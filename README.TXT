@@ -1,21 +1,27 @@
 ---------------------------------------------------
-Hex Editor VB v2.0 
-For Windows XP/Vista
+Hex Editor VB v1.3
+For Microsoft Windows XP/Vista
+
+This program is under the GNU GPL license, please refer to license.txt.
 ---------------------------------------------------
 
 For detailed information about Hex Editor VB please refer to
 the (not yet updated) documentation in docs/
 
 ---------------------------------------------------
-Only french language for now.
+INSTALLATION STEPS
 ---------------------------------------------------
-PROCEDURE POUR LA COMPILATION
-- compiler chaque projet ocx séparément (et sauvegarder le fichier *.ocx dans le dossier Executable folder)
-- ouvrir le groupe de projet, et générer tous les projets
-- ok
+- Downlod and install VB6 runtimes ( http://www.microsoft.com/downloads/details.aspx?FamilyID=bf9a24f9-b5c5-48f4-8edd-cdf2d29a79d5&DisplayLang=en )
+- Extract folder called "binaries"
+- Launch RegisterOCX.Bat
+- Run HexEditor.exe (maybe 2 times in order to create the *.manifest file)
 ---------------------------------------------------
 
 
+
+---------------------------------------------------
+DESCRIPTION (only french for now, but english translation's coming soon)
+---------------------------------------------------
 Hex Editor VB est un éditeur hexadécimal pour Windows XP/Vista. Utilisation confortable avec une résolution minimale de 1024*768. Pour disposer de toutes les fonctionnalités du logiciel, les droits d'administration sont requis (notamment l'ouverture de processus et l'écriture dans le registre).
 
 
@@ -33,7 +39,5 @@ Inclut également la possibilité de convertir des données de différents types ent
 
 
 ---------------------------------------------------
-Pour toutes informations supplémentaires, merci de lire l'aide fournie avec les sources (non disponible pour le moment).
----------------------------------------------------
-
 Please visit https://sourceforge.net/projects/hexeditorvb/
+---------------------------------------------------

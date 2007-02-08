@@ -42,7 +42,7 @@ Attribute VB_Exposed = False
 ' -----------------------------------------------
 
 
-'==> CHANGER CE MODULE PAR UN TRUC PERSO OU LIBRE DE DROITS
+
 
 
 'CRC Checksum Class
