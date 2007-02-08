@@ -1,0 +1,15 @@
+frmMain = 154, 203, 728, 633, C, 22, 29, 596, 459, C
+clsFile = 46, 46, 601, 457, C
+AfClsManifest = 161, 161, 716, 572, C
+clsFolder = 23, 23, 578, 434, C
+frmResult = 0, 0, 0, 0, C, 69, 69, 624, 480, C
+frmAbout = 69, 69, 624, 480, C, 115, 115, 670, 526, C
+frmSimul = 0, 0, 0, 0, C, 92, 92, 647, 503, C
+Demarrage = 0, 0, 0, 0, C
+Declarations = 0, 0, 0, 0, C
+clsTagInfo = 92, 92, 647, 503, C
+clsTag = 0, 0, 0, 0, C
+clsImage = 115, 115, 670, 526, C
+clsVideo = 69, 69, 624, 480, C
+mdlString = 92, 92, 647, 503, C
+clsFileInfos = 138, 138, 693, 549, C

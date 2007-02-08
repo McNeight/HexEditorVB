@@ -1,0 +1,12 @@
+bug affichage|virer le bug d'affichage lors du loading d'une new form| 10| 9
+bug de resize|bug de resize des composants après la fermeture d'une childform| 10| 3
+bug extendedvs|bug du ExtentedVS lorsqu'il arrive en bas (pour les disques) ==> plus moyen de le remonter avec l'ascenseur (oblibé de faire de la molette)| 10| 7
+bug lors de sauvegarde|bug de la sauvegarde d'un fichier en mode compilé (echec probable de readfile, null partout sauf zones modifiées)| 10| 3
+bug refresh|pas de refresh des form tant que frmHome modale après le choix d'un fichier| 10| 4
+ctrl+z|bug si appui de plusieurs fois ==> retour avant le premier| 10| 4
+data|bug pour le changement des values dans framedata| 10| 4
+fileview root|ne pas pouvoir aller dans le dossier ROOT lors de l'édition d'un disque (buf du FileView)| 10| 4
+histo|bug maintiens ajout de string car on rend la main en changeant le selecteditem de lsthisto| 10| 3
+histo|enlever marque rouge de changement lors de undo| 10| 1
+pile vs|surchargement de la pile après plusieurs utilisations d'un ExtendedVS| 10| 9
+reorganisation listview|réorganisation correcte des fichiers par taille dans les FileView| 10| 3
