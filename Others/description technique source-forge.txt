@@ -1,0 +1,11 @@
+Hex Editor VB is an hexadecimal editor for Windows. 
+
+This allows a user to manipulate binary (normally non-plain text) computer files, disks and memory.
+
+Concerning files, it allows to view and/or edit files of more than 1 TB (size is limited by the VB-Currencency type, about 9.10^18 bytes).
+Allows to explore and modify the 2GB virtual memory of each process, including system processes (takes the debug privilege).
+Allows to view/edit/search in physical and logical disks (support NTFS, FAT16 and FAT32 formats). Useful tool to recover parts of lost files, or shredd sensible data.
+
+Includes a process manager which allows to suspend processes (in order to edit), a file analyzer/comparator, a script editor and much other tools (advanced search, conversion, file renamer etc.)
+
+It uses Windows API to manipulate safely memory/files/disks.
