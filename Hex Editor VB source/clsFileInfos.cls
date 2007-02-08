@@ -47,8 +47,6 @@ Option Explicit
 '-------------------------------------------------------
 '//MODULE DE CLASSE PERMETTANT DE RECUPERER LES INFOS SUR LES FICHIERS
 '// by violent_ken
-'La procédure de listing de fichier est de ShareVB
-'Merci à lui.
 '-------------------------------------------------------
 
 
