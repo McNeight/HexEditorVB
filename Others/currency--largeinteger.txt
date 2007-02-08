@@ -1,9 +1,0 @@
-Private Type LARGE_INTEGER
-    dwLow As Long
-    dwHigh As Long
-End Type
-
-
-Private Function LI2Currency(liInput As LARGE_INTEGER) As Currency
-    CopyMemory LI2Currency, liInput, LenB(liInput)
-End Function
