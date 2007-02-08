@@ -1,6 +1,6 @@
 Type=Control
 UserControl=BGraphe.ctl
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\Windows\system32\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\Windows\system32\stdole2.tlb#OLE Automation
 Startup="(None)"
 HelpFile=""
 Title="BGraphe_OCX"
@@ -14,7 +14,7 @@ CompatibleEXE32="..\..\..\Executable folder\BGraphe_OCX.ocx"
 VersionCompatible32="1"
 MajorVer=1
 MinorVer=0
-RevisionVer=73
+RevisionVer=74
 AutoIncrementVer=1
 ServerSupportFiles=0
 VersionComments="Composant histogramme"

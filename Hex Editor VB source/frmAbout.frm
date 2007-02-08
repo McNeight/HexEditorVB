@@ -189,38 +189,7 @@ Option Explicit
 '---------------------------------------------------------------------------
 '                            HEX EDITOR VB
 '                         CODED BY VIOLENT_KEN
-'                Dernière version v5.2.1 du 15/15/2015
-'
-'
-'               LISTE DES CODES UTILISES DANS CE PROGRAMME ET
-'                       QUI N'ONT PAS ETE INITIALEMENT
-'                          CODES PAR violent_ken
-'
-'       AfClsManifest ==> classe permettant de créer un fichier
-' *.manifest pour appliquer le style XP.Code de PCPT
-' http://www.vbfrance.com/codes/CREATION-APPLICATION-MANIFEST-SEULE-
-' LIGNE-MODULE-CLASSE_34784.aspx
-'
-'       clsCRC ==> classe permettant d'obtenir le CRC16 et CRC32
-' d'un fichier
-' Par Fredrik Qvarfort. Pas d'URL, j'obtiens ce bout de code depuis
-' une autre source.
-'
-'       Self SubClassing du controle HexViewer ==> partie de code
-' permettant la gestion de la molette par subclassing
-' Par Paul CATON
-' http://www.planet-source-code.com/vb/scripts/
-' ShowCode.asp?txtCodeId=64867&lngWId=1
-'
-'       Function AfficherMenu ==> permet d'afficher un popup menu
-' dynamique. Cette morceau de code a été inspiré de la source de
-' DARKSIDIOUS.
-' http://www.vbfrance.com/codes/MENU-CREE-DYNAMIQUEMENT-SANS-
-' PASSER-ASSISTANT-VB_27410.aspx
-'
-' Merci de mettre ici votre nom et l'URL de votre source
-' si vous apportez une quelconque modification à ce programme.
-'
+'                Dernière version v1.3 du 08/02/2007
 '
 '
 '
@@ -230,7 +199,7 @@ Option Explicit
 ' ainsi que le contenu de la mémoire virtuelle de vos
 ' processus et le contenu de vos disques physiques.
 '
-' Ce programme est conçu pour Windows XP SP2, avec une résolution
+' Ce programme est conçu pour Windows XP/Vista, avec une résolution
 ' optimale minimale de 1024*768.
 '
 '
