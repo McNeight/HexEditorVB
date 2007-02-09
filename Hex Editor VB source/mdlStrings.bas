@@ -49,16 +49,38 @@ End Function
 'formate les 16 caractères d'une chaine de 16
 '-------------------------------------------------------
 Public Function Formated16String(ByVal sString As String) As String
-Dim x As Long
+Dim X As Long
 Dim s As String
 
     s = vbNullString
     
-    For x = 1 To 16
-        s = s & Byte2FormatedString(Asc(Mid$(sString, x, 1)))
-    Next x
+    For X = 1 To 16
+        s = s & Byte2FormatedString(Asc(Mid$(sString, X, 1)))
+    Next X
     
     Formated16String = s
+End Function
+
+'-------------------------------------------------------
+'formate les n caractères d'une chaine de n de long
+'pourquoi utilisé Formated16String et Formated1String alors
+'qu'il existe cette fonction ? Pour des raisons de performance.
+'-------------------------------------------------------
+Public Function FormatednString(ByVal sString As String) As String
+Dim X As Long
+Dim curLen As Currency
+Dim s As String
+
+    s = vbNullString
+    
+    'longueur de la chaine à formater
+    curLen = Len(sString)
+    
+    For X = 1 To curLen
+        s = s & Byte2FormatedString(Asc(Mid$(sString, X, 1)))
+    Next X
+    
+    FormatednString = s
 End Function
 
 '-------------------------------------------------------
@@ -147,7 +169,7 @@ End Function
 '-------------------------------------------------------
 Public Sub SplitString(ByVal strSeparator As String, ByVal strString As String, ByRef strArray() As String)
 Dim s As String
-Dim x As Long
+Dim X As Long
 Dim i As Long
 
     i = 0
@@ -155,19 +177,19 @@ Dim i As Long
     'redimensionne le tableau
     ReDim strArray(0)
     
-    For x = 1 To Len(strString)
-        If Mid$(strString, x, 1) = strSeparator Then
+    For X = 1 To Len(strString)
+        If Mid$(strString, X, 1) = strSeparator Then
             If i = 0 Then
                 'alors c'est celui de gauche
-                i = x
+                i = X
             Else
                 'alors c'est celui de droite ==> stocke dans le tableau le Mid$ de la string
                 ReDim Preserve strArray(UBound(strArray()) + 1)
-                strArray(UBound(strArray())) = Mid$(strString, i + 1, x - i - 1)
+                strArray(UBound(strArray())) = Mid$(strString, i + 1, X - i - 1)
                 i = 0 'on recommencera en prenant la position de separateur de gauche
             End If
         End If
-    Next x
+    Next X
 
 End Sub
 
@@ -225,7 +247,7 @@ End Function
 'convertit le chemin sPath en chemin existant (correct)
 '-------------------------------------------------------
 Public Function FormatedPath(ByVal sPath As String) As String
-Dim x As Long
+Dim X As Long
 Dim s As String
 
     If Len(sPath) < 1 Then Exit Function
@@ -250,9 +272,9 @@ Dim s As String
     Wend
     
     'enlève deux antislash successifs et les remplace par un seul
-    x = InStr(1, s, "\\")
-    If x > 0 Then
-        s = Left$(s, x - 1) & "\" & Right$(s, Len(s) - Len(Left$(s, x - 1)) - 2)
+    X = InStr(1, s, "\\")
+    If X > 0 Then
+        s = Left$(s, X - 1) & "\" & Right$(s, Len(s) - Len(Left$(s, X - 1)) - 2)
     End If
     
     
@@ -282,27 +304,27 @@ End Function
 '-------------------------------------------------------
 Public Function CreateMeHtmlString(lvPhys As ListView, lvLog As ListView) As String
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     s = "<html>" & vbNewLine & "<body>" & vbNewLine & "<font face=" & Chr$(34) & "courier new" & Chr$(34) & ">" & vbNewLine & "<H2>Disques physiques</H2>"
     
     'disques physiques
     With lvPhys
-        For x = 1 To .ListItems.Count
+        For X = 1 To .ListItems.Count
         
             s = s & "<font color=red>" & vbNewLine & "<div align=center>" & "<HR size=3 align=center width=100%>"
-            s = s & "<B>Disque " & Str$(.ListItems.Item(x).Text) & "</B> <BR>" & vbNewLine & "<HR size=3 align=center width=100%>" & vbNewLine & "<P>" & vbNewLine & "</font>" & vbNewLine & "</div>"
+            s = s & "<B>Disque " & Str$(.ListItems.Item(X).Text) & "</B> <BR>" & vbNewLine & "<HR size=3 align=center width=100%>" & vbNewLine & "<P>" & vbNewLine & "</font>" & vbNewLine & "</div>"
             
-            s = s & vbNewLine & "<B>Taille</B> = [" & .ListItems.Item(x).SubItems(1) & "]<BR>"
-            s = s & vbNewLine & "<B>Cylindres</B> = [" & .ListItems.Item(x).SubItems(2) & "]<BR>"
-            s = s & vbNewLine & "<B>Pistes par cynlindre</B> = [" & .ListItems.Item(x).SubItems(3) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs par pistes</B> = [" & .ListItems.Item(x).SubItems(4) & "]<BR>"
-            s = s & vbNewLine & "<B>Octets par secteur</B> = [" & .ListItems.Item(x).SubItems(5) & "]<BR>"
-            s = s & vbNewLine & "<B>Type</B> = [" & .ListItems.Item(x).SubItems(6) & "]<BR>"
+            s = s & vbNewLine & "<B>Taille</B> = [" & .ListItems.Item(X).SubItems(1) & "]<BR>"
+            s = s & vbNewLine & "<B>Cylindres</B> = [" & .ListItems.Item(X).SubItems(2) & "]<BR>"
+            s = s & vbNewLine & "<B>Pistes par cynlindre</B> = [" & .ListItems.Item(X).SubItems(3) & "]<BR>"
+            s = s & vbNewLine & "<B>Secteurs par pistes</B> = [" & .ListItems.Item(X).SubItems(4) & "]<BR>"
+            s = s & vbNewLine & "<B>Octets par secteur</B> = [" & .ListItems.Item(X).SubItems(5) & "]<BR>"
+            s = s & vbNewLine & "<B>Type</B> = [" & .ListItems.Item(X).SubItems(6) & "]<BR>"
 
             s = s & vbNewLine & "<BR> <BR>"
  
-        Next x
+        Next X
         s = s & vbNewLine & "<BR> <BR> <BR> <BR> <BR> <BR>"
     End With
     
@@ -311,36 +333,36 @@ Dim x As Long
     s = s & vbNewLine & "<H2>Disques logiques</H2>"
     
     With lvLog
-        For x = 1 To .ListItems.Count
+        For X = 1 To .ListItems.Count
         
             s = s & "<font color=red>" & vbNewLine & "<div align=center>" & vbNewLine & "<HR size=3 align=center width=100%>" & vbNewLine
-            s = s & "<B>Disque " & .ListItems.Item(x).Text & "</B> <BR>" & vbNewLine & "<HR size=3 align=center width=100%>" & vbNewLine & "<P>" & vbNewLine & "</font>" & vbNewLine & "</div>"
+            s = s & "<B>Disque " & .ListItems.Item(X).Text & "</B> <BR>" & vbNewLine & "<HR size=3 align=center width=100%>" & vbNewLine & "<P>" & vbNewLine & "</font>" & vbNewLine & "</div>"
             
-            s = s & vbNewLine & "<B>Taille</B> = [" & .ListItems.Item(x).SubItems(1) & "]<BR>"
-            s = s & vbNewLine & "<B>Taille physique</B> = [" & .ListItems.Item(x).SubItems(2) & "]<BR>"
-            s = s & vbNewLine & "<B>Espace utilisé</B> = [" & .ListItems.Item(x).SubItems(3) & "]<BR>"
-            s = s & vbNewLine & "<B>Espace libre</B> = [" & .ListItems.Item(x).SubItems(4) & "]<BR>"
-            s = s & vbNewLine & "<B>Pourcentage libre</B> = [" & .ListItems.Item(x).SubItems(5) & "]<BR>"
-            s = s & vbNewLine & "<B>Taille des clusters</B> = [" & .ListItems.Item(x).SubItems(6) & "]<BR>"
-            s = s & vbNewLine & "<B>Clusters utilisés</B> = [" & .ListItems.Item(x).SubItems(7) & "]<BR>"
-            s = s & vbNewLine & "<B>Clusters libres</B> = [" & .ListItems.Item(x).SubItems(8) & "]<BR>"
-                        s = s & vbNewLine & "<B>Clusters</B> = [" & .ListItems.Item(x).SubItems(9) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs cachés</B> = [" & .ListItems.Item(x).SubItems(10) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs logiques</B> = [" & .ListItems.Item(x).SubItems(11) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs physiques</B> = [" & .ListItems.Item(x).SubItems(12) & "]<BR>"
-            s = s & vbNewLine & "<B>Type</B> = [" & .ListItems.Item(x).SubItems(13) & "]<BR>"
-            s = s & vbNewLine & "<B>Numéro de série</B> = [" & .ListItems.Item(x).SubItems(14) & "]<BR>"
-            s = s & vbNewLine & "<B>Octets par secteur</B> = [" & .ListItems.Item(x).SubItems(15) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs par cluster</B> = [" & .ListItems.Item(x).SubItems(16) & "]<BR>"
-            s = s & vbNewLine & "<B>Pistes par cylindre</B> = [" & .ListItems.Item(x).SubItems(17) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs par piste</B> = [" & .ListItems.Item(x).SubItems(18) & "]<BR>"
-            s = s & vbNewLine & "<B>Offset de départ</B> = [" & .ListItems.Item(x).SubItems(19) & "]<BR>"
-            s = s & vbNewLine & "<B>Format de fichier</B> = [" & .ListItems.Item(x).SubItems(20) & "]<BR>"
-            s = s & vbNewLine & "<B>Type de lecteur</B> = [" & .ListItems.Item(x).SubItems(21) & "]<BR>"
+            s = s & vbNewLine & "<B>Taille</B> = [" & .ListItems.Item(X).SubItems(1) & "]<BR>"
+            s = s & vbNewLine & "<B>Taille physique</B> = [" & .ListItems.Item(X).SubItems(2) & "]<BR>"
+            s = s & vbNewLine & "<B>Espace utilisé</B> = [" & .ListItems.Item(X).SubItems(3) & "]<BR>"
+            s = s & vbNewLine & "<B>Espace libre</B> = [" & .ListItems.Item(X).SubItems(4) & "]<BR>"
+            s = s & vbNewLine & "<B>Pourcentage libre</B> = [" & .ListItems.Item(X).SubItems(5) & "]<BR>"
+            s = s & vbNewLine & "<B>Taille des clusters</B> = [" & .ListItems.Item(X).SubItems(6) & "]<BR>"
+            s = s & vbNewLine & "<B>Clusters utilisés</B> = [" & .ListItems.Item(X).SubItems(7) & "]<BR>"
+            s = s & vbNewLine & "<B>Clusters libres</B> = [" & .ListItems.Item(X).SubItems(8) & "]<BR>"
+                        s = s & vbNewLine & "<B>Clusters</B> = [" & .ListItems.Item(X).SubItems(9) & "]<BR>"
+            s = s & vbNewLine & "<B>Secteurs cachés</B> = [" & .ListItems.Item(X).SubItems(10) & "]<BR>"
+            s = s & vbNewLine & "<B>Secteurs logiques</B> = [" & .ListItems.Item(X).SubItems(11) & "]<BR>"
+            s = s & vbNewLine & "<B>Secteurs physiques</B> = [" & .ListItems.Item(X).SubItems(12) & "]<BR>"
+            s = s & vbNewLine & "<B>Type</B> = [" & .ListItems.Item(X).SubItems(13) & "]<BR>"
+            s = s & vbNewLine & "<B>Numéro de série</B> = [" & .ListItems.Item(X).SubItems(14) & "]<BR>"
+            s = s & vbNewLine & "<B>Octets par secteur</B> = [" & .ListItems.Item(X).SubItems(15) & "]<BR>"
+            s = s & vbNewLine & "<B>Secteurs par cluster</B> = [" & .ListItems.Item(X).SubItems(16) & "]<BR>"
+            s = s & vbNewLine & "<B>Pistes par cylindre</B> = [" & .ListItems.Item(X).SubItems(17) & "]<BR>"
+            s = s & vbNewLine & "<B>Secteurs par piste</B> = [" & .ListItems.Item(X).SubItems(18) & "]<BR>"
+            s = s & vbNewLine & "<B>Offset de départ</B> = [" & .ListItems.Item(X).SubItems(19) & "]<BR>"
+            s = s & vbNewLine & "<B>Format de fichier</B> = [" & .ListItems.Item(X).SubItems(20) & "]<BR>"
+            s = s & vbNewLine & "<B>Type de lecteur</B> = [" & .ListItems.Item(X).SubItems(21) & "]<BR>"
             
             s = s & vbNewLine & "<BR> <BR>"
             
-        Next x
+        Next X
     End With
     
     s = s & vbNewLine & "</body>" & vbNewLine & "</html>"

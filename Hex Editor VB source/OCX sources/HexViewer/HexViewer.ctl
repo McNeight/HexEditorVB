@@ -263,7 +263,7 @@ Dim OldCase As HexCase
     
     z = CCur((NewCase.lOffset - OldCase.lOffset - 16) + (16 - OldCase.lCol) + NewCase.lCol)
 
-    NumberOfSelectedItems = z: lNumberOfSelectedItems = z + 1: End Property
+    NumberOfSelectedItems = z + 1: lNumberOfSelectedItems = z + 1: End Property
 Public Property Get StringForeColor() As OLE_COLOR: StringForeColor = lStringForeColor: End Property
 Public Property Let StringForeColor(StringForeColor As OLE_COLOR): lStringForeColor = StringForeColor: Refresh: End Property
 Public Property Get TitleBackGround() As OLE_COLOR: TitleBackGround = lTitleBackGround: End Property
@@ -421,7 +421,18 @@ Dim xCase As Long
         
     'détermine colonne et ligne en fonction de x et y
     yCase = Round((Y - 180) / 260, 0) 'y en coordonnée de matrice
-    xCase = Round((x - 1250) / 360, 0)  'idem pour x
+    
+    If (x > 7500 And x < 9450) Then
+        'alors c'est une zone de strings
+        xCase = Int((x - 7515) / 120) + 1
+    Else
+        'alors c'est une zone de valeurs hexa
+        xCase = Round((x - 1250) / 360, 0)
+    End If
+    
+    If xCase > 16 Then
+        Stop
+    End If
     
     'stocke dans la variable contenant la nouvelle case sélectionnée
     hexNewCase.lCol = xCase
@@ -495,7 +506,7 @@ Dim xCase As Long
         
         'redéfinit xCase
         xCase = Int((x - 7515) / 120) + 1
-        If xCase > 16 Then xCase = 16
+        
         hexNewCase.lCol = xCase
         
         it.Col = xCase
@@ -521,7 +532,7 @@ Dim xCase As Long
     cit.Offset = (cit.Line - 1) * 16 + Me.FirstOffset
     
     Refresh
-    
+
     Exit Sub
     
 RaiseEv:
@@ -573,7 +584,14 @@ Dim lStep As Long
 
 
     yCase = Round((Y - 180) / 260, 0) 'y en coordonnée de matrice
-    xCase = Round((x - 1250) / 360, 0)  'idem pour x
+    
+    If (x > 7500 And x < 9450) Then
+        'alors c'est une zone de strings
+        xCase = Int((x - 7515) / 120) + 1
+    Else
+        'alors c'est une zone de valeurs hexa
+        xCase = Round((x - 1250) / 360, 0)
+    End If
     
     
     '//détermine si il faut ou non activer le changement d'offset
