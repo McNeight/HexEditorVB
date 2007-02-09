@@ -141,7 +141,7 @@ Public Sub PrintFile(ByVal curStartOffset As Currency, ByVal curEndOffset As Cur
 ByVal bPrintHexa As Boolean, ByVal bPrintASCII As Boolean, ByVal bPrintOffset As Boolean, _
 ByVal bPrintFileInfo As Boolean, ByVal lngTextSize As Long, ByVal tPrinter As Printer, Optional ByVal strTitle As String)
 
-Dim x As Long
+Dim X As Long
 Dim y As Long
 
     Set Printer = tPrinter
@@ -158,22 +158,59 @@ Dim y As Long
         Printer.Print vbNewLine & vbNewLine
         
         'procède à l'impression
-        For x = By16(curStartOffset) To By16(curEndOffset) Step 16
+        For X = By16(curStartOffset) To By16(curEndOffset) Step 16
         
             'offset
             .CurrentX = 300
             .ForeColor = frmContent.ActiveForm.HW.OffsetForeColor
             y = .CurrentY
-            Printer.Print FormatedAdress(x)
+            Printer.Print FormatedAdress(X)
             
             'valeurs hexa
             .CurrentX = 3000: .CurrentY = y
             .ForeColor = frmContent.ActiveForm.HW.HexForeColor
             Printer.Print "0H 45 12 E7 AA 12 35 00 00 FB 4F 7E 81 0D 38 11"
-        Next x
+        Next X
         
         'fin de l'impression
         .EndDoc
     End With
     
 End Sub
+
+'-------------------------------------------------------
+'récupérer des bytes dans un fichier
+'-------------------------------------------------------
+Public Function GetBytesFromFile(ByVal sFile As String, ByVal curSize As Currency, ByVal curOffset As Currency) As String
+Dim tmpText As String
+Dim Ret As Long
+Dim lFile As Long
+
+    On Error GoTo ErrGestion
+    
+    'obtient un handle vers le fichier à ouvrir
+    lFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+    
+    If lFile = 0 Then
+        'fichier inexistant, ou en tout cas inaccessible
+        Exit Function
+    End If
+        
+    'créé un buffer qui contiendra les valeurs
+    tmpText = String$(curSize, 0)
+
+    'bouge le pointeur sur lr fichier au bon emplacement
+    Ret = SetFilePointerEx(lFile, curOffset / 10000, 0&, FILE_BEGIN)  'divise par 10000 pour
+    'pouvoir renvoyer une currency DECIMALE (cad du genre 1.4567 pour l'offset 14567)
+    
+    'prend un morceau du fichier
+    Ret = ReadFile(lFile, ByVal tmpText, Len(tmpText), Ret, ByVal 0&)
+    
+    'affecte à la fonction
+    GetBytesFromFile = tmpText
+    
+    Exit Function
+ErrGestion:
+    clsERREUR.AddError "mdlFile.GetBytesFromFile", True
+End Function
+

@@ -8,5 +8,6 @@ data|bug pour le changement des values dans framedata| 10| 4
 fileview root|ne pas pouvoir aller dans le dossier ROOT lors de l'édition d'un disque (buf du FileView)| 10| 4
 histo|bug maintiens ajout de string car on rend la main en changeant le selecteditem de lsthisto| 10| 3
 histo|enlever marque rouge de changement lors de undo| 10| 1
+like word|copie bas niveau ==> augmente la taille ?| 10| 3
 pile vs|surchargement de la pile après plusieurs utilisations d'un ExtendedVS| 10| 9
 reorganisation listview|réorganisation correcte des fichiers par taille dans les FileView| 10| 3
