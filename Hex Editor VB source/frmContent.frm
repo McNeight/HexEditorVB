@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "13:55"
+            TextSave        =   "15:13"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -466,6 +466,9 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuFillSelection 
          Caption         =   "&Remplir la sélection..."
       End
+      Begin VB.Menu mnuCreateFileFromSelelection 
+         Caption         =   "&Créer un fichier depuis la sélection..."
+      End
       Begin VB.Menu mnuEditTiret4 
          Caption         =   "-"
       End
@@ -799,7 +802,7 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuFillSelectionPopUp 
          Caption         =   "&Remplir la sélection..."
       End
-      Begin VB.Menu mnuCreateFileFormSel 
+      Begin VB.Menu mnuCreateFileFromSel2 
          Caption         =   "&Créer un fichier à partir de la sélection..."
       End
    End
@@ -928,10 +931,10 @@ Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
     End If
 End Sub
 
-Private Sub LV_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     If Button = 2 Then
         'popup menu
-        Me.PopupMenu Me.mnuPopupExplore, , X + LV.Left, y + LV.Top + 300
+        Me.PopupMenu Me.mnuPopupExplore, , x + LV.Left, y + LV.Top + 300
     End If
 End Sub
 
@@ -962,14 +965,14 @@ Private Sub MDIForm_Load()
     LV.RefreshListViewOnly
 End Sub
 
-Private Sub MDIForm_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub MDIForm_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     If Button = 2 Then
         'affiche un popup
         Me.PopupMenu Me.rmnuTools
     End If
 End Sub
 
-Private Sub MDIForm_OLEDragDrop(Data As DataObject, Effect As Long, Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub MDIForm_OLEDragDrop(Data As DataObject, Effect As Long, Button As Integer, Shift As Integer, x As Single, y As Single)
 'alors on récupère un drag&drop de fichiers
 Dim i As Long
 Dim i2 As Long
@@ -1081,7 +1084,7 @@ End Sub
 Private Sub mnuCloseAll_Click()
 'ferme toutes les fenêtres
 Dim lRep As Long
-Dim X As Long
+Dim x As Long
     
     If Me.ActiveForm Is Nothing Then Exit Sub
         
@@ -1105,11 +1108,12 @@ End Sub
 Private Sub mnuCopyASCII_Click()
     mnuPopupCopy2_Click
 End Sub
-
+Private Sub mnuCopyASCII2_Click()
+    mnuPopupCopy22_Click
+End Sub
 Private Sub mnuCopyASCIIReal_Click()
     mnuPopupCopy3_Click
 End Sub
-
 Private Sub mnuCopyhexa_Click()
     mnuPopupCopy_Click
 End Sub
@@ -1160,6 +1164,119 @@ Dim bOver As Boolean
 CancelPushed:
 End Sub
 
+Private Sub mnuCreateFileFromSel2_Click()
+'créé un fichier depuis la sélection
+Dim x As Long
+Dim y As Long
+Dim s2 As String
+Dim s() As String
+Dim sFile As String
+Dim curPos2 As Currency
+Dim curSize2 As Currency
+Dim curSize As Currency
+Dim curPos As Currency
+
+    If Me.ActiveForm Is Nothing Then Exit Sub
+    
+    On Error GoTo CancelPushed
+
+    Me.Sb.Panels(1).Text = "Status=[Creating file from selection]"
+    
+    'détermine la taille
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    
+    'détermine la position du premier offset
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+        
+    With CMD
+        .CancelError = True
+        .DialogTitle = "Sélection du fichier à sauvegarder"
+        .Filter = "Tous|*.*"
+        .ShowSave
+        sFile = .Filename
+    End With
+    
+    If cFile.FileExists(sFile) Then
+        'fichier déjà existant
+        If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+    End If
+    
+    Select Case TypeOfForm(frmContent.ActiveForm)
+        Case "Fichier"
+            'édition d'un fichier ==> va piocher avec ReadFile et sauvegarde à la volée (buffers de 500Ko)
+            
+            If curSize <= 524288000 Then
+                'alors tout rentre dans un buffer
+                'récupère la string
+                s2 = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
+                GoTo CreateMyFileFromOneBuffer
+            Else
+                'plusieurs buffers nécessaire
+                
+                
+                GoTo CreateMyFileFromBuffers
+            End If
+        
+        Case "Processus"
+            'sauvegarde avec un buffer de 50Ko
+            If curSize <= 524288000 Then
+                'alors tout rentre dans un buffer
+                s2 = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+                GoTo CreateMyFileFromOneBuffer
+            Else
+                'alors plusieurs buffers nécessaires
+                
+                
+                
+                GoTo CreateMyFileFromBuffers
+            End If
+            
+        Case "Disque"
+            'sauvegarde avec un buffer de 50Ko
+            
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            
+            If curSize2 <= 524288000 Then
+                'alors tout rentre dans un buffer
+                'récupère la string
+                DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                    curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                    Me.ActiveForm.GetDriveInfos.BytesPerSector, s2
+                    
+                'recoupe la string pour récupérer ce qui intéresse vraiment
+                s2 = Mid$(s2, curPos - curPos2 + 1, curSize)
+                GoTo CreateMyFileFromOneBuffer
+            Else
+                'plusieurs buffers nécessaires
+                
+                
+                GoTo CreateMyFileFromBuffers
+            End If
+    End Select
+
+CreateMyFileFromOneBuffer:
+    'sauvegarde le fichier (un seul buffer)
+    cFile.SaveDATAinFile sFile, s2, True   'lance la sauvegarde
+    
+    GoTo CancelPushed
+    
+CreateMyFileFromBuffers:
+    'sauvegarde le fichier (plusieurs buffers)
+
+CancelPushed:
+    Me.Sb.Panels(1).Text = "Status=[Ready]"
+End Sub
+
+Private Sub mnuCreateFileFromSelelection_Click()
+    Call mnuCreateFileFromSel2_Click    'créé fichier à partir de la sélection
+End Sub
+
 Private Sub mnuDelete_Click()
 'efface les éléments de la sélection
     
@@ -1197,22 +1314,22 @@ Private Sub mnuEditSelection_Click()
 'édite les fichiers sélectionnés dans le LV
 Dim Frm As Form
 Dim sFile() As ComctlLib.ListItem
-Dim X As Long
+Dim x As Long
 
     'On Error GoTo ErrGestion
     LV.GetSelectedItems sFile
     
-    For X = 1 To UBound(sFile)
-        If cFile.FileExists(sFile(X).Text) Then
+    For x = 1 To UBound(sFile)
+        If cFile.FileExists(sFile(x).Text) Then
             'affiche une nouvelle fenêtre
             Set Frm = New Pfm
-            Call Frm.GetFile(sFile(X).Text)
+            Call Frm.GetFile(sFile(x).Text)
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
             Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
         End If
         DoEvents
-    Next X
+    Next x
     
     Exit Sub
     
@@ -1540,7 +1657,7 @@ Private Sub mnuOpenFolder_Click()
 Dim m() As String
 Dim sDir As String
 Dim Frm As Form
-Dim X As Long
+Dim x As Long
 
     'sélectionne un répertoire
     sDir = cFile.BrowseForFolder("Sélectionner un répertoire", Me.hwnd)
@@ -1552,16 +1669,16 @@ Dim X As Long
     If cFile.GetFolderFiles(sDir, m) < 1 Then Exit Sub
     
     'les ouvre un par un
-    For X = 1 To UBound(m)
-        If cFile.FileExists(m(X)) Then
+    For x = 1 To UBound(m)
+        If cFile.FileExists(m(x)) Then
             Set Frm = New Pfm
-            Call Frm.GetFile(m(X))
+            Call Frm.GetFile(m(x))
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
             Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
             DoEvents
         End If
-    Next X
+    Next x
   
     'Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
 
@@ -1569,7 +1686,7 @@ End Sub
 
 Private Sub mnuOpenInBN_Click()
 'ouvre le fichier dans le bloc notes
-Dim X As Long
+Dim x As Long
 
 On Error Resume Next
 
@@ -1582,8 +1699,8 @@ On Error Resume Next
     
     If cFile.GetFileSize(Me.ActiveForm.Caption) > 1000000 Then
         'fichier de plus de 700Ko
-        X = MsgBox("Votre fichier fait plus de 1Mo." & vbNewLine & "Il n'est pas conseillé d'ouvrir un fichier de cette taille" & vbNewLine & "avec le bloc-notes. Continuer ?", vbInformation + vbYesNo, "Attention")
-        If Not (X = vbYes) Then Exit Sub
+        x = MsgBox("Votre fichier fait plus de 1Mo." & vbNewLine & "Il n'est pas conseillé d'ouvrir un fichier de cette taille" & vbNewLine & "avec le bloc-notes. Continuer ?", vbInformation + vbYesNo, "Attention")
+        If Not (x = vbYes) Then Exit Sub
     End If
         
     Shell "notepad " & Me.ActiveForm.Caption, vbNormalFocus
@@ -1600,14 +1717,14 @@ End Sub
 Private Sub mnuOpenSelectedFiles_Click()
 'ouvre les fichiers sélectionnés dans le LV
 Dim sFile() As ListItem
-Dim X As Long
+Dim x As Long
 
     'obtient la liste des sélections
     LV.GetSelectedItems sFile
     
-    For X = 1 To UBound(sFile)
-        ShellExecute Me.hwnd, "open", sFile(X).Text, vbNullString, vbNullString, 1
-    Next X
+    For x = 1 To UBound(sFile)
+        ShellExecute Me.hwnd, "open", sFile(x).Text, vbNullString, vbNullString, 1
+    Next x
     
 End Sub
 
@@ -1622,7 +1739,7 @@ End Sub
 
 Private Sub mnuPopupCopy_Click()
 'copier la sélection (hexa)
-Dim X As Long
+Dim x As Long
 Dim y As Long
 Dim s As String
 Dim s2 As String
@@ -1680,10 +1797,10 @@ Dim curPos As Currency
 
     'formate la string
     s2 = vbNullString
-    For X = 1 To Len(s)
-        If (X Mod 1000) = 0 Then DoEvents 'rend la main
-        s2 = s2 & Str2Hex_(Mid$(s, X, 1))
-    Next X
+    For x = 1 To Len(s)
+        If (x Mod 1000) = 0 Then DoEvents 'rend la main
+        s2 = s2 & Str2Hex_(Mid$(s, x, 1))
+    Next x
             
     Clipboard.SetText s2
     Me.Sb.Panels(1).Text = "Status=[Ready]"
@@ -1691,7 +1808,7 @@ End Sub
 
 Private Sub mnuPopupCopy22_Click()
 'copier la sélection (strings) formatée en bas niveau
-Dim X As Long
+Dim x As Long
 Dim y As Long
 Dim s As String
 Dim curSize As Currency
@@ -1755,7 +1872,7 @@ End Sub
 
 Private Sub mnuPopupCopy2_Click()
 'copier la sélection (strings) formatée
-Dim X As Long
+Dim x As Long
 Dim y As Long
 Dim s As String
 Dim curPos2 As Currency
@@ -1820,7 +1937,7 @@ End Sub
 Private Sub mnuPopupCopy3_Click()
 'copie les valeurs ASCII réelles vers le clipboard
 '/!\ NULL TERMINATED STRING
-Dim X As Long
+Dim x As Long
 Dim y As Long
 Dim s As String
 Dim curPos2 As Currency
@@ -1931,7 +2048,7 @@ End Sub
 
 Private Sub mnuRemoveSignet_Click()
 'supprime un signet, si existant
-Dim X As Long
+Dim x As Long
 
     If Me.ActiveForm Is Nothing Then Exit Sub
 
@@ -1943,11 +2060,11 @@ Dim X As Long
         Wend
         
         'enlève du listview
-        For X = Me.ActiveForm.lstSignets.ListItems.Count To 1 Step -1
-            If Me.ActiveForm.lstSignets.ListItems.Item(X).Text = CStr(Me.ActiveForm.HW.Item.Offset) Then
-                Me.ActiveForm.lstSignets.ListItems.Remove X
+        For x = Me.ActiveForm.lstSignets.ListItems.Count To 1 Step -1
+            If Me.ActiveForm.lstSignets.ListItems.Item(x).Text = CStr(Me.ActiveForm.HW.Item.Offset) Then
+                Me.ActiveForm.lstSignets.ListItems.Remove x
             End If
-        Next X
+        Next x
     End If
     
 End Sub
@@ -1960,7 +2077,7 @@ Private Sub mnuSaveSignets_Click()
 'enregistre la liste des signets de la form active
 Dim s As String
 Dim lFile As Long
-Dim X As Long
+Dim x As Long
 
     On Error GoTo ErrGestion
     
@@ -1980,8 +2097,8 @@ Dim X As Long
 
     If cFile.FileExists(s) Then
         'message de confirmation
-        X = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (X = vbYes) Then Exit Sub
+        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        If Not (x = vbYes) Then Exit Sub
     End If
     
     'ouvre le fchier
@@ -1989,9 +2106,9 @@ Dim X As Long
     Open s For Output As lFile
     
     'enregistre les entrées
-    For X = 1 To Me.ActiveForm.lstSignets.ListItems.Count
-        Write #lFile, Me.ActiveForm.lstSignets.ListItems.Item(X) & "|" & Me.ActiveForm.lstSignets.ListItems.Item(X).SubItems(1)
-    Next X
+    For x = 1 To Me.ActiveForm.lstSignets.ListItems.Count
+        Write #lFile, Me.ActiveForm.lstSignets.ListItems.Item(x) & "|" & Me.ActiveForm.lstSignets.ListItems.Item(x).SubItems(1)
+    Next x
     
     Close lFile
     
@@ -2104,23 +2221,23 @@ Private Sub mnuStatsPopup_Click()
 'affiche les stats des fichiers sélectionnés dans LV
 Dim Frm As Form
 Dim sFile() As ListItem
-Dim X As Long
+Dim x As Long
 
     'On Error GoTo ErrGestion
 
     LV.GetSelectedItems sFile
     
-    For X = 1 To UBound(sFile)
-        If cFile.FileExists(sFile(X).Text) Then
+    For x = 1 To UBound(sFile)
+        If cFile.FileExists(sFile(x).Text) Then
             'affiche une nouvelle fenêtre
             Set Frm = New frmAnalys
-            Call Frm.GetFile(sFile(X).Text)
+            Call Frm.GetFile(sFile(x).Text)
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
             Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
         End If
         DoEvents
-    Next X
+    Next x
     
     Exit Sub
     
@@ -2159,7 +2276,7 @@ Private Sub mnuSaveAs_Click()
 Dim sFile As String
 Dim sPath As String
 Dim lFile As Long
-Dim X As Long
+Dim x As Long
 
     On Error GoTo GestionErr
 
@@ -2177,8 +2294,8 @@ Dim X As Long
     
     If cFile.FileExists(sPath) Then
         'message de confirmation
-        X = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (X = vbYes) Then Exit Sub
+        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        If Not (x = vbYes) Then Exit Sub
     End If
     
     'efface le précédent fichier
@@ -2299,7 +2416,7 @@ End Sub
 Private Sub AddSignetIn(ByVal bOverWrite As Boolean)
 Dim s As String
 Dim lFile As Long
-Dim X As Long
+Dim x As Long
 Dim sTemp As String
 Dim l As Long
 

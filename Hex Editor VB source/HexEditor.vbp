@@ -83,7 +83,7 @@ HelpContextID="0"
 CompatibleMode="0"
 MajorVer=1
 MinorVer=3
-RevisionVer=748
+RevisionVer=754
 AutoIncrementVer=1
 ServerSupportFiles=0
 VersionComments="Editeur hexadécimal"
@@ -91,7 +91,7 @@ VersionCompanyName="violent_ken production ;)"
 VersionFileDescription="Editeur hexadécimal complet pour Windows XP/Vista"
 VersionLegalCopyright="by violent_ken"
 VersionProductName="HexEditor VB"
-CondComp="MODE_DEBUG = -1 : USE_FORM_SUBCLASSING = 0"
+CondComp="MODE_DEBUG = -1 : USE_FORM_SUBCLASSING = 0 : PRE_ALPHA_VERSION = 0 : BETA_VERSION = 0 : FINAL_VERSION = 0"
 CompilationType=0
 OptimizationType=0
 FavorPentiumPro(tm)=0

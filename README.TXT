@@ -1,5 +1,5 @@
 ---------------------------------------------------
-Hex Editor VB v1.3
+Hex Editor VB v1.3 pre-Alpha 1
 For Microsoft Windows XP/Vista
 
 This program is under the GNU GPL license, please refer to license.txt.
