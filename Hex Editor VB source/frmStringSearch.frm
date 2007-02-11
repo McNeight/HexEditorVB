@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{6ADE9E73-F694-428F-BF86-06ADD29476A5}#1.0#0"; "ProgressBar_OCX.ocx"
 Begin VB.Form frmStringSearch 
    BorderStyle     =   1  'Fixed Single
@@ -244,10 +244,12 @@ Private clsPref As clsIniForm
 Private Sub cmdGo_Click()
 'lance la recherche
 Dim tRes() As SearchResult
+Dim lngRes() As Long
+Dim strRes() As String
 Dim i As Long
 Dim bAddSign As Boolean
 
-    On Error GoTo ErrGestion
+    'On Error GoTo ErrGestion
 
     txtSize.Text = FormatedVal(txtSize.Text)
     If Val(txtSize.Text) = 0 Then
@@ -278,7 +280,14 @@ Dim bAddSign As Boolean
         'alors c'est dans la mémoire
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), tRes(), Me.PGB
+        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), lngRes(), strRes(), Me.PGB
+        
+        'sauvegarde dans la variable tRes
+        ReDim tRes(UBound(lngRes()))
+        For i = 1 To UBound(lngRes())
+            tRes(i).curOffset = CCur(lngRes(i))
+            tRes(i).strString = strRes(i)
+        Next i
         
     Else
         'alors c'est dans le disque

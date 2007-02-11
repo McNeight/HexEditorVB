@@ -139,8 +139,10 @@ Private Type SYSTEM_INFO ' 36 Bytes
     wProcessorLevel As Integer
     wProcessorRevision As Integer
 End Type
-
-
+Private Type T_RESULT   'privé pour éviter d'avoir à déclarer un type de donnée public dans une classe pour des modules, ou dans un module pour cette classe
+    curOffset As Currency
+    strString As String
+End Type
 
 
 '-------------------------------------------------------
@@ -383,46 +385,72 @@ ErrGestion:
     CloseHandle lHandle
 End Sub
 
-
-
-
-
-
-
-
+'-------------------------------------------------------
+'détermine si un byte est considéré comme convenable en fonction
+'des paramètres Afficher : min, MAJ, nbres, signes
+'function utilisée directement avec les procédures de SearchStringIn...
+'-------------------------------------------------------
+Private Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean) As Boolean
+    If bMaj Then
+        IsCharConsideredInAString = (bytChar >= 65 And bytChar <= 90)
+        If IsCharConsideredInAString Then Exit Function
+    End If
+    If bMin Then
+        IsCharConsideredInAString = (bytChar >= 97 And bytChar <= 122)
+        If IsCharConsideredInAString Then Exit Function
+    End If
+    If bNumbers Then
+        IsCharConsideredInAString = (bytChar >= 48 And bytChar <= 57)
+        If IsCharConsideredInAString Then Exit Function
+    End If
+    If bSigns Then
+        IsCharConsideredInAString = (bytChar >= 33 And bytChar <= 47) Or _
+        (bytChar >= 58 And bytChar <= 64) Or (bytChar >= 91 And bytChar <= 96) Or _
+        (bytChar >= 123 And bytChar <= 126)
+        If IsCharConsideredInAString Then Exit Function
+    End If
+    If bytChar = 32 Then 'espace
+        IsCharConsideredInAString = True
+        If IsCharConsideredInAString Then Exit Function
+    End If
+    
+    IsCharConsideredInAString = False
+End Function
 
 '-------------------------------------------------------
 'fonction de recherche de string complètes dans un processus
 'ne cherche pas une string en particulier, mais toutes les strings qui ressemblent à des mots
 'stocke dans un tableau de 1 à Ubound
 '-------------------------------------------------------
-
-'/!\ A MODIFIER
-
-Public Sub SearchEntireStringMemory(ByVal PID As Long, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByRef tReslng() As Long, ByRef tResstr() As String, Optional PGB As pgrbar)
-Dim S As String
+Public Sub SearchEntireStringMemory(ByVal PID As Long, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByRef lngRes() As Long, ByRef strRes() As String, Optional PGB As pgrbar)
 Dim strCtemp As String
 Dim x As Long
 Dim lngLen As Long
 Dim bytAsc As Byte
-Dim lngFile As Long
 Dim strBuffer As String
 Dim curByte As Currency
-Dim tOver As OVERLAPPED
 Dim i As Long
+Dim tRes() As T_RESULT
 Dim lHandle As Long
-Dim LB() As Long, LS() As Long
+Dim LB() As Long
+Dim LS() As Long
 
     On Error GoTo ErrGestion
     
     'on obtient les différentes régions de la mémoire du processus
     RetrieveMemRegions PID, LB(), LS()
     
+    'calcule la taille max (lngLen)
+    lngLen = 0
+    For i = 1 To UBound(LS())
+        lngLen = lngLen + LS(i)
+    Next i
+    
     If Not (PGB Is Nothing) Then
         'on initialise la progressabr
         PGB.Min = 0
         PGB.Value = 0
-        PGB.Max = lngLen
+        PGB.Max = UBound(LS())
     End If
     
     'on obtient le handle depuis le PID
@@ -432,71 +460,73 @@ Dim LB() As Long, LS() As Long
     ReDim tRes(0)
 
     'vérifie que le handle est valide
-    If lHandle = INVALID_HANDLE_VALUE Then Exit Sub
+    If lHandle = INVALID_HANDLE_VALUE Then
+        ReDim lngRes(0)
+        ReDim strRes(0)
+        Exit Sub
+    End If
     
     strCtemp = vbNullString: x = 1: curByte = 0
     
-    'créé un buffer contenant chaque zone mémoire
-    
-    strBuffer = String$(51200, 0) 'buffer de 50K
-      
-    Do Until curByte > lngLen  'tant que le fichier n'est pas fini
-    
-        x = x + 1
-    
-        'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
-        GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
+    'pour chaque zone mémoire
+    For x = 1 To UBound(LS())
         
-        'obtient la string sur le buffer
-     '   ReadFileEx lngFile, ByVal strBuffer, 51200, tOver, AddressOf CallBackFunction
-    
+        'on récupère la string complète de cette zone mémoire
+        strBuffer = Me.ReadBytesH(lHandle, LB(x), LS(x))
+
         strCtemp = vbNullString
         
         'effectue la recherche dans la string
-      '  For i = 0 To 51199
-        
-     '       bytAsc = Asc(Mid$(strBuffer, i + 1, 1)) 'prend un byte
+        For i = 0 To LS(x) - 1
+            If (i Mod 300000) = 0 Then DoEvents   'rend un peu la main
+            bytAsc = Asc(Mid$(strBuffer, i + 1, 1)) 'prend un byte
             
-      '      If IsCharConsideredInAString(bytAsc, bSigns, bMaj, bMin, bNumbers) Then
+            If IsCharConsideredInAString(bytAsc, bSigns, bMaj, bMin, bNumbers) Then
                 'caractère x est valide
-      '          strCtemp = strCtemp & Chr(bytAsc)
-      '      Else
-      '          strCtemp = Trim$(strCtemp)
-      '          If Len(strCtemp) > lMinimalLenght Then
+                strCtemp = strCtemp & Chr(bytAsc)
+            Else
+                strCtemp = Trim$(strCtemp)
+                If Len(strCtemp) > lMinimalLenght Then
                     'trouvé la chaine correspondante
-      '              ReDim Preserve tRes(UBound(tRes) + 1)
-      '              tRes(UBound(tRes)).curOffset = curByte + i - Len(strCtemp) + 1
-      '              tRes(UBound(tRes)).strString = strCtemp
-      '          End If
+                    ReDim Preserve tRes(UBound(tRes) + 1)
+                    tRes(UBound(tRes)).curOffset = i + LB(x) - Len(strCtemp) + 1
+                    tRes(UBound(tRes)).strString = strCtemp
+                End If
                 strCtemp = vbNullString
-      '      End If
-     '   Next i
-        
+            End If
+        Next i
+            
         If Len(strCtemp) > lMinimalLenght Then
             'trouvé la dernière chaine possible (dernier byte compris dans cette chaine)
             ReDim Preserve tRes(UBound(tRes) + 1)
-            tRes(UBound(tRes)).curOffset = curByte + 51199 - Len(strCtemp) + 1
+            tRes(UBound(tRes)).curOffset = LS(x) + LB(x) - Len(strCtemp) + 1
             tRes(UBound(tRes)).strString = strCtemp
         End If
         
-        If (x Mod 10) = 0 Then
-            If Not (PGB Is Nothing) Then PGB.Value = curByte    'refresh progressbar
-            DoEvents    'rend la main
-        End If
-        
-        curByte = curByte + 51200   'incrémente la position
-    Loop
+        If Not (PGB Is Nothing) Then PGB.Value = x    'refresh progressbar
+        DoEvents    'rend la main
+     Next x
     
-    If Not (PGB Is Nothing) Then PGB.Value = lngLen
+    
+    If Not (PGB Is Nothing) Then PGB.Value = PGB.Max
     
     Let strBuffer = vbNullString
-    CloseHandle lngFile 'ferme le handle du fichier
+    CloseHandle lHandle 'ferme le handle du process
+    
+    'maintenant, stocke dans les arrays de sortie
+    ReDim lngRes(UBound(tRes()))
+    ReDim strRes(UBound(tRes()))
+    For i = 1 To UBound(tRes())
+        If (i Mod 2000) = 0 Then DoEvents 'rend la main
+        lngRes(i) = tRes(i).curOffset
+        strRes(i) = tRes(i).strString
+    Next i
     
     Exit Sub
+    
 ErrGestion:
 
-    CloseHandle lngFile 'ferme le handle du fichier
-    
+    CloseHandle lHandle 'ferme le handle du process
     clsERREUR.AddError "mdlDisk.SearchStringInFile", True
 End Sub
 
