@@ -260,14 +260,35 @@ Private Sub Form_Unload(Cancel As Integer)
     Set clsPref = Nothing
 End Sub
 
-Private Sub lstList_ItemCheck(Item As Integer)
+'-------------------------------------------------------
+'recalcule la taille totale
+'-------------------------------------------------------
+Private Sub RecalcSize()
 'alors on recalcule la taille du fichier résultat
-
+Dim lSize As Long
+Dim x As Long
+Dim y As Long
+Dim s As String
+    
+    lSize = 0
+    For x = 0 To lstList.ListCount - 1
+        s = Left$(lstList.List(x), Len(lstList.List(x)) - 1)  'garde l'item sans le ']' final
+        y = InStrRev(s, "[", , vbBinaryCompare)
+        s = Mid$(s, y + 1, Len(s) - y) 'contient la taille
+        
+        If lstList.Selected(x) Then
+            'ajoute la taille
+            lSize = lSize + Val(s)
+        End If
+    Next x
+    lblSize.Caption = "Taille du fichier résultant=[" & Trim$(Str$(lSize)) & "]" & vbNewLine & FormatedSize(lSize)
 End Sub
 
 Private Sub lstList_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu sur le listbox
-    If Button = 2 Then Me.PopupMenu Me.mnuPopup
+    If Button = 2 Then Me.PopupMenu Me.mnuPopUp
+    
+    RecalcSize  'recalcule la taille
 End Sub
 
 Private Sub mnuDeselectAll_Click()
@@ -280,6 +301,7 @@ Dim x As Long
         lstList.Selected(x) = False
     Next x
     
+    lblSize.Caption = "Taille du fichier résultant=[0]"
     lstList.Visible = True
 End Sub
 
@@ -295,7 +317,8 @@ Dim x As Long
     Next x
     
     lstList.Visible = True
-
+    
+    RecalcSize  'recalcule la taille
 End Sub
 
 '-------------------------------------------------------

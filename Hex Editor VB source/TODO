@@ -4,7 +4,7 @@ bitmap|save bitmap au bon format (taille)| 10| 1
 conversion avancée|ajouter la conversion avancée| 46| 3
 conversion simple|conversion simple dans toutes les bases et support des grands nombres (voire des nombres négatifs et décimaux)| 43| 4
 copie|copie inter form| 10| 3
-copier/coller/insérer|ajouter copier/coller et insertion de bytes| 18| 3
+copier/coller/insérer|ajouter copier/coller et insertion de bytes| 30| 3
 crc|ajouter la visualisation du CRC et virer le module pas sous gnu| 30| 3
 dates|ne pas changer les dates lors de la sauvegarde de fichier| 10| 1
 dbl click|double cliquer pour changer de point courant dans le HW| 10| 4

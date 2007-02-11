@@ -74,7 +74,16 @@ Dim s As String
         MsgBox "Votre système d'exploitation est [" & s & "] build [" & Trim$(Str$(y)) & "]" & vbNewLine & "Ce logiciel n'est compatible qu'avec Windows XP et Windows Vista." & vbNewLine & "Hex Editor VB va donc se fermer", vbCritical, "Système d'exploitation non compatible"
         End
     End If
-
+    
+    'affiche des messages de warning si on n'a pas une version finale
+    #If PRE_ALPHA_VERSION Then
+        'version prealpha
+        MsgBox "This file is a pre-alpha version, it means that functionnalities are missing and it may contains bugs." & vbNewLine & "This file is avalailable for testing purpose.", vbCritical, "Warning"
+    #ElseIf BETA_VERSION Then
+        'version beta
+        MsgBox "This file is a beta version, it means that all principal functions are availables but there is still bugs." & vbNewLine & "This file is avalailable for testing purpose.", vbCritical, "Warning"
+    #End If
+    
     Set clsERREUR = New clsGetionErreur 'instancie la classe de gestion des erreurs
     'affecte les properties à la classe
     clsERREUR.LogFile = App.Path & "\ErrLog.log"

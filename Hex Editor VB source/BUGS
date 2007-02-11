@@ -10,4 +10,5 @@ histo|bug maintiens ajout de string car on rend la main en changeant le selected
 histo|enlever marque rouge de changement lors de undo| 10| 1
 like word|copie bas niveau ==> augmente la taille ?| 10| 3
 pile vs|surchargement de la pile après plusieurs utilisations d'un ExtendedVS| 10| 9
+processsave|pb lors de la sélection (non check) ==> affichage de la taille faux| 10| 3
 reorganisation listview|réorganisation correcte des fichiers par taille dans les FileView| 10| 3

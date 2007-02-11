@@ -394,6 +394,31 @@ Dim lFile As Long
 End Function
 
 '-------------------------------------------------------
+'copie la string dans un fichier (type de donnée binaire)
+'-------------------------------------------------------
+Public Function SaveDATAinFile(ByVal sFile As String, ByVal sContenuFichier As String, Optional ByVal bDeleteActualFile As Boolean = False) As Long
+Dim lFile As Long
+    
+    'si le fichier est inexistant ou bien si on doit l'overwrite
+    If Me.FileExists(sFile) = False Or bDeleteActualFile = True Then
+        Me.CreateEmptyFile sFile, True
+    End If
+
+    'récupère un numéro libre
+    lFile = FreeFile
+    
+    'ouvre le fichier
+    Open sFile For Binary Access Write As #lFile
+
+    'sauvegarde la string
+    Put #lFile, , sContenuFichier
+    
+    'referme le fichier
+    Close lFile
+    
+End Function
+
+'-------------------------------------------------------
 'obtient les infos sur un dossier
 '-------------------------------------------------------
 Public Function GetFolder(ByVal sFolder As String) As clsFolder
