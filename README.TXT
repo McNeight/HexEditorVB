@@ -15,6 +15,7 @@ INSTALLATION STEPS
 - Extract folder called "binaries"
 - Launch RegisterOCX.Bat
 - Run HexEditor.exe (maybe 2 times in order to create the *.manifest file)
+NOTE : TODO and BUGS files are readables with my vb6 add-in : http://www.vbfrance.com/codes/ADDIN-VB6-POUR-GESTION-AVANCEMENT-PROJETS_41325.aspx
 ---------------------------------------------------
 
 
