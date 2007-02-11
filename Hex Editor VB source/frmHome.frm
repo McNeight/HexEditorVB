@@ -71,7 +71,7 @@ Begin VB.Form frmHome
             Height          =   285
             Left            =   120
             TabIndex        =   39
-            ToolTipText     =   "Fichier choisi pour l'ouverture"
+            ToolTipText     =   "Nouveau fichier à créer"
             Top             =   480
             Width           =   5415
          End
@@ -80,7 +80,7 @@ Begin VB.Form frmHome
             Height          =   255
             Left            =   5640
             TabIndex        =   38
-            ToolTipText     =   "Choix du fichier à ouvrir"
+            ToolTipText     =   "Choix du fichier à créer"
             Top             =   480
             Width           =   615
          End
