@@ -260,9 +260,13 @@ End Sub
 '-------------------------------------------------------
 'sauvegarder en bitmap
 '-------------------------------------------------------
-Public Sub SaveBMP(ByVal sFile As String)
-
-    pct.Picture = UserControl.Image
-    SavePicture pct.Picture, sFile
+Public Sub SaveBMP(ByVal sFile As String, Optional ByVal lWidth As Long = 640, Optional ByVal lHeight As Long = 480)
+    With pct
+        .ScaleMode = 3 'pixels
+        .Width = lWidth
+        .Height = lHeight
+        .Picture = UserControl.Image
+        SavePicture .Picture, sFile
+    End With
 End Sub
 

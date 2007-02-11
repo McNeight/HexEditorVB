@@ -25,6 +25,86 @@ Begin VB.Form frmHome
    ScaleWidth      =   6855
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Frame Frame1 
+      Height          =   4455
+      Index           =   4
+      Left            =   120
+      TabIndex        =   35
+      Top             =   480
+      Width           =   6615
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   4095
+         Index           =   4
+         Left            =   50
+         ScaleHeight     =   4095
+         ScaleWidth      =   6495
+         TabIndex        =   36
+         Top             =   240
+         Width           =   6495
+         Begin VB.TextBox txtSize 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   2160
+            TabIndex        =   41
+            Tag             =   "pref"
+            Text            =   "100"
+            ToolTipText     =   "Taille"
+            Top             =   1080
+            Width           =   975
+         End
+         Begin VB.ComboBox cdUnit 
+            Height          =   315
+            ItemData        =   "frmHome.frx":08CA
+            Left            =   3360
+            List            =   "frmHome.frx":08DA
+            Style           =   2  'Dropdown List
+            TabIndex        =   40
+            Tag             =   "pref"
+            ToolTipText     =   "Unité"
+            Top             =   1080
+            Width           =   1335
+         End
+         Begin VB.TextBox txtNewFile 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   120
+            TabIndex        =   39
+            ToolTipText     =   "Fichier choisi pour l'ouverture"
+            Top             =   480
+            Width           =   5415
+         End
+         Begin VB.CommandButton cmdBrowseNew 
+            Caption         =   "..."
+            Height          =   255
+            Left            =   5640
+            TabIndex        =   38
+            ToolTipText     =   "Choix du fichier à ouvrir"
+            Top             =   480
+            Width           =   615
+         End
+         Begin VB.Label Label1 
+            Alignment       =   2  'Center
+            Caption         =   "Taille du fichier"
+            Height          =   255
+            Index           =   5
+            Left            =   120
+            TabIndex        =   42
+            Top             =   1080
+            Width           =   1935
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Création d'un nouveau fichier"
+            Height          =   255
+            Index           =   4
+            Left            =   120
+            TabIndex        =   37
+            Top             =   120
+            Width           =   3255
+         End
+      End
+   End
    Begin VB.CommandButton cmdQuit 
       Caption         =   "Annuler"
       Height          =   435
@@ -51,29 +131,39 @@ Begin VB.Form frmHome
       _ExtentY        =   661
       _Version        =   327682
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-         NumTabs         =   4
+         NumTabs         =   5
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Ouvrir un fichier"
+            Caption         =   "Ouvrir fichier"
+            Key             =   ""
             Object.Tag             =   ""
             Object.ToolTipText     =   "Ouvrir un fichier"
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Ouvrir un dossier"
+            Caption         =   "Ouvrir dossier"
+            Key             =   ""
             Object.Tag             =   ""
             Object.ToolTipText     =   "Ouvrir un dossier de fichiers"
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Ouvrir un disque"
+            Caption         =   "Ouvrir disque"
+            Key             =   ""
             Object.Tag             =   ""
             Object.ToolTipText     =   "Ouvrir un disque"
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Ouvrir un processus"
+            Caption         =   "Ouvrir processus"
+            Key             =   ""
             Object.Tag             =   ""
             Object.ToolTipText     =   "Ouvrir un processus"
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Nouveau fichier"
+            Key             =   ""
+            Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
       EndProperty
@@ -270,83 +360,6 @@ Begin VB.Form frmHome
    End
    Begin VB.Frame Frame1 
       Height          =   4455
-      Index           =   0
-      Left            =   120
-      TabIndex        =   1
-      Top             =   480
-      Width           =   6615
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   4095
-         Index           =   0
-         Left            =   50
-         ScaleHeight     =   4095
-         ScaleWidth      =   6495
-         TabIndex        =   2
-         Top             =   240
-         Width           =   6495
-         Begin VB.Frame Frame2 
-            Caption         =   "Informations"
-            Height          =   3135
-            Index           =   2
-            Left            =   120
-            TabIndex        =   25
-            Top             =   840
-            Width           =   6255
-            Begin VB.PictureBox Picture2 
-               BorderStyle     =   0  'None
-               Height          =   2775
-               Index           =   2
-               Left            =   120
-               ScaleHeight     =   2775
-               ScaleWidth      =   6015
-               TabIndex        =   26
-               Top             =   240
-               Width           =   6015
-               Begin VB.TextBox txtFileInfos 
-                  BorderStyle     =   0  'None
-                  Height          =   2775
-                  Left            =   0
-                  Locked          =   -1  'True
-                  MultiLine       =   -1  'True
-                  ScrollBars      =   2  'Vertical
-                  TabIndex        =   32
-                  Top             =   0
-                  Width           =   6015
-               End
-            End
-         End
-         Begin VB.CommandButton cmdBrowseFile 
-            Caption         =   "..."
-            Height          =   255
-            Left            =   5640
-            TabIndex        =   11
-            ToolTipText     =   "Choix du fichier à ouvrir"
-            Top             =   360
-            Width           =   615
-         End
-         Begin VB.TextBox txtFile 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   120
-            TabIndex        =   10
-            ToolTipText     =   "Fichier choisi pour l'ouverture"
-            Top             =   360
-            Width           =   5415
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Choix du fichier à ouvrir :"
-            Height          =   255
-            Index           =   0
-            Left            =   120
-            TabIndex        =   9
-            Top             =   120
-            Width           =   4095
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   4455
       Index           =   2
       Left            =   120
       TabIndex        =   5
@@ -423,6 +436,83 @@ Begin VB.Form frmHome
          End
       End
    End
+   Begin VB.Frame Frame1 
+      Height          =   4455
+      Index           =   0
+      Left            =   120
+      TabIndex        =   1
+      Top             =   480
+      Width           =   6615
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   4095
+         Index           =   0
+         Left            =   50
+         ScaleHeight     =   4095
+         ScaleWidth      =   6495
+         TabIndex        =   2
+         Top             =   240
+         Width           =   6495
+         Begin VB.Frame Frame2 
+            Caption         =   "Informations"
+            Height          =   3135
+            Index           =   2
+            Left            =   120
+            TabIndex        =   25
+            Top             =   840
+            Width           =   6255
+            Begin VB.PictureBox Picture2 
+               BorderStyle     =   0  'None
+               Height          =   2775
+               Index           =   2
+               Left            =   120
+               ScaleHeight     =   2775
+               ScaleWidth      =   6015
+               TabIndex        =   26
+               Top             =   240
+               Width           =   6015
+               Begin VB.TextBox txtFileInfos 
+                  BorderStyle     =   0  'None
+                  Height          =   2775
+                  Left            =   0
+                  Locked          =   -1  'True
+                  MultiLine       =   -1  'True
+                  ScrollBars      =   2  'Vertical
+                  TabIndex        =   32
+                  Top             =   0
+                  Width           =   6015
+               End
+            End
+         End
+         Begin VB.CommandButton cmdBrowseFile 
+            Caption         =   "..."
+            Height          =   255
+            Left            =   5640
+            TabIndex        =   11
+            ToolTipText     =   "Choix du fichier à ouvrir"
+            Top             =   360
+            Width           =   615
+         End
+         Begin VB.TextBox txtFile 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   120
+            TabIndex        =   10
+            ToolTipText     =   "Fichier choisi pour l'ouverture"
+            Top             =   360
+            Width           =   5415
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Choix du fichier à ouvrir :"
+            Height          =   255
+            Index           =   0
+            Left            =   120
+            TabIndex        =   9
+            Top             =   120
+            Width           =   4095
+         End
+      End
+   End
 End
 Attribute VB_Name = "frmHome"
 Attribute VB_GlobalNameSpace = False
@@ -478,6 +568,11 @@ Private Sub cmdBrowseFolder_Click()
     txtFolder.Text = cFile.BrowseForFolder("Sélectionner le dossier à ouvrir", Me.hwnd)
 End Sub
 
+Private Sub cmdBrowseNew_Click()
+'browse un dossier
+    txtNewFile.Text = cFile.ShowSave("Sélectionner le fichier à créer", Me.hwnd, "Tous|*.*", App.Path)
+End Sub
+
 Private Sub cmdOk_Click()
 'ouvre l'élément sélectionné
 Dim m() As String
@@ -486,6 +581,8 @@ Dim X As Long
 Dim sDrive As String
 Dim cDr As clsDiskInfos
 Dim lH As Long
+Dim lFile As Long
+Dim lLen As Long
 
     On Error GoTo ErrGestion
 
@@ -560,7 +657,36 @@ Dim lH As Long
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
             frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
-
+            
+        Case 5
+            
+            'vérifie que le fichier n'existe pas
+            If cFile.FileExists(txtNewFile.Text) Then
+                'fichier déjà existant
+                If MsgBox("Le fichier sélectionné existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+            End If
+            cFile.CreateEmptyFile txtNewFile.Text, True
+            
+            'création du fichier
+            lLen = Abs(Val(txtSize.Text))
+            If cdUnit.Text = "Ko" Then lLen = lLen * 1024
+            If cdUnit.Text = "Mo" Then lLen = (lLen * 1024) * 1024
+            If cdUnit.Text = "Go" Then lLen = ((lLen * 1024) * 1024) * 1024
+            
+            'obtient un numéro de fichier disponible
+            lFile = FreeFile
+            
+            Open txtNewFile.Text For Binary Access Write As lFile
+                Put lFile, , String$(lLen, vbNullChar)
+            Close lFile
+            
+            'affiche une nouvelle fenêtre
+            Set Frm = New Pfm
+            Call Frm.GetFile(txtNewFile.Text)
+            Frm.Show
+            lNbChildFrm = lNbChildFrm + 1
+            frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+        
     End Select
     
     If cPref.general_CloseHomeWhenChosen Then
@@ -648,6 +774,13 @@ Dim X As Long
         Frame1(X).Visible = False
     Next X
     Frame1(lFrame).Visible = True
+    
+    If lFrame = 4 Then
+        'création de fichier
+        cmdOk.Caption = "Créer et ouvrir"
+    Else
+        cmdOk.Caption = "Ouvrir"
+    End If
 
 End Sub
 
