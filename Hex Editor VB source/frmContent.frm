@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "12:59"
+            TextSave        =   "13:55"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1627,6 +1627,8 @@ Dim y As Long
 Dim s As String
 Dim s2 As String
 Dim curSize As Currency
+Dim curPos2 As Currency
+Dim curSize2 As Currency
 Dim curPos As Currency
 
     If Me.ActiveForm Is Nothing Then Exit Sub
@@ -1658,7 +1660,21 @@ Dim curPos As Currency
             s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
 
         Case "Disque"
-            
+        
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+
+            'récupère la string
+            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
             
     End Select
 
@@ -1679,6 +1695,8 @@ Dim X As Long
 Dim y As Long
 Dim s As String
 Dim curSize As Currency
+Dim curPos2 As Currency
+Dim curSize2 As Currency
 Dim curPos As Currency
 
     If Me.ActiveForm Is Nothing Then Exit Sub
@@ -1710,7 +1728,21 @@ Dim curPos As Currency
             s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
           
         Case "Disque"
-            
+        
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+
+            'récupère la string
+            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
             
     End Select
 
@@ -1726,6 +1758,8 @@ Private Sub mnuPopupCopy2_Click()
 Dim X As Long
 Dim y As Long
 Dim s As String
+Dim curPos2 As Currency
+Dim curSize2 As Currency
 Dim curSize As Currency
 Dim curPos As Currency
 
@@ -1758,8 +1792,22 @@ Dim curPos As Currency
             s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
 
         Case "Disque"
-            
+        
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
 
+            'récupère la string
+            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
+            
     End Select
 
     'formate la string
@@ -1775,6 +1823,8 @@ Private Sub mnuPopupCopy3_Click()
 Dim X As Long
 Dim y As Long
 Dim s As String
+Dim curPos2 As Currency
+Dim curSize2 As Currency
 Dim curSize As Currency
 Dim curPos As Currency
 
@@ -1808,6 +1858,21 @@ Dim curPos As Currency
         
         Case "Disque"
         
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+
+            'récupère la string
+            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
+            
     End Select
 
     Clipboard.SetText s, vbCFText   'format fichier texte

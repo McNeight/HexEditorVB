@@ -47,42 +47,42 @@ End Function
 '-------------------------------------------------------
 'lecture de lLen bytes à l'offset lOffset dans le drive sDrive
 '-------------------------------------------------------
-Public Sub ReadB(ByVal sDrive As String, ByVal lOffset As Currency, ByVal lLen As Long, ByRef lResult() As Byte)
-Dim lDrive As Long
-Dim crPointeur As Currency
-Dim tOver As OVERLAPPED
-Dim Ret As Long, ret2 As Long
+'Public Sub ReadB(ByVal sDrive As String, ByVal lOffset As Currency, ByVal lLen As Long, ByRef lResult() As Byte)
+'Dim lDrive As Long
+'Dim crPointeur As Currency
+'Dim tOver As OVERLAPPED
+'Dim Ret As Long, ret2 As Long
 
-    On Error GoTo DiskErr
+'    On Error GoTo DiskErr
 
     'obtient un path valide pour l'API CreateFIle si nécessaire
-    If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
+'    If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
     
     'initialise le tableau résultat
-    ReDim lResult(0)
+'    ReDim lResult(0)
         
     'obtient un handle vers le Drive
-    lDrive = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+'    lDrive = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
     
     'si le handle est correct
-    If lDrive <> INVALID_HANDLE_VALUE Then
+'    If lDrive <> INVALID_HANDLE_VALUE Then
         
         'move pointer
-        ret2 = SetFilePointerEx(lDrive, lOffset, 0&, FILE_BEGIN) ', , lOffset   'positionne au Offset dans le disque
+'        ret2 = SetFilePointerEx(lDrive, lOffset, 0&, FILE_BEGIN) ', , lOffset   'positionne au Offset dans le disque
         
         'redimensionne le tableau à la taille convenable du résultat
-        ReDim lResult(lLen)
+'        ReDim lResult(lLen)
         
         'obtient les bytes désirés
-        Ret = ReadFile(lDrive, lResult(1), lLen, 0&, ByVal 0&)
-        Debug.Print "setfilepointerex=" & ret2 & "  readfile=" & Ret
-    End If
+'        Ret = ReadFile(lDrive, lResult(1), lLen, 0&, ByVal 0&)
+'        Debug.Print "setfilepointerex=" & ret2 & "  readfile=" & Ret
+'    End If
     
-DiskErr:
+'DiskErr:
     
     'ferme le handle ouvert
-    CloseHandle lDrive
-End Sub
+'    CloseHandle lDrive
+'End Sub
 
 '-------------------------------------------------------
 'permet de lire des bytes directement dans le disque
@@ -290,50 +290,50 @@ End Function
 '-------------------------------------------------------
 'identique à ReadDiskBytes, mais différent
 '-------------------------------------------------------
-Public Sub DirectReadDriveNT(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal iOffset As Currency, ByVal cBytes As Long, ByVal BytesPerSector As Long, ByRef abResult() As Byte)
-Dim hDevice As Long
-Dim abBuff() As Byte
-Dim nSectors As Currency
-Dim nRead As Long
+'Public Sub DirectReadDriveNT(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal iOffset As Currency, ByVal cBytes As Long, ByVal BytesPerSector As Long, ByRef abResult() As Byte)
+'Dim hDevice As Long
+'Dim abBuff() As Byte
+'Dim nSectors As Currency
+'Dim nRead As Long
 
-    On Error GoTo ErrGestion
+'    On Error GoTo ErrGestion
 
     'obtient un path valide pour l'API CreateFIle si nécessaire
-    If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
+'    If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
 
     'calcule le numéro du secteur lu
-    nSectors = Int((iOffset + cBytes - 1) / BytesPerSector) + 1
+'    nSectors = Int((iOffset + cBytes - 1) / BytesPerSector) + 1
     
     'ouvre le drive
-    hDevice = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+'    hDevice = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
     
     'quitte si le handle n'est pas valide
-    If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
+'    If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
     
     'move pointer
-    Call SetFilePointer(hDevice, iStartSec * BytesPerSector, 0, FILE_BEGIN)
+'    Call SetFilePointer(hDevice, iStartSec * BytesPerSector, 0, FILE_BEGIN)
     
     'redimensionne les tableaux résultants
-    ReDim abResult(cBytes - 1)
-    ReDim abBuff(nSectors * BytesPerSector - 1)
+'    ReDim abResult(cBytes - 1)
+'    ReDim abBuff(nSectors * BytesPerSector - 1)
     
     'appel l'API de lecture
-    Call ReadFile(hDevice, abBuff(0), UBound(abBuff) + 1, nRead, 0&)
+'    Call ReadFile(hDevice, abBuff(0), UBound(abBuff) + 1, nRead, 0&)
     
     'ferme le handle
-    CloseHandle hDevice
+'    CloseHandle hDevice
     
     'stocke le résultat dans le tableau
-    CopyMemory abResult(0), abBuff(iOffset), cBytes
+'    CopyMemory abResult(0), abBuff(iOffset), cBytes
     
-    Exit Sub
-ErrGestion:
+'    Exit Sub
+'ErrGestion:
 
     'ferme le handle
-    CloseHandle hDevice
+'    CloseHandle hDevice
     
-    clsERREUR.AddError "mdlDisk.DirectReadDriveNT", True
-End Sub
+'    clsERREUR.AddError "mdlDisk.DirectReadDriveNT", True
+'End Sub
 
 '-------------------------------------------------------
 'fonction de recherche de string complètes dans un fichier
@@ -341,9 +341,9 @@ End Sub
 '-------------------------------------------------------
 Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByRef tRes() As SearchResult, Optional PGB As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
-Dim S As String
+Dim s As String
 Dim strCtemp As String
-Dim x As Long
+Dim X As Long
 Dim lngLen As Long
 Dim bytAsc As Byte
 Dim lngFile As Long
@@ -373,7 +373,7 @@ Dim i As Long
     'vérifie que le handle est valide
     If lngFile = INVALID_HANDLE_VALUE Then Exit Sub
     
-    strCtemp = vbNullString: x = 1: curByte = 0
+    strCtemp = vbNullString: X = 1: curByte = 0
     
     'va faire tout le fichier pour tenter de dénicher des strings
     'créé un buffer de 50Ko
@@ -384,7 +384,7 @@ Dim i As Long
       
     Do Until curByte > lngLen  'tant que le fichier n'est pas fini
     
-        x = x + 1
+        X = X + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
@@ -421,7 +421,7 @@ Dim i As Long
             tRes(UBound(tRes)).strString = strCtemp
         End If
         
-        If (x Mod 10) = 0 Then
+        If (X Mod 10) = 0 Then
             If Not (PGB Is Nothing) Then PGB.Value = curByte    'refresh progressbar
             DoEvents    'rend la main
         End If
@@ -448,8 +448,8 @@ End Sub
 '-------------------------------------------------------
 Public Sub SearchForStringFile(ByVal sFile As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
-Dim S As String
-Dim x As Long
+Dim s As String
+Dim X As Long
 Dim lngLen As Long
 Dim bytAsc As Byte
 Dim lngFile As Long
@@ -481,7 +481,7 @@ Dim i As Long
     'vérifie que le handle est valide
     If lngFile = INVALID_HANDLE_VALUE Then Exit Sub
     
-    x = 1: curByte = 0
+    X = 1: curByte = 0
     
     'va faire tout le fichier pour tenter de dénicher des strings
     'créé un buffer de 50Ko
@@ -494,7 +494,7 @@ Dim i As Long
       
     Do Until curByte > lngLen  'tant que le fichier n'est pas fini
     
-        x = x + 1
+        X = X + 1
         
         If bCasse = False Then strBuffer = LCase$(strBuffer)
         
@@ -524,7 +524,7 @@ Dim i As Long
             strBufT = Right$(strBufT, Len(strBufT) - InStr(1, strBufT, sMatch, vbBinaryCompare) - Len(sMatch) + 1)
         Wend
         
-        If (x Mod 10) = 0 Then
+        If (X Mod 10) = 0 Then
             If Not (PGB Is Nothing) Then PGB.Value = curByte    'refresh progressbar
             DoEvents    'rend la main
         End If
@@ -554,7 +554,7 @@ End Sub
 '-------------------------------------------------------
 Public Sub SearchForStringDisk(ByVal sDrive As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
-Dim x As Long
+Dim X As Long
 Dim R() As Byte
 Dim bytAsc As Byte
 Dim strDrive As String
@@ -742,7 +742,7 @@ Dim FileBitmap As RETRIEVAL_POINTERS_BUFFER 'carte des clusters du fichier
 Dim nExtents As Long
 Dim StartingAddress As LARGE_INTEGER 'VCN de début de la carte du fichier
 Dim status As Long 'état de l'opération
-Dim x As Long
+Dim X As Long
 Dim tmp As FileClusters
 
     On Error GoTo ErrGestion
@@ -834,7 +834,7 @@ End Function
 Public Function GetVolumeFilesBitmap(Volume As String, Optional Progress As pgrbar, Optional SubFolder As Boolean = True) As FileClusters()
 Dim tmp() As FileClusters2
 Dim Files() As String
-Dim x As Long, ub As Long
+Dim X As Long, ub As Long
     
     On Error GoTo ErrGestion
     DoEvents
@@ -847,9 +847,9 @@ Dim x As Long, ub As Long
         Progress.Max = ub + 1
         Progress.Value = 0
     End If
-    For x = 0 To ub
-        tmp(x) = GetFileFragmentCount(Files(x))
-        If (x Mod 250) = 0 Then
+    For X = 0 To ub
+        tmp(X) = GetFileFragmentCount(Files(X))
+        If (X Mod 250) = 0 Then
             Progress.Value = IIf(Progress.Value + 250 < Progress.Max, Progress.Value + 250, Progress.Max)
             DoEvents
         End If
