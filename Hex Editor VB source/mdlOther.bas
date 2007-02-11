@@ -407,6 +407,10 @@ End Sub
 Public Function Str2Hex(ByVal s As String) As String
     Str2Hex = Hex$(Str2Dec(s))
 End Function
+Public Function Str2Hex_(ByVal s As String) As String
+    Str2Hex_ = Hex$(Str2Dec(s))
+    If Len(Str2Hex_) = 1 Then Str2Hex_ = "0" & Str2Hex_
+End Function
 Public Function Str2Dec(ByVal s As String) As Long
     If s = vbNullString Then Exit Function
     Str2Dec = Asc(s)
@@ -703,6 +707,6 @@ Dim s As String, l As Long
             Exit Function
     End Select
     
-    GetWindowsVersion = UnKnown
+    GetWindowsVersion = Unknown
     
 End Function

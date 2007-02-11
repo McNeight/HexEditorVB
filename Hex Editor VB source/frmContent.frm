@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "21:41"
+            TextSave        =   "12:59"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -98,7 +98,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "09/02/2007"
+            TextSave        =   "11/02/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1625,20 +1625,52 @@ Private Sub mnuPopupCopy_Click()
 Dim X As Long
 Dim y As Long
 Dim s As String
+Dim s2 As String
+Dim curSize As Currency
+Dim curPos As Currency
 
     If Me.ActiveForm Is Nothing Then Exit Sub
     
-    s = vbNullString
+    s = vbNullString    'contiendra la string à copier
     
+    'vide le clipboard
     Clipboard.Clear
     
-   ' For x = 1 To Me.ActiveForm.HW.NumberPerPage
-   '     For y = 1 To 16
-   '         If Me.ActiveForm.HW.IsSelected(x, y) = True Then s = s & Me.ActiveForm.HW.Value(x, y)
-    '    Next y
-    'Next x
+    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
+
+    'détermine la taille
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
     
-    Clipboard.SetText s
+    'détermine la position du premier offset
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+    
+    Select Case TypeOfForm(frmContent.ActiveForm)
+        Case "Fichier"
+            'édition d'un fichier ==> va piocher avec ReadFile
+                        
+            'récupère la string
+            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
+            
+        Case "Processus"
+        
+            'récupère la string
+            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+
+        Case "Disque"
+            
+            
+    End Select
+
+    'formate la string
+    s2 = vbNullString
+    For X = 1 To Len(s)
+        If (X Mod 1000) = 0 Then DoEvents 'rend la main
+        s2 = s2 & Str2Hex_(Mid$(s, X, 1))
+    Next X
+            
+    Clipboard.SetText s2
+    Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 
 Private Sub mnuPopupCopy22_Click()
@@ -1653,34 +1685,40 @@ Dim curPos As Currency
     
     s = vbNullString    'contiendra la string à copier
     
+    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
+        
     'vide le clipboard
     Clipboard.Clear
+
+    'détermine la taille
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    
+    'détermine la position du premier offset
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
     
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"
             'édition d'un fichier ==> va piocher avec ReadFile
-            
-            'détermine la taille
-            curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
-            
-            'détermine la position du premier offset
-            curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
-            
+                        
             'récupère la string
             s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
             
-            'formate la string
-            s = Replace$(s, vbNullChar, Chr$(32), , , vbBinaryCompare)
-            
         Case "Processus"
         
+            'récupère la string
+            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+          
         Case "Disque"
-        
+            
+            
     End Select
 
+    'formate la string
+    s = Replace$(s, vbNullChar, Chr$(32), , , vbBinaryCompare)
     
     Clipboard.SetText s
+    Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 
 Private Sub mnuPopupCopy2_Click()
@@ -1695,34 +1733,40 @@ Dim curPos As Currency
     
     s = vbNullString    'contiendra la string à copier
     
+    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
+        
     'vide le clipboard
     Clipboard.Clear
+    
+    'détermine la taille
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    
+    'détermine la position du premier offset
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
     
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"
             'édition d'un fichier ==> va piocher avec ReadFile
-            
-            'détermine la taille
-            curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
-            
-            'détermine la position du premier offset
-            curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
-            
+
             'récupère la string
             s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
             
-            'formate la string
-            s = FormatednString(s)
-            
         Case "Processus"
         
+            'récupère la string
+            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+
         Case "Disque"
-        
+            
+
     End Select
 
-    
+    'formate la string
+    s = FormatednString(s)
+            
     Clipboard.SetText s
+    Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 
 Private Sub mnuPopupCopy3_Click()
@@ -1737,31 +1781,37 @@ Dim curPos As Currency
     If Me.ActiveForm Is Nothing Then Exit Sub
     
     s = vbNullString    'contiendra la string à copier
+
+    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
     
     'vide le clipboard
     Clipboard.Clear
     
+    'détermine la taille
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    
+    'détermine la position du premier offset
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+            
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"
             'édition d'un fichier ==> va piocher avec ReadFile
-            
-            'détermine la taille
-            curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
-            
-            'détermine la position du premier offset
-            curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
             
             'récupère la string
             s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
         
         Case "Processus"
+            
+            'récupère la string
+            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
         
         Case "Disque"
         
     End Select
 
     Clipboard.SetText s, vbCFText   'format fichier texte
+    Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 
 Private Sub mnuPopupCut_Click()
