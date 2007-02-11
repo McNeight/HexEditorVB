@@ -430,10 +430,6 @@ Dim xCase As Long
         xCase = Round((x - 1250) / 360, 0)
     End If
     
-    If xCase > 16 Then
-        Stop
-    End If
-    
     'stocke dans la variable contenant la nouvelle case sélectionnée
     hexNewCase.lCol = xCase
     hexNewCase.lOffset = Me.FirstOffset + 16 * (yCase - 1)
