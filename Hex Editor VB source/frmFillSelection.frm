@@ -194,6 +194,7 @@ Begin VB.Form frmFillSelection
             Tag             =   "pref0"
             ToolTipText     =   "Remplit avec un byte fixe"
             Top             =   0
+            Value           =   -1  'True
             Width           =   1455
          End
          Begin VB.Label Label1 

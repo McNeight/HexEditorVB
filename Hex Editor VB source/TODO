@@ -9,7 +9,6 @@ crc|ajouter la visualisation du CRC et virer le module pas sous gnu| 30| 3
 createfromsel|ajout création depuis sélection >500Ko| 10| 3
 dates|ne pas changer les dates lors de la sauvegarde de fichier| 10| 1
 dbl click|double cliquer pour changer de point courant dans le HW| 10| 4
-différences|ajouter différences dans comparaison avancée| 10| 4
 drag & drop|ajout du drag and drop sur frmcontent| 66| 3
 fichier dump|support des fichiers *.dmp par défaut| 10| 5
 fixer les bugs|fixer les bugs| 10| 1
@@ -18,6 +17,7 @@ gestion erreur|clsERREUR.AddError "Pfm.OpenFile", True           à pleins d'endr
 historique|ajout de l'historique + gestion redo/undo| 75| 5
 limite fichier|éviter de pouvoir visualiser le fichier après sa limite affichable| 10| 3
 menu save|menu enregistrer (pas sous)| 10| 1
+mergeur|mergeur de fichiers| 10| 3
 mode lecture|ajouter le mode 'lecture de fichier'| 10| 3
 open|gérer le cas de Cancel pour showopen et dans ce cas exit sub| 10| 3
 options|maj des forms apres le changement des options| 10| 3
@@ -35,7 +35,7 @@ save|remplacer CMD pour ShowSave| 30| 3
 save buffer|enregistrer avec un buffer plus gros (diminue le temps)| 10| 1
 script|gérer l'execution de scripts| 23| 1
 settings|vérifier que le tag "pref" est présent sur tous les composants à sauver| 10| 1
-string search|recherche strings dans disque et mémoire| 10| 3
+string search|recherche strings dans disque| 10| 3
 support de vista|ajouter resize de certains composants si vista| 10| 1
 supprimer|ajout de la suppresion d'une partie de bytes| 10| 3
 toolbar|gérer le toolbar (menu de frmcontent)| 52| 3

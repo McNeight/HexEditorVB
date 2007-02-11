@@ -319,6 +319,11 @@ Private Sub cmdCLose_Click()
     Unload Me
 End Sub
 
+Private Sub cmdExamineDifferences_Click()
+    
+    frmMerge.Show vbModal
+End Sub
+
 Private Sub cmdGo_Click()
 'lance l'analyse
     
