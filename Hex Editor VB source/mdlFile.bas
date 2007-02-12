@@ -141,7 +141,7 @@ Public Sub PrintFile(ByVal curStartOffset As Currency, ByVal curEndOffset As Cur
 ByVal bPrintHexa As Boolean, ByVal bPrintASCII As Boolean, ByVal bPrintOffset As Boolean, _
 ByVal bPrintFileInfo As Boolean, ByVal lngTextSize As Long, ByVal tPrinter As Printer, Optional ByVal strTitle As String)
 
-Dim X As Long
+Dim x As Long
 Dim y As Long
 
     Set Printer = tPrinter
@@ -158,19 +158,19 @@ Dim y As Long
         Printer.Print vbNewLine & vbNewLine
         
         'procède à l'impression
-        For X = By16(curStartOffset) To By16(curEndOffset) Step 16
+        For x = By16(curStartOffset) To By16(curEndOffset) Step 16
         
             'offset
             .CurrentX = 300
             .ForeColor = frmContent.ActiveForm.HW.OffsetForeColor
             y = .CurrentY
-            Printer.Print FormatedAdress(X)
+            Printer.Print FormatedAdress(x)
             
             'valeurs hexa
             .CurrentX = 3000: .CurrentY = y
             .ForeColor = frmContent.ActiveForm.HW.HexForeColor
             Printer.Print "0H 45 12 E7 AA 12 35 00 00 FB 4F 7E 81 0D 38 11"
-        Next X
+        Next x
         
         'fin de l'impression
         .EndDoc
@@ -214,3 +214,31 @@ ErrGestion:
     clsERREUR.AddError "mdlFile.GetBytesFromFile", True
 End Function
 
+'-------------------------------------------------------
+'écrire des bytes dans un fichier
+'-------------------------------------------------------
+Public Function WriteBytesToFile(ByVal sFile As String, ByVal sString As String, ByVal curOffset As Currency) As String
+Dim tmpText As String
+Dim Ret As Long
+Dim lFile As Long
+
+    On Error GoTo ErrGestion
+       
+    'obtient un handle vers le fichier à écrire
+    'ouverture en ECRITURE, avec overwrite si déjà existant (car déjà demandé confirmation avant)
+    lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, CREATE_ALWAYS, 0, 0)
+
+    'bouge le pointeur sur le fichier au bon emplacement
+    Ret = SetFilePointerEx(lFile, (curOffset - 1) / 10000, 0&, FILE_BEGIN)
+    'a divisé par 10^4 pour obtenir un nombre décimal de Currency
+
+    'écriture dans le fichier
+    WriteFile lFile, ByVal sString, Len(sString), Ret, ByVal 0&
+    
+    'ferme le handle du fichier écrit
+    CloseHandle lFile
+
+    Exit Function
+ErrGestion:
+    clsERREUR.AddError "mdlFile.WriteBytesToFile", True
+End Function
