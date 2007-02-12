@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "18:45"
+            TextSave        =   "20:36"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -98,7 +98,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "11/02/2007"
+            TextSave        =   "12/02/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -688,7 +688,7 @@ Begin VB.MDIForm frmContent
          Caption         =   "&Renommage massif de fichiers..."
       End
       Begin VB.Menu mnuCutCopyFiles 
-         Caption         =   "&Découper/coller deux fichiers..."
+         Caption         =   "&Découper/fusionner des fichiers..."
       End
       Begin VB.Menu mnuToolsTiret4 
          Caption         =   "-"
