@@ -576,8 +576,11 @@ End Function
 '-------------------------------------------------------
 'créé un fichier vierge et renvoie son handle
 '-------------------------------------------------------
-Public Function CreateEmptyFile(ByVal sFile As String, Optional ByVal OverWrite As Boolean = False) As Long
+Public Function CreateEmptyFile(ByVal sFile As String, Optional ByVal OverWrite As Boolean = False, Optional ByVal curSize As Currency) As Long
 Dim PARAM As Long
+Dim i As Long
+Dim lBuf2 As Long
+Dim lFile As Long
     
     If OverWrite Then
         'fichier déjà existant
@@ -589,6 +592,26 @@ Dim PARAM As Long
     'créé le fichier
     CreateEmptyFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_WRITE Or FILE_SHARE_READ, ByVal 0&, PARAM, ByVal 0&, ByVal 0&)
     CloseHandle CreateEmptyFile 'ferme le handle...
+    
+    If IsMissing(curSize) Or curSize = 0 Then Exit Function  'fichier vierge
+    
+    'alors on remplit ce fichier
+    
+    'calcule le nombre de buffers de 5Mo nécessaires
+    lBuf2 = Int(curSize / 5242880) + IIf((curSize Mod 5242880) = 0, 0, 1)
+    
+    'ouvre le fichier
+    lFile = FreeFile
+    Open sFile For Binary Access Write As #lFile
+    For i = 1 To lBuf2 - 1
+        Put #lFile, , String$(5242880, 0)
+    Next i
+    
+    'remplit le dernier buffer
+    Put #lFile, , String$(curSize - 5242880 * (lBuf2 - 1), 0)
+    
+    'referme le fichier
+    Close #lFile
 End Function
 
 '-------------------------------------------------------
