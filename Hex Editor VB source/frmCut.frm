@@ -40,6 +40,126 @@ Begin VB.Form frmCut
       Top             =   4200
       Width           =   1215
    End
+   Begin ComctlLib.TabStrip TB 
+      Height          =   375
+      Left            =   90
+      TabIndex        =   25
+      Top             =   100
+      Width           =   4935
+      _ExtentX        =   8705
+      _ExtentY        =   661
+      TabWidthStyle   =   2
+      TabFixedWidth   =   4322
+      _Version        =   327682
+      BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
+         NumTabs         =   2
+         BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Découper"
+            Key             =   ""
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Fusionner"
+            Key             =   ""
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+      EndProperty
+   End
+   Begin VB.Frame Frame1 
+      Height          =   3615
+      Index           =   1
+      Left            =   120
+      TabIndex        =   2
+      Top             =   480
+      Visible         =   0   'False
+      Width           =   4935
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   3255
+         Index           =   1
+         Left            =   120
+         ScaleHeight     =   3255
+         ScaleWidth      =   4695
+         TabIndex        =   3
+         Top             =   240
+         Width           =   4695
+         Begin VB.TextBox txtGrFile 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   0
+            TabIndex        =   23
+            ToolTipText     =   "Fichier à découper"
+            Top             =   360
+            Width           =   3615
+         End
+         Begin VB.CommandButton cmdBrowseGrupFIle 
+            Caption         =   "..."
+            Height          =   255
+            Left            =   3840
+            TabIndex        =   22
+            ToolTipText     =   "Sélectionner le fichier groupeur"
+            Top             =   360
+            Width           =   615
+         End
+         Begin VB.Frame Frame2 
+            Height          =   1095
+            Index           =   1
+            Left            =   0
+            TabIndex        =   17
+            Top             =   1560
+            Width           =   4695
+            Begin VB.PictureBox Picture2 
+               BorderStyle     =   0  'None
+               Height          =   735
+               Index           =   1
+               Left            =   120
+               ScaleHeight     =   735
+               ScaleWidth      =   4455
+               TabIndex        =   18
+               Top             =   240
+               Width           =   4455
+               Begin VB.TextBox txtFolderFus 
+                  BorderStyle     =   0  'None
+                  Height          =   285
+                  Left            =   0
+                  TabIndex        =   20
+                  ToolTipText     =   "Dossier du fichier fusionné"
+                  Top             =   360
+                  Width           =   3615
+               End
+               Begin VB.CommandButton cmdBrowsePaste 
+                  Caption         =   "..."
+                  Height          =   255
+                  Left            =   3840
+                  TabIndex        =   19
+                  ToolTipText     =   "Sélectionner le dossier du fichier fusionné"
+                  Top             =   360
+                  Width           =   615
+               End
+               Begin VB.Label Label1 
+                  Caption         =   "Dossier résultat"
+                  Height          =   255
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   21
+                  Top             =   0
+                  Width           =   3735
+               End
+            End
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Fichier groupeur"
+            Height          =   255
+            Index           =   3
+            Left            =   0
+            TabIndex        =   24
+            Top             =   0
+            Width           =   3735
+         End
+      End
+   End
    Begin VB.Frame Frame1 
       Height          =   3615
       Index           =   0
@@ -149,7 +269,7 @@ Begin VB.Form frmCut
                   Width           =   3615
                End
                Begin VB.Label Label1 
-                  Caption         =   "Fichier groupeur"
+                  Caption         =   "Dossier du fichier groupeur"
                   Height          =   255
                   Index           =   1
                   Left            =   0
@@ -183,127 +303,6 @@ Begin VB.Form frmCut
             Index           =   0
             Left            =   0
             TabIndex        =   4
-            Top             =   0
-            Width           =   3735
-         End
-      End
-   End
-   Begin ComctlLib.TabStrip TB 
-      Height          =   375
-      Left            =   90
-      TabIndex        =   25
-      ToolTipText     =   "Liste des plages disponibles"
-      Top             =   100
-      Width           =   4935
-      _ExtentX        =   8705
-      _ExtentY        =   661
-      TabWidthStyle   =   2
-      TabFixedWidth   =   4322
-      _Version        =   327682
-      BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-         NumTabs         =   2
-         BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Découper"
-            Key             =   ""
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Fusionner"
-            Key             =   ""
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-      EndProperty
-   End
-   Begin VB.Frame Frame1 
-      Height          =   3615
-      Index           =   1
-      Left            =   120
-      TabIndex        =   2
-      Top             =   480
-      Visible         =   0   'False
-      Width           =   4935
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   3255
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   3255
-         ScaleWidth      =   4695
-         TabIndex        =   3
-         Top             =   240
-         Width           =   4695
-         Begin VB.TextBox Text4 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   0
-            TabIndex        =   23
-            ToolTipText     =   "Fichier à découper"
-            Top             =   360
-            Width           =   3615
-         End
-         Begin VB.CommandButton cmdBrowseGrupFIle 
-            Caption         =   "..."
-            Height          =   255
-            Left            =   3840
-            TabIndex        =   22
-            ToolTipText     =   "Sélectionner le fichier groupeur"
-            Top             =   360
-            Width           =   615
-         End
-         Begin VB.Frame Frame2 
-            Height          =   1095
-            Index           =   1
-            Left            =   0
-            TabIndex        =   17
-            Top             =   1560
-            Width           =   4695
-            Begin VB.PictureBox Picture2 
-               BorderStyle     =   0  'None
-               Height          =   735
-               Index           =   1
-               Left            =   120
-               ScaleHeight     =   735
-               ScaleWidth      =   4455
-               TabIndex        =   18
-               Top             =   240
-               Width           =   4455
-               Begin VB.TextBox Text3 
-                  BorderStyle     =   0  'None
-                  Height          =   285
-                  Left            =   0
-                  TabIndex        =   20
-                  ToolTipText     =   "Fichier collé (résultat)"
-                  Top             =   360
-                  Width           =   3615
-               End
-               Begin VB.CommandButton cmdBrowsePaste 
-                  Caption         =   "..."
-                  Height          =   255
-                  Left            =   3840
-                  TabIndex        =   19
-                  ToolTipText     =   "Sélectionner le fichier résultat"
-                  Top             =   360
-                  Width           =   615
-               End
-               Begin VB.Label Label1 
-                  Caption         =   "Fichier résultat"
-                  Height          =   255
-                  Index           =   2
-                  Left            =   0
-                  TabIndex        =   21
-                  Top             =   0
-                  Width           =   3735
-               End
-            End
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Fichier groupeur"
-            Height          =   255
-            Index           =   3
-            Left            =   0
-            TabIndex        =   24
             Top             =   0
             Width           =   3735
          End
@@ -359,6 +358,17 @@ Private Sub cmdBrowseGroupFile_Click()
     txtFolderResult.Text = cFile.BrowseForFolder("Choix du dossier résultant", Me.hwnd)
 End Sub
 
+Private Sub cmdBrowseGrupFIle_Click()
+'sélection du fichier groupe
+    txtGrFile.Text = cFile.ShowOpen("Selection du fichier groupeur", Me.hwnd, "Fichier groupeur|*.grp")
+    If txtFolderFus.Text = vbNullString Then txtFolderFus.Text = cFile.GetFolderFromPath(txtGrFile.Text)
+End Sub
+
+Private Sub cmdBrowsePaste_Click()
+'sélection du dossier du fichier fusionné
+    txtFolderFus.Text = cFile.BrowseForFolder("Choix du dossier du fichier fusionné", Me.hwnd)
+End Sub
+
 Private Sub cmdBrowseToCut_Click()
 'sélection du fichier à découper
     txtFileToCut.Text = cFile.ShowOpen("Fichier à découper", Me.hwnd, "Tous|*.*", App.Path)
@@ -367,7 +377,7 @@ End Sub
 Private Sub cmdProceed_Click()
 'démarre
 Dim tMethod As CUT_METHOD
-Dim lLen As Long
+Dim lLen As Double
 
     If Frame1(0).Visible Then
         'alors on découpe
@@ -390,8 +400,9 @@ Dim lLen As Long
         CutFile txtFileToCut.Text, txtFolderResult.Text, tMethod
         
     Else
-        'alors on fusionne
-        
+    
+        'lance la fusion
+        PasteFile txtGrFile.Text, txtFolderFus.Text
         
     End If
     

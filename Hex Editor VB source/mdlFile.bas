@@ -226,10 +226,10 @@ Dim lFile As Long
        
     'obtient un handle vers le fichier à écrire
     'ouverture en ECRITURE, avec overwrite si déjà existant (car déjà demandé confirmation avant)
-    lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, CREATE_ALWAYS, 0, 0)
+    lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
 
     'bouge le pointeur sur le fichier au bon emplacement
-    Ret = SetFilePointerEx(lFile, (curOffset - 1) / 10000, 0&, FILE_BEGIN)
+    Ret = SetFilePointerEx(lFile, curOffset / 10000, 0&, FILE_BEGIN)
     'a divisé par 10^4 pour obtenir un nombre décimal de Currency
 
     'écriture dans le fichier
@@ -241,4 +241,32 @@ Dim lFile As Long
     Exit Function
 ErrGestion:
     clsERREUR.AddError "mdlFile.WriteBytesToFile", True
+End Function
+
+'-------------------------------------------------------
+'écrire des bytes dans un fichier (à la fin du fichier)
+'-------------------------------------------------------
+Public Function WriteBytesToFileEnd(ByVal sFile As String, ByVal sString As String) As String
+Dim tmpText As String
+Dim Ret As Long
+Dim lFile As Long
+
+    On Error GoTo ErrGestion
+       
+    'obtient un handle vers le fichier à écrire
+    'ouverture en ECRITURE, avec overwrite si déjà existant (car déjà demandé confirmation avant)
+    lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+
+    'bouge le pointeur sur le fichier à la fin du fichier
+    Ret = SetFilePointerEx(lFile, 0&, 0&, FILE_END) '
+
+    'écriture dans le fichier
+    WriteFile lFile, ByVal sString, Len(sString), Ret, ByVal 0&
+    
+    'ferme le handle du fichier écrit
+    CloseHandle lFile
+
+    Exit Function
+ErrGestion:
+    clsERREUR.AddError "mdlFile.WriteBytesToFileEnd", True
 End Function

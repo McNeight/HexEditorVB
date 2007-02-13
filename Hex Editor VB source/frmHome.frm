@@ -582,7 +582,7 @@ Dim sDrive As String
 Dim cDr As clsDiskInfos
 Dim lH As Long
 Dim lFile As Long
-Dim lLen As Long
+Dim lLen As Double
 
     On Error GoTo ErrGestion
 
