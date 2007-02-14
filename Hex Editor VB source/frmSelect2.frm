@@ -1,5 +1,5 @@
 VERSION 5.00
-Begin VB.Form frmSelect 
+Begin VB.Form frmSelect2 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "     Sélectionner une zone"
    ClientHeight    =   1425
@@ -15,7 +15,7 @@ Begin VB.Form frmSelect
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
-   Icon            =   "frmSelect.frx":0000
+   Icon            =   "frmSelect2.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
@@ -41,32 +41,32 @@ Begin VB.Form frmSelect
       Top             =   960
       Width           =   1095
    End
-   Begin VB.TextBox txtTo 
+   Begin VB.TextBox txtSize 
       BorderStyle     =   0  'None
       Height          =   285
-      Left            =   1560
+      Left            =   1680
       TabIndex        =   3
-      ToolTipText     =   "Offset supérieur"
+      ToolTipText     =   "Taille de la sélection"
       Top             =   480
-      Width           =   1095
+      Width           =   975
    End
    Begin VB.TextBox txtFrom 
       BorderStyle     =   0  'None
       Height          =   285
       Left            =   1560
       TabIndex        =   2
-      ToolTipText     =   "Offset inférieur"
+      ToolTipText     =   "Offset de départ"
       Top             =   120
       Width           =   1095
    End
    Begin VB.Label Label1 
-      Caption         =   "jusqu'au byte"
+      Caption         =   "Taille de la sélection"
       Height          =   255
       Index           =   1
       Left            =   120
       TabIndex        =   1
       Top             =   480
-      Width           =   1215
+      Width           =   1455
    End
    Begin VB.Label Label1 
       Caption         =   "A partir du byte"
@@ -78,7 +78,7 @@ Begin VB.Form frmSelect
       Width           =   1215
    End
 End
-Attribute VB_Name = "frmSelect"
+Attribute VB_Name = "frmSelect2"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
@@ -120,10 +120,7 @@ Option Explicit
 'FORM POUR SELECTIONNER UNE ZONE PARTICULIERE
 '-------------------------------------------------------
 
-Private byteFunc As Byte
-
 Private Sub cmdOk_Click()
-'valide
 Dim lFrom As Long
 Dim lTo As Long
 Dim x As Long
@@ -131,68 +128,31 @@ Dim x As Long
     On Error GoTo ErrGestion
     
     'récupère les valeurs numériques
-    lFrom = FormatedVal(txtFrom.Text) + 1
-    lTo = FormatedVal(txtTo.Text)
-    
-    'fait en sorte que lFrom soit le plus petit
-    If lFrom > lTo Then
-        x = lFrom
-        lFrom = lTo
-        lTo = x
+    lFrom = FormatedVal(txtFrom.Text)
+    lTo = lFrom + FormatedVal(txtSize.Text) - 2 '-2 pour régler à la bonne taille
+        
+    'vérifie que la plage est OK
+    If lFrom < frmContent.ActiveForm.HW.FirstOffset Or lTo > frmContent.ActiveForm.HW.MaxOffset Then
+        Unload Me
+        Exit Sub
     End If
-        
-    If byteFunc = 0 Then    'il s'agit d'une sélection paramétrée
-
-        'vérifie que la plage est OK
-        If lFrom < frmContent.ActiveForm.HW.FirstOffset Or lTo > frmContent.ActiveForm.HW.MaxOffset Then
-            Unload Me
-            Exit Sub
-        End If
-        If lFrom > frmContent.ActiveForm.HW.MaxOffset Or lTo < frmContent.ActiveForm.HW.FirstOffset Then
-            Unload Me
-            Exit Sub
-        End If
-        
-        'fait la sélection désirée
-        frmContent.ActiveForm.HW.SelectZone 16 - (By16(lFrom) - lFrom), By16(lFrom) - 16, 17 - (By16(lTo) - lTo), By16(lTo) - 16
-        
-        'refresh le label qui contient la taille de la sélection
-        frmContent.ActiveForm.Sb.Panels(4).Text = "Sélection=[" & CStr(frmContent.ActiveForm.HW.NumberOfSelectedItems) & " bytes]"
-        frmContent.ActiveForm.Label2(9) = frmContent.ActiveForm.Sb.Panels(4).Text
-        
-    ElseIf byteFunc = 1 Then 'il s'agit d'une restriction d'affichage
-    
-        'formate les valeurs en terme d'offset
-        lFrom = By16(lFrom)
-        
-        'vérifie que la plage est OK
-        '/!\ vérifie la plage à l'aide des TAGS CURRENCY du HW (valeurs maximales autorisées)
-        If lFrom < frmContent.ActiveForm.HW.curTag1 Or lTo > frmContent.ActiveForm.HW.curTag2 Then
-            Unload Me
-            Exit Sub
-        End If
-        If lFrom > frmContent.ActiveForm.HW.curTag2 Or lTo < frmContent.ActiveForm.HW.curTag1 Then
-            Unload Me
-            Exit Sub
-        End If
-        
-        'ajoute une entrée à l'historique
-        frmContent.ActiveForm.AddHistoFrm actRestArea, , , frmContent.ActiveForm.HW.FirstOffset, frmContent.ActiveForm.HW.MaxOffset
-        
-        'change les valeurs dans la ActiveForm
-        frmContent.ActiveForm.HW.FirstOffset = lFrom
-        frmContent.ActiveForm.HW.MaxOffset = lTo
-        frmContent.ActiveForm.VS.Min = lFrom / 16
-        frmContent.ActiveForm.VS.Max = By16(lTo / 16)
-        Call frmContent.ActiveForm.VS_Change(frmContent.ActiveForm.VS.Min)
-
+    If lFrom > frmContent.ActiveForm.HW.MaxOffset Or lTo < frmContent.ActiveForm.HW.FirstOffset Then
+        Unload Me
+        Exit Sub
     End If
+    
+    'fait la sélection désirée
+    frmContent.ActiveForm.HW.SelectZone 16 - (By16(lFrom) - lFrom), By16(lFrom) - 16, 17 - (By16(lTo) - lTo), By16(lTo) - 16
+    
+    'refresh le label qui contient la taille de la sélection
+    frmContent.ActiveForm.Sb.Panels(4).Text = "Sélection=[" & CStr(frmContent.ActiveForm.HW.NumberOfSelectedItems) & " bytes]"
+    frmContent.ActiveForm.Label2(9) = frmContent.ActiveForm.Sb.Panels(4).Text
     
     Unload Me
     
     Exit Sub
 ErrGestion:
-    clsERREUR.AddError "frmSelect.cmdOkClick", True
+    clsERREUR.AddError "frmSelect2.cmdOkClick", True
 End Sub
 
 Private Sub cmdQuit_Click()
@@ -204,15 +164,5 @@ Private Sub Form_Load()
     If frmContent.ActiveForm Is Nothing Then Unload Me
     
     'affiche l'élément actuellement sélectionné dans l'activeform
-    txtFrom.Text = CStr(frmContent.ActiveForm.HW.Item.Offset + frmContent.ActiveForm.HW.Item.Col) - 1
-End Sub
-
-'-------------------------------------------------------
-'sub permettant de récupérer un nombre qui va spécifier
-'a quoi la sélection servira
-'0 = sélection paramétrée
-'1 = affichage restreint
-'-------------------------------------------------------
-Public Sub GetEditFunction(ByVal btFunction As Byte)
-    byteFunc = btFunction
+    txtFrom.Text = CStr(frmContent.ActiveForm.HW.Item.Offset + frmContent.ActiveForm.HW.Item.Col)
 End Sub
