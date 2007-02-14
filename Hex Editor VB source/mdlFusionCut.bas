@@ -51,7 +51,7 @@ End Type
 '-------------------------------------------------------
 'fonction de découpe de fichier
 '-------------------------------------------------------
-Public Sub CutFile(ByVal sFile As String, ByVal sFolderOut As String, tMethode As CUT_METHOD)
+Public Function CutFile(ByVal sFile As String, ByVal sFolderOut As String, tMethode As CUT_METHOD) As Long
 Dim lFileCount As Long
 Dim lLastFileSize As Long
 Dim curSize As Currency
@@ -64,23 +64,26 @@ Dim sFileStr As String
 Dim sBuf As String
 Dim lBuf2 As Long
 Dim sFic As String
+Dim lTime As Long
+Dim lNormalSize As Long
 
     On Error GoTo ErrGestion
     
+    lTime = GetTickCount
     
     '//VERIFICATIONS
     'vérifie que le fichier existe bien
     If cFile.FileExists(sFile) = False Then
         'fichier manquant
         MsgBox "Le fichier ne peut être découpé car il n'existe pas.", vbCritical, "Erreur critique"
-        Exit Sub
+        Exit Function
     End If
     
     'vérifie que le dossier résultat existe bien
     If cFile.FolderExists(sFolderOut) = False Then
         'dossier résultat inexistant
         MsgBox "L'emplacement résultant n'existe pas, vous devez spécifier le fichier groupeur dans un dossier existant.", vbCritical, "Erreur critique"
-        Exit Sub
+        Exit Function
     End If
     
     'récupère le nom du fichier
@@ -89,7 +92,7 @@ Dim sFic As String
     'vérifie que le fichier groupeur n'existe pas déjà
     If cFile.FileExists(sFolderOut & "\" & sFileStr & ".grp") Then
         'fichier déjà existant
-        If MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+        If MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Function
     End If
     
     
@@ -98,7 +101,7 @@ Dim sFic As String
     If curSize = 0 Then
         'fichier vide ou inaccessible
         MsgBox "Le fichier est vide ou inaccessible, l'opération n'a pas pu être terminée.", vbCritical, "Erreur critique"
-        Exit Sub
+        Exit Function
     End If
 
     
@@ -106,7 +109,7 @@ Dim sFic As String
     If tMethode.tMethode = [Taille fixe] Then
         'alors on découpe en fixant la taille
         
-        'calcul le nombre de fichiers nécessaire et la taille du dernier
+        'calcule le nombre de fichiers nécessaire et la taille du dernier
         lFileCount = Int(curSize / tMethode.lParam) + IIf((curSize Mod tMethode.lParam) = 0, 0, 1)
         lLastFileSize = curSize - (lFileCount - 1) * tMethode.lParam 'taille du dernier fichier
         
@@ -213,38 +216,132 @@ Dim sFic As String
        
     Else
         'alors nombre de fichiers fixé
+
+        'nombre de fichiers
+        lFileCount = tMethode.lParam
+        
+        'calcule la taille de chaque fichier
+        lNormalSize = Int(curSize / lFileCount)
+        lLastFileSize = lNormalSize + curSize - lNormalSize * lFileCount 'taille du dernier fichier (plus quelques octets, au maximum 1 par fichier)
+        
+        'lance la découpe
+        'utilisation de l'API ReadFile pour plus d'efficacité
+        'prend des buffers de 5Mo maximum
+        If lNormalSize <= 5242880 Then
+            'alors tout rentre dans un seul buffer
+            
+            For i = 1 To lFileCount - 1 'pas le dernier qui est fait à part
+                
+                'fichier résultat i
+                sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(i))
+                
+                'créé le fichier résultat
+                cFile.CreateEmptyFile sFic, True
+                
+                'récupère le buffer
+                sBuf = GetBytesFromFile(sFile, lNormalSize, CCur((i - 1) * lNormalSize))
+                
+                'on écrit dans le fichier résultat
+                WriteBytesToFile sFic, sBuf, 0
+                
+                DoEvents
+            Next i
+            
+            'maintenant le dernier fichier
+            sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(lFileCount))
+            
+            'créé le fichier résultat
+            cFile.CreateEmptyFile sFic, True
+            
+            'récupère le buffer
+            sBuf = GetBytesFromFile(sFile, lLastFileSize, CCur((lFileCount - 1) * lNormalSize))
+            
+            'on écrit dans le fichier résultat
+            WriteBytesToFile sFic, sBuf, 0
+
+        Else
+            'alors plusieurs buffer
+            
+            'calcule le nombre de buffers nécessaires pour chaque fichier
+            lBuf2 = Int(lNormalSize / 5242880) + IIf((lNormalSize Mod 5242880) = 0, 0, 1)
+            
+            For i = 1 To lFileCount - 1 'pas le dernier qui est fait à part
+                
+                'fichier résultat i
+                sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(i))
+                
+                'créé le fichier résultat
+                cFile.CreateEmptyFile sFic, True
+                
+                DoEvents
+                
+                For j = 1 To lBuf2 - 1
+                
+                    'récupère le buffer
+                    sBuf = GetBytesFromFile(sFile, 5242880, CCur((j - 1) * 5242880) + (i - 1) * lNormalSize)
+                    
+                    'on écrit dans le fichier résultat
+                    WriteBytesToFileEnd sFic, sBuf ', 5242880 * (j - 1)
+
+                Next j
+
+                'le dernier buffer
+                sBuf = GetBytesFromFile(sFile, lNormalSize - (lBuf2 - 1) * 5242880, CCur((lBuf2 - 1) * 5242880) + (i - 1) * lNormalSize)
+
+                'on écrit dans le fichier résultat
+                WriteBytesToFileEnd sFic, sBuf ', 5242880 * (lBuf2 - 1)
+            
+            Next i
+
+            'recalcule le nombre de buffers dans le dernier fichier
+            lBuf2 = Int(lLastFileSize / 5242880) + IIf((lLastFileSize Mod 5242880) = 0, 0, 1)
+
+            'maintenant le dernier fichier
+            sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(lFileCount))
+            
+            'créé le fichier résultat
+            cFile.CreateEmptyFile sFic, True
+            
+            For j = 1 To lBuf2 - 1
+            
+                'récupère le buffer
+                sBuf = GetBytesFromFile(sFile, 5242880, CCur((lFileCount - 1) * lNormalSize + (j - 1) * 5242880))
+                
+                'on écrit dans le fichier résultat
+                WriteBytesToFileEnd sFic, sBuf ', 5242880 * (j - 1)
+            
+            Next j
+            
+            'récupère le dernier buffer
+            sBuf = GetBytesFromFile(sFile, lLastFileSize - (lBuf2 - 1) * 5242880, CCur((lFileCount - 1) * lNormalSize + (lBuf2 - 1) * 5242880))
+            
+            'on écrit dans le fichier résultat
+            WriteBytesToFileEnd sFic, sBuf ', 0
+  
+        End If
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        'on créé le fichier groupeur
+        cFile.CreateEmptyFile sFolderOut & "\" & sFileStr & ".grp", True
+        cFile.SaveStringInfile sFolderOut & "\" & sFileStr & ".grp", sFileStr & "|" & Str$(lFileCount)
+ 
     End If
     
     
     'terminé
     MsgBox "Découpage terminé avec succès.", vbInformation + vbOKOnly, "Découpage réussi"
-    Exit Sub
+    CutFile = GetTickCount - lTime
+    Exit Function
 
 ErrGestion:
     clsERREUR.AddError "mdlFusionCut.CutFile", True
-End Sub
+End Function
 
 
 '-------------------------------------------------------
 'fonction de fusion de fichier
 '-------------------------------------------------------
-Public Sub PasteFile(ByVal sFileGroup As String, ByVal sFolderOut As String)
+Public Function PasteFile(ByVal sFileGroup As String, ByVal sFolderOut As String) As Long
 Dim lFileCount As Long
 Dim x As Long
 Dim i As Long
@@ -257,23 +354,25 @@ Dim sFic As String
 Dim bOk As Boolean
 Dim curSize As Currency
 Dim a As Long
+Dim lTime As Long
 
     On Error GoTo ErrGestion
     
+    lTime = GetTickCount
     
     '//VERIFICATIONS
     'vérifie que le fichier existe bien
     If cFile.FileExists(sFileGroup) = False Then
         'fichier manquant
         MsgBox "Le fichier ne peut être créé car le fichier de fusion n'existe pas.", vbCritical, "Erreur critique"
-        Exit Sub
+        Exit Function
     End If
     
     'vérifie que le dossier résultat existe bien
     If cFile.FolderExists(sFolderOut) = False Then
         'dossier résultat inexistant
         MsgBox "L'emplacement résultant n'existe pas, vous devez spécifier le fichier créé dans un dossier existant.", vbCritical, "Erreur critique"
-        Exit Sub
+        Exit Function
     End If
     
     sBuf = cFile.LoadFileInString(sFileGroup)
@@ -283,7 +382,7 @@ Dim a As Long
     'vérifie que le fichier groupeur n'existe pas déjà
     If cFile.FileExists(sFolderOut & "\" & sFileStr) Then
         'fichier déjà existant
-        If MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+        If MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Function
     End If
 
 
@@ -301,7 +400,7 @@ Dim a As Long
     If Not (bOk) Then
         'alors un fichier est absent
         MsgBox "Il manque un fichier.", vbCritical, "Opération de fusion impossible"
-        Exit Sub
+        Exit Function
     End If
     
     'créé le fichier résultat
@@ -372,10 +471,11 @@ Dim a As Long
     
     'terminé
     MsgBox "Fusion terminée avec succès.", vbInformation + vbOKOnly, "Fusion réussie"
-   
-    Exit Sub
+    
+    PasteFile = GetTickCount - lTime
+    Exit Function
 
 ErrGestion:
     clsERREUR.AddError "mdlFusionCut.PasteFile", True
-End Sub
+End Function
 

@@ -254,7 +254,7 @@ Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (By
 Public Declare Function ShellExecuteEX Lib "shell32.dll" Alias "ShellExecuteEx" (SEI As SHELLEXECUTEINFO) As Long
 Public Declare Function PrintDlg Lib "comdlg32.dll" Alias "PrintDlgA" (pPrintdlg As PRINTER_INFO) As Long
 Public Declare Function GetVersionEx Lib "kernel32" Alias "GetVersionExA" (lpVersionInformation As OSVERSIONINFO) As Long
-
+Public Declare Function GetTickCount Lib "kernel32" () As Long
 
 
 
