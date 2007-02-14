@@ -590,7 +590,6 @@ Begin VB.Form MemPfm
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
          NumTabs         =   1
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   ""
             Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
@@ -896,8 +895,13 @@ Private Sub Form_Load()
         HW.Grid = .app_Grid
     End With
     
-    'en grand dans la MDIform
-    Me.WindowState = vbMaximized
+    With cPref
+        'en grand dans la MDIform
+        If .general_MaximizeWhenOpen Then Me.WindowState = vbMaximized
+        HW.Visible = CBool(.general_DisplayArray)
+        FrameData.Visible = CBool(.general_DisplayData)
+        FrameInfos.Visible = CBool(.general_DisplayInfos)
+    End With
     
     frmContent.Sb.Panels(1).Text = "Status=[Opening process]"
     frmContent.Sb.Refresh

@@ -23,6 +23,22 @@ Begin VB.Form frmOptions
    ScaleHeight     =   8550
    ScaleWidth      =   10350
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cmdSauvegarder 
+      Caption         =   "Sauvegarder les options"
+      Height          =   495
+      Left            =   1320
+      TabIndex        =   81
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdDefault 
+      Caption         =   "Options par défaut"
+      Height          =   495
+      Left            =   0
+      TabIndex        =   80
+      Top             =   0
+      Width           =   1335
+   End
    Begin ComctlLib.TabStrip TB 
       Height          =   375
       Left            =   0
@@ -36,37 +52,31 @@ Begin VB.Form frmOptions
          NumTabs         =   6
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Apparence du tableau"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Intégration dans Explorer"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Options générales"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Environnement"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Historique/signets"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab6 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Explorateur de fichiers"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -380,22 +390,6 @@ Begin VB.Form frmOptions
       Left            =   3000
       TabIndex        =   82
       Top             =   120
-      Width           =   1335
-   End
-   Begin VB.CommandButton cmdSauvegarder 
-      Caption         =   "Sauvegarder les options"
-      Height          =   495
-      Left            =   1320
-      TabIndex        =   81
-      Top             =   120
-      Width           =   1335
-   End
-   Begin VB.CommandButton cmdDefault 
-      Caption         =   "Options par défaut"
-      Height          =   495
-      Left            =   0
-      TabIndex        =   80
-      Top             =   0
       Width           =   1335
    End
    Begin VB.Frame Frame1 
@@ -946,7 +940,7 @@ End Sub
 Private Sub cmdDefault_Click()
 'remet tout par défaut
 Dim x As Long
-Dim Y As Long
+Dim y As Long
 Dim s As String
 
     HW.BackColor = vbWhite
@@ -984,10 +978,10 @@ Dim s As String
     Randomize
     For x = 1 To 13
         s = vbNullString
-        For Y = 1 To 16
-            HW.AddHexValue x, Y, Hex$(Y - 1) & "0"
+        For y = 1 To 16
+            HW.AddHexValue x, y, Hex$(y - 1) & "0"
             s = s & Byte2FormatedString(Int(Rnd * 256))
-        Next Y
+        Next y
         HW.AddStringValue x, s
     Next x
 
@@ -1038,7 +1032,10 @@ Private Sub cmdQuitter_Click()
 End Sub
 
 Private Sub cmdSauvegarder_Click()
-'sauvegarde les options
+Dim x As Form
+Dim s As String
+
+    'sauvegarde les options
 
     'affecte à cPref toutes ses valeurs
         With cPref
@@ -1096,12 +1093,93 @@ Private Sub cmdSauvegarder_Click()
     
     'lance la sauvegarde
     clsPref.SaveIniFile cPref
+    
+    
+    'On Error Resume Next
+    'on change l'apparence de tous les HW de toutes les forms
+    For Each x In Forms
+        If (TypeOf x Is Pfm) Or (TypeOf x Is diskPfm) Or (TypeOf x Is MemPfm) Then
+
+                With x.HW
+                    'on applique ces couleurs au HW de CETTE form
+                    .BackColor = cPref.app_BackGroundColor
+                    .OffsetForeColor = cPref.app_OffsetForeColor
+                    .HexForeColor = cPref.app_HexaForeColor
+                    .StringForeColor = cPref.app_StringsForeColor
+                    .OffsetTitleForeColor = cPref.app_OffsetTitleForeColor
+                    .BaseTitleForeColor = cPref.app_BaseForeColor
+                    .TitleBackGround = cPref.app_TitleBackGroundColor
+                    .LineColor = cPref.app_LinesColor
+                    .SelectionColor = cPref.app_SelectionColor
+                    .ModifiedItemColor = cPref.app_ModifiedItems
+                    .ModifiedSelectedItemColor = cPref.app_ModifiedSelectedItems
+                    .SignetColor = cPref.app_BookMarkColor
+                    .Grid = cPref.app_Grid
+                    .Refresh
+                End With
+                
+                'change les Visible des frames de toutes les forms active
+                x.FrameData.Visible = CBool(cPref.general_DisplayData)
+                x.HW.Visible = CBool(cPref.general_DisplayArray)
+                x.FrameInfos.Visible = CBool(cPref.general_DisplayInfos)
+                If TypeOf x Is diskPfm Then x.FrameInfo2.Visible = CBool(cPref.general_DisplayInfos)
+            'End If
+        End If
+    Next x
+              
+    'on change la taille du Explorer
+    frmContent.pctExplorer.Height = cPref.explo_Height
+    frmContent.LV.Height = cPref.explo_Height - 145
+
+
+    'créé ou supprime les menus contextuels de Windows en fonction des nouvelles prefs.
+    If CBool(cPref.integ_FileContextual) = False Then
+        'enlève
+        RemoveContextMenu 1
+    Else
+        'ajoute
+        AddContextMenu 1
+    End If
+    If CBool(cPref.integ_FolderContextual) = False Then
+        'enlève
+        RemoveContextMenu 0
+    Else
+        'ajoute
+        AddContextMenu 0
+    End If
+    
+    'créé ou pas le raccourci
+    Shortcut CBool(cPref.integ_SendTo)
+
+
+    'change les settings du Explorer
+    With frmContent.LV
+        .ShowEntirePath = CBool(cPref.explo_ShowPath)
+        .ShowHiddenDirectories = CBool(cPref.explo_ShowHiddenFolders)
+        .ShowHiddenFiles = CBool(cPref.explo_ShowHiddenFiles)
+        .ShowSystemDirectories = CBool(cPref.explo_ShowSystemFodlers)
+        .ShowSystemFiles = CBool(cPref.explo_ShowSystemFiles)
+        .ShowReadOnlyDirectories = CBool(cPref.explo_ShowROFolders)
+        .ShowReadOnlyFiles = CBool(cPref.explo_ShowROFiles)
+        .AllowMultiSelect = CBool(cPref.explo_AllowMultipleSelection)
+        .AllowFileDeleting = CBool(cPref.explo_AllowFileSuppression)
+        .Pattern = cPref.explo_Pattern
+        .HideColumnHeaders = CBool(cPref.explo_HideColumnTitle)
+        Select Case cPref.explo_IconType
+            Case 0
+                .DisplayIcons = BasicIcons
+            Case 1
+                .DisplayIcons = FileIcons
+            Case 2
+                .DisplayIcons = NoIcons
+        End Select
+    End With
 
 End Sub
 
 Private Sub Form_Load()
 Dim x As Long
-Dim Y As Long
+Dim y As Long
 Dim s As String
   
     TB.ZOrder vbSendToBack  'dernier plan
@@ -1165,10 +1243,10 @@ Dim s As String
         Randomize
         For x = 1 To 13
             s = vbNullString
-            For Y = 1 To 16
-                HW.AddHexValue x, Y, Hex$(Y - 1) & "0"
+            For y = 1 To 16
+                HW.AddHexValue x, y, Hex$(y - 1) & "0"
                 s = s & Byte2FormatedString(Int(Rnd * 256))
-            Next Y
+            Next y
             HW.AddStringValue x, s
         Next x
     
@@ -1259,7 +1337,7 @@ Dim s As String
         
 End Sub
 
-Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, Y As Single, Item As HexViewer_OCX.ItemElement)
+Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As HexViewer_OCX.ItemElement)
  
     If Button = 4 And Shift = 0 Then
         'click avec la molette, et pas de Shift or Control

@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "14:14"
+            TextSave        =   "17:32"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -970,8 +970,50 @@ Private Sub MDIForm_Load()
     Lang.LangFolder = App.Path & "\Lang"
     
     'Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
-   
-    LV.RefreshListViewOnly
+    
+    'loading de la taille de l'explorer
+    Me.pctExplorer.Height = cPref.explo_Height
+    
+    'charge les prefs de l'explorer
+    '/!\ C'est ce code qui fait charger le logiciel lentement
+    '==> on cache le LV
+    With LV
+        .Visible = False
+        
+        
+        .Height = cPref.explo_Height - 145
+        
+        If cPref.explo_DefaultPath = "Dossier du programme" Then
+            'alors c'est dans app.path
+            .Path = App.Path
+        Else
+            'alors un dossier perso
+            .Path = cPref.explo_DefaultPath
+        End If
+        .ShowEntirePath = CBool(cPref.explo_ShowPath)
+        .ShowHiddenDirectories = CBool(cPref.explo_ShowHiddenFolders)
+        .ShowHiddenFiles = CBool(cPref.explo_ShowHiddenFiles)
+        .ShowSystemDirectories = CBool(cPref.explo_ShowSystemFodlers)
+        .ShowSystemFiles = CBool(cPref.explo_ShowSystemFiles)
+        .ShowReadOnlyDirectories = CBool(cPref.explo_ShowROFolders)
+        .ShowReadOnlyFiles = CBool(cPref.explo_ShowROFiles)
+        .AllowMultiSelect = CBool(cPref.explo_AllowMultipleSelection)
+        .AllowFileDeleting = CBool(cPref.explo_AllowFileSuppression)
+        .Pattern = cPref.explo_Pattern
+        .HideColumnHeaders = CBool(cPref.explo_HideColumnTitle)
+        Select Case cPref.explo_IconType
+            Case 0
+                .DisplayIcons = BasicIcons
+            Case 1
+                .DisplayIcons = FileIcons
+            Case 2
+                .DisplayIcons = NoIcons
+        End Select
+        
+        .Visible = True
+        .RefreshListViewOnly    '/!\ DO NOT REMOVE
+    End With
+
 End Sub
 
 Private Sub MDIForm_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1004,7 +1046,7 @@ Dim Frm As Form
             'alors on ajoute le contenu du dossier
             
             'liste les fichiers
-            If cFile.GetFolderFiles(Data.Files.Item(i), m) < 1 Then Exit Sub
+            If cFile.GetFolderFiles(Data.Files.Item(i), m, CBool(cPref.general_OpenSubFiles)) < 1 Then Exit Sub
             
             'les ouvre un par un
             For i2 = 1 To UBound(m)
@@ -1284,6 +1326,11 @@ End Sub
 
 Private Sub mnuCreateFileFromSelelection_Click()
     Call mnuCreateFileFromSel2_Click    'créé fichier à partir de la sélection
+End Sub
+
+Private Sub mnuCut_Click()
+'coupe la sélection
+    Call mnuPopupCut_Click
 End Sub
 
 Private Sub mnuCutCopyFiles_Click()
@@ -1680,7 +1727,7 @@ Dim x As Long
     If cFile.FolderExists(sDir) = False Then Exit Sub
     
     'liste les fichiers
-    If cFile.GetFolderFiles(sDir, m) < 1 Then Exit Sub
+    If cFile.GetFolderFiles(sDir, m, CBool(cPref.general_OpenSubFiles)) < 1 Then Exit Sub
     
     'les ouvre un par un
     For x = 1 To UBound(m)
@@ -2391,7 +2438,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
     Select Case Button.Key
     
         Case "OpenFile"
-            mnuOpen_Click
+            Call mnuOpen_Click
         Case "HomeOpen"
             'affiche la boite de dialogue Home (choix des différentes actions à faire)
             frmHome.Show
@@ -2400,31 +2447,39 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             mnuNew_Click
         Case "Signet"
             If Me.ActiveForm Is Nothing Then Exit Sub
-            mnuAddSignet_Click
+            Call mnuAddSignet_Click
         Case "Up"
             If Me.ActiveForm Is Nothing Then Exit Sub
             Me.ActiveForm.HW.FirstOffset = Me.ActiveForm.HW.GetPrevSignet(Me.ActiveForm.HW.Item.Offset)
-            Me.ActiveForm.HW.Refresh
+            Call Me.ActiveForm.HW.Refresh
             Me.ActiveForm.VS.Value = Me.ActiveForm.HW.FirstOffset / 16
         Case "Down"
             If Me.ActiveForm Is Nothing Then Exit Sub
             Me.ActiveForm.HW.FirstOffset = Me.ActiveForm.HW.GetNextSignet(Me.ActiveForm.HW.Item.Offset)
-            Me.ActiveForm.HW.Refresh
+            Call Me.ActiveForm.HW.Refresh
             Me.ActiveForm.VS.Value = Me.ActiveForm.HW.FirstOffset / 16
         Case "Copy"
-            mnuPopupCopy2_Click
+            Call mnuPopupCopy2_Click
         Case "Convert"
             frmConvert.Show
         Case "Settings"
             frmOptions.Show vbModal
         Case "Print"
-            mnuPrint_Click
+            Call mnuPrint_Click
         Case "Search"
-            mnuSearchT_Click
+            Call mnuSearchT_Click
         Case "Undo"
             Call Me.ActiveForm.UndoM
         Case "Redo"
             Call Me.ActiveForm.RedoM
+        Case "Save"
+            Call mnuSaveAs_Click
+        Case "Print"
+            Call mnuPrint_Click
+        Case "Cut"
+            Call mnuPopupCut_Click
+        Case "Paste"
+            
     End Select
 
 End Sub
