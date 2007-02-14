@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "11:30"
+            TextSave        =   "14:14"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -462,6 +462,12 @@ Begin VB.MDIForm frmContent
       End
       Begin VB.Menu mnuSelectZone 
          Caption         =   "&Sélectionner une zone..."
+      End
+      Begin VB.Menu mnuSelectFromByte 
+         Caption         =   "&Sélectionner à partir du byte..."
+      End
+      Begin VB.Menu mnuEditTiret41 
+         Caption         =   "-"
       End
       Begin VB.Menu mnuFillSelection 
          Caption         =   "&Remplir la sélection..."
@@ -2157,6 +2163,11 @@ Private Sub mnuSelectAll_Click()
     'refresh le label qui contient la taille de la sélection
     Me.ActiveForm.Sb.Panels(4).Text = "Sélection=[" & CStr(Me.ActiveForm.HW.NumberOfSelectedItems) & " bytes]"
     Me.ActiveForm.Label2(9) = Me.ActiveForm.Sb.Panels(4).Text
+End Sub
+
+Private Sub mnuSelectFromByte_Click()
+'sélection à partir d'un byte
+    frmSelect2.Show vbModal
 End Sub
 
 Private Sub mnuSelectZone_Click()
