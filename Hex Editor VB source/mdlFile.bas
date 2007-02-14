@@ -185,13 +185,11 @@ Public Function GetBytesFromFile(ByVal sFile As String, ByVal curSize As Currenc
 Dim tmpText As String
 Dim Ret As Long
 Dim lFile As Long
-
-    'On Error GoTo ErrGestion
     
     'obtient un handle vers le fichier à ouvrir
     lFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
     
-    If lFile = 0 Then
+    If lFile = -1 Then
         'fichier inexistant, ou en tout cas inaccessible
         Exit Function
     End If
@@ -209,13 +207,11 @@ Dim lFile As Long
     'affecte à la fonction
     GetBytesFromFile = tmpText
     
+ErrGestion:
+
     'referme le handle
     CloseHandle lFile
-        
-    Exit Function
-ErrGestion:
-    CloseHandle lFile
-    clsERREUR.AddError "mdlFile.GetBytesFromFile", True
+    
 End Function
 
 '-------------------------------------------------------
@@ -226,12 +222,13 @@ Dim tmpText As String
 Dim Ret As Long
 Dim lFile As Long
 
-    On Error GoTo ErrGestion
        
     'obtient un handle vers le fichier à écrire
     'ouverture en ECRITURE, avec overwrite si déjà existant (car déjà demandé confirmation avant)
     lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
 
+    If lFile = -1 Then Exit Function 'fichier indisponible
+    
     'bouge le pointeur sur le fichier au bon emplacement
     Ret = SetFilePointerEx(lFile, curOffset / 10000, 0&, FILE_BEGIN)
     'a divisé par 10^4 pour obtenir un nombre décimal de Currency
@@ -239,13 +236,11 @@ Dim lFile As Long
     'écriture dans le fichier
     WriteFile lFile, ByVal sString, Len(sString), Ret, ByVal 0&
     
+ErrGestion:
+
     'ferme le handle du fichier écrit
     CloseHandle lFile
-
-    Exit Function
-ErrGestion:
-    CloseHandle lFile
-    clsERREUR.AddError "mdlFile.WriteBytesToFile", True
+    
 End Function
 
 '-------------------------------------------------------
@@ -255,24 +250,22 @@ Public Function WriteBytesToFileEnd(ByVal sFile As String, ByVal sString As Stri
 Dim tmpText As String
 Dim Ret As Long
 Dim lFile As Long
-
-    On Error GoTo ErrGestion
        
     'obtient un handle vers le fichier à écrire
     'ouverture en ECRITURE, avec overwrite si déjà existant (car déjà demandé confirmation avant)
     lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
 
+    If lFile = -1 Then Exit Function 'fichier non dispo
+    
     'bouge le pointeur sur le fichier à la fin du fichier
     Ret = SetFilePointerEx(lFile, 0&, 0&, FILE_END) '
 
     'écriture dans le fichier
     WriteFile lFile, ByVal sString, Len(sString), Ret, ByVal 0&
     
+ErrGestion:
+
     'ferme le handle du fichier écrit
     CloseHandle lFile
 
-    Exit Function
-ErrGestion:
-    CloseHandle lFile
-    clsERREUR.AddError "mdlFile.WriteBytesToFileEnd", True
 End Function
