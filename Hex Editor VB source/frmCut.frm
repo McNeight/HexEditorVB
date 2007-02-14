@@ -55,13 +55,11 @@ Begin VB.Form frmCut
          NumTabs         =   2
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Découper"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fusionner"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -375,9 +373,9 @@ Private Sub cmdBrowseToCut_Click()
 End Sub
 
 Private Sub cmdProceed_Click()
-'démarre
 Dim tMethod As CUT_METHOD
 Dim lLen As Double
+Dim lTime As Long
 
     If Frame1(0).Visible Then
         'alors on découpe
@@ -397,14 +395,16 @@ Dim lLen As Double
         End If
         
         'lance la découpe
-        CutFile txtFileToCut.Text, txtFolderResult.Text, tMethod
+        lTime = CutFile(txtFileToCut.Text, txtFolderResult.Text, tMethod)
         
     Else
     
         'lance la fusion
-        PasteFile txtGrFile.Text, txtFolderFus.Text
+        lTime = PasteFile(txtGrFile.Text, txtFolderFus.Text)
         
     End If
+    
+    Me.Caption = "Effectué en " & Trim$(Str$(lTime * 1000)) & " s"
     
 End Sub
 
