@@ -52,7 +52,8 @@ Public cProc As clsProcess
 Public cDisk As clsDiskInfos
 Public clsPref As clsIniFile
 Public cPref As clsIniPref
-Global lNbChildFrm As Long
+Public lNbChildFrm As Long
+Public bEndSplash As Boolean
 
 '-------------------------------------------------------
 '//DEMARRAGE DU PROGRAMME
@@ -66,6 +67,8 @@ Dim y As Long
 Dim s As String
 
     On Error GoTo ErrGestion
+    
+
     
     'vérifie la version de Windows
     x = GetWindowsVersion(s, y)
@@ -116,6 +119,14 @@ Dim s As String
     
     Set cPref = clsPref.GetIniFile
     cPref.IniFilePath = clsPref.sDefaultPath
+    
+    bEndSplash = False
+    'affiche le splash si souhaité
+    cPref.general_Splash = 1
+    If cPref.general_Splash Then
+        frmSplash.Show
+        DoEvents    '/!\ DO NOT REMOVE (permet d'afficher le splash screen correctement)
+    End If
     
     'détermine si le programme a crashé ou pas
     If cPref.exe_HasCrashed = 1 Then

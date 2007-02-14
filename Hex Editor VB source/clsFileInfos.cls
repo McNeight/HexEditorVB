@@ -313,12 +313,13 @@ Private Declare Function ShellExecuteEX Lib "shell32.dll" Alias "ShellExecuteEx"
 Private Declare Function SHRunDialog Lib "shell32" Alias "#61" (ByVal hOwner As Long, ByVal Unknown1 As Long, ByVal Unknown2 As Long, ByVal szTitle As String, ByVal szPrompt As String, ByVal uFlags As Long) As Long
 Private Declare Function GetOpenFileName Lib "comdlg32.dll" Alias "GetOpenFileNameA" (pOpenfilename As OPENFILENAME) As Long
 Private Declare Function GetSaveFileName Lib "comdlg32.dll" Alias "GetSaveFileNameA" (pOpenfilename As OPENFILENAME) As Long
+Private Declare Sub CoTaskMemFree Lib "ole32.dll" (ByVal hMem As Long)
+
 
 
 '-------------------------------------------------------
 '//PUBLIC PROCEDURES & FUNCTIONS
 '-------------------------------------------------------
-
 
 
 '-------------------------------------------------------
@@ -524,7 +525,7 @@ Dim lSize As Long
 Dim Ret As Long
 Dim s As String
     
-    On Error GoTo ErrGestion
+    'On Error GoTo ErrGestion
     
     'obtient le handle du fichier
     hFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
@@ -576,7 +577,7 @@ End Function
 '-------------------------------------------------------
 'créé un fichier vierge et renvoie son handle
 '-------------------------------------------------------
-Public Function CreateEmptyFile(ByVal sFile As String, Optional ByVal OverWrite As Boolean = False, Optional ByVal curSize As Currency) As Long
+Public Function CreateEmptyFile(ByVal sFile As String, Optional ByVal OverWrite As Boolean = False) As Long
 Dim PARAM As Long
 Dim i As Long
 Dim lBuf2 As Long
@@ -593,25 +594,6 @@ Dim lFile As Long
     CreateEmptyFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_WRITE Or FILE_SHARE_READ, ByVal 0&, PARAM, ByVal 0&, ByVal 0&)
     CloseHandle CreateEmptyFile 'ferme le handle...
     
-    If IsMissing(curSize) Or curSize = 0 Then Exit Function  'fichier vierge
-    
-    'alors on remplit ce fichier
-    
-    'calcule le nombre de buffers de 5Mo nécessaires
-    lBuf2 = Int(curSize / 5242880) + IIf((curSize Mod 5242880) = 0, 0, 1)
-    
-    'ouvre le fichier
-    lFile = FreeFile
-    Open sFile For Binary Access Write As #lFile
-    For i = 1 To lBuf2 - 1
-        Put #lFile, , String$(5242880, 0)
-    Next i
-    
-    'remplit le dernier buffer
-    Put #lFile, , String$(curSize - 5242880 * (lBuf2 - 1), 0)
-    
-    'referme le fichier
-    Close #lFile
 End Function
 
 '-------------------------------------------------------
@@ -714,6 +696,7 @@ Dim tBrowseInfo As BrowseInfo
         sBuffer = String$(260, vbNullChar)
         SHGetPathFromIDList lIDList, sBuffer
         BrowseForFolder = Left$(sBuffer, InStr(sBuffer, vbNullChar) - 1)
+        CoTaskMemFree lIDList
     End If
 End Function
 
@@ -1272,4 +1255,6 @@ Static ub As Long
     'ferme l'énumèration
     FindClose hFind
 End Sub
+
+
 

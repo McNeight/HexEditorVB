@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "17:32"
+            TextSave        =   "23:01"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -950,6 +950,9 @@ End Sub
 Private Sub MDIForm_Activate()
 
     'Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
+    
+    'ferme le splash screen si il était encore ouvert
+    bEndSplash = True
     
 End Sub
 
