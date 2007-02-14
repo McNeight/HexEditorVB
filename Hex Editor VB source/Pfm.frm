@@ -687,9 +687,14 @@ Private Sub Form_Load()
     
     bOkToOpen = False 'pas prêt à l'ouverture
     
-    'en grand dans la MDIform
-    Me.WindowState = vbMaximized
-    
+    With cPref
+        'en grand dans la MDIform
+        If .general_MaximizeWhenOpen Then Me.WindowState = vbMaximized
+        HW.Visible = CBool(.general_DisplayArray)
+        FrameData.Visible = CBool(.general_DisplayData)
+        FrameInfos.Visible = CBool(.general_DisplayInfos)
+    End With
+        
     frmContent.Sb.Panels(1).Text = "Status=[Opening File]"
     frmContent.Sb.Refresh
     

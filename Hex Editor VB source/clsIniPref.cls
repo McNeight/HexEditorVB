@@ -100,3 +100,11 @@ Public explo_Pattern As String
 Public explo_Height As Long
 Public explo_HideColumnTitle As Byte
 Public exe_HasCrashed As Byte
+
+'RESTE :
+'env_Lang
+'env_OS
+'general_DoNotChangeDates
+'general_AllowMultipleInstances
+'general_ResoY/X (fixer bug qui ne change pas la taille)
+'general_DisplayArray (plutôt FrameIcons)

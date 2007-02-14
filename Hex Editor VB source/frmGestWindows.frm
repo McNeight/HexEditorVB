@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.Form frmGestWindows 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Gestion des fenêtres"
@@ -199,7 +199,7 @@ Dim Frm As Form
             If LV.SelectedItem.SubItems(1) = Frm.Caption Then
                 'SendMessage frm.hwnd, WM_SHOWWINDOW, 0, 0   'pas de .Show car form modale affichée
                 Frm.ZOrder 0
-                Frm.WindowState = vbMaximized
+                If cPref.general_MaximizeWhenOpen Then Frm.WindowState = vbMaximized
             End If
         End If
     Next Frm

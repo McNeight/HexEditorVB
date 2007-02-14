@@ -2,10 +2,10 @@ VERSION 5.00
 Begin VB.Form frmMerge 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Visualisateur de différences"
-   ClientHeight    =   4245
+   ClientHeight    =   7665
    ClientLeft      =   45
    ClientTop       =   345
-   ClientWidth     =   5460
+   ClientWidth     =   9315
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -19,8 +19,8 @@ Begin VB.Form frmMerge
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4245
-   ScaleWidth      =   5460
+   ScaleHeight     =   7665
+   ScaleWidth      =   9315
    StartUpPosition =   2  'CenterScreen
 End
 Attribute VB_Name = "frmMerge"
@@ -62,11 +62,11 @@ Attribute VB_Exposed = False
 Option Explicit
 
 '-------------------------------------------------------
-'//FORM DE MERGEUR DE FICHIERS
+'//FORM DE COMPARAISON AVANCEE
 '-------------------------------------------------------
 
 '-------------------------------------------------------
-'récupère les 2 fichiers à merger
+'récupère les 2 fichiers à visualiser
 '-------------------------------------------------------
 Public Sub GetFiles(ByVal sFile1 As String, ByVal sFile2 As String)
 
