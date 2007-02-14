@@ -294,6 +294,11 @@ Public Enum WINDOWS_VERSION
     [UnKnown_OS]
 End Enum
 
+'définit la méthode de découpe des fichiers (splitter)
+Public Enum CUT_METHOD_ENUM
+    [Taille fixe]
+    [Nombre fichiers fixe]
+End Enum
 
 
 '-------------------------------------------------------
@@ -555,4 +560,10 @@ Public Type OSVERSIONINFO
     dwBuildNumber As Long
     dwPlatformId As Long
     szCSDVersion As String * 128
+End Type
+
+'définit la méthode de découpe (splitter de fichiers)
+Public Type CUT_METHOD
+    tMethode As CUT_METHOD_ENUM
+    lParam As Long
 End Type
