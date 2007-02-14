@@ -55,11 +55,13 @@ Begin VB.Form frmCut
          NumTabs         =   2
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Découper"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fusionner"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -404,7 +406,7 @@ Dim lTime As Long
         
     End If
     
-    Me.Caption = "Effectué en " & Trim$(Str$(lTime * 1000)) & " s"
+    Me.Caption = "Effectué en " & Trim$(Str$(lTime / 1000)) & " s"
     
 End Sub
 

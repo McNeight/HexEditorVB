@@ -36,24 +36,13 @@ Option Explicit
 '//MODULE DE GESTION DE LA DECOUPE/FUSION
 '-------------------------------------------------------
 
-'-------------------------------------------------------
-'TYPES & ENUMS
-'-------------------------------------------------------
-Public Enum CUT_METHOD_ENUM
-    [Taille fixe]
-    [Nombre fichiers fixe]
-End Enum
-Public Type CUT_METHOD
-    tMethode As CUT_METHOD_ENUM
-    lParam As Long
-End Type
 
 '-------------------------------------------------------
 'fonction de découpe de fichier
 '-------------------------------------------------------
 Public Function CutFile(ByVal sFile As String, ByVal sFolderOut As String, tMethode As CUT_METHOD) As Long
 Dim lFileCount As Long
-Dim lLastFileSize As Long
+Dim lLastFileSize As Currency
 Dim curSize As Currency
 Dim x As Long
 Dim i As Long
@@ -65,7 +54,7 @@ Dim sBuf As String
 Dim lBuf2 As Long
 Dim sFic As String
 Dim lTime As Long
-Dim lNormalSize As Long
+Dim lNormalSize As Currency
 
     On Error GoTo ErrGestion
     
@@ -412,7 +401,7 @@ Dim lTime As Long
     
         For i = 1 To lFileCount
             'écrit les bytes lus
-            WriteBytesToFileEnd sFolderOut & "\" & sFileStr, cFile.LoadFileInString(sFolderOut & "\" & sFileStr & "." & Trim$(Str$(i)))
+            WriteBytesToFileEnd sFolderOut & "\" & sFileStr, cFile.LoadFileInString(cFile.GetFolderFromPath(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i)))
             DoEvents
         Next i
         
