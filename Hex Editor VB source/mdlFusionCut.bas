@@ -164,7 +164,7 @@ Dim sFic As String
                 For j = 1 To lBuf2 - 1
                 
                     'récupère le buffer
-                    sBuf = GetBytesFromFile(sFile, 5242880, CCur((j - 1) * 5242880))
+                    sBuf = GetBytesFromFile(sFile, 5242880, CCur((j - 1) * 5242880) + (i - 1) * tMethode.lParam)
                     
                     'on écrit dans le fichier résultat
                     WriteBytesToFileEnd sFic, sBuf ', 5242880 * (j - 1)
@@ -172,20 +172,10 @@ Dim sFic As String
                 Next j
 
                 'le dernier buffer
-                '==> CETTE ligne foire (espion InStr(1, sbuf, "àpäR") ==> indique que pique dans la fin du fichier
-                'pour mettre dans le dernier buffer du premier fichier)
-                sBuf = GetBytesFromFile(sFile, tMethode.lParam - (lBuf2 - 1) * 5242880, CCur((lBuf2 - 1) * 5242880))
+                sBuf = GetBytesFromFile(sFile, tMethode.lParam - (lBuf2 - 1) * 5242880, CCur((lBuf2 - 1) * 5242880) + (i - 1) * tMethode.lParam)
 
                 'on écrit dans le fichier résultat
                 WriteBytesToFileEnd sFic, sBuf ', 5242880 * (lBuf2 - 1)
-                
-                
-            '//BUG ==> a la fin du fichier 1 (sur 2), on a la fin du fichier total
-            '==> prend la fin du fichier total dans le dernier buffer du fichier 1
-            'A priori, on écrit à la fin du fichier à chaque fois, donc pas de bug
-            'de Write au mauvais endroit, mais plutôt de Read au mauvais endroit.
-            'A priori, le dernier fichier est bon
-            
             
             Next i
 
@@ -201,7 +191,7 @@ Dim sFic As String
             For j = 1 To lBuf2 - 1
             
                 'récupère le buffer
-                sBuf = GetBytesFromFile(sFile, 5242880, CCur((lFileCount - 1) * tMethode.lParam + j * 5242880))
+                sBuf = GetBytesFromFile(sFile, 5242880, CCur((lFileCount - 1) * tMethode.lParam + (j - 1) * 5242880))
                 
                 'on écrit dans le fichier résultat
                 WriteBytesToFileEnd sFic, sBuf ', 5242880 * (j - 1)
@@ -209,7 +199,7 @@ Dim sFic As String
             Next j
             
             'récupère le dernier buffer
-            sBuf = GetBytesFromFile(sFile, lLastFileSize, CCur((lFileCount - 1) * tMethode.lParam))
+            sBuf = GetBytesFromFile(sFile, lLastFileSize - (lBuf2 - 1) * 5242880, CCur((lFileCount - 1) * tMethode.lParam + (lBuf2 - 1) * 5242880))
             
             'on écrit dans le fichier résultat
             WriteBytesToFileEnd sFic, sBuf ', 0

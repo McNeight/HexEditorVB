@@ -186,7 +186,7 @@ Dim tmpText As String
 Dim Ret As Long
 Dim lFile As Long
 
-    On Error GoTo ErrGestion
+    'On Error GoTo ErrGestion
     
     'obtient un handle vers le fichier à ouvrir
     lFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
@@ -209,8 +209,12 @@ Dim lFile As Long
     'affecte à la fonction
     GetBytesFromFile = tmpText
     
+    'referme le handle
+    CloseHandle lFile
+        
     Exit Function
 ErrGestion:
+    CloseHandle lFile
     clsERREUR.AddError "mdlFile.GetBytesFromFile", True
 End Function
 
@@ -240,6 +244,7 @@ Dim lFile As Long
 
     Exit Function
 ErrGestion:
+    CloseHandle lFile
     clsERREUR.AddError "mdlFile.WriteBytesToFile", True
 End Function
 
@@ -268,5 +273,6 @@ Dim lFile As Long
 
     Exit Function
 ErrGestion:
+    CloseHandle lFile
     clsERREUR.AddError "mdlFile.WriteBytesToFileEnd", True
 End Function
