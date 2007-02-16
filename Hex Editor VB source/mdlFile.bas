@@ -269,3 +269,4 @@ ErrGestion:
     CloseHandle lFile
 
 End Function
+

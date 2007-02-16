@@ -36,6 +36,7 @@ Option Explicit
 '//MODULE DE GESTION DE LA DECOUPE/FUSION
 '-------------------------------------------------------
 
+Public lBufSize As Long     'taille du buffer
 
 '-------------------------------------------------------
 'fonction de découpe de fichier
@@ -55,8 +56,10 @@ Dim lBuf2 As Long
 Dim sFic As String
 Dim lTime As Long
 Dim lNormalSize As Currency
+Dim k As Currency
+Dim k2 As Currency
 
-    On Error GoTo ErrGestion
+    'On Error GoTo ErrGestion
     
     lTime = GetTickCount
     
@@ -87,26 +90,40 @@ Dim lNormalSize As Currency
     
     'récupère la taille du fichier
     curSize = cFile.GetFileSize(sFile)
-    If curSize = 0 Then
+    If curSize = 0 Or cFile.IsFileAvailable(sFile) = False Then
         'fichier vide ou inaccessible
         MsgBox "Le fichier est vide ou inaccessible, l'opération n'a pas pu être terminée.", vbCritical, "Erreur critique"
         Exit Function
     End If
-
+    
+    'règle la progressbar
+    With frmCut.PGB
+        .Min = 0
+        .Value = 0
+    End With
     
     '//LANCE LE DECOUPAGE
     If tMethode.tMethode = [Taille fixe] Then
         'alors on découpe en fixant la taille
         
         'calcule le nombre de fichiers nécessaire et la taille du dernier
-        lFileCount = Int(curSize / tMethode.lParam) + IIf((curSize Mod tMethode.lParam) = 0, 0, 1)
-        lLastFileSize = curSize - (lFileCount - 1) * tMethode.lParam 'taille du dernier fichier
+        lFileCount = Int(curSize / tMethode.lParam) + IIf(Mod2(curSize, tMethode.lParam) = 0, 0, 1)
+        lLastFileSize = curSize     'taille du dernier fichier
+        k = (lFileCount - 1)
+        k = k * tMethode.lParam
+        lLastFileSize = lLastFileSize - k 'évite les dépassement de capacité
+        
         
         'lance la découpe
         'utilisation de l'API ReadFile pour plus d'efficacité
         'prend des buffers de 5Mo maximum
-        If tMethode.lParam <= 5242880 Then
+        If tMethode.lParam <= lBufSize Then
             'alors tout rentre dans un seul buffer
+            
+            frmCut.PGB.Max = lFileCount
+            
+            k2 = lFileCount - 1
+            k2 = k2 * tMethode.lParam
             
             For i = 1 To lFileCount - 1 'pas le dernier qui est fait à part
                 
@@ -117,11 +134,14 @@ Dim lNormalSize As Currency
                 cFile.CreateEmptyFile sFic, True
                 
                 'récupère le buffer
-                sBuf = GetBytesFromFile(sFile, CCur(tMethode.lParam), CCur((i - 1) * tMethode.lParam))
+                k = i - 1
+                k = k * tMethode.lParam
+                sBuf = GetBytesFromFile(sFile, CCur(tMethode.lParam), CCur(k))
                 
                 'on écrit dans le fichier résultat
                 WriteBytesToFile sFic, sBuf, 0
                 
+                frmCut.PGB.Value = i
                 DoEvents
             Next i
             
@@ -132,16 +152,22 @@ Dim lNormalSize As Currency
             cFile.CreateEmptyFile sFic, True
             
             'récupère le buffer
-            sBuf = GetBytesFromFile(sFile, lLastFileSize, CCur((lFileCount - 1) * tMethode.lParam))
+            sBuf = GetBytesFromFile(sFile, lLastFileSize, CCur(k2))
             
             'on écrit dans le fichier résultat
             WriteBytesToFile sFic, sBuf, 0
+            
+            frmCut.PGB.Value = frmCut.PGB.Max
 
         Else
             'alors plusieurs buffer
             
             'calcule le nombre de buffers nécessaires pour chaque fichier
-            lBuf2 = Int(tMethode.lParam / 5242880) + IIf((tMethode.lParam Mod 5242880) = 0, 0, 1)
+            lBuf2 = Int(tMethode.lParam / lBufSize) + IIf(Mod2(tMethode.lParam, lBufSize) = 0, 0, 1)
+            
+            frmCut.PGB.Max = lFileCount * lBuf2
+            k2 = lFileCount - 1
+            k2 = k2 * tMethode.lParam
             
             For i = 1 To lFileCount - 1 'pas le dernier qui est fait à part
                 
@@ -151,28 +177,33 @@ Dim lNormalSize As Currency
                 'créé le fichier résultat
                 cFile.CreateEmptyFile sFic, True
                 
-                DoEvents
+                k = i - 1
+                k = k * tMethode.lParam
                 
                 For j = 1 To lBuf2 - 1
-                
+ 
                     'récupère le buffer
-                    sBuf = GetBytesFromFile(sFile, 5242880, CCur((j - 1) * 5242880) + (i - 1) * tMethode.lParam)
+                    sBuf = GetBytesFromFile(sFile, lBufSize, CCur((j - 1) * lBufSize) + k)
                     
                     'on écrit dans le fichier résultat
                     WriteBytesToFileEnd sFic, sBuf ', 5242880 * (j - 1)
+                    
+                    frmCut.PGB.Value = frmCut.PGB.Value + 1: DoEvents
 
                 Next j
-
+                
                 'le dernier buffer
-                sBuf = GetBytesFromFile(sFile, tMethode.lParam - (lBuf2 - 1) * 5242880, CCur((lBuf2 - 1) * 5242880) + (i - 1) * tMethode.lParam)
+                sBuf = GetBytesFromFile(sFile, tMethode.lParam - (lBuf2 - 1) * lBufSize, CCur((lBuf2 - 1) * lBufSize) + k)
 
                 'on écrit dans le fichier résultat
                 WriteBytesToFileEnd sFic, sBuf ', 5242880 * (lBuf2 - 1)
+                
+                frmCut.PGB.Value = frmCut.PGB.Value + 1: DoEvents
             
             Next i
 
             'recalcule le nombre de buffers dans le dernier fichier
-            lBuf2 = Int(lLastFileSize / 5242880) + IIf((lLastFileSize Mod 5242880) = 0, 0, 1)
+            lBuf2 = Int(lLastFileSize / lBufSize) + IIf(Mod2(lLastFileSize, lBufSize) = 0, 0, 1)
 
             'maintenant le dernier fichier
             sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(lFileCount))
@@ -181,20 +212,22 @@ Dim lNormalSize As Currency
             cFile.CreateEmptyFile sFic, True
             
             For j = 1 To lBuf2 - 1
-            
+                    
                 'récupère le buffer
-                sBuf = GetBytesFromFile(sFile, 5242880, CCur((lFileCount - 1) * tMethode.lParam + (j - 1) * 5242880))
+                sBuf = GetBytesFromFile(sFile, lBufSize, CCur(k2 + (j - 1) * lBufSize))
                 
                 'on écrit dans le fichier résultat
                 WriteBytesToFileEnd sFic, sBuf ', 5242880 * (j - 1)
             
             Next j
-            
+                
             'récupère le dernier buffer
-            sBuf = GetBytesFromFile(sFile, lLastFileSize - (lBuf2 - 1) * 5242880, CCur((lFileCount - 1) * tMethode.lParam + (lBuf2 - 1) * 5242880))
+            sBuf = GetBytesFromFile(sFile, lLastFileSize - (lBuf2 - 1) * lBufSize, CCur(k2 + (lBuf2 - 1) * lBufSize))
             
             'on écrit dans le fichier résultat
             WriteBytesToFileEnd sFic, sBuf ', 0
+            
+            frmCut.PGB.Value = frmCut.PGB.Max
   
         End If
         
@@ -211,13 +244,21 @@ Dim lNormalSize As Currency
         
         'calcule la taille de chaque fichier
         lNormalSize = Int(curSize / lFileCount)
-        lLastFileSize = lNormalSize + curSize - lNormalSize * lFileCount 'taille du dernier fichier (plus quelques octets, au maximum 1 par fichier)
+        lLastFileSize = lNormalSize + curSize
+        k = lNormalSize
+        k = k * lFileCount 'taille du dernier fichier (plus quelques octets, au maximum 1 par fichier)
+        lLastFileSize = lLastFileSize - k       'évite le dépassement de capacité
+        
         
         'lance la découpe
         'utilisation de l'API ReadFile pour plus d'efficacité
         'prend des buffers de 5Mo maximum
-        If lNormalSize <= 5242880 Then
+        If lNormalSize <= lBufSize Then
             'alors tout rentre dans un seul buffer
+            
+            frmCut.PGB.Max = lFileCount
+            k2 = lFileCount - 1
+            k2 = k2 * lNormalSize
             
             For i = 1 To lFileCount - 1 'pas le dernier qui est fait à part
                 
@@ -228,11 +269,14 @@ Dim lNormalSize As Currency
                 cFile.CreateEmptyFile sFic, True
                 
                 'récupère le buffer
-                sBuf = GetBytesFromFile(sFile, lNormalSize, CCur((i - 1) * lNormalSize))
+                k = i - 1
+                k = k * lNormalSize
+                sBuf = GetBytesFromFile(sFile, lNormalSize, CCur(k))
                 
                 'on écrit dans le fichier résultat
                 WriteBytesToFile sFic, sBuf, 0
                 
+                frmCut.PGB.Value = i
                 DoEvents
             Next i
             
@@ -243,16 +287,22 @@ Dim lNormalSize As Currency
             cFile.CreateEmptyFile sFic, True
             
             'récupère le buffer
-            sBuf = GetBytesFromFile(sFile, lLastFileSize, CCur((lFileCount - 1) * lNormalSize))
+            sBuf = GetBytesFromFile(sFile, lLastFileSize, CCur(k2))
             
             'on écrit dans le fichier résultat
             WriteBytesToFile sFic, sBuf, 0
+            
+            frmCut.PGB.Value = frmCut.PGB.Max
 
         Else
             'alors plusieurs buffer
             
             'calcule le nombre de buffers nécessaires pour chaque fichier
-            lBuf2 = Int(lNormalSize / 5242880) + IIf((lNormalSize Mod 5242880) = 0, 0, 1)
+            lBuf2 = Int(lNormalSize / lBufSize) + IIf(Mod2(lNormalSize, lBufSize) = 0, 0, 1)
+            
+            frmCut.PGB.Max = lFileCount * lBuf2
+            k2 = lFileCount - 1
+            k2 = k2 * lNormalSize
             
             For i = 1 To lFileCount - 1 'pas le dernier qui est fait à part
                 
@@ -264,26 +314,30 @@ Dim lNormalSize As Currency
                 
                 DoEvents
                 
+                k = i - 1
+                k = k * lNormalSize
+                
                 For j = 1 To lBuf2 - 1
                 
                     'récupère le buffer
-                    sBuf = GetBytesFromFile(sFile, 5242880, CCur((j - 1) * 5242880) + (i - 1) * lNormalSize)
+                    sBuf = GetBytesFromFile(sFile, lBufSize, CCur((j - 1) * lBufSize) + k)
                     
                     'on écrit dans le fichier résultat
                     WriteBytesToFileEnd sFic, sBuf ', 5242880 * (j - 1)
-
+                    
+                    frmCut.PGB.Value = frmCut.PGB.Value + 1: DoEvents
                 Next j
 
                 'le dernier buffer
-                sBuf = GetBytesFromFile(sFile, lNormalSize - (lBuf2 - 1) * 5242880, CCur((lBuf2 - 1) * 5242880) + (i - 1) * lNormalSize)
+                sBuf = GetBytesFromFile(sFile, lNormalSize - (lBuf2 - 1) * lBufSize, CCur((lBuf2 - 1) * lBufSize) + k)
 
                 'on écrit dans le fichier résultat
                 WriteBytesToFileEnd sFic, sBuf ', 5242880 * (lBuf2 - 1)
-            
+                frmCut.PGB.Value = frmCut.PGB.Value + 1: DoEvents
             Next i
 
             'recalcule le nombre de buffers dans le dernier fichier
-            lBuf2 = Int(lLastFileSize / 5242880) + IIf((lLastFileSize Mod 5242880) = 0, 0, 1)
+            lBuf2 = Int(lLastFileSize / lBufSize) + IIf(Mod2(lLastFileSize, lBufSize) = 0, 0, 1)
 
             'maintenant le dernier fichier
             sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(lFileCount))
@@ -294,7 +348,7 @@ Dim lNormalSize As Currency
             For j = 1 To lBuf2 - 1
             
                 'récupère le buffer
-                sBuf = GetBytesFromFile(sFile, 5242880, CCur((lFileCount - 1) * lNormalSize + (j - 1) * 5242880))
+                sBuf = GetBytesFromFile(sFile, lBufSize, CCur(k2 + (j - 1) * lBufSize))
                 
                 'on écrit dans le fichier résultat
                 WriteBytesToFileEnd sFic, sBuf ', 5242880 * (j - 1)
@@ -302,11 +356,12 @@ Dim lNormalSize As Currency
             Next j
             
             'récupère le dernier buffer
-            sBuf = GetBytesFromFile(sFile, lLastFileSize - (lBuf2 - 1) * 5242880, CCur((lFileCount - 1) * lNormalSize + (lBuf2 - 1) * 5242880))
+            sBuf = GetBytesFromFile(sFile, lLastFileSize - (lBuf2 - 1) * lBufSize, CCur(k2 + (lBuf2 - 1) * lBufSize))
             
             'on écrit dans le fichier résultat
             WriteBytesToFileEnd sFic, sBuf ', 0
-  
+            
+            frmCut.PGB.Value = frmCut.PGB.Max
         End If
         
         
@@ -323,7 +378,6 @@ Dim lNormalSize As Currency
     Exit Function
 
 ErrGestion:
-    clsERREUR.AddError "mdlFusionCut.CutFile", True
 End Function
 
 
@@ -345,7 +399,7 @@ Dim curSize As Currency
 Dim a As Long
 Dim lTime As Long
 
-    On Error GoTo ErrGestion
+    'On Error GoTo ErrGestion
     
     lTime = GetTickCount
     
@@ -373,7 +427,16 @@ Dim lTime As Long
         'fichier déjà existant
         If MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Function
     End If
+    
+    If cFile.IsFileAvailable(sFileGroup) = False Then
+        'fichier groupe indisponible ou inexistant
+        MsgBox "Le fichier groupeur est indisponible ou inexistant.", vbCritical, "Erreur critique"
+    End If
 
+    With frmCut.PGB
+        .Min = 0
+        .Value = 0
+    End With
 
     '//LANCE LA FUSION
     'récupère le nombre de fichiers concernés
@@ -396,21 +459,26 @@ Dim lTime As Long
     cFile.CreateEmptyFile sFolderOut & "\" & sFileStr, True
     
     'alors tout est OK, on peut commencer à coller les données par buffer de 5Mo
-    If cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1") <= 5242880 Then
+    If cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1") <= lBufSize Then
         'alors tout rentre dans un buffer de 5Mo
     
+        frmCut.PGB.Max = lFileCount
+        frmCut.PGB.Value = 0
         For i = 1 To lFileCount
             'écrit les bytes lus
             WriteBytesToFileEnd sFolderOut & "\" & sFileStr, cFile.LoadFileInString(cFile.GetFolderFromPath(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i)))
-            DoEvents
+            DoEvents: frmCut.PGB.Value = frmCut.PGB.Value + 1
         Next i
+        frmCut.PGB.Value = frmCut.PGB.Max
         
     Else
     
         'alors il faut plusieurs buffers de 5Mo par fichier
         
         'détermine le nombre de buffers nécessaire
-        lBuf2 = Int(cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1") / 5242880) + IIf((cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1") Mod 5242880) = 0, 0, 1)
+        lBuf2 = Int(cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1") / lBufSize) + IIf(Mod2(cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1"), lBufSize) = 0, 0, 1)
+        
+        frmCut.PGB.Max = lFileCount * lBuf2
         
         For i = 1 To lFileCount - 1
         
@@ -419,41 +487,45 @@ Dim lTime As Long
             
             For j = 1 To lBuf2 - 1
                 'sbuf contient 5Mo lus
-                sBuf = GetBytesFromFile(sFic, 5242880, 5242880 * (j - 1))
+                sBuf = GetBytesFromFile(sFic, lBufSize, lBufSize * (j - 1))
                 
                 'écrit les bytes dans le fichier résultat
                 WriteBytesToFileEnd sFolderOut & "\" & sFileStr, sBuf
+                
+                frmCut.PGB.Value = frmCut.PGB.Value + 1: DoEvents
             Next j
             
             'le dernier buffer
-            a = cFile.GetFileSize(sFic) - (lBuf2 - 1) * 5242880     'taille du dernier buffer
-            sBuf = GetBytesFromFile(sFic, a, 5242880 * (lBuf2 - 1))
+            a = cFile.GetFileSize(sFic) - (lBuf2 - 1) * lBufSize     'taille du dernier buffer
+            sBuf = GetBytesFromFile(sFic, a, lBufSize * (lBuf2 - 1))
             
             'écrit les bytes dans le fichier résultat
             WriteBytesToFileEnd sFolderOut & "\" & sFileStr, sBuf
             
+            frmCut.PGB.Value = frmCut.PGB.Value + 1
             DoEvents
         Next i
         
         'fait le dernier fichier
         sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(lFileCount))
-        lBuf2 = Int(cFile.GetFileSize(sFic) / 5242880) + IIf((cFile.GetFileSize(sFic) Mod 5242880) = 0, 0, 1)   'nouveau buffer
+        lBuf2 = Int(cFile.GetFileSize(sFic) / lBufSize) + IIf(Mod2(cFile.GetFileSize(sFic), lBufSize) = 0, 0, 1)    'nouveau buffer
             
         For j = 1 To lBuf2 - 1
             'sbuf contient 5Mo lus
-            sBuf = GetBytesFromFile(sFic, 5242880, 5242880 * (j - 1))
+            sBuf = GetBytesFromFile(sFic, lBufSize, lBufSize * (j - 1))
             
             'écrit les bytes dans le fichier résultat
             WriteBytesToFileEnd sFolderOut & "\" & sFileStr, sBuf
         Next j
         
         'le dernier buffer
-        a = cFile.GetFileSize(sFic) - (lBuf2 - 1) * 5242880
-        sBuf = GetBytesFromFile(sFic, a, 5242880 * (lBuf2 - 1))
+        a = cFile.GetFileSize(sFic) - (lBuf2 - 1) * lBufSize
+        sBuf = GetBytesFromFile(sFic, a, lBufSize * (lBuf2 - 1))
         
         'écrit les bytes dans le fichier résultat
         WriteBytesToFileEnd sFolderOut & "\" & sFileStr, sBuf
         
+        frmCut.PGB.Value = frmCut.PGB.Max
         DoEvents
         
     End If
@@ -465,6 +537,13 @@ Dim lTime As Long
     Exit Function
 
 ErrGestion:
-    clsERREUR.AddError "mdlFusionCut.PasteFile", True
+End Function
+
+'-------------------------------------------------------
+'effectue un modulo sans dépassement de capacité
+'très peu optimisé, mais utile pour les grandes valeurs de cur
+'-------------------------------------------------------
+Public Function Mod2(ByVal cur As Currency, lng As Long) As Currency
+    Mod2 = cur - Int(cur / lng) * lng
 End Function
 

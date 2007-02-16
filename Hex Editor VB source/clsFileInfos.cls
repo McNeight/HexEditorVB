@@ -593,7 +593,7 @@ Dim lFile As Long
     'créé le fichier
     CreateEmptyFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_WRITE Or FILE_SHARE_READ, ByVal 0&, PARAM, ByVal 0&, ByVal 0&)
     CloseHandle CreateEmptyFile 'ferme le handle...
-    
+
 End Function
 
 '-------------------------------------------------------
@@ -717,6 +717,27 @@ Dim curSize As Currency
     CloseHandle lngFile
     
     GetFileSize = curSize * 10000 'multiplie par 10^4 pour obtenir un nombre entier
+End Function
+
+'-------------------------------------------------------
+'teste la disponibilité d'un fichier (et aussi sa présence)
+'-------------------------------------------------------
+Public Function IsFileAvailable(ByVal sFile As String) As Boolean
+Dim lFile As Long
+    
+    IsFileAvailable = True
+    
+    'obtient un handle vers le fichier à ouvrir
+    lFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+    
+    If lFile = -1 Then
+        'fichier inexistant, ou en tout cas inaccessible
+        IsFileAvailable = False
+    End If
+
+    'referme le handle
+    CloseHandle lFile
+    
 End Function
 
 '-------------------------------------------------------
@@ -993,6 +1014,7 @@ Dim OFName As OPENFILENAME
 
     'ouvre la boite de dialogue
     bHasPushedCancel = Not (CBool(GetOpenFileName(OFName))) 'récupère si l'utilisateur à cliqué sur "annuler"
+    If bHasPushedCancel Then Exit Function
     
     'récupère le FileName
     ShowOpen = Left$(OFName.lpstrFile, InStr(OFName.lpstrFile, vbNullChar) - 1)
