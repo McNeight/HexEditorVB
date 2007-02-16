@@ -39,6 +39,6 @@ gestion erreur|clsERREUR.AddError "Pfm.OpenFile", True           à pleins d'endr
 conversion simple|conversion simple dans toutes les bases et support des grands nombres (voire des nombres négatifs et décimaux)| 43| 4
 conversion avancée|ajouter la conversion avancée| 46| 3
 drag & drop|ajout du drag and drop sur frmcontent| 66| 3
-options|gérer options + sauvegarde| 83| 3
 historique|ajout de l'historique + gestion redo/undo| 75| 5
-toolbar|gérer le toolbar (manque juste Paste)| 79| 1
+toolbar|gérer le toolbar (manque juste Paste)| 82| 1
+options|gérer options + sauvegarde| 83| 3
