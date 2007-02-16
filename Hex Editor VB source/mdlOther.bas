@@ -187,11 +187,13 @@ Dim cReg As clsRegistry
 End Sub
 
 '-------------------------------------------------------
-'renvoie a^b
+'renvoie a^b (plus rapide que a^b)
 '-------------------------------------------------------
-Public Function AexpB(ByVal a As Long, ByVal b As Long) As Long
+Public Function AexpB(ByVal a As Long, ByVal b As Long) As Currency
 Dim x As Long
 Dim l As Long
+
+    On Error Resume Next
 
     If b = 0 Then
         AexpB = 1
@@ -426,193 +428,6 @@ Dim lst As ListImage
 
 End Sub
 
-
-
-'-------------------------------------------------------
-'FONCTIONS DE CONVERSION
-'-------------------------------------------------------
-Public Function Str2Hex(ByVal s As String) As String
-    Str2Hex = Hex$(Str2Dec(s))
-End Function
-Public Function Str2Hex_(ByVal s As String) As String
-    Str2Hex_ = Hex$(Str2Dec(s))
-    If Len(Str2Hex_) = 1 Then Str2Hex_ = "0" & Str2Hex_
-End Function
-Public Function Str2Dec(ByVal s As String) As Long
-    If s = vbNullString Then Exit Function
-    Str2Dec = Asc(s)
-End Function
-Public Function Str2Oct(ByVal s As String) As String
-    Str2Oct = Oct$(Str2Dec(s))
-End Function
-Public Function Hex2Dec(ByVal s As String) As Long
-Dim x As Long
-Dim l As Long
-
-    For x = Len(s) To 1 Step -1
-        l = l + HexVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(16, x - 1)
-    Next x
-
-    Hex2Dec = l
-End Function
-Public Function Hex2Str(ByVal s As String) As String
-    Hex2Str = Byte2FormatedString(Hex2Dec(s))
-End Function
-Public Function Hex2Str_(ByVal s As String) As String
-    Hex2Str_ = Chr$(Hex2Dec(s))
-End Function
-Public Function Hex2Oct(ByVal s As String) As String
-    Hex2Oct = Oct$(Hex2Dec(s))
-End Function
-Public Function Dec2Bin(ByVal l As Long, Optional ByVal lSize As Long = 8) As String
-Dim x As Long
-Dim s As String
-
-    s = vbNullString
-
-    For x = lSize - 1 To 0 Step -1
-        If l >= AexpB(2, x) Then
-            l = l - AexpB(2, x)
-            s = s & "1"
-        Else
-            s = s & "0"
-        End If
-    Next x
-    
-    Dec2Bin = s
-        
-End Function
-Public Function Bin2Dec(ByVal s As String) As Long
-Dim x As Long
-Dim l As Long
-
-    For x = Len(s) To 1 Step -1
-        l = l + FormatedVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(2, x - 1)
-    Next x
-
-    Bin2Dec = l
-End Function
-Public Function Oct2Dec(ByVal s As String) As Long
-Dim x As Long
-Dim l As Long
-
-    For x = Len(s) To 1 Step -1
-        l = l + FormatedVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(8, x - 1)
-    Next x
-
-    Oct2Dec = l
-End Function
-Public Function FormatedVal(ByVal s As String) As Long
-    FormatedVal = Abs(Int(Val(s)))
-End Function
-Public Function HexVal(ByVal s As String) As Long
-    If s = "0" Then
-        HexVal = 0
-    ElseIf s = "1" Then
-        HexVal = 1
-    ElseIf s = "2" Then
-        HexVal = 2
-    ElseIf s = "3" Then
-        HexVal = 3
-    ElseIf s = "4" Then
-        HexVal = 4
-    ElseIf s = "5" Then
-        HexVal = 5
-    ElseIf s = "6" Then
-        HexVal = 6
-    ElseIf s = "7" Then
-        HexVal = 7
-    ElseIf s = "8" Then
-        HexVal = 8
-    ElseIf s = "9" Then
-        HexVal = 9
-    ElseIf LCase(s) = "a" Then
-        HexVal = 10
-    ElseIf LCase(s) = "b" Then
-        HexVal = 11
-    ElseIf LCase(s) = "c" Then
-        HexVal = 12
-    ElseIf LCase(s) = "d" Then
-        HexVal = 13
-    ElseIf LCase(s) = "e" Then
-        HexVal = 14
-    ElseIf LCase(s) = "f" Then
-        HexVal = 15
-    End If
-End Function
-Public Function ExtendedHex(ByVal cVal As Currency) As String
-Dim x As Long
-Dim s As String
-Dim table16(15) As Currency
-Dim res(15) As Byte
-
-    cVal = cVal + 1 'ajoute 1 pour que le résultat soit juste
-
-    'contient la table des 16^n
-    table16(0) = 1
-    table16(1) = 16
-    table16(2) = 256
-    table16(3) = 4096
-    table16(4) = 65536
-    table16(5) = 1048576
-    table16(6) = 16777216
-    table16(7) = 268435456
-    table16(8) = 4294967296#
-    table16(9) = 68719476736#
-    table16(10) = 1099511627776#
-    table16(11) = 17592186044416#
-    table16(12) = 281474976710656#
-
-    'enlève, en partant des plus grosses valeurs, un maximum de fois un 16^x
-    For x = 12 To 0 Step -1
-        While cVal > table16(x)
-            cVal = cVal - table16(x)
-            res(x) = res(x) + 1 'ajoute 1 à l'occurence de table16(x)
-        Wend
-    Next x
-    
-    'créé la string
-    For x = 12 To 0 Step -1
-        s = s & Hex(res(x))
-    Next
-    
-    ExtendedHex = s
-End Function
-'-------------------------------------------------------
-'fonction qui transforme une suite de valeur hexa en une string
-'-------------------------------------------------------
-Public Function HexValues2String(ByVal sString As String) As String
-Dim Sep As Boolean
-Dim sRes As String
-Dim x As Long
-
-    Sep = True  'recherche un séparant entre les valeurs hexa (de longueur 2)
-
-    While Sep
-        If Len(sString) > 2 Then
-            'alors on recherche un éventuel séparant
-            If Val("&h" & Mid$(sString, 3, 1)) = 0 And Mid$(sString, 3, 1) <> "0" Then
-                'alors le troisième caractère n'est pas un caractère qui compose une valeur hexa
-                'donc c'est un séparant
-                sString = Replace$(sString, Mid$(sString, 3, 1), vbNullString) 'vire tous les séparants
-            Else
-                'alors pas de séparant ==> on quitte la boucle
-                Sep = False
-            End If
-        Else
-            Sep = False
-        End If
-    Wend
-    
-    sRes = vbNullString
-    'maintenant que la string ne comporte plus de séparants, on créé le résultat
-    For x = 1 To Int(Len(sString) / 2)
-        sRes = sRes & Chr$(Hex2Dec(Mid$(sString, 2 * x - 1, 2)))
-    Next x
-    
-    HexValues2String = sRes
-End Function
-
 '-------------------------------------------------------
 'enregsitre le type de fichier *.hescr
 '-------------------------------------------------------
@@ -743,12 +558,213 @@ End Function
 '-------------------------------------------------------
 Public Function GetUserName() As String
 Dim strS As String
-Dim ret As Long
+Dim Ret As Long
 
     'créé un buffer
     strS = String$(200, 0)
     
     'récupère le Name
-    ret = GetUserNameA(strS, 199)
-    If ret <> 0 Then GetUserName = Left$(strS, 199) Else GetUserName = vbNullString
+    Ret = GetUserNameA(strS, 199)
+    If Ret <> 0 Then GetUserName = Left$(strS, 199) Else GetUserName = vbNullString
+End Function
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'-------------------------------------------------------
+'FONCTIONS DE CONVERSION INTER-BASES
+'-------------------------------------------------------
+Public Function Str2Hex(ByVal s As String) As String
+    Str2Hex = Hex$(Str2Dec(s))
+End Function
+Public Function Str2Hex_(ByVal s As String) As String
+    Str2Hex_ = Hex$(Str2Dec(s))
+    If Len(Str2Hex_) = 1 Then Str2Hex_ = "0" & Str2Hex_
+End Function
+Public Function Str2Dec(ByVal s As String) As Long
+    If s = vbNullString Then Exit Function
+    Str2Dec = Asc(s)
+End Function
+Public Function Str2Oct(ByVal s As String) As String
+    Str2Oct = Oct$(Str2Dec(s))
+End Function
+Public Function Hex2Dec(ByVal s As String) As Long
+Dim x As Long
+Dim l As Long
+
+    For x = Len(s) To 1 Step -1
+        l = l + HexVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(16, x - 1)
+    Next x
+
+    Hex2Dec = l
+End Function
+Public Function Hex2Str(ByVal s As String) As String
+    Hex2Str = Byte2FormatedString(Hex2Dec(s))
+End Function
+Public Function Hex2Str_(ByVal s As String) As String
+    Hex2Str_ = Chr$(Hex2Dec(s))
+End Function
+Public Function Hex2Oct(ByVal s As String) As String
+    Hex2Oct = Oct$(Hex2Dec(s))
+End Function
+Public Function Dec2Bin(ByVal l As Long, Optional ByVal lSize As Long = 8) As String
+Dim x As Long
+Dim s As String
+
+    s = vbNullString
+
+    For x = lSize - 1 To 0 Step -1
+        If l >= AexpB(2, x) Then
+            l = l - AexpB(2, x)
+            s = s & "1"
+        Else
+            s = s & "0"
+        End If
+    Next x
+    
+    Dec2Bin = s
+        
+End Function
+Public Function Bin2Dec(ByVal s As String) As Long
+Dim x As Long
+Dim l As Long
+
+    For x = Len(s) To 1 Step -1
+        l = l + FormatedVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(2, x - 1)
+    Next x
+
+    Bin2Dec = l
+End Function
+Public Function Oct2Dec(ByVal s As String) As Long
+Dim x As Long
+Dim l As Long
+
+    For x = Len(s) To 1 Step -1
+        l = l + FormatedVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(8, x - 1)
+    Next x
+
+    Oct2Dec = l
+End Function
+Public Function FormatedVal(ByVal s As String) As Long
+    On Error Resume Next
+    FormatedVal = Abs(Int(Val(s)))
+End Function
+Public Function HexVal(ByVal s As String) As Long
+    If s = "0" Then
+        HexVal = 0
+    ElseIf s = "1" Then
+        HexVal = 1
+    ElseIf s = "2" Then
+        HexVal = 2
+    ElseIf s = "3" Then
+        HexVal = 3
+    ElseIf s = "4" Then
+        HexVal = 4
+    ElseIf s = "5" Then
+        HexVal = 5
+    ElseIf s = "6" Then
+        HexVal = 6
+    ElseIf s = "7" Then
+        HexVal = 7
+    ElseIf s = "8" Then
+        HexVal = 8
+    ElseIf s = "9" Then
+        HexVal = 9
+    ElseIf LCase(s) = "a" Then
+        HexVal = 10
+    ElseIf LCase(s) = "b" Then
+        HexVal = 11
+    ElseIf LCase(s) = "c" Then
+        HexVal = 12
+    ElseIf LCase(s) = "d" Then
+        HexVal = 13
+    ElseIf LCase(s) = "e" Then
+        HexVal = 14
+    ElseIf LCase(s) = "f" Then
+        HexVal = 15
+    End If
+End Function
+Public Function ExtendedHex(ByVal cVal As Currency) As String
+Dim x As Long
+Dim s As String
+Dim table16(15) As Currency
+Dim res(15) As Byte
+
+    cVal = cVal + 1 'ajoute 1 pour que le résultat soit juste
+
+    'contient la table des 16^n
+    table16(0) = 1
+    table16(1) = 16
+    table16(2) = 256
+    table16(3) = 4096
+    table16(4) = 65536
+    table16(5) = 1048576
+    table16(6) = 16777216
+    table16(7) = 268435456
+    table16(8) = 4294967296#
+    table16(9) = 68719476736#
+    table16(10) = 1099511627776#
+    table16(11) = 17592186044416#
+    table16(12) = 281474976710656#
+
+    'enlève, en partant des plus grosses valeurs, un maximum de fois un 16^x
+    For x = 12 To 0 Step -1
+        While cVal > table16(x)
+            cVal = cVal - table16(x)
+            res(x) = res(x) + 1 'ajoute 1 à l'occurence de table16(x)
+        Wend
+    Next x
+    
+    'créé la string
+    For x = 12 To 0 Step -1
+        s = s & Hex(res(x))
+    Next
+    
+    ExtendedHex = s
+End Function
+'-------------------------------------------------------
+'fonction qui transforme une suite de valeur hexa en une string
+'-------------------------------------------------------
+Public Function HexValues2String(ByVal sString As String) As String
+Dim Sep As Boolean
+Dim sRes As String
+Dim x As Long
+
+    Sep = True  'recherche un séparant entre les valeurs hexa (de longueur 2)
+
+    While Sep
+        If Len(sString) > 2 Then
+            'alors on recherche un éventuel séparant
+            If Val("&h" & Mid$(sString, 3, 1)) = 0 And Mid$(sString, 3, 1) <> "0" Then
+                'alors le troisième caractère n'est pas un caractère qui compose une valeur hexa
+                'donc c'est un séparant
+                sString = Replace$(sString, Mid$(sString, 3, 1), vbNullString) 'vire tous les séparants
+            Else
+                'alors pas de séparant ==> on quitte la boucle
+                Sep = False
+            End If
+        Else
+            Sep = False
+        End If
+    Wend
+    
+    sRes = vbNullString
+    'maintenant que la string ne comporte plus de séparants, on créé le résultat
+    For x = 1 To Int(Len(sString) / 2)
+        sRes = sRes & Chr$(Hex2Dec(Mid$(sString, 2 * x - 1, 2)))
+    Next x
+    
+    HexValues2String = sRes
 End Function

@@ -1,14 +1,21 @@
 ajout opt|ajouter l'option "caractère séparant" pour la copie des valeurs hexa| 10| 3
 annuler|ajouter possibilité d'annuler les actions longues (qui changent le sb.panels(1).text)| 10| 3
 bitmap|save bitmap au bon format (taille)| 10| 1
+conversion avancée|ajouter la conversion avancée| 62| 3
+conversion simple|conversion simple dans toutes les bases et support des grands nombres (voire des nombres négatifs et décimaux)| 43| 4
 copie|copie inter form| 10| 3
+copier/coller/insérer|ajouter copier/coller et insertion de bytes| 30| 3
+crc|ajouter la visualisation du CRC et virer le module pas sous gnu| 30| 3
 createfromsel|ajout création depuis sélection >500Ko| 10| 3
 dates|ne pas changer les dates lors de la sauvegarde de fichier| 10| 1
 dbl click|double cliquer pour changer de point courant dans le HW| 10| 4
+drag & drop|ajout du drag and drop sur frmcontent| 66| 3
 fichier dump|support des fichiers *.dmp par défaut| 10| 5
 fixer les bugs|fixer les bugs| 10| 1
 folder|dates des dossiers mauvaises| 10| 4
+gestion erreur|clsERREUR.AddError "Pfm.OpenFile", True           à pleins d'endroits| 35| 3
 grp|support du type *.grp| 10| 3
+historique|ajout de l'historique + gestion redo/undo| 75| 5
 limite fichier|éviter de pouvoir visualiser le fichier après sa limite affichable| 10| 3
 menu save|menu enregistrer (pas sous)| 10| 1
 mergeur|ajouter comparaison (comme Windiff) de fichiers| 10| 3
@@ -16,29 +23,22 @@ mode lecture|ajouter le mode 'lecture de fichier'| 10| 3
 open|gérer le cas de Cancel pour showopen et dans ce cas exit sub| 10| 3
 options|ajouter combobox pour choix de type de mise par défaut à faire (appareance, general....)| 10| 1
 options|maj des forms apres le changement des options| 10| 3
+options|lang + os| 30| 3
+options|gérer options + sauvegarde| 83| 3
+options de recherche|ajouter les options de recherche (vers le bas, mot entier, zone recherche, expression régulière)| 16| 4
+pref|gérer la création du fichier par défaut si inexistant| 30| 3
+print|impression| 16| 3
 properties|gérer les checkboxes de frmproperty pour les fichiers (attributs)| 10| 1
+renommage|projet de renommage massif| 30| 1
 replace|'remplacer' (dans la recherche)| 10| 3
+sauvegarde mémoire|sauvegarde de la mémoire virtuelle en tant que fichier| 18| 3
+save|remplacer CMD pour ShowSave| 30| 3
 save buffer|enregistrer avec un buffer plus gros (diminue le temps)| 10| 1
+script|gérer l'execution de scripts| 23| 1
 settings|vérifier que le tag "pref" est présent sur tous les composants à sauver| 10| 1
 string search|recherche strings dans disque| 10| 3
 support de vista|ajouter resize de certains composants si vista| 10| 1
 supprimer|ajout de la suppresion d'une partie de bytes| 10| 3
-tooltiptext|ajouter des tooltiptext dans la form Options| 10| 1
-options de recherche|ajouter les options de recherche (vers le bas, mot entier, zone recherche, expression régulière)| 16| 4
-print|impression| 16| 3
-sauvegarde mémoire|sauvegarde de la mémoire virtuelle en tant que fichier| 18| 3
-script|gérer l'execution de scripts| 23| 1
-copier/coller/insérer|ajouter copier/coller et insertion de bytes| 30| 3
-crc|ajouter la visualisation du CRC et virer le module pas sous gnu| 30| 3
-options|lang + os| 30| 3
-pref|gérer la création du fichier par défaut si inexistant| 30| 3
-renommage|projet de renommage massif| 30| 1
-save|remplacer CMD pour ShowSave| 30| 3
-traduction|traduction anglaise| 30| 1
-gestion erreur|clsERREUR.AddError "Pfm.OpenFile", True           à pleins d'endroits| 35| 3
-conversion simple|conversion simple dans toutes les bases et support des grands nombres (voire des nombres négatifs et décimaux)| 43| 4
-conversion avancée|ajouter la conversion avancée| 46| 3
-drag & drop|ajout du drag and drop sur frmcontent| 66| 3
-historique|ajout de l'historique + gestion redo/undo| 75| 5
 toolbar|gérer le toolbar (manque juste Paste)| 82| 1
-options|gérer options + sauvegarde| 83| 3
+tooltiptext|ajouter des tooltiptext dans la form Options| 10| 1
+traduction|traduction anglaise| 30| 1
