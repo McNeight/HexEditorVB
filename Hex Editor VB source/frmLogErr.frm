@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.Form frmLogErr 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Rapport d'erreurs"
@@ -187,7 +187,7 @@ Dim x As Long
     If clsERREUR.NumberOfErrorInLogFile <> 0 Then
         'il y a des erreurs
         Text1.ForeColor = &HC0&
-        Text1.Text = "Des erreurs ont été enregistrées dans le rapport d'erreur." & vbNewLine & "Veuillez SVP envoyer le fichier" & vbNewLine & clsERREUR.LogFile & vbNewLine & "à l'adresse : violent_ken@hotmail.fr" & vbNewLine & "Vous contriburez ainsi à l'amélioration de ce programme."
+        Text1.Text = "Des erreurs ont été enregistrées dans le rapport d'erreur." & vbNewLine & "Veuillez SVP envoyer le fichier" & vbNewLine & clsERREUR.LogFile & vbNewLine & "à l'adresse : hexeditorvb@gmail.com" & vbNewLine & "Vous contriburez ainsi à l'amélioration de ce programme."
     Else
         'pas d'erreurs
         Text1.ForeColor = &HC000&

@@ -511,9 +511,6 @@ Private Sub cmdQuit_Click()
 End Sub
 
 Private Sub Form_Load()
-
-    'instancie la classe fichier
-    Set cFile = New clsFileInfos
     
     'redimensionne et place les frames
     With Frame1(0)
@@ -529,11 +526,6 @@ Private Sub Form_Load()
         .Height = 3615
     End With
     
-End Sub
-
-Private Sub Form_Unload(Cancel As Integer)
-    'libère
-    Set cFile = Nothing
 End Sub
 
 Private Sub Option1_Click(Index As Integer)
