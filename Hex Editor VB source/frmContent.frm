@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "23:01"
+            TextSave        =   "20:02"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -98,7 +98,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "14/02/2007"
+            TextSave        =   "16/02/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -920,11 +920,11 @@ Dim Frm As Form
 
     'demande le fichier
 
-    If cFile.FileExists(Item.Text) = False Then Exit Sub
+    If cFile.FileExists(Item.Tag) = False Then Exit Sub
     
     'affiche une nouvelle fenêtre
     Set Frm = New Pfm
-    Call Frm.GetFile(Item.Text)
+    Call Frm.GetFile(Item.Tag)
     Frm.Show
     lNbChildFrm = lNbChildFrm + 1
     Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
@@ -1384,10 +1384,10 @@ Dim x As Long
     LV.GetSelectedItems sFile
     
     For x = 1 To UBound(sFile)
-        If cFile.FileExists(sFile(x).Text) Then
+        If cFile.FileExists(sFile(x).Tag) Then
             'affiche une nouvelle fenêtre
             Set Frm = New Pfm
-            Call Frm.GetFile(sFile(x).Text)
+            Call Frm.GetFile(sFile(x).Tag)
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
             Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
@@ -1787,7 +1787,7 @@ Dim x As Long
     LV.GetSelectedItems sFile
     
     For x = 1 To UBound(sFile)
-        ShellExecute Me.hwnd, "open", sFile(x).Text, vbNullString, vbNullString, 1
+        ShellExecute Me.hwnd, "open", sFile(x).Tag, vbNullString, vbNullString, 1
     Next x
     
 End Sub
@@ -2297,10 +2297,11 @@ Dim x As Long
     LV.GetSelectedItems sFile
     
     For x = 1 To UBound(sFile)
-        If cFile.FileExists(sFile(x).Text) Then
+        If cFile.FileExists(sFile(x).Tag) Then
             'affiche une nouvelle fenêtre
             Set Frm = New frmAnalys
-            Call Frm.GetFile(sFile(x).Text)
+            Call Frm.GetFile(sFile(x).Tag)
+            Call Frm.cmdAnalyse_Click   'lance l'analyse
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
             Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"

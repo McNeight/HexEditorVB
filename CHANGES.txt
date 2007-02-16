@@ -1,0 +1,10 @@
+'---------------------------------------------------------------------------
+'                         HISTORIQUE DES VERSIONS
+'
+' v1.4 ajout des options, de la recherche en mémoire, de la conversion avancée, de la copie dans le presse papier et du fusionneur/découpeur de fichiers
+' v1.3 support de l'historique
+' v1.2 Ajout de la gestion des disques
+' v1.1 Ajout de la gestion de la modification des processus
+'   en mémoire
+' v1.0 Initial release
+'---------------------------------------------------------------------------
