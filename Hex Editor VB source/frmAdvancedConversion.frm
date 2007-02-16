@@ -242,6 +242,7 @@ Begin VB.Form frmAdvancedConversion
             Height          =   1575
             Left            =   240
             MultiLine       =   -1  'True
+            ScrollBars      =   2  'Vertical
             TabIndex        =   5
             Top             =   120
             Width           =   6015
@@ -277,6 +278,7 @@ Begin VB.Form frmAdvancedConversion
             Height          =   1575
             Left            =   0
             MultiLine       =   -1  'True
+            ScrollBars      =   2  'Vertical
             TabIndex        =   2
             Top             =   0
             Width           =   6015
@@ -519,12 +521,11 @@ End Sub
 Private Sub LaunchExtraConversion()
 Dim sO As String
 Dim s As String
-Dim lS As Long
+Dim LS As Long
 Dim lMax As Long
 Dim sSep As String
 Dim x As Long
 Dim sA() As String
-
 
     If cbI.ListIndex < 0 Or cbO.ListIndex < 0 Then Exit Sub 'pas de base sélectionnée
     If (cbI.ListIndex = 5 And FormatedVal(txtBaseI.Text) = 0) Or (cbO.ListIndex = 5 And FormatedVal(txtBaseO.Text) = 0) Then Exit Sub 'pas de base perso définie
@@ -534,17 +535,22 @@ Dim sA() As String
     
     If optUseFixedSize.Value Then
         'alors on fait une conversion par taille de paquet fixe
-        lS = FormatedVal(txtSize.Text)
-        If lS = 0 Then
+        LS = FormatedVal(txtSize.Text)
+        If LS = 0 Then
             'taille nulle
             MsgBox "La taille des paquets n'est pas convenable.", vbCritical, "Attention"
             Exit Sub
         End If
         
+        Me.Caption = "Conversion..."
+        
         lMax = Len(txtI.Text)
-        For x = 1 To lMax Step lS
+        For x = 1 To lMax Step LS
+        
+            If (x Mod 1000) = 0 Then DoEvents
+            
             'on extrait le(s) caractère(s)
-            s = Mid$(txtI.Text, x, lS)
+            s = Mid$(txtI.Text, x, LS)
             
             'on récupère la valeur formatée et on ajoute au buffer final
             sO = sO & GetCv(s)
@@ -552,6 +558,8 @@ Dim sA() As String
         
         'on affiche çà
         txtO.Text = sO
+        
+        Me.Caption = "Conversion avancée"
         
     Else
         'alors on fait une conversion par séparateur
@@ -561,6 +569,8 @@ Dim sA() As String
             Exit Sub
         End If
         
+        Me.Caption = "Conversion..."
+        
         'définit le caractère séparant
         If optSep(0).Value Then sSep = txtSepS.Text Else sSep = Str2Hex(txtSepH.Text)
         
@@ -568,12 +578,16 @@ Dim sA() As String
         sA() = Split(txtI.Text, sSep, , vbBinaryCompare)
         
         For x = 0 To UBound(sA())
+        
+            If (x Mod 1000) = 0 Then DoEvents
             sO = sO & GetCv(sA(x)) & sSep
         Next x
         
         'on affiche en virant le dernier séparateur
         txtO.Text = Left$(sO, Len(sO) - Len(sSep))
 
+        Me.Caption = "Conversion avancée"
+        
     End If
     
 End Sub

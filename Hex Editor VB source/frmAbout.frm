@@ -240,7 +240,6 @@ Option Explicit
 '---------------------------------------------------------------------------
 '                            HEX EDITOR VB
 '                         CODED BY VIOLENT_KEN
-'                Dernière version v1.3 du 08/02/2007
 '
 '
 '
@@ -255,14 +254,6 @@ Option Explicit
 '
 '
 '
-'
-'                         HISTORIQUE DES VERSIONS
-'
-' v1.3 support de l'historique
-' v1.2 Ajout de la gestion des disques
-' v1.1 Ajout de la gestion de la modification des processus
-'   en mémoire
-' v1.0 Initial release
 '---------------------------------------------------------------------------
 
 
@@ -285,7 +276,7 @@ Dim s As String
     lblVersion.Caption = "Version " & Str$(App.Major) & "." & Str$(App.Minor) & "." & Str$(App.Revision)
     
     'écriture du texte
-    s = "HexEditor VB par violent ken. Dernière version du 02/01/2007. Il s'agit d'un éditeur héxadécimal complet permettant de modifier vos fichiers, vos disques et vos processus en mémoire très facilement." & vbNewLine & vbNewLine & "Ce logiciel est prévu pour Windows XP et une résolution minimale de 1024*768." & vbNewLine & vbNewLine & "Ce logiciel est sous license GNU, veuillez lire le fichier de licence ci dessous."
+    s = "Hex Editor VB" & vbNewLine & "Copyright (c) 2006-2007 Alain Descotes (violent_ken)" & vbNewLine & "Dernière version du 16/02/2007. Il s'agit d'un éditeur héxadécimal complet permettant de modifier vos fichiers, vos disques et vos processus en mémoire très facilement." & vbNewLine & vbNewLine & "Ce logiciel est prévu pour Windows XP/Vista et une résolution minimale de 1024*768." & vbNewLine & vbNewLine & "Ce logiciel est sous license GNU General Public License, veuillez lire le contrat de licence ci dessous."
     s = s & vbNewLine & vbNewLine & cFile.LoadFileInString(App.Path & "\License.txt")
     txt.Text = s
     
