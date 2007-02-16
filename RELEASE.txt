@@ -1,0 +1,28 @@
+'---------------------------------------------------------------------------
+'                            HEX EDITOR VB
+'                         CODED BY VIOLENT_KEN
+'                Dernière version v1.3 du 08/02/2007
+'
+'
+'
+'                        DESCRIPTION DU PROGRAMME
+'
+' Ce logiciel vous permet d'éditer le contenu de vos fichiers
+' ainsi que le contenu de la mémoire virtuelle de vos
+' processus et le contenu de vos disques physiques.
+'
+' Ce programme est conçu pour Windows XP/Vista, avec une résolution
+' optimale minimale de 1024*768.
+'
+'
+'
+'
+'                         HISTORIQUE DES VERSIONS
+' 
+' v1.4 ajout des options, de la recherche en mémoire, de la conversion avancée, de la copie dans le presse papier et du fusionneur/découpeur de fichiers
+' v1.3 support de l'historique
+' v1.2 Ajout de la gestion des disques
+' v1.1 Ajout de la gestion de la modification des processus
+'   en mémoire
+' v1.0 Initial release
+'---------------------------------------------------------------------------
