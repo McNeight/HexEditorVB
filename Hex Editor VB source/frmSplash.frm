@@ -29,6 +29,25 @@ Begin VB.Form frmSplash
       Left            =   683
       Top             =   413
    End
+   Begin VB.Label lblState 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   210
+      Left            =   120
+      TabIndex        =   6
+      Top             =   600
+      Width           =   45
+   End
    Begin VB.Image Image1 
       Height          =   2265
       Left            =   120
