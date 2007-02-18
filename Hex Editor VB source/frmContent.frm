@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "20:02"
+            TextSave        =   "13:11"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -98,7 +98,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "16/02/2007"
+            TextSave        =   "18/02/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1128,9 +1128,12 @@ End Sub
 Private Sub mnuChangeDates_Click()
 'changer les dates
 
-    If Not (Me.ActiveForm Is Nothing) Then
+
+    If TypeOfForm(Me.ActiveForm) = "Fichier" Then
         frmDates.txtFile.Text = Me.ActiveForm.Caption
+        Call frmDates.GetFile(Me.ActiveForm.TheFile)
     End If
+    
     frmDates.Show vbModal
     
 End Sub

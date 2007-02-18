@@ -595,6 +595,7 @@ Private bytFirstChange As Byte
 Public cUndo As clsUndoItem 'infos générales sur 'historique
 Private cHisto() As clsUndoSubItem  'historique pour le Undo/Redo
 
+Public TheFile As clsFile
 
 Private Sub cmdMAJ_Click()
 'MAJ des infos
@@ -1007,9 +1008,12 @@ Public Sub GetFile(ByVal sFile As String)
 Dim l As Long
 
     On Error GoTo ErrGestion
+
+    'récupère les infos fichier
+    Set TheFile = cFile.GetFile(sFile)
     
     'récupère le contenu du fichier
-    lLenght = cFile.GetFileSize(sFile)
+    lLenght = TheFile.FileSize
     
     HW.MaxOffset = lLenght 'offset maximal
     
