@@ -387,7 +387,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 '-------------------------------------------------------
-'//FORM DE CONVERSION AVANCEE
+'FORM DE CONVERSION AVANCEE
 '-------------------------------------------------------
 
 Private clsPref As clsIniForm
@@ -466,7 +466,7 @@ End Sub
 
 Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
-    If Button = 2 Then Me.PopupMenu Me.mnuPopUp
+    If Button = 2 Then Me.PopupMenu Me.mnuPopup
 End Sub
 Private Sub Frame2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
@@ -508,7 +508,7 @@ End Sub
 
 Private Sub Picture1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
-    If Button = 2 Then Me.PopupMenu Me.mnuPopUp
+    If Button = 2 Then Me.PopupMenu Me.mnuPopup
 End Sub
 Private Sub Picture2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu

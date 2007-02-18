@@ -383,7 +383,7 @@ Option Explicit
 
 
 '-------------------------------------------------------
-'//FORM DE DECOUPAGE/COLLAGE DE FICHIERS
+'FORM DE DECOUPAGE/COLLAGE DE FICHIERS
 '-------------------------------------------------------
 
 Private Sub cmdBrowseGroupFile_Click()

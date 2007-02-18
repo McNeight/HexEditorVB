@@ -111,7 +111,7 @@ Dim strIniFile As String
         LetPref "Integration", "FolderContextual", .integ_FolderContextual, .IniFilePath
         LetPref "Integration", "SendTo", .integ_SendTo, .IniFilePath
         LetPref "General", "MaximizeWhenOpen", .general_MaximizeWhenOpen, .IniFilePath
-        LetPref "General", "DisplayArray", .general_DisplayArray, .IniFilePath
+        LetPref "General", "DisplayIcon", .general_DisplayIcon, .IniFilePath
         LetPref "General", "DisplayInfos", .general_DisplayInfos, .IniFilePath
         LetPref "General", "DisplayData", .general_DisplayData, .IniFilePath
         LetPref "General", "OpenSubFiles", .general_OpenSubFiles, .IniFilePath
@@ -180,7 +180,7 @@ Dim strIniFile As String
         .integ_FolderContextual = (Val(GetPref("Integration", "FolderContextual", sFile)))
         .integ_SendTo = (Val(GetPref("Integration", "SendTo", sFile)))
         .general_MaximizeWhenOpen = (Val(GetPref("General", "MaximizeWhenOpen", sFile)))
-        .general_DisplayArray = (Val(GetPref("General", "DisplayArray", sFile)))
+        .general_DisplayIcon = (Val(GetPref("General", "DisplayIcon", sFile)))
         .general_DisplayInfos = (Val(GetPref("General", "DisplayInfos", sFile)))
         .general_DisplayData = (Val(GetPref("General", "DisplayData", sFile)))
         .general_Splash = (Val(GetPref("General", "Splash", sFile)))

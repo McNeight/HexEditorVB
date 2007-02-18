@@ -62,7 +62,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 '-------------------------------------------------------
-'//FORM DE COMPARAISON AVANCEE
+'FORM DE COMPARAISON AVANCEE
 '-------------------------------------------------------
 
 '-------------------------------------------------------
