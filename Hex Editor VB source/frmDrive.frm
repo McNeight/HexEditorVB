@@ -102,7 +102,7 @@ Option Explicit
 
 
 '-------------------------------------------------------
-'//FORM PERMETTANT LE CHOIX DU DRIVE A OUVRIR
+'FORM PERMETTANT LE CHOIX DU DRIVE A OUVRIR
 '-------------------------------------------------------
 
 Private Sub Form_Load()

@@ -236,7 +236,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 '-------------------------------------------------------
-'//FORM DE RECHERCHE DE STRINGS DANS LE FICHIER/MEMOIRE
+'FORM DE RECHERCHE DE STRINGS DANS LE FICHIER/MEMOIRE
 '-------------------------------------------------------
 
 Private clsPref As clsIniForm
@@ -274,13 +274,13 @@ Dim bAddSign As Boolean
         'alors c'est un fichier classique
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), tRes(), Me.PGB
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), tRes(), Me.pgb
         
     ElseIf TypeOfActiveForm = "Mem" Then
         'alors c'est dans la mémoire
         
         'lance la recherche
-        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), lngRes(), strRes(), Me.PGB
+        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), lngRes(), strRes(), Me.pgb
         
         'sauvegarde dans la variable tRes
         ReDim tRes(UBound(lngRes()))
@@ -293,7 +293,7 @@ Dim bAddSign As Boolean
         'alors c'est dans le disque
 
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), tRes(), Me.PGB
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), tRes(), Me.pgb
         
     End If
     

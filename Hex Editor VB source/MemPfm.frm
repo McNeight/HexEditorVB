@@ -716,7 +716,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 '-------------------------------------------------------
-'//FORM D'EDITION DE LA MEMOIRE D'UN PROCESSUS
+'FORM D'EDITION DE LA MEMOIRE D'UN PROCESSUS
 '-------------------------------------------------------
 
 '-------------------------------------------------------
@@ -898,9 +898,6 @@ Private Sub Form_Load()
     With cPref
         'en grand dans la MDIform
         If .general_MaximizeWhenOpen Then Me.WindowState = vbMaximized
-        HW.Visible = CBool(.general_DisplayArray)
-        FrameData.Visible = CBool(.general_DisplayData)
-        FrameInfos.Visible = CBool(.general_DisplayInfos)
     End With
     
     frmContent.Sb.Panels(1).Text = "Status=[Opening process]"

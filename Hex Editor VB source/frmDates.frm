@@ -629,7 +629,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 '-------------------------------------------------------
-'//FORM PERMETTANT DE CHANGER LES DATES D'UN FICHIER
+'FORM PERMETTANT DE CHANGER LES DATES D'UN FICHIER
 '-------------------------------------------------------
 
 Private mFile As clsFile

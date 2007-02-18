@@ -72,7 +72,7 @@ Public integ_FileContextual As Byte
 Public integ_FolderContextual As Byte
 Public integ_SendTo As Byte
 Public general_MaximizeWhenOpen As Byte
-Public general_DisplayArray As Byte
+Public general_DisplayIcon As Byte
 Public general_DisplayInfos As Byte
 Public general_DisplayData As Byte
 Public general_ResoX As Long

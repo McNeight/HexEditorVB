@@ -75,7 +75,6 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -83,15 +82,13 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "13:11"
-            Key             =   ""
+            TextSave        =   "13:31"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -99,7 +96,6 @@ Begin VB.MDIForm frmContent
             Object.Width           =   2117
             MinWidth        =   2117
             TextSave        =   "18/02/2007"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -961,7 +957,9 @@ Private Sub MDIForm_DblClick()
 End Sub
 
 Private Sub MDIForm_Load()
-
+    
+    
+    frmSplash.lblState.Caption = "Vérifie la présence de FileRenamer..."
     'vérifie la présence de FileRenamer.exe
     If cFile.FileExists(App.Path & "\FileRenamer.exe") = False Then
         Me.mnuFileRenamer.Enabled = False
@@ -969,11 +967,19 @@ Private Sub MDIForm_Load()
         Me.mnuFileRenamer.Enabled = True
     End If
         
+    frmSplash.lblState.Caption = "Application de la langue..."
     lNbChildFrm = 0
     Lang.LangFolder = App.Path & "\Lang"
     
     'Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
     
+    
+    frmSplash.lblState.Caption = "Lecture des préférences..."
+    Me.mnuEditTools.Checked = cPref.general_DisplayData
+    Me.mnuInformations.Checked = cPref.general_DisplayInfos
+    Me.mnuShowIcons.Checked = cPref.general_DisplayIcon
+    
+    frmSplash.lblState.Caption = "Lancement de l'explorateur de fichiers..."
     'loading de la taille de l'explorer
     Me.pctExplorer.Height = cPref.explo_Height
     
@@ -1618,7 +1624,9 @@ End Sub
 
 Private Sub mnuHelp_Click()
 'affiche l'aide
+
     On Error GoTo 5
+    
     'ShellExecute Me.hWnd, "open", App.Path & "\aide.chm", vbNullString, vbNullString, 1
     
     ' Dim s() As Byte

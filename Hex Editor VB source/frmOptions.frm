@@ -23,145 +23,6 @@ Begin VB.Form frmOptions
    ScaleHeight     =   8550
    ScaleWidth      =   10350
    StartUpPosition =   2  'CenterScreen
-   Begin VB.Frame Frame1 
-      Height          =   7575
-      Index           =   2
-      Left            =   0
-      TabIndex        =   4
-      Top             =   600
-      Visible         =   0   'False
-      Width           =   9855
-      Begin VB.PictureBox pctManifest 
-         BorderStyle     =   0  'None
-         Height          =   5895
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   5895
-         ScaleWidth      =   9435
-         TabIndex        =   11
-         Top             =   240
-         Width           =   9435
-         Begin VB.CheckBox Check9 
-            Caption         =   "Afficher le splash screen"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   83
-            Top             =   3000
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check1 
-            Caption         =   "Maximiser les fenêtres à leur ouverture"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   79
-            Top             =   120
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check8 
-            Caption         =   "Fermer la fenêtre de démarrage après le choix d'un objet à ouvrir"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   78
-            Top             =   2640
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check7 
-            Caption         =   "Ouvrir également les fichiers des sous-dossiers lors de l'ouverture d'un dossier"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   77
-            Top             =   2280
-            Width           =   6615
-         End
-         Begin VB.TextBox Text4 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   5520
-            TabIndex        =   20
-            Text            =   "480"
-            Top             =   3480
-            Width           =   495
-         End
-         Begin VB.TextBox Text3 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   4680
-            TabIndex        =   19
-            Text            =   "640"
-            Top             =   3480
-            Width           =   495
-         End
-         Begin VB.TextBox Text1 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   2160
-            MaxLength       =   1
-            TabIndex        =   17
-            Text            =   " "
-            Top             =   3840
-            Width           =   255
-         End
-         Begin VB.CheckBox Check6 
-            Caption         =   "Ne pas changer les dates des fichiers modifiés"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   16
-            Top             =   1920
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check5 
-            Caption         =   "Permettre plusieurs instances du programme"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   15
-            Top             =   1560
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check4 
-            Caption         =   "Afficher les informations fichier par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   14
-            Top             =   1200
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check3 
-            Caption         =   "Afficher les données par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   13
-            Top             =   840
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check2 
-            Caption         =   "Afficher le tableau par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   12
-            Top             =   480
-            Width           =   6615
-         End
-         Begin VB.Label Label5 
-            Caption         =   "X"
-            Height          =   255
-            Left            =   5280
-            TabIndex        =   21
-            Top             =   3480
-            Width           =   135
-         End
-         Begin VB.Label Label4 
-            Caption         =   "Résolution de sauvegarde des images d'analyse des fichiers :"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   18
-            Top             =   3480
-            Width           =   4575
-         End
-      End
-   End
    Begin VB.CommandButton cmdSauvegarder 
       Caption         =   "Sauvegarder les options"
       Height          =   495
@@ -226,6 +87,518 @@ Begin VB.Form frmOptions
             ImageVarType    =   2
          EndProperty
       EndProperty
+   End
+   Begin VB.CommandButton cmdQuitter 
+      Caption         =   "Fermer"
+      Height          =   495
+      Left            =   3000
+      TabIndex        =   82
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.Frame Frame1 
+      Height          =   5775
+      Index           =   4
+      Left            =   840
+      TabIndex        =   6
+      Top             =   1680
+      Visible         =   0   'False
+      Width           =   7935
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   5175
+         Left            =   120
+         ScaleHeight     =   5175
+         ScaleWidth      =   7455
+         TabIndex        =   22
+         Top             =   240
+         Width           =   7455
+      End
+   End
+   Begin VB.Frame Frame1 
+      Height          =   6255
+      Index           =   3
+      Left            =   240
+      TabIndex        =   5
+      Top             =   480
+      Visible         =   0   'False
+      Width           =   9615
+      Begin VB.PictureBox Picture2 
+         BorderStyle     =   0  'None
+         Height          =   5175
+         Left            =   120
+         ScaleHeight     =   5175
+         ScaleWidth      =   7455
+         TabIndex        =   23
+         Top             =   240
+         Width           =   7455
+         Begin VB.ComboBox cbLang 
+            Height          =   315
+            ItemData        =   "frmOptions.frx":08CA
+            Left            =   2040
+            List            =   "frmOptions.frx":08D1
+            Style           =   2  'Dropdown List
+            TabIndex        =   75
+            ToolTipText     =   "Langue par défaut"
+            Top             =   1080
+            Width           =   4215
+         End
+         Begin VB.ComboBox cbOS 
+            Height          =   315
+            ItemData        =   "frmOptions.frx":08DD
+            Left            =   2040
+            List            =   "frmOptions.frx":08E7
+            Style           =   2  'Dropdown List
+            TabIndex        =   73
+            ToolTipText     =   "Système d'exploitation utilisant le logiciel"
+            Top             =   240
+            Width           =   4215
+         End
+         Begin VB.Label Label7 
+            Caption         =   "Langue par défaut :"
+            Height          =   255
+            Index           =   1
+            Left            =   120
+            TabIndex        =   76
+            Top             =   1080
+            Width           =   1815
+         End
+         Begin VB.Label Label7 
+            Caption         =   "Système d'exploitation :"
+            Height          =   255
+            Index           =   0
+            Left            =   120
+            TabIndex        =   74
+            Top             =   240
+            Width           =   1815
+         End
+      End
+   End
+   Begin VB.Frame Frame1 
+      Height          =   6375
+      Index           =   5
+      Left            =   120
+      TabIndex        =   24
+      Top             =   480
+      Visible         =   0   'False
+      Width           =   9855
+      Begin VB.PictureBox Picture3 
+         BorderStyle     =   0  'None
+         Height          =   6135
+         Left            =   120
+         ScaleHeight     =   6135
+         ScaleWidth      =   9615
+         TabIndex        =   25
+         Top             =   120
+         Width           =   9615
+         Begin VB.TextBox txtExpPath 
+            BorderStyle     =   0  'None
+            Enabled         =   0   'False
+            Height          =   285
+            Left            =   5280
+            TabIndex        =   43
+            Text            =   "C:\"
+            ToolTipText     =   $"frmOptions.frx":091A
+            Top             =   4680
+            Width           =   2535
+         End
+         Begin VB.TextBox txtHeight 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   2520
+            TabIndex        =   40
+            Text            =   "2200"
+            ToolTipText     =   "Hauteur de l'explorateur de fichiers"
+            Top             =   5160
+            Width           =   2655
+         End
+         Begin VB.TextBox txtExpPattern 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   2520
+            TabIndex        =   39
+            Text            =   "*.*"
+            ToolTipText     =   "Filtre de l'explorateur de fichiers"
+            Top             =   5520
+            Width           =   2535
+         End
+         Begin VB.ComboBox cbExpInitDir 
+            Height          =   315
+            ItemData        =   "frmOptions.frx":09B8
+            Left            =   2520
+            List            =   "frmOptions.frx":09C2
+            Style           =   2  'Dropdown List
+            TabIndex        =   38
+            ToolTipText     =   "Type de chemin par défaut de l'explorateur de fichiers"
+            Top             =   4680
+            Width           =   2535
+         End
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Autoriser la suppression de fichiers"
+            Height          =   255
+            Index           =   1
+            Left            =   240
+            TabIndex        =   37
+            ToolTipText     =   "Permet de supprimer des fichiers dans l'explorateur de fichiers"
+            Top             =   720
+            Value           =   1  'Checked
+            Width           =   6495
+         End
+         Begin VB.ComboBox cbExpIcon 
+            Height          =   315
+            ItemData        =   "frmOptions.frx":09E6
+            Left            =   2520
+            List            =   "frmOptions.frx":09F3
+            Style           =   2  'Dropdown List
+            TabIndex        =   36
+            ToolTipText     =   "Type d'icones à afficher dans l'explorateur de fichiers"
+            Top             =   4320
+            Width           =   2535
+         End
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Masquer les en-têtes des colonnes"
+            Height          =   255
+            Index           =   11
+            Left            =   240
+            TabIndex        =   35
+            ToolTipText     =   "Masque les en têtes des colonnes (Taille, Nom, Date...) dans l'explorateur de fichiers"
+            Top             =   3960
+            Width           =   8655
+         End
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Afficher les fichiers en lecture seule"
+            Height          =   255
+            Index           =   9
+            Left            =   240
+            TabIndex        =   34
+            ToolTipText     =   "Autorise l'affichage des fichiers avec l'attribut 'lecture seule' dans l'explorateur de fichiers"
+            Top             =   3240
+            Value           =   1  'Checked
+            Width           =   8655
+         End
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Autoriser la sélection multiple"
+            Height          =   255
+            Index           =   8
+            Left            =   240
+            TabIndex        =   33
+            ToolTipText     =   "Autorise la sélection multiple dans l'exporateur de fichiers"
+            Top             =   3600
+            Value           =   1  'Checked
+            Width           =   8655
+         End
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Afficher les fichiers système"
+            Height          =   255
+            Index           =   7
+            Left            =   240
+            TabIndex        =   32
+            ToolTipText     =   "Autorise l'affichage des fichiers avec l'attribut 'système' dans l'explorateur de fichiers"
+            Top             =   2520
+            Value           =   1  'Checked
+            Width           =   8655
+         End
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Afficher les fichiers cachés"
+            Height          =   255
+            Index           =   6
+            Left            =   240
+            TabIndex        =   31
+            ToolTipText     =   "Autorise l'affichage des fichiers avec l'attribut 'caché' dans l'explorateur de fichiers"
+            Top             =   2880
+            Value           =   1  'Checked
+            Width           =   8655
+         End
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Afficher les dossiers cachés"
+            Height          =   255
+            Index           =   5
+            Left            =   240
+            TabIndex        =   30
+            ToolTipText     =   "Autorise l'affichage des dossiers avec l'attribut 'caché' dans l'explorateur de fichiers"
+            Top             =   1800
+            Value           =   1  'Checked
+            Width           =   8655
+         End
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Afficher les dossiers en lecture seule"
+            Height          =   255
+            Index           =   4
+            Left            =   240
+            TabIndex        =   29
+            ToolTipText     =   "Autorise l'affichage des dossiers avec l'attribut 'lecture seule' dans l'explorateur de fichiers"
+            Top             =   2160
+            Value           =   1  'Checked
+            Width           =   8655
+         End
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Autoriser la suppression de dossiers"
+            Height          =   255
+            Index           =   3
+            Left            =   240
+            TabIndex        =   28
+            ToolTipText     =   "Permet de supprimer des dossiers dans l'explorateur de fichiers"
+            Top             =   1080
+            Width           =   8655
+         End
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Afficher les dossiers système"
+            Height          =   255
+            Index           =   2
+            Left            =   240
+            TabIndex        =   27
+            ToolTipText     =   "Autorise l'affichage des dossiers avec l'attribut 'système' dans l'explorateur de fichiers"
+            Top             =   1440
+            Value           =   1  'Checked
+            Width           =   8655
+         End
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Afficher les paths entiers"
+            Height          =   255
+            Index           =   0
+            Left            =   240
+            TabIndex        =   26
+            ToolTipText     =   "Affiche le chemin du fichier avec le nom du fichier"
+            Top             =   360
+            Value           =   1  'Checked
+            Width           =   8655
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Filtre :"
+            Height          =   255
+            Index           =   16
+            Left            =   360
+            TabIndex        =   45
+            Top             =   5520
+            Width           =   2055
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Hauteur du composant :"
+            Height          =   255
+            Index           =   15
+            Left            =   360
+            TabIndex        =   44
+            Top             =   5160
+            Width           =   2055
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Path par défaut :"
+            Height          =   255
+            Index           =   14
+            Left            =   360
+            TabIndex        =   42
+            Top             =   4800
+            Width           =   1695
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Affichage des icones :"
+            Height          =   255
+            Index           =   13
+            Left            =   360
+            TabIndex        =   41
+            Top             =   4440
+            Width           =   1935
+         End
+      End
+   End
+   Begin VB.Frame Frame1 
+      Height          =   6255
+      Index           =   1
+      Left            =   120
+      TabIndex        =   3
+      Top             =   360
+      Visible         =   0   'False
+      Width           =   9735
+      Begin VB.PictureBox pctManifest 
+         BorderStyle     =   0  'None
+         Height          =   5895
+         Index           =   0
+         Left            =   120
+         ScaleHeight     =   5895
+         ScaleWidth      =   9435
+         TabIndex        =   7
+         Top             =   360
+         Width           =   9435
+         Begin VB.CheckBox chkContextMenu 
+            Caption         =   "Mettre une entrée au menu contextuel de Windows pour les dossiers"
+            Height          =   255
+            Index           =   1
+            Left            =   120
+            TabIndex        =   10
+            ToolTipText     =   "Ajoute une entrée au menu contextuel de Windows pour les dossiers"
+            Top             =   600
+            Width           =   6855
+         End
+         Begin VB.CheckBox chkSendTo 
+            Caption         =   "Mettre une entrée dans le menu ""Envoyer vers"" de Windows"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   9
+            ToolTipText     =   "Ajoute une entrée 'Envoyer vers --> Hex Editor VB'"
+            Top             =   1080
+            Width           =   5175
+         End
+         Begin VB.CheckBox chkContextMenu 
+            Caption         =   "Mettre une entrée au menu contextuel de Windows pour les fichiers"
+            Height          =   255
+            Index           =   0
+            Left            =   120
+            TabIndex        =   8
+            ToolTipText     =   "Ajoute une entrée au menu contextuel de Windows pour les fichiers"
+            Top             =   120
+            Width           =   6855
+         End
+      End
+   End
+   Begin VB.Frame Frame1 
+      Height          =   7575
+      Index           =   2
+      Left            =   0
+      TabIndex        =   4
+      Top             =   600
+      Visible         =   0   'False
+      Width           =   9855
+      Begin VB.PictureBox pctManifest 
+         BorderStyle     =   0  'None
+         Height          =   5895
+         Index           =   1
+         Left            =   120
+         ScaleHeight     =   5895
+         ScaleWidth      =   9435
+         TabIndex        =   11
+         Top             =   240
+         Width           =   9435
+         Begin VB.CheckBox Check9 
+            Caption         =   "Afficher le splash screen"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   83
+            ToolTipText     =   "Autorise l'affichage du splash screen au démarrage du logiciel"
+            Top             =   3000
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check1 
+            Caption         =   "Maximiser les fenêtres à leur ouverture"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   79
+            ToolTipText     =   "Lance les fenêtres d'édition en grand lors de leur ouverture"
+            Top             =   120
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check8 
+            Caption         =   "Fermer la fenêtre de démarrage après le choix d'un objet à ouvrir"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   78
+            ToolTipText     =   "Referme la fenêtre de démarrage rapide après le choix d'une action"
+            Top             =   2640
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check7 
+            Caption         =   "Ouvrir également les fichiers des sous-dossiers lors de l'ouverture d'un dossier"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   77
+            ToolTipText     =   "Liste et ouvre tous les fichiers des sous dossiers lors de l'ouverture d'un dossier (lent - déconseillé)"
+            Top             =   2280
+            Width           =   6615
+         End
+         Begin VB.TextBox Text4 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   200
+            Left            =   5520
+            TabIndex        =   20
+            Text            =   "480"
+            ToolTipText     =   "Hauteur"
+            Top             =   3480
+            Width           =   495
+         End
+         Begin VB.TextBox Text3 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   200
+            Left            =   4680
+            TabIndex        =   19
+            Text            =   "640"
+            ToolTipText     =   "Largeur"
+            Top             =   3480
+            Width           =   495
+         End
+         Begin VB.TextBox Text1 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   200
+            Left            =   2160
+            MaxLength       =   1
+            TabIndex        =   17
+            Text            =   " "
+            Top             =   3840
+            Width           =   255
+         End
+         Begin VB.CheckBox Check6 
+            Caption         =   "Ne pas changer les dates des fichiers modifiés"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   16
+            ToolTipText     =   "Conserve les dates originelles du fichiers après sa modification et sa sauvegarde"
+            Top             =   1920
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check5 
+            Caption         =   "Permettre plusieurs instances du programme"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   15
+            ToolTipText     =   "Permet au logiciel de se lancer plusieurs fois en même temps"
+            Top             =   1560
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check4 
+            Caption         =   "Afficher les informations fichier par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   14
+            ToolTipText     =   "Affiche les informations sur les fichiers dans les fenêtres d'édition"
+            Top             =   1200
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check3 
+            Caption         =   "Afficher les données par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   13
+            ToolTipText     =   "Afficher la zone de changement rapide de donnée lors de l'ouverture des fenêtres d'édition"
+            Top             =   840
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check2 
+            Caption         =   "Afficher la liste des icones par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   12
+            ToolTipText     =   "Affiche la liste des icones par défaut (fichier et processus)"
+            Top             =   480
+            Width           =   6615
+         End
+         Begin VB.Label Label5 
+            Caption         =   "X"
+            Height          =   255
+            Left            =   5280
+            TabIndex        =   21
+            Top             =   3480
+            Width           =   135
+         End
+         Begin VB.Label Label4 
+            Caption         =   "Résolution de sauvegarde des images d'analyse des fichiers :"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   18
+            Top             =   3480
+            Width           =   4575
+         End
+      End
    End
    Begin VB.Frame Frame1 
       Height          =   7455
@@ -390,11 +763,12 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbGrid 
             Height          =   315
-            ItemData        =   "frmOptions.frx":08CA
+            ItemData        =   "frmOptions.frx":0A2A
             Left            =   5640
-            List            =   "frmOptions.frx":08E0
+            List            =   "frmOptions.frx":0A40
             Style           =   2  'Dropdown List
             TabIndex        =   47
+            ToolTipText     =   "Type de grille à afficher"
             Top             =   960
             Width           =   3855
          End
@@ -526,347 +900,6 @@ Begin VB.Form frmOptions
             TabIndex        =   59
             Top             =   720
             Width           =   3135
-         End
-      End
-   End
-   Begin VB.CommandButton cmdQuitter 
-      Caption         =   "Fermer"
-      Height          =   495
-      Left            =   3000
-      TabIndex        =   82
-      Top             =   120
-      Width           =   1335
-   End
-   Begin VB.Frame Frame1 
-      Height          =   5775
-      Index           =   4
-      Left            =   840
-      TabIndex        =   6
-      Top             =   480
-      Visible         =   0   'False
-      Width           =   7935
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   5175
-         Left            =   120
-         ScaleHeight     =   5175
-         ScaleWidth      =   7455
-         TabIndex        =   22
-         Top             =   240
-         Width           =   7455
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   6255
-      Index           =   3
-      Left            =   240
-      TabIndex        =   5
-      Top             =   480
-      Visible         =   0   'False
-      Width           =   9615
-      Begin VB.PictureBox Picture2 
-         BorderStyle     =   0  'None
-         Height          =   5175
-         Left            =   120
-         ScaleHeight     =   5175
-         ScaleWidth      =   7455
-         TabIndex        =   23
-         Top             =   240
-         Width           =   7455
-         Begin VB.ComboBox cbLang 
-            Height          =   315
-            ItemData        =   "frmOptions.frx":096F
-            Left            =   2040
-            List            =   "frmOptions.frx":0976
-            Style           =   2  'Dropdown List
-            TabIndex        =   75
-            Top             =   1080
-            Width           =   4215
-         End
-         Begin VB.ComboBox cbOS 
-            Height          =   315
-            ItemData        =   "frmOptions.frx":0982
-            Left            =   2040
-            List            =   "frmOptions.frx":098C
-            Style           =   2  'Dropdown List
-            TabIndex        =   73
-            Top             =   240
-            Width           =   4215
-         End
-         Begin VB.Label Label7 
-            Caption         =   "Langue par défaut :"
-            Height          =   255
-            Index           =   1
-            Left            =   120
-            TabIndex        =   76
-            Top             =   1080
-            Width           =   1815
-         End
-         Begin VB.Label Label7 
-            Caption         =   "Système d'exploitation :"
-            Height          =   255
-            Index           =   0
-            Left            =   120
-            TabIndex        =   74
-            Top             =   240
-            Width           =   1815
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   6375
-      Index           =   5
-      Left            =   120
-      TabIndex        =   24
-      Top             =   480
-      Visible         =   0   'False
-      Width           =   9855
-      Begin VB.PictureBox Picture3 
-         BorderStyle     =   0  'None
-         Height          =   6135
-         Left            =   120
-         ScaleHeight     =   6135
-         ScaleWidth      =   9615
-         TabIndex        =   25
-         Top             =   120
-         Width           =   9615
-         Begin VB.TextBox txtExpPath 
-            BorderStyle     =   0  'None
-            Enabled         =   0   'False
-            Height          =   285
-            Left            =   5280
-            TabIndex        =   43
-            Text            =   "C:\"
-            Top             =   4680
-            Width           =   2535
-         End
-         Begin VB.TextBox txtHeight 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   2520
-            TabIndex        =   40
-            Text            =   "2200"
-            Top             =   5160
-            Width           =   2655
-         End
-         Begin VB.TextBox txtExpPattern 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   2520
-            TabIndex        =   39
-            Text            =   "*.*"
-            Top             =   5520
-            Width           =   2535
-         End
-         Begin VB.ComboBox cbExpInitDir 
-            Height          =   315
-            ItemData        =   "frmOptions.frx":09BF
-            Left            =   2520
-            List            =   "frmOptions.frx":09C9
-            Style           =   2  'Dropdown List
-            TabIndex        =   38
-            Top             =   4680
-            Width           =   2535
-         End
-         Begin VB.CheckBox chkEx 
-            Caption         =   "Autoriser la suppression de fichiers"
-            Height          =   255
-            Index           =   1
-            Left            =   240
-            TabIndex        =   37
-            Top             =   720
-            Value           =   1  'Checked
-            Width           =   6495
-         End
-         Begin VB.ComboBox cbExpIcon 
-            Height          =   315
-            ItemData        =   "frmOptions.frx":09ED
-            Left            =   2520
-            List            =   "frmOptions.frx":09FA
-            Style           =   2  'Dropdown List
-            TabIndex        =   36
-            Top             =   4320
-            Width           =   2535
-         End
-         Begin VB.CheckBox chkEx 
-            Caption         =   "Masquer les en-têtes des colonnes"
-            Height          =   255
-            Index           =   11
-            Left            =   240
-            TabIndex        =   35
-            Top             =   3960
-            Width           =   8655
-         End
-         Begin VB.CheckBox chkEx 
-            Caption         =   "Afficher les fichiers en lecture seule"
-            Height          =   255
-            Index           =   9
-            Left            =   240
-            TabIndex        =   34
-            Top             =   3240
-            Value           =   1  'Checked
-            Width           =   8655
-         End
-         Begin VB.CheckBox chkEx 
-            Caption         =   "Autoriser la sélection multiple"
-            Height          =   255
-            Index           =   8
-            Left            =   240
-            TabIndex        =   33
-            Top             =   3600
-            Value           =   1  'Checked
-            Width           =   8655
-         End
-         Begin VB.CheckBox chkEx 
-            Caption         =   "Afficher les fichiers système"
-            Height          =   255
-            Index           =   7
-            Left            =   240
-            TabIndex        =   32
-            Top             =   2520
-            Value           =   1  'Checked
-            Width           =   8655
-         End
-         Begin VB.CheckBox chkEx 
-            Caption         =   "Afficher les fichiers cachés"
-            Height          =   255
-            Index           =   6
-            Left            =   240
-            TabIndex        =   31
-            Top             =   2880
-            Value           =   1  'Checked
-            Width           =   8655
-         End
-         Begin VB.CheckBox chkEx 
-            Caption         =   "Afficher les dossiers cachés"
-            Height          =   255
-            Index           =   5
-            Left            =   240
-            TabIndex        =   30
-            Top             =   1800
-            Value           =   1  'Checked
-            Width           =   8655
-         End
-         Begin VB.CheckBox chkEx 
-            Caption         =   "Afficher les dossiers en lecture seule"
-            Height          =   255
-            Index           =   4
-            Left            =   240
-            TabIndex        =   29
-            Top             =   2160
-            Value           =   1  'Checked
-            Width           =   8655
-         End
-         Begin VB.CheckBox chkEx 
-            Caption         =   "Autoriser la suppression de dossiers"
-            Height          =   255
-            Index           =   3
-            Left            =   240
-            TabIndex        =   28
-            Top             =   1080
-            Width           =   8655
-         End
-         Begin VB.CheckBox chkEx 
-            Caption         =   "Afficher les dossiers système"
-            Height          =   255
-            Index           =   2
-            Left            =   240
-            TabIndex        =   27
-            Top             =   1440
-            Value           =   1  'Checked
-            Width           =   8655
-         End
-         Begin VB.CheckBox chkEx 
-            Caption         =   "Afficher les paths entiers"
-            Height          =   255
-            Index           =   0
-            Left            =   240
-            TabIndex        =   26
-            Top             =   360
-            Value           =   1  'Checked
-            Width           =   8655
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Pattern :"
-            Height          =   255
-            Index           =   16
-            Left            =   360
-            TabIndex        =   45
-            Top             =   5520
-            Width           =   2055
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Hauteur du composant :"
-            Height          =   255
-            Index           =   15
-            Left            =   360
-            TabIndex        =   44
-            Top             =   5160
-            Width           =   2055
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Path par défaut :"
-            Height          =   255
-            Index           =   14
-            Left            =   360
-            TabIndex        =   42
-            Top             =   4800
-            Width           =   1695
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Affichage des icones :"
-            Height          =   255
-            Index           =   13
-            Left            =   360
-            TabIndex        =   41
-            Top             =   4440
-            Width           =   1935
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   6255
-      Index           =   1
-      Left            =   120
-      TabIndex        =   3
-      Top             =   360
-      Visible         =   0   'False
-      Width           =   9735
-      Begin VB.PictureBox pctManifest 
-         BorderStyle     =   0  'None
-         Height          =   5895
-         Index           =   0
-         Left            =   120
-         ScaleHeight     =   5895
-         ScaleWidth      =   9435
-         TabIndex        =   7
-         Top             =   360
-         Width           =   9435
-         Begin VB.CheckBox chkContextMenu 
-            Caption         =   "Mettre une entrée au menu contextuel de Windows pour les dossiers"
-            Height          =   255
-            Index           =   1
-            Left            =   120
-            TabIndex        =   10
-            Top             =   600
-            Width           =   6855
-         End
-         Begin VB.CheckBox chkSendTo 
-            Caption         =   "Mettre une entrée dans le menu ""Envoyer vers"" de Windows"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   9
-            Top             =   1080
-            Width           =   5175
-         End
-         Begin VB.CheckBox chkContextMenu 
-            Caption         =   "Mettre une entrée au menu contextuel de Windows pour les fichiers"
-            Height          =   255
-            Index           =   0
-            Left            =   120
-            TabIndex        =   8
-            Top             =   120
-            Width           =   6855
          End
       End
    End
@@ -1070,7 +1103,7 @@ Dim s As String
             .app_Grid = cbGrid.ListIndex
             
             .general_MaximizeWhenOpen = Check1.Value
-            .general_DisplayArray = Check2.Value
+            .general_DisplayIcon = Check2.Value
             .general_DisplayData = Check3.Value
             .general_DisplayInfos = Check4.Value
             .general_AllowMultipleInstances = Check5.Value
@@ -1136,7 +1169,6 @@ Dim s As String
                 
                 'change les Visible des frames de toutes les forms active
                 x.FrameData.Visible = CBool(cPref.general_DisplayData)
-                x.HW.Visible = CBool(cPref.general_DisplayArray)
                 x.FrameInfos.Visible = CBool(cPref.general_DisplayInfos)
                 If TypeOf x Is diskPfm Then x.FrameInfo2.Visible = CBool(cPref.general_DisplayInfos)
             'End If
@@ -1289,7 +1321,7 @@ Dim s As String
         '//GENERAL
         With cPref
             Check1.Value = .general_MaximizeWhenOpen
-            Check2.Value = .general_DisplayArray
+            Check2.Value = .general_DisplayIcon
             Check3.Value = .general_DisplayData
             Check4.Value = .general_DisplayInfos
             Check5.Value = .general_AllowMultipleInstances

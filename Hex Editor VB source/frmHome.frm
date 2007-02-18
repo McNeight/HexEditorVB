@@ -712,7 +712,7 @@ Private Sub cmdQuit_Click()
 End Sub
 
 '-------------------------------------------------------
-'//FORM HOME ==> CHOIX DE L'OBJET A OUVRIR
+'FORM HOME ==> CHOIX DE L'OBJET A OUVRIR
 '-------------------------------------------------------
 Private Sub Form_Load()
 Dim x As Long
