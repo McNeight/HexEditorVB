@@ -122,7 +122,6 @@ Dim s As String
     
     bEndSplash = False
     'affiche le splash si souhaité
-    cPref.general_Splash = 1
     If cPref.general_Splash Then
         frmSplash.Show
         DoEvents    '/!\ DO NOT REMOVE (permet d'afficher le splash screen correctement)

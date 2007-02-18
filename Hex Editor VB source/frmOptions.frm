@@ -23,6 +23,145 @@ Begin VB.Form frmOptions
    ScaleHeight     =   8550
    ScaleWidth      =   10350
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Frame Frame1 
+      Height          =   7575
+      Index           =   2
+      Left            =   0
+      TabIndex        =   4
+      Top             =   600
+      Visible         =   0   'False
+      Width           =   9855
+      Begin VB.PictureBox pctManifest 
+         BorderStyle     =   0  'None
+         Height          =   5895
+         Index           =   1
+         Left            =   120
+         ScaleHeight     =   5895
+         ScaleWidth      =   9435
+         TabIndex        =   11
+         Top             =   240
+         Width           =   9435
+         Begin VB.CheckBox Check9 
+            Caption         =   "Afficher le splash screen"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   83
+            Top             =   3000
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check1 
+            Caption         =   "Maximiser les fenêtres à leur ouverture"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   79
+            Top             =   120
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check8 
+            Caption         =   "Fermer la fenêtre de démarrage après le choix d'un objet à ouvrir"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   78
+            Top             =   2640
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check7 
+            Caption         =   "Ouvrir également les fichiers des sous-dossiers lors de l'ouverture d'un dossier"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   77
+            Top             =   2280
+            Width           =   6615
+         End
+         Begin VB.TextBox Text4 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   200
+            Left            =   5520
+            TabIndex        =   20
+            Text            =   "480"
+            Top             =   3480
+            Width           =   495
+         End
+         Begin VB.TextBox Text3 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   200
+            Left            =   4680
+            TabIndex        =   19
+            Text            =   "640"
+            Top             =   3480
+            Width           =   495
+         End
+         Begin VB.TextBox Text1 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   200
+            Left            =   2160
+            MaxLength       =   1
+            TabIndex        =   17
+            Text            =   " "
+            Top             =   3840
+            Width           =   255
+         End
+         Begin VB.CheckBox Check6 
+            Caption         =   "Ne pas changer les dates des fichiers modifiés"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   16
+            Top             =   1920
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check5 
+            Caption         =   "Permettre plusieurs instances du programme"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   15
+            Top             =   1560
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check4 
+            Caption         =   "Afficher les informations fichier par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   14
+            Top             =   1200
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check3 
+            Caption         =   "Afficher les données par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   13
+            Top             =   840
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check2 
+            Caption         =   "Afficher le tableau par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   12
+            Top             =   480
+            Width           =   6615
+         End
+         Begin VB.Label Label5 
+            Caption         =   "X"
+            Height          =   255
+            Left            =   5280
+            TabIndex        =   21
+            Top             =   3480
+            Width           =   135
+         End
+         Begin VB.Label Label4 
+            Caption         =   "Résolution de sauvegarde des images d'analyse des fichiers :"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   18
+            Top             =   3480
+            Width           =   4575
+         End
+      End
+   End
    Begin VB.CommandButton cmdSauvegarder 
       Caption         =   "Sauvegarder les options"
       Height          =   495
@@ -52,31 +191,37 @@ Begin VB.Form frmOptions
          NumTabs         =   6
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Apparence du tableau"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Intégration dans Explorer"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Options générales"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Environnement"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Historique/signets"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab6 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Explorateur de fichiers"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -725,137 +870,6 @@ Begin VB.Form frmOptions
          End
       End
    End
-   Begin VB.Frame Frame1 
-      Height          =   7575
-      Index           =   2
-      Left            =   0
-      TabIndex        =   4
-      Top             =   600
-      Visible         =   0   'False
-      Width           =   9855
-      Begin VB.PictureBox pctManifest 
-         BorderStyle     =   0  'None
-         Height          =   5895
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   5895
-         ScaleWidth      =   9435
-         TabIndex        =   11
-         Top             =   240
-         Width           =   9435
-         Begin VB.CheckBox Check1 
-            Caption         =   "Maximiser les fenêtres à leur ouverture"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   79
-            Top             =   120
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check8 
-            Caption         =   "Fermer la fenêtre de démarrage après le choix d'un objet à ouvrir"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   78
-            Top             =   2640
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check7 
-            Caption         =   "Ouvrir également les fichiers des sous-dossiers lors de l'ouverture d'un dossier"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   77
-            Top             =   2280
-            Width           =   6615
-         End
-         Begin VB.TextBox Text4 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   5520
-            TabIndex        =   20
-            Text            =   "480"
-            Top             =   3480
-            Width           =   495
-         End
-         Begin VB.TextBox Text3 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   4680
-            TabIndex        =   19
-            Text            =   "640"
-            Top             =   3480
-            Width           =   495
-         End
-         Begin VB.TextBox Text1 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   2160
-            MaxLength       =   1
-            TabIndex        =   17
-            Text            =   " "
-            Top             =   3840
-            Width           =   255
-         End
-         Begin VB.CheckBox Check6 
-            Caption         =   "Ne pas changer les dates des fichiers modifiés"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   16
-            Top             =   1920
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check5 
-            Caption         =   "Permettre plusieurs instances du programme"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   15
-            Top             =   1560
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check4 
-            Caption         =   "Afficher les informations fichier par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   14
-            Top             =   1200
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check3 
-            Caption         =   "Afficher les données par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   13
-            Top             =   840
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check2 
-            Caption         =   "Afficher le tableau par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   12
-            Top             =   480
-            Width           =   6615
-         End
-         Begin VB.Label Label5 
-            Caption         =   "X"
-            Height          =   255
-            Left            =   5280
-            TabIndex        =   21
-            Top             =   3480
-            Width           =   135
-         End
-         Begin VB.Label Label4 
-            Caption         =   "Résolution de sauvegarde des images d'analyse des fichiers :"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   18
-            Top             =   3480
-            Width           =   4575
-         End
-      End
-   End
 End
 Attribute VB_Name = "frmOptions"
 Attribute VB_GlobalNameSpace = False
@@ -997,6 +1011,7 @@ Dim s As String
     Check6.Value = 1
     Check7.Value = 0
     Check8.Value = 0
+    Check9.Value = 1
     Text3.Text = 640
     Text4.Text = 480
 
@@ -1064,6 +1079,7 @@ Dim s As String
             .general_CloseHomeWhenChosen = Check8.Value
             .general_ResoX = Text3.Text
             .general_ResoY = Text4.Text
+            .general_Splash = Check9.Value
             
             .integ_FileContextual = chkContextMenu(0).Value
             .integ_FolderContextual = chkContextMenu(1).Value
@@ -1280,6 +1296,7 @@ Dim s As String
             Check6.Value = .general_DoNotChangeDates
             Check7.Value = .general_OpenSubFiles
             Check8.Value = .general_CloseHomeWhenChosen
+            Check9.Value = .general_Splash
             Text3.Text = .general_ResoX
             Text4.Text = .general_ResoY
         End With
