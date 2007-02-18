@@ -22,11 +22,10 @@ mergeur|ajouter comparaison (comme Windiff) de fichiers| 10| 3
 mode lecture|ajouter le mode 'lecture de fichier'| 10| 3
 open|gérer le cas de Cancel pour showopen et dans ce cas exit sub| 10| 3
 options|ajouter combobox pour choix de type de mise par défaut à faire (appareance, general....)| 10| 1
-options|maj des forms apres le changement des options| 10| 3
+options|maj des forms apres le changement des options| 69| 3
 options|lang + os| 30| 3
 options|gérer options + sauvegarde| 83| 3
 options de recherche|ajouter les options de recherche (vers le bas, mot entier, zone recherche, expression régulière)| 16| 4
-pref|gérer la création du fichier par défaut si inexistant| 30| 3
 print|impression| 16| 3
 properties|gérer les checkboxes de frmproperty pour les fichiers (attributs)| 10| 1
 renommage|projet de renommage massif| 30| 1

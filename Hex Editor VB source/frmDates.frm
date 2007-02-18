@@ -629,17 +629,28 @@ Attribute VB_Exposed = False
 Option Explicit
 
 '-------------------------------------------------------
-'FORM PERMETTANT DE CHANGER LES DATES D'UN FICHIER
+'//FORM PERMETTANT DE CHANGER LES DATES D'UN FICHIER
 '-------------------------------------------------------
+
+Private mFile As clsFile
 
 '-------------------------------------------------------
 'attribution des dates spécifiées au Fichier (text1.text)
 '-------------------------------------------------------
 Private Sub AttribDates()
-Dim modif_Date As Date, lngHandle As Long, creation_Date As Date, access_Date As Date
-Dim udtFileTime As FILETIME, ucreationFileTime As FILETIME, ucaccessFileTime As FILETIME
-Dim udtLocalTime As FILETIME, ucreationFileTimelocal As FILETIME, ucaccessFileTimelocal As FILETIME
-Dim udtSystemTime As SYSTEMTIME, ucreationSystemTime As SYSTEMTIME, ucaccessSystemTime As SYSTEMTIME
+Dim modif_Date As Date
+Dim lngHandle As Long
+Dim creation_Date As Date
+Dim access_Date As Date
+Dim udtFileTime As FILETIME
+Dim ucreationFileTime As FILETIME
+Dim ucaccessFileTime As FILETIME
+Dim udtLocalTime As FILETIME
+Dim ucreationFileTimelocal As FILETIME
+Dim ucaccessFileTimelocal As FILETIME
+Dim udtSystemTime As SYSTEMTIME
+Dim ucreationSystemTime As SYSTEMTIME
+Dim ucaccessSystemTime As SYSTEMTIME
 
     On Error GoTo ErrGestion
     
@@ -703,11 +714,9 @@ Dim udtSystemTime As SYSTEMTIME, ucreationSystemTime As SYSTEMTIME, ucaccessSyst
     'ferme le handle
     CloseHandle lngHandle
     
-    'avertir du succès de la modification
     MsgBox "Le changement a fonctionné", vbInformation, "Changements des dates"
     
     Exit Sub
-
 ErrGestion:
     clsERREUR.AddError "frmDates.AttribDates", True
     
@@ -716,25 +725,15 @@ End Sub
 
 Private Sub cmdAppliquer_Click()
     AttribDates
-    txtFile_Change
+    Call ChangeDates
 End Sub
 
 Private Sub cmdBrowse_Click()
 'ouvre un fichier
 
-    On Error GoTo CancelErr
+    txtFile.Text = cFile.ShowOpen("Sélection d'un fichier", Me.hwnd, "Tous |*.*")
     
-    With frmContent.CMD
-        .CancelError = True
-        .DialogTitle = "Sélection d'un fichier"
-        .Filter = "Tous |*.*"
-        .ShowOpen
-        txtFile.Text = .Filename
-    End With
-    
-    Exit Sub
-    
-CancelErr:
+    Call ChangeDates
 End Sub
 
 Private Sub cmdDefaut_Click(Index As Integer)
@@ -756,46 +755,33 @@ Private Sub cmdQuit_Click()
 End Sub
 
 Private Sub cmdRefresh_Click()
-    txtFile_Change
+    Call ChangeDates
 End Sub
 
-Private Sub txtFile_Change()
-'si le fichier existe, alors on obtient les dates et on les affiches dans les captions, et les textboxes
-Dim lHandle As Long
-Dim CREATION_D As FILETIME, CREATION__D As SYSTEMTIME
-Dim ACCESS_D As FILETIME, ACCESS__D As SYSTEMTIME
-Dim MODIF_D As FILETIME, MODIF__D As SYSTEMTIME
-   
-    If cFile.FileExists(txtFile.Text) Then
-        'récupère le handle du fichier
-        lHandle = CreateFile(txtFile.Text, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
-        
-        'récupère les dates
-        GetFileTime lHandle, CREATION_D, ACCESS_D, MODIF_D
-        
-        'conversion de dates
-        'temps local
-        FileTimeToLocalFileTime CREATION_D, CREATION_D
-        FileTimeToLocalFileTime ACCESS_D, ACCESS_D
-        FileTimeToLocalFileTime MODIF_D, MODIF_D
-        'temps système
-        FileTimeToSystemTime CREATION_D, CREATION__D
-        FileTimeToSystemTime ACCESS_D, ACCESS__D
-        FileTimeToSystemTime MODIF_D, MODIF__D
-        
-        'affichage des infos de dates
-        lblDate(0).Caption = Left$(FileTimeToString(CREATION_D, False), 10)
-        lblDate(1).Caption = Left$(FileTimeToString(ACCESS_D, False), 10)
-        lblDate(2).Caption = Left$(FileTimeToString(MODIF_D, False), 10)
-        
-        'affichage des infos d'heures
-        lblHour(0).Caption = CREATION__D.wHour & ":" & CREATION__D.wMinute & ":" & CREATION__D.wSecond
-        lblHour(1).Caption = ACCESS__D.wHour & ":" & ACCESS__D.wMinute & ":" & ACCESS__D.wSecond
-        lblHour(2).Caption = MODIF__D.wHour & ":" & MODIF__D.wMinute & ":" & MODIF__D.wSecond
-    End If
+'-------------------------------------------------------
+'récupère les dates et change les controles
+'-------------------------------------------------------
+Private Sub ChangeDates()
+    Set mFile = cFile.GetFile(txtFile.Text) 'récupère le fichier
+    
+    'affichage des infos de dates
+    lblDate(0).Caption = Left$(mFile.CreationDate, 10)
+    lblDate(1).Caption = Left$(mFile.LastAccessDate, 10)
+    lblDate(2).Caption = Left$(mFile.LastModificationDate, 10)
+    
+    'affichage des infos d'heures
+    lblHour(0).Caption = Right$(mFile.CreationDate, 8)
+    lblHour(1).Caption = Right$(mFile.LastAccessDate, 8)
+    lblHour(2).Caption = Right$(mFile.LastModificationDate, 8)
     
     'heures par défaut
     cmdDefaut_Click (0): cmdDefaut_Click (1): cmdDefaut_Click (2)
+End Sub
 
-    CloseHandle lHandle
+'-------------------------------------------------------
+'récupère le fichier
+'-------------------------------------------------------
+Public Sub GetFile(ByVal tFile As clsFile)
+    Set mFile = tFile
+    Call ChangeDates
 End Sub
