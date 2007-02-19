@@ -628,16 +628,19 @@ End Sub
 
 Private Sub mnuFileProp_Click()
 'affiche les propriétés du fichier sélectionné
+    If LVres.SelectedItem Is Nothing Then Exit Sub
     cFile.ShowFileProperty LVres.SelectedItem.Text, Me.hWnd
 End Sub
 
 Private Sub mnuOpenFile_Click()
 'ouvre le fichier sélectionné
+    If LVres.SelectedItem Is Nothing Then Exit Sub
     cFile.ShellOpenFile LVres.SelectedItem.Text, Me.hWnd
 End Sub
 
 Private Sub mnuOpenFolder_Click()
 'ouvre le dossier du fichier sélectionné
+    If LVres.SelectedItem Is Nothing Then Exit Sub
     Shell "explorer.exe " & cFile.GetFolderFromPath(LVres.SelectedItem.Text), vbNormalFocus
 End Sub
 
