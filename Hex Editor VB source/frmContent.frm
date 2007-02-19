@@ -75,6 +75,7 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -82,20 +83,23 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "13:31"
+            TextSave        =   "10:50"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "18/02/2007"
+            TextSave        =   "19/02/2007"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -691,6 +695,9 @@ Begin VB.MDIForm frmContent
       End
       Begin VB.Menu mnuCutCopyFiles 
          Caption         =   "&Découper/fusionner des fichiers..."
+      End
+      Begin VB.Menu mnuFileSearch 
+         Caption         =   "&Recherche de fichiers..."
       End
       Begin VB.Menu mnuToolsTiret4 
          Caption         =   "-"
@@ -1451,6 +1458,11 @@ End Sub
 Private Sub mnuFileRenamer_Click()
 'lance FileRenamer.exe
     ShellExecute Me.hwnd, "Open", App.Path & "\FileRenamer.exe", "", App.Path, 1
+End Sub
+
+Private Sub mnuFileSearch_Click()
+'lance la recherche de fichiers
+    frmFileSearch.Show
 End Sub
 
 Private Sub mnuFreeForum_Click()
