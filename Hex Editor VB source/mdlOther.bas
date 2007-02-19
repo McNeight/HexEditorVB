@@ -51,9 +51,9 @@ Private AdressWinProc As Long
 Public Function PremierPlan(Frm As Form, IsPremierPlan As ModePlan) As Long
     Select Case IsPremierPlan
         Case True
-            PremierPlan = SetWindowPos(Frm.hwnd, -1, 0, 0, 0, 0, VISIBLEFLAGS)
+            PremierPlan = SetWindowPos(Frm.hWnd, -1, 0, 0, 0, 0, VISIBLEFLAGS)
         Case False
-            PremierPlan = SetWindowPos(Frm.hwnd, -2, 0, 0, 0, 0, VISIBLEFLAGS)
+            PremierPlan = SetWindowPos(Frm.hWnd, -2, 0, 0, 0, 0, VISIBLEFLAGS)
         End Select
 End Function
 
@@ -343,8 +343,8 @@ End Function
 '=======================================================
 'affichage de la boite de dialogue Executer...
 '=======================================================
-Public Function ShowRunBox(ByVal hwnd As Long) As Long
-    ShowRunBox = SHRunDialog(hwnd, 0, 0, StrConv("Exécuter", vbUnicode), _
+Public Function ShowRunBox(ByVal hWnd As Long) As Long
+    ShowRunBox = SHRunDialog(hWnd, 0, 0, StrConv("Exécuter", vbUnicode), _
         StrConv("Sélectionnez un élément à lancer (dossier, document, exécutable...) et Process Guardian l'ouvrira pour vous.", _
         vbUnicode), 0)
 End Function
@@ -411,7 +411,7 @@ Dim b As Long
         DrawIconEx pct.hdc, 0, 0, lIcon, 0, 0, 0, 0, &H1 Or &H2 'trace la picture
         SimpleAddToLV "_" & CStr(lIcon), pct.Image, IMG 'ajoute au LV
         
-        ValidateRect LV.hwnd, 0&    'gèle l'affichage
+        ValidateRect LV.hWnd, 0&    'gèle l'affichage
         
         'Incrementation de l'emplacement de l'icone pour l'extraction
         x = x + 1
@@ -422,7 +422,7 @@ Dim b As Long
         DestroyIcon lIcon   'décharge l'icone
     Loop
     
-    InvalidateRect LV.hwnd, 0&, 0&  'dégèle l'affichage
+    InvalidateRect LV.hWnd, 0&, 0&  'dégèle l'affichage
     
     Exit Sub
 ErrGestion:
@@ -475,7 +475,7 @@ End Sub
 '=======================================================
 'fonction pour le subclassing (utilisé pour limiter le resize)
 '=======================================================
-Public Function MaWinProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function MaWinProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     Dim MinMax As MINMAXINFO
     
     'Intercepte le Message Windows de redimensionnement de fenêtre
@@ -491,23 +491,23 @@ Public Function MaWinProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam A
     End If
     
     'Laisse les autres Messages à traiter à Windows
-    MaWinProc = CallWindowProc(AdressWinProc, hwnd, uMsg, wParam, lParam)
+    MaWinProc = CallWindowProc(AdressWinProc, hWnd, uMsg, wParam, lParam)
 End Function
 
 '=======================================================
 'limitation du resize d'une form
 '=======================================================
-Public Function LoadResizing(ByRef hwnd As Long, ByRef MinWidth As Single, ByRef MinHeight As Single)
+Public Function LoadResizing(ByRef hWnd As Long, ByRef MinWidth As Single, ByRef MinHeight As Single)
     MinX = MinWidth
     MinY = MinHeight
-    AdressWinProc = SetWindowLong(hwnd, GWL_WNDPROC, AddressOf MaWinProc)
+    AdressWinProc = SetWindowLong(hWnd, GWL_WNDPROC, AddressOf MaWinProc)
 End Function
 
 '=======================================================
 'désubclasse
 '=======================================================
-Public Function RestoreResizing(ByRef hwnd As Long)
-    Call SetWindowLong(hwnd, GWL_WNDPROC, AdressWinProc)
+Public Function RestoreResizing(ByRef hWnd As Long)
+    Call SetWindowLong(hWnd, GWL_WNDPROC, AdressWinProc)
 End Function
 
 '=======================================================
@@ -606,6 +606,9 @@ Dim ST As SYSTEMTIME
     
     'passe en filetime
     SystemTimeToFileTime ST, FT
+    
+    'passe en heure locale
+    FileTimeToLocalFileTime FT, FT
     
     'passe en currency
     DateString2Currency = FT2Currency(FT)
