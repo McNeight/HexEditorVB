@@ -233,7 +233,7 @@ Begin VB.Form frmFileSearch
             Width           =   855
          End
          Begin VB.CheckBox chkDate 
-            Caption         =   "Par taille"
+            Caption         =   "Par date"
             Height          =   195
             Left            =   0
             TabIndex        =   14
@@ -849,13 +849,10 @@ NoNameToS:
     'continue la recherche
     If chkDate.Value Then
     
-        '0==> creation
-        '1==> dernier accès
-        '2==> dernière modification
         l2 = cbOpDate.ListIndex
         
         'récupère la date en Currency
-        curDateReal = cFile.GetFileDate(sFile, l2, True)
+        curDateReal = cFile.GetFileDate(sFile, cbDateType.ListIndex, True)
         
         If curDateReal = 0 Then
             'date inaccessible
@@ -871,7 +868,7 @@ NoNameToS:
         
         If Ret = 0 Then
             If (l2 = 0) Or (l2 = 3) Or (l2 = 4) Then Exit Function
-        ElseIf Ret = -1 Then
+        ElseIf Ret = 1 Then
             If (l2 = 2) Or (l2 = 4) Then Exit Function
         Else
             If (l2 = 1) Or (l2 = 3) Then Exit Function
