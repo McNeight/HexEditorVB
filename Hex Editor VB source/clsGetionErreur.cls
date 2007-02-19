@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,19 +39,19 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//CLASS DE GESTION DES ERREURS
 '//ECRIT UN *.LOG AVEC LES ERREURS RENCONTREES
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'TYPE & ENUMS
-'-------------------------------------------------------
+'=======================================================
 Private Type FILETIME
     dwLowDateTime As Long
     dwHighDateTime As Long
@@ -69,16 +69,16 @@ Private Type WIN32_FIND_DATA
     cAlternate As String * 14
 End Type
 
-'-------------------------------------------------------
+'=======================================================
 'CONSTANTES
-'-------------------------------------------------------
+'=======================================================
 Private Const FILE_ATTRIBUTE_DIRECTORY      As Long = &H10
 Private Const INVALID_HANDLE_VALUE          As Long = -1
 
 
-'-------------------------------------------------------
+'=======================================================
 'APIS
-'-------------------------------------------------------
+'=======================================================
 Private Declare Function FindFirstFile Lib "kernel32" Alias "FindFirstFileA" (ByVal lpFileName As String, lpFindFileData As WIN32_FIND_DATA) As Long
 Private Declare Function FindClose Lib "kernel32" (ByVal hFindFile As Long) As Long
 Private Declare Function GetLogicalDriveStrings Lib "kernel32.dll" Alias "GetLogicalDriveStringsA" (ByVal nBufferLength As Long, ByVal lpBuffer As String) As Long
@@ -88,15 +88,15 @@ Private Declare Function PathIsDirectory Lib "shlwapi.dll" Alias "PathIsDirector
 Private Declare Function PathFileExists Lib "shlwapi.dll" Alias "PathFileExistsA" (ByVal pszPath As String) As Long
 
 
-'-------------------------------------------------------
+'=======================================================
 'VARIABLES PRIVEES
-'-------------------------------------------------------
+'=======================================================
 Private bMakeSoundIDE As Boolean
 Private sLogFile As String
 
-'-------------------------------------------------------
+'=======================================================
 'EVENEMENTS
-'-------------------------------------------------------
+'=======================================================
 Public Event DisplayError(Error As ErrObject)
 
 
@@ -112,9 +112,9 @@ Private Sub Class_Initialize()
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute une erreur au log
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddError(ByVal sZone As String, Optional ByVal WriteLog As Boolean = True)
 Dim lFile As Long
 Dim sTemp As String
@@ -169,9 +169,9 @@ Dim sTemp As String
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'efface le fichier log
-'-------------------------------------------------------
+'=======================================================
 Public Function DeleteLogFile() As Long
     DeleteLogFile = DeleteFile(sLogFile)
 End Function
@@ -179,17 +179,17 @@ End Function
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'propriétés de la classe
-'-------------------------------------------------------
+'=======================================================
 Public Property Get MakeSoundIDE() As Boolean: MakeSoundIDE = bMakeSoundIDE: End Property
 Public Property Let MakeSoundIDE(MakeSoundIDE As Boolean): bMakeSoundIDE = MakeSoundIDE: End Property
 Public Property Get LogFile() As String: LogFile = sLogFile: End Property
 Public Property Let LogFile(LogFile As String): sLogFile = LogFile: End Property
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie le nombre d'erreurs dans le fichier log
-'-------------------------------------------------------
+'=======================================================
 Public Property Get NumberOfErrorInLogFile() As Long
 Dim lFile As Long
 Dim Cnt As Long
@@ -216,9 +216,9 @@ Dim tmp As String
         
 End Property
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie les erreurs sous forme de tableau
-'-------------------------------------------------------
+'=======================================================
 Public Property Get GetErrors() As Variant
 Dim tmp() As clsErr
 Dim tmpText As String
@@ -276,9 +276,9 @@ End Property
 
 '//SUB & FUNCTIONS PRIVEES
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le dossier fils du dossier sKnownFolder
-'-------------------------------------------------------
+'=======================================================
 Private Function GetFolderAfter(ByVal sPath As String, ByVal sKnownFolder) As String
 Dim l As Long
 Dim l2 As Long
@@ -297,16 +297,16 @@ Dim l2 As Long
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'test de l'existence d'un répertoire
-'-------------------------------------------------------
+'=======================================================
 Private Function FolderExists(strFolder As String) As Boolean
     FolderExists = CBool(PathIsDirectory(strFolder))
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient un dossier (le prédécent) depuis un path
-'-------------------------------------------------------
+'=======================================================
 Private Function GetPrevFolder(ByVal sPath As String) As String
 Dim l As Long
 
@@ -324,9 +324,9 @@ Dim l As Long
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient un dossier depuis un path
-'-------------------------------------------------------
+'=======================================================
 Private Function GetFolderFromPath(ByVal sPath As String) As String
 Dim l As Long
 
@@ -342,9 +342,9 @@ Dim l As Long
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'teste l'existence un fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function FileExists(ByVal sFile As String) As Boolean
     FileExists = CBool(PathFileExists(sFile) And Not (FolderExists(sFile)))
 End Function

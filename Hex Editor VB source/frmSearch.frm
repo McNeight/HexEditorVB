@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{6ADE9E73-F694-428F-BF86-06ADD29476A5}#1.0#0"; "ProgressBar_OCX.ocx"
 Begin VB.Form frmSearch 
    BorderStyle     =   1  'Fixed Single
@@ -386,12 +386,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -414,14 +414,14 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 'FORM DE RECHERCHE
-'-------------------------------------------------------
+'=======================================================
 
 Private clsPref As clsIniForm
 
@@ -445,14 +445,14 @@ Dim s As String
             If Option4(1).Value And Option1(2).Value Then
                 'alors c'est une string en recherche simple
                 SearchForStringFile frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
                 
                 'lance la recherche de la string
                 SearchForStringFile frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
             Else
                 Exit Sub
             End If
@@ -462,14 +462,14 @@ Dim s As String
             If Option4(1).Value And Option1(2).Value Then
                 'alors c'est une string en recherche simple
                 SearchForStringDisk frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
                 
                 'lance la recherche de la string
                 SearchForStringDisk frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
             Else
                 Exit Sub
             End If
@@ -483,14 +483,14 @@ Dim s As String
 
                 'lance la recherche
                 cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), txtSearch.Text, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
                 
                 'lance la recherche de la string
                 cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), s, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
             Else
                 Exit Sub
             End If

@@ -1,10 +1,10 @@
 Attribute VB_Name = "mdlOther"
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -27,7 +27,7 @@ Attribute VB_Name = "mdlOther"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
@@ -40,14 +40,14 @@ Private AdressWinProc As Long
 
 
 
-'-------------------------------------------------------
+'=======================================================
 '//MODULE CONTENANT DIFFERENTES SUBS ET FUNCTIONS NECESSAIRES
-'-------------------------------------------------------
+'=======================================================
 
 
-'-------------------------------------------------------
+'=======================================================
 'met au premier plan ou non une form
-'-------------------------------------------------------
+'=======================================================
 Public Function PremierPlan(Frm As Form, IsPremierPlan As ModePlan) As Long
     Select Case IsPremierPlan
         Case True
@@ -57,9 +57,9 @@ Public Function PremierPlan(Frm As Form, IsPremierPlan As ModePlan) As Long
         End Select
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'modifie les enabled des buttons/menus pour les undo/redo
-'-------------------------------------------------------
+'=======================================================
 Public Sub ModifyHistoEnabled()
 Dim l As Long
 Dim c As Long
@@ -139,9 +139,9 @@ Dim c As Long
         
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute l'entrée du menu contextuel
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddContextMenu(ByVal tType As Byte)
 Dim cReg As clsRegistry
 
@@ -164,9 +164,9 @@ Dim cReg As clsRegistry
     Set cReg = Nothing
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'enlève l'entrée du menu contextuel
-'-------------------------------------------------------
+'=======================================================
 Public Sub RemoveContextMenu(ByVal tType As Byte)
 Dim cReg As clsRegistry
 
@@ -186,9 +186,9 @@ Dim cReg As clsRegistry
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie a^b (plus rapide que a^b)
-'-------------------------------------------------------
+'=======================================================
 Public Function AexpB(ByVal a As Long, ByVal b As Long) As Currency
 Dim x As Long
 Dim l As Long
@@ -208,83 +208,83 @@ Dim l As Long
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie une valeur divisible par 16 (supérieure à l)
-'-------------------------------------------------------
+'=======================================================
 Public Function By16(ByVal l As Currency) As Currency
-Dim R As Currency
+Dim r As Currency
 
-    R = l
-    While Int(R / 16) < (R / 16)
-        R = R + 1
+    r = l
+    While Int(r / 16) < (r / 16)
+        r = r + 1
     Wend
-    By16 = R
+    By16 = r
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie une valeur divisible par 16 (inférieure à l)
-'-------------------------------------------------------
+'=======================================================
 Public Function By16D(ByVal l As Currency) As Currency
-Dim R As Currency
+Dim r As Currency
 
     If (l Mod 16) = 0 Then
         By16D = l
         Exit Function
     End If
 
-    R = l
-    While Int(R / 16) < (R / 16)
-        R = R + 1
+    r = l
+    While Int(r / 16) < (r / 16)
+        r = r + 1
     Wend
-    By16D = R - 16
+    By16D = r - 16
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'effectue un modulo sans dépassement de capacité
 'très peu optimisé, mais utile pour les grandes valeurs de cur
-'-------------------------------------------------------
+'=======================================================
 Public Function Mod2(ByVal cur As Currency, lng As Long) As Currency
     Mod2 = cur - Int(cur / lng) * lng
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie une valeur divisible par n (inférieure à l)
-'-------------------------------------------------------
+'=======================================================
 Public Function ByND(ByVal l As Currency, ByVal n As Long) As Currency
-Dim R As Currency
+Dim r As Currency
 
     If Mod2(l, n) = 0 Then
         ByND = l
         Exit Function
     End If
 
-    R = l
-    While Int(R / n) < (R / n)
-        R = R + 1
+    r = l
+    While Int(r / n) < (r / n)
+        r = r + 1
     Wend
-    ByND = R - n
+    ByND = r - n
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie une valeur divisible par n (supérieure à l)
-'-------------------------------------------------------
+'=======================================================
 Public Function ByN(ByVal l As Currency, ByVal n As Long) As Currency
-Dim R As Currency
+Dim r As Currency
 
-    R = l
-    While Int(R / n) < (R / n)
-        R = R + 1
+    r = l
+    While Int(r / n) < (r / n)
+        r = r + 1
     Wend
-    ByN = R
+    ByN = r
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie le type d'activeform
-'-------------------------------------------------------
+'=======================================================
 Public Function TypeOfActiveForm() As String
     
     On Error Resume Next
@@ -294,9 +294,9 @@ Public Function TypeOfActiveForm() As String
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie le type d'une form
-'-------------------------------------------------------
+'=======================================================
 Public Function TypeOfForm(Frm As Form) As String
     
     On Error Resume Next
@@ -305,9 +305,9 @@ Public Function TypeOfForm(Frm As Form) As String
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'divise une currency en 2 long ==> créé une LARGE_INTEGER
-'-------------------------------------------------------
+'=======================================================
 Public Sub GetLargeInteger(ByVal curVar As Currency, ByRef lngLowPart As Long, ByRef lngHighPart As Long)
     lngLowPart = 0: lngHighPart = 0
     Do
@@ -319,26 +319,40 @@ Public Sub GetLargeInteger(ByVal curVar As Currency, ByRef lngLowPart As Long, B
     lngLowPart = CLng(curVar)
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'rassemble de long pour former une currency
-'-------------------------------------------------------
+'=======================================================
 Public Function GetCurrency(ByVal lngLowPart As Long, ByVal lngHighPart As Long) As Currency
     GetCurrency = 2 ^ 32 * lngHighPart + lngLowPart
 End Function
 
-'-------------------------------------------------------
+'=======================================================
+'transforme un largeinterger en currency
+'=======================================================
+Public Function LI2Currency(liInput As LARGE_INTEGER) As Currency
+    CopyMemory LI2Currency, liInput, LenB(liInput)
+End Function
+
+'=======================================================
+'transforme un filetime en currency
+'=======================================================
+Public Function FT2Currency(FT As FILETIME) As Currency
+    CopyMemory FT2Currency, FT, LenB(FT)
+End Function
+
+'=======================================================
 'affichage de la boite de dialogue Executer...
-'-------------------------------------------------------
+'=======================================================
 Public Function ShowRunBox(ByVal hwnd As Long) As Long
     ShowRunBox = SHRunDialog(hwnd, 0, 0, StrConv("Exécuter", vbUnicode), _
         StrConv("Sélectionnez un élément à lancer (dossier, document, exécutable...) et Process Guardian l'ouvrira pour vous.", _
         vbUnicode), 0)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'récupère l'icone associée à un fichier
 'sortie en type IPictureDisp
-'-------------------------------------------------------
+'=======================================================
 Public Function CreateIcon(ByVal sFile As String) As IPicture
 Dim vSHFI As SHFILEINFO
 Dim lAttr As Long
@@ -372,10 +386,10 @@ ErrGestion:
     clsERREUR.AddError "mdlOther.CreateIcon", True
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute les icones du fichier sFile au Listview spécifié
 'utilise une picture et une IMG pour tracer les images
-'-------------------------------------------------------
+'=======================================================
 Public Sub LoadIconesToLV(ByVal sFile As String, LV As ListView, pct As PictureBox, IMG As ImageList)
 Dim lIcon As Long
 Dim x As Long
@@ -415,10 +429,10 @@ ErrGestion:
     clsERREUR.AddError "mdlOther.LoadIconesToLV", True
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajout d'une image au ImageList
 'pas d'erreur en cas de clé déjà existante
-'-------------------------------------------------------
+'=======================================================
 Public Sub SimpleAddToLV(ByVal sKey As String, IMG As Picture, ImageL As ImageList)
 Dim lst As ListImage
 
@@ -428,9 +442,9 @@ Dim lst As ListImage
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'enregsitre le type de fichier *.hescr
-'-------------------------------------------------------
+'=======================================================
 Public Sub Reg_HESCR_file()
 Dim cReg As clsRegistry
     
@@ -458,9 +472,9 @@ Dim cReg As clsRegistry
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'fonction pour le subclassing (utilisé pour limiter le resize)
-'-------------------------------------------------------
+'=======================================================
 Public Function MaWinProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     Dim MinMax As MINMAXINFO
     
@@ -480,25 +494,25 @@ Public Function MaWinProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam A
     MaWinProc = CallWindowProc(AdressWinProc, hwnd, uMsg, wParam, lParam)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'limitation du resize d'une form
-'-------------------------------------------------------
+'=======================================================
 Public Function LoadResizing(ByRef hwnd As Long, ByRef MinWidth As Single, ByRef MinHeight As Single)
     MinX = MinWidth
     MinY = MinHeight
     AdressWinProc = SetWindowLong(hwnd, GWL_WNDPROC, AddressOf MaWinProc)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'désubclasse
-'-------------------------------------------------------
+'=======================================================
 Public Function RestoreResizing(ByRef hwnd As Long)
     Call SetWindowLong(hwnd, GWL_WNDPROC, AdressWinProc)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'récupère la version de Windows
-'-------------------------------------------------------
+'=======================================================
 Public Function GetWindowsVersion(Optional ByRef sWindowsVersion As String, Optional ByRef lBuildNumber As Long) As WINDOWS_VERSION
 Dim OS As OSVERSIONINFO
 Dim s As String, l As Long
@@ -553,9 +567,9 @@ Dim s As String, l As Long
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'récupère le nom de l'utilisateur
-'-------------------------------------------------------
+'=======================================================
 Public Function GetUserName() As String
 Dim strS As String
 Dim Ret As Long
@@ -566,6 +580,36 @@ Dim Ret As Long
     'récupère le Name
     Ret = GetUserNameA(strS, 199)
     If Ret <> 0 Then GetUserName = Left$(strS, 199) Else GetUserName = vbNullString
+End Function
+
+'=======================================================
+'transforme une string (date) en currency
+'=======================================================
+Public Function DateString2Currency(ByVal sDate As String) As Currency
+Dim FT As FILETIME
+Dim d As Date
+Dim t As Date
+Dim ST As SYSTEMTIME
+
+    d = DateValue(sDate)
+    t = TimeValue(sDate)
+
+    'transfome déjà en systemtime
+    With ST
+        .wDay = Day(d)
+        .wMonth = Month(d)
+        .wYear = Year(d)
+        .wMinute = Minute(t)
+        .wHour = Hour(t)
+        .wSecond = Second(t)
+    End With
+    
+    'passe en filetime
+    SystemTimeToFileTime ST, FT
+    
+    'passe en currency
+    DateString2Currency = FT2Currency(FT)
+        
 End Function
 
 
@@ -582,10 +626,9 @@ End Function
 
 
 
-
-'-------------------------------------------------------
+'=======================================================
 'FONCTIONS DE CONVERSION INTER-BASES
-'-------------------------------------------------------
+'=======================================================
 Public Function Str2Hex(ByVal s As String) As String
     Str2Hex = Hex$(Str2Dec(s))
 End Function
@@ -734,9 +777,9 @@ Dim res(15) As Byte
     
     ExtendedHex = s
 End Function
-'-------------------------------------------------------
+'=======================================================
 'fonction qui transforme une suite de valeur hexa en une string
-'-------------------------------------------------------
+'=======================================================
 Public Function HexValues2String(ByVal sString As String) As String
 Dim Sep As Boolean
 Dim sRes As String

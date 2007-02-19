@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,20 +39,20 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//TYPE PERSO
 'CONTIENT LES SECTIONS ET VARIABLES DU FICHIER *INI
 'C'EST CE FICHIER QU'IL FAUT EDITER POUR CHANGER LES PREFS
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'variables publiques qui constituent le type de variable définit par la classe
-'-------------------------------------------------------
+'=======================================================
 Public IniFilePath As String
 Public app_BackGroundColor As Long
 Public app_OffsetForeColor As Long

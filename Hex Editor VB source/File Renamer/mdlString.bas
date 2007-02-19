@@ -1,10 +1,10 @@
 Attribute VB_Name = "mdlString"
-' -----------------------------------------------
+' =======================================================
 '
 ' File Renamer VB (part of Hex Editor VB)
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' An Windows utility which allows to rename lots of file (part of Hex Editor VB)
 '
@@ -26,19 +26,19 @@ Attribute VB_Name = "mdlString"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
 
-'-----------------------------------------------
+'=======================================================
 '//MODULE DE GESTION DES STRINGS
-'-----------------------------------------------
+'=======================================================
 
-'-----------------------------------------------
+'=======================================================
 'renvoie si oui ou non une string est convenable pour un nom de fichier
-'-----------------------------------------------
+'=======================================================
 Public Function IsFileNameOK(ByVal sFileName As String) As Boolean
 Dim s As String
 Dim x As Long
@@ -53,11 +53,11 @@ Dim x As Long
     IsFileNameOK = True
 End Function
 
-'-----------------------------------------------
+'=======================================================
 'la fonction qui est au coeur de tout : le renommage
 'prend directement en paramètres le composant listbox concerné
 'ne renomme RIEN directement, renvoie en sortie un tableau avec les nouveaux noms
-'-----------------------------------------------
+'=======================================================
 Public Sub RenameMyFiles(Lst As ListBox, OldNames() As String, ByRef NewNames() As String)
      NewNames = OldNames
 End Sub

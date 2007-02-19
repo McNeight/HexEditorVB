@@ -83,12 +83,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -111,14 +111,14 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 'FORM POUR SELECTIONNER UNE ZONE PARTICULIERE
-'-------------------------------------------------------
+'=======================================================
 
 Private byteFunc As Byte
 
@@ -207,12 +207,12 @@ Private Sub Form_Load()
     txtFrom.Text = CStr(frmContent.ActiveForm.HW.Item.Offset + frmContent.ActiveForm.HW.Item.Col) - 1
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'sub permettant de récupérer un nombre qui va spécifier
 'a quoi la sélection servira
 '0 = sélection paramétrée
 '1 = affichage restreint
-'-------------------------------------------------------
+'=======================================================
 Public Sub GetEditFunction(ByVal btFunction As Byte)
     byteFunc = btFunction
 End Sub

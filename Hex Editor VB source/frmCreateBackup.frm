@@ -78,12 +78,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -106,26 +106,26 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 'FORM PERMETTANT DE CREER UN BAKCUP DE FICHIER
-'-------------------------------------------------------
+'=======================================================
 
 
-'-------------------------------------------------------
+'=======================================================
 'VARIABLES PRIVESS
-'-------------------------------------------------------
+'=======================================================
 'Private strFile As String
 'Private Frm As Pfm
 'Private tAction As BACKUP_ACTION
 
-'-------------------------------------------------------
+'=======================================================
 'ENUMS
-'-------------------------------------------------------
+'=======================================================
 'Public Enum BACKUP_ACTION
 '    DeleteZone
 '    AddZone
@@ -144,12 +144,12 @@ Private Sub cmdOk_Click()
 End Sub
 
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le nom du fichier dont on doit faire le backup
 'la form qui contient le HW et donc les modifs
 'le type de modif à faire
 'les paramètres des modifs
-'-------------------------------------------------------
+'=======================================================
 'Public Sub GetAction(ByVal sFile As String, ByVal frmFrom As Pfm, _
 'ByVal TypeOfAction As BACKUP_ACTION, Optional ByVal Param1 As Variant, _
 'Optional ByVal Param2 As Variant, Optional ByVal Param3 As Variant)

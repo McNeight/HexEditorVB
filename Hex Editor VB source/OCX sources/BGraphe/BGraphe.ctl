@@ -25,12 +25,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -53,15 +53,15 @@ Attribute VB_Exposed = True
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//GRAPHE EN "BARRES" POUR VISUALISER LES OCCURENCES
 'D'APPARITION DES BYTES
-'-------------------------------------------------------
+'=======================================================
 
 Private m(255) As Long
 Private lBackColor As OLE_COLOR
@@ -75,9 +75,9 @@ Public Event MouseDown(Button As Integer, Shift As Integer, x As Single, y As Si
 Public Event MouseMove(bByteX As Byte, lOccurence As Long, Button As Integer, Shift As Integer, x As Single, y As Single)
 Public Event MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
 
-'-------------------------------------------------------
+'=======================================================
 'USERCONTROL INITIALISATION
-'-------------------------------------------------------
+'=======================================================
 Private Sub UserControl_InitProperties()
 'valeurs par défaut
     Me.BackColor = vbWhite
@@ -85,9 +85,9 @@ Private Sub UserControl_InitProperties()
     Me.BarreColor2 = vbRed
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'EVENTS
-'-------------------------------------------------------
+'=======================================================
 Private Sub UserControl_KeyDown(KeyCode As Integer, Shift As Integer)
     RaiseEvent KeyDown(KeyCode, Shift)
 End Sub
@@ -115,9 +115,9 @@ Private Sub UserControl_MouseUp(Button As Integer, Shift As Integer, x As Single
     RaiseEvent MouseUp(Button, Shift, x, y)
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'USERCONTROL PROPERTIES
-'-------------------------------------------------------
+'=======================================================
 Private Sub UserControl_Resize()
     TraceGraph
 End Sub
@@ -156,9 +156,9 @@ End Property
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'Trace le graphique
-'-------------------------------------------------------
+'=======================================================
 Public Sub TraceGraph()
 Dim lMaxVal As Long
 Dim x As Long
@@ -206,18 +206,18 @@ Dim lR1 As Long, lG1 As Long, lB1 As Long, lR2 As Long, lG2 As Long, lB2 As Long
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'transforme une couleur long en RGB
-'-------------------------------------------------------
+'=======================================================
 Private Function LongToRGB(ByVal lLong As Long, ByRef lRed As Long, ByRef lGreen As Long, ByRef lBlue As Long)
     lBlue = CLng(Int(lLong / 65536))
     lGreen = CLng(Int((lLong - CLng(lBlue) * 65536) / 256))
     lRed = CLng(lLong - CLng(lBlue) * 65536 - CLng(lGreen) * 256)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient une valeur à mettre dans le tableau
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddValue(ByVal bByte As Byte, ByVal lOccurence As Long)
     
     On Error GoTo ErrGestion
@@ -227,9 +227,9 @@ Public Sub AddValue(ByVal bByte As Byte, ByVal lOccurence As Long)
 ErrGestion:
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'obtient une valeur à mettre dans le tableau
-'-------------------------------------------------------
+'=======================================================
 Public Function GetValue(ByVal bByte As Byte) As Long
     
     On Error GoTo ErrGestion
@@ -239,9 +239,9 @@ Public Function GetValue(ByVal bByte As Byte) As Long
 ErrGestion:
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'efface les valeurs
-'-------------------------------------------------------
+'=======================================================
 Public Sub ClearValues()
 Dim x As Long
 
@@ -250,16 +250,16 @@ Dim x As Long
     Next x
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'efface le graphe
-'-------------------------------------------------------
+'=======================================================
 Public Sub ClearGraphe()
     UserControl.Cls
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'sauvegarder en bitmap
-'-------------------------------------------------------
+'=======================================================
 Public Sub SaveBMP(ByVal sFile As String, Optional ByVal lWidth As Long = 640, Optional ByVal lHeight As Long = 480)
     With pct
         .ScaleMode = 3 'pixels

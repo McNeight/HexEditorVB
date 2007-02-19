@@ -244,12 +244,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -272,18 +272,18 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 'FORM DE COMPARAISON DE FICHIERS
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'VARIABLES
-'-------------------------------------------------------
+'=======================================================
 Private F1(255) As Long
 Private F2(255) As Long
 
@@ -343,9 +343,9 @@ Private Sub cmdSaveReport_Click()
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'lance l'analyse des deux fichiers
-'-------------------------------------------------------
+'=======================================================
 Private Sub LaunchAnalys()
 Dim lLenght1 As Long, lLenght2 As Long
 Dim x As Long
@@ -367,7 +367,7 @@ Dim curByteOld As Currency
     
     'prépare la progressbar
     lLenght1 = cFile.GetFileSize(txtFile1.Text): lLenght2 = cFile.GetFileSize(txtFile2.Text)
-    PGB.Min = 0: PGB.Max = lLenght1 + lLenght2: PGB.Value = 0
+    pgb.Min = 0: pgb.Max = lLenght1 + lLenght2: pgb.Value = 0
     x = 0
     
     'obtient le handle du fichier
@@ -407,7 +407,7 @@ Dim curByteOld As Currency
         If (x Mod 10) = 0 Then
             'rend la main
             DoEvents
-            PGB.Value = curByte
+            pgb.Value = curByte
         End If
         
         curByte = curByte + 51200
@@ -458,7 +458,7 @@ Dim curByteOld As Currency
         If (x Mod 10) = 0 Then
             'rend la main
             DoEvents
-            PGB.Value = curByte + curByteOld
+            pgb.Value = curByte + curByteOld
         End If
         
         curByte = curByte + 51200
@@ -467,7 +467,7 @@ Dim curByteOld As Currency
     
     CloseHandle lngFile
     
-    PGB.Value = PGB.Max
+    pgb.Value = pgb.Max
     DisplayResults   'affiche les résultats
 
     Exit Sub
@@ -476,9 +476,9 @@ ErrGestion:
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'affiche les résultats (graphes & labels)
-'-------------------------------------------------------
+'=======================================================
 Private Sub DisplayResults()
 Dim x As Long
 

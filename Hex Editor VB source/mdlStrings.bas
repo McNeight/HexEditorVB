@@ -1,10 +1,10 @@
 Attribute VB_Name = "mdlStrings"
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -27,27 +27,27 @@ Attribute VB_Name = "mdlStrings"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//MODULE DE GESTION DES STRINGS
 '//FONCTIONS GENERIQUES D'OPERATIONS SUR DES STRINGS
-'-------------------------------------------------------
+'=======================================================
 
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie le nom du path sans le fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFolderFormPath(ByVal sPath As String) As String
     GetFolderFormPath = Left(sPath, InStrRev(sPath, "\", Len(sPath)))
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'formate les 16 caractères d'une chaine de 16
-'-------------------------------------------------------
+'=======================================================
 Public Function Formated16String(ByVal sString As String) As String
 Dim x As Long
 Dim s As String
@@ -61,11 +61,11 @@ Dim s As String
     Formated16String = s
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'formate les n caractères d'une chaine de n de long
 'pourquoi utilisé Formated16String et Formated1String alors
 'qu'il existe cette fonction ? Pour des raisons de performance.
-'-------------------------------------------------------
+'=======================================================
 Public Function FormatednString(ByVal sString As String) As String
 Dim x As Long
 Dim curLen As Currency
@@ -84,18 +84,18 @@ Dim s As String
     FormatednString = s
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'formate un caractère string vers quelque chose de lisible
-'-------------------------------------------------------
+'=======================================================
 Public Function Formated1String(ByVal sString As String) As String
 
     Formated1String = Byte2FormatedString(Asc(sString))
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'formate la taille d'un fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function FormatedSize(ByVal LS As Currency, Optional ByVal lRoundNumber = 5) As String
 Dim dS As Double
 Dim n As Byte
@@ -120,9 +120,9 @@ Dim n As Byte
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'colle la string s1 dans s2, à l'emplacement ldep
-'-------------------------------------------------------
+'=======================================================
 Public Sub PasteS1inS2(ByVal s1 As String, ByRef s2 As String, ByVal lDep As Long)
 Dim sAvant As String
 Dim sApres As String
@@ -146,10 +146,10 @@ Dim sApres As String
     s2 = sAvant & s1 & sApres
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'formate un byte en string en enlevant les caractères ASCII
 'non représentés(ables) dans un visualisateur hexa
-'-------------------------------------------------------
+'=======================================================
 Public Function Byte2FormatedString(ByVal bCar As Long) As String
 
     'renvoie un "." pour les caractères non affichables
@@ -164,10 +164,10 @@ Public Function Byte2FormatedString(ByVal bCar As Long) As String
    
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie un tableau de 1 à ubound de string
 'qui contient les strings comprises entre un caractère défini
-'-------------------------------------------------------
+'=======================================================
 Public Sub SplitString(ByVal strSeparator As String, ByVal strString As String, ByRef strArray() As String)
 Dim s As String
 Dim x As Long
@@ -194,10 +194,10 @@ Dim i As Long
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie une adresse (string) avec les 0 devant si nécessaire, pour avoir un longueur
 'de string fixe (8)
-'-------------------------------------------------------
+'=======================================================
 Public Function FormatedAdress(ByVal lNumber As Long, Optional ByVal lLongueur As Long = 8) As String
 Dim s As String
 
@@ -210,9 +210,9 @@ Dim s As String
     FormatedAdress = s
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'transforme une date en FILETIME vers une date en string
-'-------------------------------------------------------
+'=======================================================
 Public Function FileTimeToString(fDate As FILETIME, Optional ByVal bConvertToLocal As Boolean = True) As String
 Dim sDate As SYSTEMTIME
 Dim sDay As String
@@ -244,9 +244,9 @@ Dim s As String
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'convertit le chemin sPath en chemin existant (correct)
-'-------------------------------------------------------
+'=======================================================
 Public Function FormatedPath(ByVal sPath As String) As String
 Dim x As Long
 Dim s As String
@@ -282,9 +282,9 @@ Dim s As String
     FormatedPath = s
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le NOM de la priorité en STRING à partir du long correspondant
-'-------------------------------------------------------
+'=======================================================
 Public Function PriorityFromLong(ByVal lp As Long) As String
 Dim s As String
 
@@ -299,10 +299,10 @@ Dim s As String
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'créé une string contenant les données en langage HTML à sauvegarder
 'prend en paramètre les infos à afficher (deux listviews contenant les infos disques)
-'-------------------------------------------------------
+'=======================================================
 Public Function CreateMeHtmlString(lvPhys As ListView, lvLog As ListView) As String
 Dim s As String
 Dim x As Long

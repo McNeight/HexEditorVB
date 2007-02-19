@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,19 +39,19 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//CLASSE DE GESTION DES PROCESSUS ET DE LEUR MEMOIRE
 '//by Violent_ken
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'CONSTANTES
-'-------------------------------------------------------
+'=======================================================
 'constantes d'accès à un processus (pour OpenProcess)
 Private Const SYNCHRONIZE                   As Long = &H100000
 Private Const STANDARD_RIGHTS_REQUIRED      As Long = &HF0000 'aussi pour d'autres accès que les processus
@@ -86,9 +86,9 @@ Private Const MEM_COMMIT                    As Long = &H1000
 Private Const INVALID_HANDLE_VALUE          As Long = -1
 
 
-'-------------------------------------------------------
+'=======================================================
 'APIs
-'-------------------------------------------------------
+'=======================================================
 Private Declare Function AdjustTokenPrivileges Lib "advapi32.dll" (ByVal TokenHandle As Long, ByVal DisableAllPrivileges As Long, NewState As TOKEN_PRIVILEGES, ByVal BufferLength As Long, PreviousState As TOKEN_PRIVILEGES, ReturnLength As Long) As Long
 Private Declare Function OpenProcessToken Lib "advapi32.dll" (ByVal ProcessHandle As Long, ByVal DesiredAccess As Long, TokenHandle As Long) As Long
 Private Declare Function LookupPrivilegeValue Lib "advapi32.dll" Alias "LookupPrivilegeValueA" (ByVal lpSystemName As String, ByVal lpName As String, lpLuid As LUID) As Long
@@ -102,9 +102,9 @@ Private Declare Function VirtualQueryEx& Lib "kernel32" (ByVal hProcess As Long,
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'TYPES ET ENUMS
-'-------------------------------------------------------
+'=======================================================
 Private Type LUID
     LowPart As Long
     HighPart As Long
@@ -145,13 +145,13 @@ Private Type T_RESULT   'privé pour éviter d'avoir à déclarer un type de donnée 
 End Type
 
 
-'-------------------------------------------------------
+'=======================================================
 'FUNCTIONS AND PROCEDURES
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'donne le privilege Debug à l'application (permet d'accéder à tout les processus avec OpenProcess)
-'-------------------------------------------------------
+'=======================================================
 Private Sub GetAllPrivileges()
 Dim lhTokenHandle As Long
 Dim tLuid As LUID
@@ -179,17 +179,17 @@ Dim hProc As Long
     CloseHandle lhTokenHandle
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie un handle de processus permettant la lecture écriture en mémoire
-'-------------------------------------------------------
+'=======================================================
 Private Function GetValidHandle(ByVal PID As Long) As Long
     GetValidHandle = OpenProcess(PROCESS_ALL_ACCESS, False, PID)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'lit lSize bytes dans la zone virtuelle de la mémoire d'un processus
 'demande un PID
-'-------------------------------------------------------
+'=======================================================
 Public Function ReadBytes(ByVal PID As Long, ByVal lngOffset As Long, ByVal lngSize As Long) As String
 Dim sBuf As String
 Dim lByte As Long
@@ -213,10 +213,10 @@ Dim lHandle As Long
     ReadBytes = sBuf
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'lit lSize bytes dans la zone virtuelle de la mémoire d'un processus
 'demande un handle
-'-------------------------------------------------------
+'=======================================================
 Public Function ReadBytesH(ByVal lHandle As Long, ByVal lngOffset As Long, ByVal lngSize As Long) As String
 Dim sBuf As String
 Dim lByte As Long
@@ -234,9 +234,9 @@ Dim lRet As Long
     ReadBytesH = sBuf
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'écrit une string dans la mémoire virtuelle d'un processus
-'-------------------------------------------------------
+'=======================================================
 Public Function WriteBytes(ByVal PID As Long, ByVal lngOffset As Long, ByVal strStringToWrite As String) As Long
 Dim lHandle As Long
 
@@ -249,18 +249,18 @@ Dim lHandle As Long
     CloseHandle lHandle
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'écrit une string dans la mémoire virtuelle d'un processus (à partir d'un handle)
-'-------------------------------------------------------
+'=======================================================
 Public Function WriteBytesH(ByVal lngHandle As Long, ByVal lngOffset As Long, ByVal strStringToWrite As String) As Long
 'écrit en mémoire
     WriteBytesH = WriteProcessMemory(lngHandle, lngOffset, ByVal strStringToWrite, Len(strStringToWrite), 0&)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient les différentes zones mémoire d'un processus utilisées dans la zone virtuelle
 'stocke de 1 à Ubound
-'-------------------------------------------------------
+'=======================================================
 Public Sub RetrieveMemRegions(ByVal PID As Long, ByRef lBaseAdress() As Long, ByRef lRegionSize() As Long)
 Dim lHandle As Long
 Dim lPosMem As Long
@@ -319,11 +319,11 @@ ErrCapacityGestion:
    CloseHandle lHandle 'ferme le handle du processus
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'fonction de recherche de string dans un processus
 'de 1 à Ubound
-'-------------------------------------------------------
-Public Sub SearchForStringMemory(ByVal PID As Long, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional ByVal PGB As pgrbar)
+'=======================================================
+Public Sub SearchForStringMemory(ByVal PID As Long, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional ByVal pgb As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim x As Long
 Dim bytAsc As Byte
@@ -341,11 +341,11 @@ Dim LS() As Long
     'on obtient les différentes régions de la mémoire du processus
     RetrieveMemRegions PID, LB(), LS()
     
-    If Not (PGB Is Nothing) Then
+    If Not (pgb Is Nothing) Then
         'on initialise la progressabr
-        PGB.Min = 0
-        PGB.Value = 0
-        PGB.Max = UBound(LS())
+        pgb.Min = 0
+        pgb.Value = 0
+        pgb.Max = UBound(LS())
     End If
     
     'on obtient le handle depuis le PID
@@ -371,12 +371,12 @@ Dim LS() As Long
             strBufT = Right$(strBufT, Len(strBufT) - InStr(1, strBufT, sMatch, vbBinaryCompare) - Len(sMatch) + 1)
         Wend
         
-        If Not (PGB Is Nothing) Then PGB.Value = x    'refresh progressbar
+        If Not (pgb Is Nothing) Then pgb.Value = x    'refresh progressbar
         DoEvents    'rend la main
         
     Next x
     
-    If Not (PGB Is Nothing) Then PGB.Value = PGB.Max
+    If Not (pgb Is Nothing) Then pgb.Value = pgb.Max
         
     Let strBufT = vbNullString
 
@@ -385,11 +385,11 @@ ErrGestion:
     CloseHandle lHandle
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'détermine si un byte est considéré comme convenable en fonction
 'des paramètres Afficher : min, MAJ, nbres, signes
 'function utilisée directement avec les procédures de SearchStringIn...
-'-------------------------------------------------------
+'=======================================================
 Private Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean) As Boolean
     If bMaj Then
         IsCharConsideredInAString = (bytChar >= 65 And bytChar <= 90)
@@ -417,12 +417,12 @@ Private Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns A
     IsCharConsideredInAString = False
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'fonction de recherche de string complètes dans un processus
 'ne cherche pas une string en particulier, mais toutes les strings qui ressemblent à des mots
 'stocke dans un tableau de 1 à Ubound
-'-------------------------------------------------------
-Public Sub SearchEntireStringMemory(ByVal PID As Long, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByRef lngRes() As Long, ByRef strRes() As String, Optional PGB As pgrbar)
+'=======================================================
+Public Sub SearchEntireStringMemory(ByVal PID As Long, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByRef lngRes() As Long, ByRef strRes() As String, Optional pgb As pgrbar)
 Dim strCtemp As String
 Dim x As Long
 Dim lngLen As Long
@@ -446,11 +446,11 @@ Dim LS() As Long
         lngLen = lngLen + LS(i)
     Next i
     
-    If Not (PGB Is Nothing) Then
+    If Not (pgb Is Nothing) Then
         'on initialise la progressabr
-        PGB.Min = 0
-        PGB.Value = 0
-        PGB.Max = UBound(LS())
+        pgb.Min = 0
+        pgb.Value = 0
+        pgb.Max = UBound(LS())
     End If
     
     'on obtient le handle depuis le PID
@@ -503,12 +503,12 @@ Dim LS() As Long
             tRes(UBound(tRes)).strString = strCtemp
         End If
         
-        If Not (PGB Is Nothing) Then PGB.Value = x    'refresh progressbar
+        If Not (pgb Is Nothing) Then pgb.Value = x    'refresh progressbar
         DoEvents    'rend la main
      Next x
     
     
-    If Not (PGB Is Nothing) Then PGB.Value = PGB.Max
+    If Not (pgb Is Nothing) Then pgb.Value = pgb.Max
     
     Let strBuffer = vbNullString
     CloseHandle lHandle 'ferme le handle du process
@@ -530,9 +530,9 @@ ErrGestion:
     clsERREUR.AddError "mdlDisk.SearchStringInFile", True
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'procédure d'initialisation de la classe
-'-------------------------------------------------------
+'=======================================================
 Private Sub Class_Initialize()
     GetAllPrivileges    'obtient le privileges debug
 End Sub

@@ -1,10 +1,10 @@
 Attribute VB_Name = "mdlScript"
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -27,23 +27,23 @@ Attribute VB_Name = "mdlScript"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//MODULE DE GESTION DES SCRIPTS
-'-------------------------------------------------------
+'=======================================================
 
 Private Const COM As String = "ADR|ADR+|ADR-|BEEP|CLOSE_PROCESS_NAME|CLOSE_PROCESS_PATH|CLOSE_PROCESS_PID|COUNT_ALL_HEX|COUNT_ALL_STR|COUNT_HEX|COUNT_STR|CREATE_FILE|CREATE_PROCESS|DEL|DEL_FILE|EXIT|FILE_EXISTS|FIND_HEX|FIND_STR|FOLDER_EXISTS|GET_HEX|GET_STR|GOTO|IF|INSERT|LABEL|MSG|PASTE_HEX|PASTE_STR|PROCESS_EXISTS_NAME|PROCESS_EXISTS_PATH|PROCESS_EXISTS_PID|REBOOT|REM|REPEAT|REPLACE_ALL_HEX|REPLACE_ALL_STR|REPLACE_HEX|REPLACE_STR|RESUME_PROCESS_NAME|RESUME_PROCESS_PATH|RESUME_PROCESS_PID|SHUTDOWN|STO_A|STO_B|STO_C|STO_D|SUSPEND_PROCESS_NAME|SUSPEND_PROCESS_PATH|SUSPEND_PROCESS_PID|UNTIL|USE_FILE|USE_PROCESS_NAME|USE_PROCESS_PATH|USE_PROCESS_PID|USE_VOLUME|WHILE|"
 Private sCom() As String
 
 
-'-------------------------------------------------------
+'=======================================================
 'vérifie la cohérence d'un script
 'renvoie 0 si OK, renvoie le numéro de la ligne si pas OK
-'-------------------------------------------------------
+'=======================================================
 Public Function IsScriptCorrect(ByVal sText As String) As Long
 Dim sLine() As String   'contiendra la liste des commandes
 Dim x As Long
@@ -186,25 +186,25 @@ ErrGestion:
     clsERREUR.AddError "mdlScript.IsScriptCorrect", True
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'lance un script
-'-------------------------------------------------------
+'=======================================================
 Public Function LauchScript(ByVal sText As String) As Boolean
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient la commande de la ligne S
-'-------------------------------------------------------
-Private Function GetCommand(ByVal S As String) As String
+'=======================================================
+Private Function GetCommand(ByVal s As String) As String
 Dim x As Long
 Dim y As Long
 Dim l As Long
 
-    l = Len(S)
+    l = Len(s)
     For x = l To 1 Step -1  'parcourt toute la string
         For y = 0 To UBound(sCom()) 'parcourt toutes les commandes dispo.
-            If Mid$(S, 1, x) = sCom(y) Then
+            If Mid$(s, 1, x) = sCom(y) Then
                 'on a trouvé une commande
                 GetCommand = sCom(y)
                 Exit Function
@@ -214,10 +214,10 @@ Dim l As Long
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'transforme la string COM en tableau
 '0 à ubound
-'-------------------------------------------------------
+'=======================================================
 Public Sub GetSplit()
     sCom = Split(COM, "|")
 End Sub

@@ -1,10 +1,10 @@
 Attribute VB_Name = "Declarations"
-' -----------------------------------------------
+' =======================================================
 '
 ' File Renamer VB (part of Hex Editor VB)
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' An Windows utility which allows to rename lots of file (part of Hex Editor VB)
 '
@@ -26,7 +26,7 @@ Attribute VB_Name = "Declarations"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
@@ -35,21 +35,21 @@ Option Explicit
 '//DECLARATIONS DES APIS/TYPES/CONSTANTES/ENUMS
 
 
-'-----------------------------------------------
+'=======================================================
 '//CONSTANTES
-'-----------------------------------------------
+'=======================================================
 
-'-----------------------------------------------
+'=======================================================
 '//ENUMS
-'-----------------------------------------------
+'=======================================================
 
-'-----------------------------------------------
+'=======================================================
 '//TYPES
-'-----------------------------------------------
+'=======================================================
 
-'-----------------------------------------------
+'=======================================================
 '//APIS
-'-----------------------------------------------
+'=======================================================
 Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 Public Declare Sub ValidateRect Lib "user32" (ByVal hwnd As Long, ByVal t As Long)
 

@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,34 +39,34 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//CLASS DE GESTION DU FICHIER DE CONFIGURATION
-'-------------------------------------------------------
+'=======================================================
 
 Public sDefaultPath As String   'path par défaut
 
 
-'-------------------------------------------------------
+'=======================================================
 'APIS
-'-------------------------------------------------------
+'=======================================================
 Private Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nSize As Long, ByVal lpFileName As String) As Long
 Private Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpString As Any, ByVal lpFileName As String) As Long
 
-'-------------------------------------------------------
+'=======================================================
 'définit les préférences du fichier *.ini
-'-------------------------------------------------------
+'=======================================================
 Private Sub LetPref(ByVal sSection As String, ByVal sVariable As String, ByVal sValeur As String, ByVal sFile As String)
     WritePrivateProfileString sSection, sVariable, sValeur, sFile
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'permet de récupérer les préférences du fichier *.ini
-'-------------------------------------------------------
+'=======================================================
 Private Function GetPref(ByVal sSection As String, ByVal sVariable As String, ByVal sFile As String) As String
 Dim lng As Integer
 Dim sReturn As String
@@ -81,9 +81,9 @@ Dim sReturn As String
     GetPref = Left$(sReturn, lng)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'permet de sauver le fichier *.ini dans le fichier sFile
-'-------------------------------------------------------
+'=======================================================
 Public Function SaveIniFile(ByVal IniFile As clsIniPref) As Boolean
 Dim strIniFile As String
 
@@ -148,9 +148,9 @@ Dim strIniFile As String
 GetError:
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'permet de récupérer le fichier *ini ou de le créer le cas échéant
-'-------------------------------------------------------
+'=======================================================
 Public Function GetIniFile(Optional ByVal sFile As String) As clsIniPref
 Dim tCls As clsIniPref
 Dim strIniFile As String

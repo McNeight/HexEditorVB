@@ -1,10 +1,10 @@
 Attribute VB_Name = "mdlUndo"
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -27,20 +27,20 @@ Attribute VB_Name = "mdlUndo"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//MODULE DE GESTION DE L'HISTORIQUE
 'CONTIENT LES PROCEDURES DE GESTION DE L'HISTORIQUE
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'effectue un Undo, prend en entrée
 '-la liste de l'historique
-'-------------------------------------------------------
+'=======================================================
 Public Sub UndoMe(Undo As clsUndoItem, ByRef Histo() As clsUndoSubItem)
     
     With Histo(Undo.lRang)
@@ -88,10 +88,10 @@ Public Sub UndoMe(Undo As clsUndoItem, ByRef Histo() As clsUndoSubItem)
     End With
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'effectue un Redo, prend en entrée
 '-la liste de l'historique
-'-------------------------------------------------------
+'=======================================================
 Public Sub RedoMe(Undo As clsUndoItem, ByRef Histo() As clsUndoSubItem)
     
     With Histo(Undo.lRang)
@@ -139,13 +139,13 @@ Public Sub RedoMe(Undo As clsUndoItem, ByRef Histo() As clsUndoSubItem)
     End With
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute une entrée à l'historique, prend en paramètre
 '-le rang de la nouvelle entrée (donc supprime tout ce qui est après)
 '-l'historique
 '-les datas
 '-le type de nouvelle entrée
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddHisto(ByVal lRang As Long, ByVal Undo As clsUndoItem, ByRef Histo() As clsUndoSubItem, _
     ByVal tUndoType As UNDO_TYPE, Optional ByVal sData1 As String, Optional ByVal sData2 As String, _
     Optional ByVal curData1 As Currency, Optional ByVal curData2 As Currency, _
@@ -201,11 +201,11 @@ Dim s As String
         
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'supprime des entrées de l'historique, prend en paramètre
 '-le rang de la limite de suppression (tout ce qui est > est supprimé)
 '-l'historique
-'-------------------------------------------------------
+'=======================================================
 Public Sub DelHisto(ByVal lRang As Long, ByRef Histo() As clsUndoSubItem, ByVal Undo As clsUndoItem)
 Dim x As Long
 

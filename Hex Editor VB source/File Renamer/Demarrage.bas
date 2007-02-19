@@ -1,10 +1,10 @@
 Attribute VB_Name = "Demarrage"
-' -----------------------------------------------
+' =======================================================
 '
 ' File Renamer VB (part of Hex Editor VB)
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' An Windows utility which allows to rename lots of file (part of Hex Editor VB)
 '
@@ -26,7 +26,7 @@ Attribute VB_Name = "Demarrage"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
@@ -35,9 +35,9 @@ Public AfManifest As New AfClsManifest  'classe appliquant le style XP
 Public cFile As clsFileInfos
 
 
-'-----------------------------------------------
+'=======================================================
 'sub de démarrage du programme
-'-----------------------------------------------
+'=======================================================
 Sub Main()
 
     '//on instancie les classes
@@ -56,9 +56,9 @@ Sub Main()
     
 End Sub
 
-'-----------------------------------------------
+'=======================================================
 'quitte le programme
-'-----------------------------------------------
+'=======================================================
 Public Sub EndProg()
 
     '//désinstancie les classes

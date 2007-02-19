@@ -142,12 +142,19 @@ Begin VB.Form frmFileSearch
             ForeColor       =   -2147483640
             BackColor       =   -2147483643
             Appearance      =   0
-            NumItems        =   1
+            NumItems        =   2
             BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
                Key             =   ""
                Object.Tag             =   ""
                Text            =   "Dossier"
-               Object.Width           =   8819
+               Object.Width           =   4410
+            EndProperty
+            BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+               SubItemIndex    =   1
+               Key             =   ""
+               Object.Tag             =   ""
+               Text            =   "Sous dossiers"
+               Object.Width           =   1764
             EndProperty
          End
          Begin VB.CommandButton cmdAdd 
@@ -367,18 +374,26 @@ Begin VB.Form frmFileSearch
          End
       End
    End
+   Begin VB.Menu mnuPopUp 
+      Caption         =   "mnuPopUp"
+      Visible         =   0   'False
+      Begin VB.Menu mnuSub 
+         Caption         =   "&Recherche dans les sous dossiers"
+         Checked         =   -1  'True
+      End
+   End
 End
 Attribute VB_Name = "frmFileSearch"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -401,22 +416,32 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+
+'=======================================================
 'FORM DE RECHERCHE DE FICHIERS DANS LES DISQUES DURS
-'-------------------------------------------------------
+'=======================================================
+
+Private It As ListItem
+Private dblSize As Double    'taille à rechercher
+Private curDate As Currency 'date à rechercher
+Private bStop As Boolean
 
 Private Sub chkDate_Click()
     If chkDate.Value Then
         txtDate.Enabled = True
         cbOpDate.Enabled = True
+        cbDateType.Enabled = True
+        cmdDate.Enabled = True
     Else
         txtDate.Enabled = False
         cbOpDate.Enabled = False
+        cbDateType.Enabled = False
+        cmdDate.Enabled = False
     End If
     Call CheckSearch 'vérifie qu'une recherche est possible
 End Sub
@@ -450,17 +475,37 @@ Dim s As String
     If cFile.FolderExists(s) Then
         'alors ajoute le dossier à la liste des emplacements
         LV.ListItems.Add Text:=s
+        LV.ListItems.Item(LV.ListItems.Count).SubItems(1) = "Non"
     End If
     Call CheckSearch 'vérifie qu'une recherche est possible
 End Sub
 
-Private Sub cmdQuit_Click()
-    Unload Me
+Private Sub cmdGo_Click()
+'lance la recherche
+    If Option1(0).Value Then
+        'alors recherche par nom de fichier
+        Call LaunchSearch([Recherche de fichiers])
+    ElseIf Option1(1).Value Then
+        'alors recherche par nom de dossier
+        Call LaunchSearch([Recherche de dossiers])
+    Else
+        'alors recherche par contenu de fichier
+        Call LaunchSearch([Recherche de contenu de fichier])
+    End If
 End Sub
 
-'-------------------------------------------------------
+Private Sub cmdQuit_Click()
+    If cmdQuit.Caption = "Quitter" Then
+        Unload Me
+    Else
+        'annule la recherche
+        bStop = True
+    End If
+End Sub
+
+'=======================================================
 'checke si la recherche est possible ou non
-'-------------------------------------------------------
+'=======================================================
 Private Sub CheckSearch()
 
     cmdGo.Enabled = False
@@ -468,18 +513,20 @@ Private Sub CheckSearch()
     
     If chkName.Value Then
         cmdGo.Enabled = True
-        Exit Sub
     End If
     If chkSize.Value Then
         If Len(txtSize.Text) > 0 And cdUnit.ListIndex >= 0 And cbOpSize.ListIndex >= 0 Then
             cmdGo.Enabled = True
+        Else
+            cmdGo.Enabled = False
             Exit Sub
         End If
     End If
     If chkDate.Value Then
         If Len(txtDate.Text) > 0 And cbOpDate.ListIndex >= 0 And cbDateType.ListIndex >= 0 Then
             cmdGo.Enabled = True
-            Exit Sub
+        Else
+            cmdGo.Enabled = False
         End If
     End If
     
@@ -489,6 +536,10 @@ Private Sub cmdSave_Click()
 'sauvegarde les résultats
 
 
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set It = Nothing
 End Sub
 
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -503,6 +554,42 @@ Dim r As Long
     End If
 
     Call CheckSearch 'vérifie qu'une recherche est possible
+End Sub
+
+Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+'change l'attribut "sous dossier"
+
+    Set It = LV.HitTest(x, y)
+    If It Is Nothing Then Exit Sub
+
+    If Button = 2 Then
+        Me.mnuSub.Checked = IIf(It.SubItems(1) = "Non", False, True)
+        Me.PopupMenu Me.mnuPopUp
+    End If
+End Sub
+
+Private Sub mnuSub_Click()
+'change le check
+    If It Is Nothing Then Exit Sub
+    
+    Me.mnuSub.Checked = Not (Me.mnuSub.Checked)
+    It.SubItems(1) = IIf(Me.mnuSub.Checked, "Oui", "Non")
+End Sub
+
+Private Sub Option1_Click(Index As Integer)
+    chkSize.Enabled = Option1(0).Value
+    chkSize.Value = 0
+    chkDate.Enabled = Option1(0).Value
+    chkDate.Value = 0
+    If Option1(0).Value = False Then
+        cbOpSize.Enabled = False
+        cbOpDate.Enabled = False
+        txtDate.Enabled = False
+        txtSize.Enabled = False
+        cmdDate.Enabled = False
+        cdUnit.Enabled = False
+        cbDateType.Enabled = False
+    End If
 End Sub
 
 Private Sub txtDate_Change()
@@ -523,3 +610,275 @@ End Sub
 Private Sub cdUnit_Click()
     Call CheckSearch 'vérifie qu'une recherche est possible
 End Sub
+Private Sub cbDateType_Click()
+    Call CheckSearch 'vérifie qu'une recherche est possible
+End Sub
+
+'=======================================================
+'effectue la recherche
+'=======================================================
+Private Sub LaunchSearch(ByVal tMet As TYPE_OF_FILE_SEARCH)
+Dim s() As FILE_SEARCH_RESULT
+Dim i As Long
+Dim x As Long
+Dim lC As Long
+
+    'efface le lv de resultats
+    LVres.ListItems.Clear
+    Frame3.Caption = "Résultats"
+    
+    Frame1(0).Enabled = False
+    Frame1(1).Enabled = False
+    Frame2.Enabled = False
+    cmdSave.Enabled = False
+    cmdGo.Enabled = False
+    cmdQuit.Caption = "Annuler"
+    bStop = False
+    DoEvents    '/!\DO NOT REMOVE
+
+    If tMet = [Recherche de fichiers] Then
+        'alors recherche par nom de fichier
+        
+        '//recupère les infos sur le fichier à rechercher
+        'on calcule la taille du fichier à rechercher
+        If chkSize.Value Then
+            dblSize = Abs(Val(txtSize.Text))
+            If cdUnit.Text = "Ko" Then dblSize = dblSize * 1024
+            If cdUnit.Text = "Mo" Then dblSize = (dblSize * 1024) * 1024
+            If cdUnit.Text = "Go" Then dblSize = ((dblSize * 1024) * 1024) * 1024
+        End If
+        
+        'on calcule sa date
+        curDate = DateString2Currency(txtDate.Text)
+                
+        Me.Caption = "Indexation des fichiers..."
+        
+        '//indexe les fichiers
+        'contiendra de 1 à ubound une liste de fichiers
+        ReDim s(LV.ListItems.Count)
+        
+        With Me.pgb
+            .Min = 0
+            .Max = LV.ListItems.Count
+            .Value = 0
+        End With
+        'indexation des fichiers
+        For x = LV.ListItems.Count To 1 Step -1
+            Call cFile.GetFolderFiles(LV.ListItems.Item(x).Text, s(x).sF(), _
+                IIf(LV.ListItems.Item(x).SubItems(1) = "Oui", True, False))
+                Me.pgb.Value = LV.ListItems.Count - x + 1
+                If bStop Then GoTo GStop
+            DoEvents
+        Next x
+        
+        
+        '//recherche dans les fichiers indexés
+        Me.Caption = "Recherche de fichiers"
+            
+        lC = 0
+        'compte le nombre de fichiers
+        For x = 1 To UBound(s())
+            lC = lC + UBound(s(x).sF())
+        Next x
+        With Me.pgb
+            .Max = lC
+            .Min = 0
+            .Value = 0
+        End With
+
+        'teste chaque élément
+        lC = 0
+        LVres.Visible = False
+        For x = 1 To UBound(s())
+            For i = 1 To UBound(s(x).sF())
+                If IsOk(s(x).sF(i)) Then
+                    'on ajoute
+                    LVres.ListItems.Add Text:=s(x).sF(i)
+                End If
+                lC = lC + 1
+                If (lC Mod 200) = 0 Then
+                    DoEvents   'rend la main
+                    pgb.Value = lC
+                End If
+                If bStop Then GoTo GStop
+            Next i
+        Next x
+        pgb.Value = pgb.Max
+        Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " résultat(s)"
+                
+
+    ElseIf tMet = [Recherche de dossiers] Then
+        'alors recherche par nom de dossier
+        Me.Caption = "Indexation des dossiers..."
+        
+        '//indexe les dossiers
+        'contiendra de 1 à ubound une liste de fichiers
+        ReDim s(LV.ListItems.Count)
+        
+        With Me.pgb
+            .Min = 0
+            .Max = LV.ListItems.Count
+            .Value = 0
+        End With
+        'indexation des dossiers
+        For x = LV.ListItems.Count To 1 Step -1
+            Call cFile.EnumFolders(LV.ListItems.Item(x).Text, s(x).sF(), True, _
+                IIf(LV.ListItems.Item(x).SubItems(1) = "Oui", True, False))
+                Me.pgb.Value = LV.ListItems.Count - x + 1
+                If bStop Then GoTo GStop
+            DoEvents
+        Next x
+        
+        
+        '//recherche dans les dossiers indexés
+        Me.Caption = "Recherche de fichiers"
+        
+        lC = 0
+        'compte le nombre de dossiers
+        For x = 1 To UBound(s())
+            lC = lC + UBound(s(x).sF())
+        Next x
+        With Me.pgb
+            .Max = lC
+            .Min = 0
+            .Value = 0
+        End With
+
+        'teste chaque élément
+        lC = 0
+        LVres.Visible = False
+        For x = 1 To UBound(s())
+            For i = 1 To UBound(s(x).sF())
+                If IsOk(s(x).sF(i)) Then
+                    'on ajoute
+                    LVres.ListItems.Add Text:=s(x).sF(i)
+                End If
+                lC = lC + 1
+                If (lC Mod 200) = 0 Then
+                    DoEvents   'rend la main
+                    pgb.Value = lC
+                End If
+                If bStop Then GoTo GStop
+            Next i
+        Next x
+        pgb.Value = pgb.Max
+        Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " résultat(s)"
+        
+    Else
+        'alors recherche dans le contenu des fichiers
+        
+        
+        
+        
+    End If
+GStop:
+    Frame1(0).Enabled = True
+    Frame1(1).Enabled = True
+    Frame2.Enabled = True
+    cmdSave.Enabled = True
+    cmdGo.Enabled = True
+    cmdQuit.Caption = "Quitter"
+    LVres.Visible = True
+End Sub
+
+'=======================================================
+'détermine si le fichier est OK pour la recherche
+'=======================================================
+Private Function IsOk(ByVal sFile As String) As Boolean
+Dim l As Long
+Dim l2 As Long
+Dim Ret As Long
+Dim curSize As Currency
+Dim curDateReal As Currency
+
+    IsOk = True
+    
+    'vérifie tout d'abord que le nom du fichier est OK
+    If chkName.Value Then
+        
+        'si pas de texte à chercher, renvoie tous les fichiers
+        If txtName.Text = vbNullString Then GoTo NoNameToS
+        
+        If chkCasse.Value Then l = vbBinaryCompare Else l = vbTextCompare
+        
+        If InStr(1, cFile.GetFileFromPath(sFile), txtName.Text, l) = 0 Then
+            IsOk = False
+            Exit Function
+        End If
+    End If
+    
+NoNameToS:
+    'on continue la recherche
+    If chkSize.Value Then
+        'alors on doit récupérer la taille du fichier
+        curSize = cFile.GetFileSize(sFile)
+        
+        If cbOpSize.ListIndex = 2 Then
+            '<
+            If curSize >= dblSize Then
+                IsOk = False
+                Exit Function
+            End If
+        ElseIf cbOpSize.ListIndex = 1 Then
+            '>
+            If curSize <= dblSize Then
+                IsOk = False
+                Exit Function
+            End If
+        ElseIf cbOpSize.ListIndex = 0 Then
+            '=
+            If curSize <> dblSize Then
+                IsOk = False
+                Exit Function
+            End If
+        ElseIf cbOpSize.ListIndex = 4 Then
+            '<=
+            If curSize > dblSize Then
+                IsOk = False
+                Exit Function
+            End If
+        ElseIf cbOpSize.ListIndex = 3 Then
+            '>=
+            If curSize < dblSize Then
+                IsOk = False
+                Exit Function
+            End If
+        End If
+    End If
+    
+    'continue la recherche
+    If chkDate.Value Then
+    
+        '0==> creation
+        '1==> dernier accès
+        '2==> dernière modification
+        l2 = cbOpDate.ListIndex
+        
+        'récupère la date en Currency
+        curDateReal = cFile.GetFileDate(sFile, l2, True)
+        
+        If curDateReal = 0 Then
+            'date inaccessible
+            IsOk = False
+            Exit Function
+        End If
+        
+        'compare avec la date à rechercher
+        '-1==> curDate < curDateReal
+        '0 ==> curDate = curDateReal
+        '1 ==> curDate > curDateReal
+        Ret = CompareFileTime(curDate, curDateReal)
+        
+        If Ret = 0 Then
+            If (l2 = 0) Or (l2 = 3) Or (l2 = 4) Then Exit Function
+        ElseIf Ret = -1 Then
+            If (l2 = 2) Or (l2 = 4) Then Exit Function
+        Else
+            If (l2 = 1) Or (l2 = 3) Then Exit Function
+        End If
+        
+        'si on est là, c'est que la comparaison n'est pas bonne
+        IsOk = False
+    End If
+    
+End Function

@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' File Renamer VB (part of Hex Editor VB)
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' An Windows utility which allows to rename lots of file (part of Hex Editor VB)
 '
@@ -38,22 +38,22 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-----------------------------------------------
+'=======================================================
 '//CLASSE DE RECUPERATION DES TAGS D'UN MP3
-'-----------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================--------
 'PUBLIC PROCEDURES & FUNCTIONS
-'-------------------------------------------------------
+'=======================================================--------
 
-'-------------------------------------------------------
+'=======================================================--------
 'récupération des tags d'un fichier mp3 v1
-'-------------------------------------------------------
+'=======================================================--------
 Public Function GetTagsV1(ByVal mp3File As String) As clsTag
 Dim AllTag As String * 127
 Dim lFile As Byte
@@ -121,13 +121,13 @@ Dim sYear As String
 End Function
 
 
-'-------------------------------------------------------
+'=======================================================--------
 'PRIVATE PROCEDURES & FUNCTIONS
-'-------------------------------------------------------
+'=======================================================--------
 
-'-------------------------------------------------------
+'=======================================================--------
 'formatage de string
-'-------------------------------------------------------
+'=======================================================--------
 Private Function FormatedString(ByVal sString As String) As String
 
     If InStr(sString, vbNullChar) Then _
@@ -137,9 +137,9 @@ Private Function FormatedString(ByVal sString As String) As String
     FormatedString = Trim$(FormatedString)
 End Function
 
-'-------------------------------------------------------
+'=======================================================--------
 'convertit un genre (byte) en string
-'-------------------------------------------------------
+'=======================================================--------
 Private Function Genre2String(ByVal bytGenre As Byte) As String
     Select Case bytGenre
         Case 0

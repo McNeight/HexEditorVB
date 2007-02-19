@@ -832,12 +832,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -860,17 +860,17 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 'FORM D'OUVERTURE D'UN DISQUE EN ACCES DIRECT
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'VARIABLES PRIVEES
-'-------------------------------------------------------
+'=======================================================
 Private lBgAdress As Long   'offset de départ de page
 Private lEdAdress As Long   'offset de fin de page
 Private NumberPerPage As Long   'nombre de lignes visibles par Page
@@ -1006,7 +1006,7 @@ End Sub
 
 Private Sub lstSignets_KeyDown(KeyCode As Integer, Shift As Integer)
 'vire les signets si touche suppr
-Dim R As Long
+Dim r As Long
 
     mouseUped = True
     
@@ -1014,12 +1014,12 @@ Dim R As Long
         'touche suppr
         If lstSignets.SelectedItem.Selected Then
             'alors on supprime quelque chose
-            R = MsgBox("Supprimer les signets ?", vbInformation + vbYesNo, "Attention")
-            If R <> vbYes Then Exit Sub
+            r = MsgBox("Supprimer les signets ?", vbInformation + vbYesNo, "Attention")
+            If r <> vbYes Then Exit Sub
         
-            For R = lstSignets.ListItems.Count To 1 Step -1
-                If lstSignets.ListItems.Item(R).Selected Then lstSignets.ListItems.Remove R
-            Next R
+            For r = lstSignets.ListItems.Count To 1 Step -1
+                If lstSignets.ListItems.Item(r).Selected Then lstSignets.ListItems.Remove r
+            Next r
         End If
     End If
         
@@ -1174,16 +1174,16 @@ Private Sub Form_Resize()
             
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'permet de lancer le Resize depuis uen autre form
-'-------------------------------------------------------
+'=======================================================
 Public Sub ResizeMe()
     Form_Resize
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'affiche le path du fichier sélectionné dans la picturbox
-'-------------------------------------------------------
+'=======================================================
 Private Sub DisplayPath()
 Dim s As String
 
@@ -1204,12 +1204,12 @@ Dim s As String
     pctPath.Print s
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'affiche dans le HW les valeurs hexa qui correspondent à la partie
 'du fichier qui est visualisée
-'-------------------------------------------------------
+'=======================================================
 Private Sub OpenDrive()
-Dim R() As Byte, RB() As Byte, RA() As Byte, RD() As Byte, RT() As Byte
+Dim r() As Byte, RB() As Byte, RA() As Byte, RD() As Byte, RT() As Byte
 Dim Offset As Currency, Sector As Currency
 Dim x As Long, s As String
 Dim y As Long, h As Long
@@ -1220,7 +1220,7 @@ Dim lDecal As Long
     On Error GoTo ErrGestion
     
     'initialise tous les tableaux de bytes
-    ReDim R(0): ReDim RB(0): ReDim RA(0): ReDim RD(0): ReDim RT(0)
+    ReDim r(0): ReDim RB(0): ReDim RA(0): ReDim RD(0): ReDim RT(0)
     
     lDisplayableBytes = HW.NumberPerPage * 16 'nombres d'éléments affichables
     Offset = HW.FirstOffset 'premier offset visualisé
@@ -1243,7 +1243,7 @@ Dim lDecal As Long
     offsetFinSectorAft = offsetFinSectorVis + lBytesPerSector
     
     'obtient les bytes du secteur visualisé en partie
-    DirectRead strDrive, Sector, lBytesPerSector, lBytesPerSector, R()
+    DirectRead strDrive, Sector, lBytesPerSector, lBytesPerSector, r()
     
     'créé la liste RD() des bytes visualisés à partir des 3 secteurs dont ont a les bytes
     ReDim RD(lDisplayableBytes)     'redimensionne le tableau au nombre de bytes qui vont être affichés
@@ -1258,14 +1258,14 @@ Dim lDecal As Long
                 RT(x) = RB(x)
             Else
                 'alors on pioche dans le secteur 2 (toujours lu)
-                RT(x) = R(x)
+                RT(x) = r(x)
             End If
         Next x
         If UBound(RT) > 512 Then
             For x = 512 To 1023
                 If UBound(RB) > 0 Then
                     'alors on pioche dans le secteur 2
-                    RT(x) = R(x - 512)
+                    RT(x) = r(x - 512)
                 Else
                     'alors on pioche dans le secteur 3
                     RT(x) = RA(x - 512)
@@ -1307,9 +1307,9 @@ ErrGestion:
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie si l'offset contient une modification
-'-------------------------------------------------------
+'=======================================================
 Private Function IsOffsetModified(ByVal lOffset As Long, ByRef lPlace As Long) As Boolean
 Dim x As Long
     
@@ -1327,9 +1327,9 @@ Dim x As Long
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie si la case a été modifiée ou non
-'-------------------------------------------------------
+'=======================================================
 Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Long) As Boolean
 Dim x As Long
     
@@ -1346,9 +1346,9 @@ Dim x As Long
     Next x
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le nom du fichier à ouvrir, et l'ouvre
-'-------------------------------------------------------
+'=======================================================
 Public Sub GetDrive(ByVal sDrive As String)
 Dim l As Currency
 
@@ -1602,7 +1602,7 @@ End Sub
 
 Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As ItemElement)
 Dim s As String
-Dim R As Long
+Dim r As Long
 
     'popup menu
     If Button = 2 Then
@@ -1665,11 +1665,11 @@ Dim R As Long
             Wend
             
             'enlève du listview
-            For R = lstSignets.ListItems.Count To 1 Step -1
-                If lstSignets.ListItems.Item(R).Text = CStr(HW.Item.Offset) Then
-                    lstSignets.ListItems.Remove R
+            For r = lstSignets.ListItems.Count To 1 Step -1
+                If lstSignets.ListItems.Item(r).Text = CStr(HW.Item.Offset) Then
+                    lstSignets.ListItems.Remove r
                 End If
-            Next R
+            Next r
             
             Refresh
         End If
@@ -1721,7 +1721,7 @@ End Sub
 Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 Dim tLst As ListItem
 Dim s As String
-Dim R As Long
+Dim r As Long
 
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
@@ -1740,8 +1740,8 @@ Dim R As Long
         Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         
-        R = MsgBox("Supprimer le signet " & tLst.Text & " ?", vbInformation + vbYesNo, "Attention")
-        If R <> vbYes Then Exit Sub
+        r = MsgBox("Supprimer le signet " & tLst.Text & " ?", vbInformation + vbYesNo, "Attention")
+        If r <> vbYes Then Exit Sub
         
         'on supprime
         HW.RemoveSignet Val(tLst.Text)
@@ -1763,10 +1763,10 @@ Private Sub TB_Click()
     End If
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'change la valeur du VS
 'public, car cette sub est aussi appelée pour le refresh
-'-------------------------------------------------------
+'=======================================================
 Public Sub VS_Change(Value As Currency)
 Dim lPages As Long
 
@@ -1796,9 +1796,9 @@ ErrGestion:
     clsERREUR.AddError "diskPfm.VS_Change", True
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute une valeur changée dans la liste des valeurs changées
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddChange(ByVal lOffset As Long, ByVal lCol As Long, ByVal sString As String)
    
     'redimensionne le tableau
@@ -1815,9 +1815,9 @@ Public Sub AddChange(ByVal lOffset As Long, ByVal lCol As Long, ByVal sString As
     Call Me.VS_Change(VS.Value)
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'procède à la sauvegarde du fichier avec changements à l'emplacement sFile2
-'-------------------------------------------------------
+'=======================================================
 Public Function GetNewFile(ByVal sFile2 As String) As String
 Dim x As Long, s As String
 Dim tmpText As String
@@ -1888,25 +1888,25 @@ ErrGestion:
     clsERREUR.AddError "diskPfm.GetNewFile", True
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'fonction ayant uniquement pour but d'exister, on l'appelle à partir d'une
 'autre fonction pour tester si frmcontent.activeform est
 'une form d'édition mémoire, edition de fichier ou de disque
-'-------------------------------------------------------
+'=======================================================
 Public Function Useless() As String
     Useless = "Disk"
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie le cDrive du disque ouvert par cette form
-'-------------------------------------------------------
+'=======================================================
 Public Function GetDriveInfos() As clsDrive
     Set GetDriveInfos = cDrive
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'changement des valeurs dans le FrameData
-'-------------------------------------------------------
+'=======================================================
 Private Sub txtValue_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
 'change la valeur de l'item sélectionné du HW de frmcontent.activeform (i_tem)
 Dim I_tem As ItemElement
@@ -1944,9 +1944,9 @@ Dim I_tem As ItemElement
         
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'affiche les infos clusters du fichier sFile
-'-------------------------------------------------------
+'=======================================================
 Private Sub DisplayClustersInfos(ByVal sFile As String)
 Dim F As FileClusters
 Dim l As Long
@@ -1965,9 +1965,9 @@ Dim l As Long
     End If
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'des données ont étés modifiées ==> on sauvegarde ces changements
-'-------------------------------------------------------
+'=======================================================
 Private Sub ModifyData(ByVal sNewChar As String)
 Dim sActualString As String
 Dim iCur As Currency
@@ -2006,9 +2006,9 @@ Dim I_tem As ItemElement
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajout d 'un élément à l'historique
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddHistoFrm(ByVal tUndo As UNDO_TYPE, Optional ByVal sData1 As String, _
     Optional ByVal sData2 As String, Optional ByVal curData1 As Currency, _
     Optional ByVal curData2 As Currency, Optional ByVal bytData1 As Byte, _
@@ -2018,9 +2018,9 @@ Public Sub AddHistoFrm(ByVal tUndo As UNDO_TYPE, Optional ByVal sData1 As String
     lstHisto.ListItems.Item(lstHisto.ListItems.Count).Selected = True
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajout d 'un élément à l'historique
-'-------------------------------------------------------
+'=======================================================
 Public Sub UndoM()
     'On Error Resume Next
     With lstHisto
@@ -2037,9 +2037,9 @@ Public Sub UndoM()
     Call ModifyHistoEnabled 'vérifie que c'est Ok pour les enabled
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajout d 'un élément à l'historique
-'-------------------------------------------------------
+'=======================================================
 Public Sub RedoM()
     On Error Resume Next
     With lstHisto
@@ -2060,9 +2060,9 @@ Public Sub RedoM()
     Call ModifyHistoEnabled 'vérifie que c'est Ok pour les enabled
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'refresh simple du HW
-'-------------------------------------------------------
+'=======================================================
 Public Sub RefreshHW()
     Call VS_Change(VS.Value)
 End Sub

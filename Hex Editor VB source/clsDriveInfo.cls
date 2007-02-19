@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,20 +39,20 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//PERSONNAL TYPE
 'INFOS SUR UN DRIVE
-'-------------------------------------------------------
+'=======================================================
 
 
-'-------------------------------------------------------
+'=======================================================
 'ENUMS
-'-------------------------------------------------------
+'=======================================================
 Public Enum PARTITION_TYPE
     PARTITION_ENTRY_UNUSED = &H0
     PARTITION_FAT_12 = &H1
@@ -101,9 +101,9 @@ Public Enum MEDIA_TYPE
 End Enum
 
 
-'-------------------------------------------------------
+'=======================================================
 'variables de la structure clsDriveInfo
-'-------------------------------------------------------
+'=======================================================
 Public Cylinders As Currency
 Public MediaType As MEDIA_TYPE
 Public TracksPerCylinder As Long

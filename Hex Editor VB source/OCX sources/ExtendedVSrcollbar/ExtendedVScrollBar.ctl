@@ -21,12 +21,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -49,12 +49,12 @@ Attribute VB_Exposed = True
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//SCROLLBAR PERMETTANT D'ALLER A PLUS DE 2^15 (922337203685477)
 '
 '/!\ NE PAS MODIFIER LES VALEURS SMALLCHANGE ET LARGECHANGE
@@ -65,12 +65,12 @@ Option Explicit
 'contexte, il sera nécessaire d'effectuer des vérifications
 'plus poussées dans les Property Let des propriétés Min, Max et Value
 'pour prévenir tout bug de la part d'un utilisateur
-'-------------------------------------------------------
+'=======================================================
 
 
-'-------------------------------------------------------
+'=======================================================
 'VARIABLES PRIVEES
-'-------------------------------------------------------
+'=======================================================
 Private lMin As Currency
 Private lMax As Currency
 Private lValue As Currency
@@ -81,9 +81,9 @@ Public Event Change(Value As Currency)
 Private bRecursive As Boolean   'pour éviter des boucles lors de l'update
 
 
-'-------------------------------------------------------
+'=======================================================
 'USERCONTROL SUBS
-'-------------------------------------------------------
+'=======================================================
 Private Sub UserControl_InitProperties()
     'valeurs par défaut
     Me.Min = 0
@@ -116,9 +116,9 @@ Private Sub UserControl_Resize()
 End Sub
 
 
-'-------------------------------------------------------
+'=======================================================
 'PROPERTIES
-'-------------------------------------------------------
+'=======================================================
 Public Property Get SmallChange() As Currency: SmallChange = lSmallChange: End Property
 Public Property Let SmallChange(SmallChange As Currency): lSmallChange = SmallChange: RefreshVS: End Property
 Public Property Get LargeChange() As Currency: LargeChange = lLargeChange: End Property
@@ -132,9 +132,9 @@ Public Property Let Value(Value As Currency): lValue = Value: RefreshVS: lOldVal
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'rafraichit le VRAI scrollbar
-'-------------------------------------------------------
+'=======================================================
 Private Sub RefreshVS()
 'rafraichit le VS posé dans le UserControl
 Dim lPercent As Double
@@ -160,9 +160,9 @@ Dim VirtualRange As Currency
     RaiseEvent Change(lValue)
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'calcule les nouvelles valeurs virtuelles
-'-------------------------------------------------------
+'=======================================================
 Private Sub VS_Change()
 Dim lPercent As Double
 Dim RealRange As Currency
@@ -228,9 +228,9 @@ Private Sub VS_Scroll()
     Call VS_Change
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'vérfie que les valeurs du usercontrol sont acceptables
-'-------------------------------------------------------
+'=======================================================
 Private Sub CheckValues()
 Dim l As Currency
 

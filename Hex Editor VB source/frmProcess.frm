@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.Form frmProcess 
    Caption         =   "Gestionnaire de processus"
    ClientHeight    =   5415
@@ -199,12 +199,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -227,14 +227,14 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 'FORM DE GESTION SIMPLIFIEE DES PROCESSUS
-'-------------------------------------------------------
+'=======================================================
 
 
 'classe de gestion des processus
@@ -325,7 +325,7 @@ Dim s As String
         LV_Click
         
         'affiche le popup menu
-        Me.PopupMenu Me.mnuPopup
+        Me.PopupMenu Me.mnuPopUp
     End If
         
 End Sub
@@ -515,9 +515,9 @@ Private Sub Timer1_Timer()
     RefreshProcList
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'rafraichissement de la priorité du SelectedItem
-'-------------------------------------------------------
+'=======================================================
 Private Sub RefreshPriority()
 Dim p As ProcessItem
 
@@ -534,9 +534,9 @@ Dim p As ProcessItem
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'rafraichissement du LV
-'-------------------------------------------------------
+'=======================================================
 Private Sub RefreshProcList()
 Dim p() As ProcessItem
 Dim lCount As Long
@@ -626,9 +626,9 @@ ErrGestion:
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'détermine si une clé existe deja ou pas dans le IMG
-'-------------------------------------------------------
+'=======================================================
 Private Function DoesKeyExist(ByVal sKey As String) As Boolean
 'renvoie si la clé existe ou non deja dans IMG
 Dim l As Long
@@ -647,9 +647,9 @@ ErrGest:
 'la clé n'existait pas
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute une icone au IMG, en fonction du fichier (obtient l'icone de l'executable)
-'-------------------------------------------------------
+'=======================================================
 Private Function AddIconToIMG(ByVal sFile As String, ByVal sKey As String) As Boolean
 Dim lstImg As ListImage
 Dim hIcon As Long

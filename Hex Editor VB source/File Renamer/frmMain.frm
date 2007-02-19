@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.1#0"; "FileView_OCX.ocx"
 Begin VB.Form frmMain 
    Caption         =   "File Renamer VB"
@@ -848,36 +848,43 @@ Begin VB.Form frmMain
          NumTabs         =   7
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Style"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Compteur"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Remplacer"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Base"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Audio"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab6 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Video"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab7 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Image"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -1132,12 +1139,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' File Renamer VB (part of Hex Editor VB)
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' An Windows utility which allows to rename lots of file (part of Hex Editor VB)
 '
@@ -1159,14 +1166,14 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-----------------------------------------------
+'=======================================================
 'ENUM
-'-----------------------------------------------
+'=======================================================
 Public Enum TYPE_OF_MODIFICATION
     Style = 1
     Compteur = 2
@@ -1738,14 +1745,14 @@ End Sub
 
 
 
-'-----------------------------------------------
+'=======================================================
 'PROCEDURE & FUNCTIONS
-'-----------------------------------------------
+'=======================================================
 
-'-----------------------------------------------
+'=======================================================
 'permet d'afficher dans txtproto le résultat final des modifications
 '/!\ n'affiche que les ajouts de string
-'-----------------------------------------------
+'=======================================================
 Private Sub DisplaySample()
 '
 End Sub

@@ -595,12 +595,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -623,20 +623,20 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 'FORM PERMETTANT DE CHANGER LES DATES D'UN FICHIER
-'-------------------------------------------------------
+'=======================================================
 
 Private mFile As clsFile
 
-'-------------------------------------------------------
+'=======================================================
 'attribution des dates spécifiées au Fichier (text1.text)
-'-------------------------------------------------------
+'=======================================================
 Private Sub AttribDates()
 Dim modif_Date As Date
 Dim lngHandle As Long
@@ -758,9 +758,9 @@ Private Sub cmdRefresh_Click()
     Call ChangeDates
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'récupère les dates et change les controles
-'-------------------------------------------------------
+'=======================================================
 Private Sub ChangeDates()
     Set mFile = cFile.GetFile(txtFile.Text) 'récupère le fichier
     
@@ -778,9 +778,9 @@ Private Sub ChangeDates()
     cmdDefaut_Click (0): cmdDefaut_Click (1): cmdDefaut_Click (2)
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'récupère le fichier
-'-------------------------------------------------------
+'=======================================================
 Public Sub GetFile(ByVal tFile As clsFile)
     Set mFile = tFile
     Call ChangeDates

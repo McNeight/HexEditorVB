@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' File Renamer VB (part of Hex Editor VB)
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' An Windows utility which allows to rename lots of file (part of Hex Editor VB)
 '
@@ -38,15 +38,15 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
 
-'-----------------------------------------------
+'=======================================================
 'VARIABLES PUBLIQUES DE LA CLASSE
-'-----------------------------------------------
+'=======================================================
 Public strFile As String
 Public lngWidth As Long
 Public lngHeight As Long
@@ -64,14 +64,14 @@ Public lngMinute As Long
 Public lngSecond As Long
 
 
-'-----------------------------------------------
+'=======================================================
 'CONSTANTES
-'-----------------------------------------------
+'=======================================================
 Private Const OF_SHARE_DENY_WRITE               As Long = &H20
 
-'-----------------------------------------------
+'=======================================================
 'TYPES
-'-----------------------------------------------
+'=======================================================
 Private Type AVIFileInfo
     dwMaxBytesPerSec As Long
     dwFlags As Long
@@ -87,9 +87,9 @@ Private Type AVIFileInfo
     szFileType As String * 64
 End Type
 
-'-----------------------------------------------
+'=======================================================
 'APIS
-'-----------------------------------------------
+'=======================================================
 Private Declare Function AVIFileOpen Lib "avifil32" Alias "AVIFileOpenA" (ppfile As Long, ByVal szFile As String, ByVal mode As Long, pclsidHandler As Any) As Long
 Private Declare Function AVIFileRelease Lib "avifil32" (ByVal pfile As Long) As Long
 Private Declare Function AVIFileInfo Lib "avifil32" Alias "AVIFileInfoA" (ByVal pfile As Long, pfi As AVIFileInfo, ByVal lSize As Long) As Long
@@ -97,13 +97,13 @@ Private Declare Sub AVIFileInit Lib "avifil32" ()
 Private Declare Sub AVIFileExit Lib "avifil32" ()
 
 
-'-----------------------------------------------
+'=======================================================
 'PROCEDURES/FUNCTIONS PUBLIQUES
-'-----------------------------------------------
+'=======================================================
 
-'-----------------------------------------------
+'=======================================================
 'récupère les infos
-'-----------------------------------------------
+'=======================================================
 Public Sub GetVideoInfo()
 Dim hFile As Long
 Dim AviInfo As AVIFileInfo
@@ -140,9 +140,9 @@ Dim AviInfo As AVIFileInfo
     AVIFileExit
 End Sub
 
-'-----------------------------------------------
+'=======================================================
 'formate la durée
-'-----------------------------------------------
+'=======================================================
 Private Function FormatedDuration() As String
 Dim s As String
     
@@ -165,9 +165,9 @@ Dim s As String
     FormatedDuration = s
 End Function
 
-'-------------------------------------------------------
+'=======================================================--------
 'formatage de string
-'-------------------------------------------------------
+'=======================================================--------
 Private Function FormatedString(ByVal sString As String) As String
 
     If InStr(sString, vbNullChar) Then _

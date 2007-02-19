@@ -1,10 +1,10 @@
 Attribute VB_Name = "mdlFusionCut"
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -27,20 +27,20 @@ Attribute VB_Name = "mdlFusionCut"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//MODULE DE GESTION DE LA DECOUPE/FUSION
-'-------------------------------------------------------
+'=======================================================
 
 Public lBufSize As Long     'taille du buffer
 
-'-------------------------------------------------------
+'=======================================================
 'fonction de découpe de fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function CutFile(ByVal sFile As String, ByVal sFolderOut As String, tMethode As CUT_METHOD) As Long
 Dim lFileCount As Long
 Dim lLastFileSize As Currency
@@ -97,7 +97,7 @@ Dim k2 As Currency
     End If
     
     'règle la progressbar
-    With frmCut.PGB
+    With frmCut.pgb
         .Min = 0
         .Value = 0
     End With
@@ -120,7 +120,7 @@ Dim k2 As Currency
         If tMethode.lParam <= lBufSize Then
             'alors tout rentre dans un seul buffer
             
-            frmCut.PGB.Max = lFileCount
+            frmCut.pgb.Max = lFileCount
             
             k2 = lFileCount - 1
             k2 = k2 * tMethode.lParam
@@ -141,7 +141,7 @@ Dim k2 As Currency
                 'on écrit dans le fichier résultat
                 WriteBytesToFile sFic, sBuf, 0
                 
-                frmCut.PGB.Value = i
+                frmCut.pgb.Value = i
                 DoEvents
             Next i
             
@@ -157,7 +157,7 @@ Dim k2 As Currency
             'on écrit dans le fichier résultat
             WriteBytesToFile sFic, sBuf, 0
             
-            frmCut.PGB.Value = frmCut.PGB.Max
+            frmCut.pgb.Value = frmCut.pgb.Max
 
         Else
             'alors plusieurs buffer
@@ -165,7 +165,7 @@ Dim k2 As Currency
             'calcule le nombre de buffers nécessaires pour chaque fichier
             lBuf2 = Int(tMethode.lParam / lBufSize) + IIf(Mod2(tMethode.lParam, lBufSize) = 0, 0, 1)
             
-            frmCut.PGB.Max = lFileCount * lBuf2
+            frmCut.pgb.Max = lFileCount * lBuf2
             k2 = lFileCount - 1
             k2 = k2 * tMethode.lParam
             
@@ -188,7 +188,7 @@ Dim k2 As Currency
                     'on écrit dans le fichier résultat
                     WriteBytesToFileEnd sFic, sBuf ', 5242880 * (j - 1)
                     
-                    frmCut.PGB.Value = frmCut.PGB.Value + 1: DoEvents
+                    frmCut.pgb.Value = frmCut.pgb.Value + 1: DoEvents
 
                 Next j
                 
@@ -198,7 +198,7 @@ Dim k2 As Currency
                 'on écrit dans le fichier résultat
                 WriteBytesToFileEnd sFic, sBuf ', 5242880 * (lBuf2 - 1)
                 
-                frmCut.PGB.Value = frmCut.PGB.Value + 1: DoEvents
+                frmCut.pgb.Value = frmCut.pgb.Value + 1: DoEvents
             
             Next i
 
@@ -227,7 +227,7 @@ Dim k2 As Currency
             'on écrit dans le fichier résultat
             WriteBytesToFileEnd sFic, sBuf ', 0
             
-            frmCut.PGB.Value = frmCut.PGB.Max
+            frmCut.pgb.Value = frmCut.pgb.Max
   
         End If
         
@@ -256,7 +256,7 @@ Dim k2 As Currency
         If lNormalSize <= lBufSize Then
             'alors tout rentre dans un seul buffer
             
-            frmCut.PGB.Max = lFileCount
+            frmCut.pgb.Max = lFileCount
             k2 = lFileCount - 1
             k2 = k2 * lNormalSize
             
@@ -276,7 +276,7 @@ Dim k2 As Currency
                 'on écrit dans le fichier résultat
                 WriteBytesToFile sFic, sBuf, 0
                 
-                frmCut.PGB.Value = i
+                frmCut.pgb.Value = i
                 DoEvents
             Next i
             
@@ -292,7 +292,7 @@ Dim k2 As Currency
             'on écrit dans le fichier résultat
             WriteBytesToFile sFic, sBuf, 0
             
-            frmCut.PGB.Value = frmCut.PGB.Max
+            frmCut.pgb.Value = frmCut.pgb.Max
 
         Else
             'alors plusieurs buffer
@@ -300,7 +300,7 @@ Dim k2 As Currency
             'calcule le nombre de buffers nécessaires pour chaque fichier
             lBuf2 = Int(lNormalSize / lBufSize) + IIf(Mod2(lNormalSize, lBufSize) = 0, 0, 1)
             
-            frmCut.PGB.Max = lFileCount * lBuf2
+            frmCut.pgb.Max = lFileCount * lBuf2
             k2 = lFileCount - 1
             k2 = k2 * lNormalSize
             
@@ -325,7 +325,7 @@ Dim k2 As Currency
                     'on écrit dans le fichier résultat
                     WriteBytesToFileEnd sFic, sBuf ', 5242880 * (j - 1)
                     
-                    frmCut.PGB.Value = frmCut.PGB.Value + 1: DoEvents
+                    frmCut.pgb.Value = frmCut.pgb.Value + 1: DoEvents
                 Next j
 
                 'le dernier buffer
@@ -333,7 +333,7 @@ Dim k2 As Currency
 
                 'on écrit dans le fichier résultat
                 WriteBytesToFileEnd sFic, sBuf ', 5242880 * (lBuf2 - 1)
-                frmCut.PGB.Value = frmCut.PGB.Value + 1: DoEvents
+                frmCut.pgb.Value = frmCut.pgb.Value + 1: DoEvents
             Next i
 
             'recalcule le nombre de buffers dans le dernier fichier
@@ -361,7 +361,7 @@ Dim k2 As Currency
             'on écrit dans le fichier résultat
             WriteBytesToFileEnd sFic, sBuf ', 0
             
-            frmCut.PGB.Value = frmCut.PGB.Max
+            frmCut.pgb.Value = frmCut.pgb.Max
         End If
         
         
@@ -381,9 +381,9 @@ ErrGestion:
 End Function
 
 
-'-------------------------------------------------------
+'=======================================================
 'fonction de fusion de fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function PasteFile(ByVal sFileGroup As String, ByVal sFolderOut As String) As Long
 Dim lFileCount As Long
 Dim x As Long
@@ -433,7 +433,7 @@ Dim lTime As Long
         MsgBox "Le fichier groupeur est indisponible ou inexistant.", vbCritical, "Erreur critique"
     End If
 
-    With frmCut.PGB
+    With frmCut.pgb
         .Min = 0
         .Value = 0
     End With
@@ -462,14 +462,14 @@ Dim lTime As Long
     If cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1") <= lBufSize Then
         'alors tout rentre dans un buffer de 5Mo
     
-        frmCut.PGB.Max = lFileCount
-        frmCut.PGB.Value = 0
+        frmCut.pgb.Max = lFileCount
+        frmCut.pgb.Value = 0
         For i = 1 To lFileCount
             'écrit les bytes lus
             WriteBytesToFileEnd sFolderOut & "\" & sFileStr, cFile.LoadFileInString(cFile.GetFolderFromPath(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i)))
-            DoEvents: frmCut.PGB.Value = frmCut.PGB.Value + 1
+            DoEvents: frmCut.pgb.Value = frmCut.pgb.Value + 1
         Next i
-        frmCut.PGB.Value = frmCut.PGB.Max
+        frmCut.pgb.Value = frmCut.pgb.Max
         
     Else
     
@@ -478,7 +478,7 @@ Dim lTime As Long
         'détermine le nombre de buffers nécessaire
         lBuf2 = Int(cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1") / lBufSize) + IIf(Mod2(cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1"), lBufSize) = 0, 0, 1)
         
-        frmCut.PGB.Max = lFileCount * lBuf2
+        frmCut.pgb.Max = lFileCount * lBuf2
         
         For i = 1 To lFileCount - 1
         
@@ -492,7 +492,7 @@ Dim lTime As Long
                 'écrit les bytes dans le fichier résultat
                 WriteBytesToFileEnd sFolderOut & "\" & sFileStr, sBuf
                 
-                frmCut.PGB.Value = frmCut.PGB.Value + 1: DoEvents
+                frmCut.pgb.Value = frmCut.pgb.Value + 1: DoEvents
             Next j
             
             'le dernier buffer
@@ -502,7 +502,7 @@ Dim lTime As Long
             'écrit les bytes dans le fichier résultat
             WriteBytesToFileEnd sFolderOut & "\" & sFileStr, sBuf
             
-            frmCut.PGB.Value = frmCut.PGB.Value + 1
+            frmCut.pgb.Value = frmCut.pgb.Value + 1
             DoEvents
         Next i
         
@@ -525,7 +525,7 @@ Dim lTime As Long
         'écrit les bytes dans le fichier résultat
         WriteBytesToFileEnd sFolderOut & "\" & sFileStr, sBuf
         
-        frmCut.PGB.Value = frmCut.PGB.Max
+        frmCut.pgb.Value = frmCut.pgb.Max
         DoEvents
         
     End If
@@ -539,10 +539,10 @@ Dim lTime As Long
 ErrGestion:
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'effectue un modulo sans dépassement de capacité
 'très peu optimisé, mais utile pour les grandes valeurs de cur
-'-------------------------------------------------------
+'=======================================================
 Public Function Mod2(ByVal cur As Currency, lng As Long) As Currency
     Mod2 = cur - Int(cur / lng) * lng
 End Function

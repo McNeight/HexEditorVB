@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,21 +39,21 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//MODULE DE CLASSE PERMETTANT DE RECUPERER LES INFOS SUR LES FICHIERS
 '// by violent_ken
-'-------------------------------------------------------
+'=======================================================
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'CONSTANTES
-'-------------------------------------------------------
+'=======================================================
 Private Const GENERIC_READ                  As Long = &H80000000
 Private Const FILE_SHARE_READ               As Long = &H1
 Private Const FILE_SHARE_WRITE              As Long = &H2
@@ -85,9 +85,9 @@ Private Const FOF_SIMPLEPROGRESS            As Long = &H100&
 Private Const OFN_EXPLORER                  As Long = &H80000
 
 
-'-------------------------------------------------------
+'=======================================================
 'TYPES & ENUMS
-'-------------------------------------------------------
+'=======================================================
 Public Enum FILE_ATTRIBUTE
     FILE_ATTRIBUTE_ARCHIVE = &H20
     FILE_ATTRIBUTE_HIDDEN = &H2
@@ -264,11 +264,15 @@ Private Type OPENFILENAME
     lpfnHook As Long
     lpTemplateName As Long
 End Type
+Private Type LARGE_INTEGER
+    LowDWORD As Long
+    HighDWORD As Long
+End Type
 
 
-'-------------------------------------------------------
+'=======================================================
 'APIS
-'-------------------------------------------------------
+'=======================================================
 Private Declare Function SHFileOperation Lib "shell32.dll" Alias "SHFileOperationA" (lpFileOp As Fichier) As Long
 Private Declare Function SHGetSpecialFolderLocation Lib "shell32.dll" (ByVal hwndOwner As Long, ByVal nFolder As Long, pidl As ITEMIDLIST) As Long
 Private Declare Function SHGetPathFromIDList Lib "shell32.dll" Alias "SHGetPathFromIDListA" (ByVal pidl As Long, ByVal pszPath As String) As Long
@@ -314,17 +318,18 @@ Private Declare Function SHRunDialog Lib "shell32" Alias "#61" (ByVal hOwner As 
 Private Declare Function GetOpenFileName Lib "comdlg32.dll" Alias "GetOpenFileNameA" (pOpenfilename As OPENFILENAME) As Long
 Private Declare Function GetSaveFileName Lib "comdlg32.dll" Alias "GetSaveFileNameA" (pOpenfilename As OPENFILENAME) As Long
 Private Declare Sub CoTaskMemFree Lib "ole32.dll" (ByVal hMem As Long)
+Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
 
 
 
-'-------------------------------------------------------
+'=======================================================
 '//PUBLIC PROCEDURES & FUNCTIONS
-'-------------------------------------------------------
+'=======================================================
 
 
-'-------------------------------------------------------
+'=======================================================
 'liste les sous-dossiers contenus dans un dossier
-'-------------------------------------------------------
+'=======================================================
 Public Function GetSubFolders(ByVal sFolder As String, ByRef Folders() As String, Optional ByVal SubFolder As Boolean = True) As Long
 
     On Error Resume Next    'évite les erreurs si le tableau est vide
@@ -341,10 +346,10 @@ Public Function GetSubFolders(ByVal sFolder As String, ByRef Folders() As String
     End If
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'liste les fichiers contenus dans un dossier
 'de 1 à ubound
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFolderFiles(ByVal sFolder As String, Files() As String, Optional SubFolder As Boolean = True) As Long
 
     On Error Resume Next    'évite les erreurs si le tableau est vide
@@ -362,16 +367,16 @@ Public Function GetFolderFiles(ByVal sFolder As String, Files() As String, Optio
     End If
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'change l'attribut fichier/dossier
-'-------------------------------------------------------
+'=======================================================
 Public Function ChangeAttributes(ByVal sPath As String, lParam As FILE_ATTRIBUTE) As Long
     ChangeAttributes = SetFileAttributes(sPath, lParam)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'copie la string dans un fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function SaveStringInfile(ByVal sFile As String, ByVal sContenuFichier As String, Optional ByVal bDeleteActualFile As Boolean = False) As Long
 Dim lFile As Long
     
@@ -394,9 +399,9 @@ Dim lFile As Long
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'copie la string dans un fichier (type de donnée binaire)
-'-------------------------------------------------------
+'=======================================================
 Public Function SaveDATAinFile(ByVal sFile As String, ByVal sContenuFichier As String, Optional ByVal bDeleteActualFile As Boolean = False) As Long
 Dim lFile As Long
     
@@ -419,9 +424,9 @@ Dim lFile As Long
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient les infos sur un dossier
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFolder(ByVal sFolder As String) As clsFolder
 Dim tmp As clsFolder
 Dim lFolder As Long
@@ -459,9 +464,9 @@ ErrGestion:
     CloseHandle lFolder   'ferme le handle
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient les infos sur un fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFile(ByVal sFile As String) As clsFile
 Dim tmp As clsFile
 Dim lFile As Long
@@ -516,9 +521,48 @@ ErrGestion:
     CloseHandle lFile   'ferme le handle
 End Function
 
-'-------------------------------------------------------
+'=======================================================
+'obtient les infos sur un fichier de manière rapide (conçu pour la recherche de fichiers)
+'0==> creation
+'1==> dernier accès
+'2==> dernière modification
+'=======================================================
+Public Function GetFileDate(ByVal sFile As String, ByVal lType As Long, Optional ByVal LocalTime As Boolean = True) As Currency
+Dim lFile As Long
+Dim FileInfo As BY_HANDLE_FILE_INFORMATION
+Dim FT As FILETIME
+
+    'handle vers le fichier désiré
+    lFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, ByVal &O0, ByVal 0&)
+    
+    'obtient les infos sur le fichier
+    GetFileInformationByHandle lFile, FileInfo
+    CloseHandle lFile
+
+    'change les FILE_TIME en Currency
+    With FileInfo
+        If lType = 0 Then
+            FT = .ftCreationTime
+        ElseIf lType = 1 Then
+            FT = .ftLastAccessTime
+        Else
+            FT = .ftLastWriteTime
+        End If
+    End With
+    
+    If LocalTime Then
+        'convertit au temps local
+        FileTimeToLocalFileTime FT, FT
+    End If
+
+    'renvoie le résultat en currency
+    GetFileDate = LI2Currency(FT)
+    
+End Function
+
+'=======================================================
 'loade un fichier en string
-'-------------------------------------------------------
+'=======================================================
 Public Function LoadFileInString(ByVal sFile As String, Optional ByRef sLoadIsOk As Long) As String
 Dim hFile As Long
 Dim lSize As Long
@@ -554,17 +598,17 @@ ErrGestion:
     CloseHandle hFile
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renomme un fichier/dossier
-'-------------------------------------------------------
+'=======================================================
 Public Sub Rename(ByVal sOldName As String, ByVal sNewName As String)
     On Error Resume Next
     Name sOldName As sNewName
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le dossier parent du dossier spécifié
-'-------------------------------------------------------
+'=======================================================
 Public Function GetParentDirectory(ByVal sFolder As String) As String
 Dim l As Long
 
@@ -574,9 +618,9 @@ Dim l As Long
     If l = 0 Then GetParentDirectory = vbNullString Else GetParentDirectory = Left$(sFolder, l)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'créé un fichier vierge et renvoie son handle
-'-------------------------------------------------------
+'=======================================================
 Public Function CreateEmptyFile(ByVal sFile As String, Optional ByVal OverWrite As Boolean = False) As Long
 Dim PARAM As Long
 Dim i As Long
@@ -596,16 +640,16 @@ Dim lFile As Long
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'détermine si le path est un root
-'-------------------------------------------------------
+'=======================================================
 Public Function IsRoot(ByVal sPath As String) As Boolean
     IsRoot = CBool(PathIsRoot(sPath))
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le programme associé à un fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function GetAssociatedExecutableProgram(ByVal sFile As String) As String
 Dim sBuf As String
 
@@ -619,9 +663,9 @@ Dim sBuf As String
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le nom court
-'-------------------------------------------------------
+'=======================================================
 Public Function GetShortName(ByVal sPath As String, ByRef sOutputBuffer As String, Optional ByVal lSize As Long = 164) As Long
 Dim s As String
     s = String$(lSize, 0)   'buffer
@@ -629,9 +673,9 @@ Dim s As String
     sOutputBuffer = FormatedString(s)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le path court
-'-------------------------------------------------------
+'=======================================================
 Public Function GetShortPath(ByVal sPath As String, ByRef sOutputBuffer As String, Optional ByVal lSize As Long = 164) As Long
 Dim s As String
     s = String$(lSize, 0)   'buffer
@@ -639,18 +683,18 @@ Dim s As String
     sOutputBuffer = FormatedString(s)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient les dossier depuis un path
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFolderFromPath(ByVal sPath As String) As String
     PathRemoveFileSpec sPath
     GetFolderFromPath = FormatedString(sPath)
     If Right$(sPath, 1) <> "\" Then sPath = sPath & "\"
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le type du fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFileType(ByVal sFile As String) As String
 Dim sExt As String
 Dim hKey As Long
@@ -673,9 +717,9 @@ Dim hKey2 As Long
     RegCloseKey hKey
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'affiche la boite de dialogue "Choix du dossier Dossier..."
-'-------------------------------------------------------
+'=======================================================
 Public Function BrowseForFolder(ByVal sTitle As String, ByVal hwnd As Long) As String
 Dim lIDList As Long
 Dim sBuffer As String
@@ -700,9 +744,9 @@ Dim tBrowseInfo As BrowseInfo
     End If
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient la taille d'un fichier, même si celle ci est supérieure à 4Go (long)
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFileSize(ByVal sFile As String) As Currency
 Dim lngFile As Long
 Dim curSize As Currency
@@ -719,9 +763,9 @@ Dim curSize As Currency
     GetFileSize = curSize * 10000 'multiplie par 10^4 pour obtenir un nombre entier
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'teste la disponibilité d'un fichier (et aussi sa présence)
-'-------------------------------------------------------
+'=======================================================
 Public Function IsFileAvailable(ByVal sFile As String) As Boolean
 Dim lFile As Long
     
@@ -740,77 +784,77 @@ Dim lFile As Long
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'teste l'existence d'un dossier
-'-------------------------------------------------------
+'=======================================================
 Public Function FolderExists(ByVal sFolder As String) As Boolean
     FolderExists = CBool(PathIsDirectory(sFolder))
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'teste l'existence un fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function FileExists(ByVal sFile As String) As Boolean
     FileExists = CBool(PathFileExists(sFile) And Not (Me.FolderExists(sFile)))
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie la terminaison d'un fichier/path
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFileExtension(ByVal sFile As String) As String
     GetFileExtension = String$(lstrlenA(ByVal PathFindExtension(sFile)), 0)
     Call lstrcpyA(ByVal GetFileExtension, ByVal PathFindExtension(sFile))
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient un fichier depuis un path
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFileFromPath(ByVal sPath As String) As String
     PathStripPath sPath
     GetFileFromPath = FormatedString(sPath)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient un drive depuis un path
-'-------------------------------------------------------
+'=======================================================
 Public Function GetDriveFormPath(ByVal sPath As String) As String
     PathStripToRoot sPath
     GetDriveFormPath = FormatedString(sPath)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'tue un fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function KillFile(ByVal sFile As String) As Long
     SetFileAttributes sFile, FILE_ATTRIBUTE_NORMAL  'permet de virer un attribut qui empecherait la suppression
     KillFile = DeleteFile(sFile)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient une info sur un executable
-'-------------------------------------------------------
+'=======================================================
 Public Function GetEXEFileInfo(ByVal sFile As String, Information As TypeInfo) As String
     GetEXEFileInfo = GetEXEdescription(sFile, Information)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient un path spécial
-'-------------------------------------------------------
+'=======================================================
 Public Function GetSpecialFolder(Folder As SPECIAL_FOLDER_TYPE, Optional ByVal hwnd As Long) As String
-Dim R As Long
+Dim r As Long
 Dim sPath As String
 Dim IDL As ITEMIDLIST
 
     If IsMissing(hwnd) Then hwnd = 100
 
     'obtient le path
-    R = SHGetSpecialFolderLocation(hwnd, Folder, IDL)
+    r = SHGetSpecialFolderLocation(hwnd, Folder, IDL)
     
-    If R = 0 Then
+    If r = 0 Then
         'création d'un buffer
         sPath = Space$(512)
         'obtient le path depuis l'itemidlist
-        R = SHGetPathFromIDList(ByVal IDL.mkid.cb, ByVal sPath)
+        r = SHGetPathFromIDList(ByVal IDL.mkid.cb, ByVal sPath)
         'formate le texte
         GetSpecialFolder = Left$(sPath, InStr(sPath, vbNullChar) - 1)
         Exit Function
@@ -819,18 +863,18 @@ Dim IDL As ITEMIDLIST
     GetSpecialFolder = vbNullString
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'créé un dossier
-'-------------------------------------------------------
+'=======================================================
 Public Function CreateFolder(ByVal sFolder As String) As Long
 Dim secSec As SECURITY_ATTRIBUTES
     CreateFolder = CreateDirectory(sFolder, secSec)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'énumère les sous dossiers d'un dossier
 'de 1 à ubound
-'-------------------------------------------------------
+'=======================================================
 Public Sub EnumFolders(ByVal Directory As String, Folders() As String, Optional Begin As Boolean = False, Optional SubFolder As Boolean = True)
 'infos d'un fichier et handle d'énumération
 Dim FileInfo As WIN32_FIND_DATA, hFind As Long, sDir As String
@@ -877,9 +921,9 @@ Static ub As Long
     FindClose hFind
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'fonction permettant d'afficher une boite de dialogue "propriété"
-'-------------------------------------------------------
+'=======================================================
 Public Function DisplayFileProperty(ByVal sFile As String, ByVal lHwnd As Long) As Long
 Dim SEI As SHELLEXECUTEINFO
 
@@ -904,9 +948,9 @@ Dim SEI As SHELLEXECUTEINFO
 ErrGestion:
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'déplace un fichier ou un dossier
-'-------------------------------------------------------
+'=======================================================
 Public Function MoveFileOrFolder(ByVal sFileOrFolder As String, ByVal sDestination As String) As Long
 Dim sFileToDelete As Fichier
 
@@ -922,9 +966,9 @@ Dim sFileToDelete As Fichier
     MoveFileOrFolder = SHFileOperation(sFileToDelete)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'suppression d'un dossier
-'-------------------------------------------------------
+'=======================================================
 Public Function KillFolder(ByVal sFileOrFolder As String) As Long
 Dim sFileToDelete As Fichier
 
@@ -939,9 +983,9 @@ Dim sFileToDelete As Fichier
     KillFolder = SHFileOperation(sFileToDelete)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'copie un fichier/dossier
-'-------------------------------------------------------
+'=======================================================
 Public Function CopyFileOrFolder(ByVal sFileOrFolder As String, ByVal sDestination As String) As Long
 Dim sFileToDelete As Fichier
 
@@ -957,9 +1001,9 @@ Dim sFileToDelete As Fichier
     CopyFileOrFolder = SHFileOperation(sFileToDelete)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'déplace vers la corbeille un fichier/dossier
-'-------------------------------------------------------
+'=======================================================
 Public Function MoveToTrash(ByVal sFileOrFolder As String) As Long
 Dim sFileToDelete As Fichier
 
@@ -974,19 +1018,19 @@ Dim sFileToDelete As Fichier
     MoveToTrash = SHFileOperation(sFileToDelete)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'affichage de la boite de dialogue Executer...
-'-------------------------------------------------------
+'=======================================================
 Public Function ShowRunBox(ByVal hwnd As Long) As Long
     ShowRunBox = SHRunDialog(hwnd, 0, 0, StrConv("Exécuter", vbUnicode), _
         StrConv("Sélectionnez un élément à lancer (dossier, document, exécutable...) et Process Guardian l'ouvrira pour vous.", _
         vbUnicode), 0)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'affichage de la boite de dialogue Ouvrir...
 'renvoie le FileName
-'-------------------------------------------------------
+'=======================================================
 Public Function ShowOpen(ByVal sTitle As String, ByVal hwnd As Long, _
     Optional ByVal sFilter As String, Optional ByVal sInitDir As String, _
     Optional ByRef bHasPushedCancel As Boolean) As String
@@ -1020,10 +1064,10 @@ Dim OFName As OPENFILENAME
     ShowOpen = Left$(OFName.lpstrFile, InStr(OFName.lpstrFile, vbNullChar) - 1)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'affichage de la boite de dialogue Enregistrer...
 'renvoie le FileName AVEC l'extension choisie (ne double pas l'extension si comprise dans le nom)
-'-------------------------------------------------------
+'=======================================================
 Public Function ShowSave(ByVal sTitle As String, ByVal hwnd As Long, _
     Optional ByVal sFilter As String, Optional ByVal sInitDir As String, _
     Optional ByVal sDefaultFileName As String, _
@@ -1071,12 +1115,12 @@ End Function
 
 
 
-'-------------------------------------------------------
+'=======================================================
 '//PRIVATE PROCEDURES & FUNCTIONS
-'-------------------------------------------------------
-'-------------------------------------------------------
+'=======================================================
+'=======================================================
 'transforme une date en FILETIME vers une date en string
-'-------------------------------------------------------
+'=======================================================
 Private Function FileTimeToString(fDate As FILETIME, Optional ByVal bConvertToLocal As Boolean = True) As String
 Dim sDate As SYSTEMTIME
 Dim sDay As String
@@ -1108,9 +1152,9 @@ Dim s As String
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'lit une valeur dans le registre
-'-------------------------------------------------------
+'=======================================================
 Private Function RegQueryStringValue(ByVal hKey As Long, ByVal strValueName As String) As String
 Dim lValueType As Long
 Dim strBuf As String
@@ -1132,10 +1176,9 @@ Dim lData As Long
     End If
 End Function
 
-
-'-------------------------------------------------------
+'=======================================================
 'obtient une info sur un executable - from MSDN
-'-------------------------------------------------------
+'=======================================================
 Private Function GetEXEdescription(ByVal Cible As String, ByVal TypeInfo As TypeInfo) As String
 Dim Buffer As String, Lang_Charset_String As String
 Dim Rc As Long, HexNumber As Long, p As Long
@@ -1210,10 +1253,9 @@ Dim Cible2 As String
     GetEXEdescription = Buffer
 End Function
 
-
-'-------------------------------------------------------
+'=======================================================
 'formatage de string
-'-------------------------------------------------------
+'=======================================================
 Private Function FormatedString(ByVal sString As String) As String
 
     If InStr(sString, vbNullChar) Then _
@@ -1223,10 +1265,10 @@ Private Function FormatedString(ByVal sString As String) As String
     FormatedString = Trim$(FormatedString)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'énumère les fichiers d'un dossier
 'de 1 à ubound
-'-------------------------------------------------------
+'=======================================================
 Private Sub EnumFiles(ByVal Directory As String, Files() As String, Optional Begin As Boolean = False, Optional SubFolder As Boolean = True)
 'infos d'un fichier et handle d'énumération
 Dim FileInfo As WIN32_FIND_DATA, hFind As Long
@@ -1278,5 +1320,9 @@ Static ub As Long
     FindClose hFind
 End Sub
 
-
-
+'=======================================================
+'transforme un largeinterger en currency
+'=======================================================
+Private Function LI2Currency(liInput As FILETIME) As Currency
+    CopyMemory LI2Currency, liInput, LenB(liInput)
+End Function

@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,21 +39,21 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//MODULE DE CLASSE PERMETTANT DE RECUPERER LES INFOS SUR LES DRIVES
 '// by violent_ken
-'-------------------------------------------------------
+'=======================================================
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'CONSTANTES
-'-------------------------------------------------------
+'=======================================================
 Private Const GENERIC_READ                  As Long = &H80000000
 Private Const GENERIC_WRITE                 As Long = &H40000000
 Private Const FILE_SHARE_READ               As Long = &H1
@@ -65,9 +65,9 @@ Private Const IOCTL_DISK_GET_DRIVE_GEOMETRY As Long = &H70000
 Private Const IOCTL_DISK_GET_PARTITION_INFO As Long = &H74004
 
 
-'-------------------------------------------------------
+'=======================================================
 'APIS
-'-------------------------------------------------------
+'=======================================================
 Private Declare Function GetLogicalDriveStrings Lib "kernel32.dll" Alias "GetLogicalDriveStringsA" (ByVal nBufferLength As Long, ByVal lpBuffer As String) As Long
 Private Declare Function DeviceIoControl Lib "kernel32.dll" (ByVal hDevice As Long, ByVal dwIoControlCode As Long, lpInBuffer As Any, ByVal nInBufferSize As Long, lpOutBuffer As Any, ByVal nOutBufferSize As Long, lpBytesReturned As Long, lpOverlapped As OVERLAPPED) As Long
 Private Declare Function CreateFile Lib "kernel32" Alias "CreateFileA" (ByVal lpFileName As String, ByVal dwDesiredAccess As Long, ByVal dwShareMode As Long, ByVal lpSecurityAttributes As Long, ByVal dwCreationDisposition As Long, ByVal dwFlagsAndAttributes As Long, ByVal hTemplateFile As Long) As Long
@@ -77,9 +77,9 @@ Private Declare Function GetDiskFreeSpace Lib "kernel32" Alias "GetDiskFreeSpace
 Private Declare Function GetDriveType Lib "kernel32" Alias "GetDriveTypeA" (ByVal nDrive As String) As Long
 
 
-'-------------------------------------------------------
+'=======================================================
 'TYPES & ENUMS
-'-------------------------------------------------------
+'=======================================================
 
 Private Type DISK_GEOMETRY
    Cylinders         As Currency
@@ -114,13 +114,13 @@ End Type
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'FUNCTIONS AND PROCEDURE
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le drive (string) logique
-'-------------------------------------------------------
+'=======================================================
 Public Function GetLogicalDrive(ByVal Drive As String) As clsDrive
 Dim hDrive As Long
 Dim bytesReturned As Long
@@ -128,7 +128,7 @@ Dim strDrive As String
 Dim tDrive As clsDrive
 'temp variables
 Dim a As Long, b As Long, c As Long, e As Long
-Dim S As String, s2 As String, d As Long
+Dim s As String, s2 As String, d As Long
 Dim ovrTemp As OVERLAPPED
 
     On Error GoTo DriveNonDispo
@@ -195,12 +195,12 @@ Dim ovrTemp As OVERLAPPED
                 
     '//API GetVolumeInformation
         'buffer
-        S = String$(255, 0)
-        s2 = S
+        s = String$(255, 0)
+        s2 = s
         
         'get info
-        GetVolumeInformation Right$(strDrive, 2) & "\", S, 255, d, 0, 0, s2, 255
-        tDrive.VolumeName = S
+        GetVolumeInformation Right$(strDrive, 2) & "\", s, 255, d, 0, 0, s2, 255
+        tDrive.VolumeName = s
         tDrive.VolumeSerialNumber = d
         tDrive.FileSystemName = s2
         
@@ -232,9 +232,9 @@ DriveNonDispo:
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le drive (byte) physique
-'-------------------------------------------------------
+'=======================================================
 Public Function GetPhysicalDrive(ByVal Drive As Byte) As clsDrive
 Dim hDrive As Long
 Dim bytesReturned As Long
@@ -242,7 +242,7 @@ Dim strDrive As String
 Dim tDrive As clsDrive
 'temp variables
 Dim a As Long, b As Long, c As Long, e As Long
-Dim S As String, s2 As String, d As Long
+Dim s As String, s2 As String, d As Long
 Dim tGeom As DISK_GEOMETRY
 
 
@@ -286,16 +286,16 @@ Dim tGeom As DISK_GEOMETRY
     Set GetPhysicalDrive = tDrive
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie un drive compatible avec l'api CreateFile
-'-------------------------------------------------------
+'=======================================================
 Private Function BuildDrive(ByVal sDrive As String) As String
     BuildDrive = "\\.\" & UCase$(Left$(sDrive, 2))
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie un type de drive en String correspondant au type en long
-'-------------------------------------------------------
+'=======================================================
 Private Function GetMediaType(ByVal bytType As Byte) As String
 
    Select Case bytType
@@ -329,9 +329,9 @@ Private Function GetMediaType(ByVal bytType As Byte) As String
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie un type de drive en String correspondant au type en long
-'-------------------------------------------------------
+'=======================================================
 Private Function GetStringDriveType(ByVal bytType As Byte) As String
 
     Select Case bytType
@@ -345,9 +345,9 @@ Private Function GetStringDriveType(ByVal bytType As Byte) As String
     End Select
     
 End Function
-'-------------------------------------------------------
+'=======================================================
 'renvoie le nombre de disques physiques
-'-------------------------------------------------------
+'=======================================================
 Public Property Get NumberOfPhysicalDrives() As Byte
 Dim bytVar As Byte
 Dim hDrive As Long
@@ -365,14 +365,14 @@ Dim hDrive As Long
     NumberOfPhysicalDrives = bytVar - 1
 End Property
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie la liste des drives physiques
 'de 0 à Ubound-1
-'-------------------------------------------------------
+'=======================================================
 Public Function GetLogicalDrivesList(ByRef strDrives() As String) As Byte
 Dim strBuffer As String
 Dim x As Byte, lngLen As Long
-Dim S() As String
+Dim s() As String
 
     'créé un buffer qui recevra les noms de partition
     strBuffer = String$(255, 0)
@@ -384,20 +384,20 @@ Dim S() As String
     strBuffer = Left$(strBuffer, lngLen)
     
     'redimensionne le tableau
-    ReDim S(Len(strBuffer) / 4)
+    ReDim s(Len(strBuffer) / 4)
     
     For x = 0 To Len(strBuffer) Step 4
-        S(x / 4) = Mid$(strBuffer, x + 1, 4)
+        s(x / 4) = Mid$(strBuffer, x + 1, 4)
     Next x
     
-    strDrives = S
+    strDrives = s
     GetLogicalDrivesList = CByte(x / 4 - 1)
 End Function
 
 
-'-------------------------------------------------------
+'=======================================================
 'vérifie que la partition est accessible
-'-------------------------------------------------------
+'=======================================================
 Public Function IsLogicalDriveAccessible(ByVal Drive As String) As Boolean
 Dim hDrive As Long
 Dim strDrive As String
@@ -425,9 +425,9 @@ DriveNonDispo:
     CloseHandle hDrive
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'vérifie que la partition est accessible
-'-------------------------------------------------------
+'=======================================================
 Public Function IsPhysicalDriveAccessible(ByVal Drive As Byte) As Boolean
 Dim hDrive As Long
 Dim bytesReturned As Long
