@@ -1743,6 +1743,9 @@ End Sub
 '=======================================================
 Public Sub UndoM()
     'On Error Resume Next
+    
+    If lstHisto.SelectedItem Is Nothing Then Exit Sub
+    
     With lstHisto
         If .SelectedItem.Index > 1 Then
             .ListItems.Item(.SelectedItem.Index - 1).Selected = True
