@@ -560,17 +560,17 @@ Private clsPref As clsIniForm
 
 Private Sub cmdBrowseFile_Click()
 'browse un fichier
-    txtFile.Text = cFile.ShowOpen("Sélectionner le fichier à ouvrir", Me.hWnd, "Tous|*.*")
+    txtFile.Text = cFile.ShowOpen("Sélectionner le fichier à ouvrir", Me.hwnd, "Tous|*.*")
 End Sub
 
 Private Sub cmdBrowseFolder_Click()
 'browse un dossier
-    txtFolder.Text = cFile.BrowseForFolder("Sélectionner le dossier à ouvrir", Me.hWnd)
+    txtFolder.Text = cFile.BrowseForFolder("Sélectionner le dossier à ouvrir", Me.hwnd)
 End Sub
 
 Private Sub cmdBrowseNew_Click()
 'browse un dossier
-    txtNewFile.Text = cFile.ShowSave("Sélectionner le fichier à créer", Me.hWnd, "Tous|*.*", App.Path)
+    txtNewFile.Text = cFile.ShowSave("Sélectionner le fichier à créer", Me.hwnd, "Tous|*.*", App.Path)
 End Sub
 
 Private Sub cmdOk_Click()
@@ -647,7 +647,7 @@ Dim lLen As Double
             
             If lH = 0 Then
                 'pas possible
-                MsgBox "Accès impossible à ce processus", vbInformation, "Erreur"
+                Me.Caption = "Accès impossible au processus"
                 Exit Sub
             End If
             
@@ -774,9 +774,9 @@ Dim x As Long
     
     If lFrame = 4 Then
         'création de fichier
-        cmdOK.Caption = "Créer et ouvrir"
+        cmdOk.Caption = "Créer et ouvrir"
     Else
-        cmdOK.Caption = "Ouvrir"
+        cmdOk.Caption = "Ouvrir"
     End If
 
 End Sub
