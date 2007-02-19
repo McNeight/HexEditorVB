@@ -75,7 +75,6 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -83,15 +82,13 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "17:46"
-            Key             =   ""
+            TextSave        =   "18:17"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -99,7 +96,6 @@ Begin VB.MDIForm frmContent
             Object.Width           =   2117
             MinWidth        =   2117
             TextSave        =   "19/02/2007"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -960,7 +956,9 @@ Private Sub MDIForm_Activate()
 End Sub
 
 Private Sub MDIForm_DblClick()
-    Me.PopupMenu Me.rmnuTools
+'montre la form de démarrage rapide
+    frmHome.Show
+    PremierPlan frmHome, MettreAuPremierPlan
 End Sub
 
 Private Sub MDIForm_Load()
@@ -1457,7 +1455,7 @@ End Sub
 
 Private Sub mnuFileRenamer_Click()
 'lance FileRenamer.exe
-    cFile.ShellOpenFile App.Path & "\FileRenamer.exe", Me.hWnd, , App.Path
+    cFile.ShellOpenFile App.Path & "\FileRenamer.exe", Me.hwnd, , App.Path
 End Sub
 
 Private Sub mnuFileSearch_Click()
@@ -1467,12 +1465,12 @@ End Sub
 
 Private Sub mnuFreeForum_Click()
 'forum de discussion
-    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654034", Me.hWnd, , App.Path
+    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654034", Me.hwnd, , App.Path
 End Sub
 
 Private Sub mnuHelpForum_Click()
 'forum de demande d'aide
-    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654035", Me.hWnd, , App.Path
+    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654035", Me.hwnd, , App.Path
 End Sub
 
 Private Sub mnuHome_Click()
@@ -1561,7 +1559,7 @@ Dim sExt As String
     'obtient la termaison
     sExt = cFile.GetFileExtension(Me.ActiveForm.Caption)
     
-    ExecuteTempFile Me.hWnd, Me.ActiveForm, sExt
+    ExecuteTempFile Me.hwnd, Me.ActiveForm, sExt
 End Sub
 
 Private Sub mnuExit_Click()
@@ -1696,7 +1694,7 @@ End Sub
 
 Private Sub mnuNewProcess_Click()
 'invite à demarrer un nouveau processus
-    ShowRunBox Me.hWnd
+    ShowRunBox Me.hwnd
 End Sub
 
 Private Sub mnuOpen_Click()
@@ -1746,7 +1744,7 @@ Dim Frm As Form
 Dim x As Long
 
     'sélectionne un répertoire
-    sDir = cFile.BrowseForFolder("Sélectionner un répertoire", Me.hWnd)
+    sDir = cFile.BrowseForFolder("Sélectionner un répertoire", Me.hwnd)
     
     'teste la validité du répertoire
     If cFile.FolderExists(sDir) = False Then Exit Sub
@@ -1809,7 +1807,7 @@ Dim x As Long
     LV.GetSelectedItems sFile
     
     For x = 1 To UBound(sFile)
-        cFile.ShellOpenFile sFile(x).Tag, Me.hWnd
+        cFile.ShellOpenFile sFile(x).Tag, Me.hwnd
     Next x
     
 End Sub
@@ -2292,7 +2290,7 @@ End Sub
 
 Private Sub mnuSourceForge_Click()
 'page source forge
-    cFile.ShellOpenFile "http://sourceforge.net/projects/hexeditorvb/", Me.hWnd, , App.Path
+    cFile.ShellOpenFile "http://sourceforge.net/projects/hexeditorvb/", Me.hwnd, , App.Path
 End Sub
 
 Private Sub mnuStats_Click()
@@ -2420,7 +2418,7 @@ End Sub
 
 Private Sub mnuVbfrance_Click()
 'vbfrance.com
-    cFile.ShellOpenFile "http://www.vbfrance.com/auteurdetail.aspx?ID=523601&print=1", Me.hWnd, , App.Path
+    cFile.ShellOpenFile "http://www.vbfrance.com/auteurdetail.aspx?ID=523601&print=1", Me.hwnd, , App.Path
 End Sub
 
 Private Sub muUp_Click()
