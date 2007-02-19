@@ -359,9 +359,8 @@ Dim x As Long
     End With
     
     If cFile.FileExists(sFile) Then
-        'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (x = vbYes) Then Exit Sub
+        'fichier déjà existant
+        If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
     End If
 
     Label2.Caption = "Saving file..."

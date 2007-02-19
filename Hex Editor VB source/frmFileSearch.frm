@@ -212,6 +212,7 @@ Begin VB.Form frmFileSearch
             Alignment       =   2  'Center
             BorderStyle     =   0  'None
             Enabled         =   0   'False
+            ForeColor       =   &H000000C0&
             Height          =   285
             Left            =   2280
             TabIndex        =   16
@@ -523,7 +524,7 @@ Private Sub CheckSearch()
         End If
     End If
     If chkDate.Value Then
-        If Len(txtDate.Text) > 0 And cbOpDate.ListIndex >= 0 And cbDateType.ListIndex >= 0 Then
+        If Len(txtDate.Text) > 0 And cbOpDate.ListIndex >= 0 And cbDateType.ListIndex >= 0 And IsDate(txtDate.Text) Then
             cmdGo.Enabled = True
         Else
             cmdGo.Enabled = False
@@ -534,8 +535,46 @@ End Sub
 
 Private Sub cmdSave_Click()
 'sauvegarde les résultats
+Dim sFile As String
+Dim x As Long
+Dim lFile As Long
 
-
+    If LVres.ListItems.Count = 0 Then
+        MsgBox "Aucun résultat n'a été trouvé", vbInformation, "Enregistrement impossible"
+        Exit Sub
+    End If
+    
+    On Error GoTo CancelPushed
+    
+    With frmContent.CMD
+        .CancelError = True
+        .DialogTitle = "Sélection du fichier à enregistrer"
+        .Filter = "Fichier texte|*.txt|Tous|*.*"
+        .ShowSave
+        sFile = .Filename
+    End With
+    
+    If cFile.FileExists(sFile) Then
+        'fichier déjà existant
+        If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+    End If
+        
+    
+    'récupère un numéro vide
+    lFile = FreeFile
+    
+    'ouvre le fichier
+    Open sFile For Append As lFile
+    
+    For x = 1 To LVres.ListItems.Count
+        'sauvegarde la string
+        Print #lFile, LVres.ListItems.Item(x).Text
+    Next x
+    
+    'referme le fichier
+    Close lFile
+    
+CancelPushed:
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
@@ -564,7 +603,7 @@ Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As 
 
     If Button = 2 Then
         Me.mnuSub.Checked = IIf(It.SubItems(1) = "Non", False, True)
-        Me.PopupMenu Me.mnuPopUp
+        Me.PopupMenu Me.mnuPopup
     End If
 End Sub
 
@@ -593,6 +632,13 @@ Private Sub Option1_Click(Index As Integer)
 End Sub
 
 Private Sub txtDate_Change()
+    If IsDate(txtDate.Text) = False Then
+        'pas une date
+        txtDate.ForeColor = &HC0&
+    Else
+        'c'est une date
+        txtDate.ForeColor = &HC000&
+    End If
     Call CheckSearch 'vérifie qu'une recherche est possible
 End Sub
 Private Sub txtName_Change()
@@ -649,7 +695,7 @@ Dim lC As Long
         End If
         
         'on calcule sa date
-        curDate = DateString2Currency(txtDate.Text)
+        If chkDate.Value Then curDate = DateString2Currency(txtDate.Text)
                 
         Me.Caption = "Indexation des fichiers..."
         
