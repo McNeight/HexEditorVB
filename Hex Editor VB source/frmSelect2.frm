@@ -121,15 +121,14 @@ Option Explicit
 '=======================================================
 
 Private Sub cmdOk_Click()
-Dim lFrom As Long
-Dim lTo As Long
-Dim x As Long
+Dim lFrom As Currency
+Dim lTo As Currency
 
     On Error GoTo ErrGestion
     
     'récupère les valeurs numériques
-    lFrom = FormatedVal(txtFrom.Text)
-    lTo = lFrom + FormatedVal(txtSize.Text) - 2 '-2 pour régler à la bonne taille
+    lFrom = FormatedVal_(txtFrom.Text)
+    lTo = lFrom + FormatedVal_(txtSize.Text) - 2 '-2 pour régler à la bonne taille
         
     'vérifie que la plage est OK
     If lFrom < frmContent.ActiveForm.HW.FirstOffset Or lTo > frmContent.ActiveForm.HW.MaxOffset Then
@@ -147,7 +146,7 @@ Dim x As Long
     'refresh le label qui contient la taille de la sélection
     frmContent.ActiveForm.Sb.Panels(4).Text = "Sélection=[" & CStr(frmContent.ActiveForm.HW.NumberOfSelectedItems) & " bytes]"
     frmContent.ActiveForm.Label2(9) = frmContent.ActiveForm.Sb.Panels(4).Text
-    
+    frmContent.ActiveForm.HW.Refresh
     Unload Me
     
     Exit Sub

@@ -739,154 +739,224 @@ End Function
 Public Function GetFileBitmap(File As String) As FileClusters
 Dim hFile As Long 'handle de fichier dont on veut la carte des clusters
 Dim FileBitmap As RETRIEVAL_POINTERS_BUFFER 'carte des clusters du fichier
-Dim nExtents As Long
+Dim nExtents As Long 'nombre d'extents (fragments) du fichier
 Dim StartingAddress As LARGE_INTEGER 'VCN de début de la carte du fichier
+Dim bt As Long 'nombre d'octets renvoyés
 Dim status As Long 'état de l'opération
-Dim x As Long
-Dim tmp As FileClusters
+Dim x As Long 'compteur
 
-    On Error GoTo ErrGestion
+    'ouvre le fichier avec les droits de la déplacer juste pour voir si on pourrait le déplacer
+    hFile = CreateFile(File, FILE_READ_ACCESS Or &H10000, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
     
-    hFile = CreateFile(File, FILE_READ_ACCESS, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
-    tmp.File = File
+    'copie le nom du fichier
+    GetFileBitmap.File = File
+    
+    'si on ne peut pas l'ouvrir pour déplacement
     If hFile = -1 Then
-        tmp.Moveable = False
+        'pas déplacable
+        GetFileBitmap.Moveable = False
+        'on essaie de l'ouvrir en lecture
         hFile = CreateFile(File, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+        'si pas possible : fichier système vital
         If hFile = -1 Then Exit Function
     Else
-        tmp.Moveable = True
+        'déplacable
+        GetFileBitmap.Moveable = True
     End If
     
-    'on demande la carte complète du fichier
+    'on demande la carte complète du fichier donc depuis le début
     StartingAddress.HighDWORD = 0
     StartingAddress.LowDWORD = 0
     
-    'on demande la carte
+    'on demande la carte du fichier tant qu'il y en a encore à récupérer
     Do
-        DeviceIoControl hFile, FSCTL_GET_RETRIEVAL_POINTERS, StartingAddress, 8&, FileBitmap, Len(FileBitmap), 0&, 0&
+        'demande un morceau de 512 fragments
+        DeviceIoControl hFile, FSCTL_GET_RETRIEVAL_POINTERS, StartingAddress, 8&, FileBitmap, Len(FileBitmap), bt, 0&
         status = Err.LastDllError
-        'If (FileBitmap.StartingVcn.LowDWORD = 0) And (FileBitmap.StartingVcn.HighDWORD = 0) Then
-            If FileBitmap.ExtentCount Then
-                tmp.ExtentsCount = tmp.ExtentsCount + FileBitmap.ExtentCount
-                ReDim Preserve tmp.Extents(tmp.ExtentsCount - 1)
-            End If
-        'End If
-        If FileBitmap.ExtentCount > 1024 Then
-            CopyMemory tmp.Extents(nExtents), FileBitmap.Extents(0), 1024& * 16&
-            nExtents = nExtents + 1024
+        
+        'si la partie contient des fragments
+        If FileBitmap.ExtentCount Then
+            'ajoute le nombre de fragments de la partie de carte au nombre de fragments du fichier
+            GetFileBitmap.ExtentsCount = GetFileBitmap.ExtentsCount + FileBitmap.ExtentCount
+            'fait de la place pour ajouter les fragments
+            ReDim Preserve GetFileBitmap.Extents(GetFileBitmap.ExtentsCount - 1)
+        End If
+        
+        'si le nombre de fragments est > 512
+        If FileBitmap.ExtentCount > 512 Then
+            'on copie les 512 premier fragments, car notre structure allouée ne peut pas en contenir plus
+            CopyMemory GetFileBitmap.Extents(nExtents), FileBitmap.Extents(0), 512& * 16&
+            'on avance de 512 fragments
+            nExtents = nExtents + 512
+        'sinon s'il y a moins de 512 fragments dans la partie de carte
         ElseIf FileBitmap.ExtentCount Then
-            CopyMemory tmp.Extents(nExtents), FileBitmap.Extents(0), FileBitmap.ExtentCount * 16&
+            'on les copies
+            CopyMemory GetFileBitmap.Extents(nExtents), FileBitmap.Extents(0), FileBitmap.ExtentCount * 16&
+            'on avance du nombre de fragments renvoyés
             nExtents = nExtents + FileBitmap.ExtentCount
         End If
-        StartingAddress.LowDWORD = StartingAddress.LowDWORD + FileBitmap.Extents(1023).NextVcn.LowDWORD
-        StartingAddress.HighDWORD = StartingAddress.HighDWORD + FileBitmap.Extents(1023).NextVcn.HighDWORD
+        
+        'on avance dans le fichier jusqu'à l'offset (depuis le début du fichier) du prochain fragment après ceux que l'on a déjà obtenus
+        StartingAddress.LowDWORD = FileBitmap.Extents(511).NextVcn.LowDWORD
+        StartingAddress.HighDWORD = FileBitmap.Extents(511).NextVcn.HighDWORD
+        
+    'tant que l'on n'est pas à la fin des fragments du fichier
     Loop While status = ERROR_MORE_DATA
+    
     CloseHandle hFile
-    
-    GetFileBitmap = tmp
-    
-    Exit Function
-ErrGestion:
-    clsERREUR.AddError "mdlDisk.GetFileBitMap", True
 End Function
+
+'Public Function GetFileBitmap(File As String) As FileClusters
+'Dim hFile As Long 'handle de fichier dont on veut la carte des clusters
+'Dim FileBitmap As RETRIEVAL_POINTERS_BUFFER 'carte des clusters du fichier
+'Dim nExtents As Long
+'Dim StartingAddress As LARGE_INTEGER 'VCN de début de la carte du fichier
+'Dim status As Long 'état de l'opération
+'Dim x As Long
+'Dim tmp As FileClusters
+
+'    On Error GoTo ErrGestion
+    
+'    hFile = CreateFile(File, FILE_READ_ACCESS, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+'    tmp.File = File
+'    If hFile = -1 Then
+'        tmp.Moveable = False
+'        hFile = CreateFile(File, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+'        If hFile = -1 Then Exit Function
+'    Else
+'        tmp.Moveable = True
+'    End If
+    
+    'on demande la carte complète du fichier
+'    StartingAddress.HighDWORD = 0
+'    StartingAddress.LowDWORD = 0
+    
+    'on demande la carte
+'    Do
+'        DeviceIoControl hFile, FSCTL_GET_RETRIEVAL_POINTERS, StartingAddress, 8&, FileBitmap, Len(FileBitmap), 0&, 0&
+'        status = Err.LastDllError
+        'If (FileBitmap.StartingVcn.LowDWORD = 0) And (FileBitmap.StartingVcn.HighDWORD = 0) Then
+'            If FileBitmap.ExtentCount Then
+'                tmp.ExtentsCount = tmp.ExtentsCount + FileBitmap.ExtentCount
+'                ReDim Preserve tmp.Extents(tmp.ExtentsCount - 1)
+'            End If
+        'End If
+'        If FileBitmap.ExtentCount > 1024 Then
+'            CopyMemory tmp.Extents(nExtents), FileBitmap.Extents(0), 1024& * 16&
+'            nExtents = nExtents + 1024
+'        ElseIf FileBitmap.ExtentCount Then
+'            CopyMemory tmp.Extents(nExtents), FileBitmap.Extents(0), FileBitmap.ExtentCount * 16&
+'            nExtents = nExtents + FileBitmap.ExtentCount
+'        End If
+'        StartingAddress.LowDWORD = StartingAddress.LowDWORD + FileBitmap.Extents(1023).NextVcn.LowDWORD
+'        StartingAddress.HighDWORD = StartingAddress.HighDWORD + FileBitmap.Extents(1023).NextVcn.HighDWORD
+'    Loop While status = ERROR_MORE_DATA
+'    CloseHandle hFile
+    
+'    GetFileBitmap = tmp
+    
+'    Exit Function
+'ErrGestion:
+'    clsERREUR.AddError "mdlDisk.GetFileBitMap", True
+'End Function
 
 '=======================================================
 'version simplifiée de GetFileBitmap ==> n'obtient que le nombre
 'de fragments d'un fichier
 '=======================================================
-Public Function GetFileFragmentCount(File As String) As FileClusters2
-Dim hFile As Long 'handle de fichier dont on veut la carte des clusters
-Dim FileBitmap As RETRIEVAL_POINTERS_BUFFER 'carte des clusters du fichier
-Dim StartingAddress As LARGE_INTEGER 'VCN de début de la carte du fichier
-Dim status As Long 'état de l'opération
-Dim tmp As FileClusters2
+'Public Function GetFileFragmentCount(File As String) As FileClusters2
+'Dim hFile As Long 'handle de fichier dont on veut la carte des clusters
+'Dim FileBitmap As RETRIEVAL_POINTERS_BUFFER 'carte des clusters du fichier
+'Dim StartingAddress As LARGE_INTEGER 'VCN de début de la carte du fichier
+'Dim status As Long 'état de l'opération
+'Dim tmp As FileClusters2
 
-    On Error GoTo ErrGestion
+'    On Error GoTo ErrGestion
     
-    hFile = CreateFile(File, FILE_READ_ACCESS Or GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
-    tmp.File = File
+'    hFile = CreateFile(File, FILE_READ_ACCESS Or GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+'    tmp.File = File
     
     'on demande la carte complète du fichier
-    StartingAddress.HighDWORD = 0
-    StartingAddress.LowDWORD = 0
+'    StartingAddress.HighDWORD = 0
+'    StartingAddress.LowDWORD = 0
     
     'on demande la carte
-    Do
-        DeviceIoControl hFile, FSCTL_GET_RETRIEVAL_POINTERS, StartingAddress, 8&, FileBitmap, Len(FileBitmap), 0&, 0&
-        status = Err.LastDllError
-            If FileBitmap.ExtentCount Then
-                tmp.ExtentsCount = tmp.ExtentsCount + FileBitmap.ExtentCount
-            End If
+'    Do
+'        DeviceIoControl hFile, FSCTL_GET_RETRIEVAL_POINTERS, StartingAddress, 8&, FileBitmap, Len(FileBitmap), 0&, 0&
+'        status = Err.LastDllError
+'            If FileBitmap.ExtentCount Then
+'                tmp.ExtentsCount = tmp.ExtentsCount + FileBitmap.ExtentCount
+'            End If
                 
-    Loop While status = ERROR_MORE_DATA
-    CloseHandle hFile
+'    Loop While status = ERROR_MORE_DATA
+'    CloseHandle hFile
     
-    GetFileFragmentCount = tmp
+'    GetFileFragmentCount = tmp
     
-    Exit Function
-ErrGestion:
-    clsERREUR.AddError "mdlDisk.GetFileFragmentCount", True
-End Function
+'    Exit Function
+'ErrGestion:
+'    clsERREUR.AddError "mdlDisk.GetFileFragmentCount", True
+'End Function
 
 '=======================================================
 'obtient le nombre de fragments pour chaque fichier d'un drive
 '=======================================================
-Public Function GetVolumeFilesBitmap(Volume As String, Optional Progress As pgrbar, Optional SubFolder As Boolean = True) As FileClusters()
-Dim tmp() As FileClusters2
-Dim Files() As String
-Dim x As Long, ub As Long
+'Public Function GetVolumeFilesBitmap(Volume As String, Optional Progress As pgrbar, Optional SubFolder As Boolean = True) As FileClusters()
+'Dim tmp() As FileClusters2
+'Dim Files() As String
+'Dim x As Long, ub As Long
     
-    On Error GoTo ErrGestion
-    DoEvents
-    GetVolumeFiles Volume, Files, True, SubFolder
-    ub = UBound(Files)
-    ReDim tmp(ub)
-    
-    If IsMissing(Progress) = False Then
-        Progress.Min = 0
-        Progress.Max = ub + 1
-        Progress.Value = 0
-    End If
-    For x = 0 To ub
-        tmp(x) = GetFileFragmentCount(Files(x))
-        If (x Mod 250) = 0 Then
-            Progress.Value = IIf(Progress.Value + 250 < Progress.Max, Progress.Value + 250, Progress.Max)
-            DoEvents
-        End If
-    Next
-    GetVolumeFilesBitmap = tmp
+'    On Error GoTo ErrGestion
+'    DoEvents
+'    GetVolumeFiles Volume, Files, True, SubFolder
+'    ub = UBound(Files)
+'    ReDim tmp(ub)
+'
+'    If IsMissing(Progress) = False Then
+'        Progress.Min = 0
+'        Progress.Max = ub + 1
+'        Progress.Value = 0
+'    End If
+'    For x = 0 To ub
+'        tmp(x) = GetFileFragmentCount(Files(x))
+'        If (x Mod 250) = 0 Then
+'            Progress.Value = IIf(Progress.Value + 250 < Progress.Max, Progress.Value + 250, Progress.Max)
+'            DoEvents
+'        End If
+'    Next
+'    GetVolumeFilesBitmap = tmp
 
-    Exit Function
-ErrGestion:
-    clsERREUR.AddError "mdlDisk.GetVolumeFilesBitMap", True
-End Function
+'    Exit Function
+'ErrGestion:
+'    clsERREUR.AddError "mdlDisk.GetVolumeFilesBitMap", True
+'End Function
 
 '=======================================================
 'liste tous les fichiers d'un drive
 '=======================================================
-Public Sub GetVolumeFiles(ByVal Directory As String, Files() As String, Optional Begin As Boolean = False, Optional SubFolder As Boolean = True)
-Dim FileInfo As WIN32_FIND_DATA, hFind As Long
-Static ub As Long
-    If Begin = True Then ub = 0
-    DoEvents
-    hFind = FindFirstFile(Directory & "*", FileInfo)
-    If hFind <> -1 Then
-        If (FileInfo.dwFileAttributes And FILE_ATTRIBUTE_DIRECTORY) = FILE_ATTRIBUTE_DIRECTORY Then
-            If InStr(FileInfo.cFileName, ".") <> 1 And SubFolder Then GetVolumeFiles Directory & Mid$(FileInfo.cFileName, 1, InStr(FileInfo.cFileName, vbNullChar) - 1) & "\", Files, False
-        Else
-            ub = ub + 1
-            ReDim Preserve Files(ub)
-            Files(ub) = Directory & Mid$(FileInfo.cFileName, 1, InStr(FileInfo.cFileName, vbNullChar) - 1)
-        End If
-        Do While FindNextFile(hFind, FileInfo)
-            If (FileInfo.dwFileAttributes And FILE_ATTRIBUTE_DIRECTORY) = FILE_ATTRIBUTE_DIRECTORY Then
-                If InStr(FileInfo.cFileName, ".") <> 1 And SubFolder Then GetVolumeFiles Directory & Mid$(FileInfo.cFileName, 1, InStr(FileInfo.cFileName, vbNullChar) - 1) & "\", Files, False
-            Else
-                ub = ub + 1
-                ReDim Preserve Files(ub)
-                Files(ub) = Directory & Mid$(FileInfo.cFileName, 1, InStr(FileInfo.cFileName, vbNullChar) - 1)
-            End If
-        Loop
-    End If
-    FindClose hFind
-End Sub
+'Public Sub GetVolumeFiles(ByVal Directory As String, Files() As String, Optional Begin As Boolean = False, Optional SubFolder As Boolean = True)
+'Dim FileInfo As WIN32_FIND_DATA, hFind As Long
+'Static ub As Long
+'    If Begin = True Then ub = 0
+'    DoEvents
+'    hFind = FindFirstFile(Directory & "*", FileInfo)
+'    If hFind <> -1 Then
+'        If (FileInfo.dwFileAttributes And FILE_ATTRIBUTE_DIRECTORY) = FILE_ATTRIBUTE_DIRECTORY Then
+'            If InStr(FileInfo.cFileName, ".") <> 1 And SubFolder Then GetVolumeFiles Directory & Mid$(FileInfo.cFileName, 1, InStr(FileInfo.cFileName, vbNullChar) - 1) & "\", Files, False
+'        Else
+'            ub = ub + 1
+'            ReDim Preserve Files(ub)
+'            Files(ub) = Directory & Mid$(FileInfo.cFileName, 1, InStr(FileInfo.cFileName, vbNullChar) - 1)
+'        End If
+'        Do While FindNextFile(hFind, FileInfo)
+'            If (FileInfo.dwFileAttributes And FILE_ATTRIBUTE_DIRECTORY) = FILE_ATTRIBUTE_DIRECTORY Then
+'                If InStr(FileInfo.cFileName, ".") <> 1 And SubFolder Then GetVolumeFiles Directory & Mid$(FileInfo.cFileName, 1, InStr(FileInfo.cFileName, vbNullChar) - 1) & "\", Files, False
+'            Else
+'                ub = ub + 1
+'                ReDim Preserve Files(ub)
+'                Files(ub) = Directory & Mid$(FileInfo.cFileName, 1, InStr(FileInfo.cFileName, vbNullChar) - 1)
+'            End If
+'        Loop
+'    End If
+'    FindClose hFind
+'End Sub

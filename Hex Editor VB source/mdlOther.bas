@@ -706,6 +706,10 @@ Public Function FormatedVal(ByVal s As String) As Long
     On Error Resume Next
     FormatedVal = Abs(Int(Val(s)))
 End Function
+Public Function FormatedVal_(ByVal s As String) As Currency
+    On Error Resume Next
+    FormatedVal_ = Abs(Int(Val(s)))
+End Function
 Public Function HexVal(ByVal s As String) As Long
     If s = "0" Then
         HexVal = 0
