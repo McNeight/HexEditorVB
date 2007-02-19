@@ -560,17 +560,17 @@ Private clsPref As clsIniForm
 
 Private Sub cmdBrowseFile_Click()
 'browse un fichier
-    txtFile.Text = cFile.ShowOpen("Sélectionner le fichier à ouvrir", Me.hwnd, "Tous|*.*")
+    txtFile.Text = cFile.ShowOpen("Sélectionner le fichier à ouvrir", Me.hWnd, "Tous|*.*")
 End Sub
 
 Private Sub cmdBrowseFolder_Click()
 'browse un dossier
-    txtFolder.Text = cFile.BrowseForFolder("Sélectionner le dossier à ouvrir", Me.hwnd)
+    txtFolder.Text = cFile.BrowseForFolder("Sélectionner le dossier à ouvrir", Me.hWnd)
 End Sub
 
 Private Sub cmdBrowseNew_Click()
 'browse un dossier
-    txtNewFile.Text = cFile.ShowSave("Sélectionner le fichier à créer", Me.hwnd, "Tous|*.*", App.Path)
+    txtNewFile.Text = cFile.ShowSave("Sélectionner le fichier à créer", Me.hWnd, "Tous|*.*", App.Path)
 End Sub
 
 Private Sub cmdOk_Click()
@@ -605,7 +605,7 @@ Dim lLen As Double
             If cFile.FolderExists(txtFolder.Text) = False Then Exit Sub
             
             'liste les fichiers
-            If cFile.GetFolderFiles(txtFolder.Text, m, optFolderSub(0).Value) < 1 Then Exit Sub
+            If cFile.EnumFilesFromFolder(txtFolder.Text, m, optFolderSub(0).Value) < 1 Then Exit Sub
             
             'les ouvre un par un
             For x = 1 To UBound(m)
@@ -774,9 +774,9 @@ Dim x As Long
     
     If lFrame = 4 Then
         'création de fichier
-        cmdOk.Caption = "Créer et ouvrir"
+        cmdOK.Caption = "Créer et ouvrir"
     Else
-        cmdOk.Caption = "Ouvrir"
+        cmdOK.Caption = "Ouvrir"
     End If
 
 End Sub

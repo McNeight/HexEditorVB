@@ -193,7 +193,7 @@ Dim s As String
                         frmShredd.LV.ListItems.Add Text:=sFile(x)
                     ElseIf cFile.FolderExists(sFile(x)) Then
                         'ouvre un dossier - liste les fichiers
-                        If cFile.GetFolderFiles(sFile(x), m) <> 0 Then
+                        If cFile.EnumFilesFromFolder(sFile(x), m) <> 0 Then
                             'les ouvre un par un
                             For y = 1 To UBound(m)
                                 If cFile.FileExists(m(y)) Then
@@ -232,7 +232,7 @@ Dim s As String
                         Frm.Show
                     ElseIf cFile.FolderExists(sFile(x)) Then
                         'ouvre un dossier - liste les fichiers
-                        If cFile.GetFolderFiles(sFile(x), m) <> 0 Then
+                        If cFile.EnumFilesFromFolder(sFile(x), m) <> 0 Then
                             'les ouvre un par un
                             For y = 1 To UBound(m)
                                 If cFile.FileExists(m(y)) Then
@@ -267,7 +267,7 @@ Dim s As String
                      Frm.Show
                  ElseIf cFile.FolderExists(sFile(x)) Then
                      'ouvre un dossier - liste les fichiers
-                     If cFile.GetFolderFiles(sFile(x), m) <> 0 Then
+                     If cFile.EnumFilesFromFolder(sFile(x), m) <> 0 Then
                          'les ouvre un par un
                          For y = 1 To UBound(m)
                              If cFile.FileExists(m(y)) Then

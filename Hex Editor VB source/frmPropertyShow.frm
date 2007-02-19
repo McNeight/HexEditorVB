@@ -462,11 +462,11 @@ Dim clsP As clsProcess
     
     If TypeOfForm(frmContent.ActiveForm) = "Processus" Then
         'le PID est stocké dans le Tag
-        cFile.DisplayFileProperty clsP.GetPathFromPID(Val(frmContent.ActiveForm.Tag)), Me.hwnd
+        cFile.ShowFileProperty clsP.GetPathFromPID(Val(frmContent.ActiveForm.Tag)), Me.hWnd
     ElseIf TypeOfForm(frmContent.ActiveForm) = "Disque" Then
-        cFile.DisplayFileProperty Right$(frmContent.ActiveForm.Caption, 3), Me.hwnd
+        cFile.ShowFileProperty Right$(frmContent.ActiveForm.Caption, 3), Me.hWnd
     ElseIf TypeOfForm(frmContent.ActiveForm) = "Fichier" Then
-        cFile.DisplayFileProperty frmContent.ActiveForm.Caption, Me.hwnd
+        cFile.ShowFileProperty frmContent.ActiveForm.Caption, Me.hWnd
     End If
     
     Set clsP = Nothing

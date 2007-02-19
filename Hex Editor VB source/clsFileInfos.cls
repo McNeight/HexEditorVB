@@ -218,7 +218,7 @@ End Type
 Private Type SHELLEXECUTEINFO
     cbSize As Long
     fMask As Long
-    hwnd As Long
+    hWnd As Long
     lpVerb As String
     lpFile As String
     lpParameters As String
@@ -233,7 +233,7 @@ Private Type SHELLEXECUTEINFO
     hProcess As Long
 End Type
 Private Type Fichier    'utilisé pour envoyer vers la corbeille
-     hwnd As Long
+     hWnd As Long
      wFunc As Long
      pFrom As String
      pTo As String
@@ -319,6 +319,7 @@ Private Declare Function GetOpenFileName Lib "comdlg32.dll" Alias "GetOpenFileNa
 Private Declare Function GetSaveFileName Lib "comdlg32.dll" Alias "GetSaveFileNameA" (pOpenfilename As OPENFILENAME) As Long
 Private Declare Sub CoTaskMemFree Lib "ole32.dll" (ByVal hMem As Long)
 Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
+Private Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 
 
 
@@ -350,7 +351,7 @@ End Function
 'liste les fichiers contenus dans un dossier
 'de 1 à ubound
 '=======================================================
-Public Function GetFolderFiles(ByVal sFolder As String, Files() As String, Optional SubFolder As Boolean = True) As Long
+Public Function EnumFilesFromFolder(ByVal sFolder As String, Files() As String, Optional SubFolder As Boolean = True) As Long
 
     On Error Resume Next    'évite les erreurs si le tableau est vide
     
@@ -359,11 +360,11 @@ Public Function GetFolderFiles(ByVal sFolder As String, Files() As String, Optio
     
     If Me.FolderExists(sFolder) = False Then
         'alors pas la peine de chercher
-        GetFolderFiles = 0
+        EnumFilesFromFolder = 0
         Exit Function
     Else
         EnumFiles sFolder, Files(), True, SubFolder   'énumère les fichiers
-        GetFolderFiles = UBound(Files())
+        EnumFilesFromFolder = UBound(Files())
     End If
 End Function
 
@@ -720,14 +721,14 @@ End Function
 '=======================================================
 'affiche la boite de dialogue "Choix du dossier Dossier..."
 '=======================================================
-Public Function BrowseForFolder(ByVal sTitle As String, ByVal hwnd As Long) As String
+Public Function BrowseForFolder(ByVal sTitle As String, ByVal hWnd As Long) As String
 Dim lIDList As Long
 Dim sBuffer As String
 Dim tBrowseInfo As BrowseInfo
 
     'affectation des propriétés définies par les arguments de la fonction
     With tBrowseInfo
-        .hwndOwner = hwnd
+        .hwndOwner = hWnd
         .lpszTitle = lstrcat(sTitle, "")
         .ulFlags = BIF_RETURNONLYFSDIRS + BIF_DONTGOBELOWDOMAIN
     End With
@@ -840,15 +841,15 @@ End Function
 '=======================================================
 'obtient un path spécial
 '=======================================================
-Public Function GetSpecialFolder(Folder As SPECIAL_FOLDER_TYPE, Optional ByVal hwnd As Long) As String
+Public Function GetSpecialFolder(Folder As SPECIAL_FOLDER_TYPE, Optional ByVal hWnd As Long) As String
 Dim r As Long
 Dim sPath As String
 Dim IDL As ITEMIDLIST
 
-    If IsMissing(hwnd) Then hwnd = 100
+    If IsMissing(hWnd) Then hWnd = 100
 
     'obtient le path
-    r = SHGetSpecialFolderLocation(hwnd, Folder, IDL)
+    r = SHGetSpecialFolderLocation(hWnd, Folder, IDL)
     
     If r = 0 Then
         'création d'un buffer
@@ -924,7 +925,7 @@ End Sub
 '=======================================================
 'fonction permettant d'afficher une boite de dialogue "propriété"
 '=======================================================
-Public Function DisplayFileProperty(ByVal sFile As String, ByVal lHwnd As Long) As Long
+Public Function ShowFileProperty(ByVal sFile As String, ByVal lHwnd As Long) As Long
 Dim SEI As SHELLEXECUTEINFO
 
     On Error GoTo ErrGestion
@@ -934,7 +935,7 @@ Dim SEI As SHELLEXECUTEINFO
         'défnition
         .cbSize = Len(SEI)
         .fMask = SEE_MASK_NOCLOSEPROCESS Or SEE_MASK_INVOKEIDLIST Or SEE_MASK_FLAG_NO_UI
-        .hwnd = lHwnd
+        .hWnd = lHwnd
         .lpVerb = "properties"
         .lpFile = sFile
         .lpParameters = vbNullChar
@@ -943,9 +944,16 @@ Dim SEI As SHELLEXECUTEINFO
         .hInstApp = 0
         .lpIDList = 0
     End With
-    DisplayFileProperty = ShellExecuteEX(SEI)   'affichage
+    ShowFileProperty = ShellExecuteEX(SEI)   'affichage
     
 ErrGestion:
+End Function
+
+'=======================================================
+'fonction permettant d'ouvrir un fichier
+'=======================================================
+Public Function ShellOpenFile(ByVal sFile As String, ByVal hWnd As Long, Optional sParameters As String = vbNullString, Optional ByVal sDirectory As String = vbNullString) As Long
+    ShellOpenFile = ShellExecute(hWnd, "open", sFile, sParameters, sDirectory, 1)
 End Function
 
 '=======================================================
@@ -1021,8 +1029,8 @@ End Function
 '=======================================================
 'affichage de la boite de dialogue Executer...
 '=======================================================
-Public Function ShowRunBox(ByVal hwnd As Long) As Long
-    ShowRunBox = SHRunDialog(hwnd, 0, 0, StrConv("Exécuter", vbUnicode), _
+Public Function ShowRunBox(ByVal hWnd As Long) As Long
+    ShowRunBox = SHRunDialog(hWnd, 0, 0, StrConv("Exécuter", vbUnicode), _
         StrConv("Sélectionnez un élément à lancer (dossier, document, exécutable...) et Process Guardian l'ouvrira pour vous.", _
         vbUnicode), 0)
 End Function
@@ -1031,7 +1039,7 @@ End Function
 'affichage de la boite de dialogue Ouvrir...
 'renvoie le FileName
 '=======================================================
-Public Function ShowOpen(ByVal sTitle As String, ByVal hwnd As Long, _
+Public Function ShowOpen(ByVal sTitle As String, ByVal hWnd As Long, _
     Optional ByVal sFilter As String, Optional ByVal sInitDir As String, _
     Optional ByRef bHasPushedCancel As Boolean) As String
     
@@ -1042,7 +1050,7 @@ Dim OFName As OPENFILENAME
         .lStructSize = Len(OFName)
         
         'affecte les valeurs des variables de configuration de la boite de dialogue au type
-        .hwndOwner = hwnd
+        .hwndOwner = hWnd
         .hInstance = App.hInstance
         sFilter = Replace$(sFilter, "|", vbNullChar) 'convertit la string
         .lpstrFilter = sFilter
@@ -1068,7 +1076,7 @@ End Function
 'affichage de la boite de dialogue Enregistrer...
 'renvoie le FileName AVEC l'extension choisie (ne double pas l'extension si comprise dans le nom)
 '=======================================================
-Public Function ShowSave(ByVal sTitle As String, ByVal hwnd As Long, _
+Public Function ShowSave(ByVal sTitle As String, ByVal hWnd As Long, _
     Optional ByVal sFilter As String, Optional ByVal sInitDir As String, _
     Optional ByVal sDefaultFileName As String, _
     Optional ByRef bHasPushedCancel As Boolean) As String
@@ -1082,7 +1090,7 @@ Dim s3 As String
         'taille du type
         .lStructSize = Len(OFName)
         'définit les paramètres au type
-        .hwndOwner = hwnd
+        .hwndOwner = hWnd
         .hInstance = App.hInstance
         .lpstrFilter = Replace$(sFilter, "|", vbNullChar) 'convertit la string
         .nMaxFile = 255
