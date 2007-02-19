@@ -945,7 +945,7 @@ Private Sub Form_Activate()
     
     bOkToOpen = False 'pas prêt à l'ouverture
     
-    UpdateWindow Me.hwnd    'refresh de la form
+    UpdateWindow Me.hWnd    'refresh de la form
     
 End Sub
 
@@ -953,7 +953,7 @@ Private Sub Form_Unload(Cancel As Integer)
     Set cUndo = Nothing
     #If USE_FORM_SUBCLASSING Then
         'alors enlève le subclassing
-        Call RestoreResizing(Me.hwnd)
+        Call RestoreResizing(Me.hWnd)
     #End If
 End Sub
 
@@ -1034,7 +1034,7 @@ Private Sub Form_Load()
 
     'subclasse la form pour éviter de resizer trop
     #If USE_FORM_SUBCLASSING Then
-        Call LoadResizing(Me.hwnd, 9000, 6000)
+        Call LoadResizing(Me.hWnd, 9000, 6000)
     #End If
     
     'instancie la classe Undo
@@ -1950,6 +1950,8 @@ End Sub
 Private Sub DisplayClustersInfos(ByVal sFile As String)
 Dim F As FileClusters
 Dim l As Long
+Dim clust As Currency
+Dim lastOffset  As Currency
 
     'obtient la localisation (en cluster) d'un fichier sFile
     F = GetFileBitmap(sFile)
@@ -1958,9 +1960,12 @@ Dim l As Long
     lstFrag.Clear
     
     'affiche tous les fragments
+    lastOffset = 0
     If F.ExtentsCount <> 0 Then
         For l = 0 To F.ExtentsCount - 1
-            lstFrag.AddItem CStr(GetCurrency(F.Extents(l).LCN.LowDWORD, F.Extents(l).LCN.HighDWORD))
+            clust = GetCurrency(F.Extents(l).NextVcn.LowDWORD, F.Extents(l).NextVcn.HighDWORD) - lastOffset
+            lstFrag.AddItem CStr(GetCurrency(F.Extents(l).LCN.LowDWORD, F.Extents(l).LCN.HighDWORD)) & "  (" & Trim$(Str$(clust)) & ")"
+            lastOffset = GetCurrency(F.Extents(l).NextVcn.LowDWORD, F.Extents(l).NextVcn.HighDWORD)
         Next l
     End If
 End Sub

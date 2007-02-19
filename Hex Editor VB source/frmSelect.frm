@@ -124,15 +124,15 @@ Private byteFunc As Byte
 
 Private Sub cmdOk_Click()
 'valide
-Dim lFrom As Long
-Dim lTo As Long
-Dim x As Long
+Dim lFrom As Currency
+Dim lTo As Currency
+Dim x As Currency
 
-    On Error GoTo ErrGestion
+    'On Error GoTo ErrGestion
     
     'récupère les valeurs numériques
-    lFrom = FormatedVal(txtFrom.Text) + 1
-    lTo = FormatedVal(txtTo.Text)
+    lFrom = FormatedVal_(txtFrom.Text) + 1
+    lTo = FormatedVal_(txtTo.Text)
     
     'fait en sorte que lFrom soit le plus petit
     If lFrom > lTo Then
@@ -187,6 +187,8 @@ Dim x As Long
         Call frmContent.ActiveForm.VS_Change(frmContent.ActiveForm.VS.Min)
 
     End If
+    
+    frmContent.ActiveForm.HW.Refresh
     
     Unload Me
     

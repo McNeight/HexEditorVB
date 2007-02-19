@@ -3,6 +3,7 @@ bug de resize|bug de resize des composants après la fermeture d'une childform| 1
 bug extendedvs|bug du ExtentedVS lorsqu'il arrive en bas (pour les disques) ==> plus moyen de le remonter avec l'ascenseur (oblibé de faire de la molette)| 10| 7
 bug lors de sauvegarde|bug de la sauvegarde d'un fichier en mode compilé (echec probable de readfile, null partout sauf zones modifiées)| 10| 3
 bug refresh|pas de refresh des form tant que frmHome modale après le choix d'un fichier| 10| 4
+cluster|erreur cartographie FAT32| 10| 3
 ctrl+z|bug si appui de plusieurs fois ==> retour avant le premier| 10| 4
 data|bug pour le changement des values dans framedata| 10| 4
 fileview root|ne pas pouvoir aller dans le dossier ROOT lors de l'édition d'un disque (buf du FileView)| 10| 4
