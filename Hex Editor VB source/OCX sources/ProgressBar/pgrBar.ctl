@@ -95,12 +95,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -123,21 +123,21 @@ Attribute VB_Exposed = True
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
 
-'-------------------------------------------------------
+'=======================================================
 '//CONTROLE PERSONNALISE
 '//Par Violent_ken
 '//PROGRESS BAR AVANCEE --> pgrBar
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'Historique d'avancement du contôle
-'-------------------------------------------------------
+'=======================================================
 '****v1.0
 'initial release
 '****v1.1
@@ -168,18 +168,18 @@ Option Explicit
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'TO DO
-'-------------------------------------------------------
+'=======================================================
 '-choix de l'orientation G/D/H/B de la barre de valeur
 '-ajout de la form de propriétés
 '-ajout d'une liste de valeurs (par l'utilisateur) créant un évênement
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'DESCRIPTIF du composant
-'-------------------------------------------------------
+'=======================================================
 
 'Cette progress bar possède un look stylé XP
 'Quelques propriétés graphiques :
@@ -247,22 +247,22 @@ Option Explicit
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'SOURCE du composant
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'APIs
-'-------------------------------------------------------
+'=======================================================
 'pour appliquer des bitmaps
 Private Declare Function StretchBlt Lib "gdi32" (ByVal hdc As Long, _
     ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, _
     ByVal hSrcDC As Long, ByVal xSrc As Long, ByVal ySrc As Long, _
     ByVal nSrcWidth As Long, ByVal nSrcHeight As Long, ByVal dwRop As Long) As Long
 
-'-------------------------------------------------------
+'=======================================================
 'EVENTs publics
-'-------------------------------------------------------
+'=======================================================
 Public Event MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 Public Event MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
 Public Event MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -276,9 +276,9 @@ Public Event InteractionComplete(NewValue As Double, OldValue As Double)
 Public Event ValueIsMax(Value As Double)
 Public Event ValueIsMin(Value As Double)
 
-'-------------------------------------------------------
+'=======================================================
 'VARIABLEs privée
-'-------------------------------------------------------
+'=======================================================
 Private lBackColorTop As Long 'couleur dégradé 1
 Private lBackColorBottom As Long 'couleur dégradé 2
 Private lLeftColor As Long 'couleur valeur dégradé 1
@@ -298,9 +298,9 @@ Private taAlign As TEXT_ALIGMENT   'alignement du texte
 Private lOSx As Long    'offsetX
 Private lOSy As Long    'offsetY
 
-'-------------------------------------------------------
+'=======================================================
 'ENUMs de choix de propriétés
-'-------------------------------------------------------
+'=======================================================
 Enum LABEL_MODE
     No = 0
     PercentageMode = 1
@@ -334,9 +334,9 @@ Enum TEXT_ALIGMENT
 End Enum
 
 
-'-------------------------------------------------------
+'=======================================================
 'PROPERTIES
-'-------------------------------------------------------
+'=======================================================
 Public Property Get Alignment() As TEXT_ALIGMENT: Alignment = taAlign: End Property
 Public Property Let Alignment(Alignment As TEXT_ALIGMENT): taAlign = Alignment: Refresh: End Property
 Public Property Get LabelColor() As OLE_COLOR: LabelColor = lLabelColor: End Property
@@ -412,9 +412,9 @@ Public Property Get RoundColorValue() As OLE_COLOR: RoundColorValue = UserContro
 Public Property Let RoundColorValue(RoundColorValue As OLE_COLOR): UserControl.BackColor = RoundColorValue: Refresh: End Property
 Public Property Get Degrade() As MODE_DEGRADE: Degrade = mdDeg: End Property
 Public Property Let Degrade(Degrade As MODE_DEGRADE): mdDeg = Degrade: Refresh: End Property
-'-------------------------------------------------------
+'=======================================================
 'ABOUT
-'-------------------------------------------------------
+'=======================================================
 Public Sub About()
 Dim s As String
     s = "prgBar v1.7 par violent_ken (septembre 2006)" & vbNewLine & "Remplace la progressbar de Windows Common Controls"
@@ -423,9 +423,9 @@ End Sub
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'EVENEMENTS
-'-------------------------------------------------------
+'=======================================================
 Private Sub pct_Click()
     RaiseEvent Click
 End Sub
@@ -449,9 +449,9 @@ Private Sub pct_MouseUp(Button As Integer, Shift As Integer, x As Single, y As S
 End Sub
 
 
-'-------------------------------------------------------
+'=======================================================
 'USERCONTROL
-'-------------------------------------------------------
+'=======================================================
 Private Sub UserControl_InitProperties()
 
 'valeurs par défaut
@@ -593,18 +593,18 @@ Dim lDif As Long    'marge
     Refresh
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'transforme une couleur long en RGB
-'-------------------------------------------------------
+'=======================================================
 Private Function LongToRGB(ByVal lLong As Long, ByRef lRed As Long, ByRef lGreen As Long, ByRef lBlue As Long)
     lBlue = CLng(Int(lLong / 65536))
     lGreen = CLng(Int((lLong - CLng(lBlue) * 65536) / 256))
     lRed = CLng(lLong - CLng(lBlue) * 65536 - CLng(lGreen) * 256)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'créé le dégradé
-'-------------------------------------------------------
+'=======================================================
 Private Sub Degrader()
 Dim pxlHeight As Long   'hauteur (pixel) du picturebox
 Dim pxlWidth As Long    'largeur (pixel) du picturebox
@@ -652,9 +652,9 @@ Dim dIncrBlue As Double  'incrémentation de la composante bleue
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'rafraichit le contrôle
-'-------------------------------------------------------
+'=======================================================
 Private Sub Refresh()
 Dim pxlHeight As Long   'hauteur du picturebox
 Dim pxlWidth As Long    'largeur du picturebox

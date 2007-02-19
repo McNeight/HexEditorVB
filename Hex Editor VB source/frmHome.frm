@@ -519,12 +519,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -547,14 +547,14 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 'FORM DE DEMARRAGE (CHOIX DES ACTIONS A EFFECTUER)
-'-------------------------------------------------------
+'=======================================================
 
 Private clsPref As clsIniForm
 
@@ -711,9 +711,9 @@ Private Sub cmdQuit_Click()
     Unload Me
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'FORM HOME ==> CHOIX DE L'OBJET A OUVRIR
-'-------------------------------------------------------
+'=======================================================
 Private Sub Form_Load()
 Dim x As Long
 Dim p() As ProcessItem
@@ -761,9 +761,9 @@ Dim clsProc As clsProcess   'appel à une classe de gestion de processus
     MaskFrames 0
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'masque tous les frames sauf un
-'-------------------------------------------------------
+'=======================================================
 Private Sub MaskFrames(ByVal lFrame As Long)
 Dim x As Long
 

@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,18 +39,18 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//CLASSE DE GESTION DU REGISTRE
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'CONSTANTES
-'-------------------------------------------------------
+'=======================================================
 Private Const REG_OPTION_BACKUP_RESTORE         As Long = 4      ' open for backup or restore
 Private Const REG_OPTION_VOLATILE               As Long = 1             ' Key is not preserved when system is rebooted
 Private Const REG_OPTION_NON_VOLATILE           As Long = 0        ' Key is preserved when system is rebooted
@@ -77,9 +77,9 @@ Private Const ERROR_NO_MORE_ITEMS               As Long = 259&
 Private Const BUFFER_SIZE                       As Long = 255
 
 
-'-------------------------------------------------------
+'=======================================================
 'ENUM & TYPES
-'-------------------------------------------------------
+'=======================================================
 'enum de sélection de clé racine
 Public Enum KEY_TYPE
     HKEY_CLASSES_ROOT = &H80000000
@@ -103,9 +103,9 @@ Public Enum REGKEY_TYPE
     REG_RESOURCE_LIST = 8
 End Enum
 
-'-------------------------------------------------------
+'=======================================================
 'APIS
-'-------------------------------------------------------
+'=======================================================
 Private Declare Function RegCloseKey Lib "advapi32.dll" (ByVal hKey As Long) As Long
 Private Declare Function RegCreateKey Lib "advapi32.dll" Alias "RegCreateKeyA" (ByVal hKey As Long, ByVal lpSubKey As String, phkResult As Long) As Long
 Private Declare Function RegDeleteValue Lib "advapi32.dll" Alias "RegDeleteValueA" (ByVal hKey As Long, ByVal lpValueName As String) As Long
@@ -119,7 +119,7 @@ Private Declare Function RegEnumKeyEx Lib "advapi32.dll" Alias "RegEnumKeyExA" (
 Private Declare Function RegEnumValue Lib "advapi32.dll" Alias "RegEnumValueA" (ByVal hKey As Long, ByVal dwIndex As Long, ByVal lpValueName As String, lpcbValueName As Long, ByVal lpReserved As Long, lpType As Long, lpData As Any, lpcbData As Long) As Long
 
 
-'-------------------------------------------------------
+'=======================================================
 'récupère une valeur d'une clé
 'exemple d'utilisation :
 '    Dim sPath As String
@@ -129,7 +129,7 @@ Private Declare Function RegEnumValue Lib "advapi32.dll" Alias "RegEnumValueA" (
 '            RetrieveServiceInfo = RegQueryStringValue(hKey, sValeur)
 '            RegCloseKey hKey
 '        End If
-'-------------------------------------------------------
+'=======================================================
 Private Function RegQueryStringValue(ByVal hKey As Long, ByVal strValueName As String) As String
 Dim lValueType As Long
 Dim strBuf As String
@@ -167,10 +167,10 @@ Dim lData As Long
     End If
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient la valeur d'une clé registre
 'exemple : ReadValue(HKEY_CURRENT_USER, "Le path de la clé", "Le nom de la valeur de clé")
-'-------------------------------------------------------
+'=======================================================
 Public Function ReadValue(ByVal hKey As KEY_TYPE, ByVal strPath As String, ByVal strValue As String) As String
 Dim Ret As Long
 
@@ -184,10 +184,10 @@ Dim Ret As Long
     RegCloseKey Ret
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'sauvegarde une valeur de clé
 'exemple : WriteValue HKEY_CURRENT_USER, "folder1\folder2", "Nom de la valeur", "Contenu de la valeur de clé", REG_BINARY
-'-------------------------------------------------------
+'=======================================================
 Public Function WriteValue(ByVal hKey As KEY_TYPE, ByVal strPath As String, ByVal strValue As String, ByVal strData As String, ByVal tType As REGKEY_TYPE) As Long
 Dim Ret As Long
 
@@ -201,10 +201,10 @@ Dim Ret As Long
     RegCloseKey Ret
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'supprime une valeur de clé
 'exemple : DelKeyValue HKEY_CURRENT_USER, "folder1\folder2", "Valeur de clé"
-'-------------------------------------------------------
+'=======================================================
 Public Function DelKeyValue(ByVal hKey As KEY_TYPE, ByVal strPath As String, ByVal strValue As String) As Long
 Dim Ret As Long
    
@@ -218,18 +218,18 @@ Dim Ret As Long
     RegCloseKey Ret
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'supprime une clé
 'exemple : DelKey HKEY_USERS, "folder1\folder2"
-'-------------------------------------------------------
+'=======================================================
 Public Function DelKey(ByVal hKey As KEY_TYPE, ByVal strPath As String) As Long
     DelKey = RegDeleteKey(hKey, strPath)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'créé une nouvelle clé
 'exemple : CreateKey HKEY_USERS, "folder1\folder2"
-'-------------------------------------------------------
+'=======================================================
 Public Function CreateKey(ByVal hKey As KEY_TYPE, ByVal strPath As String) As Long
 Dim result As Long
 Dim Ret As Long
@@ -245,9 +245,9 @@ Dim Ret As Long
     RegCloseKey result
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'teste la présence d'une clé
-'-------------------------------------------------------
+'=======================================================
 Public Function DoesKeyExist(ByVal hKey As KEY_TYPE, ByVal strPath As String) As Boolean
 Dim result As Long
 
@@ -261,10 +261,10 @@ Dim result As Long
     RegCloseKey result
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'énumère les sous clés
 'stocke de 1 à ubound
-'-------------------------------------------------------
+'=======================================================
 Public Sub GetSubKeys(ByVal hKey As KEY_TYPE, ByVal strPath As String, ByRef SubKeys() As String)
 Dim Cnt As Long
 Dim sName As String
@@ -304,9 +304,9 @@ Dim s() As String
     SubKeys = s
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'énumère les valeurs de clé
-'-------------------------------------------------------
+'=======================================================
 Public Sub GetKeyValues(ByVal hKey As KEY_TYPE, ByVal strPath As String, ByRef KeyValues() As String, ByRef KeyValuesData() As String)
 Dim Cnt As Long
 Dim sName As String

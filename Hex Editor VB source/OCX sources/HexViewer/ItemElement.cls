@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,29 +39,29 @@ Attribute VB_Exposed = True
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//PERSONNAL TYPE
 'UTILISE PAR LE HEXVIEWER
-'-------------------------------------------------------
+'=======================================================
 
 
-'-------------------------------------------------------
+'=======================================================
 'ENUMS
-'-------------------------------------------------------
+'=======================================================
 Public Enum ItemType
     tHex = 1
     tString = 2
     tOffset = 3
 End Enum
  
-'-------------------------------------------------------
+'=======================================================
 'variables de la structure ItemElement
-'-------------------------------------------------------
+'=======================================================
 Public Line As Long
 Public Col As Long
 Public Value As Variant

@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,27 +39,27 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//CLASSE POUR LA GESTION DU UNDO/REDO
 'TYPE PERSO CONTENANT L'HISTORIQUE (SUB ITEM)
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'TYPES & ENUMS
-'-------------------------------------------------------
+'=======================================================
 Public Enum UNDO_TYPE   'contient les types de Undo possibles
     actByteWritten = 0 'écriture d'un byte de type string
     actRestArea = 2 'restriction de visualisation
 End Enum
 
-'-------------------------------------------------------
+'=======================================================
 'PUBLIC VARIABLES (composant du type perso que constitue la classe)
-'-------------------------------------------------------
+'=======================================================
 'variables qui définissent chaque entrée de l'historique
 Public tUndoType As UNDO_TYPE     'type de l'item qui consitue cet élément
 Public sData1 As String     'donnée string 1 (généralement l'ancienne string)

@@ -106,16 +106,19 @@ Begin VB.Form frmPropertyShow
          NumTabs         =   3
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fichier"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Disque"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Processus"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -192,12 +195,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -220,31 +223,31 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 'FORM D'AFFICHAGE DES PROPRIETES
-'-------------------------------------------------------
+'=======================================================
 
 Private Sub Form_Activate()
     RefreshProp
 End Sub
 
 Private Sub Form_Load()
-Dim X As Long
-    For X = 0 To 2
-        Frame1(X).Top = 600
-        Frame1(X).Left = 120
-        Frame1(X).Visible = False
-    Next X
+Dim x As Long
+    For x = 0 To 2
+        Frame1(x).Top = 600
+        Frame1(x).Left = 120
+        Frame1(x).Visible = False
+    Next x
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'rafraichit les propriétés
-'-------------------------------------------------------
+'=======================================================
 Private Sub RefreshProp()
 
     'affiche le bon TAB
@@ -266,9 +269,9 @@ Private Sub RefreshProp()
 End Sub
 
 
-'-------------------------------------------------------
+'=======================================================
 'affiche les propriétés d'un disque
-'-------------------------------------------------------
+'=======================================================
 Private Sub ShowDiskProp()
 Dim cDrive As clsDrive
 Dim s As String
@@ -318,9 +321,9 @@ Dim s As String
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'affiche les propriétés d'un fichier
-'-------------------------------------------------------
+'=======================================================
 Private Sub ShowFileProp()
 Dim cFic As clsFile
 Dim s As String
@@ -373,9 +376,9 @@ Dim s As String
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'affiche les propriétés d'un processus
-'-------------------------------------------------------
+'=======================================================
 Private Sub ShowProcessProp()
 Dim pProcess As ProcessItem
 Dim cFic As clsFile

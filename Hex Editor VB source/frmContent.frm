@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "10:50"
+            TextSave        =   "16:01"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -874,12 +874,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -902,16 +902,16 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 'FORM PARENT QUI CONTIENT LES FORM D'EDITION
 'FICHIER/MEMOIRE
 'CONTIENT LES MENUS
-'-------------------------------------------------------
+'=======================================================
 
 Private bDonneeForm As Boolean
 
@@ -1658,7 +1658,6 @@ Private Sub mnuHelp_Click()
     'Else
     '    Lang.Language = "French"
     'End If
-    
     
     
     'Err.Raise Int(Rnd * 50)
@@ -2511,9 +2510,9 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute (ou ouvre si overwrite) une liste de signets
-'-------------------------------------------------------
+'=======================================================
 Private Sub AddSignetIn(ByVal bOverWrite As Boolean)
 Dim s As String
 Dim lFile As Long
@@ -2561,9 +2560,9 @@ Dim l As Long
 ErrGestion:
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'permet de masquer ou d'afficher les menus en fonction du type de form qui est active
-'-------------------------------------------------------
+'=======================================================
 Public Function ChangeEnabledMenus()
 
     If TypeOfActiveForm = "Mem" Then

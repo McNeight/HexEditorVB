@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' File Renamer VB (part of Hex Editor VB)
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' An Windows utility which allows to rename lots of file (part of Hex Editor VB)
 '
@@ -38,28 +38,28 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================--------
 '//CLASSE IMAGE
-'-------------------------------------------------------
+'=======================================================--------
 
 
-'-------------------------------------------------------
+'=======================================================--------
 'VARIABLES PUBLIQUES
-'-------------------------------------------------------
+'=======================================================--------
 Public sType As String    'PNG/JPEG/BMP/GIF
 Public lHeight As Long
 Public lWidth As Long
 Public sFile As String
 
 
-'-------------------------------------------------------
+'=======================================================--------
 'TYPES & ENUMS
-'-------------------------------------------------------
+'=======================================================--------
 Private Enum IMAGE_EXTENSION_TYPE
     lUNKNOWN = 0
     lGIF = 1
@@ -79,15 +79,15 @@ Private Type WordWrapper
     Value As Integer
 End Type
 
-'-------------------------------------------------------
+'=======================================================--------
 'VARIABLES PRIVEES
-'-------------------------------------------------------
+'=======================================================--------
 Private bytBuffer() As Byte
 
 
-'-------------------------------------------------------
+'=======================================================--------
 'retourne un type IMAGE_INFO contenant des infos sur un fichier image
-'-------------------------------------------------------
+'=======================================================--------
 Public Sub GetImageInfos()
 Dim lFile As Long
 Dim lngWidth As Long
@@ -172,13 +172,13 @@ ErrGestion:
 End Sub
 
 
-'-------------------------------------------------------
+'=======================================================--------
 'FONCTIONS PRIVEES
-'-------------------------------------------------------
+'=======================================================--------
 
-'-------------------------------------------------------
+'=======================================================--------
 'retourne une string qui renvoie le type du fichier
-'-------------------------------------------------------
+'=======================================================--------
 Private Function ImageType2String(ByVal lType As IMAGE_EXTENSION_TYPE) As String
     Select Case lType
         Case lUNKNOWN
@@ -194,12 +194,12 @@ Private Function ImageType2String(ByVal lType As IMAGE_EXTENSION_TYPE) As String
     End Select
 End Function
 
-'-------------------------------------------------------
+'=======================================================--------
 '2 fonctions de conversion
 '/!\ ces fonctions ont été trouvées sur le net, me rappelle plus vraiment d'où
 'attention à l'affectation LSet qui affecte dans un type perso un AUTRE type perso
 'les données binaires de x2 sont copiées dans l'espace mémoire de x1
-'-------------------------------------------------------
+'=======================================================--------
 Private Function LEWord(position As Long) As Long
 Dim x1 As WordBytes
 Dim x2 As WordWrapper

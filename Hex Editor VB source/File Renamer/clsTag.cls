@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' File Renamer VB (part of Hex Editor VB)
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' An Windows utility which allows to rename lots of file (part of Hex Editor VB)
 '
@@ -38,18 +38,18 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-----------------------------------------------
+'=======================================================
 '//OBJET TAG
-'-----------------------------------------------
+'=======================================================
 
-'-----------------------------------------------
+'=======================================================
 '//VARIABLES DU TYPE PERSO
-'-----------------------------------------------
+'=======================================================
 Public Album As String
 Public Artist As String
 Public Comment As String
@@ -66,9 +66,9 @@ Public TrackV1 As Integer   'IDv1 ==> integer
 Public Year As String
 
 
-'-----------------------------------------------
+'=======================================================
 '//ENUMS
-'-----------------------------------------------
+'=======================================================
 Public Enum GENRE_OF_MUSIC
     [Genre - Blues] = 0
     [Genre - Classic Rock] = 1

@@ -1,10 +1,10 @@
 Attribute VB_Name = "mdlDeclarations"
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -27,24 +27,24 @@ Attribute VB_Name = "mdlDeclarations"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
 
-'-----------------------------------------------
+'=======================================================
 '//MODULE DE DECLARATION
 '//DES APIS/ENUM/TYPES/CONSTANTES
-'-----------------------------------------------
+'=======================================================
 
 
 
 
 
-'-------------------------------------------------------
+'=======================================================
 '//CONSTANTES
-'-------------------------------------------------------
+'=======================================================
 
 'constantes d'accès à un processus (pour OpenProcess)
 Public Const SYNCHRONIZE                        As Long = &H100000
@@ -159,15 +159,16 @@ Public Const INVALID_HANDLE_VALUE               As Long = -1&
 
 
 
-'-------------------------------------------------------
+'=======================================================
 '//APIs
-'-------------------------------------------------------
+'=======================================================
 
-'conversions de système de temps
+'systèmes de temps
 Public Declare Function FileTimeToSystemTime Lib "kernel32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
 Public Declare Function FileTimeToLocalFileTime Lib "kernel32" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
 Public Declare Function SystemTimeToFileTime Lib "kernel32" (lpSystemTime As SYSTEMTIME, lpFileTime As FILETIME) As Long
 Public Declare Function LocalFileTimeToFileTime Lib "kernel32" (lpLocalFileTime As FILETIME, lpFileTime As FILETIME) As Long
+Public Declare Function CompareFileTime Lib "kernel32" (lpFileTime1 As Currency, lpFileTime2 As Currency) As Long
 
 'APIS pour les menus dynamiques
 Public Declare Function CreatePopupMenu Lib "user32" () As Long
@@ -259,9 +260,9 @@ Public Declare Function GetUserNameA Lib "advapi32.dll" (ByVal lpBuffer As Strin
 
 
 
-'-------------------------------------------------------
+'=======================================================
 '//ENUMS
-'-------------------------------------------------------
+'=======================================================
 
 'type de table à afficher dans frmTable
 Public Enum TableType
@@ -300,10 +301,18 @@ Public Enum CUT_METHOD_ENUM
     [Nombre fichiers fixe]
 End Enum
 
+'type de recherche (recherche de fichiers)
+Public Enum TYPE_OF_FILE_SEARCH
+    [Recherche de fichiers]
+    [Recherche de dossiers]
+    [Recherche de contenu de fichier]
+End Enum
 
-'-------------------------------------------------------
+
+
+'=======================================================
 '//TYPES
-'-------------------------------------------------------
+'=======================================================
 
 'pour l'obtention des zones mémoire d'un processus
 Public Type MEMORY_BASIC_INFORMATION ' 28 bytes
@@ -566,4 +575,9 @@ End Type
 Public Type CUT_METHOD
     tMethode As CUT_METHOD_ENUM
     lParam As Long
+End Type
+
+'contient les résultats de la recherche de fichiers
+Public Type FILE_SEARCH_RESULT
+    sF() As String
 End Type

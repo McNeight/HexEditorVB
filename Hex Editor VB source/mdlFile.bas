@@ -1,10 +1,10 @@
 Attribute VB_Name = "mdlFile"
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -27,18 +27,18 @@ Attribute VB_Name = "mdlFile"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//MODULE DE GESTION DES FICHIERS
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le path du fichier temp à créer
-'-------------------------------------------------------
+'=======================================================
 Public Sub ObtainTempPathFile(ByVal sFile As String, ByRef sTempFile As String, sExt As String)
 Dim sBuf As String
 Dim s As String
@@ -70,9 +70,9 @@ Dim s As String
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'enregistrer sous ==> lance la création d'un fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function CreateAFile(Frm As Form, ByVal sPath As String) As Boolean
 Dim sFile As String
 Dim lFile As Long
@@ -88,10 +88,10 @@ Dim lFile As Long
 GestionErr:
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'execute un fichier temporaire créé à partir
 'des valeurs modifiées du tableau hexadécimal
-'-------------------------------------------------------
+'=======================================================
 Public Function ExecuteTempFile(ByVal hwnd As Long, Frm As Form, sExt As String) As Long
 Dim sTempFile As String
 
@@ -105,9 +105,9 @@ Dim sTempFile As String
     ExecuteTempFile = ShellExecute(hwnd, "open", sTempFile, vbNullString, vbNullString, 1)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'créé un raccourci dans 'envoyer vers...'
-'-------------------------------------------------------
+'=======================================================
 Public Sub Shortcut(ByVal bCreate As Boolean)
 Dim WSHShell As Object, Sh As Variant
 Dim sPath As String
@@ -134,9 +134,9 @@ Dim sPath As String
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'impression du fichier de l'activeform
-'-------------------------------------------------------
+'=======================================================
 Public Sub PrintFile(ByVal curStartOffset As Currency, ByVal curEndOffset As Currency, _
 ByVal bPrintHexa As Boolean, ByVal bPrintASCII As Boolean, ByVal bPrintOffset As Boolean, _
 ByVal bPrintFileInfo As Boolean, ByVal lngTextSize As Long, ByVal tPrinter As Printer, Optional ByVal strTitle As String)
@@ -178,9 +178,9 @@ Dim y As Long
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'récupérer des bytes dans un fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function GetBytesFromFile(ByVal sFile As String, ByVal curSize As Currency, ByVal curOffset As Currency) As String
 Dim tmpText As String
 Dim Ret As Long
@@ -214,9 +214,9 @@ ErrGestion:
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'écrire des bytes dans un fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function WriteBytesToFile(ByVal sFile As String, ByVal sString As String, ByVal curOffset As Currency) As String
 Dim tmpText As String
 Dim Ret As Long
@@ -243,9 +243,9 @@ ErrGestion:
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'écrire des bytes dans un fichier (à la fin du fichier)
-'-------------------------------------------------------
+'=======================================================
 Public Function WriteBytesToFileEnd(ByVal sFile As String, ByVal sString As String) As String
 Dim tmpText As String
 Dim Ret As Long

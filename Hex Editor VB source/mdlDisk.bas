@@ -1,10 +1,10 @@
 Attribute VB_Name = "mdlDisk"
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -27,26 +27,26 @@ Attribute VB_Name = "mdlDisk"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//MODULE CONTENANT LES FONCTIONS POUR L'OUVERTURE D'UN DISQUE
-'-------------------------------------------------------
+'=======================================================
 
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie un drive compatible avec l'api CreateFile
-'-------------------------------------------------------
+'=======================================================
 Public Function BuildDrive(ByVal sDrive As String) As String
     BuildDrive = "\\.\" & UCase$(Left$(sDrive, 2))
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'lecture de lLen bytes à l'offset lOffset dans le drive sDrive
-'-------------------------------------------------------
+'=======================================================
 'Public Sub ReadB(ByVal sDrive As String, ByVal lOffset As Currency, ByVal lLen As Long, ByRef lResult() As Byte)
 'Dim lDrive As Long
 'Dim crPointeur As Currency
@@ -84,9 +84,9 @@ End Function
 '    CloseHandle lDrive
 'End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'permet de lire des bytes directement dans le disque
-'-------------------------------------------------------
+'=======================================================
 Public Sub DirectRead(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef ReadOctet() As Byte)
 ' Attention le nombre d'octets lus ou écrits ainsi que l'offset du premier octet lu ou écrit
 ' doivent impérativement être un multiple de la taille d'un secteur de disque
@@ -131,9 +131,9 @@ dskerror:
     CloseHandle hDevice
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'permet de d'écrire de manière directe dans le disque
-'-------------------------------------------------------
+'=======================================================
 Public Sub DirectWriteS(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sStringToWrite As String)
 '/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
 Dim BytesRead As Long
@@ -180,10 +180,10 @@ dskerror:
     CloseHandle hDevice
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'permet de lire des bytes directement dans le disque
 'sortie en String
-'-------------------------------------------------------
+'=======================================================
 Public Sub DirectReadS(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sBufferOut As String)
 '/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
 Dim BytesRead As Long
@@ -226,9 +226,9 @@ dskerror:
     CloseHandle hDevice
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'lecture de lLen bytes à l'offset lOffset dans le drive sDrive
-'-------------------------------------------------------
+'=======================================================
 Public Sub ReadDiskBytes(ByVal sDrive As String, ByVal lOffset As Currency, ByVal lLen As Long, ByRef lResult() As Byte, ByVal lBytesPerSector As Long)
 Dim lDrive As Long
 Dim crPointeur As Currency
@@ -279,17 +279,17 @@ DiskErr:
     CloseHandle lDrive
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'callback fonction appelée par l'API ReadFileEx juste au dessus
 'fonction non utilisée, mais sa présence est néanmoins nécessaire
-'-------------------------------------------------------
+'=======================================================
 Public Function CallBackFunction()
     Rem N'est pas utile en soit
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'identique à ReadDiskBytes, mais différent
-'-------------------------------------------------------
+'=======================================================
 'Public Sub DirectReadDriveNT(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal iOffset As Currency, ByVal cBytes As Long, ByVal BytesPerSector As Long, ByRef abResult() As Byte)
 'Dim hDevice As Long
 'Dim abBuff() As Byte
@@ -335,15 +335,15 @@ End Function
 '    clsERREUR.AddError "mdlDisk.DirectReadDriveNT", True
 'End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'fonction de recherche de string complètes dans un fichier
 'stocke dans un tableau de 1 à Ubound
-'-------------------------------------------------------
-Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByRef tRes() As SearchResult, Optional PGB As pgrbar)
+'=======================================================
+Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByRef tRes() As SearchResult, Optional pgb As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
 Dim strCtemp As String
-Dim X As Long
+Dim x As Long
 Dim lngLen As Long
 Dim bytAsc As Byte
 Dim lngFile As Long
@@ -357,11 +357,11 @@ Dim i As Long
     'taille du fichier
     lngLen = cFile.GetFileSize(sFile)
     
-    If Not (PGB Is Nothing) Then
+    If Not (pgb Is Nothing) Then
         'on initialise la progressabr
-        PGB.Min = 0
-        PGB.Value = 0
-        PGB.Max = lngLen
+        pgb.Min = 0
+        pgb.Value = 0
+        pgb.Max = lngLen
     End If
 
     'initialise le tableau
@@ -373,7 +373,7 @@ Dim i As Long
     'vérifie que le handle est valide
     If lngFile = INVALID_HANDLE_VALUE Then Exit Sub
     
-    strCtemp = vbNullString: X = 1: curByte = 0
+    strCtemp = vbNullString: x = 1: curByte = 0
     
     'va faire tout le fichier pour tenter de dénicher des strings
     'créé un buffer de 50Ko
@@ -384,7 +384,7 @@ Dim i As Long
       
     Do Until curByte > lngLen  'tant que le fichier n'est pas fini
     
-        X = X + 1
+        x = x + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
@@ -421,15 +421,15 @@ Dim i As Long
             tRes(UBound(tRes)).strString = strCtemp
         End If
         
-        If (X Mod 10) = 0 Then
-            If Not (PGB Is Nothing) Then PGB.Value = curByte    'refresh progressbar
+        If (x Mod 10) = 0 Then
+            If Not (pgb Is Nothing) Then pgb.Value = curByte    'refresh progressbar
             DoEvents    'rend la main
         End If
         
         curByte = curByte + 51200   'incrémente la position
     Loop
     
-    If Not (PGB Is Nothing) Then PGB.Value = lngLen
+    If Not (pgb Is Nothing) Then pgb.Value = lngLen
     
     Let strBuffer = vbNullString
     CloseHandle lngFile 'ferme le handle du fichier
@@ -442,14 +442,14 @@ ErrGestion:
     clsERREUR.AddError "mdlDisk.SearchStringInFile", True
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'fonction de recherche de string dans un fichier
 'de 1 à Ubound
-'-------------------------------------------------------
-Public Sub SearchForStringFile(ByVal sFile As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrbar)
+'=======================================================
+Public Sub SearchForStringFile(ByVal sFile As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional pgb As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
-Dim X As Long
+Dim x As Long
 Dim lngLen As Long
 Dim bytAsc As Byte
 Dim lngFile As Long
@@ -465,11 +465,11 @@ Dim i As Long
     'taille du fichier
     lngLen = cFile.GetFileSize(sFile)
     
-    If Not (PGB Is Nothing) Then
+    If Not (pgb Is Nothing) Then
         'on initialise la progressabr
-        PGB.Min = 0
-        PGB.Value = 0
-        PGB.Max = lngLen
+        pgb.Min = 0
+        pgb.Value = 0
+        pgb.Max = lngLen
     End If
 
     'initialise le tableau
@@ -481,7 +481,7 @@ Dim i As Long
     'vérifie que le handle est valide
     If lngFile = INVALID_HANDLE_VALUE Then Exit Sub
     
-    X = 1: curByte = 0
+    x = 1: curByte = 0
     
     'va faire tout le fichier pour tenter de dénicher des strings
     'créé un buffer de 50Ko
@@ -494,7 +494,7 @@ Dim i As Long
       
     Do Until curByte > lngLen  'tant que le fichier n'est pas fini
     
-        X = X + 1
+        x = x + 1
         
         If bCasse = False Then strBuffer = LCase$(strBuffer)
         
@@ -524,15 +524,15 @@ Dim i As Long
             strBufT = Right$(strBufT, Len(strBufT) - InStr(1, strBufT, sMatch, vbBinaryCompare) - Len(sMatch) + 1)
         Wend
         
-        If (X Mod 10) = 0 Then
-            If Not (PGB Is Nothing) Then PGB.Value = curByte    'refresh progressbar
+        If (x Mod 10) = 0 Then
+            If Not (pgb Is Nothing) Then pgb.Value = curByte    'refresh progressbar
             DoEvents    'rend la main
         End If
         
         curByte = curByte + Len(strBuffer2) + Len(strBuffer) 'incrémente la position
     Loop
     
-    If Not (PGB Is Nothing) Then PGB.Value = lngLen
+    If Not (pgb Is Nothing) Then pgb.Value = lngLen
     
     Let strBufT = vbNullString
     Let strBuffer2 = vbNullString
@@ -548,14 +548,14 @@ ErrGestion:
     clsERREUR.AddError "mdlDisk.SearchForStringFile", True
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'fonction de recherche de string dans un disque
 'de 1 à Ubound
-'-------------------------------------------------------
-Public Sub SearchForStringDisk(ByVal sDrive As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrbar)
+'=======================================================
+Public Sub SearchForStringDisk(ByVal sDrive As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional pgb As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
-Dim X As Long
-Dim R() As Byte
+Dim x As Long
+Dim r() As Byte
 Dim bytAsc As Byte
 Dim strDrive As String
 Dim strBufT As String
@@ -570,7 +570,7 @@ Dim clsDrive As clsDiskInfos
     On Error GoTo ErrGestion
 
     'initialise les tableaux
-    ReDim tRes(0): ReDim R(0)
+    ReDim tRes(0): ReDim r(0)
     
     'formate le nom du disque
     strDrive = BuildDrive(Right$(sDrive, 3))
@@ -583,11 +583,11 @@ Dim clsDrive As clsDiskInfos
     nbSec = cDrive.TotalLogicalSectors
     btPerSec = cDrive.BytesPerSector
     
-    If Not (PGB Is Nothing) Then
+    If Not (pgb Is Nothing) Then
         'on initialise la progressabr
-        PGB.Min = 0
-        PGB.Value = 0
-        PGB.Max = nbSec
+        pgb.Min = 0
+        pgb.Value = 0
+        pgb.Max = nbSec
     End If
 
     If bCasse = False Then sMatch = LCase$(sMatch)  'cherche que les minuscules
@@ -609,12 +609,12 @@ Dim clsDrive As clsDiskInfos
             strBufT = Right$(strBufT, Len(strBufT) - InStr(1, strBufT, sMatch, vbBinaryCompare) - Len(sMatch) + 1)
         Wend
         
-        If Not (PGB Is Nothing) Then PGB.Value = i    'refresh progressbar
+        If Not (pgb Is Nothing) Then pgb.Value = i    'refresh progressbar
         DoEvents    'rend la main
         
     Next i
     
-    If Not (PGB Is Nothing) Then PGB.Value = nbSec
+    If Not (pgb Is Nothing) Then pgb.Value = nbSec
     
     Let strBufT = vbNullString
 
@@ -623,11 +623,11 @@ ErrGestion:
     clsERREUR.AddError "mdlDisk.SearchForStringFile", True
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'détermine si un byte est considéré comme convenable en fonction
 'des paramètres Afficher : min, MAJ, nbres, signes
 'function utilisée directement avec les procédures de SearchStringIn...
-'-------------------------------------------------------
+'=======================================================
 Public Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean) As Boolean
     If bMaj Then
         IsCharConsideredInAString = (bytChar >= 65 And bytChar <= 90)
@@ -655,17 +655,17 @@ Public Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As
     IsCharConsideredInAString = False
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'écriture de bytes dans un disque physique
-'-------------------------------------------------------
+'=======================================================
 Public Sub DirectWrite(ByVal iStartSec As Currency, ByVal nBytes As Long)
 '
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'efface complètement un fichier du disque dur
-'-------------------------------------------------------
+'=======================================================
 Public Function ShreddFile(ByVal sFile As String) As Boolean
 Dim hFile As Long
 Dim sFile2 As String
@@ -733,16 +733,16 @@ ErrGestion:
     clsERREUR.AddError "mdlDisk.ShreddFile", True
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient les infos sur l'emplacement (clusters) du fichier sur le disque
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFileBitmap(File As String) As FileClusters
 Dim hFile As Long 'handle de fichier dont on veut la carte des clusters
 Dim FileBitmap As RETRIEVAL_POINTERS_BUFFER 'carte des clusters du fichier
 Dim nExtents As Long
 Dim StartingAddress As LARGE_INTEGER 'VCN de début de la carte du fichier
 Dim status As Long 'état de l'opération
-Dim X As Long
+Dim x As Long
 Dim tmp As FileClusters
 
     On Error GoTo ErrGestion
@@ -790,10 +790,10 @@ ErrGestion:
     clsERREUR.AddError "mdlDisk.GetFileBitMap", True
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'version simplifiée de GetFileBitmap ==> n'obtient que le nombre
 'de fragments d'un fichier
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFileFragmentCount(File As String) As FileClusters2
 Dim hFile As Long 'handle de fichier dont on veut la carte des clusters
 Dim FileBitmap As RETRIEVAL_POINTERS_BUFFER 'carte des clusters du fichier
@@ -828,13 +828,13 @@ ErrGestion:
     clsERREUR.AddError "mdlDisk.GetFileFragmentCount", True
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le nombre de fragments pour chaque fichier d'un drive
-'-------------------------------------------------------
+'=======================================================
 Public Function GetVolumeFilesBitmap(Volume As String, Optional Progress As pgrbar, Optional SubFolder As Boolean = True) As FileClusters()
 Dim tmp() As FileClusters2
 Dim Files() As String
-Dim X As Long, ub As Long
+Dim x As Long, ub As Long
     
     On Error GoTo ErrGestion
     DoEvents
@@ -847,9 +847,9 @@ Dim X As Long, ub As Long
         Progress.Max = ub + 1
         Progress.Value = 0
     End If
-    For X = 0 To ub
-        tmp(X) = GetFileFragmentCount(Files(X))
-        If (X Mod 250) = 0 Then
+    For x = 0 To ub
+        tmp(x) = GetFileFragmentCount(Files(x))
+        If (x Mod 250) = 0 Then
             Progress.Value = IIf(Progress.Value + 250 < Progress.Max, Progress.Value + 250, Progress.Max)
             DoEvents
         End If
@@ -861,9 +861,9 @@ ErrGestion:
     clsERREUR.AddError "mdlDisk.GetVolumeFilesBitMap", True
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'liste tous les fichiers d'un drive
-'-------------------------------------------------------
+'=======================================================
 Public Sub GetVolumeFiles(ByVal Directory As String, Files() As String, Optional Begin As Boolean = False, Optional SubFolder As Boolean = True)
 Dim FileInfo As WIN32_FIND_DATA, hFind As Long
 Static ub As Long

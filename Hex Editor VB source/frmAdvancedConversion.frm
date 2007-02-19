@@ -353,12 +353,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -381,14 +381,14 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 'FORM DE CONVERSION AVANCEE
-'-------------------------------------------------------
+'=======================================================
 
 Private clsPref As clsIniForm
 
@@ -466,7 +466,7 @@ End Sub
 
 Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
-    If Button = 2 Then Me.PopupMenu Me.mnuPopup
+    If Button = 2 Then Me.PopupMenu Me.mnuPopUp
 End Sub
 Private Sub Frame2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
@@ -508,16 +508,16 @@ End Sub
 
 Private Sub Picture1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
-    If Button = 2 Then Me.PopupMenu Me.mnuPopup
+    If Button = 2 Then Me.PopupMenu Me.mnuPopUp
 End Sub
 Private Sub Picture2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp2
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'procède à la conversion
-'-------------------------------------------------------
+'=======================================================
 Private Sub LaunchExtraConversion()
 Dim sO As String
 Dim s As String
@@ -592,9 +592,9 @@ Dim sA() As String
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie une aleur formatée en fonction des choix de base
-'-------------------------------------------------------
+'=======================================================
 Private Function GetCv(ByVal sIn As String) As String
 Dim s2 As String
 

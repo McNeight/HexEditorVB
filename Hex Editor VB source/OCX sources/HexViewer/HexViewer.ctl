@@ -28,12 +28,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -56,27 +56,27 @@ Attribute VB_Exposed = True
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//HEWVIEWER USERCONTROL
 'AFFICHE UNE TABLE HEXADECIMALE
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 '//USERCONTROL BY Violent_ken
 '//
 '//NOTE : THE SUBCLASSING PART OF THIS CODE BELONGS TO PAUL CATON
 '//FOR MORE INFORMATIONS ABOUT THE COPYRIGHT, PLEASE REFER TO
 '//http://www.planet-source-code.com/vb/scripts/ShowCode.asp?txtCodeId=64867&lngWId=1
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'CONSTANTES
-'-------------------------------------------------------
+'=======================================================
 Private Const WM_MOUSEWHEEL             As Long = &H20A
 Private Const ALL_MESSAGES              As Long = -1         'All messages callback
 Private Const MSG_ENTRIES               As Long = 32         'Number of msg table entries
@@ -94,9 +94,9 @@ Private Const WM_MOVING                 As Long = &H216
 Private Const WM_SIZING                 As Long = &H214
 Private Const WM_EXITSIZEMOVE           As Long = &H232
 
-'-------------------------------------------------------
+'=======================================================
 'APIs
-'-------------------------------------------------------
+'=======================================================
 Private Declare Function CallWindowProcA Lib "user32" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Private Declare Function GetCurrentProcessId Lib "kernel32" () As Long
 Private Declare Function GetModuleHandleA Lib "kernel32" (ByVal lpModuleName As String) As Long
@@ -115,9 +115,9 @@ Private Declare Function TrackMouseEventComCtl Lib "Comctl32" Alias "_TrackMouse
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'TYPE & ENUMS
-'-------------------------------------------------------
+'=======================================================
 Private Enum TRACKMOUSEEVENT_FLAGS
   TME_HOVER = &H1&
   TME_LEAVE = &H2&
@@ -150,9 +150,9 @@ End Type
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'SUBCLASS VARIABLE DECLARATION
-'-------------------------------------------------------
+'=======================================================
 Private z_ScMem             As Long                                         'Thunk base address
 Private z_Sc(64)            As Long                                         'Thunk machine-code initialised here
 Private z_Funk              As Collection                                   'hWnd/thunk-address collection
@@ -162,9 +162,9 @@ Private bInCtrl               As Boolean
 Private bMoving               As Boolean
 
 
-'-------------------------------------------------------
+'=======================================================
 'VARIABLES
-'-------------------------------------------------------
+'=======================================================
 Private bStillOkForRefresh As Boolean
 Private lNumberPerPage As Long   'nombre de lignes à afficher
 Private lFirstOffset As Currency 'valeur du premier offset
@@ -208,9 +208,9 @@ Private bDisableHexDisplay As Boolean
 
    
    
-'-------------------------------------------------------
+'=======================================================
 'EVENTS
-'-------------------------------------------------------
+'=======================================================
 Public Event ItemClick(Item As ItemElement, Button As Integer)
 Public Event MouseMove(Button As Integer, Shift As Integer, x As Single, Y As Single, Item As ItemElement)
 Public Event KeyDown(KeyCode As Integer, Shift As Integer)
@@ -226,9 +226,9 @@ Public Event UserMakeFirstOffsetChangeByMovingMouse()
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'PROPRIETES
-'-------------------------------------------------------
+'=======================================================
 Public Property Get BackColor() As OLE_COLOR: BackColor = lBackColor: End Property
 Public Property Let BackColor(BackColor As OLE_COLOR): lBackColor = BackColor: UserControl.BackColor = BackColor: Refresh: End Property
 Public Property Get SignetColor() As OLE_COLOR: SignetColor = lSignetColor: End Property
@@ -352,9 +352,9 @@ Public Property Let DisableHexDisplay(DisableHexDisplay As Boolean): bDisableHex
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'EVENEMENTS SIMPLES
-'-------------------------------------------------------
+'=======================================================
 Private Sub UserControl_Click()
     RaiseEvent Click
 End Sub
@@ -376,10 +376,10 @@ End Sub
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'changement de FirstOffset lorsque la souris est tout en haut
 'ou tout en bas du userontrol
-'-------------------------------------------------------
+'=======================================================
 Private Sub Timer1_Timer()
     If yZone > UserControl.Height - 150 Then
         'alors on descend
@@ -397,9 +397,9 @@ End Sub
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'EVENEMENTS NON SIMPLES
-'-------------------------------------------------------
+'=======================================================
 Private Sub UserControl_MouseDown(Button As Integer, Shift As Integer, x As Single, Y As Single)
 'click sur le picturebox
 Dim it As New ItemElement
@@ -915,9 +915,9 @@ End Sub
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'USERCONTROL SUBS
-'-------------------------------------------------------
+'=======================================================
 Private Sub UserControl_InitProperties()
 'initialise les variables par défault (création du controle)
     Me.BackColor = vbWhite
@@ -1068,13 +1068,13 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
 End Sub
 
 
-'-------------------------------------------------------
+'=======================================================
 'PUBLIC PROCEDURES AND FUNCTIONS
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie si l'élément est sélectionné
-'-------------------------------------------------------
+'=======================================================
 Public Function IsSelected(ByVal lLine As Long, ByVal Col As Long) As Boolean
 Dim TempOff As Long
 Dim NewCase As HexCase
@@ -1112,9 +1112,9 @@ Dim OldCase As HexCase
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute un offset en signet
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddSignet(ByVal lOffset As Currency)
 
     ReDim Preserve M_S(UBound(M_S) + 1)
@@ -1122,9 +1122,9 @@ Public Sub AddSignet(ByVal lOffset As Currency)
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'enlève un offset des signets
-'-------------------------------------------------------
+'=======================================================
 Public Sub RemoveSignet(ByVal lOffset As Currency)
 Dim x As Long
 Dim b As Boolean
@@ -1153,9 +1153,9 @@ Dim b As Boolean
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie True si l'offset lOffset a un signet
-'-------------------------------------------------------
+'=======================================================
 Public Function IsSignet(ByVal lOffset As Currency) As Boolean
 Dim x As Long
 
@@ -1169,17 +1169,17 @@ Dim x As Long
     Next x
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'enlève tout les signets
-'-------------------------------------------------------
+'=======================================================
 Public Sub RemoveAllSignets()
     ReDim M_S(1)
     Me.Refresh
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie l'offset suivant
-'-------------------------------------------------------
+'=======================================================
 Public Function GetNextSignet(ByVal lOffset As Currency) As Currency
 Dim lAfter As Currency
 Dim lMin As Currency
@@ -1205,9 +1205,9 @@ Dim x As Long
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie le signet précédent
-'-------------------------------------------------------
+'=======================================================
 Public Function GetPrevSignet(ByVal lOffset As Currency) As Currency
 Dim lBefore As Currency
 Dim lMax As Currency
@@ -1230,9 +1230,9 @@ Dim x As Long
     End If
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'rafraichit le controle entièrement (retrace les valeurs hexa et les lignes du tableau)
-'-------------------------------------------------------
+'=======================================================
 Public Sub Refresh()
 Dim x As Long
 Dim Y As Long
@@ -1257,11 +1257,11 @@ Dim Y As Long
     UserControl.MaskPicture = UserControl.Image
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'colorise un élément
 '1) applique un rectangle de couleur
 '2) réaffiche le texte
-'-------------------------------------------------------
+'=======================================================
 Public Sub ColorItem(ByVal tType As ItemType, ByVal lLine As Long, ByVal lCol As Long, ByVal vValue As Variant, ByVal lColor As Long, ByVal bEraseOtherSelection As Boolean, Optional ByVal bFillOffsetText As Boolean = True)
 
 Dim x As Long
@@ -1311,11 +1311,11 @@ Dim Y As Long
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'colorise un élément
 '1) applique un rectangle de couleur
 '2) réaffiche le texte
-'-------------------------------------------------------
+'=======================================================
 Private Sub ColorLine(ByVal lLine As Long, ByVal lColor As Long, ByVal bEraseOtherSelection As Boolean)
 Dim x As Long
 Dim Y As Long
@@ -1341,9 +1341,9 @@ Dim Y As Long
         
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'changement des offsets ==> redessine, redimensionne et vide les tableaux
-'-------------------------------------------------------
+'=======================================================
 Public Sub ChangeValues()
 
     'détermine le nombre de lignes à afficher
@@ -1361,16 +1361,16 @@ Public Sub ChangeValues()
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'obtient la string FORMATEE de la ligne lLine
-'-------------------------------------------------------
+'=======================================================
 Public Function GetString(ByVal lLine As Long) As String
     GetString = Mstr(lLine)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient la string REELLE de la ligne lLine
-'-------------------------------------------------------
+'=======================================================
 Public Function GetRealString(ByVal lLine As Long) As String
 Dim x As Byte
 Dim s As String
@@ -1383,9 +1383,9 @@ Dim s As String
     GetRealString = s
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute une valeur hexa au tableau
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddHexValue(ByVal lLine As Long, ByVal lCol As Long, ByVal sHexValue As String, Optional ByVal bIsModified = False)
     If lLine > lNumberPerPage Then Exit Sub
     Mhex(lCol, lLine) = sHexValue
@@ -1393,17 +1393,17 @@ Public Sub AddHexValue(ByVal lLine As Long, ByVal lCol As Long, ByVal sHexValue 
     M_M(lCol, lLine) = bIsModified  'renseigne sur une modification potentielle de la case
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute une valeur hexa au tableau
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddStringValue(ByVal lLine As Long, ByVal sString As String)
     If lLine > lNumberPerPage Then Exit Sub
     Mstr(lLine) = sString
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute une valeur hexa au tableau
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddOneStringValue(ByVal lLine As Long, ByVal lCol As Long, ByVal sString As String)
 Dim sAvant As String
 Dim sApres As String
@@ -1427,9 +1427,9 @@ Dim sApres As String
     Mstr(lLine) = sAvant & sString & sApres
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'remplit le texte dans toutes les cases
-'-------------------------------------------------------
+'=======================================================
 Public Sub FillText()
 Dim x As Long
 Dim Y As Long
@@ -1448,13 +1448,13 @@ End Sub
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'SUBS PRIVEES
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'affiche la sélection
-'-------------------------------------------------------
+'=======================================================
 Private Sub CreateSelections(ByVal tType As ItemType)
 Dim z As Long
 Dim w As Long
@@ -1654,10 +1654,10 @@ Dim lStep As Long
         
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie une adresse (string) avec les 0 devant si nécessaire, pour avoir une longueur
 'de string fixe (10)
-'-------------------------------------------------------
+'=======================================================
 Private Function FormatedAdress(ByVal lNumber As Currency, Optional ByVal bAsHex As Boolean = False) As String
 Dim s As String
 
@@ -1678,9 +1678,9 @@ Dim s As String
     FormatedAdress = s
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie a^b
-'-------------------------------------------------------
+'=======================================================
 Private Function AexpB(ByVal a As Long, ByVal b As Long) As Long
 Dim x As Long
 Dim l As Long
@@ -1698,9 +1698,9 @@ Dim l As Long
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'convertit une valeur hexa (string) en valeur décimale
-'-------------------------------------------------------
+'=======================================================
 Private Function Hex2Dec(ByVal s As String) As Long
 Dim x As Long
 Dim l As Long
@@ -1712,9 +1712,9 @@ Dim l As Long
     Hex2Dec = l
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie la valeur decimale d'une string de longueur 1 en hexa
-'-------------------------------------------------------
+'=======================================================
 Private Function HexVal(ByVal s As String) As Long
     If s = "0" Then
         HexVal = 0
@@ -1751,33 +1751,33 @@ Private Function HexVal(ByVal s As String) As Long
     End If
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'affecte les valeurs CurrentX et CurrentY au usercontrol
-'-------------------------------------------------------
+'=======================================================
 Private Sub Pos(ByVal CurrentX As Long, CurrentY As Long)
     UserControl.CurrentX = CurrentX
     UserControl.CurrentY = CurrentY
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'écrit une String à la ligne lLine
-'-------------------------------------------------------
+'=======================================================
 Private Sub PasteOffset(ByVal lLine As Long, ByVal sString As String)
     UserControl.ForeColor = lOffsetForeColor
     Pos 50, 260 * (lLine) + 100
     UserControl.Print sString
 End Sub
-'-------------------------------------------------------
+'=======================================================
 'écrit une String à la ligne lLine
-'-------------------------------------------------------
+'=======================================================
 Private Sub PasteString(ByVal lLine As Long, ByVal sString As String)
     UserControl.ForeColor = lStringForeColor
     Pos 7500, 260 * (lLine) + 100
     UserControl.Print sString
 End Sub
-'-------------------------------------------------------
+'=======================================================
 'écrit une valeurs hexa a un endroit de la matrice
-'-------------------------------------------------------
+'=======================================================
 Private Sub PasteHex(ByVal lLine As Long, ByVal lCol As Long, ByVal sString As String)
     If M_M(lCol, lLine) = False Then
         'case normale
@@ -1791,9 +1791,9 @@ Private Sub PasteHex(ByVal lLine As Long, ByVal lCol As Long, ByVal sString As S
     UserControl.Print sString
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'créé les titres et les lignes du tableau
-'-------------------------------------------------------
+'=======================================================
 Private Sub CreateBackGround()
 Dim x As Long
 
@@ -1828,9 +1828,9 @@ Dim x As Long
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'Trace le Grid (lignes du tableau ENTRE les valeurs)
-'-------------------------------------------------------
+'=======================================================
 Private Sub TraceGrid()
 Dim x As Long
 Dim l As Long
@@ -1862,9 +1862,9 @@ Dim lDeltaString As Long
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'traçage des signets
-'-------------------------------------------------------
+'=======================================================
 Public Sub TraceSignets()   'public pour permettre un refresh rapide après un ajout (car pour obliger de faire HW.Refresh)
 Dim x As Long
 Dim l As Currency
@@ -1878,9 +1878,9 @@ Dim l As Currency
     Next x
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'efface uniquement la zone de sélection (réapplique la MaskPicture)
-'-------------------------------------------------------
+'=======================================================
 Private Sub Refresh2()
     
     UserControl.Cls
@@ -1888,16 +1888,16 @@ Private Sub Refresh2()
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute une sélection au tableau des sélections
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddSelection(ByVal lLine As Long, ByVal lCol As Long)
     'Msel(lCol, lLine) = True
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'sélectionne manuellement une zone
-'-------------------------------------------------------
+'=======================================================
 Public Sub SelectZone(Col1 As Long, Offset1 As Currency, Col2 As Long, Offset2 As Currency)
     hexOldCase.lCol = Col1
     hexOldCase.lOffset = Offset1
@@ -1905,10 +1905,10 @@ Public Sub SelectZone(Col1 As Long, Offset1 As Currency, Col2 As Long, Offset2 A
     hexNewCase.lOffset = Offset2
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'permet de calculer la valeur hexa d'un nombre très grand
 '(currency, jusqu'à 15*16^12+15*16^11+15*16^10+...)
-'-------------------------------------------------------
+'=======================================================
 Private Function ExtendedHex(ByVal cVal As Currency) As String
 Dim x As Long
 Dim s As String
@@ -1957,10 +1957,10 @@ End Function
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'SUBS FOR SELF-SUBCLASSING
 'cette partie n'est pas de moi
-'-------------------------------------------------------
+'=======================================================
 
 'Determine if the passed function is supported
 Private Function IsFunctionExported(ByVal sFunction As String, ByVal sModule As String) As Boolean
@@ -1987,7 +1987,7 @@ Private Function IsFunctionExported(ByVal sFunction As String, ByVal sModule As 
   End If
 End Function
 
-'-SelfSub code------------------------------------------------------------------------------------
+'-SelfSub code=======================================================-------------------------------------
 Private Function sc_Subclass(ByVal lng_hWnd As Long, _
                     Optional ByVal lParamUser As Long = 0, _
                     Optional ByVal nOrdinal As Long = 1, _

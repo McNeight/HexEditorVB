@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,12 +39,12 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
-'   ---------------------------------------------------------------------------------
+'   =======================================================----------------------------------
 '           [AFCK]              Classe Manifest v1.0.3             25 nov 2005
-'   ---------------------------------------------------------------------------------
+'   =======================================================----------------------------------
 '
 '                   v1.0.1          23 nov  2005
 '                   v1.0.2          24 nov  2005
@@ -52,7 +52,7 @@ Attribute VB_Exposed = False
 '                   v1.0.3          25 nov  2005
 '                                               ~ test version WinXP numérique
 '
-'   ---------------------------------------------------------------------------------
+'   =======================================================----------------------------------
 '
 '
 '       Cette classe sert à créer un MonProgramme.exe.manifest afin d'appliquer
@@ -68,9 +68,9 @@ Attribute VB_Exposed = False
 '                       (première exécution. donc manuel! et après la 2ème
 '                       non-plus mais là, c'est votre volonté... ;) )
 '
-'   ---------------------------------------------------------------------------------
+'   =======================================================----------------------------------
 '   dernière version :                     http://www.vbfrance.com/code.aspx?ID=34784
-'   ---------------------------------------------------------------------------------
+'   =======================================================----------------------------------
 
 
 Option Explicit

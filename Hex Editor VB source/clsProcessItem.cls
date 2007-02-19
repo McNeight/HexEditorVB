@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = True
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,20 +39,20 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//PERSONNAL TYPE
 'RENSEIGNEMENTS SIMPLES SUR UN PROCESSUS
-'-------------------------------------------------------
+'=======================================================
 
 
-'-------------------------------------------------------
+'=======================================================
 'ENUMS & TYPES
-'-------------------------------------------------------
+'=======================================================
 'enum contenant les valeurs des priorités
 Public Enum PRIORITY_TYPE
     HIGH_PRIORITY = &H80
@@ -79,9 +79,9 @@ End Type
 
 Private mdl() As ProcessModuleItem  'passage par variant pour le tableau
  
-'-------------------------------------------------------
+'=======================================================
 'variables de la structure clsProcessItem
-'-------------------------------------------------------
+'=======================================================
 Public dwSize As Long
 Public cntUsage As Long
 Public th32ProcessID As Long

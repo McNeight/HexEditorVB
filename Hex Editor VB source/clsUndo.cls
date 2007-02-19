@@ -11,12 +11,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -39,28 +39,28 @@ Attribute VB_Exposed = False
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//CLASSE POUR LA GESTION DU UNDO/REDO
 'TYPE PERSO CONTENANT L'HISTORIQUE
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'ENUMS & TYPES
-'-------------------------------------------------------
+'=======================================================
 Public Enum EDITION_TYPE   'contient le type d'édition à annuler
     edtFile 'fichier
     edtProcess  'mémoire
     edtDisk 'disque
 End Enum
 
-'-------------------------------------------------------
+'=======================================================
 'PUBLIC VARIABLES (composant du type perso que constitue la classe)
-'-------------------------------------------------------
+'=======================================================
 
 'variables générales à la classe
 Public lRang As Long        'valeur du composant actuel (position dans l'historique)

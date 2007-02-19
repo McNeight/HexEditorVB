@@ -1,10 +1,10 @@
 Attribute VB_Name = "mdlPrint"
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -27,20 +27,20 @@ Attribute VB_Name = "mdlPrint"
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-------------------------------------------------------
+'=======================================================
 '//MODULE D'IMPRESSION
-'-------------------------------------------------------
+'=======================================================
 
 
-'-------------------------------------------------------
+'=======================================================
 'procedure qui permet de renvoyer une imprimante et ses propriétés
 'affiche une boite de dialogue de choix d'imprimante et de configuration
-'-------------------------------------------------------
+'=======================================================
 Public Sub GetPrinter(ByRef tPrinter As Printer)
 Dim strPrinterName As String
 Dim selectedPrinter As PRINTER_INFO

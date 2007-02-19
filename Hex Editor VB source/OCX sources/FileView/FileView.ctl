@@ -153,12 +153,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -181,36 +181,36 @@ Attribute VB_Exposed = True
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
 
-'-------------------------------------------------------
+'=======================================================
 '//FILEVIEW USERCONTROL : permet d'avoir une liste des fichiers/dossiers du disque dur
 'PAR violent_ken
 'v2.0 codé le 14/01/2007
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 '//IMPORTANT NOTE : YOU HAVE TO ADD THE "MICROSOFT SCRIPTING RUNTIME" REFERENCE
 '//IN YOUR PROJECT TO USE THIS USERCONTROL
-'-------------------------------------------------------
+'=======================================================
 
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'DECLARATIONS autre que les variables
-'-------------------------------------------------------
+'=======================================================
 Private fs As FileSystemObject
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'APIs
-'-------------------------------------------------------
+'=======================================================
 'déplacement des fichiers vers la corbeille
 Private Declare Function SHFileOperation Lib "shell32.dll" Alias "SHFileOperationA" (lpFileOp As Fichier) As Long
 'obtient des infos (utilisé pour l'icone de l'executable) d'un fichier
@@ -231,9 +231,9 @@ Private Declare Function GetFileSizeEx Lib "kernel32" (ByVal hFile As Long, lpFi
 Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
 
 
-'-------------------------------------------------------
+'=======================================================
 'CONSTANTES
-'-------------------------------------------------------
+'=======================================================
 Private Const FO_DELETE                     As Long = &H3
 Private Const FOF_ALLOWUNDO                 As Long = &H40
 Private Const SHGFI_DISPLAYNAME             As Long = &H200
@@ -249,9 +249,9 @@ Private Const BASIC_SHGFI_FLAGS             As Long = SHGFI_TYPENAME Or SHGFI_SH
 Private Const ILD_TRANSPARENT               As Long = &H1
 
 
-'-------------------------------------------------------
+'=======================================================
 'EVENTS
-'-------------------------------------------------------
+'=======================================================
 Public Event ColumnClick(ByVal ColumnHeader As ComctlLib.ColumnHeader)
 Public Event AfterLabelEdit(Cancel As Integer, OldString As String, NewString As String)
 Public Event BeforeLabelEdit(Cancel As Integer)
@@ -269,9 +269,9 @@ Public Event PatternChange(sOldPattern As String, sNewPattern As String)
 Public Event ItemDblSelection(Item As ComctlLib.ListItem)
 
 
-'-------------------------------------------------------
+'=======================================================
 'ENUMS AND TYPES
-'-------------------------------------------------------
+'=======================================================
 Public Enum IconDisplay
     NoIcons = 0
     BasicIcons = 1
@@ -303,9 +303,9 @@ End Type
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'VARIABLES
-'-------------------------------------------------------
+'=======================================================
 Private bLabelWrap As Boolean
 Private tView As ListViewConstants
 Private bAppearence3D As Boolean
@@ -346,9 +346,9 @@ Private bShowDrives As Boolean
 Private lItemWidth As Long
 
 
-'-------------------------------------------------------
+'=======================================================
 'SIMPLE EVENTS
-'-------------------------------------------------------
+'=======================================================
 Private Sub LV_Click(): RaiseEvent Click: End Sub
 Private Sub LV_ItemClick(ByVal Item As ComctlLib.ListItem): RaiseEvent ItemClick(Item): End Sub
 Private Sub LV_KeyPress(KeyAscii As Integer): RaiseEvent KeyPress(KeyAscii): End Sub
@@ -359,9 +359,9 @@ Private Sub LV_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Si
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'PROPERTIES (gros bloc....)
-'-------------------------------------------------------
+'=======================================================
 Public Property Get LabelWrap() As Boolean: LabelWrap = bLabelWrap: End Property
 Public Property Let LabelWrap(LabelWrap As Boolean): bLabelWrap = LabelWrap: LV.LabelWrap = LabelWrap: End Property
 Public Property Get View() As ListViewConstants: View = tView: End Property
@@ -454,9 +454,9 @@ Public Property Set Font(Font As StdFont)
 End Property
 
 
-'-------------------------------------------------------
+'=======================================================
 'USERCONTROL SUBS
-'-------------------------------------------------------
+'=======================================================
 Private Sub UserControl_InitProperties()
 'properties by default
     Me.AllowDirectoryDeleting = True
@@ -591,9 +591,9 @@ End Sub
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'EVENTS PARTICULIERS
-'-------------------------------------------------------
+'=======================================================
 Private Sub LV_ColumnClick(ByVal ColumnHeader As ComctlLib.ColumnHeader)
 'classement (ou pas) des columns
 Dim bOkForAjout As Boolean
@@ -752,14 +752,14 @@ End Sub
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'FONCTIONS ET PROCEDURES PUBLIQUES
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le nom des fichiers sélectionnés
 '/!\ type variant attendu, mais renvoie un type ListItem (ComctLib)
-'-------------------------------------------------------
+'=======================================================
 Public Sub GetSelectedItems(ByRef sFileArray As Variant)   '/!\ ByRef sFileArray() As ComctlLib.ListItem  attendu
 Dim x As Long
 'Dim sFileSelection() As ComctlLib.ListItem
@@ -780,16 +780,16 @@ Dim sFileSelection() As ComctlLib.ListItem
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'utilisé pour éviter les bugs d'affichage au loading d'une form
-'-------------------------------------------------------
+'=======================================================
 Public Sub RefreshListViewOnly()
     LV.Refresh
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'rafraichit le control (son contenu)
-'-------------------------------------------------------
+'=======================================================
 Public Sub Refresh()
 
     If bStillOkForRefresh = True Then Exit Sub  'contrôle pas encore chargé
@@ -805,16 +805,16 @@ Public Sub Refresh()
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'efface le cotenu
-'-------------------------------------------------------
+'=======================================================
 Public Sub Clear()
     LV.ListItems.Clear
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute manuellement une entrée au listview
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddItemManually(ByVal sItem As String, ByVal tTypeOfItem As Item_Type, Optional ByVal sSubItem1 As String = vbNullString, Optional ByVal sSubItem2 As String = vbNullString, Optional ByVal sSubItem3 As String = vbNullString, Optional ByVal sSubItem4 As String = vbNullString, Optional ByVal sSubItem5 As String = vbNullString, Optional ByVal sSubItem6 As String = vbNullString, Optional ByVal bFillSubItemsAuto As Boolean = True)
 Dim g As Long
 Dim l As Long
@@ -904,9 +904,9 @@ Dim s As String, key As String
     End If
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'enlève un item définit par son index
-'-------------------------------------------------------
+'=======================================================
 Public Sub RemoveItemManually(ByVal Index As Long)
     
     On Error Resume Next
@@ -915,11 +915,11 @@ Public Sub RemoveItemManually(ByVal Index As Long)
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'efface le(s) fichier(s)/dossier(s) sélectionné(s) du disque dur
 'peut aussi déplacer vers la corbeille
 'peut afficher un message d'alerte
-'-------------------------------------------------------
+'=======================================================
 Public Sub DeleteSelectedItemsFromDisk(ByVal bAskConfirmation As Boolean, Optional ByVal sConfirmationTitle As String = "Attention", Optional ByVal sConfirmationMessage As String = "Vous allez supprimer des éléments de votre disque dur. Continuer ?", Optional ByVal bMoveToTrash As Boolean = True, Optional ByVal Force As Boolean = False)
 Dim lRet As Long
 Dim x As Long
@@ -967,23 +967,23 @@ Dim sItem As String
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'va au dossier parent
-'-------------------------------------------------------
+'=======================================================
 Public Sub GoParentFolder()
     Me.Path = ParentFolder(Me.Path)
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'obtient le dossier parent
-'-------------------------------------------------------
+'=======================================================
 Public Function GetParentFolder() As String
     GetParentFolder = ParentFolder(Me.Path)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'créé un dossier dans le path actuel
-'-------------------------------------------------------
+'=======================================================
 Public Sub CreateDirectoryInCurrentPath(ByVal sDirectory_with_or_without_current_path As String)
 Dim s As String
 
@@ -1002,9 +1002,9 @@ Dim s As String
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'créé un fichier dans le Path actuel
-'-------------------------------------------------------
+'=======================================================
 Public Sub CreateFileInCurrentPath(ByVal sFile_with_or_without_path As String, Optional ByVal bOverWrite As Boolean = False)
 Dim s As String
 
@@ -1023,9 +1023,9 @@ End Sub
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'FONCTIONS DIRECTES SUR LE LISTVIEW
-'-------------------------------------------------------
+'=======================================================
 Public Function GetFirstVisible() As ComctlLib.ListItem
     GetFirstVisible = LV.GetFirstVisible
 End Function
@@ -1038,14 +1038,14 @@ End Function
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'FONCTIONS ET PROCEDURES PRIVEES AU USERCONTROL
-'-------------------------------------------------------
+'=======================================================
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute les fichiers du dossier sPath et les sous dossiers de ce dossier sPath dans le LV
 'en fonction des paramètres du usercontrol
-'-------------------------------------------------------
+'=======================================================
 Private Sub AddFiles()
 Dim sDirectory() As String
 Dim sFile() As String
@@ -1190,9 +1190,9 @@ ErrGestion:
     'LockWindowUpdate 0&
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute les disques
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddDrives()
 Dim sDirectory() As String
 Dim sF As String
@@ -1237,9 +1237,9 @@ Dim s2 As String
     
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie le dossier parent
-'-------------------------------------------------------
+'=======================================================
 Private Function ParentFolder(ByVal sFolder As String) As String
 Dim l As Long
 Dim s As String
@@ -1253,9 +1253,9 @@ Dim s As String
     ParentFolder = Left$(sFolder, l)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'déplace vers la corbeille un fichier
-'-------------------------------------------------------
+'=======================================================
 Private Function MoveToTrash(sFile As String) As Long
 Dim sFileToDelete As Fichier
 
@@ -1270,9 +1270,9 @@ Dim sFileToDelete As Fichier
     MoveToTrash = SHFileOperation(sFileToDelete)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'formate la taille d'un fichier
-'-------------------------------------------------------
+'=======================================================
 Private Function FormatedSize(ByVal lS As Currency, Optional ByVal lRoundNumber = 5) As String
 Dim dS As Double
 Dim n As Byte
@@ -1296,9 +1296,9 @@ Dim n As Byte
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute un fichier au listview
-'-------------------------------------------------------
+'=======================================================
 Private Sub AddFileToLV(ByVal sFile As String, ByVal sImageKey As String, ByVal lAttribute As Long)
 Dim g As Long
 Dim l As Long
@@ -1347,9 +1347,9 @@ Dim l As Long
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'ajoute une icone à l'ImageList (à partir du fichier sFile)
-'-------------------------------------------------------
+'=======================================================
 Private Sub AddIconToIMG(ByVal sFile As String, ByVal sKey As String)
 Dim lstImg As ListImage
 Dim hIcon As Long
@@ -1373,9 +1373,9 @@ Dim pct As IPictureDisp
 
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie si la clé existe ou non deja dans IMG
-'-------------------------------------------------------
+'=======================================================
 Private Function DoesKeyExist(ByVal sKey As String) As Boolean
 Dim l As Long
 
@@ -1393,9 +1393,9 @@ ErrGest:
 'la clé n'existait pas
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient un fichier depuis un path
-'-------------------------------------------------------
+'=======================================================
 Private Function GetFileFromPath(ByVal sPath As String)
 Dim l As Long
 
@@ -1416,10 +1416,10 @@ Dim l As Long
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'vérifie que l'attribut est compatible avec les paramètres de l'usercontrol
 '==> doit on l'afficher ou pas ?
-'-------------------------------------------------------
+'=======================================================
 Private Function IsAttrOK(ByVal lAttribute As Long, ByVal bNormal As Boolean, ByVal bHidden As Boolean, ByVal bReadOnly As Boolean, ByVal bSystem As Boolean) As Boolean
 
     
@@ -1442,18 +1442,18 @@ Private Function IsAttrOK(ByVal lAttribute As Long, ByVal bNormal As Boolean, By
 
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient l'attribut sans erreur
-'-------------------------------------------------------
+'=======================================================
 Private Function MustGetAttr(ByVal sFile As String) As Long
         On Error Resume Next
         If fs.FileExists(sFile) Then MustGetAttr = fs.GetFile(sFile).Attributes
         If fs.FolderExists(sFile) Then MustGetAttr = fs.GetFolder(sFile).Attributes
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'renomme sans erreur
-'-------------------------------------------------------
+'=======================================================
 Private Sub MustRename(ByVal sOldName As String, sNewName As String)
     On Error Resume Next
     
@@ -1462,9 +1462,9 @@ Private Sub MustRename(ByVal sOldName As String, sNewName As String)
     Name sOldName As sNewName
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'renvoie la terminaison d'un fichier/path
-'-------------------------------------------------------
+'=======================================================
 Private Function GetFileExtension(ByVal sFileOrPath As String) As String
 Dim x As Long
 
@@ -1473,9 +1473,9 @@ Dim x As Long
     If x > 0 Then GetFileExtension = Right(sFileOrPath, Len(sFileOrPath) - x)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'détermine si le fichier convient au pattern
-'-------------------------------------------------------
+'=======================================================
 Private Function IsPatternOk(ByVal sFile As String) As Boolean
 Dim sExt As String
 
@@ -1487,9 +1487,9 @@ Dim sExt As String
     
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'obtient la taille d'un fichier, même si celle ci est supérieure à 4Go (long)
-'-------------------------------------------------------
+'=======================================================
 Private Function GetFileSize(ByVal strFile As String) As Currency
 Dim lngFile As Long
 Dim curSize As Currency

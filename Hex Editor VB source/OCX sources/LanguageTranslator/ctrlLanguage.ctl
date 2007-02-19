@@ -26,12 +26,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-' -----------------------------------------------
+' =======================================================
 '
 ' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
-' -----------------------------------------------
+' =======================================================
 '
 ' A complete hexadecimal editor for Windows ©
 ' (Editeur hexadécimal complet pour Windows ©)
@@ -54,22 +54,22 @@ Attribute VB_Exposed = True
 ' along with Hex Editor VB; if not, write to the Free Software
 ' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 '
-' -----------------------------------------------
+' =======================================================
 
 
 Option Explicit
 
-'-----------------------------------------------
+'=======================================================
 '//CONTROLE DE CHANGEMENT DE LANGUE
-'-----------------------------------------------
+'=======================================================
 
 
 'AJOUTER LE TAG "lang_ok" POUR LES LISTBOX/COMBOX POUR EFFECTUER LA LECTURE DES ITEMS
 
 
-'-------------------------------------------------------
+'=======================================================
 'APIS
-'-------------------------------------------------------
+'=======================================================
 Private Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nSize As Long, ByVal lpFileName As String) As Long
 Private Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As Any, ByVal lpString As Any, ByVal lpFileName As String) As Long
 
@@ -80,15 +80,15 @@ Private mParent As Form  'form parente
 Attribute mParent.VB_VarHelpID = -1
 
 
-'-------------------------------------------------------
+'=======================================================
 'EVENTS
-'-------------------------------------------------------
+'=======================================================
 Public Event LanguageChanged(OldLanguage As String, NewLanguage As String)
 
 
-'-------------------------------------------------------
+'=======================================================
 'PROPERTIES
-'-------------------------------------------------------
+'=======================================================
 Public Property Get Language() As String: Language = sLanguage: End Property
 Public Property Let Language(Language As String)
 If sLanguage <> Language Then
@@ -102,9 +102,9 @@ Public Property Let LangFolder(LangFolder As String): sLangFolder = LangFolder: 
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'CONTROL SUBS
-'-------------------------------------------------------
+'=======================================================
 Private Sub UserControl_Initialize()
     Me.LangFolder = App.Path & "\Lang"
     Me.Language = "French"
@@ -135,9 +135,9 @@ End Sub
 
 
 
-'-------------------------------------------------------
+'=======================================================
 'permet de récupérer une string
-'-------------------------------------------------------
+'=======================================================
 Public Function GetString(ByVal StringName As String, Optional ByVal Language As String) As String
 Dim lng As Integer
 Dim sLang As String
@@ -167,16 +167,16 @@ Dim sFile As String
     GetString = Left$(sReturn, lng)
 End Function
 
-'-------------------------------------------------------
+'=======================================================
 'définit les préférences du fichier *.ini
-'-------------------------------------------------------
+'=======================================================
 Private Sub LetPref(ByVal sSection As String, ByVal sVariable As String, ByVal sValeur As String, ByVal sFile As String)
     WritePrivateProfileString sSection, sVariable, sValeur, sFile
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'affecte les propriétés Text et Caption pour tous les controles de la form
-'-------------------------------------------------------
+'=======================================================
 Public Sub LoadControlsCaption()
 Dim Obj As Control
 Dim X As Long
@@ -266,9 +266,9 @@ Dim s As String
     mParent.Caption = Me.GetString(mParent.Name)
 End Sub
 
-'-------------------------------------------------------
+'=======================================================
 'créé le contenu du fichier *.ini
-'-------------------------------------------------------
+'=======================================================
 Public Sub WriteIniFileFormIDEform()
 Dim Obj As Control
 Dim sFile As String
@@ -344,9 +344,9 @@ Dim s As String
 End Sub
 
 
-'-------------------------------------------------------
+'=======================================================
 'permet d'ajouter une string dans le fichier ini
-'-------------------------------------------------------
+'=======================================================
 Public Sub AddSimpleStringToFile(ByVal StringName As String, Value As String)
     '/!\ conflit si identifiant de string porte un nom de controle /!\
     LetPref mParent.Name, StringName, Value, Me.LangFolder & "\" & Me.Language & ".ini"
