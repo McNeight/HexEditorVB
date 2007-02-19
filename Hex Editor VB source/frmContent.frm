@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "19:31"
+            TextSave        =   "20:32"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -868,6 +868,13 @@ Begin VB.MDIForm frmContent
          Caption         =   "&Fin de partition"
       End
    End
+   Begin VB.Menu mnuPopupIcon 
+      Caption         =   "mnuPopupIcon"
+      Visible         =   0   'False
+      Begin VB.Menu mnuSaveIconAsBitmap 
+         Caption         =   "&Enregistrer l'icone en bitmap..."
+      End
+   End
 End
 Attribute VB_Name = "frmContent"
 Attribute VB_GlobalNameSpace = False
@@ -1459,7 +1466,7 @@ End Sub
 
 Private Sub mnuFileRenamer_Click()
 'lance FileRenamer.exe
-    cFile.ShellOpenFile App.Path & "\FileRenamer.exe", Me.hwnd, , App.Path
+    cFile.ShellOpenFile App.Path & "\FileRenamer.exe", Me.hWnd, , App.Path
 End Sub
 
 Private Sub mnuFileSearch_Click()
@@ -1469,12 +1476,12 @@ End Sub
 
 Private Sub mnuFreeForum_Click()
 'forum de discussion
-    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654034", Me.hwnd, , App.Path
+    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654034", Me.hWnd, , App.Path
 End Sub
 
 Private Sub mnuHelpForum_Click()
 'forum de demande d'aide
-    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654035", Me.hwnd, , App.Path
+    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654035", Me.hWnd, , App.Path
 End Sub
 
 Private Sub mnuHome_Click()
@@ -1563,7 +1570,7 @@ Dim sExt As String
     'obtient la termaison
     sExt = cFile.GetFileExtension(Me.ActiveForm.Caption)
     
-    ExecuteTempFile Me.hwnd, Me.ActiveForm, sExt
+    ExecuteTempFile Me.hWnd, Me.ActiveForm, sExt
 End Sub
 
 Private Sub mnuExit_Click()
@@ -1698,7 +1705,7 @@ End Sub
 
 Private Sub mnuNewProcess_Click()
 'invite à demarrer un nouveau processus
-    ShowRunBox Me.hwnd
+    ShowRunBox Me.hWnd
 End Sub
 
 Private Sub mnuOpen_Click()
@@ -1748,7 +1755,7 @@ Dim Frm As Form
 Dim x As Long
 
     'sélectionne un répertoire
-    sDir = cFile.BrowseForFolder("Sélectionner un répertoire", Me.hwnd)
+    sDir = cFile.BrowseForFolder("Sélectionner un répertoire", Me.hWnd)
     
     'teste la validité du répertoire
     If cFile.FolderExists(sDir) = False Then Exit Sub
@@ -1811,7 +1818,7 @@ Dim x As Long
     LV.GetSelectedItems sFile
     
     For x = 1 To UBound(sFile)
-        cFile.ShellOpenFile sFile(x).Tag, Me.hwnd
+        cFile.ShellOpenFile sFile(x).Tag, Me.hWnd
     Next x
     
 End Sub
@@ -2161,6 +2168,44 @@ Private Sub mnuReorganize_Click()
     Me.Arrange vbArrangeIcons
 End Sub
 
+Private Sub mnuSaveIconAsBitmap_Click()
+'enregistre l'icone de l'active form en bitmap
+Dim s As String
+
+    If Me.ActiveForm Is Nothing Then Exit Sub
+    If TypeOfForm(Me.ActiveForm) <> "Fichier" And TypeOfForm(Me.ActiveForm) <> "Processus" Then Exit Sub
+    
+    'sauvegarder l'icone sélectionnée en bitmap
+    If Me.ActiveForm.lvIcon.SelectedItem Is Nothing Then Exit Sub
+    
+    'pose l'image sur le picturebox
+    ImageList_Draw Me.ActiveForm.IMG.hImageList, Me.ActiveForm.lvIcon.SelectedItem.Index - 1, _
+        Me.ActiveForm.pct.hdc, 2, 2, ILD_TRANSPARENT    'tente de recentrer l'image avec 2,2
+   
+   If Me.ActiveForm.pct.Picture Is Nothing Then Exit Sub
+   
+    'demande la sauvegarde du fichier
+    On Error GoTo Err
+    
+    'affiche la boite de dialogue "sauvegarder"
+    With frmContent.CMD
+        .CancelError = True
+        .DialogTitle = "Sauvegarder une image bitmap"
+        .Filter = "Bitmap Image|*.bmp|"
+        .ShowSave
+        s = .Filename
+    End With
+    
+    'rajoute l'extension si nécessaire
+    If LCase$(Right$(s, 4)) <> ".bmp" Then s = s & ".bmp"
+    
+    'lance la sauvegarde
+    SavePicture Me.ActiveForm.pct.Image, s
+    
+Err:
+    Set Me.ActiveForm.pct.Picture = Nothing
+End Sub
+
 Private Sub mnuSaveSignets_Click()
 'enregistre la liste des signets de la form active
 Dim s As String
@@ -2294,7 +2339,7 @@ End Sub
 
 Private Sub mnuSourceForge_Click()
 'page source forge
-    cFile.ShellOpenFile "http://sourceforge.net/projects/hexeditorvb/", Me.hwnd, , App.Path
+    cFile.ShellOpenFile "http://sourceforge.net/projects/hexeditorvb/", Me.hWnd, , App.Path
 End Sub
 
 Private Sub mnuStats_Click()
@@ -2422,7 +2467,7 @@ End Sub
 
 Private Sub mnuVbfrance_Click()
 'vbfrance.com
-    cFile.ShellOpenFile "http://www.vbfrance.com/auteurdetail.aspx?ID=523601&print=1", Me.hwnd, , App.Path
+    cFile.ShellOpenFile "http://www.vbfrance.com/auteurdetail.aspx?ID=523601&print=1", Me.hWnd, , App.Path
 End Sub
 
 Private Sub muUp_Click()
