@@ -261,8 +261,7 @@ Private Sub cmdLicense_Click()
 'affiche le ReadMe
 
     If cFile.FileExists(App.Path & "\License.txt") = False Then Exit Sub
-    
-    ShellExecute Me.hwnd, "open", App.Path & "\License.txt", vbNullString, vbNullString, 1
+    cFile.ShellOpenFile App.Path & "\License.txt", Me.hWnd
 End Sub
 
 Private Sub cmdUnload_Click()

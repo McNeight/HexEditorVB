@@ -11,6 +11,7 @@ dates|ne pas changer les dates lors de la sauvegarde de fichier| 10| 1
 dbl click|double cliquer pour changer de point courant dans le HW| 10| 4
 drag & drop|ajout du drag and drop sur frmcontent| 66| 3
 fichier dump|support des fichiers *.dmp par défaut| 10| 5
+file search|possibilité de faire une recherche sans changer d'indexation| 10| 3
 fixer les bugs|fixer les bugs| 10| 1
 folder|dates des dossiers mauvaises| 10| 4
 gestion erreur|clsERREUR.AddError "Pfm.OpenFile", True           à pleins d'endroits| 35| 3

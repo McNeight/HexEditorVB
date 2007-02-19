@@ -325,7 +325,7 @@ Dim s As String
         LV_Click
         
         'affiche le popup menu
-        Me.PopupMenu Me.mnuPopUp
+        Me.PopupMenu Me.mnuPopup
     End If
         
 End Sub
@@ -375,7 +375,7 @@ Dim Frm As Form
 End Sub
 
 Private Sub mnuExecute_Click()
-    ShowRunBox Me.hwnd  'affiche la boite de dialogue Executer...
+    ShowRunBox Me.hWnd  'affiche la boite de dialogue Executer...
 End Sub
 
 Private Sub mnuHighP_Click()
@@ -460,7 +460,7 @@ End Sub
 
 Private Sub mnuProperties_Click()
 'affiche les propriétés du fichier
-    cFile.DisplayFileProperty LV.SelectedItem.SubItems(2), Me.hwnd
+    cFile.ShowFileProperty LV.SelectedItem.SubItems(2), Me.hWnd
 End Sub
 
 Private Sub mnuQuit_Click()
@@ -499,7 +499,7 @@ Dim sSearch As String
     'formate la string pour la recherche
     sURL = "http://www.google.com/search?hl=en&q=%22" & sSearch & "%22"
 
-    ShellExecute Me.hwnd, "open", sURL, ByVal 0&, 0&, 1
+    cFile.ShellOpenFile sURL, Me.hWnd
     
 End Sub
 
@@ -526,11 +526,11 @@ Dim p As ProcessItem
     
     'affichage dans le LV
     '/!\ on GELE l'affichage pour éviter le clignotement
-    ValidateRect LV.hwnd, 0&
+    ValidateRect LV.hWnd, 0&
 
     LV.SelectedItem.SubItems(14) = PriorityFromLong(p.pcPriClassBase) & " [" & p.pcPriClassBase & "]"
     
-    InvalidateRect LV.hwnd, 0&, 0&   'dégèle le display
+    InvalidateRect LV.hWnd, 0&, 0&   'dégèle le display
 
 End Sub
 
@@ -550,7 +550,7 @@ Dim sKey As String
     
     'affichage dans le LV
     '/!\ on GELE l'affichage pour éviter le clignotement
-    ValidateRect LV.hwnd, 0&
+    ValidateRect LV.hWnd, 0&
     
     LV.ListItems.Clear
     
@@ -617,7 +617,7 @@ Dim sKey As String
         Next x
     End If
     
-    InvalidateRect LV.hwnd, 0&, 0&   'dégèle le display
+    InvalidateRect LV.hWnd, 0&, 0&   'dégèle le display
     Me.Caption = "Gestionnaire de processus --- " & CStr(lCount) & " processus"
     
     Exit Sub

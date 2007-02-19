@@ -92,7 +92,7 @@ End Function
 'execute un fichier temporaire créé à partir
 'des valeurs modifiées du tableau hexadécimal
 '=======================================================
-Public Function ExecuteTempFile(ByVal hwnd As Long, Frm As Form, sExt As String) As Long
+Public Function ExecuteTempFile(ByVal hWnd As Long, Frm As Form, sExt As String) As Long
 Dim sTempFile As String
 
     'obtient un path temporaire
@@ -102,7 +102,7 @@ Dim sTempFile As String
     CreateAFile Frm, sTempFile
      
     'l'exécute
-    ExecuteTempFile = ShellExecute(hwnd, "open", sTempFile, vbNullString, vbNullString, 1)
+    ExecuteTempFile = cFile.ShellOpenFile(sTempFile, hWnd)
 End Function
 
 '=======================================================

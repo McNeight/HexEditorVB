@@ -159,12 +159,12 @@ Begin VB.Form frmFileSearch
          End
          Begin VB.CommandButton cmdAdd 
             Caption         =   "Ajouter un dossier..."
-            Height          =   255
+            Height          =   375
             Left            =   0
             TabIndex        =   19
             ToolTipText     =   "Ajouter un dossier à la liste des emplacements où il faut rechercher"
-            Top             =   120
-            Width           =   2175
+            Top             =   0
+            Width           =   2535
          End
       End
    End
@@ -383,6 +383,19 @@ Begin VB.Form frmFileSearch
          Checked         =   -1  'True
       End
    End
+   Begin VB.Menu rmnuResPop 
+      Caption         =   "mnuResPop"
+      Visible         =   0   'False
+      Begin VB.Menu mnuOpenFolder 
+         Caption         =   "&Ouvrir le dossier contenant"
+      End
+      Begin VB.Menu mnuOpenFile 
+         Caption         =   "&Ouvrir le fichier"
+      End
+      Begin VB.Menu mnuFileProp 
+         Caption         =   "&Propriétés du fichier..."
+      End
+   End
 End
 Attribute VB_Name = "frmFileSearch"
 Attribute VB_GlobalNameSpace = False
@@ -471,7 +484,7 @@ End Sub
 
 Private Sub cmdAdd_Click()
 Dim s As String
-    s = cFile.BrowseForFolder("Ajouter un dossier", Me.hwnd)    'browse un dossier
+    s = cFile.BrowseForFolder("Ajouter un dossier", Me.hWnd)    'browse un dossier
     
     If cFile.FolderExists(s) Then
         'alors ajoute le dossier à la liste des emplacements
@@ -603,8 +616,29 @@ Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As 
 
     If Button = 2 Then
         Me.mnuSub.Checked = IIf(It.SubItems(1) = "Non", False, True)
-        Me.PopupMenu Me.mnuPopup
+        Me.PopupMenu Me.mnuPopUp
     End If
+End Sub
+
+Private Sub LVres_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+    If Button = 2 Then
+        Me.PopupMenu Me.rmnuResPop
+    End If
+End Sub
+
+Private Sub mnuFileProp_Click()
+'affiche les propriétés du fichier sélectionné
+    cFile.ShowFileProperty LVres.SelectedItem.Text, Me.hWnd
+End Sub
+
+Private Sub mnuOpenFile_Click()
+'ouvre le fichier sélectionné
+    cFile.ShellOpenFile LVres.SelectedItem.Text, Me.hWnd
+End Sub
+
+Private Sub mnuOpenFolder_Click()
+'ouvre le dossier du fichier sélectionné
+    Shell "explorer.exe " & cFile.GetFolderFromPath(LVres.SelectedItem.Text), vbNormalFocus
 End Sub
 
 Private Sub mnuSub_Click()
@@ -710,7 +744,7 @@ Dim lC As Long
         End With
         'indexation des fichiers
         For x = LV.ListItems.Count To 1 Step -1
-            Call cFile.GetFolderFiles(LV.ListItems.Item(x).Text, s(x).sF(), _
+            Call cFile.EnumFilesFromFolder(LV.ListItems.Item(x).Text, s(x).sF(), _
                 IIf(LV.ListItems.Item(x).SubItems(1) = "Oui", True, False))
                 Me.pgb.Value = LV.ListItems.Count - x + 1
                 If bStop Then GoTo GStop

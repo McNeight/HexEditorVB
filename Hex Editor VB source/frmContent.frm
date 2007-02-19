@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "16:01"
+            TextSave        =   "17:46"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1062,7 +1062,7 @@ Dim Frm As Form
             'alors on ajoute le contenu du dossier
             
             'liste les fichiers
-            If cFile.GetFolderFiles(Data.Files.Item(i), m, CBool(cPref.general_OpenSubFiles)) < 1 Then Exit Sub
+            If cFile.EnumFilesFromFolder(Data.Files.Item(i), m, CBool(cPref.general_OpenSubFiles)) < 1 Then Exit Sub
             
             'les ouvre un par un
             For i2 = 1 To UBound(m)
@@ -1457,7 +1457,7 @@ End Sub
 
 Private Sub mnuFileRenamer_Click()
 'lance FileRenamer.exe
-    ShellExecute Me.hwnd, "Open", App.Path & "\FileRenamer.exe", "", App.Path, 1
+    cFile.ShellOpenFile App.Path & "\FileRenamer.exe", Me.hWnd, , App.Path
 End Sub
 
 Private Sub mnuFileSearch_Click()
@@ -1467,12 +1467,12 @@ End Sub
 
 Private Sub mnuFreeForum_Click()
 'forum de discussion
-    ShellExecute Me.hwnd, "Open", "https://sourceforge.net/forum/forum.php?forum_id=654034", "", App.Path, 1
+    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654034", Me.hWnd, , App.Path
 End Sub
 
 Private Sub mnuHelpForum_Click()
 'forum de demande d'aide
-    ShellExecute Me.hwnd, "Open", "https://sourceforge.net/forum/forum.php?forum_id=654035", "", App.Path, 1
+    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654035", Me.hWnd, , App.Path
 End Sub
 
 Private Sub mnuHome_Click()
@@ -1561,7 +1561,7 @@ Dim sExt As String
     'obtient la termaison
     sExt = cFile.GetFileExtension(Me.ActiveForm.Caption)
     
-    ExecuteTempFile Me.hwnd, Me.ActiveForm, sExt
+    ExecuteTempFile Me.hWnd, Me.ActiveForm, sExt
 End Sub
 
 Private Sub mnuExit_Click()
@@ -1696,7 +1696,7 @@ End Sub
 
 Private Sub mnuNewProcess_Click()
 'invite à demarrer un nouveau processus
-    ShowRunBox Me.hwnd
+    ShowRunBox Me.hWnd
 End Sub
 
 Private Sub mnuOpen_Click()
@@ -1746,13 +1746,13 @@ Dim Frm As Form
 Dim x As Long
 
     'sélectionne un répertoire
-    sDir = cFile.BrowseForFolder("Sélectionner un répertoire", Me.hwnd)
+    sDir = cFile.BrowseForFolder("Sélectionner un répertoire", Me.hWnd)
     
     'teste la validité du répertoire
     If cFile.FolderExists(sDir) = False Then Exit Sub
     
     'liste les fichiers
-    If cFile.GetFolderFiles(sDir, m, CBool(cPref.general_OpenSubFiles)) < 1 Then Exit Sub
+    If cFile.EnumFilesFromFolder(sDir, m, CBool(cPref.general_OpenSubFiles)) < 1 Then Exit Sub
     
     'les ouvre un par un
     For x = 1 To UBound(m)
@@ -1809,7 +1809,7 @@ Dim x As Long
     LV.GetSelectedItems sFile
     
     For x = 1 To UBound(sFile)
-        ShellExecute Me.hwnd, "open", sFile(x).Tag, vbNullString, vbNullString, 1
+        cFile.ShellOpenFile sFile(x).Tag, Me.hWnd
     Next x
     
 End Sub
@@ -2292,7 +2292,7 @@ End Sub
 
 Private Sub mnuSourceForge_Click()
 'page source forge
-    ShellExecute Me.hwnd, "Open", "https://sourceforge.net/projects/hexeditorvb/", "", App.Path, 1
+    cFile.ShellOpenFile "http://sourceforge.net/projects/hexeditorvb/", Me.hWnd, , App.Path
 End Sub
 
 Private Sub mnuStats_Click()
@@ -2420,7 +2420,7 @@ End Sub
 
 Private Sub mnuVbfrance_Click()
 'vbfrance.com
-    ShellExecute Me.hwnd, "Open", "http://www.vbfrance.com/auteurdetail.aspx?ID=523601&print=1", "", App.Path, 1
+    cFile.ShellOpenFile "http://www.vbfrance.com/auteurdetail.aspx?ID=523601&print=1", Me.hWnd, , App.Path
 End Sub
 
 Private Sub muUp_Click()
