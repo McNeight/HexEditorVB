@@ -323,7 +323,7 @@ End Sub
 'fonction de recherche de string dans un processus
 'de 1 à Ubound
 '=======================================================
-Public Sub SearchForStringMemory(ByVal PID As Long, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional ByVal pgb As pgrbar)
+Public Sub SearchForStringMemory(ByVal PID As Long, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional ByVal PGB As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim x As Long
 Dim bytAsc As Byte
@@ -341,11 +341,11 @@ Dim LS() As Long
     'on obtient les différentes régions de la mémoire du processus
     RetrieveMemRegions PID, LB(), LS()
     
-    If Not (pgb Is Nothing) Then
+    If Not (PGB Is Nothing) Then
         'on initialise la progressabr
-        pgb.Min = 0
-        pgb.Value = 0
-        pgb.Max = UBound(LS())
+        PGB.Min = 0
+        PGB.Value = 0
+        PGB.Max = UBound(LS())
     End If
     
     'on obtient le handle depuis le PID
@@ -371,12 +371,12 @@ Dim LS() As Long
             strBufT = Right$(strBufT, Len(strBufT) - InStr(1, strBufT, sMatch, vbBinaryCompare) - Len(sMatch) + 1)
         Wend
         
-        If Not (pgb Is Nothing) Then pgb.Value = x    'refresh progressbar
+        If Not (PGB Is Nothing) Then PGB.Value = x    'refresh progressbar
         DoEvents    'rend la main
         
     Next x
     
-    If Not (pgb Is Nothing) Then pgb.Value = pgb.Max
+    If Not (PGB Is Nothing) Then PGB.Value = PGB.Max
         
     Let strBufT = vbNullString
 
@@ -390,7 +390,7 @@ End Sub
 'des paramètres Afficher : min, MAJ, nbres, signes
 'function utilisée directement avec les procédures de SearchStringIn...
 '=======================================================
-Private Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean) As Boolean
+Private Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean) As Boolean
     If bMaj Then
         IsCharConsideredInAString = (bytChar >= 65 And bytChar <= 90)
         If IsCharConsideredInAString Then Exit Function
@@ -413,6 +413,9 @@ Private Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns A
         IsCharConsideredInAString = True
         If IsCharConsideredInAString Then Exit Function
     End If
+    If bAccent Then
+        IsCharConsideredInAString = (bytChar >= 192)
+    End If
     
     IsCharConsideredInAString = False
 End Function
@@ -422,7 +425,7 @@ End Function
 'ne cherche pas une string en particulier, mais toutes les strings qui ressemblent à des mots
 'stocke dans un tableau de 1 à Ubound
 '=======================================================
-Public Sub SearchEntireStringMemory(ByVal PID As Long, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByRef lngRes() As Long, ByRef strRes() As String, Optional pgb As pgrbar)
+Public Sub SearchEntireStringMemory(ByVal PID As Long, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef lngRes() As Long, ByRef strRes() As String, Optional PGB As pgrbar)
 Dim strCtemp As String
 Dim x As Long
 Dim lngLen As Long
@@ -446,11 +449,11 @@ Dim LS() As Long
         lngLen = lngLen + LS(i)
     Next i
     
-    If Not (pgb Is Nothing) Then
+    If Not (PGB Is Nothing) Then
         'on initialise la progressabr
-        pgb.Min = 0
-        pgb.Value = 0
-        pgb.Max = UBound(LS())
+        PGB.Min = 0
+        PGB.Value = 0
+        PGB.Max = UBound(LS())
     End If
     
     'on obtient le handle depuis le PID
@@ -481,7 +484,7 @@ Dim LS() As Long
             If (i Mod 300000) = 0 Then DoEvents   'rend un peu la main
             bytAsc = Asc(Mid$(strBuffer, i + 1, 1)) 'prend un byte
             
-            If IsCharConsideredInAString(bytAsc, bSigns, bMaj, bMin, bNumbers) Then
+            If IsCharConsideredInAString(bytAsc, bSigns, bMaj, bMin, bNumbers, bAccent) Then
                 'caractère x est valide
                 strCtemp = strCtemp & Chr(bytAsc)
             Else
@@ -503,12 +506,12 @@ Dim LS() As Long
             tRes(UBound(tRes)).strString = strCtemp
         End If
         
-        If Not (pgb Is Nothing) Then pgb.Value = x    'refresh progressbar
+        If Not (PGB Is Nothing) Then PGB.Value = x    'refresh progressbar
         DoEvents    'rend la main
      Next x
     
     
-    If Not (pgb Is Nothing) Then pgb.Value = pgb.Max
+    If Not (PGB Is Nothing) Then PGB.Value = PGB.Max
     
     Let strBuffer = vbNullString
     CloseHandle lHandle 'ferme le handle du process
