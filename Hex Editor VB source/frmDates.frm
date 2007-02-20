@@ -1,11 +1,12 @@
 VERSION 5.00
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmDates 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Changement de dates"
-   ClientHeight    =   5760
+   ClientHeight    =   4680
    ClientLeft      =   45
    ClientTop       =   360
-   ClientWidth     =   8505
+   ClientWidth     =   6720
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -19,13 +20,13 @@ Begin VB.Form frmDates
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   5760
-   ScaleWidth      =   8505
+   ScaleHeight     =   4680
+   ScaleWidth      =   6720
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdRefresh 
       Caption         =   "Rafraichir"
       Height          =   255
-      Left            =   6960
+      Left            =   5280
       TabIndex        =   23
       ToolTipText     =   "Rafraichir les dates"
       Top             =   240
@@ -33,23 +34,29 @@ Begin VB.Form frmDates
    End
    Begin VB.Frame Frame1 
       Caption         =   "Date de dernier accès actuelle"
-      Height          =   1455
+      Height          =   1095
       Index           =   4
-      Left            =   5400
+      Left            =   3600
       TabIndex        =   18
-      Top             =   2160
+      Top             =   1920
       Width           =   3015
       Begin VB.Label lblHour 
          Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
          Height          =   255
          Index           =   1
          Left            =   120
          TabIndex        =   20
-         Top             =   840
+         Top             =   720
          Width           =   2775
       End
       Begin VB.Label lblDate 
          Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
          Height          =   255
          Index           =   1
          Left            =   120
@@ -60,23 +67,29 @@ Begin VB.Form frmDates
    End
    Begin VB.Frame Frame1 
       Caption         =   "Date de dernière modification actuelle"
-      Height          =   1455
+      Height          =   1215
       Index           =   5
-      Left            =   5400
+      Left            =   3600
       TabIndex        =   12
-      Top             =   3600
+      Top             =   3120
       Width           =   3015
       Begin VB.Label lblHour 
          Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
          Height          =   255
          Index           =   2
          Left            =   120
          TabIndex        =   22
-         Top             =   840
+         Top             =   720
          Width           =   2775
       End
       Begin VB.Label lblDate 
          Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
          Height          =   255
          Index           =   2
          Left            =   120
@@ -88,472 +101,178 @@ Begin VB.Form frmDates
    Begin VB.CommandButton cmdQuit 
       Caption         =   "Fermer"
       Height          =   375
-      Left            =   4785
+      Left            =   1560
       TabIndex        =   8
       ToolTipText     =   "Fermer la fenêtre"
-      Top             =   5280
+      Top             =   4200
       Width           =   1215
    End
    Begin VB.CommandButton cmdAppliquer 
       Caption         =   "Appliquer"
       Height          =   375
-      Left            =   2505
+      Left            =   120
       TabIndex        =   7
       ToolTipText     =   "Appliquer les changements"
-      Top             =   5280
+      Top             =   4200
       Width           =   1215
    End
    Begin VB.Frame Frame1 
       Caption         =   "Date de dernière modification"
-      Height          =   1455
+      Height          =   855
       Index           =   2
       Left            =   120
       TabIndex        =   6
-      Top             =   3600
-      Width           =   5175
+      Top             =   3120
+      Width           =   3255
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
-         Height          =   1095
+         Height          =   495
          Index           =   2
          Left            =   120
-         ScaleHeight     =   1095
-         ScaleWidth      =   4935
+         ScaleHeight     =   495
+         ScaleWidth      =   3015
          TabIndex        =   11
          Top             =   240
-         Width           =   4935
-         Begin VB.TextBox Text2 
-            Height          =   285
-            Index           =   2
-            Left            =   600
-            MaxLength       =   2
-            TabIndex        =   53
-            Top             =   120
-            Width           =   495
-         End
-         Begin VB.TextBox Text3 
-            Height          =   285
-            Index           =   2
-            Left            =   1680
-            MaxLength       =   2
-            TabIndex        =   52
-            Top             =   120
-            Width           =   495
-         End
-         Begin VB.TextBox Text4 
-            Height          =   285
-            Index           =   2
-            Left            =   3000
-            MaxLength       =   4
-            TabIndex        =   51
-            Top             =   120
-            Width           =   495
-         End
-         Begin VB.TextBox Text5 
-            Height          =   285
-            Index           =   2
-            Left            =   600
-            MaxLength       =   2
-            TabIndex        =   50
-            Top             =   600
-            Width           =   495
-         End
-         Begin VB.TextBox Text6 
-            Height          =   285
-            Index           =   2
-            Left            =   1680
-            MaxLength       =   2
-            TabIndex        =   49
-            Top             =   600
-            Width           =   495
-         End
-         Begin VB.TextBox Text7 
-            Height          =   285
-            Index           =   2
-            Left            =   3000
-            MaxLength       =   2
-            TabIndex        =   48
-            Top             =   600
-            Width           =   495
-         End
+         Width           =   3015
          Begin VB.CommandButton cmdDefaut 
             Caption         =   "Par défaut"
-            Height          =   375
+            Height          =   255
             Index           =   2
-            Left            =   3840
+            Left            =   2040
             TabIndex        =   17
             ToolTipText     =   "Dates par défaut (actuelles) du fichier"
-            Top             =   240
+            Top             =   120
             Width           =   975
          End
-         Begin VB.Label Label1 
-            AutoSize        =   -1  'True
-            Caption         =   "jour"
-            Height          =   195
-            Index           =   6
-            Left            =   120
-            TabIndex        =   59
+         Begin MSComCtl2.DTPicker DT 
+            Height          =   300
+            Index           =   2
+            Left            =   0
+            TabIndex        =   26
             Top             =   120
-            Width           =   285
-         End
-         Begin VB.Label Label2 
-            AutoSize        =   -1  'True
-            Caption         =   "mois"
-            Height          =   195
-            Index           =   2
-            Left            =   1200
-            TabIndex        =   58
-            Top             =   120
-            Width           =   315
-         End
-         Begin VB.Label Label3 
-            AutoSize        =   -1  'True
-            Caption         =   "année"
-            Height          =   195
-            Index           =   2
-            Left            =   2400
-            TabIndex        =   57
-            Top             =   120
-            Width           =   450
-         End
-         Begin VB.Label Label4 
-            AutoSize        =   -1  'True
-            Caption         =   "heure"
-            Height          =   195
-            Index           =   2
-            Left            =   120
-            TabIndex        =   56
-            Top             =   600
-            Width           =   420
-         End
-         Begin VB.Label Label5 
-            AutoSize        =   -1  'True
-            Caption         =   "minute"
-            Height          =   195
-            Index           =   2
-            Left            =   1155
-            TabIndex        =   55
-            Top             =   600
-            Width           =   480
-         End
-         Begin VB.Label Label6 
-            AutoSize        =   -1  'True
-            Caption         =   "seconde"
-            Height          =   195
-            Index           =   2
-            Left            =   2280
-            TabIndex        =   54
-            Top             =   600
-            Width           =   600
+            Width           =   1935
+            _ExtentX        =   3413
+            _ExtentY        =   529
+            _Version        =   393216
+            CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
+            Format          =   94633987
+            CurrentDate     =   39133
          End
       End
    End
    Begin VB.Frame Frame1 
       Caption         =   "Date de dernier accès"
-      Height          =   1455
+      Height          =   855
       Index           =   1
       Left            =   120
       TabIndex        =   5
-      Top             =   2160
-      Width           =   5175
+      Top             =   1920
+      Width           =   3255
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
-         Height          =   1095
+         Height          =   495
          Index           =   1
          Left            =   120
-         ScaleHeight     =   1095
-         ScaleWidth      =   4935
+         ScaleHeight     =   495
+         ScaleWidth      =   3015
          TabIndex        =   10
          Top             =   240
-         Width           =   4935
-         Begin VB.TextBox Text2 
-            Height          =   285
-            Index           =   1
-            Left            =   600
-            MaxLength       =   2
-            TabIndex        =   41
-            Top             =   120
-            Width           =   495
-         End
-         Begin VB.TextBox Text3 
-            Height          =   285
-            Index           =   1
-            Left            =   1680
-            MaxLength       =   2
-            TabIndex        =   40
-            Top             =   120
-            Width           =   495
-         End
-         Begin VB.TextBox Text4 
-            Height          =   285
-            Index           =   1
-            Left            =   3000
-            MaxLength       =   4
-            TabIndex        =   39
-            Top             =   120
-            Width           =   495
-         End
-         Begin VB.TextBox Text5 
-            Height          =   285
-            Index           =   1
-            Left            =   600
-            MaxLength       =   2
-            TabIndex        =   38
-            Top             =   600
-            Width           =   495
-         End
-         Begin VB.TextBox Text6 
-            Height          =   285
-            Index           =   1
-            Left            =   1680
-            MaxLength       =   2
-            TabIndex        =   37
-            Top             =   600
-            Width           =   495
-         End
-         Begin VB.TextBox Text7 
-            Height          =   285
-            Index           =   1
-            Left            =   3000
-            MaxLength       =   2
-            TabIndex        =   36
-            Top             =   600
-            Width           =   495
-         End
+         Width           =   3015
          Begin VB.CommandButton cmdDefaut 
             Caption         =   "Par défaut"
-            Height          =   375
+            Height          =   255
             Index           =   1
-            Left            =   3840
+            Left            =   2040
             TabIndex        =   16
             ToolTipText     =   "Dates par défaut (actuelles) du fichier"
-            Top             =   240
+            Top             =   120
             Width           =   975
          End
-         Begin VB.Label Label1 
-            AutoSize        =   -1  'True
-            Caption         =   "jour"
-            Height          =   195
-            Index           =   2
-            Left            =   120
-            TabIndex        =   47
+         Begin MSComCtl2.DTPicker DT 
+            Height          =   300
+            Index           =   1
+            Left            =   0
+            TabIndex        =   25
             Top             =   120
-            Width           =   285
-         End
-         Begin VB.Label Label2 
-            AutoSize        =   -1  'True
-            Caption         =   "mois"
-            Height          =   195
-            Index           =   1
-            Left            =   1200
-            TabIndex        =   46
-            Top             =   120
-            Width           =   315
-         End
-         Begin VB.Label Label3 
-            AutoSize        =   -1  'True
-            Caption         =   "année"
-            Height          =   195
-            Index           =   1
-            Left            =   2400
-            TabIndex        =   45
-            Top             =   120
-            Width           =   450
-         End
-         Begin VB.Label Label4 
-            AutoSize        =   -1  'True
-            Caption         =   "heure"
-            Height          =   195
-            Index           =   1
-            Left            =   120
-            TabIndex        =   44
-            Top             =   600
-            Width           =   420
-         End
-         Begin VB.Label Label5 
-            AutoSize        =   -1  'True
-            Caption         =   "minute"
-            Height          =   195
-            Index           =   1
-            Left            =   1155
-            TabIndex        =   43
-            Top             =   600
-            Width           =   480
-         End
-         Begin VB.Label Label6 
-            AutoSize        =   -1  'True
-            Caption         =   "seconde"
-            Height          =   195
-            Index           =   1
-            Left            =   2280
-            TabIndex        =   42
-            Top             =   600
-            Width           =   600
+            Width           =   1935
+            _ExtentX        =   3413
+            _ExtentY        =   529
+            _Version        =   393216
+            CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
+            Format          =   94633987
+            CurrentDate     =   39133
          End
       End
    End
    Begin VB.Frame Frame1 
       Caption         =   "Date de création"
-      Height          =   1455
+      Height          =   855
       Index           =   0
       Left            =   120
       TabIndex        =   4
       Top             =   720
-      Width           =   5175
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   1095
+      Width           =   3375
+      Begin MSComCtl2.DTPicker DT 
+         Height          =   300
          Index           =   0
          Left            =   120
-         ScaleHeight     =   1095
-         ScaleWidth      =   4935
+         TabIndex        =   24
+         Top             =   360
+         Width           =   1935
+         _ExtentX        =   3413
+         _ExtentY        =   529
+         _Version        =   393216
+         CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
+         Format          =   94633987
+         CurrentDate     =   39133.9583333333
+      End
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   495
+         Index           =   0
+         Left            =   120
+         ScaleHeight     =   495
+         ScaleWidth      =   3135
          TabIndex        =   9
          Top             =   240
-         Width           =   4935
-         Begin VB.TextBox Text2 
-            Height          =   285
-            Index           =   0
-            Left            =   600
-            MaxLength       =   2
-            TabIndex        =   29
-            Top             =   120
-            Width           =   495
-         End
-         Begin VB.TextBox Text3 
-            Height          =   285
-            Index           =   0
-            Left            =   1680
-            MaxLength       =   2
-            TabIndex        =   28
-            Top             =   120
-            Width           =   495
-         End
-         Begin VB.TextBox Text4 
-            Height          =   285
-            Index           =   0
-            Left            =   3000
-            MaxLength       =   4
-            TabIndex        =   27
-            Top             =   120
-            Width           =   495
-         End
-         Begin VB.TextBox Text5 
-            Height          =   285
-            Index           =   0
-            Left            =   600
-            MaxLength       =   2
-            TabIndex        =   26
-            Top             =   600
-            Width           =   495
-         End
-         Begin VB.TextBox Text6 
-            Height          =   285
-            Index           =   0
-            Left            =   1680
-            MaxLength       =   2
-            TabIndex        =   25
-            Top             =   600
-            Width           =   495
-         End
-         Begin VB.TextBox Text7 
-            Height          =   285
-            Index           =   0
-            Left            =   3000
-            MaxLength       =   2
-            TabIndex        =   24
-            Top             =   600
-            Width           =   495
-         End
+         Width           =   3135
          Begin VB.CommandButton cmdDefaut 
             Caption         =   "Par défaut"
-            Height          =   375
+            Height          =   255
             Index           =   0
-            Left            =   3840
+            Left            =   2040
             TabIndex        =   15
             ToolTipText     =   "Dates par défaut (actuelles) du fichier"
-            Top             =   240
+            Top             =   120
             Width           =   975
-         End
-         Begin VB.Label Label1 
-            AutoSize        =   -1  'True
-            Caption         =   "jour"
-            Height          =   195
-            Index           =   1
-            Left            =   120
-            TabIndex        =   35
-            Top             =   120
-            Width           =   285
-         End
-         Begin VB.Label Label2 
-            AutoSize        =   -1  'True
-            Caption         =   "mois"
-            Height          =   195
-            Index           =   0
-            Left            =   1200
-            TabIndex        =   34
-            Top             =   120
-            Width           =   315
-         End
-         Begin VB.Label Label3 
-            AutoSize        =   -1  'True
-            Caption         =   "année"
-            Height          =   195
-            Index           =   0
-            Left            =   2400
-            TabIndex        =   33
-            Top             =   120
-            Width           =   450
-         End
-         Begin VB.Label Label4 
-            AutoSize        =   -1  'True
-            Caption         =   "heure"
-            Height          =   195
-            Index           =   0
-            Left            =   120
-            TabIndex        =   32
-            Top             =   600
-            Width           =   420
-         End
-         Begin VB.Label Label5 
-            AutoSize        =   -1  'True
-            Caption         =   "minute"
-            Height          =   195
-            Index           =   0
-            Left            =   1155
-            TabIndex        =   31
-            Top             =   600
-            Width           =   480
-         End
-         Begin VB.Label Label6 
-            AutoSize        =   -1  'True
-            Caption         =   "seconde"
-            Height          =   195
-            Index           =   0
-            Left            =   2280
-            TabIndex        =   30
-            Top             =   600
-            Width           =   600
          End
       End
    End
    Begin VB.Frame Frame1 
       Caption         =   "Date de création actuelle"
-      Height          =   1455
+      Height          =   1095
       Index           =   3
-      Left            =   5400
+      Left            =   3600
       TabIndex        =   3
       Top             =   720
       Width           =   3015
       Begin VB.Label lblHour 
          Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
          Height          =   255
          Index           =   0
          Left            =   120
          TabIndex        =   14
-         Top             =   840
+         Top             =   720
          Width           =   2775
       End
       Begin VB.Label lblDate 
          Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
          Height          =   255
          Index           =   0
          Left            =   120
@@ -565,7 +284,7 @@ Begin VB.Form frmDates
    Begin VB.CommandButton cmdBrowse 
       Caption         =   "..."
       Height          =   255
-      Left            =   6120
+      Left            =   4680
       TabIndex        =   1
       ToolTipText     =   "Sélection du fichier"
       Top             =   240
@@ -578,7 +297,7 @@ Begin VB.Form frmDates
       TabIndex        =   0
       ToolTipText     =   "Emplacement du fichier"
       Top             =   240
-      Width           =   5055
+      Width           =   3615
    End
    Begin VB.Label Label1 
       Caption         =   "Fichier :"
@@ -638,10 +357,7 @@ Private mFile As clsFile
 'attribution des dates spécifiées au Fichier (text1.text)
 '=======================================================
 Private Sub AttribDates()
-Dim modif_Date As Date
 Dim lngHandle As Long
-Dim creation_Date As Date
-Dim access_Date As Date
 Dim udtFileTime As FILETIME
 Dim ucreationFileTime As FILETIME
 Dim ucaccessFileTime As FILETIME
@@ -653,45 +369,41 @@ Dim ucreationSystemTime As SYSTEMTIME
 Dim ucaccessSystemTime As SYSTEMTIME
 
     On Error GoTo ErrGestion
-    
-    'obtient les dates à partir des textboxes (utilisé pour le DayOfWeek)
-    modif_Date = Text2(2).Text & "/" & Text3(2).Text & "/" & Text4(2).Text
-    creation_Date = Text2(0).Text & "/" & Text3(0).Text & "/" & Text4(0).Text
-    access_Date = Text2(1).Text & "/" & Text3(1).Text & "/" & Text4(1).Text
+
     
     'stocke les données de date & d'heure à la nouvelle heure (last modification)
     With udtSystemTime
-        .wYear = Year(modif_Date)
-        .wMonth = Month(modif_Date)
-        .wDay = Day(modif_Date)
-        .wDayOfWeek = Weekday(modif_Date) - 1
-        .wHour = FormatedVal(Text5(2).Text)
-        .wMinute = FormatedVal(Text6(2).Text)
-        .wSecond = FormatedVal(Text7(2).Text)
+        .wYear = DT(2).Year
+        .wMonth = DT(2).Month
+        .wDay = DT(2).Day
+        '.wDayOfWeek = Weekday(Left$(DT(2).Value, 10)) - 1
+        .wHour = DT(2).Hour
+        .wMinute = DT(2).Minute
+        .wSecond = DT(2).Second
         .wMilliseconds = 0
     End With
     
     'idem pour la date & heure de création
     With ucreationSystemTime
-        .wYear = Year(creation_Date)
-        .wMonth = Month(creation_Date)
-        .wDay = Day(creation_Date)
-        .wDayOfWeek = Weekday(creation_Date) - 1
-        .wHour = FormatedVal(Text5(0).Text)
-        .wMinute = FormatedVal(Text6(0).Text)
-        .wSecond = FormatedVal(Text7(0).Text)
+        .wYear = DT(0).Year
+        .wMonth = DT(0).Month
+        .wDay = DT(0).Day
+        '.wDayOfWeek = Weekday(Left$(DT(0).Value, 10)) - 1
+        .wHour = DT(0).Hour
+        .wMinute = DT(0).Minute
+        .wSecond = DT(0).Second
         .wMilliseconds = 0
     End With
         
     'idem pour la date et heure de dernier accès
     With ucaccessSystemTime
-        .wYear = Year(access_Date)
-        .wMonth = Month(access_Date)
-        .wDay = Day(access_Date)
-        .wDayOfWeek = Weekday(access_Date) - 1
-        .wHour = FormatedVal(Text5(1).Text)
-        .wMinute = FormatedVal(Text6(1).Text)
-        .wSecond = FormatedVal(Text7(1).Text)
+        .wYear = DT(1).Year
+        .wMonth = DT(1).Month
+        .wDay = DT(1).Day
+        '.wDayOfWeek = Weekday(Left$(DT(1).Value, 10)) - 1
+        .wHour = DT(1).Hour
+        .wMinute = DT(1).Minute
+        .wSecond = DT(1).Second
         .wMilliseconds = 0
     End With
     
@@ -731,7 +443,7 @@ End Sub
 Private Sub cmdBrowse_Click()
 'ouvre un fichier
 
-    txtFile.Text = cFile.ShowOpen("Sélection d'un fichier", Me.hwnd, "Tous |*.*")
+    txtFile.Text = cFile.ShowOpen("Sélection d'un fichier", Me.hWnd, "Tous |*.*")
     
     Call ChangeDates
 End Sub
@@ -741,12 +453,7 @@ Private Sub cmdDefaut_Click(Index As Integer)
 
     On Error Resume Next
     
-    Text2(Index).Text = Day(lblDate(Index).Caption)
-    Text3(Index).Text = Month(lblDate(Index).Caption)
-    Text4(Index).Text = Year(lblDate(Index).Caption)
-    Text5(Index).Text = Hour(lblHour(Index).Caption)
-    Text6(Index).Text = Minute(lblHour(Index).Caption)
-    Text7(Index).Text = Second(lblHour(Index).Caption)
+    DT(Index).Value = lblDate(Index).Caption & " " & lblHour(Index).Caption
         
 End Sub
 

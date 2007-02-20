@@ -428,7 +428,7 @@ Begin VB.Form diskPfm
             Width           =   855
          End
          Begin VB.Label lblValue 
-            Caption         =   "String :"
+            Caption         =   "ASCII :"
             Height          =   255
             Index           =   2
             Left            =   0
@@ -1437,8 +1437,8 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             VS.Value = VS.Value - 1
             Call VS_Change(VS.Value)
         End If
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.Col
     End If
     
     If KeyCode = vbKeyDown Then
@@ -1454,8 +1454,8 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             Call VS_Change(VS.Value)
         End If
         'change le VS
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.Col
    End If
     
     If KeyCode = vbKeyEnd Then
@@ -1481,10 +1481,10 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
     
     If KeyCode = vbKeyLeft Then
         'alors va à gauche
-        If HW.FirstOffset = 0 And HW.Item.col = 1 And HW.Item.Line = 1 Then Exit Sub 'tout au début déjà
-        If HW.Item.col = 1 Then
+        If HW.FirstOffset = 0 And HW.Item.Col = 1 And HW.Item.Line = 1 Then Exit Sub 'tout au début déjà
+        If HW.Item.Col = 1 Then
             'tout à gauche ==> on remonte d'une ligne alors
-            HW.Item.col = 16: HW.Item.Line = HW.Item.Line - 1
+            HW.Item.Col = 16: HW.Item.Line = HW.Item.Line - 1
             If HW.Item.Line = 0 Then
                 'alors on remonte le firstoffset
                 HW.Item.Line = 1
@@ -1494,18 +1494,18 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             End If
         Else
             'va à gauche
-            HW.Item.col = HW.Item.col - 1
+            HW.Item.Col = HW.Item.Col - 1
         End If
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.Col
     End If
          
     If KeyCode = vbKeyRight Then
         'alors va à droite
-        If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) And HW.Item.col = 16 Then Exit Sub  'tout à la fin déjà
-        If HW.Item.col = 16 Then
+        If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) And HW.Item.Col = 16 Then Exit Sub  'tout à la fin déjà
+        If HW.Item.Col = 16 Then
             'tout à droite ==> on descend d'une ligne alors
-            HW.Item.col = 1: HW.Item.Line = HW.Item.Line + 1
+            HW.Item.Col = 1: HW.Item.Line = HW.Item.Line + 1
             If HW.Item.Line = HW.NumberPerPage Then
                 'alors on descend le firstoffset
                 HW.Item.Line = HW.NumberPerPage - 1
@@ -1515,18 +1515,18 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             End If
         Else
             'va à droite
-            HW.Item.col = HW.Item.col + 1
+            HW.Item.Col = HW.Item.Col + 1
         End If
         'change le VS
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.Col
     End If
     
     'réenregistre le numéro de l'offset actuel dans hw.item
     HW.Item.Offset = HW.FirstOffset + (HW.Item.Line - 1) * 16
     'affecte les autres valeurs dans Item
     'HW.Item.tType = tHex
-    HW.Item.Value = HW.Value(HW.Item.Line, HW.Item.col)
+    HW.Item.Value = HW.Value(HW.Item.Line, HW.Item.Col)
     
     DoEvents
     
@@ -1610,7 +1610,7 @@ Dim r As Long
     If Button = 1 Then
         'alors on a sélectionné un objet
         
-        If Item.col < 1 Or Item.col > 16 Then Exit Sub
+        If Item.Col < 1 Or Item.Col > 16 Then Exit Sub
                
         If Item.Value = vbNullString Then
             'pas de valeur
@@ -1633,7 +1633,7 @@ Dim r As Long
         End If
         If Item.tType = tString Then
             'valeur strind sélectionnée
-            s = HW.Value(Item.Line, Item.col)
+            s = HW.Value(Item.Line, Item.Col)
             txtValue(0).Text = s
             txtValue(1).Text = Hex2Dec(s)
             txtValue(2).Text = Hex2Str(s)
@@ -2000,7 +2000,7 @@ Dim I_tem As ItemElement
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     
     'détermine l'offset du caractère à changer
-    iCur = I_tem.Offset + I_tem.col - 1
+    iCur = I_tem.Offset + I_tem.Col - 1
     
     'détermine le numéro du secteur contenant le caractère à changer
     Sector = Int(iCur / lBytesPerSector)

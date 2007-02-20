@@ -1,6 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{6ADE9E73-F694-428F-BF86-06ADD29476A5}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmFileSearch 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Recherche de fichiers"
@@ -26,7 +27,7 @@ Begin VB.Form frmFileSearch
    Begin ProgressBar_OCX.pgrBar pgb 
       Height          =   255
       Left            =   120
-      TabIndex        =   27
+      TabIndex        =   26
       ToolTipText     =   "Avancement de la recherche"
       Top             =   5520
       Width           =   9615
@@ -42,7 +43,7 @@ Begin VB.Form frmFileSearch
       Caption         =   "Sauvegarder les résultats..."
       Height          =   375
       Left            =   5400
-      TabIndex        =   26
+      TabIndex        =   25
       ToolTipText     =   "Sauvegarde les résultats de la recherche"
       Top             =   2040
       Width           =   2775
@@ -51,7 +52,7 @@ Begin VB.Form frmFileSearch
       Caption         =   "Quitter"
       Height          =   375
       Left            =   8400
-      TabIndex        =   25
+      TabIndex        =   24
       ToolTipText     =   "Ferme la fenêtre de recherche"
       Top             =   2040
       Width           =   1335
@@ -61,7 +62,7 @@ Begin VB.Form frmFileSearch
       Enabled         =   0   'False
       Height          =   375
       Left            =   3120
-      TabIndex        =   24
+      TabIndex        =   23
       ToolTipText     =   "Lance la recherche"
       Top             =   2040
       Width           =   2055
@@ -70,7 +71,7 @@ Begin VB.Form frmFileSearch
       Caption         =   "Résultats"
       Height          =   2895
       Left            =   3120
-      TabIndex        =   21
+      TabIndex        =   20
       Top             =   2520
       Width           =   6615
       Begin VB.PictureBox Picture3 
@@ -79,13 +80,13 @@ Begin VB.Form frmFileSearch
          Left            =   120
          ScaleHeight     =   2535
          ScaleWidth      =   6375
-         TabIndex        =   22
+         TabIndex        =   21
          Top             =   240
          Width           =   6375
          Begin ComctlLib.ListView LVres 
             Height          =   2535
             Left            =   0
-            TabIndex        =   23
+            TabIndex        =   22
             Top             =   0
             Width           =   6375
             _ExtentX        =   11245
@@ -113,7 +114,7 @@ Begin VB.Form frmFileSearch
       Caption         =   "Emplacements"
       Height          =   3735
       Left            =   120
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   1680
       Width           =   2895
       Begin VB.PictureBox Picture2 
@@ -122,13 +123,13 @@ Begin VB.Form frmFileSearch
          Left            =   120
          ScaleHeight     =   3375
          ScaleWidth      =   2655
-         TabIndex        =   18
+         TabIndex        =   17
          Top             =   240
          Width           =   2655
          Begin ComctlLib.ListView LV 
             Height          =   2895
             Left            =   0
-            TabIndex        =   20
+            TabIndex        =   19
             Top             =   480
             Width           =   2655
             _ExtentX        =   4683
@@ -161,7 +162,7 @@ Begin VB.Form frmFileSearch
             Caption         =   "Ajouter un dossier..."
             Height          =   375
             Left            =   0
-            TabIndex        =   19
+            TabIndex        =   18
             ToolTipText     =   "Ajouter un dossier à la liste des emplacements où il faut rechercher"
             Top             =   0
             Width           =   2535
@@ -186,39 +187,18 @@ Begin VB.Form frmFileSearch
          TabIndex        =   3
          Top             =   240
          Width           =   6375
-         Begin VB.CommandButton cmdDate 
-            Caption         =   "..."
-            Height          =   255
-            Left            =   4200
-            TabIndex        =   29
-            ToolTipText     =   "Sélectionner une date..."
-            Top             =   1080
-            Width           =   375
-         End
          Begin VB.ComboBox cbDateType 
             Enabled         =   0   'False
             Height          =   315
             ItemData        =   "frmFileSearch.frx":0902
-            Left            =   4680
+            Left            =   4440
             List            =   "frmFileSearch.frx":090F
             Style           =   2  'Dropdown List
-            TabIndex        =   28
+            TabIndex        =   27
             Tag             =   "pref"
             ToolTipText     =   "Type de date"
             Top             =   1080
-            Width           =   1695
-         End
-         Begin VB.TextBox txtDate 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Enabled         =   0   'False
-            ForeColor       =   &H000000C0&
-            Height          =   285
-            Left            =   2280
-            TabIndex        =   16
-            ToolTipText     =   "Date (et heure)"
-            Top             =   1080
-            Width           =   1815
+            Width           =   1935
          End
          Begin VB.ComboBox cbOpDate 
             Enabled         =   0   'False
@@ -318,6 +298,19 @@ Begin VB.Form frmFileSearch
             Top             =   120
             Value           =   1  'Checked
             Width           =   1215
+         End
+         Begin MSComCtl2.DTPicker DT 
+            Height          =   300
+            Left            =   2280
+            TabIndex        =   28
+            Top             =   1080
+            Width           =   1935
+            _ExtentX        =   3413
+            _ExtentY        =   529
+            _Version        =   393216
+            CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
+            Format          =   94568451
+            CurrentDate     =   39133.9583333333
          End
       End
    End
@@ -447,15 +440,13 @@ Private bStop As Boolean
 
 Private Sub chkDate_Click()
     If chkDate.Value Then
-        txtDate.Enabled = True
         cbOpDate.Enabled = True
         cbDateType.Enabled = True
-        cmdDate.Enabled = True
+        DT.Enabled = True
     Else
-        txtDate.Enabled = False
         cbOpDate.Enabled = False
         cbDateType.Enabled = False
-        cmdDate.Enabled = False
+        DT.Enabled = False
     End If
     Call CheckSearch 'vérifie qu'une recherche est possible
 End Sub
@@ -537,7 +528,7 @@ Private Sub CheckSearch()
         End If
     End If
     If chkDate.Value Then
-        If Len(txtDate.Text) > 0 And cbOpDate.ListIndex >= 0 And cbDateType.ListIndex >= 0 And IsDate(txtDate.Text) Then
+        If cbOpDate.ListIndex >= 0 And cbDateType.ListIndex >= 0 Then
             cmdGo.Enabled = True
         Else
             cmdGo.Enabled = False
@@ -660,24 +651,13 @@ Private Sub Option1_Click(Index As Integer)
     If Option1(0).Value = False Then
         cbOpSize.Enabled = False
         cbOpDate.Enabled = False
-        txtDate.Enabled = False
         txtSize.Enabled = False
-        cmdDate.Enabled = False
         cdUnit.Enabled = False
+        DT.Enabled = False
         cbDateType.Enabled = False
     End If
 End Sub
 
-Private Sub txtDate_Change()
-    If IsDate(txtDate.Text) = False Then
-        'pas une date
-        txtDate.ForeColor = RED_COLOR
-    Else
-        'c'est une date
-        txtDate.ForeColor = GREEN_COLOR
-    End If
-    Call CheckSearch 'vérifie qu'une recherche est possible
-End Sub
 Private Sub txtName_Change()
     Call CheckSearch 'vérifie qu'une recherche est possible
 End Sub
@@ -732,7 +712,7 @@ Dim lC As Long
         End If
         
         'on calcule sa date
-        If chkDate.Value Then curDate = DateString2Currency(txtDate.Text)
+        If chkDate.Value Then curDate = DateString2Currency(DT.Value)
                 
         Me.Caption = "Indexation des fichiers..."
         

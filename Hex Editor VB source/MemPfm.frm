@@ -122,7 +122,7 @@ Begin VB.Form MemPfm
             Width           =   495
          End
          Begin VB.Label lblValue 
-            Caption         =   "String :"
+            Caption         =   "ASCII :"
             Height          =   255
             Index           =   2
             Left            =   0
