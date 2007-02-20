@@ -590,6 +590,7 @@ Begin VB.Form MemPfm
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
          NumTabs         =   1
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   ""
             Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
@@ -1262,6 +1263,12 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
     Exit Sub
 ErrGestion:
     clsERREUR.AddError "MemPfm.KeyDown", True
+End Sub
+
+Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+    If Button = 2 Then
+        Me.PopupMenu frmContent.mnuPopupIcon
+    End If
 End Sub
 
 Private Sub HW_KeyPress(KeyAscii As Integer)
