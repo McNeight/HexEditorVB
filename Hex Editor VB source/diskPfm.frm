@@ -1656,7 +1656,7 @@ Dim r As Long
             HW.AddSignet Item.Offset
             Me.lstSignets.ListItems.Add Text:=CStr(Item.Offset)
             HW.TraceSignets
-        ElseIf HW.IsSignet(Item.Offset) Then
+        Else
         
             'alors on l'enlève
             While HW.IsSignet(HW.Item.Offset)

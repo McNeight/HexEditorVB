@@ -636,14 +636,14 @@ Private Sub Form_Activate()
     
     HW.Refresh
 
-    UpdateWindow Me.hwnd    'refresh de la form
+    UpdateWindow Me.hWnd    'refresh de la form
 End Sub
 
 Private Sub Form_Load()
 
     'subclasse la form pour éviter de resizer trop
     #If USE_FORM_SUBCLASSING Then
-        Call LoadResizing(Me.hwnd, 9000, 6000)
+        Call LoadResizing(Me.hWnd, 9000, 6000)
     #End If
     
     'instancie la classe Undo
@@ -1047,7 +1047,7 @@ Private Sub Form_Unload(Cancel As Integer)
     Set cUndo = Nothing
     #If USE_FORM_SUBCLASSING Then
         'alors enlève le subclassing
-        Call RestoreResizing(Me.hwnd)
+        Call RestoreResizing(Me.hWnd)
     #End If
 End Sub
 
@@ -1345,7 +1345,7 @@ Dim r As Long
             HW.AddSignet Item.Offset
             Me.lstSignets.ListItems.Add Text:=CStr(Item.Offset)
             HW.TraceSignets
-        ElseIf HW.IsSignet(Item.Offset) Then
+        Else
         
             'alors on l'enlève
             While HW.IsSignet(HW.Item.Offset)
