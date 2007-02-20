@@ -186,11 +186,11 @@ Dim x As Long
     
     If clsERREUR.NumberOfErrorInLogFile <> 0 Then
         'il y a des erreurs
-        Text1.ForeColor = &HC0&
+        Text1.ForeColor = RED_COLOR
         Text1.Text = "Des erreurs ont été enregistrées dans le rapport d'erreur." & vbNewLine & "Veuillez SVP envoyer le fichier" & vbNewLine & clsERREUR.LogFile & vbNewLine & "à l'adresse : hexeditorvb@gmail.com" & vbNewLine & "Vous contriburez ainsi à l'amélioration de ce programme."
     Else
         'pas d'erreurs
-        Text1.ForeColor = &HC000&
+        Text1.ForeColor = GREEN_COLOR
         Text1.Text = "Pas d'erreur enregistrée !"
     End If
 End Sub

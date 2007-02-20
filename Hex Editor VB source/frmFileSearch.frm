@@ -671,10 +671,10 @@ End Sub
 Private Sub txtDate_Change()
     If IsDate(txtDate.Text) = False Then
         'pas une date
-        txtDate.ForeColor = &HC0&
+        txtDate.ForeColor = RED_COLOR
     Else
         'c'est une date
-        txtDate.ForeColor = &HC000&
+        txtDate.ForeColor = GREEN_COLOR
     End If
     Call CheckSearch 'vérifie qu'une recherche est possible
 End Sub

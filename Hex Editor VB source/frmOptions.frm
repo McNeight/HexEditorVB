@@ -364,7 +364,7 @@ Begin VB.Form frmOptions
       Height          =   375
       Left            =   0
       TabIndex        =   1
-      Top             =   0
+      Top             =   30
       Width           =   9975
       _ExtentX        =   17595
       _ExtentY        =   661
@@ -1197,6 +1197,8 @@ Dim s As String
         End If
     Next x
               
+    On Error Resume Next
+    
     'on change la taille du Explorer
     frmContent.pctExplorer.Height = cPref.explo_Height
     frmContent.LV.Height = cPref.explo_Height - 145
@@ -1244,7 +1246,8 @@ Dim s As String
                 .DisplayIcons = NoIcons
         End Select
     End With
-
+    
+    Call frmContent.MDIForm_Resize
 End Sub
 
 Private Sub Form_Load()

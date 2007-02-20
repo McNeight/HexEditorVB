@@ -30,6 +30,15 @@ Begin VB.MDIForm frmContent
    Begin VB.PictureBox pctExplorer 
       Align           =   1  'Align Top
       BorderStyle     =   0  'None
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   2200
       Left            =   0
       ScaleHeight     =   2205
@@ -37,6 +46,23 @@ Begin VB.MDIForm frmContent
       TabIndex        =   1
       Top             =   330
       Width           =   9870
+      Begin VB.TextBox pctPath 
+         BorderStyle     =   0  'None
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   285
+         Left            =   0
+         TabIndex        =   4
+         Top             =   0
+         Width           =   1575
+      End
       Begin FileView_OCX.FileView LV 
          Height          =   2055
          Left            =   120
@@ -90,7 +116,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "12:20"
+            TextSave        =   "14:18"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -593,6 +619,9 @@ Begin VB.MDIForm frmContent
          Caption         =   "&Aller à l'offset..."
          Shortcut        =   ^G
       End
+      Begin VB.Menu mnuMoveOffset 
+         Caption         =   "&Déplacer l'offset..."
+      End
    End
    Begin VB.Menu rmnuSignets 
       Caption         =   "&Signets"
@@ -943,6 +972,27 @@ Dim Frm As Form
 ErrGestion:
 End Sub
 
+'=======================================================
+'affiche le path du fichier sélectionné dans la picturbox
+'=======================================================
+Private Sub DisplayPath()
+Dim s As String
+Dim l As Long
+
+    'récupère le texte à afficher
+    s = LV.Path & "\"
+    s = Replace$(s, "\\", "\")  'vire le double slash
+    
+    'enlève la partie après le vbNullChar de la string
+    l = InStr(1, s, vbNullChar)
+    If l > 0 Then
+        s = Left$(s, l)
+    End If
+    
+    'affiche la string dans la picturebox
+    pctPath.Text = cFile.GetFolderFromPath(s)
+End Sub
+
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
 'suppression des fichiers
     If KeyCode = vbKeyDelete Then
@@ -955,6 +1005,10 @@ Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As 
         'popup menu
         Me.PopupMenu Me.mnuPopupExplore, , x + LV.Left, y + LV.Top + 300
     End If
+End Sub
+
+Private Sub LV_PathChange(sOldPath As String, sNewPath As String)
+    DisplayPath 'affiche le path dans la "barre d'adresse"
 End Sub
 
 Private Sub MDIForm_Activate()
@@ -974,6 +1028,7 @@ End Sub
 
 Private Sub MDIForm_Load()
     
+    On Error Resume Next
     
     frmSplash.lblState.Caption = "Vérifie la présence de FileRenamer..."
     'vérifie la présence de FileRenamer.exe
@@ -1041,6 +1096,26 @@ Private Sub MDIForm_Load()
 
 End Sub
 
+Private Sub pctPath_Change()
+    If cFile.FolderExists(cFile.GetFolderFromPath(pctPath.Text & "\")) = False Then
+        'couleur rouge
+        pctPath.ForeColor = RED_COLOR
+    Else
+        'c'est un path ok
+        pctPath.ForeColor = GREEN_COLOR
+    End If
+End Sub
+
+Private Sub pctPath_KeyDown(KeyCode As Integer, Shift As Integer)
+'valide si entrée
+Dim s As String
+    If KeyCode = vbKeyReturn Then
+        s = pctPath.Text
+        If cFile.FolderExists(pctPath.Text) Then LV.Path = pctPath.Text
+        pctPath.Text = s
+    End If
+End Sub
+
 Private Sub MDIForm_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     If Button = 2 Then
         'affiche un popup
@@ -1093,12 +1168,19 @@ Dim Frm As Form
     Data.Clear
 End Sub
 
-Private Sub MDIForm_Resize()
+Public Sub MDIForm_Resize()
     On Error Resume Next
     
     'If Me.WindowState = vbMinimized Then frmData.Hide Else If Me.mnuEditTools.Checked Then frmData.Show
     
-    LV.Width = Me.Width - 300
+    LV.Width = Me.Width - 400
+    LV.Height = Me.pctExplorer.Height - 290
+    
+    'positionne le pctPath
+    pctPath.Height = 255
+    pctPath.Top = LV.Height + 30
+    pctPath.Left = 50
+    pctPath.Width = LV.Width - 300
     
 End Sub
 
@@ -1280,11 +1362,11 @@ Dim curPos As Currency
     Me.Sb.Panels(1).Text = "Status=[Creating file from selection]"
     
     'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.col + 1
     
     'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.col - 1
         
     With CMD
         .CancelError = True
@@ -1335,7 +1417,7 @@ Dim curPos As Currency
             'redéfinit correctement la position et la taille (doivent être multiple du nombre
             'de bytes par secteur)
             curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.col - _
                 curPos2  'recalcule la taille en partant du début du secteur
             curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
             
@@ -1506,6 +1588,28 @@ Private Sub mnuHome_Click()
 'lance frmHome
     frmHome.Show
     PremierPlan frmHome, MettreAuPremierPlan
+End Sub
+
+Private Sub mnuMoveOffset_Click()
+'va à une valeur particulière de l'offset (déplacement relatif)
+Dim s As String
+Dim l As Currency
+
+    On Error Resume Next
+    
+    If Me.ActiveForm Is Nothing Then Exit Sub
+    s = InputBox("Se déplacer de combien d'octets (négatif pour reculer) ?", "Changement d'offset")
+    If StrPtr(s) = 0 Then Exit Sub  'cancel
+    
+    'alors on va à l'offset
+    l = By16(Me.ActiveForm.HW.Item.Offset + Me.ActiveForm.HW.Item.col + Int(Val(s)))
+    
+    If l <= By16(Me.ActiveForm.HW.MaxOffset) And l >= 0 Then
+        'alors c'est ok
+        Me.ActiveForm.VS.Value = (l / 16)
+        Call Me.ActiveForm.VS_Change(Me.ActiveForm.VS.Value)    'refresh
+    End If
+    
 End Sub
 
 Private Sub mnuNextClust_Click()
@@ -1871,11 +1975,11 @@ Dim curPos As Currency
     Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
 
     'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.col + 1
     
     'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.col - 1
     
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"
@@ -1894,7 +1998,7 @@ Dim curPos As Currency
             'redéfinit correctement la position et la taille (doivent être multiple du nombre
             'de bytes par secteur)
             curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.col - _
                 curPos2  'recalcule la taille en partant du début du secteur
             curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
 
@@ -1939,11 +2043,11 @@ Dim curPos As Currency
     Clipboard.Clear
 
     'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.col + 1
     
     'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.col - 1
     
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"
@@ -1962,7 +2066,7 @@ Dim curPos As Currency
             'redéfinit correctement la position et la taille (doivent être multiple du nombre
             'de bytes par secteur)
             curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.col - _
                 curPos2  'recalcule la taille en partant du début du secteur
             curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
 
@@ -2003,11 +2107,11 @@ Dim curPos As Currency
     Clipboard.Clear
     
     'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.col + 1
     
     'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.col - 1
     
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"
@@ -2026,7 +2130,7 @@ Dim curPos As Currency
             'redéfinit correctement la position et la taille (doivent être multiple du nombre
             'de bytes par secteur)
             curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.col - _
                 curPos2  'recalcule la taille en partant du début du secteur
             curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
 
@@ -2068,11 +2172,11 @@ Dim curPos As Currency
     Clipboard.Clear
     
     'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.col + 1
     
     'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.col - 1
             
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"
@@ -2091,7 +2195,7 @@ Dim curPos As Currency
             'redéfinit correctement la position et la taille (doivent être multiple du nombre
             'de bytes par secteur)
             curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.col - _
                 curPos2  'recalcule la taille en partant du début du secteur
             curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
 
