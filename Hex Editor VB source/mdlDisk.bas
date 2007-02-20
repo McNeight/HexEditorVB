@@ -647,12 +647,13 @@ Public Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As
         (bytChar >= 123 And bytChar <= 126)
         If IsCharConsideredInAString Then Exit Function
     End If
-    If bytChar = 32 Then 'espace
+        If bytChar = 32 Or bytChar = 39 Then    'espace ou apostrophe
         IsCharConsideredInAString = True
         If IsCharConsideredInAString Then Exit Function
     End If
     If bAccent Then
         IsCharConsideredInAString = (bytChar >= 192)
+        If IsCharConsideredInAString Then Exit Function
     End If
     
     IsCharConsideredInAString = False

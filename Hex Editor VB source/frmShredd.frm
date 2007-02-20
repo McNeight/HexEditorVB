@@ -62,6 +62,7 @@ Begin VB.Form frmShredd
       LabelEdit       =   1
       LabelWrap       =   -1  'True
       HideSelection   =   -1  'True
+      HideColumnHeaders=   -1  'True
       _Version        =   327682
       ForeColor       =   -2147483640
       BackColor       =   -2147483643
