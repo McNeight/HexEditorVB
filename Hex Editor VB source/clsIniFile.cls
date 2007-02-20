@@ -104,6 +104,7 @@ Dim strIniFile As String
         LetPref "Appearance", "SelectionColor", .app_SelectionColor, .IniFilePath
         LetPref "Appearance", "ModifiedItems", .app_ModifiedItems, .IniFilePath
         LetPref "Appearance", "SelectedItems", .app_SelectedItems, .IniFilePath
+        LetPref "Appearance", "OffsetsHex", .app_OffsetsHex, .IniFilePath
         LetPref "Appearance", "BookMarkColor", .app_BookMarkColor, .IniFilePath
         LetPref "Appearance", "ModifiedSelectedItems", .app_ModifiedSelectedItems, .IniFilePath
         LetPref "Appearance", "Grid", .app_Grid, .IniFilePath
@@ -169,6 +170,7 @@ Dim strIniFile As String
         .app_BaseForeColor = Val(GetPref("Appearance", "BaseForeColor", sFile))
         .app_TitleBackGroundColor = Val(GetPref("Appearance", "TitleBackGroundColor", sFile))
         .app_LinesColor = Val(GetPref("Appearance", "LinesColor", sFile))
+        .app_OffsetsHex = Val(GetPref("Appearance", "OffsetsHex", sFile))
         .app_SelectionColor = Val(GetPref("Appearance", "SelectionColor", sFile))
         .app_ModifiedItems = Val(GetPref("Appearance", "ModifiedItems", sFile))
         .app_SelectedItems = Val(GetPref("Appearance", "SelectedItems", sFile))

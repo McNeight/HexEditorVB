@@ -23,6 +23,325 @@ Begin VB.Form frmOptions
    ScaleHeight     =   8550
    ScaleWidth      =   10350
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Frame Frame1 
+      Height          =   7455
+      Index           =   0
+      Left            =   240
+      TabIndex        =   0
+      Top             =   720
+      Width           =   9495
+      Begin HexViewer_OCX.HexViewer HW 
+         Height          =   3735
+         Left            =   120
+         TabIndex        =   72
+         Top             =   240
+         Width           =   9615
+         _ExtentX        =   16960
+         _ExtentY        =   6588
+         strTag1         =   "0"
+         strTag2         =   "0"
+      End
+      Begin VB.PictureBox pctCauzeOfManifest 
+         Appearance      =   0  'Flat
+         BorderStyle     =   0  'None
+         ForeColor       =   &H80000008&
+         Height          =   2175
+         Left            =   120
+         ScaleHeight     =   2175
+         ScaleWidth      =   9495
+         TabIndex        =   2
+         Top             =   4080
+         Width           =   9500
+         Begin VB.OptionButton optDec 
+            Caption         =   "Offsets en décimal"
+            Height          =   255
+            Left            =   4800
+            TabIndex        =   85
+            Top             =   1800
+            Width           =   3495
+         End
+         Begin VB.OptionButton optHex 
+            Caption         =   "Offsets en hexadécimal"
+            Height          =   195
+            Left            =   4800
+            TabIndex        =   84
+            Top             =   1440
+            Width           =   3135
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   0
+            Left            =   3120
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   58
+            Top             =   0
+            Width           =   375
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   1
+            Left            =   3120
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   57
+            Top             =   240
+            Width           =   375
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   2
+            Left            =   3120
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   56
+            Top             =   480
+            Width           =   375
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   3
+            Left            =   3120
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   55
+            Top             =   720
+            Width           =   375
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   4
+            Left            =   3120
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   54
+            Top             =   960
+            Width           =   375
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   5
+            Left            =   3120
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   53
+            Top             =   1200
+            Width           =   375
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   8
+            Left            =   8400
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   52
+            Top             =   0
+            Width           =   375
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   9
+            Left            =   8400
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   51
+            Top             =   240
+            Width           =   375
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   10
+            Left            =   8400
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   50
+            Top             =   480
+            Width           =   375
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   6
+            Left            =   3120
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   49
+            Top             =   1440
+            Width           =   375
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   7
+            Left            =   3120
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   48
+            Top             =   1680
+            Width           =   375
+         End
+         Begin VB.ComboBox cbGrid 
+            Height          =   315
+            ItemData        =   "frmOptions.frx":08CA
+            Left            =   5640
+            List            =   "frmOptions.frx":08E0
+            Style           =   2  'Dropdown List
+            TabIndex        =   47
+            ToolTipText     =   "Type de grille à afficher"
+            Top             =   960
+            Width           =   3855
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   11
+            Left            =   8400
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   46
+            Top             =   720
+            Width           =   375
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur de fond"
+            Height          =   255
+            Index           =   0
+            Left            =   0
+            TabIndex        =   71
+            Top             =   0
+            Width           =   2055
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur de la police de l'offset"
+            Height          =   255
+            Index           =   1
+            Left            =   0
+            TabIndex        =   70
+            Top             =   240
+            Width           =   2295
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur de la police des valeurs hexa"
+            Height          =   255
+            Index           =   2
+            Left            =   0
+            TabIndex        =   69
+            Top             =   480
+            Width           =   2775
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur de la police des strings"
+            Height          =   255
+            Index           =   3
+            Left            =   0
+            TabIndex        =   68
+            Top             =   720
+            Width           =   2655
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur de la police du titre Offset"
+            Height          =   255
+            Index           =   4
+            Left            =   0
+            TabIndex        =   67
+            Top             =   960
+            Width           =   2655
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur de la police de la base"
+            Height          =   255
+            Index           =   5
+            Left            =   0
+            TabIndex        =   66
+            Top             =   1200
+            Width           =   2415
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur de la sélection"
+            Height          =   255
+            Index           =   8
+            Left            =   4800
+            TabIndex        =   65
+            Top             =   0
+            Width           =   2055
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur des éléments modifiés"
+            Height          =   255
+            Index           =   9
+            Left            =   4800
+            TabIndex        =   64
+            Top             =   240
+            Width           =   2895
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur des éléments modifiés sélectionnés"
+            Height          =   255
+            Index           =   10
+            Left            =   4800
+            TabIndex        =   63
+            Top             =   480
+            Width           =   3135
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur des lignes"
+            Height          =   255
+            Index           =   7
+            Left            =   0
+            TabIndex        =   62
+            Top             =   1680
+            Width           =   2055
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur de fond de titre"
+            Height          =   255
+            Index           =   6
+            Left            =   0
+            TabIndex        =   61
+            Top             =   1440
+            Width           =   2055
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Grille"
+            Height          =   255
+            Index           =   11
+            Left            =   4800
+            TabIndex        =   60
+            Top             =   960
+            Width           =   615
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur des signets"
+            Height          =   255
+            Index           =   12
+            Left            =   4800
+            TabIndex        =   59
+            Top             =   720
+            Width           =   3135
+         End
+      End
+   End
    Begin VB.CommandButton cmdSauvegarder 
       Caption         =   "Sauvegarder les options"
       Height          =   495
@@ -52,37 +371,31 @@ Begin VB.Form frmOptions
          NumTabs         =   6
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Apparence du tableau"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Intégration dans Explorer"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Options générales"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Environnement"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Historique/signets"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab6 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Explorateur de fichiers"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -116,61 +429,152 @@ Begin VB.Form frmOptions
       End
    End
    Begin VB.Frame Frame1 
-      Height          =   6255
-      Index           =   3
-      Left            =   240
-      TabIndex        =   5
-      Top             =   480
+      Height          =   7575
+      Index           =   2
+      Left            =   0
+      TabIndex        =   4
+      Top             =   600
       Visible         =   0   'False
-      Width           =   9615
-      Begin VB.PictureBox Picture2 
+      Width           =   9855
+      Begin VB.PictureBox pctManifest 
          BorderStyle     =   0  'None
-         Height          =   5175
+         Height          =   5895
+         Index           =   1
          Left            =   120
-         ScaleHeight     =   5175
-         ScaleWidth      =   7455
-         TabIndex        =   23
+         ScaleHeight     =   5895
+         ScaleWidth      =   9435
+         TabIndex        =   11
          Top             =   240
-         Width           =   7455
-         Begin VB.ComboBox cbLang 
-            Height          =   315
-            ItemData        =   "frmOptions.frx":08CA
-            Left            =   2040
-            List            =   "frmOptions.frx":08D1
-            Style           =   2  'Dropdown List
-            TabIndex        =   75
-            ToolTipText     =   "Langue par défaut"
-            Top             =   1080
-            Width           =   4215
-         End
-         Begin VB.ComboBox cbOS 
-            Height          =   315
-            ItemData        =   "frmOptions.frx":08DD
-            Left            =   2040
-            List            =   "frmOptions.frx":08E7
-            Style           =   2  'Dropdown List
-            TabIndex        =   73
-            ToolTipText     =   "Système d'exploitation utilisant le logiciel"
-            Top             =   240
-            Width           =   4215
-         End
-         Begin VB.Label Label7 
-            Caption         =   "Langue par défaut :"
+         Width           =   9435
+         Begin VB.CheckBox Check9 
+            Caption         =   "Afficher le splash screen"
             Height          =   255
-            Index           =   1
             Left            =   120
-            TabIndex        =   76
-            Top             =   1080
-            Width           =   1815
+            TabIndex        =   83
+            ToolTipText     =   "Autorise l'affichage du splash screen au démarrage du logiciel"
+            Top             =   3000
+            Width           =   6615
          End
-         Begin VB.Label Label7 
-            Caption         =   "Système d'exploitation :"
+         Begin VB.CheckBox Check1 
+            Caption         =   "Maximiser les fenêtres à leur ouverture"
             Height          =   255
-            Index           =   0
             Left            =   120
-            TabIndex        =   74
-            Top             =   240
-            Width           =   1815
+            TabIndex        =   79
+            ToolTipText     =   "Lance les fenêtres d'édition en grand lors de leur ouverture"
+            Top             =   120
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check8 
+            Caption         =   "Fermer la fenêtre de démarrage après le choix d'un objet à ouvrir"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   78
+            ToolTipText     =   "Referme la fenêtre de démarrage rapide après le choix d'une action"
+            Top             =   2640
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check7 
+            Caption         =   "Ouvrir également les fichiers des sous-dossiers lors de l'ouverture d'un dossier"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   77
+            ToolTipText     =   "Liste et ouvre tous les fichiers des sous dossiers lors de l'ouverture d'un dossier (lent - déconseillé)"
+            Top             =   2280
+            Width           =   6615
+         End
+         Begin VB.TextBox Text4 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   200
+            Left            =   5520
+            TabIndex        =   20
+            Text            =   "480"
+            ToolTipText     =   "Hauteur"
+            Top             =   3480
+            Width           =   495
+         End
+         Begin VB.TextBox Text3 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   200
+            Left            =   4680
+            TabIndex        =   19
+            Text            =   "640"
+            ToolTipText     =   "Largeur"
+            Top             =   3480
+            Width           =   495
+         End
+         Begin VB.TextBox Text1 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   200
+            Left            =   2160
+            MaxLength       =   1
+            TabIndex        =   17
+            Text            =   " "
+            Top             =   3840
+            Width           =   255
+         End
+         Begin VB.CheckBox Check6 
+            Caption         =   "Ne pas changer les dates des fichiers modifiés"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   16
+            ToolTipText     =   "Conserve les dates originelles du fichiers après sa modification et sa sauvegarde"
+            Top             =   1920
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check5 
+            Caption         =   "Permettre plusieurs instances du programme"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   15
+            ToolTipText     =   "Permet au logiciel de se lancer plusieurs fois en même temps"
+            Top             =   1560
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check4 
+            Caption         =   "Afficher les informations fichier par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   14
+            ToolTipText     =   "Affiche les informations sur les fichiers dans les fenêtres d'édition"
+            Top             =   1200
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check3 
+            Caption         =   "Afficher les données par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   13
+            ToolTipText     =   "Afficher la zone de changement rapide de donnée lors de l'ouverture des fenêtres d'édition"
+            Top             =   840
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check2 
+            Caption         =   "Afficher la liste des icones par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   12
+            ToolTipText     =   "Affiche la liste des icones par défaut (fichier et processus)"
+            Top             =   480
+            Width           =   6615
+         End
+         Begin VB.Label Label5 
+            Caption         =   "X"
+            Height          =   255
+            Left            =   5280
+            TabIndex        =   21
+            Top             =   3480
+            Width           =   135
+         End
+         Begin VB.Label Label4 
+            Caption         =   "Résolution de sauvegarde des images d'analyse des fichiers :"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   18
+            Top             =   3480
+            Width           =   4575
          End
       End
    End
@@ -198,7 +602,7 @@ Begin VB.Form frmOptions
             Left            =   5280
             TabIndex        =   43
             Text            =   "C:\"
-            ToolTipText     =   $"frmOptions.frx":091A
+            ToolTipText     =   $"frmOptions.frx":096F
             Top             =   4680
             Width           =   2535
          End
@@ -224,9 +628,9 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbExpInitDir 
             Height          =   315
-            ItemData        =   "frmOptions.frx":09B8
+            ItemData        =   "frmOptions.frx":0A0D
             Left            =   2520
-            List            =   "frmOptions.frx":09C2
+            List            =   "frmOptions.frx":0A17
             Style           =   2  'Dropdown List
             TabIndex        =   38
             ToolTipText     =   "Type de chemin par défaut de l'explorateur de fichiers"
@@ -246,9 +650,9 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbExpIcon 
             Height          =   315
-            ItemData        =   "frmOptions.frx":09E6
+            ItemData        =   "frmOptions.frx":0A3B
             Left            =   2520
-            List            =   "frmOptions.frx":09F3
+            List            =   "frmOptions.frx":0A48
             Style           =   2  'Dropdown List
             TabIndex        =   36
             ToolTipText     =   "Type d'icones à afficher dans l'explorateur de fichiers"
@@ -403,6 +807,65 @@ Begin VB.Form frmOptions
    End
    Begin VB.Frame Frame1 
       Height          =   6255
+      Index           =   3
+      Left            =   240
+      TabIndex        =   5
+      Top             =   480
+      Visible         =   0   'False
+      Width           =   9615
+      Begin VB.PictureBox Picture2 
+         BorderStyle     =   0  'None
+         Height          =   5175
+         Left            =   120
+         ScaleHeight     =   5175
+         ScaleWidth      =   7455
+         TabIndex        =   23
+         Top             =   240
+         Width           =   7455
+         Begin VB.ComboBox cbLang 
+            Height          =   315
+            ItemData        =   "frmOptions.frx":0A7F
+            Left            =   2040
+            List            =   "frmOptions.frx":0A86
+            Style           =   2  'Dropdown List
+            TabIndex        =   75
+            ToolTipText     =   "Langue par défaut"
+            Top             =   1080
+            Width           =   4215
+         End
+         Begin VB.ComboBox cbOS 
+            Height          =   315
+            ItemData        =   "frmOptions.frx":0A92
+            Left            =   2040
+            List            =   "frmOptions.frx":0A9C
+            Style           =   2  'Dropdown List
+            TabIndex        =   73
+            ToolTipText     =   "Système d'exploitation utilisant le logiciel"
+            Top             =   240
+            Width           =   4215
+         End
+         Begin VB.Label Label7 
+            Caption         =   "Langue par défaut :"
+            Height          =   255
+            Index           =   1
+            Left            =   120
+            TabIndex        =   76
+            Top             =   1080
+            Width           =   1815
+         End
+         Begin VB.Label Label7 
+            Caption         =   "Système d'exploitation :"
+            Height          =   255
+            Index           =   0
+            Left            =   120
+            TabIndex        =   74
+            Top             =   240
+            Width           =   1815
+         End
+      End
+   End
+   Begin VB.Frame Frame1 
+      Height          =   6255
       Index           =   1
       Left            =   120
       TabIndex        =   3
@@ -447,459 +910,6 @@ Begin VB.Form frmOptions
             ToolTipText     =   "Ajoute une entrée au menu contextuel de Windows pour les fichiers"
             Top             =   120
             Width           =   6855
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   7575
-      Index           =   2
-      Left            =   0
-      TabIndex        =   4
-      Top             =   600
-      Visible         =   0   'False
-      Width           =   9855
-      Begin VB.PictureBox pctManifest 
-         BorderStyle     =   0  'None
-         Height          =   5895
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   5895
-         ScaleWidth      =   9435
-         TabIndex        =   11
-         Top             =   240
-         Width           =   9435
-         Begin VB.CheckBox Check9 
-            Caption         =   "Afficher le splash screen"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   83
-            ToolTipText     =   "Autorise l'affichage du splash screen au démarrage du logiciel"
-            Top             =   3000
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check1 
-            Caption         =   "Maximiser les fenêtres à leur ouverture"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   79
-            ToolTipText     =   "Lance les fenêtres d'édition en grand lors de leur ouverture"
-            Top             =   120
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check8 
-            Caption         =   "Fermer la fenêtre de démarrage après le choix d'un objet à ouvrir"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   78
-            ToolTipText     =   "Referme la fenêtre de démarrage rapide après le choix d'une action"
-            Top             =   2640
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check7 
-            Caption         =   "Ouvrir également les fichiers des sous-dossiers lors de l'ouverture d'un dossier"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   77
-            ToolTipText     =   "Liste et ouvre tous les fichiers des sous dossiers lors de l'ouverture d'un dossier (lent - déconseillé)"
-            Top             =   2280
-            Width           =   6615
-         End
-         Begin VB.TextBox Text4 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   5520
-            TabIndex        =   20
-            Text            =   "480"
-            ToolTipText     =   "Hauteur"
-            Top             =   3480
-            Width           =   495
-         End
-         Begin VB.TextBox Text3 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   4680
-            TabIndex        =   19
-            Text            =   "640"
-            ToolTipText     =   "Largeur"
-            Top             =   3480
-            Width           =   495
-         End
-         Begin VB.TextBox Text1 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   2160
-            MaxLength       =   1
-            TabIndex        =   17
-            Text            =   " "
-            Top             =   3840
-            Width           =   255
-         End
-         Begin VB.CheckBox Check6 
-            Caption         =   "Ne pas changer les dates des fichiers modifiés"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   16
-            ToolTipText     =   "Conserve les dates originelles du fichiers après sa modification et sa sauvegarde"
-            Top             =   1920
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check5 
-            Caption         =   "Permettre plusieurs instances du programme"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   15
-            ToolTipText     =   "Permet au logiciel de se lancer plusieurs fois en même temps"
-            Top             =   1560
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check4 
-            Caption         =   "Afficher les informations fichier par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   14
-            ToolTipText     =   "Affiche les informations sur les fichiers dans les fenêtres d'édition"
-            Top             =   1200
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check3 
-            Caption         =   "Afficher les données par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   13
-            ToolTipText     =   "Afficher la zone de changement rapide de donnée lors de l'ouverture des fenêtres d'édition"
-            Top             =   840
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check2 
-            Caption         =   "Afficher la liste des icones par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   12
-            ToolTipText     =   "Affiche la liste des icones par défaut (fichier et processus)"
-            Top             =   480
-            Width           =   6615
-         End
-         Begin VB.Label Label5 
-            Caption         =   "X"
-            Height          =   255
-            Left            =   5280
-            TabIndex        =   21
-            Top             =   3480
-            Width           =   135
-         End
-         Begin VB.Label Label4 
-            Caption         =   "Résolution de sauvegarde des images d'analyse des fichiers :"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   18
-            Top             =   3480
-            Width           =   4575
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   7455
-      Index           =   0
-      Left            =   240
-      TabIndex        =   0
-      Top             =   720
-      Width           =   9495
-      Begin HexViewer_OCX.HexViewer HW 
-         Height          =   3735
-         Left            =   120
-         TabIndex        =   72
-         Top             =   240
-         Width           =   9615
-         _ExtentX        =   16960
-         _ExtentY        =   6588
-         strTag1         =   "0"
-         strTag2         =   "0"
-      End
-      Begin VB.PictureBox pctCauzeOfManifest 
-         Appearance      =   0  'Flat
-         BorderStyle     =   0  'None
-         ForeColor       =   &H80000008&
-         Height          =   2175
-         Left            =   120
-         ScaleHeight     =   2175
-         ScaleWidth      =   9495
-         TabIndex        =   2
-         Top             =   4080
-         Width           =   9500
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   0
-            Left            =   3120
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   58
-            Top             =   0
-            Width           =   375
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   1
-            Left            =   3120
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   57
-            Top             =   240
-            Width           =   375
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   2
-            Left            =   3120
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   56
-            Top             =   480
-            Width           =   375
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   3
-            Left            =   3120
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   55
-            Top             =   720
-            Width           =   375
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   4
-            Left            =   3120
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   54
-            Top             =   960
-            Width           =   375
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   5
-            Left            =   3120
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   53
-            Top             =   1200
-            Width           =   375
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   8
-            Left            =   8400
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   52
-            Top             =   0
-            Width           =   375
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   9
-            Left            =   8400
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   51
-            Top             =   240
-            Width           =   375
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   10
-            Left            =   8400
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   50
-            Top             =   480
-            Width           =   375
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   6
-            Left            =   3120
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   49
-            Top             =   1440
-            Width           =   375
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   7
-            Left            =   3120
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   48
-            Top             =   1680
-            Width           =   375
-         End
-         Begin VB.ComboBox cbGrid 
-            Height          =   315
-            ItemData        =   "frmOptions.frx":0A2A
-            Left            =   5640
-            List            =   "frmOptions.frx":0A40
-            Style           =   2  'Dropdown List
-            TabIndex        =   47
-            ToolTipText     =   "Type de grille à afficher"
-            Top             =   960
-            Width           =   3855
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   11
-            Left            =   8400
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   46
-            Top             =   720
-            Width           =   375
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur de fond"
-            Height          =   255
-            Index           =   0
-            Left            =   0
-            TabIndex        =   71
-            Top             =   0
-            Width           =   2055
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur de la police de l'offset"
-            Height          =   255
-            Index           =   1
-            Left            =   0
-            TabIndex        =   70
-            Top             =   240
-            Width           =   2295
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur de la police des valeurs hexa"
-            Height          =   255
-            Index           =   2
-            Left            =   0
-            TabIndex        =   69
-            Top             =   480
-            Width           =   2775
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur de la police des strings"
-            Height          =   255
-            Index           =   3
-            Left            =   0
-            TabIndex        =   68
-            Top             =   720
-            Width           =   2655
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur de la police du titre Offset"
-            Height          =   255
-            Index           =   4
-            Left            =   0
-            TabIndex        =   67
-            Top             =   960
-            Width           =   2655
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur de la police de la base"
-            Height          =   255
-            Index           =   5
-            Left            =   0
-            TabIndex        =   66
-            Top             =   1200
-            Width           =   2415
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur de la sélection"
-            Height          =   255
-            Index           =   8
-            Left            =   4800
-            TabIndex        =   65
-            Top             =   0
-            Width           =   2055
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur des éléments modifiés"
-            Height          =   255
-            Index           =   9
-            Left            =   4800
-            TabIndex        =   64
-            Top             =   240
-            Width           =   2895
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur des éléments modifiés sélectionnés"
-            Height          =   255
-            Index           =   10
-            Left            =   4800
-            TabIndex        =   63
-            Top             =   480
-            Width           =   3135
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur des lignes"
-            Height          =   255
-            Index           =   7
-            Left            =   0
-            TabIndex        =   62
-            Top             =   1680
-            Width           =   2055
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur de fond de titre"
-            Height          =   255
-            Index           =   6
-            Left            =   0
-            TabIndex        =   61
-            Top             =   1440
-            Width           =   2055
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Grille"
-            Height          =   255
-            Index           =   11
-            Left            =   4800
-            TabIndex        =   60
-            Top             =   960
-            Width           =   615
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur des signets"
-            Height          =   255
-            Index           =   12
-            Left            =   4800
-            TabIndex        =   59
-            Top             =   720
-            Width           =   3135
          End
       End
    End
@@ -1006,6 +1016,7 @@ Dim s As String
     HW.ModifiedItemColor = &HFF&
     HW.ModifiedSelectedItemColor = &HFF&
     HW.Refresh
+    HW.UseHexOffset = True
 
     pctColor(0).BackColor = HW.BackColor
     pctColor(1).BackColor = HW.OffsetForeColor
@@ -1019,6 +1030,7 @@ Dim s As String
     pctColor(9).BackColor = HW.ModifiedItemColor
     pctColor(10).BackColor = HW.ModifiedSelectedItemColor
     pctColor(11).BackColor = HW.SignetColor
+    optHex.Value = True
         
     'affiche un exemple de valeurs Offset, String et Hexa dans le HW
     HW.NumberPerPage = 13
@@ -1099,6 +1111,7 @@ Dim s As String
             .app_ModifiedItems = pctColor(9).BackColor
             .app_ModifiedSelectedItems = pctColor(10).BackColor
             .app_BookMarkColor = pctColor(11).BackColor
+            .app_OffsetsHex = Abs(CLng(optHex.Value))
             
             .app_Grid = cbGrid.ListIndex
             
@@ -1164,6 +1177,7 @@ Dim s As String
                     .ModifiedSelectedItemColor = cPref.app_ModifiedSelectedItems
                     .SignetColor = cPref.app_BookMarkColor
                     .Grid = cPref.app_Grid
+                    .UseHexOffset = CBool(cPref.app_OffsetsHex)
                     .Refresh
                 End With
                 
@@ -1268,6 +1282,8 @@ Dim s As String
             pctColor(9).BackColor = .app_ModifiedItems
             pctColor(10).BackColor = .app_ModifiedSelectedItems
             pctColor(11).BackColor = .app_BookMarkColor
+            optHex.Value = CBool(.app_OffsetsHex)
+            optDec.Value = Not (optHex.Value)
         End With
         
         With HW
@@ -1284,6 +1300,7 @@ Dim s As String
             .ModifiedItemColor = pctColor(9).BackColor
             .ModifiedSelectedItemColor = pctColor(10).BackColor
             .SignetColor = pctColor(11).BackColor
+            .UseHexOffset = optHex.Value
         End With
         
         'affiche un exemple de valeurs Offset, String et Hexa dans le HW

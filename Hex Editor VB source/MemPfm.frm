@@ -893,6 +893,7 @@ Private Sub Form_Load()
         HW.ModifiedSelectedItemColor = .app_ModifiedSelectedItems
         HW.SignetColor = .app_BookMarkColor
         HW.Grid = .app_Grid
+        HW.UseHexOffset = CBool(.app_OffsetsHex)
     End With
     
     With cPref
