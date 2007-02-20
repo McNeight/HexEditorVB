@@ -62,6 +62,7 @@ Public app_BaseForeColor As Long
 Public app_OffsetTitleForeColor As Long
 Public app_TitleBackGroundColor As Long
 Public app_LinesColor As Long
+Public app_OffsetsHex As Byte
 Public app_SelectionColor As Long
 Public app_ModifiedItems As Long
 Public app_SelectedItems As Long
