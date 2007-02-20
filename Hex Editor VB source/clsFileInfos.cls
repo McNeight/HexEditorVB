@@ -82,7 +82,6 @@ Private Const FOF_ALLOWUNDO                 As Long = &H40
 Private Const FO_COPY                       As Long = &H2&
 Private Const FO_MOVE                       As Long = &H1&
 Private Const FOF_SIMPLEPROGRESS            As Long = &H100&
-Private Const OFN_EXPLORER                  As Long = &H80000
 
 
 '=======================================================
@@ -144,6 +143,29 @@ Public Enum SPECIAL_FOLDER_TYPE
     CSIDL_COMMON_DOCUMENTS = &H2E        'All Users\Documents
     CSIDL_COMMON_ADMINTOOLS = &H2F       'All Users\Start Menu\Programs\Administrative Tools
     CSIDL_ADMINTOOLS = &H30              '{user}\Start Menu\Programs\Administrative Tools
+End Enum
+Public Enum OPENFILENAME_FLAGS
+    OFN_READONLY = &H1
+    OFN_OVERWRITEPROMPT = &H2
+    OFN_HIDEREADONLY = &H4
+    OFN_NOCHANGEDIR = &H8
+    OFN_SHOWHELP = &H10
+    OFN_ENABLEHOOK = &H20
+    OFN_ENABLETEMPLATE = &H40
+    OFN_ENABLETEMPLATEHANDLE = &H80
+    OFN_NOVALIDATE = &H100
+    OFN_ALLOWMULTISELECT = &H200
+    OFN_EXTENSIONDIFFERENT = &H400
+    OFN_PATHMUSTEXIST = &H800
+    OFN_CREATEPROMPT = &H2000
+    OFN_SHAREAWARE = &H4000
+    OFN_NOREADONLYRETURN = &H8000
+    OFN_NOTESTFILECREATE = &H10000
+    OFN_SHAREFALLTHROUGH = 2
+    OFN_SHARENOWARN = 1
+    OFN_SHAREWARN = 0
+    OFN_FILEMUSTEXIST = &H1000
+    OFN_EXPLORER = &H80000
 End Enum
 Public Enum TypeInfo
   CompanyName
@@ -1038,12 +1060,18 @@ End Function
 '=======================================================
 'affichage de la boite de dialogue Ouvrir...
 'renvoie le FileName
+'multiples fichiers stockés en dernier paramètre Byref de 1 à Ubound
 '=======================================================
 Public Function ShowOpen(ByVal sTitle As String, ByVal hWnd As Long, _
     Optional ByVal sFilter As String, Optional ByVal sInitDir As String, _
-    Optional ByRef bHasPushedCancel As Boolean) As String
+        Optional ByVal sInitFile As String, Optional ByRef bHasPushedCancel As Boolean, _
+            Optional ByVal lDefIndex As Long, Optional ByVal FLAGS As OPENFILENAME_FLAGS, _
+                Optional ByVal BufSize As Long = 512, Optional ByRef Files As Variant) As String
     
 Dim OFName As OPENFILENAME
+Dim s() As String
+Dim s2 As String
+Dim x As Long
 
     With OFName
         'taille du type
@@ -1053,15 +1081,18 @@ Dim OFName As OPENFILENAME
         .hwndOwner = hWnd
         .hInstance = App.hInstance
         sFilter = Replace$(sFilter, "|", vbNullChar) 'convertit la string
+        .nMaxCustFilter = 0 ' Index de filtre personnalisé (non géré)
+        .nFilterIndex = lDefIndex  ' Index du filtre à utiliser par défaut
         .lpstrFilter = sFilter
-        .nMaxFile = 255
-        .nMaxFileTitle = 255
-        .lpstrFileTitle = Space$(254)
-        .lpstrInitialDir = sInitDir
-        .lpstrTitle = sTitle
         
-        .lpstrFile = Space$(254)    'créé un buffer /!\ NE PAS CHANGER la taille du buffer
-
+        .lpstrFile = Left$(sInitFile & String$(2048, vbNullChar), 2048)
+        .nMaxFile = Len(.lpstrFile) - 1 ' Longueur du nom de fichier
+        .lpstrFileTitle = .lpstrFile ' Nom et extension du fichier (sans chemin)
+        .nMaxFileTitle = .nMaxFile ' Taille de la chaîne précédente
+        .lpstrInitialDir = sInitDir ' Répertoire initial
+        .lpstrTitle = sTitle ' Titre de la fenêtre
+        
+        .FLAGS = FLAGS
     End With
 
     'ouvre la boite de dialogue
@@ -1070,6 +1101,28 @@ Dim OFName As OPENFILENAME
     
     'récupère le FileName
     ShowOpen = Left$(OFName.lpstrFile, InStr(OFName.lpstrFile, vbNullChar) - 1)
+    
+    If IsMissing(Files) Then Exit Function
+           
+           
+    '//récupère tous les items sélectionnés
+    s2 = OFName.lpstrFile
+    
+    'récupère les multiples fichiers ==> vire les derniers vbnullchar
+    While Right$(s2, 1) = vbNullChar
+        s2 = Left$(s2, Len(s2) - 1)
+    Wend
+    
+    'créé un tableau avec les fichiers
+    s() = Split(s2, vbNullChar, , vbBinaryCompare)
+    
+    ReDim Files(0) As String
+    For x = 1 To UBound(s())
+        s(x) = s(0) & "\" & s(x) 'ajoute le path aux fichiers
+        ReDim Preserve Files(x) As String   'agrandit le tableau
+        Files(x) = s(x) 'stocke
+    Next x
+
 End Function
 
 '=======================================================

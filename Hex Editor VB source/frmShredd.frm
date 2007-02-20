@@ -34,6 +34,7 @@ Begin VB.Form frmShredd
    End
    Begin VB.CommandButton cmdProceed 
       Caption         =   "Supprimer définitivement"
+      Enabled         =   0   'False
       Height          =   375
       Left            =   2543
       TabIndex        =   2
@@ -42,11 +43,11 @@ Begin VB.Form frmShredd
       Width           =   2175
    End
    Begin VB.CommandButton cmdAddFile 
-      Caption         =   "Ajouter un fichier..."
+      Caption         =   "Ajouter des fichiers..."
       Height          =   375
       Left            =   143
       TabIndex        =   1
-      ToolTipText     =   "Ajouter un fichier à détruire"
+      ToolTipText     =   "Permet l'ajout de fichiers à détruire"
       Top             =   3600
       Width           =   2175
    End
@@ -120,16 +121,23 @@ Option Explicit
 
 Private Sub cmdAddFile_Click()
 'ajoute un fichier à la liste à supprimer
+Dim s() As String
+Dim s2 As String
+Dim x As Long
 
-    On Error GoTo ErrCancel
+    s2 = cFile.ShowOpen("Choix des fichiers à supprimer", Me.hWnd, "Tous|*.*", , , , , _
+        OFN_EXPLORER + OFN_ALLOWMULTISELECT, 4096, s())
     
-    With frmContent.CMD
-        .CancelError = True
-        .DialogTitle = "Choix du fichier à supprimer"
-        .Filter = "Tous |*.*"
-        .ShowOpen
-        If Len(.Filename) Then LV.ListItems.Add Text:=.Filename 'ajoute l'élément
-    End With
+    For x = 1 To UBound(s())
+        If cFile.FileExists(s(x)) Then
+            LV.ListItems.Add Text:=s(x) 'ajoute l'élément
+        End If
+    Next x
+    
+    'dans le cas d'un fichier simple
+    If cFile.FileExists(s2) Then LV.ListItems.Add Text:=s2
+    
+    CheckBtn    'enable ou non le cmdProceed
 
 ErrCancel:
 End Sub
@@ -168,9 +176,20 @@ End Sub
 
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
 
+    If LV.SelectedItem Is Nothing Then Exit Sub
+        
     If KeyCode = vbKeyDelete Then
         'alors enleve le fichiers sélectionnés
         LV.ListItems.Remove LV.SelectedItem.Index
     End If
-        
+    
+    CheckBtn    'enable ou non le cmdProceed
+
+End Sub
+
+'=======================================================
+'vérifie que le bouton de suppression est enabled ou pas
+'=======================================================
+Private Sub CheckBtn()
+    Me.cmdProceed.Enabled = (LV.ListItems.Count > 0)
 End Sub

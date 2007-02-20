@@ -388,23 +388,23 @@ Option Explicit
 
 Private Sub cmdBrowseGroupFile_Click()
 'sélection du dossier (groupeur à sauvegarder)
-    txtFolderResult.Text = cFile.BrowseForFolder("Choix du dossier résultant", Me.hwnd)
+    txtFolderResult.Text = cFile.BrowseForFolder("Choix du dossier résultant", Me.hWnd)
 End Sub
 
 Private Sub cmdBrowseGrupFIle_Click()
 'sélection du fichier groupe
-    txtGrFile.Text = cFile.ShowOpen("Selection du fichier groupeur", Me.hwnd, "Fichier groupeur|*.grp")
+    txtGrFile.Text = cFile.ShowOpen("Selection du fichier groupeur", Me.hWnd, "Fichier groupeur|*.grp")
     If txtFolderFus.Text = vbNullString Then txtFolderFus.Text = cFile.GetFolderFromPath(txtGrFile.Text)
 End Sub
 
 Private Sub cmdBrowsePaste_Click()
 'sélection du dossier du fichier fusionné
-    txtFolderFus.Text = cFile.BrowseForFolder("Choix du dossier du fichier fusionné", Me.hwnd)
+    txtFolderFus.Text = cFile.BrowseForFolder("Choix du dossier du fichier fusionné", Me.hWnd)
 End Sub
 
 Private Sub cmdBrowseToCut_Click()
 'sélection du fichier à découper
-    txtFileToCut.Text = cFile.ShowOpen("Fichier à découper", Me.hwnd, "Tous|*.*", App.Path)
+    txtFileToCut.Text = cFile.ShowOpen("Fichier à découper", Me.hWnd, "Tous|*.*", App.Path)
 End Sub
 
 Private Sub cmdProceed_Click()
