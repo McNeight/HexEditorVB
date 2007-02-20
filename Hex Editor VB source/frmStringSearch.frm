@@ -112,6 +112,16 @@ Begin VB.Form frmStringSearch
          TabIndex        =   1
          Top             =   240
          Width           =   4095
+         Begin VB.CheckBox chkAccent 
+            Caption         =   "Rechercher des caractères accentués"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   15
+            Tag             =   "pref"
+            ToolTipText     =   "Rechercher des caractères avec des accents ("
+            Top             =   960
+            Width           =   3735
+         End
          Begin VB.CheckBox chkAddSignet 
             Caption         =   "Ajouter un signet pour les chaines trouvées"
             Height          =   255
@@ -119,7 +129,7 @@ Begin VB.Form frmStringSearch
             TabIndex        =   14
             Tag             =   "pref"
             ToolTipText     =   "Ajouter un signet à chaque offset où une string est trouvée"
-            Top             =   1080
+            Top             =   1200
             Width           =   3975
          End
          Begin VB.CheckBox chkSigns 
@@ -129,7 +139,7 @@ Begin VB.Form frmStringSearch
             TabIndex        =   13
             Tag             =   "pref"
             ToolTipText     =   "Inclure les signes dans la recherche"
-            Top             =   840
+            Top             =   720
             Width           =   2895
          End
          Begin VB.CheckBox chkMaj 
@@ -139,7 +149,7 @@ Begin VB.Form frmStringSearch
             TabIndex        =   12
             Tag             =   "pref"
             ToolTipText     =   "Inclure les majuscules dans la recherche"
-            Top             =   600
+            Top             =   480
             Value           =   1  'Checked
             Width           =   2895
          End
@@ -150,7 +160,7 @@ Begin VB.Form frmStringSearch
             TabIndex        =   11
             Tag             =   "pref"
             ToolTipText     =   "Inclure les minuscules dans la recherche"
-            Top             =   360
+            Top             =   240
             Value           =   1  'Checked
             Width           =   2895
          End
@@ -173,7 +183,7 @@ Begin VB.Form frmStringSearch
             TabIndex        =   2
             Tag             =   "pref"
             ToolTipText     =   "Inclure les chiffres dans la recherche"
-            Top             =   120
+            Top             =   0
             Width           =   2895
          End
          Begin VB.Label Label1 
@@ -274,13 +284,13 @@ Dim bAddSign As Boolean
         'alors c'est un fichier classique
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), tRes(), Me.pgb
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
         
     ElseIf TypeOfActiveForm = "Mem" Then
         'alors c'est dans la mémoire
         
         'lance la recherche
-        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), lngRes(), strRes(), Me.pgb
+        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), lngRes(), strRes(), Me.PGB
         
         'sauvegarde dans la variable tRes
         ReDim tRes(UBound(lngRes()))
@@ -293,7 +303,7 @@ Dim bAddSign As Boolean
         'alors c'est dans le disque
 
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), tRes(), Me.pgb
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
         
     End If
     

@@ -339,7 +339,7 @@ End Function
 'fonction de recherche de string complètes dans un fichier
 'stocke dans un tableau de 1 à Ubound
 '=======================================================
-Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByRef tRes() As SearchResult, Optional pgb As pgrbar)
+Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef tRes() As SearchResult, Optional pgb As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
 Dim strCtemp As String
@@ -399,7 +399,7 @@ Dim i As Long
         
             bytAsc = Asc(Mid$(strBuffer, i + 1, 1)) 'prend un byte
             
-            If IsCharConsideredInAString(bytAsc, bSigns, bMaj, bMin, bNumbers) Then
+            If IsCharConsideredInAString(bytAsc, bSigns, bMaj, bMin, bNumbers, bAccent) Then
                 'caractère x est valide
                 strCtemp = strCtemp & Chr(bytAsc)
             Else
@@ -628,7 +628,7 @@ End Sub
 'des paramètres Afficher : min, MAJ, nbres, signes
 'function utilisée directement avec les procédures de SearchStringIn...
 '=======================================================
-Public Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean) As Boolean
+Public Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean) As Boolean
     If bMaj Then
         IsCharConsideredInAString = (bytChar >= 65 And bytChar <= 90)
         If IsCharConsideredInAString Then Exit Function
@@ -650,6 +650,9 @@ Public Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As
     If bytChar = 32 Then 'espace
         IsCharConsideredInAString = True
         If IsCharConsideredInAString Then Exit Function
+    End If
+    If bAccent Then
+        IsCharConsideredInAString = (bytChar >= 192)
     End If
     
     IsCharConsideredInAString = False
