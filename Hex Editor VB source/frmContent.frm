@@ -90,7 +90,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "20:32"
+            TextSave        =   "12:20"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -98,7 +98,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "19/02/2007"
+            TextSave        =   "20/02/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -203,7 +203,7 @@ Begin VB.MDIForm frmContent
          EndProperty
          BeginProperty Button15 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Signet"
-            Object.ToolTipText     =   "Ajouter un signet à l'offset sélectionné"
+            Object.ToolTipText     =   "Basculer le signet à l'offset sélectionné"
             ImageIndex      =   8
          EndProperty
          BeginProperty Button16 {66833FEA-8583-11D1-B16A-00C0F0283628} 
@@ -346,7 +346,7 @@ Begin VB.MDIForm frmContent
             Shortcut        =   ^N
          End
          Begin VB.Menu mnuNewProcess 
-            Caption         =   "&Nouveau processus..."
+            Caption         =   "&Démarrer un processus..."
          End
       End
       Begin VB.Menu mnuROpen 
@@ -673,7 +673,7 @@ Begin VB.MDIForm frmContent
          Caption         =   "&Comparaison de fichiers..."
       End
       Begin VB.Menu mnuChangeDates 
-         Caption         =   "&Changer les dates..."
+         Caption         =   "&Changer les dates d'un fichier..."
       End
       Begin VB.Menu mnuShredder 
          Caption         =   "&Suppression de fichiers..."
@@ -1113,15 +1113,33 @@ Private Sub mnuAbout_Click()
 End Sub
 
 Private Sub mnuAddSignet_Click()
-'ajoute un signet sur l'offset actif
+Dim r As Long
+
+    'on ajoute (ou enlève) un signet
+
+    If Me.ActiveForm.HW.IsSignet(Me.ActiveForm.HW.Item.Offset) = False Then
+        'on l'ajoute
+        Me.ActiveForm.HW.AddSignet Me.ActiveForm.HW.Item.Offset
+        Me.ActiveForm.lstSignets.ListItems.Add Text:=CStr(Me.ActiveForm.HW.Item.Offset)
+        Me.ActiveForm.HW.TraceSignets
+    Else
     
-    'ajoute le signet au contrôle HW
-    Me.ActiveForm.HW.AddSignet Me.ActiveForm.HW.Item.Offset
-    Me.ActiveForm.HW.TraceSignets
-    
-    'ajoute le signet à la listview
-    Me.ActiveForm.lstSignets.ListItems.Add Text:=CStr(Me.ActiveForm.HW.Item.Offset)
-    
+        'alors on l'enlève
+        While Me.ActiveForm.HW.IsSignet(Me.ActiveForm.HW.Item.Offset)
+            'on supprime
+            Me.ActiveForm.HW.RemoveSignet Val(Me.ActiveForm.HW.Item.Offset)
+        Wend
+        
+        'enlève du listview
+        For r = Me.ActiveForm.lstSignets.ListItems.Count To 1 Step -1
+            If Me.ActiveForm.lstSignets.ListItems.Item(r).Text = CStr(Me.ActiveForm.HW.Item.Offset) Then
+                Me.ActiveForm.lstSignets.ListItems.Remove r
+            End If
+        Next r
+        
+        Me.ActiveForm.HW.TraceSignets
+    End If
+                
 End Sub
 
 Private Sub mnuAddSignetIn_Click()
