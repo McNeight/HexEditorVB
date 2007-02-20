@@ -272,7 +272,7 @@ Private Sub Form_Load()
 Dim s As String
     'mise à jour de la version et de l'USER
     lblLicenseTo.Caption = "License accordée à " & GetUserName
-    lblVersion.Caption = "Version " & Str$(App.Major) & "." & Str$(App.Minor) & "." & Str$(App.Revision)
+    lblVersion.Caption = "Version " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision))
     
     'écriture du texte
     s = "Hex Editor VB" & vbNewLine & "Copyright (c) 2006-2007 Alain Descotes (violent_ken)" & vbNewLine & "Dernière version du 16/02/2007. Il s'agit d'un éditeur héxadécimal complet permettant de modifier vos fichiers, vos disques et vos processus en mémoire très facilement." & vbNewLine & vbNewLine & "Ce logiciel est prévu pour Windows XP/Vista et une résolution minimale de 1024*768." & vbNewLine & vbNewLine & "Ce logiciel est sous license GNU General Public License, veuillez lire le contrat de licence ci dessous."

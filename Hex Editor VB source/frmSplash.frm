@@ -222,7 +222,7 @@ Option Explicit
 Private Sub Form_Load()
 'affiche le contenu des captions
     lblLicenseTo.Caption = "License accordée à " & GetUserName
-    lblVersion.Caption = "Version " & Str$(App.Major) & "." & Str$(App.Minor) & "." & Str$(App.Revision)
+    lblVersion.Caption = "Version " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision))
 End Sub
 
 Private Sub Timer1_Timer()

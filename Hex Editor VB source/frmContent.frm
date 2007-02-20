@@ -116,7 +116,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "14:42"
+            TextSave        =   "23:21"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1033,6 +1033,9 @@ Private Sub MDIForm_Load()
     
     On Error Resume Next
     
+    'lance le hook des menus
+    Call HookFormMenu(Me.hWnd)
+    
     frmSplash.lblState.Caption = "Vérifie la présence de FileRenamer..."
     'vérifie la présence de FileRenamer.exe
     If cFile.FileExists(App.Path & "\FileRenamer.exe") = False Then
@@ -1211,8 +1214,11 @@ Public Sub MDIForm_Resize()
 End Sub
 
 Private Sub MDIForm_Unload(Cancel As Integer)
+    
+    'termine le hook des menus
+    Call UnHookFormMenu(Me.hWnd)
+    
     Unload Me
-    'Unload frmData
     EndProgram
 End Sub
 
@@ -1723,7 +1729,7 @@ End Sub
 
 Private Sub mnuExit_Click()
     'quitte
-    EndProgram
+    Call MDIForm_Unload(0)
 End Sub
 
 Private Sub mnuExploreDisk_Click()
