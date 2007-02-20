@@ -24,10 +24,18 @@ Begin VB.Form diskPfm
    ScaleHeight     =   8415
    ScaleWidth      =   10155
    Visible         =   0   'False
+   Begin VB.TextBox pctPath 
+      BorderStyle     =   0  'None
+      Height          =   285
+      Left            =   720
+      TabIndex        =   63
+      Top             =   6840
+      Width           =   1575
+   End
    Begin HexViewer_OCX.HexViewer HW 
       Height          =   2415
       Left            =   240
-      TabIndex        =   62
+      TabIndex        =   61
       Top             =   600
       Width           =   2535
       _ExtentX        =   4471
@@ -38,7 +46,7 @@ Begin VB.Form diskPfm
    Begin ExtVS.ExtendedVScrollBar VS 
       Height          =   3615
       Left            =   3120
-      TabIndex        =   61
+      TabIndex        =   60
       Top             =   480
       Width           =   255
       _ExtentX        =   450
@@ -119,7 +127,7 @@ Begin VB.Form diskPfm
       ForeColor       =   &H00FF0000&
       Height          =   5415
       Left            =   7080
-      TabIndex        =   42
+      TabIndex        =   41
       Top             =   2520
       Width           =   2175
       Begin VB.PictureBox Picture3 
@@ -128,7 +136,7 @@ Begin VB.Form diskPfm
          Left            =   50
          ScaleHeight     =   5055
          ScaleWidth      =   2085
-         TabIndex        =   43
+         TabIndex        =   42
          Top             =   240
          Width           =   2085
          Begin VB.TextBox TextBox 
@@ -138,7 +146,7 @@ Begin VB.Form diskPfm
             Index           =   22
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   60
+            TabIndex        =   59
             Text            =   "Fichier=[path]"
             Top             =   3840
             Width           =   2895
@@ -150,7 +158,7 @@ Begin VB.Form diskPfm
             Index           =   21
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   59
+            TabIndex        =   58
             Text            =   "Fichier=[path]"
             Top             =   3600
             Width           =   2895
@@ -162,7 +170,7 @@ Begin VB.Form diskPfm
             Index           =   20
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   58
+            TabIndex        =   57
             Text            =   "Taille=[taille]"
             Top             =   3360
             Width           =   2895
@@ -174,7 +182,7 @@ Begin VB.Form diskPfm
             Index           =   27
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   55
+            TabIndex        =   54
             Text            =   "Taille=[taille]"
             Top             =   2760
             Width           =   2895
@@ -186,7 +194,7 @@ Begin VB.Form diskPfm
             Index           =   26
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   54
+            TabIndex        =   53
             Text            =   "Fichier=[path]"
             Top             =   3000
             Width           =   2895
@@ -198,7 +206,7 @@ Begin VB.Form diskPfm
             Index           =   19
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   53
+            TabIndex        =   52
             Text            =   "Fichier=[path]"
             Top             =   1920
             Width           =   2895
@@ -210,7 +218,7 @@ Begin VB.Form diskPfm
             Index           =   18
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   52
+            TabIndex        =   51
             Text            =   "Fichier=[path]"
             Top             =   1560
             Width           =   2895
@@ -222,7 +230,7 @@ Begin VB.Form diskPfm
             Index           =   17
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   51
+            TabIndex        =   50
             Text            =   "Taille=[taille]"
             Top             =   0
             Width           =   2895
@@ -234,7 +242,7 @@ Begin VB.Form diskPfm
             Index           =   16
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   50
+            TabIndex        =   49
             Text            =   "Fichier=[path]"
             Top             =   240
             Width           =   2895
@@ -246,7 +254,7 @@ Begin VB.Form diskPfm
             Index           =   7
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   49
+            TabIndex        =   48
             Text            =   "Fichier=[path]"
             Top             =   480
             Width           =   2895
@@ -258,7 +266,7 @@ Begin VB.Form diskPfm
             Index           =   6
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   48
+            TabIndex        =   47
             Text            =   "Fichier=[path]"
             Top             =   840
             Width           =   2895
@@ -270,7 +278,7 @@ Begin VB.Form diskPfm
             Index           =   5
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   47
+            TabIndex        =   46
             Text            =   "Fichier=[path]"
             Top             =   1080
             Width           =   2895
@@ -282,7 +290,7 @@ Begin VB.Form diskPfm
             Index           =   4
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   46
+            TabIndex        =   45
             Text            =   "Fichier=[path]"
             Top             =   1320
             Width           =   2895
@@ -294,7 +302,7 @@ Begin VB.Form diskPfm
             Index           =   3
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   45
+            TabIndex        =   44
             Text            =   "Fichier=[path]"
             Top             =   2400
             Width           =   2895
@@ -306,25 +314,12 @@ Begin VB.Form diskPfm
             Index           =   2
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   44
+            TabIndex        =   43
             Text            =   "Fichier=[path]"
             Top             =   2160
             Width           =   2895
          End
       End
-   End
-   Begin VB.PictureBox pctPath 
-      AutoRedraw      =   -1  'True
-      BackColor       =   &H8000000B&
-      BorderStyle     =   0  'None
-      Height          =   255
-      Left            =   240
-      ScaleHeight     =   255
-      ScaleWidth      =   1815
-      TabIndex        =   30
-      ToolTipText     =   "Chemin du fichier sélectionné"
-      Top             =   6960
-      Width           =   1815
    End
    Begin FileView_OCX.FileView FV 
       Height          =   1575
@@ -454,7 +449,7 @@ Begin VB.Form diskPfm
       Begin ComctlLib.ListView lstHisto 
          Height          =   1575
          Left            =   120
-         TabIndex        =   63
+         TabIndex        =   62
          Top             =   4800
          Width           =   2895
          _ExtentX        =   5106
@@ -498,7 +493,7 @@ Begin VB.Form diskPfm
             Index           =   1
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   40
+            TabIndex        =   39
             Text            =   "Fichier=[path]"
             Top             =   2160
             Width           =   2895
@@ -510,7 +505,7 @@ Begin VB.Form diskPfm
             Index           =   0
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   39
+            TabIndex        =   38
             Text            =   "Fichier=[path]"
             Top             =   2400
             Width           =   2895
@@ -522,7 +517,7 @@ Begin VB.Form diskPfm
             Index           =   13
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   38
+            TabIndex        =   37
             Text            =   "Fichier=[path]"
             Top             =   1440
             Width           =   2895
@@ -534,7 +529,7 @@ Begin VB.Form diskPfm
             Index           =   12
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   37
+            TabIndex        =   36
             Text            =   "Fichier=[path]"
             Top             =   1200
             Width           =   2895
@@ -546,7 +541,7 @@ Begin VB.Form diskPfm
             Index           =   11
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   36
+            TabIndex        =   35
             Text            =   "Fichier=[path]"
             Top             =   960
             Width           =   2895
@@ -558,7 +553,7 @@ Begin VB.Form diskPfm
             Index           =   10
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   35
+            TabIndex        =   34
             Text            =   "Fichier=[path]"
             Top             =   720
             Width           =   2895
@@ -570,7 +565,7 @@ Begin VB.Form diskPfm
             Index           =   9
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   34
+            TabIndex        =   33
             Text            =   "Fichier=[path]"
             Top             =   480
             Width           =   2895
@@ -582,7 +577,7 @@ Begin VB.Form diskPfm
             Index           =   8
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   33
+            TabIndex        =   32
             Text            =   "Taille=[taille]"
             Top             =   240
             Width           =   2895
@@ -594,7 +589,7 @@ Begin VB.Form diskPfm
             Index           =   14
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   32
+            TabIndex        =   31
             Text            =   "Fichier=[path]"
             Top             =   1680
             Width           =   2895
@@ -606,7 +601,7 @@ Begin VB.Form diskPfm
             Index           =   15
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   31
+            TabIndex        =   30
             Text            =   "Fichier=[path]"
             Top             =   1920
             Width           =   2895
@@ -685,7 +680,7 @@ Begin VB.Form diskPfm
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   41
+            TabIndex        =   40
             Top             =   0
             Width           =   2895
          End
@@ -797,7 +792,7 @@ Begin VB.Form diskPfm
    Begin FileView_OCX.FileView FV2 
       Height          =   1575
       Left            =   480
-      TabIndex        =   56
+      TabIndex        =   55
       Top             =   3240
       Width           =   2415
       _ExtentX        =   4260
@@ -822,7 +817,7 @@ Begin VB.Form diskPfm
       Caption         =   "Aller à ..."
       Height          =   255
       Left            =   240
-      TabIndex        =   57
+      TabIndex        =   56
       Top             =   7320
       Width           =   855
    End
@@ -1186,22 +1181,21 @@ End Sub
 '=======================================================
 Private Sub DisplayPath()
 Dim s As String
+Dim l As Long
 
     'récupère le texte à afficher
     s = FV.Path & "\"
+    s = Replace$(s, "\\", "\")  'vire le double slash
     If FV2.ListIndex <> -1 Then s = s & FV2.ListItems.Item(FV2.ListIndex)
     
-    'définit le texte à afficher en fonction de taille+police
-    PathCompactPath pctPath.hdc, s, pctPath.Width / 15 '/15 car en pixels
-    
     'enlève la partie après le vbNullChar de la string
-    If InStr(1, s, vbNullChar) > 0 Then
-        s = Left$(s, InStr(1, s, vbNullChar) - 1)
+    l = InStr(1, s, vbNullChar)
+    If l > 0 Then
+        s = Left$(s, l)
     End If
     
     'affiche la string dans la picturebox
-    pctPath.Cls
-    pctPath.Print s
+    pctPath.Text = cFile.GetFolderFromPath(s)
 End Sub
 
 '=======================================================
@@ -1443,8 +1437,8 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             VS.Value = VS.Value - 1
             Call VS_Change(VS.Value)
         End If
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.col
     End If
     
     If KeyCode = vbKeyDown Then
@@ -1460,8 +1454,8 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             Call VS_Change(VS.Value)
         End If
         'change le VS
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.col
    End If
     
     If KeyCode = vbKeyEnd Then
@@ -1487,10 +1481,10 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
     
     If KeyCode = vbKeyLeft Then
         'alors va à gauche
-        If HW.FirstOffset = 0 And HW.Item.Col = 1 And HW.Item.Line = 1 Then Exit Sub 'tout au début déjà
-        If HW.Item.Col = 1 Then
+        If HW.FirstOffset = 0 And HW.Item.col = 1 And HW.Item.Line = 1 Then Exit Sub 'tout au début déjà
+        If HW.Item.col = 1 Then
             'tout à gauche ==> on remonte d'une ligne alors
-            HW.Item.Col = 16: HW.Item.Line = HW.Item.Line - 1
+            HW.Item.col = 16: HW.Item.Line = HW.Item.Line - 1
             If HW.Item.Line = 0 Then
                 'alors on remonte le firstoffset
                 HW.Item.Line = 1
@@ -1500,18 +1494,18 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             End If
         Else
             'va à gauche
-            HW.Item.Col = HW.Item.Col - 1
+            HW.Item.col = HW.Item.col - 1
         End If
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.col
     End If
          
     If KeyCode = vbKeyRight Then
         'alors va à droite
-        If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) And HW.Item.Col = 16 Then Exit Sub  'tout à la fin déjà
-        If HW.Item.Col = 16 Then
+        If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) And HW.Item.col = 16 Then Exit Sub  'tout à la fin déjà
+        If HW.Item.col = 16 Then
             'tout à droite ==> on descend d'une ligne alors
-            HW.Item.Col = 1: HW.Item.Line = HW.Item.Line + 1
+            HW.Item.col = 1: HW.Item.Line = HW.Item.Line + 1
             If HW.Item.Line = HW.NumberPerPage Then
                 'alors on descend le firstoffset
                 HW.Item.Line = HW.NumberPerPage - 1
@@ -1521,18 +1515,18 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             End If
         Else
             'va à droite
-            HW.Item.Col = HW.Item.Col + 1
+            HW.Item.col = HW.Item.col + 1
         End If
         'change le VS
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.col
     End If
     
     'réenregistre le numéro de l'offset actuel dans hw.item
     HW.Item.Offset = HW.FirstOffset + (HW.Item.Line - 1) * 16
     'affecte les autres valeurs dans Item
     'HW.Item.tType = tHex
-    HW.Item.Value = HW.Value(HW.Item.Line, HW.Item.Col)
+    HW.Item.Value = HW.Value(HW.Item.Line, HW.Item.col)
     
     DoEvents
     
@@ -1616,7 +1610,7 @@ Dim r As Long
     If Button = 1 Then
         'alors on a sélectionné un objet
         
-        If Item.Col < 1 Or Item.Col > 16 Then Exit Sub
+        If Item.col < 1 Or Item.col > 16 Then Exit Sub
                
         If Item.Value = vbNullString Then
             'pas de valeur
@@ -1639,7 +1633,7 @@ Dim r As Long
         End If
         If Item.tType = tString Then
             'valeur strind sélectionnée
-            s = HW.Value(Item.Line, Item.Col)
+            s = HW.Value(Item.Line, Item.col)
             txtValue(0).Text = s
             txtValue(1).Text = Hex2Dec(s)
             txtValue(2).Text = Hex2Str(s)
@@ -1750,6 +1744,26 @@ Dim r As Long
         lstSignets.ListItems.Remove tLst.Index
     End If
         
+End Sub
+
+Private Sub pctPath_Change()
+    If cFile.FolderExists(cFile.GetFolderFromPath(pctPath.Text & "\")) = False Then
+        'couleur rouge
+        pctPath.ForeColor = RED_COLOR
+    Else
+        'c'est un path ok
+        pctPath.ForeColor = GREEN_COLOR
+    End If
+End Sub
+
+Private Sub pctPath_KeyDown(KeyCode As Integer, Shift As Integer)
+'valide si entrée
+Dim s As String
+    If KeyCode = vbKeyReturn Then
+        s = pctPath.Text
+        If cFile.FolderExists(pctPath.Text) Then FV.Path = pctPath.Text
+        pctPath.Text = s
+    End If
 End Sub
 
 Private Sub TB_Click()
@@ -1986,7 +2000,7 @@ Dim I_tem As ItemElement
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     
     'détermine l'offset du caractère à changer
-    iCur = I_tem.Offset + I_tem.Col - 1
+    iCur = I_tem.Offset + I_tem.col - 1
     
     'détermine le numéro du secteur contenant le caractère à changer
     Sector = Int(iCur / lBytesPerSector)

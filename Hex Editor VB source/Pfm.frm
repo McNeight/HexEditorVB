@@ -736,7 +736,6 @@ Private Sub Form_Resize()
     FrameIcon.Top = 1700
     FrameIcon.Left = IIf(HW.Visible, HW.Width + HW.Left, IIf(FrameInfos.Visible, FrameInfos.Width, 0)) + 500
     
-    
     'calcule le nombre de lignes du Grid à afficher
     'NumberPerPage = Int(Me.Height / 250) - 1
     NumberPerPage = Int(HW.Height / 250) - 1
@@ -903,8 +902,8 @@ Dim OfF As Currency, OfL As Currency
     frmContent.Sb.Panels(1).Text = "Status=[Creating backup " & Me.Caption & "]"
     
     'détermine les offsets de délimitation
-    OfF = Me.HW.FirstSelectionItem.Offset + Me.HW.FirstSelectionItem.Col
-    OfL = Me.HW.SecondSelectionItem.Offset + Me.HW.SecondSelectionItem.Col
+    OfF = Me.HW.FirstSelectionItem.Offset + Me.HW.FirstSelectionItem.col
+    OfL = Me.HW.SecondSelectionItem.Offset + Me.HW.SecondSelectionItem.col
     
     lFile2 = FreeFile 'obtient une ouverture dispo
     Open tempFile For Binary Access Write As lFile2   'ouvre le fichier sFile2 pour l'enregistrement
@@ -1085,8 +1084,8 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             VS.Value = VS.Value - 1
             Call VS_Change(VS.Value)
         End If
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.col
     End If
     
     If KeyCode = vbKeyDown Then
@@ -1105,8 +1104,8 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             Call VS_Change(VS.Value)
         End If
         'change le VS
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.col
    End If
     
     If KeyCode = vbKeyEnd Then
@@ -1147,10 +1146,10 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
         'pour l'édition dynamique au clavier
         
         'alors va à gauche
-        If HW.FirstOffset = 0 And HW.Item.Col = 1 And HW.Item.Line = 1 Then Exit Sub 'tout au début déjà
-        If HW.Item.Col = 1 Then
+        If HW.FirstOffset = 0 And HW.Item.col = 1 And HW.Item.Line = 1 Then Exit Sub 'tout au début déjà
+        If HW.Item.col = 1 Then
             'tout à gauche ==> on remonte d'une ligne alors
-            HW.Item.Col = 16: HW.Item.Line = HW.Item.Line - 1
+            HW.Item.col = 16: HW.Item.Line = HW.Item.Line - 1
             If HW.Item.Line = 0 Then
                 'alors on remonte le firstoffset
                 HW.Item.Line = 1
@@ -1160,10 +1159,10 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             End If
         Else
             'va à gauche
-            HW.Item.Col = HW.Item.Col - 1
+            HW.Item.col = HW.Item.col - 1
         End If
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.col
     End If
          
     If KeyCode = vbKeyRight Then
@@ -1171,10 +1170,10 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
         'pour l'édition dynamique au clavier
         
         'alors va à droite
-        If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) And HW.Item.Col = 16 Then Exit Sub  'tout à la fin déjà
-        If HW.Item.Col = 16 Then
+        If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) And HW.Item.col = 16 Then Exit Sub  'tout à la fin déjà
+        If HW.Item.col = 16 Then
             'tout à droite ==> on descend d'une ligne alors
-            HW.Item.Col = 1: HW.Item.Line = HW.Item.Line + 1
+            HW.Item.col = 1: HW.Item.Line = HW.Item.Line + 1
             If HW.Item.Line = HW.NumberPerPage Then
                 'alors on descend le firstoffset
                 HW.Item.Line = HW.NumberPerPage - 1
@@ -1184,18 +1183,18 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
             End If
         Else
             'va à droite
-            HW.Item.Col = HW.Item.Col + 1
+            HW.Item.col = HW.Item.col + 1
         End If
         'change le VS
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
+        HW.ColorItem tHex, HW.Item.Line, HW.Item.col, HW.Value(HW.Item.Line, HW.Item.col), HW.SelectionColor, True
+        HW.AddSelection HW.Item.Line, HW.Item.col
     End If
     
     'réenregistre le numéro de l'offset actuel dans hw.item
     HW.Item.Offset = HW.Item.Line * 16 - 16
     'affecte les autres valeurs dans Item
     'HW.Item.tType = tHex
-    HW.Item.Value = HW.Value(HW.Item.Line, HW.Item.Col)
+    HW.Item.Value = HW.Value(HW.Item.Line, HW.Item.col)
     
     DoEvents
 
@@ -1252,12 +1251,12 @@ Dim s2 As String
             s2 = s
             
             'calcule la nouvelle string (partie de gauche ancienne + nouveau byte + partie de droite ancienne)
-            s = Mid$(s, 1, HW.Item.Col - 1) & Chr$(bytHex) & Mid$(s, HW.Item.Col + 1, 16 - HW.Item.Col)   'avant & nouvelle & après
+            s = Mid$(s, 1, HW.Item.col - 1) & Chr$(bytHex) & Mid$(s, HW.Item.col + 1, 16 - HW.Item.col)   'avant & nouvelle & après
             
             'applique le changement
-            Call Me.AddChange((HW.Item.Line - 1) * 16 + HW.FirstOffset, HW.Item.Col, s)
+            Call Me.AddChange((HW.Item.Line - 1) * 16 + HW.FirstOffset, HW.Item.col, s)
             'ajoute l'historique
-            Me.AddHistoFrm actByteWritten, s2, s, (HW.Item.Line - 1) * 16 + HW.FirstOffset, , HW.Item.Col
+            Me.AddHistoFrm actByteWritten, s2, s, (HW.Item.Line - 1) * 16 + HW.FirstOffset, , HW.Item.col
            'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
             
@@ -1276,12 +1275,12 @@ Dim s2 As String
             s2 = s
             
             'calcule la nouvelle string (partie de gauche ancienne + nouveau byte + partie de droite ancienne)
-            s = Mid$(s, 1, HW.Item.Col - 1) & Chr$(KeyAscii) & Mid$(s, HW.Item.Col + 1, 16 - HW.Item.Col)   'avant & nouvelle & après
+            s = Mid$(s, 1, HW.Item.col - 1) & Chr$(KeyAscii) & Mid$(s, HW.Item.col + 1, 16 - HW.Item.col)   'avant & nouvelle & après
             
             'applique le changement
-            Call Me.AddChange((HW.Item.Line - 1) * 16 + HW.FirstOffset, HW.Item.Col, s)
+            Call Me.AddChange((HW.Item.Line - 1) * 16 + HW.FirstOffset, HW.Item.col, s)
             'ajoute l'historique
-            Me.AddHistoFrm actByteWritten, s2, s, (HW.Item.Line - 1) * 16 + HW.FirstOffset, , HW.Item.Col
+            Me.AddHistoFrm actByteWritten, s2, s, (HW.Item.Line - 1) * 16 + HW.FirstOffset, , HW.Item.col
             'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
             
@@ -1312,7 +1311,7 @@ Dim r As Long
         bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
         'pour l'édition dynamique au clavier
         
-        If Item.Col < 1 Or Item.Col > 16 Then Exit Sub
+        If Item.col < 1 Or Item.col > 16 Then Exit Sub
                
         If Item.Value = vbNullString Then
             'pas de valeur
@@ -1335,7 +1334,7 @@ Dim r As Long
         End If
         If Item.tType = tString Then
             'valeur strind sélectionnée
-            s = HW.Value(Item.Line, Item.Col)
+            s = HW.Value(Item.Line, Item.col)
             txtValue(0).Text = s
             txtValue(1).Text = Hex2Dec(s)
             txtValue(2).Text = Hex2Str(s)
@@ -1703,8 +1702,8 @@ Dim I_tem As ItemElement
         End If
 
         With frmContent.ActiveForm.HW
-            .AddHexValue I_tem.Line, I_tem.Col, txtValue(0).Text
-            .AddOneStringValue I_tem.Line, I_tem.Col, txtValue(2).Text
+            .AddHexValue I_tem.Line, I_tem.col, txtValue(0).Text
+            .AddOneStringValue I_tem.Line, I_tem.col, txtValue(2).Text
             ModifyData
         End With
     End If
@@ -1729,7 +1728,7 @@ Dim I_tem As ItemElement
         s = s & Hex2Str_(frmContent.ActiveForm.HW.Value(I_tem.Line, x))
     Next x
 
-    frmContent.ActiveForm.AddChange frmContent.ActiveForm.HW.FirstOffset + 16 * (I_tem.Line - 1), I_tem.Col, s
+    frmContent.ActiveForm.AddChange frmContent.ActiveForm.HW.FirstOffset + 16 * (I_tem.Line - 1), I_tem.col, s
     
 End Sub
 

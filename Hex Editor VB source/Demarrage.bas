@@ -43,7 +43,7 @@ Option Explicit
 Private Const DEFAULT_INI = "[Appearance]" & vbNewLine & "BackGroundColor=16777215" & vbNewLine & "OffsetForeColor=16737380" & vbNewLine & "HexaForeColor=7303023" & vbNewLine & "StringsForeColor=7303023" & vbNewLine & "BaseForeColor=16737380" & vbNewLine & "TitleBackGroundColor=16777215" & vbNewLine & "LinesColor=-2147483636" & vbNewLine & "SelectionColor=14737632" & vbNewLine & "ModifiedItems=255" & vbNewLine & "SelectedItems=0" & vbNewLine & "BookMarkColor=8421631" & vbNewLine & "ModifiedSelectedItems=255" & vbNewLine & "Grid=0" & vbNewLine & "OffsetTitleForeColor=16737380" & vbNewLine & "OffsetsHex=1" & vbNewLine & "[Integration]" & vbNewLine & "FileContextual=1" & vbNewLine & "FolderContextual=1" & vbNewLine & "SendTo=1" & vbNewLine & "[General]" & vbNewLine & "MaximizeWhenOpen=1" & vbNewLine & "DisplayIcon=1" & vbNewLine & "DisplayInfos=1" & vbNewLine & "DisplayData=1" & vbNewLine & "ResoX=640" & _
     vbNewLine & "ResoY=480" & vbNewLine & "AllowMultipleInstances=0" & vbNewLine & "DoNotChangeDates=1" & vbNewLine & "OpenSubFiles=0" & vbNewLine & "CloseHomeWhenChosen=0" & vbNewLine & "Splash=1" & vbNewLine & "[Environnement]" & vbNewLine & "OS=1" & vbNewLine & "Lang=" & vbNewLine & "[Historique]" & vbNewLine & "NumberOfSave=0" & vbNewLine & "[FileExplorer]" & vbNewLine & "ShowPath=0" & vbNewLine & "ShowHiddenFiles=1" & vbNewLine & "ShowHiddenFolders=1" & vbNewLine & "ShowSystemFiles=1" & vbNewLine & "ShowSystemFodlers=1" & vbNewLine & "ShowROFiles=1" & vbNewLine & "ShowROFolders=1" & vbNewLine & "AllowMultipleSelection=1" & vbNewLine & "AllowFileSuppression=1" & vbNewLine & "AllowFolderSuppression=0" & vbNewLine & "IconType=1" & vbNewLine & "DefaultPath=Dossier du programme" & vbNewLine & "Pattern=*.*" & vbNewLine & "Height=2200" & vbNewLine & "HideColumnTitle=0" & vbNewLine & "[Executable]" & vbNewLine & "HasCrashed=0"
 
-Public AfManifest As New AfClsManifest  'classe appliquant le style XP
+Public AfManifest As AfClsManifest   'classe appliquant le style XP
 Public TempFiles() As String    'contient tout les fichiers temporaires
 Public JailedProcess() As ProcessItem   'contient la liste de tous les processus bloqués
 Public bAcceptBackup As Boolean 'variable qui détermine si la création d'un backup a été acceptée
@@ -80,6 +80,11 @@ Dim s As String
         End
     End If
     
+    'applique le style XP (création d'un *.manifest si nécessaire)
+    Set AfManifest = New AfClsManifest
+    AfManifest.Run
+    Set AfManifest = Nothing
+    
     'affiche des messages de warning si on n'a pas une version finale
     #If PRE_ALPHA_VERSION Then
         'version prealpha
@@ -93,9 +98,6 @@ Dim s As String
     'affecte les properties à la classe
     clsERREUR.LogFile = App.Path & "\ErrLog.log"
     clsERREUR.MakeSoundIDE = True
-    
-    'applique le style XP (création d'un *.manifest si nécessaire)
-    AfManifest.Run
     
     'instancie les classes
     Set cFile = New clsFileInfos
