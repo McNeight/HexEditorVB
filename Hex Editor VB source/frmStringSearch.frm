@@ -173,7 +173,7 @@ Begin VB.Form frmStringSearch
             Tag             =   "pref"
             Text            =   "5"
             ToolTipText     =   "Taille minimale (au dessous de cette taille, les suites de caractères ne sont pas considérées comme des strings)"
-            Top             =   1440
+            Top             =   1460
             Width           =   735
          End
          Begin VB.CheckBox chkNumb3r 
@@ -191,7 +191,7 @@ Begin VB.Form frmStringSearch
             Height          =   255
             Left            =   0
             TabIndex        =   3
-            Top             =   1440
+            Top             =   1460
             Width           =   3135
          End
       End
@@ -278,19 +278,20 @@ Dim bAddSign As Boolean
     Label1.Enabled = False
     txtSize.Enabled = False
     cmdQuit.Enabled = False
+    chkAccent.Enabled = False
     chkAddSignet.Enabled = False
     
     If TypeOfActiveForm = "Pfm" Then
         'alors c'est un fichier classique
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
         
     ElseIf TypeOfActiveForm = "Mem" Then
         'alors c'est dans la mémoire
         
         'lance la recherche
-        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), lngRes(), strRes(), Me.PGB
+        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), lngRes(), strRes(), Me.pgb
         
         'sauvegarde dans la variable tRes
         ReDim tRes(UBound(lngRes()))
@@ -303,7 +304,7 @@ Dim bAddSign As Boolean
         'alors c'est dans le disque
 
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
         
     End If
     
@@ -340,6 +341,7 @@ Dim bAddSign As Boolean
     txtSize.Enabled = True
     cmdQuit.Enabled = True
     chkAddSignet.Enabled = True
+    chkAccent.Enabled = True
     
     Exit Sub
 ErrGestion:
