@@ -40,8 +40,6 @@ Option Explicit
 
 
 
-
-
 '=======================================================
 '//CONSTANTES
 '=======================================================
@@ -60,7 +58,7 @@ Public Const SPECIFIC_RIGHTS_ALL                As Long = &HFFFF
 Public Const PROCESS_READ_WRITE_QUERY           As Long = PROCESS_VM_READ Or PROCESS_VM_WRITE Or _
         PROCESS_VM_OPERATION Or PROCESS_QUERY_INFORMATION
 
-'constantes utilisées pour la création de menus dynamiques
+'constantes utilisées pour la gestion des menus
 Public Const MIIM_ID                            As Long = &H2
 Public Const MIIM_TYPE                          As Long = &H10
 Public Const MIIM_STATE                         As Long = &H1
@@ -72,6 +70,13 @@ Public Const MFT_RADIOCHECK                     As Long = &H200&
 Public Const MFT_CHECKED                        As Long = &H8&
 Public Const MFT_STRING                         As Long = &H0
 Public Const MFS_ENABLED                        As Long = &H0
+Public Const MF_BYCOMMAND                       As Long = &H0
+Public Const MIIM_DATA                          As Long = &H20
+Public Const MF_BYPOSITION                      As Long = &H400
+Public Const MF_OWNERDRAW                       As Long = &H100
+Public Const MFT_OWNERDRAW                      As Long = MF_OWNERDRAW
+Public Const MFS_DEFAULT                        As Long = &H1000
+Public Const MF_STRING                          As Long = &H0&
 
 Public Const MEM_PUBLIC                         As Long = &H20000
 Public Const MEM_COMMIT                         As Long = &H1000
@@ -110,6 +115,7 @@ Public Const ILD_TRANSPARENT                    As Long = &H1
 Public Const IID_IICON                          As String = "{7BF80980-BF32-101A-8BBB-00AA00300CAB}"
 
 'messages pour les fenêtres
+Public Const WM_MENUSELECT                      As Long = &H11F
 Public Const WM_CLOSE                           As Long = &H10
 Public Const WM_SHOWWINDOW                      As Long = &H18
 Public Const VISIBLEFLAGS                       As Long = &H2 Or &H1 Or &H40 Or &H10
@@ -174,12 +180,17 @@ Public Declare Function SystemTimeToFileTime Lib "kernel32" (lpSystemTime As SYS
 Public Declare Function LocalFileTimeToFileTime Lib "kernel32" (lpLocalFileTime As FILETIME, lpFileTime As FILETIME) As Long
 Public Declare Function CompareFileTime Lib "kernel32" (lpFileTime1 As Currency, lpFileTime2 As Currency) As Long
 
-'APIS pour les menus dynamiques
+'APIS pour les menus
 Public Declare Function CreatePopupMenu Lib "user32" () As Long
 Public Declare Function InsertMenuItem Lib "user32.dll" Alias "InsertMenuItemA" (ByVal hMenu As Long, ByVal uItem As Long, ByVal fByPosition As Long, lpmii As MENUITEMINFO) As Long
 Public Declare Function TrackPopupMenuEx Lib "user32" (ByVal hMenu As Long, ByVal wFlags As Long, ByVal x As Long, ByVal y As Long, ByVal hWnd As Long, ByVal lptpm As Any) As Long
 Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
 Public Declare Function DestroyMenu Lib "user32" (ByVal hMenu As Long) As Long
+Public Declare Function GetMenu Lib "user32" (ByVal hWnd As Long) As Long
+Public Declare Function GetSubMenu Lib "user32" (ByVal hMenu As Long, ByVal nPos As Long) As Long
+Public Declare Function SetMenuItemBitmaps Lib "user32" (ByVal hMenu As Long, ByVal nPosition As Long, ByVal wFlags As Long, ByVal hBitmapUnchecked As Long, ByVal hBitmapChecked As Long) As Long
+Public Declare Function GetMenuItemCount Lib "user32" (ByVal hMenu As Long) As Long
+Public Declare Function GetMenuItemInfoStr Lib "user32" Alias "GetMenuItemInfoA" (ByVal hMenu As Long, ByVal uItem As Long, ByVal ByPosition As Long, ByRef lpMenuItemInfo As MENUITEMINFO_STRINGDATA) As Boolean
 
 'APIs sur les processus
 Public Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
@@ -584,4 +595,19 @@ End Type
 'contient les résultats de la recherche de fichiers
 Public Type FILE_SEARCH_RESULT
     sF() As String
+End Type
+
+'type de définition des menus
+Public Type MENUITEMINFO_STRINGDATA
+   cbSize As Long
+   fMask As Long
+   fType As Long
+   fState As Long
+   wID As Long
+   hSubMenu As Long
+   hbmpChecked As Long
+   hbmpUnchecked As Long
+   dwItemData As Long
+   dwTypeData As String
+   cch As Long
 End Type

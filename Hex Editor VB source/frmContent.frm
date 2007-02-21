@@ -116,7 +116,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "23:21"
+            TextSave        =   "17:47"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -124,7 +124,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "20/02/2007"
+            TextSave        =   "21/02/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -953,6 +953,13 @@ Option Explicit
 '=======================================================
 
 Private bDonneeForm As Boolean
+Public WithEvents cSubEvent As clsFrmSubClassEvent
+Attribute cSubEvent.VB_VarHelpID = -1
+
+Private Sub cSubEvent_MenuOver(ByVal strCaption As String)
+    'cet event est libéré lors du survol des menus
+    Sb.Panels(1).Text = strCaption
+End Sub
 
 Private Sub LV_ItemDblSelection(Item As ComctlLib.ListItem)
 Dim Frm As Form
@@ -1033,8 +1040,14 @@ Private Sub MDIForm_Load()
     
     On Error Resume Next
     
-    'lance le hook des menus
-    Call HookFormMenu(Me.hWnd)
+    #If USE_FRMC_SUBCLASSING Then
+        'lance le hook des menus
+        Set cSub = New clsFrmSubClass
+        Set cSubEvent = New clsFrmSubClassEvent
+    
+        'démarre le hook de la form
+        Call cSub.HookFormMenu(Me.hWnd, cSubEvent)
+    #End If
     
     frmSplash.lblState.Caption = "Vérifie la présence de FileRenamer..."
     'vérifie la présence de FileRenamer.exe
@@ -1215,8 +1228,12 @@ End Sub
 
 Private Sub MDIForm_Unload(Cancel As Integer)
     
-    'termine le hook des menus
-    Call UnHookFormMenu(Me.hWnd)
+    #If USE_FRMC_SUBCLASSING Then
+        'enlève le hook de la form
+        Call cSub.UnHookFormMenu(Me.hWnd)
+        Set cSubEvent = Nothing
+        Set cSub = Nothing
+    #End If
     
     Unload Me
     EndProgram
