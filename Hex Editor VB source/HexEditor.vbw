@@ -64,5 +64,5 @@ frmSelect2 = 0, 0, 0, 0, C, 0, 0, 539, 430, C
 frmSplash = 0, 0, 0, 0, C, 23, 23, 562, 453, C
 frmFileSearch = 0, 0, 0, 0, C, 46, 46, 585, 476, C
 clsFrmSubClass = 0, 0, 0, 0, C
-clsFrmSubClassEvent = 0, 0, 0, 0, C
 mdlSubClassingSubs = 161, 161, 700, 591, Z
+IOverMenuEvent = 0, 0, 0, 0, C
