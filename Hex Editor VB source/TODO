@@ -37,6 +37,7 @@ save buffer|enregistrer avec un buffer plus gros (diminue le temps)| 10| 1
 script|gérer l'execution de scripts| 23| 1
 settings|vérifier que le tag "pref" est présent sur tous les composants à sauver| 10| 1
 string search|recherche strings dans disque| 10| 3
+subclassing menus|foire| 10| 8
 support de vista|ajouter resize de certains composants si vista| 10| 1
 supprimer|ajout de la suppresion d'une partie de bytes| 10| 3
 toolbar|gérer le toolbar (manque juste Paste)| 82| 1

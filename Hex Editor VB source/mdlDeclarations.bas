@@ -59,15 +59,16 @@ Public Const PROCESS_READ_WRITE_QUERY           As Long = PROCESS_VM_READ Or PRO
         PROCESS_VM_OPERATION Or PROCESS_QUERY_INFORMATION
 
 'constantes utilisées pour la gestion des menus
+Public Const MF_HILITE                          As Long = &H80
 Public Const MIIM_ID                            As Long = &H2
 Public Const MIIM_TYPE                          As Long = &H10
 Public Const MIIM_STATE                         As Long = &H1
 Public Const MIIM_SUBMENU                       As Long = &H4
-Public Const TPM_LEFTALIGN                      As Long = &H0&
-Public Const TPM_RETURNCMD                      As Long = &H100&
-Public Const TPM_RIGHTBUTTON                    As Long = &H2&
-Public Const MFT_RADIOCHECK                     As Long = &H200&
-Public Const MFT_CHECKED                        As Long = &H8&
+Public Const TPM_LEFTALIGN                      As Long = &H0
+Public Const TPM_RETURNCMD                      As Long = &H100
+Public Const TPM_RIGHTBUTTON                    As Long = &H2
+Public Const MFT_RADIOCHECK                     As Long = &H200
+Public Const MFT_CHECKED                        As Long = &H8
 Public Const MFT_STRING                         As Long = &H0
 Public Const MFS_ENABLED                        As Long = &H0
 Public Const MF_BYCOMMAND                       As Long = &H0
@@ -76,7 +77,9 @@ Public Const MF_BYPOSITION                      As Long = &H400
 Public Const MF_OWNERDRAW                       As Long = &H100
 Public Const MFT_OWNERDRAW                      As Long = MF_OWNERDRAW
 Public Const MFS_DEFAULT                        As Long = &H1000
-Public Const MF_STRING                          As Long = &H0&
+Public Const MF_STRING                          As Long = &H0
+Public Const MF_GRAYED                         As Long = &H1
+Public Const MF_CHECKED                        As Long = &H8
 
 Public Const MEM_PUBLIC                         As Long = &H20000
 Public Const MEM_COMMIT                         As Long = &H1000
@@ -183,14 +186,16 @@ Public Declare Function CompareFileTime Lib "kernel32" (lpFileTime1 As Currency,
 'APIS pour les menus
 Public Declare Function CreatePopupMenu Lib "user32" () As Long
 Public Declare Function InsertMenuItem Lib "user32.dll" Alias "InsertMenuItemA" (ByVal hMenu As Long, ByVal uItem As Long, ByVal fByPosition As Long, lpmii As MENUITEMINFO) As Long
-Public Declare Function TrackPopupMenuEx Lib "user32" (ByVal hMenu As Long, ByVal wFlags As Long, ByVal x As Long, ByVal y As Long, ByVal hWnd As Long, ByVal lptpm As Any) As Long
+Public Declare Function TrackPopupMenuEx Lib "user32" (ByVal hMenu As Long, ByVal wFlags As Long, ByVal X As Long, ByVal y As Long, ByVal hWnd As Long, ByVal lptpm As Any) As Long
 Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
 Public Declare Function DestroyMenu Lib "user32" (ByVal hMenu As Long) As Long
 Public Declare Function GetMenu Lib "user32" (ByVal hWnd As Long) As Long
 Public Declare Function GetSubMenu Lib "user32" (ByVal hMenu As Long, ByVal nPos As Long) As Long
 Public Declare Function SetMenuItemBitmaps Lib "user32" (ByVal hMenu As Long, ByVal nPosition As Long, ByVal wFlags As Long, ByVal hBitmapUnchecked As Long, ByVal hBitmapChecked As Long) As Long
 Public Declare Function GetMenuItemCount Lib "user32" (ByVal hMenu As Long) As Long
-Public Declare Function GetMenuItemInfoStr Lib "user32" Alias "GetMenuItemInfoA" (ByVal hMenu As Long, ByVal uItem As Long, ByVal ByPosition As Long, ByRef lpMenuItemInfo As MENUITEMINFO_STRINGDATA) As Boolean
+Public Declare Function GetMenuState Lib "user32" (ByVal hMenu As Long, ByVal wID As Long, ByVal wFlags As Long) As Long
+Public Declare Function GetMenuString Lib "user32" Alias "GetMenuStringA" (ByVal hMenu As Long, ByVal wIDItem As Long, ByVal lpString As String, ByVal nMaxCount As Long, ByVal wFlag As Long) As Long
+
 
 'APIs sur les processus
 Public Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
@@ -247,14 +252,14 @@ Public Declare Function CLSIDFromString Lib "ole32" (ByVal lpsz As Any, pclsid A
 Public Declare Function ExtractIcon Lib "shell32.dll" Alias "ExtractIconA" (ByVal hInst As Long, ByVal lpszExeFileName As String, ByVal nIconIndex As Long) As Long
 Public Declare Function DrawIconEx Lib "user32" (ByVal hdc As Long, ByVal xLeft As Long, ByVal yTop As Long, ByVal hIcon As Long, ByVal cxWidth As Long, ByVal cyWidth As Long, ByVal istepIfAniCur As Long, ByVal hbrFlickerFreeDraw As Long, ByVal diFlags As Long) As Long
 Public Declare Function DestroyIcon Lib "user32" (ByVal hIcon As Long) As Long
-Public Declare Function DrawIcon Lib "user32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, ByVal hIcon As Long) As Long
+Public Declare Function DrawIcon Lib "user32" (ByVal hdc As Long, ByVal X As Long, ByVal y As Long, ByVal hIcon As Long) As Long
 Public Declare Function OleCreatePictureIndirect Lib "olepro32.dll" (lpPictDesc As PICTDESC, riid As GUID, ByVal fPictureOwnsHandle As Long, ipic As IPicture) As Long
-Public Declare Function ImageList_Draw Lib "Comctl32.dll" (ByVal himl&, ByVal i&, ByVal hDCDest&, ByVal x&, ByVal y&, ByVal FLAGS&) As Long
+Public Declare Function ImageList_Draw Lib "Comctl32.dll" (ByVal himl&, ByVal i&, ByVal hDCDest&, ByVal X&, ByVal y&, ByVal FLAGS&) As Long
 
 'APIs pour l'affichage/gestion des fenêtres
 Public Declare Sub InvalidateRect Lib "user32" (ByVal hWnd As Long, ByVal t As Long, ByVal bErase As Long)
 Public Declare Sub ValidateRect Lib "user32" (ByVal hWnd As Long, ByVal t As Long)
-Public Declare Function SetWindowPos Lib "user32" (ByVal hWnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
+Public Declare Function SetWindowPos Lib "user32" (ByVal hWnd As Long, ByVal hWndInsertAfter As Long, ByVal X As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
 Public Declare Function UpdateWindow Lib "user32" (ByVal hWnd As Long) As Long
 Public Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
 Public Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hWnd As Long, ByVal nIndex As Long) As Long
@@ -563,7 +568,7 @@ Public Type MENUITEMINFO
     cch As Long
 End Type
 Public Type POINTAPI
-    x As Long
+    X As Long
     y As Long
 End Type
 
