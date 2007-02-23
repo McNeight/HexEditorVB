@@ -27,7 +27,7 @@ Begin VB.Form frmDates
       Caption         =   "Rafraichir"
       Height          =   255
       Left            =   5280
-      TabIndex        =   23
+      TabIndex        =   2
       ToolTipText     =   "Rafraichir les dates"
       Top             =   240
       Width           =   1215
@@ -37,7 +37,7 @@ Begin VB.Form frmDates
       Height          =   1095
       Index           =   4
       Left            =   3600
-      TabIndex        =   18
+      TabIndex        =   22
       Top             =   1920
       Width           =   3015
       Begin VB.Label lblHour 
@@ -48,7 +48,7 @@ Begin VB.Form frmDates
          Height          =   255
          Index           =   1
          Left            =   120
-         TabIndex        =   20
+         TabIndex        =   24
          Top             =   720
          Width           =   2775
       End
@@ -60,7 +60,7 @@ Begin VB.Form frmDates
          Height          =   255
          Index           =   1
          Left            =   120
-         TabIndex        =   19
+         TabIndex        =   23
          Top             =   360
          Width           =   2775
       End
@@ -70,7 +70,7 @@ Begin VB.Form frmDates
       Height          =   1215
       Index           =   5
       Left            =   3600
-      TabIndex        =   12
+      TabIndex        =   19
       Top             =   3120
       Width           =   3015
       Begin VB.Label lblHour 
@@ -81,7 +81,7 @@ Begin VB.Form frmDates
          Height          =   255
          Index           =   2
          Left            =   120
-         TabIndex        =   22
+         TabIndex        =   26
          Top             =   720
          Width           =   2775
       End
@@ -93,7 +93,7 @@ Begin VB.Form frmDates
          Height          =   255
          Index           =   2
          Left            =   120
-         TabIndex        =   21
+         TabIndex        =   25
          Top             =   360
          Width           =   2775
       End
@@ -102,7 +102,7 @@ Begin VB.Form frmDates
       Caption         =   "Fermer"
       Height          =   375
       Left            =   1560
-      TabIndex        =   8
+      TabIndex        =   10
       ToolTipText     =   "Fermer la fenêtre"
       Top             =   4200
       Width           =   1215
@@ -111,7 +111,7 @@ Begin VB.Form frmDates
       Caption         =   "Appliquer"
       Height          =   375
       Left            =   120
-      TabIndex        =   7
+      TabIndex        =   9
       ToolTipText     =   "Appliquer les changements"
       Top             =   4200
       Width           =   1215
@@ -121,7 +121,7 @@ Begin VB.Form frmDates
       Height          =   855
       Index           =   2
       Left            =   120
-      TabIndex        =   6
+      TabIndex        =   15
       Top             =   3120
       Width           =   3255
       Begin VB.PictureBox Picture1 
@@ -131,7 +131,8 @@ Begin VB.Form frmDates
          Left            =   120
          ScaleHeight     =   495
          ScaleWidth      =   3015
-         TabIndex        =   11
+         TabIndex        =   18
+         TabStop         =   0   'False
          Top             =   240
          Width           =   3015
          Begin VB.CommandButton cmdDefaut 
@@ -139,7 +140,7 @@ Begin VB.Form frmDates
             Height          =   255
             Index           =   2
             Left            =   2040
-            TabIndex        =   17
+            TabIndex        =   8
             ToolTipText     =   "Dates par défaut (actuelles) du fichier"
             Top             =   120
             Width           =   975
@@ -148,14 +149,14 @@ Begin VB.Form frmDates
             Height          =   300
             Index           =   2
             Left            =   0
-            TabIndex        =   26
+            TabIndex        =   7
             Top             =   120
             Width           =   1935
             _ExtentX        =   3413
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   94633987
+            Format          =   80674819
             CurrentDate     =   39133
          End
       End
@@ -165,7 +166,7 @@ Begin VB.Form frmDates
       Height          =   855
       Index           =   1
       Left            =   120
-      TabIndex        =   5
+      TabIndex        =   14
       Top             =   1920
       Width           =   3255
       Begin VB.PictureBox Picture1 
@@ -175,7 +176,8 @@ Begin VB.Form frmDates
          Left            =   120
          ScaleHeight     =   495
          ScaleWidth      =   3015
-         TabIndex        =   10
+         TabIndex        =   17
+         TabStop         =   0   'False
          Top             =   240
          Width           =   3015
          Begin VB.CommandButton cmdDefaut 
@@ -183,7 +185,7 @@ Begin VB.Form frmDates
             Height          =   255
             Index           =   1
             Left            =   2040
-            TabIndex        =   16
+            TabIndex        =   6
             ToolTipText     =   "Dates par défaut (actuelles) du fichier"
             Top             =   120
             Width           =   975
@@ -192,14 +194,14 @@ Begin VB.Form frmDates
             Height          =   300
             Index           =   1
             Left            =   0
-            TabIndex        =   25
+            TabIndex        =   5
             Top             =   120
             Width           =   1935
             _ExtentX        =   3413
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   94633987
+            Format          =   80674819
             CurrentDate     =   39133
          End
       End
@@ -209,21 +211,21 @@ Begin VB.Form frmDates
       Height          =   855
       Index           =   0
       Left            =   120
-      TabIndex        =   4
+      TabIndex        =   13
       Top             =   720
       Width           =   3375
       Begin MSComCtl2.DTPicker DT 
          Height          =   300
          Index           =   0
          Left            =   120
-         TabIndex        =   24
+         TabIndex        =   3
          Top             =   360
          Width           =   1935
          _ExtentX        =   3413
          _ExtentY        =   529
          _Version        =   393216
          CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-         Format          =   94633987
+         Format          =   80674819
          CurrentDate     =   39133.9583333333
       End
       Begin VB.PictureBox Picture1 
@@ -233,7 +235,8 @@ Begin VB.Form frmDates
          Left            =   120
          ScaleHeight     =   495
          ScaleWidth      =   3135
-         TabIndex        =   9
+         TabIndex        =   16
+         TabStop         =   0   'False
          Top             =   240
          Width           =   3135
          Begin VB.CommandButton cmdDefaut 
@@ -241,7 +244,7 @@ Begin VB.Form frmDates
             Height          =   255
             Index           =   0
             Left            =   2040
-            TabIndex        =   15
+            TabIndex        =   4
             ToolTipText     =   "Dates par défaut (actuelles) du fichier"
             Top             =   120
             Width           =   975
@@ -253,7 +256,7 @@ Begin VB.Form frmDates
       Height          =   1095
       Index           =   3
       Left            =   3600
-      TabIndex        =   3
+      TabIndex        =   12
       Top             =   720
       Width           =   3015
       Begin VB.Label lblHour 
@@ -264,7 +267,7 @@ Begin VB.Form frmDates
          Height          =   255
          Index           =   0
          Left            =   120
-         TabIndex        =   14
+         TabIndex        =   21
          Top             =   720
          Width           =   2775
       End
@@ -276,7 +279,7 @@ Begin VB.Form frmDates
          Height          =   255
          Index           =   0
          Left            =   120
-         TabIndex        =   13
+         TabIndex        =   20
          Top             =   360
          Width           =   2775
       End
@@ -304,7 +307,7 @@ Begin VB.Form frmDates
       Height          =   255
       Index           =   0
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   11
       Top             =   240
       Width           =   615
    End

@@ -25,7 +25,7 @@ Begin VB.Form frmConvert
       Caption         =   "Mettre au premier plan"
       Height          =   255
       Left            =   360
-      TabIndex        =   3
+      TabIndex        =   6
       Tag             =   "pref"
       ToolTipText     =   "Active ou non la mise au premier plan de la fenêtre"
       Top             =   1920
@@ -36,7 +36,7 @@ Begin VB.Form frmConvert
       Caption         =   "Fermer"
       Height          =   375
       Left            =   3120
-      TabIndex        =   2
+      TabIndex        =   7
       ToolTipText     =   "Fermer cette feuille"
       Top             =   1920
       Width           =   1575
@@ -45,7 +45,7 @@ Begin VB.Form frmConvert
       Caption         =   "Sortie"
       Height          =   855
       Left            =   120
-      TabIndex        =   1
+      TabIndex        =   9
       Top             =   960
       Width           =   5055
       Begin VB.PictureBox Picture2 
@@ -54,7 +54,8 @@ Begin VB.Form frmConvert
          Left            =   120
          ScaleHeight     =   495
          ScaleWidth      =   4815
-         TabIndex        =   9
+         TabIndex        =   12
+         TabStop         =   0   'False
          Top             =   240
          Width           =   4815
          Begin VB.TextBox txtI 
@@ -62,7 +63,7 @@ Begin VB.Form frmConvert
             Height          =   285
             Index           =   1
             Left            =   0
-            TabIndex        =   12
+            TabIndex        =   3
             Tag             =   "pref1"
             ToolTipText     =   "Valeur dans la base d'arrivée"
             Top             =   120
@@ -75,7 +76,7 @@ Begin VB.Form frmConvert
             Height          =   285
             Index           =   1
             Left            =   4200
-            TabIndex        =   11
+            TabIndex        =   5
             Tag             =   "pref"
             Text            =   "12"
             ToolTipText     =   "Base personnelle"
@@ -88,7 +89,7 @@ Begin VB.Form frmConvert
             Left            =   2520
             List            =   "frmConvert.frx":08E0
             Style           =   2  'Dropdown List
-            TabIndex        =   10
+            TabIndex        =   4
             Tag             =   "pref"
             ToolTipText     =   "Base d'arrivée"
             Top             =   120
@@ -109,7 +110,7 @@ Begin VB.Form frmConvert
       Caption         =   "Entrée"
       Height          =   855
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   8
       Top             =   120
       Width           =   5055
       Begin VB.PictureBox Picture1 
@@ -118,7 +119,8 @@ Begin VB.Form frmConvert
          Left            =   120
          ScaleHeight     =   495
          ScaleWidth      =   4815
-         TabIndex        =   4
+         TabIndex        =   10
+         TabStop         =   0   'False
          Top             =   240
          Width           =   4815
          Begin VB.TextBox txtI 
@@ -126,7 +128,7 @@ Begin VB.Form frmConvert
             Height          =   285
             Index           =   0
             Left            =   0
-            TabIndex        =   7
+            TabIndex        =   0
             Tag             =   "pref0"
             ToolTipText     =   "Valeur dans la base de départ"
             Top             =   120
@@ -139,7 +141,7 @@ Begin VB.Form frmConvert
             Height          =   285
             Index           =   0
             Left            =   4200
-            TabIndex        =   6
+            TabIndex        =   2
             Tag             =   "pref"
             Text            =   "12"
             ToolTipText     =   "Base personnelle"
@@ -152,7 +154,7 @@ Begin VB.Form frmConvert
             Left            =   2520
             List            =   "frmConvert.frx":0936
             Style           =   2  'Dropdown List
-            TabIndex        =   5
+            TabIndex        =   1
             Tag             =   "pref"
             ToolTipText     =   "Base de départ"
             Top             =   120
@@ -163,7 +165,7 @@ Begin VB.Form frmConvert
             Height          =   255
             Index           =   0
             Left            =   1440
-            TabIndex        =   8
+            TabIndex        =   11
             Top             =   120
             Width           =   975
          End

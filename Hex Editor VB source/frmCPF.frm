@@ -27,7 +27,7 @@ Begin VB.Form frmCPF
       Caption         =   "Examiner les différences"
       Height          =   495
       Left            =   1099
-      TabIndex        =   12
+      TabIndex        =   5
       ToolTipText     =   "Lancer une analyse détaillée"
       Top             =   6360
       Width           =   1455
@@ -36,7 +36,7 @@ Begin VB.Form frmCPF
       Caption         =   "Fermer"
       Height          =   495
       Left            =   5697
-      TabIndex        =   5
+      TabIndex        =   7
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   6360
       Width           =   1455
@@ -45,7 +45,7 @@ Begin VB.Form frmCPF
       Caption         =   "Sauvegarder le rapport..."
       Height          =   495
       Left            =   3297
-      TabIndex        =   4
+      TabIndex        =   6
       ToolTipText     =   "Sauvegarder le rapport au format texte"
       Top             =   6360
       Width           =   1455
@@ -54,7 +54,7 @@ Begin VB.Form frmCPF
       Caption         =   "Résultats"
       Height          =   4575
       Left            =   120
-      TabIndex        =   3
+      TabIndex        =   10
       Top             =   1560
       Width           =   8055
       Begin VB.PictureBox Picture2 
@@ -63,13 +63,15 @@ Begin VB.Form frmCPF
          Left            =   120
          ScaleHeight     =   4215
          ScaleWidth      =   7815
-         TabIndex        =   13
+         TabIndex        =   15
+         TabStop         =   0   'False
          Top             =   240
          Width           =   7815
          Begin BGraphe_OCX.BGraphe BG2 
             Height          =   3015
             Left            =   3960
             TabIndex        =   22
+            TabStop         =   0   'False
             Top             =   1080
             Width           =   3855
             _ExtentX        =   6800
@@ -79,6 +81,7 @@ Begin VB.Form frmCPF
             Height          =   3015
             Left            =   0
             TabIndex        =   21
+            TabStop         =   0   'False
             Top             =   1080
             Width           =   3855
             _ExtentX        =   6800
@@ -88,7 +91,7 @@ Begin VB.Form frmCPF
             Caption         =   "Tailles :"
             Height          =   255
             Left            =   0
-            TabIndex        =   18
+            TabIndex        =   20
             Top             =   0
             Width           =   6015
          End
@@ -96,7 +99,7 @@ Begin VB.Form frmCPF
             Caption         =   "Pourcentage de correspondance :"
             Height          =   255
             Left            =   0
-            TabIndex        =   17
+            TabIndex        =   19
             Top             =   240
             Width           =   6015
          End
@@ -104,7 +107,7 @@ Begin VB.Form frmCPF
             Caption         =   "Différences :"
             Height          =   255
             Left            =   0
-            TabIndex        =   16
+            TabIndex        =   18
             Top             =   480
             Width           =   6015
          End
@@ -112,7 +115,7 @@ Begin VB.Form frmCPF
             Caption         =   "Fichier 1"
             Height          =   255
             Left            =   0
-            TabIndex        =   15
+            TabIndex        =   17
             Top             =   840
             Width           =   975
          End
@@ -120,7 +123,7 @@ Begin VB.Form frmCPF
             Caption         =   "Fichier 2"
             Height          =   255
             Left            =   3960
-            TabIndex        =   14
+            TabIndex        =   16
             Top             =   840
             Width           =   975
          End
@@ -128,14 +131,14 @@ Begin VB.Form frmCPF
       Begin VB.Label lblF2 
          Height          =   255
          Left            =   4080
-         TabIndex        =   11
+         TabIndex        =   14
          Top             =   3720
          Width           =   3855
       End
       Begin VB.Label lblF1 
          Height          =   255
          Left            =   120
-         TabIndex        =   10
+         TabIndex        =   13
          Top             =   3720
          Width           =   3855
       End
@@ -144,7 +147,7 @@ Begin VB.Form frmCPF
       Caption         =   "Lancer l'analyse"
       Height          =   495
       Left            =   5880
-      TabIndex        =   2
+      TabIndex        =   0
       ToolTipText     =   "Analyser"
       Top             =   240
       Width           =   1095
@@ -153,7 +156,7 @@ Begin VB.Form frmCPF
       Caption         =   "Fichier 2"
       Height          =   735
       Left            =   120
-      TabIndex        =   1
+      TabIndex        =   9
       Top             =   840
       Width           =   4455
       Begin VB.PictureBox Picture1 
@@ -163,13 +166,14 @@ Begin VB.Form frmCPF
          Left            =   120
          ScaleHeight     =   375
          ScaleWidth      =   4215
-         TabIndex        =   8
+         TabIndex        =   12
+         TabStop         =   0   'False
          Top             =   240
          Width           =   4215
          Begin VB.TextBox txtFile2 
             Height          =   285
             Left            =   0
-            TabIndex        =   19
+            TabIndex        =   3
             ToolTipText     =   "Emplacement du fichier 2"
             Top             =   0
             Width           =   3375
@@ -179,7 +183,7 @@ Begin VB.Form frmCPF
             Height          =   255
             Index           =   1
             Left            =   3600
-            TabIndex        =   9
+            TabIndex        =   4
             ToolTipText     =   "Sélectionner le fichier 2"
             Top             =   0
             Width           =   495
@@ -190,7 +194,7 @@ Begin VB.Form frmCPF
       Caption         =   "Fichier 1"
       Height          =   735
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   8
       Top             =   120
       Width           =   4455
       Begin VB.PictureBox Picture1 
@@ -200,13 +204,14 @@ Begin VB.Form frmCPF
          Left            =   120
          ScaleHeight     =   375
          ScaleWidth      =   4215
-         TabIndex        =   6
+         TabIndex        =   11
+         TabStop         =   0   'False
          Top             =   240
          Width           =   4215
          Begin VB.TextBox txtFile1 
             Height          =   285
             Left            =   0
-            TabIndex        =   20
+            TabIndex        =   1
             ToolTipText     =   "Emplacement du fichier 1"
             Top             =   0
             Width           =   3375
@@ -216,7 +221,7 @@ Begin VB.Form frmCPF
             Height          =   255
             Index           =   0
             Left            =   3600
-            TabIndex        =   7
+            TabIndex        =   2
             ToolTipText     =   "Sélectionner le fichier 1"
             Top             =   0
             Width           =   495
@@ -227,6 +232,7 @@ Begin VB.Form frmCPF
       Height          =   375
       Left            =   4800
       TabIndex        =   23
+      TabStop         =   0   'False
       ToolTipText     =   "Progression de l'analyse"
       Top             =   960
       Width           =   3255

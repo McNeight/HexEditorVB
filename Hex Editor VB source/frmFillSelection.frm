@@ -26,7 +26,7 @@ Begin VB.Form frmFillSelection
       Caption         =   "Fermer"
       Height          =   375
       Left            =   3240
-      TabIndex        =   17
+      TabIndex        =   1
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   2880
       Width           =   1095
@@ -35,7 +35,7 @@ Begin VB.Form frmFillSelection
       Caption         =   "Appliquer"
       Height          =   375
       Left            =   3240
-      TabIndex        =   16
+      TabIndex        =   0
       ToolTipText     =   "Appliquer les passes"
       Top             =   2280
       Width           =   1095
@@ -45,7 +45,7 @@ Begin VB.Form frmFillSelection
       Height          =   1815
       Index           =   1
       Left            =   120
-      TabIndex        =   10
+      TabIndex        =   16
       Top             =   1680
       Width           =   3015
       Begin VB.PictureBox Picture1 
@@ -55,14 +55,15 @@ Begin VB.Form frmFillSelection
          Left            =   120
          ScaleHeight     =   1455
          ScaleWidth      =   2775
-         TabIndex        =   11
+         TabIndex        =   17
+         TabStop         =   0   'False
          Top             =   240
          Width           =   2775
          Begin VB.CommandButton cmdSanitization 
             Caption         =   "Sanitization"
             Height          =   375
             Left            =   1680
-            TabIndex        =   15
+            TabIndex        =   11
             ToolTipText     =   "Ajouter les 3 passes de sanitization"
             Top             =   960
             Width           =   975
@@ -71,7 +72,7 @@ Begin VB.Form frmFillSelection
             Caption         =   "Enlever"
             Height          =   375
             Left            =   1680
-            TabIndex        =   14
+            TabIndex        =   10
             ToolTipText     =   "Supprimer la passe sélectionnée"
             Top             =   480
             Width           =   975
@@ -80,7 +81,7 @@ Begin VB.Form frmFillSelection
             Caption         =   "Ajouter"
             Height          =   375
             Left            =   1680
-            TabIndex        =   13
+            TabIndex        =   9
             ToolTipText     =   "Ajouter la passe en cours"
             Top             =   0
             Width           =   975
@@ -100,7 +101,7 @@ Begin VB.Form frmFillSelection
       Height          =   1455
       Index           =   0
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   13
       Top             =   120
       Width           =   3735
       Begin VB.PictureBox Picture1 
@@ -110,7 +111,8 @@ Begin VB.Form frmFillSelection
          Left            =   120
          ScaleHeight     =   1095
          ScaleWidth      =   3495
-         TabIndex        =   1
+         TabIndex        =   14
+         TabStop         =   0   'False
          Top             =   240
          Width           =   3495
          Begin VB.TextBox txtList 
@@ -118,7 +120,7 @@ Begin VB.Form frmFillSelection
             Enabled         =   0   'False
             Height          =   285
             Left            =   1680
-            TabIndex        =   9
+            TabIndex        =   8
             Tag             =   "pref"
             Text            =   "00 55 AA FF"
             ToolTipText     =   "Liste des bytes (séparer par un espace les paquets de 2)"
@@ -131,7 +133,7 @@ Begin VB.Form frmFillSelection
             Enabled         =   0   'False
             Height          =   285
             Left            =   2760
-            TabIndex        =   7
+            TabIndex        =   6
             Tag             =   "pref"
             Text            =   "255"
             ToolTipText     =   "Borne supérieure du random (1-255)"
@@ -144,7 +146,7 @@ Begin VB.Form frmFillSelection
             Enabled         =   0   'False
             Height          =   285
             Left            =   1680
-            TabIndex        =   6
+            TabIndex        =   5
             Tag             =   "pref"
             Text            =   "0"
             ToolTipText     =   "Borne inférieure du random (0-254)"
@@ -156,7 +158,7 @@ Begin VB.Form frmFillSelection
             Enabled         =   0   'False
             Height          =   285
             Left            =   1680
-            TabIndex        =   5
+            TabIndex        =   3
             Tag             =   "pref"
             Text            =   "55"
             ToolTipText     =   "Valeur hexa de remplissement"
@@ -168,7 +170,7 @@ Begin VB.Form frmFillSelection
             Height          =   255
             Index           =   2
             Left            =   0
-            TabIndex        =   4
+            TabIndex        =   7
             Tag             =   "pref2"
             ToolTipText     =   "Remplit avec un byte choisi dans une liste"
             Top             =   720
@@ -179,7 +181,7 @@ Begin VB.Form frmFillSelection
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   3
+            TabIndex        =   4
             Tag             =   "pref1"
             ToolTipText     =   "Remplit avec byte sélectionné au hasard"
             Top             =   360
@@ -201,7 +203,7 @@ Begin VB.Form frmFillSelection
             Caption         =   "et"
             Height          =   255
             Left            =   2400
-            TabIndex        =   8
+            TabIndex        =   15
             Top             =   360
             Width           =   255
          End

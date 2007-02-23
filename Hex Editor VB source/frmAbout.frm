@@ -27,7 +27,7 @@ Begin VB.Form frmAbout
       Caption         =   "Fermer"
       Height          =   375
       Left            =   5640
-      TabIndex        =   2
+      TabIndex        =   0
       ToolTipText     =   "Fermer cette feuille"
       Top             =   5880
       Width           =   1335
@@ -57,7 +57,7 @@ Begin VB.Form frmAbout
       Locked          =   -1  'True
       MultiLine       =   -1  'True
       ScrollBars      =   2  'Vertical
-      TabIndex        =   0
+      TabIndex        =   2
       Top             =   4040
       Width           =   6705
    End

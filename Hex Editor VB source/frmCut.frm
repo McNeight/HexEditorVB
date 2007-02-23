@@ -28,6 +28,7 @@ Begin VB.Form frmCut
       Height          =   255
       Left            =   120
       TabIndex        =   30
+      TabStop         =   0   'False
       ToolTipText     =   "Etat d'avancement"
       Top             =   4560
       Width           =   4815
@@ -44,7 +45,7 @@ Begin VB.Form frmCut
       BorderStyle     =   0  'None
       Height          =   285
       Left            =   3000
-      TabIndex        =   29
+      TabIndex        =   15
       Text            =   "5"
       ToolTipText     =   "Taille du buffer"
       Top             =   4200
@@ -54,7 +55,7 @@ Begin VB.Form frmCut
       Caption         =   "Fermer"
       Height          =   495
       Left            =   3060
-      TabIndex        =   27
+      TabIndex        =   1
       Top             =   4920
       Width           =   1215
    End
@@ -62,14 +63,14 @@ Begin VB.Form frmCut
       Caption         =   "Lancer"
       Height          =   495
       Left            =   780
-      TabIndex        =   26
+      TabIndex        =   0
       Top             =   4920
       Width           =   1215
    End
    Begin ComctlLib.TabStrip TB 
       Height          =   375
       Left            =   90
-      TabIndex        =   25
+      TabIndex        =   28
       Top             =   100
       Width           =   4935
       _ExtentX        =   8705
@@ -95,9 +96,104 @@ Begin VB.Form frmCut
    End
    Begin VB.Frame Frame1 
       Height          =   3615
+      Index           =   1
+      Left            =   120
+      TabIndex        =   18
+      Top             =   480
+      Visible         =   0   'False
+      Width           =   4935
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   3255
+         Index           =   1
+         Left            =   120
+         ScaleHeight     =   3255
+         ScaleWidth      =   4695
+         TabIndex        =   19
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   4695
+         Begin VB.TextBox txtGrFile 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   0
+            TabIndex        =   11
+            ToolTipText     =   "Fichier à découper"
+            Top             =   360
+            Width           =   3615
+         End
+         Begin VB.CommandButton cmdBrowseGrupFIle 
+            Caption         =   "..."
+            Height          =   255
+            Left            =   3840
+            TabIndex        =   12
+            ToolTipText     =   "Sélectionner le fichier groupeur"
+            Top             =   360
+            Width           =   615
+         End
+         Begin VB.Frame Frame2 
+            Height          =   1095
+            Index           =   1
+            Left            =   0
+            TabIndex        =   24
+            Top             =   1560
+            Width           =   4695
+            Begin VB.PictureBox Picture2 
+               BorderStyle     =   0  'None
+               Height          =   735
+               Index           =   1
+               Left            =   120
+               ScaleHeight     =   735
+               ScaleWidth      =   4455
+               TabIndex        =   25
+               TabStop         =   0   'False
+               Top             =   240
+               Width           =   4455
+               Begin VB.TextBox txtFolderFus 
+                  BorderStyle     =   0  'None
+                  Height          =   285
+                  Left            =   0
+                  TabIndex        =   13
+                  ToolTipText     =   "Dossier du fichier fusionné"
+                  Top             =   360
+                  Width           =   3615
+               End
+               Begin VB.CommandButton cmdBrowsePaste 
+                  Caption         =   "..."
+                  Height          =   255
+                  Left            =   3840
+                  TabIndex        =   14
+                  ToolTipText     =   "Sélectionner le dossier du fichier fusionné"
+                  Top             =   360
+                  Width           =   615
+               End
+               Begin VB.Label Label1 
+                  Caption         =   "Dossier résultat"
+                  Height          =   255
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   26
+                  Top             =   0
+                  Width           =   3735
+               End
+            End
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Fichier groupeur"
+            Height          =   255
+            Index           =   3
+            Left            =   0
+            TabIndex        =   27
+            Top             =   0
+            Width           =   3735
+         End
+      End
+   End
+   Begin VB.Frame Frame1 
+      Height          =   3615
       Index           =   0
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   16
       Top             =   480
       Width           =   4935
       Begin VB.PictureBox Picture1 
@@ -107,14 +203,15 @@ Begin VB.Form frmCut
          Left            =   120
          ScaleHeight     =   3255
          ScaleWidth      =   4695
-         TabIndex        =   1
+         TabIndex        =   17
+         TabStop         =   0   'False
          Top             =   240
          Width           =   4695
          Begin VB.Frame Frame2 
             Height          =   2175
             Index           =   0
             Left            =   0
-            TabIndex        =   7
+            TabIndex        =   21
             Top             =   840
             Width           =   4695
             Begin VB.PictureBox Picture2 
@@ -124,7 +221,8 @@ Begin VB.Form frmCut
                Left            =   120
                ScaleHeight     =   1815
                ScaleWidth      =   4455
-               TabIndex        =   8
+               TabIndex        =   22
+               TabStop         =   0   'False
                Top             =   240
                Width           =   4455
                Begin VB.TextBox txtNumberOfFiles 
@@ -133,7 +231,7 @@ Begin VB.Form frmCut
                   Enabled         =   0   'False
                   Height          =   285
                   Left            =   1920
-                  TabIndex        =   16
+                  TabIndex        =   10
                   Tag             =   "pref"
                   ToolTipText     =   "Nombre"
                   Top             =   1320
@@ -144,7 +242,7 @@ Begin VB.Form frmCut
                   BorderStyle     =   0  'None
                   Height          =   285
                   Left            =   1920
-                  TabIndex        =   15
+                  TabIndex        =   7
                   Tag             =   "pref"
                   ToolTipText     =   "Taille"
                   Top             =   960
@@ -156,7 +254,7 @@ Begin VB.Form frmCut
                   Left            =   3000
                   List            =   "frmCut.frx":0912
                   Style           =   2  'Dropdown List
-                  TabIndex        =   14
+                  TabIndex        =   8
                   Tag             =   "pref"
                   ToolTipText     =   "Unité"
                   Top             =   960
@@ -167,7 +265,7 @@ Begin VB.Form frmCut
                   Height          =   255
                   Index           =   1
                   Left            =   0
-                  TabIndex        =   13
+                  TabIndex        =   9
                   Tag             =   "pref"
                   Top             =   1320
                   Width           =   1935
@@ -177,7 +275,7 @@ Begin VB.Form frmCut
                   Height          =   255
                   Index           =   0
                   Left            =   0
-                  TabIndex        =   12
+                  TabIndex        =   6
                   Tag             =   "pref"
                   Top             =   960
                   Value           =   -1  'True
@@ -187,7 +285,7 @@ Begin VB.Form frmCut
                   Caption         =   "..."
                   Height          =   255
                   Left            =   3840
-                  TabIndex        =   10
+                  TabIndex        =   5
                   ToolTipText     =   "Sélectionner le dossier du fichier groupeur"
                   Top             =   360
                   Width           =   615
@@ -196,7 +294,7 @@ Begin VB.Form frmCut
                   BorderStyle     =   0  'None
                   Height          =   285
                   Left            =   0
-                  TabIndex        =   9
+                  TabIndex        =   4
                   ToolTipText     =   "Dossier du fichier groupeur"
                   Top             =   360
                   Width           =   3615
@@ -206,7 +304,7 @@ Begin VB.Form frmCut
                   Height          =   255
                   Index           =   1
                   Left            =   0
-                  TabIndex        =   11
+                  TabIndex        =   23
                   Top             =   0
                   Width           =   3735
                End
@@ -216,7 +314,7 @@ Begin VB.Form frmCut
             Caption         =   "..."
             Height          =   255
             Left            =   3840
-            TabIndex        =   6
+            TabIndex        =   3
             ToolTipText     =   "Sélectionner le fichier à couper"
             Top             =   360
             Width           =   615
@@ -225,7 +323,7 @@ Begin VB.Form frmCut
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   0
-            TabIndex        =   5
+            TabIndex        =   2
             ToolTipText     =   "Fichier à découper"
             Top             =   360
             Width           =   3615
@@ -235,100 +333,7 @@ Begin VB.Form frmCut
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   4
-            Top             =   0
-            Width           =   3735
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   3615
-      Index           =   1
-      Left            =   120
-      TabIndex        =   2
-      Top             =   480
-      Visible         =   0   'False
-      Width           =   4935
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   3255
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   3255
-         ScaleWidth      =   4695
-         TabIndex        =   3
-         Top             =   240
-         Width           =   4695
-         Begin VB.TextBox txtGrFile 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   0
-            TabIndex        =   23
-            ToolTipText     =   "Fichier à découper"
-            Top             =   360
-            Width           =   3615
-         End
-         Begin VB.CommandButton cmdBrowseGrupFIle 
-            Caption         =   "..."
-            Height          =   255
-            Left            =   3840
-            TabIndex        =   22
-            ToolTipText     =   "Sélectionner le fichier groupeur"
-            Top             =   360
-            Width           =   615
-         End
-         Begin VB.Frame Frame2 
-            Height          =   1095
-            Index           =   1
-            Left            =   0
-            TabIndex        =   17
-            Top             =   1560
-            Width           =   4695
-            Begin VB.PictureBox Picture2 
-               BorderStyle     =   0  'None
-               Height          =   735
-               Index           =   1
-               Left            =   120
-               ScaleHeight     =   735
-               ScaleWidth      =   4455
-               TabIndex        =   18
-               Top             =   240
-               Width           =   4455
-               Begin VB.TextBox txtFolderFus 
-                  BorderStyle     =   0  'None
-                  Height          =   285
-                  Left            =   0
-                  TabIndex        =   20
-                  ToolTipText     =   "Dossier du fichier fusionné"
-                  Top             =   360
-                  Width           =   3615
-               End
-               Begin VB.CommandButton cmdBrowsePaste 
-                  Caption         =   "..."
-                  Height          =   255
-                  Left            =   3840
-                  TabIndex        =   19
-                  ToolTipText     =   "Sélectionner le dossier du fichier fusionné"
-                  Top             =   360
-                  Width           =   615
-               End
-               Begin VB.Label Label1 
-                  Caption         =   "Dossier résultat"
-                  Height          =   255
-                  Index           =   2
-                  Left            =   0
-                  TabIndex        =   21
-                  Top             =   0
-                  Width           =   3735
-               End
-            End
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Fichier groupeur"
-            Height          =   255
-            Index           =   3
-            Left            =   0
-            TabIndex        =   24
+            TabIndex        =   20
             Top             =   0
             Width           =   3735
          End
@@ -338,7 +343,7 @@ Begin VB.Form frmCut
       Caption         =   "Taille du buffer (valeur entière en Mo)"
       Height          =   255
       Left            =   120
-      TabIndex        =   28
+      TabIndex        =   29
       Top             =   4200
       Width           =   2775
    End

@@ -43,7 +43,8 @@ Begin VB.MDIForm frmContent
       Left            =   0
       ScaleHeight     =   2205
       ScaleWidth      =   9870
-      TabIndex        =   1
+      TabIndex        =   3
+      TabStop         =   0   'False
       Top             =   330
       Width           =   9870
       Begin VB.TextBox pctPath 
@@ -59,7 +60,7 @@ Begin VB.MDIForm frmContent
          EndProperty
          Height          =   285
          Left            =   0
-         TabIndex        =   4
+         TabIndex        =   0
          Top             =   0
          Width           =   1575
       End
@@ -87,7 +88,7 @@ Begin VB.MDIForm frmContent
       Align           =   2  'Align Bottom
       Height          =   255
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   1
       Top             =   7530
       Width           =   9870
       _ExtentX        =   17410
@@ -116,7 +117,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "17:47"
+            TextSave        =   "20:39"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -124,7 +125,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "21/02/2007"
+            TextSave        =   "23/02/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -150,7 +151,7 @@ Begin VB.MDIForm frmContent
       Align           =   1  'Align Top
       Height          =   330
       Left            =   0
-      TabIndex        =   3
+      TabIndex        =   4
       Top             =   0
       Width           =   9870
       _ExtentX        =   17410

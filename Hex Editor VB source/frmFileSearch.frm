@@ -27,7 +27,8 @@ Begin VB.Form frmFileSearch
    Begin ProgressBar_OCX.pgrBar pgb 
       Height          =   255
       Left            =   120
-      TabIndex        =   26
+      TabIndex        =   28
+      TabStop         =   0   'False
       ToolTipText     =   "Avancement de la recherche"
       Top             =   5520
       Width           =   9615
@@ -43,7 +44,7 @@ Begin VB.Form frmFileSearch
       Caption         =   "Sauvegarder les résultats..."
       Height          =   375
       Left            =   5400
-      TabIndex        =   25
+      TabIndex        =   1
       ToolTipText     =   "Sauvegarde les résultats de la recherche"
       Top             =   2040
       Width           =   2775
@@ -52,7 +53,7 @@ Begin VB.Form frmFileSearch
       Caption         =   "Quitter"
       Height          =   375
       Left            =   8400
-      TabIndex        =   24
+      TabIndex        =   2
       ToolTipText     =   "Ferme la fenêtre de recherche"
       Top             =   2040
       Width           =   1335
@@ -62,7 +63,7 @@ Begin VB.Form frmFileSearch
       Enabled         =   0   'False
       Height          =   375
       Left            =   3120
-      TabIndex        =   23
+      TabIndex        =   0
       ToolTipText     =   "Lance la recherche"
       Top             =   2040
       Width           =   2055
@@ -71,7 +72,7 @@ Begin VB.Form frmFileSearch
       Caption         =   "Résultats"
       Height          =   2895
       Left            =   3120
-      TabIndex        =   20
+      TabIndex        =   25
       Top             =   2520
       Width           =   6615
       Begin VB.PictureBox Picture3 
@@ -80,13 +81,14 @@ Begin VB.Form frmFileSearch
          Left            =   120
          ScaleHeight     =   2535
          ScaleWidth      =   6375
-         TabIndex        =   21
+         TabIndex        =   26
+         TabStop         =   0   'False
          Top             =   240
          Width           =   6375
          Begin ComctlLib.ListView LVres 
             Height          =   2535
             Left            =   0
-            TabIndex        =   22
+            TabIndex        =   27
             Top             =   0
             Width           =   6375
             _ExtentX        =   11245
@@ -114,7 +116,7 @@ Begin VB.Form frmFileSearch
       Caption         =   "Emplacements"
       Height          =   3735
       Left            =   120
-      TabIndex        =   16
+      TabIndex        =   23
       Top             =   1680
       Width           =   2895
       Begin VB.PictureBox Picture2 
@@ -123,13 +125,14 @@ Begin VB.Form frmFileSearch
          Left            =   120
          ScaleHeight     =   3375
          ScaleWidth      =   2655
-         TabIndex        =   17
+         TabIndex        =   24
+         TabStop         =   0   'False
          Top             =   240
          Width           =   2655
          Begin ComctlLib.ListView LV 
             Height          =   2895
             Left            =   0
-            TabIndex        =   19
+            TabIndex        =   7
             Top             =   480
             Width           =   2655
             _ExtentX        =   4683
@@ -162,7 +165,7 @@ Begin VB.Form frmFileSearch
             Caption         =   "Ajouter un dossier..."
             Height          =   375
             Left            =   0
-            TabIndex        =   18
+            TabIndex        =   6
             ToolTipText     =   "Ajouter un dossier à la liste des emplacements où il faut rechercher"
             Top             =   0
             Width           =   2535
@@ -174,7 +177,7 @@ Begin VB.Form frmFileSearch
       Height          =   1815
       Index           =   1
       Left            =   3120
-      TabIndex        =   2
+      TabIndex        =   22
       Top             =   120
       Width           =   6615
       Begin VB.PictureBox Picture1 
@@ -184,7 +187,8 @@ Begin VB.Form frmFileSearch
          Left            =   120
          ScaleHeight     =   1455
          ScaleWidth      =   6375
-         TabIndex        =   3
+         TabIndex        =   19
+         TabStop         =   0   'False
          Top             =   240
          Width           =   6375
          Begin VB.ComboBox cbDateType 
@@ -194,7 +198,7 @@ Begin VB.Form frmFileSearch
             Left            =   4440
             List            =   "frmFileSearch.frx":090F
             Style           =   2  'Dropdown List
-            TabIndex        =   27
+            TabIndex        =   18
             Tag             =   "pref"
             ToolTipText     =   "Type de date"
             Top             =   1080
@@ -207,7 +211,7 @@ Begin VB.Form frmFileSearch
             Left            =   1200
             List            =   "frmFileSearch.frx":0950
             Style           =   2  'Dropdown List
-            TabIndex        =   15
+            TabIndex        =   16
             Tag             =   "pref"
             ToolTipText     =   "Opérateur de recherche"
             Top             =   1080
@@ -217,7 +221,7 @@ Begin VB.Form frmFileSearch
             Caption         =   "Par date"
             Height          =   195
             Left            =   0
-            TabIndex        =   14
+            TabIndex        =   15
             ToolTipText     =   "Ajoute le critère 'date' à la recherche"
             Top             =   1080
             Width           =   975
@@ -229,7 +233,7 @@ Begin VB.Form frmFileSearch
             Left            =   1200
             List            =   "frmFileSearch.frx":0978
             Style           =   2  'Dropdown List
-            TabIndex        =   13
+            TabIndex        =   12
             Tag             =   "pref"
             ToolTipText     =   "Opérateur de recherche"
             Top             =   600
@@ -241,7 +245,7 @@ Begin VB.Form frmFileSearch
             Enabled         =   0   'False
             Height          =   285
             Left            =   2280
-            TabIndex        =   12
+            TabIndex        =   13
             Tag             =   "pref"
             Text            =   "100"
             ToolTipText     =   "Taille"
@@ -255,7 +259,7 @@ Begin VB.Form frmFileSearch
             Left            =   3840
             List            =   "frmFileSearch.frx":099D
             Style           =   2  'Dropdown List
-            TabIndex        =   11
+            TabIndex        =   14
             Tag             =   "pref"
             ToolTipText     =   "Unité"
             Top             =   600
@@ -265,7 +269,7 @@ Begin VB.Form frmFileSearch
             Caption         =   "Par taille"
             Height          =   255
             Left            =   0
-            TabIndex        =   10
+            TabIndex        =   11
             ToolTipText     =   "Ajoute le critère 'taille' à la recherche"
             Top             =   600
             Width           =   1095
@@ -274,7 +278,7 @@ Begin VB.Form frmFileSearch
             Caption         =   "Casse"
             Height          =   195
             Left            =   3840
-            TabIndex        =   9
+            TabIndex        =   10
             ToolTipText     =   "Respecte ou non la casse"
             Top             =   120
             Width           =   975
@@ -284,7 +288,7 @@ Begin VB.Form frmFileSearch
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   1200
-            TabIndex        =   8
+            TabIndex        =   9
             ToolTipText     =   "Nom à rechercher"
             Top             =   120
             Width           =   2415
@@ -293,7 +297,7 @@ Begin VB.Form frmFileSearch
             Caption         =   "Par nom"
             Height          =   195
             Left            =   0
-            TabIndex        =   7
+            TabIndex        =   8
             ToolTipText     =   "Ajoute le critère 'nom' à la recherche"
             Top             =   120
             Value           =   1  'Checked
@@ -302,14 +306,14 @@ Begin VB.Form frmFileSearch
          Begin MSComCtl2.DTPicker DT 
             Height          =   300
             Left            =   2280
-            TabIndex        =   28
+            TabIndex        =   17
             Top             =   1080
             Width           =   1935
             _ExtentX        =   3413
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   94568451
+            Format          =   80871427
             CurrentDate     =   39133.9583333333
          End
       End
@@ -319,7 +323,7 @@ Begin VB.Form frmFileSearch
       Height          =   1455
       Index           =   0
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   20
       Top             =   120
       Width           =   2895
       Begin VB.PictureBox Picture1 
@@ -329,7 +333,8 @@ Begin VB.Form frmFileSearch
          Left            =   120
          ScaleHeight     =   1095
          ScaleWidth      =   2655
-         TabIndex        =   1
+         TabIndex        =   21
+         TabStop         =   0   'False
          Top             =   240
          Width           =   2655
          Begin VB.OptionButton Option1 
@@ -337,7 +342,7 @@ Begin VB.Form frmFileSearch
             Height          =   255
             Index           =   2
             Left            =   0
-            TabIndex        =   6
+            TabIndex        =   5
             Tag             =   "pref"
             ToolTipText     =   "Ne recherche que dans les fichiers (lent)"
             Top             =   840
@@ -348,7 +353,7 @@ Begin VB.Form frmFileSearch
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   5
+            TabIndex        =   4
             Tag             =   "pref"
             ToolTipText     =   "Ne recherche que des dossiers"
             Top             =   480
@@ -359,7 +364,7 @@ Begin VB.Form frmFileSearch
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   4
+            TabIndex        =   3
             Tag             =   "pref"
             ToolTipText     =   "Ne recherche que des fichiers"
             Top             =   120

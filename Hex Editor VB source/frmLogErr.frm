@@ -28,7 +28,7 @@ Begin VB.Form frmLogErr
       Caption         =   "Reset..."
       Height          =   375
       Left            =   7320
-      TabIndex        =   3
+      TabIndex        =   1
       ToolTipText     =   "Supprimer toutes les entrées du rapport d'erreur"
       Top             =   840
       Width           =   1095
@@ -46,7 +46,7 @@ Begin VB.Form frmLogErr
    Begin ComctlLib.ListView LV 
       Height          =   2775
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   3
       Top             =   1320
       Width           =   8295
       _ExtentX        =   14631
@@ -107,7 +107,7 @@ Begin VB.Form frmLogErr
       Caption         =   "Fermer"
       Height          =   375
       Left            =   7320
-      TabIndex        =   1
+      TabIndex        =   0
       ToolTipText     =   "Fermer la fenêtre"
       Top             =   240
       Width           =   1095

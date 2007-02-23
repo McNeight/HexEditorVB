@@ -35,6 +35,7 @@ Begin VB.Form frmCreateBackup
          Height          =   375
          Left            =   120
          TabIndex        =   4
+         TabStop         =   0   'False
          Top             =   240
          Width           =   4215
          _ExtentX        =   7435
@@ -50,7 +51,7 @@ Begin VB.Form frmCreateBackup
       Caption         =   "Non"
       Height          =   375
       Left            =   2873
-      TabIndex        =   2
+      TabIndex        =   1
       ToolTipText     =   "Annule la procédure"
       Top             =   1320
       Width           =   1095
@@ -59,7 +60,7 @@ Begin VB.Form frmCreateBackup
       Caption         =   "Oui"
       Height          =   375
       Left            =   713
-      TabIndex        =   1
+      TabIndex        =   0
       ToolTipText     =   "Procède au changement"
       Top             =   1320
       Width           =   1095
@@ -68,7 +69,7 @@ Begin VB.Form frmCreateBackup
       Caption         =   $"frmCreateBackup.frx":0044
       Height          =   1095
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   2
       Top             =   120
       Width           =   4455
    End

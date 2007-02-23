@@ -22,81 +22,11 @@ Begin VB.Form frmPropertyShow
    ScaleHeight     =   6810
    ScaleWidth      =   7920
    StartUpPosition =   2  'CenterScreen
-   Begin VB.Frame Frame1 
-      BackColor       =   &H00FFFFFF&
-      Height          =   6135
-      Index           =   0
-      Left            =   120
-      TabIndex        =   1
-      Top             =   600
-      Width           =   7695
-      Begin VB.PictureBox Picture4 
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   0  'None
-         Height          =   5775
-         Left            =   120
-         ScaleHeight     =   5775
-         ScaleWidth      =   7455
-         TabIndex        =   8
-         Top             =   240
-         Width           =   7455
-         Begin VB.CheckBox chkAt 
-            BackColor       =   &H00FFFFFF&
-            Caption         =   "Normal"
-            Height          =   255
-            Index           =   0
-            Left            =   240
-            TabIndex        =   13
-            Top             =   5400
-            Width           =   855
-         End
-         Begin VB.CheckBox chkAt 
-            BackColor       =   &H00FFFFFF&
-            Caption         =   "Caché"
-            Height          =   255
-            Index           =   1
-            Left            =   1440
-            TabIndex        =   12
-            Top             =   5400
-            Width           =   1095
-         End
-         Begin VB.CheckBox chkAt 
-            BackColor       =   &H00FFFFFF&
-            Caption         =   "Système"
-            Height          =   255
-            Index           =   2
-            Left            =   2640
-            TabIndex        =   11
-            Top             =   5400
-            Width           =   1095
-         End
-         Begin VB.CheckBox chkAt 
-            BackColor       =   &H00FFFFFF&
-            Caption         =   "Lecture seule"
-            Height          =   255
-            Index           =   3
-            Left            =   3840
-            TabIndex        =   10
-            Top             =   5400
-            Width           =   1455
-         End
-         Begin VB.TextBox txtFile 
-            BorderStyle     =   0  'None
-            Height          =   5175
-            Left            =   0
-            Locked          =   -1  'True
-            MultiLine       =   -1  'True
-            ScrollBars      =   2  'Vertical
-            TabIndex        =   9
-            Top             =   0
-            Width           =   7455
-         End
-      End
-   End
    Begin ComctlLib.TabStrip TabStrip1 
       Height          =   495
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   7
+      TabStop         =   0   'False
       Top             =   120
       Width           =   7695
       _ExtentX        =   13573
@@ -127,9 +57,81 @@ Begin VB.Form frmPropertyShow
    Begin VB.Frame Frame1 
       BackColor       =   &H00FFFFFF&
       Height          =   6135
+      Index           =   0
+      Left            =   120
+      TabIndex        =   8
+      Top             =   600
+      Width           =   7695
+      Begin VB.PictureBox Picture4 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   5775
+         Left            =   120
+         ScaleHeight     =   5775
+         ScaleWidth      =   7455
+         TabIndex        =   13
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   7455
+         Begin VB.CheckBox chkAt 
+            BackColor       =   &H00FFFFFF&
+            Caption         =   "Normal"
+            Height          =   255
+            Index           =   0
+            Left            =   240
+            TabIndex        =   1
+            Top             =   5400
+            Width           =   855
+         End
+         Begin VB.CheckBox chkAt 
+            BackColor       =   &H00FFFFFF&
+            Caption         =   "Caché"
+            Height          =   255
+            Index           =   1
+            Left            =   1440
+            TabIndex        =   2
+            Top             =   5400
+            Width           =   1095
+         End
+         Begin VB.CheckBox chkAt 
+            BackColor       =   &H00FFFFFF&
+            Caption         =   "Système"
+            Height          =   255
+            Index           =   2
+            Left            =   2640
+            TabIndex        =   3
+            Top             =   5400
+            Width           =   1095
+         End
+         Begin VB.CheckBox chkAt 
+            BackColor       =   &H00FFFFFF&
+            Caption         =   "Lecture seule"
+            Height          =   255
+            Index           =   3
+            Left            =   3840
+            TabIndex        =   4
+            Top             =   5400
+            Width           =   1455
+         End
+         Begin VB.TextBox txtFile 
+            BorderStyle     =   0  'None
+            Height          =   5175
+            Left            =   0
+            Locked          =   -1  'True
+            MultiLine       =   -1  'True
+            ScrollBars      =   2  'Vertical
+            TabIndex        =   0
+            Top             =   0
+            Width           =   7455
+         End
+      End
+   End
+   Begin VB.Frame Frame1 
+      BackColor       =   &H00FFFFFF&
+      Height          =   6135
       Index           =   1
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   9
       Top             =   600
       Width           =   7695
       Begin VB.PictureBox Picture3 
@@ -139,7 +141,8 @@ Begin VB.Form frmPropertyShow
          Left            =   120
          ScaleHeight     =   5775
          ScaleWidth      =   7455
-         TabIndex        =   6
+         TabIndex        =   12
+         TabStop         =   0   'False
          Top             =   240
          Width           =   7455
          Begin VB.TextBox txtDisk 
@@ -149,7 +152,7 @@ Begin VB.Form frmPropertyShow
             Locked          =   -1  'True
             MultiLine       =   -1  'True
             ScrollBars      =   2  'Vertical
-            TabIndex        =   7
+            TabIndex        =   5
             Top             =   0
             Width           =   7455
          End
@@ -160,7 +163,7 @@ Begin VB.Form frmPropertyShow
       Height          =   6135
       Index           =   2
       Left            =   120
-      TabIndex        =   3
+      TabIndex        =   10
       Top             =   600
       Width           =   7695
       Begin VB.PictureBox Picture2 
@@ -170,7 +173,8 @@ Begin VB.Form frmPropertyShow
          Left            =   120
          ScaleHeight     =   5895
          ScaleWidth      =   7455
-         TabIndex        =   4
+         TabIndex        =   11
+         TabStop         =   0   'False
          Top             =   120
          Width           =   7455
          Begin VB.TextBox txtProcess 
@@ -180,7 +184,7 @@ Begin VB.Form frmPropertyShow
             Locked          =   -1  'True
             MultiLine       =   -1  'True
             ScrollBars      =   2  'Vertical
-            TabIndex        =   5
+            TabIndex        =   6
             Top             =   0
             Width           =   7455
          End
