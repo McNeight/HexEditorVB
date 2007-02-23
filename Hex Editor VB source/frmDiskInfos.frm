@@ -27,7 +27,7 @@ Begin VB.Form frmDiskInfos
       Height          =   3015
       Index           =   1
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   4
       Top             =   3240
       Width           =   9495
       Begin VB.PictureBox Picture1 
@@ -37,13 +37,14 @@ Begin VB.Form frmDiskInfos
          Left            =   120
          ScaleHeight     =   2655
          ScaleWidth      =   9255
-         TabIndex        =   3
+         TabIndex        =   5
+         TabStop         =   0   'False
          Top             =   240
          Width           =   9255
          Begin ComctlLib.ListView LV2 
             Height          =   2535
             Left            =   0
-            TabIndex        =   5
+            TabIndex        =   1
             Top             =   120
             Width           =   9255
             _ExtentX        =   16325
@@ -225,7 +226,7 @@ Begin VB.Form frmDiskInfos
       Height          =   3015
       Index           =   0
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   2
       Top             =   120
       Width           =   9495
       Begin VB.PictureBox Picture1 
@@ -235,13 +236,14 @@ Begin VB.Form frmDiskInfos
          Left            =   120
          ScaleHeight     =   2655
          ScaleWidth      =   9255
-         TabIndex        =   1
+         TabIndex        =   3
+         TabStop         =   0   'False
          Top             =   240
          Width           =   9255
          Begin ComctlLib.ListView LV1 
             Height          =   2535
             Left            =   0
-            TabIndex        =   4
+            TabIndex        =   0
             Top             =   120
             Width           =   9255
             _ExtentX        =   16325

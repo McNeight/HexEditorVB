@@ -27,7 +27,7 @@ Begin VB.Form frmDrive
    Begin FileView_OCX.FileView FV 
       Height          =   3615
       Left            =   0
-      TabIndex        =   2
+      TabIndex        =   0
       Top             =   0
       Width           =   4095
       _ExtentX        =   7223
@@ -47,7 +47,7 @@ Begin VB.Form frmDrive
       Caption         =   "Fermer"
       Height          =   495
       Left            =   2355
-      TabIndex        =   1
+      TabIndex        =   2
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   3720
       Width           =   1095
@@ -56,7 +56,7 @@ Begin VB.Form frmDrive
       Caption         =   "Ouvrir..."
       Height          =   495
       Left            =   675
-      TabIndex        =   0
+      TabIndex        =   1
       ToolTipText     =   "Ouvrir ce lecteur"
       Top             =   3720
       Width           =   1095

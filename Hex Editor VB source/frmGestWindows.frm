@@ -27,7 +27,7 @@ Begin VB.Form frmGestWindows
       Caption         =   "Fermer"
       Height          =   375
       Left            =   1800
-      TabIndex        =   3
+      TabIndex        =   2
       ToolTipText     =   "Fermer la fenêtre sélectionnée"
       Top             =   3360
       Width           =   1455
@@ -36,7 +36,7 @@ Begin VB.Form frmGestWindows
       Caption         =   "Afficher"
       Height          =   375
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   1
       ToolTipText     =   "Afficher la fenêtre au premier plan"
       Top             =   3360
       Width           =   1455
@@ -45,7 +45,7 @@ Begin VB.Form frmGestWindows
       Caption         =   "Quitter"
       Height          =   375
       Left            =   5160
-      TabIndex        =   1
+      TabIndex        =   3
       ToolTipText     =   "Quitter"
       Top             =   3360
       Width           =   1815
@@ -159,7 +159,7 @@ Dim x As Long
             For x = LV.ListItems.Count To 1 Step -1
                 If LV.ListItems.Item(x).Selected And LV.ListItems.Item(x).SubItems(1) = _
                 Frm.Caption Then
-                    SendMessage Frm.hwnd, WM_CLOSE, 0, 0
+                    SendMessage Frm.hWnd, WM_CLOSE, 0, 0
                     'Unload frm
                     'lNbChildFrm = lNbChildFrm - 1
                     LV.ListItems.Remove x
@@ -173,7 +173,7 @@ Dim x As Long
     '/!\ Après déchargement des form (juste en haut), des form nommées "Form1" (caption par
     'défaut) subsistent
     For Each Frm In Forms
-        If Frm.Caption = "Form1" Then SendMessage Frm.hwnd, WM_CLOSE, 0, 0
+        If Frm.Caption = "Form1" Then SendMessage Frm.hWnd, WM_CLOSE, 0, 0
     Next Frm
     
     LV.Visible = True

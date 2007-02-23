@@ -27,7 +27,7 @@ Begin VB.Form frmNew
       Caption         =   "Fermer"
       Height          =   375
       Left            =   1470
-      TabIndex        =   4
+      TabIndex        =   3
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   1200
       Width           =   975
@@ -36,7 +36,7 @@ Begin VB.Form frmNew
       Caption         =   "Créer"
       Height          =   375
       Left            =   270
-      TabIndex        =   0
+      TabIndex        =   2
       ToolTipText     =   "Créer le fichier (emplacement dans les fichiers temporaires)"
       Top             =   1200
       Width           =   975
@@ -47,7 +47,7 @@ Begin VB.Form frmNew
       Left            =   1200
       List            =   "frmNew.frx":001C
       Style           =   2  'Dropdown List
-      TabIndex        =   3
+      TabIndex        =   1
       Tag             =   "pref"
       ToolTipText     =   "Unité"
       Top             =   720
@@ -58,7 +58,7 @@ Begin VB.Form frmNew
       BorderStyle     =   0  'None
       Height          =   285
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   0
       Tag             =   "pref"
       Text            =   "100"
       ToolTipText     =   "Taille"
@@ -70,7 +70,7 @@ Begin VB.Form frmNew
       Caption         =   "Taille du fichier"
       Height          =   255
       Left            =   390
-      TabIndex        =   1
+      TabIndex        =   4
       Top             =   240
       Width           =   1935
    End

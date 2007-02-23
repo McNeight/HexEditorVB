@@ -27,7 +27,7 @@ Begin VB.Form frmPrint
       Caption         =   "Aperçu avant impression..."
       Height          =   375
       Left            =   360
-      TabIndex        =   19
+      TabIndex        =   14
       ToolTipText     =   "Visualiser un aperçu avant d'imprimer"
       Top             =   4320
       Width           =   2415
@@ -36,7 +36,7 @@ Begin VB.Form frmPrint
       Caption         =   "Fermer"
       Height          =   375
       Left            =   3120
-      TabIndex        =   18
+      TabIndex        =   15
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   4320
       Width           =   975
@@ -45,7 +45,7 @@ Begin VB.Form frmPrint
       Caption         =   "Options de l'imprimante"
       Height          =   375
       Left            =   1680
-      TabIndex        =   17
+      TabIndex        =   13
       ToolTipText     =   "Configurer l'imprimante/impression"
       Top             =   3840
       Width           =   1935
@@ -54,7 +54,7 @@ Begin VB.Form frmPrint
       Caption         =   "Imprimer"
       Height          =   375
       Left            =   360
-      TabIndex        =   16
+      TabIndex        =   12
       ToolTipText     =   "Lancer l'impression"
       Top             =   3840
       Width           =   975
@@ -63,7 +63,7 @@ Begin VB.Form frmPrint
       Caption         =   "Options d'impression"
       Height          =   3615
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   16
       Top             =   120
       Width           =   4095
       Begin VB.PictureBox Picture1 
@@ -72,7 +72,8 @@ Begin VB.Form frmPrint
          Left            =   120
          ScaleHeight     =   3255
          ScaleWidth      =   3855
-         TabIndex        =   1
+         TabIndex        =   17
+         TabStop         =   0   'False
          Top             =   240
          Width           =   3855
          Begin VB.TextBox txtFontSize 
@@ -80,7 +81,7 @@ Begin VB.Form frmPrint
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   1560
-            TabIndex        =   15
+            TabIndex        =   11
             Tag             =   "pref"
             Text            =   "10"
             ToolTipText     =   "Taille de la police d'impression (Courier New)"
@@ -91,7 +92,7 @@ Begin VB.Form frmPrint
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   2760
-            TabIndex        =   13
+            TabIndex        =   10
             Tag             =   "pref"
             Text            =   "10000000"
             ToolTipText     =   "Offset supérieur"
@@ -102,7 +103,7 @@ Begin VB.Form frmPrint
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   1440
-            TabIndex        =   11
+            TabIndex        =   9
             Tag             =   "pref"
             Text            =   "00000000"
             ToolTipText     =   "Offset inférieur"
@@ -114,7 +115,7 @@ Begin VB.Form frmPrint
             Height          =   255
             Index           =   2
             Left            =   120
-            TabIndex        =   10
+            TabIndex        =   8
             Tag             =   "pref2"
             ToolTipText     =   "Imprimer une plage d'offsets"
             Top             =   2520
@@ -125,7 +126,7 @@ Begin VB.Form frmPrint
             Height          =   255
             Index           =   1
             Left            =   120
-            TabIndex        =   9
+            TabIndex        =   7
             Tag             =   "pref1"
             ToolTipText     =   "Imprimer uniquement la sélection"
             Top             =   2280
@@ -136,7 +137,7 @@ Begin VB.Form frmPrint
             Height          =   255
             Index           =   0
             Left            =   120
-            TabIndex        =   8
+            TabIndex        =   6
             Tag             =   "pref0"
             ToolTipText     =   "Tout imprimer"
             Top             =   2040
@@ -147,7 +148,7 @@ Begin VB.Form frmPrint
             Enabled         =   0   'False
             Height          =   285
             Left            =   840
-            TabIndex        =   7
+            TabIndex        =   5
             Tag             =   "pref"
             Text            =   "Titre du document"
             ToolTipText     =   "Titre du document"
@@ -159,7 +160,7 @@ Begin VB.Form frmPrint
             Height          =   255
             Index           =   4
             Left            =   0
-            TabIndex        =   6
+            TabIndex        =   4
             Tag             =   "pref4"
             ToolTipText     =   "Ajouter un titre"
             Top             =   1560
@@ -170,7 +171,7 @@ Begin VB.Form frmPrint
             Height          =   255
             Index           =   3
             Left            =   0
-            TabIndex        =   5
+            TabIndex        =   3
             Tag             =   "pref3"
             ToolTipText     =   "Afficher les informations sur le fichier en première page"
             Top             =   1200
@@ -182,7 +183,7 @@ Begin VB.Form frmPrint
             Height          =   255
             Index           =   2
             Left            =   0
-            TabIndex        =   4
+            TabIndex        =   2
             Tag             =   "pref2"
             ToolTipText     =   "Afficher les offsets"
             Top             =   840
@@ -194,7 +195,7 @@ Begin VB.Form frmPrint
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   3
+            TabIndex        =   1
             Tag             =   "pref1"
             ToolTipText     =   "Ajouter les valeurs hexa"
             Top             =   480
@@ -206,7 +207,7 @@ Begin VB.Form frmPrint
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   2
+            TabIndex        =   0
             Tag             =   "pref0"
             ToolTipText     =   "Ajouter les valeurs ASCII"
             Top             =   120
@@ -217,7 +218,7 @@ Begin VB.Form frmPrint
             Caption         =   "Taille de la police :"
             Height          =   255
             Left            =   120
-            TabIndex        =   14
+            TabIndex        =   19
             Top             =   2880
             Width           =   1455
          End
@@ -225,7 +226,7 @@ Begin VB.Form frmPrint
             Caption         =   "à"
             Height          =   255
             Left            =   2520
-            TabIndex        =   12
+            TabIndex        =   18
             Top             =   2520
             Width           =   255
          End

@@ -37,6 +37,7 @@ Begin VB.Form frmAnalys
          ScaleHeight     =   975
          ScaleWidth      =   9855
          TabIndex        =   7
+         TabStop         =   0   'False
          Top             =   240
          Width           =   9855
          Begin VB.TextBox TextBox 
@@ -152,7 +153,7 @@ Begin VB.Form frmAnalys
       Caption         =   "Sauvegarder statistiques..."
       Height          =   495
       Left            =   1245
-      TabIndex        =   4
+      TabIndex        =   2
       ToolTipText     =   "Sauvegarder les statistiques au format texte"
       Top             =   7320
       Width           =   2655
@@ -170,7 +171,7 @@ Begin VB.Form frmAnalys
       Caption         =   "Quitter"
       Height          =   495
       Left            =   7365
-      TabIndex        =   2
+      TabIndex        =   4
       ToolTipText     =   "Quitter cette fenêtre"
       Top             =   7320
       Width           =   1575
@@ -179,7 +180,7 @@ Begin VB.Form frmAnalys
       Caption         =   "Occurences"
       Height          =   5895
       Left            =   50
-      TabIndex        =   1
+      TabIndex        =   5
       Top             =   1320
       Width           =   10095
       Begin VB.PictureBox Picture1 
@@ -188,13 +189,15 @@ Begin VB.Form frmAnalys
          Left            =   120
          ScaleHeight     =   5535
          ScaleWidth      =   9855
-         TabIndex        =   5
+         TabIndex        =   6
+         TabStop         =   0   'False
          Top             =   240
          Width           =   9855
          Begin ProgressBar_OCX.pgrBar PGB 
             Height          =   375
             Left            =   120
             TabIndex        =   19
+            TabStop         =   0   'False
             ToolTipText     =   "Progression de l'analyse"
             Top             =   5160
             Width           =   4095
@@ -222,7 +225,7 @@ Begin VB.Form frmAnalys
             Caption         =   "Analyser"
             Height          =   375
             Left            =   4560
-            TabIndex        =   6
+            TabIndex        =   1
             ToolTipText     =   "Lance l'analyse"
             Top             =   5160
             Width           =   975
