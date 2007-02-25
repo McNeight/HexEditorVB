@@ -339,13 +339,11 @@ Begin VB.Form Pfm
                NumTabs         =   2
                BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Historique"
-                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
                BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Signets"
-                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
@@ -469,7 +467,6 @@ Begin VB.Form Pfm
             MinWidth        =   4410
             Text            =   "Fichier=[Modifié]"
             TextSave        =   "Fichier=[Modifié]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -477,7 +474,6 @@ Begin VB.Form Pfm
             MinWidth        =   4410
             Text            =   "Page=[0/0]"
             TextSave        =   "Page=[0/0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -485,7 +481,6 @@ Begin VB.Form Pfm
             MinWidth        =   3175
             Text            =   "Offset=[0]"
             TextSave        =   "Offset=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -493,7 +488,6 @@ Begin VB.Form Pfm
             MinWidth        =   5292
             Text            =   "Sélection=[0 Bytes]"
             TextSave        =   "Sélection=[0 Bytes]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -858,19 +852,19 @@ End Sub
 'renvoie si l'offset contient une modification
 '=======================================================
 Public Function IsOffsetModified(ByVal lOffset As Long, ByRef lPlace As Long) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsOffsetModified = False
     
-    For x = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
+    For X = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
     'dans le cas où il y a eu plusieurs modifs dans le même offset
-        If ChangeListO(x) = lOffset + 1 Then
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            lPlace = x
+            lPlace = X
             IsOffsetModified = True
             Exit Function
         End If
-    Next x
+    Next X
     
 End Function
 
@@ -880,7 +874,7 @@ End Function
 '=======================================================
 Public Sub DeleteZone()
 Dim tempFile As String
-Dim x As Long, s As String
+Dim X As Long, s As String
 Dim tmpText As String
 Dim y As Long
 Dim a As Long
@@ -983,19 +977,19 @@ End Sub
 'renvoie si la case a été modifiée ou non
 '=======================================================
 Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Long) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsModified = False
     
-    For x = 2 To ChangeListDim
-        If ChangeListO(x) = lOffset + 1 Then
+    For X = 2 To ChangeListDim
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            If ChangeListC(x) = lCol Then
+            If ChangeListC(X) = lCol Then
                 IsModified = True
                 Exit Function
             End If
         End If
-    Next x
+    Next X
 End Function
 
 '=======================================================
@@ -1209,7 +1203,7 @@ Dim s As String
 Dim sKey As Long
 Dim bytHex As Byte
 Dim Valu As Byte
-Dim x As Byte
+Dim X As Byte
 Dim s2 As String
 
     On Error GoTo ErrGestion
@@ -1245,9 +1239,9 @@ Dim s2 As String
 
             's est la nouvelle string
             s = vbNullString
-            For x = 1 To 16
-                s = s & Hex2Str_(HW.Value(HW.Item.Line, CLng(x)))
-            Next x
+            For X = 1 To 16
+                s = s & Hex2Str_(HW.Value(HW.Item.Line, CLng(X)))
+            Next X
             s2 = s
             
             'calcule la nouvelle string (partie de gauche ancienne + nouveau byte + partie de droite ancienne)
@@ -1269,9 +1263,9 @@ Dim s2 As String
 
             's est la nouvelle string
             s = vbNullString
-            For x = 1 To 16
-                s = s & Hex2Str_(HW.Value(HW.Item.Line, CLng(x)))
-            Next x
+            For X = 1 To 16
+                s = s & Hex2Str_(HW.Value(HW.Item.Line, CLng(X)))
+            Next X
             s2 = s
             
             'calcule la nouvelle string (partie de gauche ancienne + nouveau byte + partie de droite ancienne)
@@ -1291,15 +1285,15 @@ ErrGestion:
     clsERREUR.AddError "Pfm.KeyPress", True
 End Sub
 
-Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As ItemElement)
+Private Sub HW_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single, Item As ItemElement)
 Dim s As String
 Dim r As Long
 
     'popup menu
     If Button = 2 Then
-        frmContent.mnuDelete.Enabled = True
-        frmContent.mnuPopupCut.Enabled = True
-        Me.PopupMenu frmContent.mnuPopupGrid ', X + GD.Left, Y + GD.Top
+        frmContent.mnuDeleteSelection.Enabled = True
+        frmContent.mnuCut.Enabled = True
+        Me.PopupMenu frmContent.rmnuEdit ', X + GD.Left, Y + GD.Top
     End If
     Me.Sb.Panels(3).Text = "Offset=[" & CStr(Item.Line * 16 + HW.FirstOffset - 16) & "]"
     Label2(10).Caption = Me.Sb.Panels(3).Text
@@ -1377,7 +1371,7 @@ Dim r As Long
     
 End Sub
 
-Private Sub HW_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub HW_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
     Me.Sb.Panels(4).Text = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(9) = Me.Sb.Panels(4).Text
 End Sub
@@ -1405,21 +1399,21 @@ Private Sub HW_UserMakeFirstOffsetChangeByMovingMouse()
     VS.Value = HW.FirstOffset / 16
 End Sub
 
-Private Sub lstHisto_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstHisto_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
 'on supprime l'historique si button=2
 'on va à l'élément si button=4
 Dim Item As ListItem
         
     If Button = 2 Then
         'récupère l'item
-        Set Item = lstHisto.HitTest(x, y)
+        Set Item = lstHisto.HitTest(X, y)
         If Item Is Nothing Then Exit Sub
         
         'supprime
         DelHisto Val(Item.SubItems(1)), cHisto(), cUndo
     ElseIf Button = 4 Then
         'récupère l'item
-        Set Item = lstHisto.HitTest(x, y)
+        Set Item = lstHisto.HitTest(X, y)
         If Item Is Nothing Then Exit Sub
         
         'active l'élément
@@ -1464,7 +1458,7 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
 Dim tLst As ListItem
 Dim s As String
 Dim r As Long
@@ -1472,7 +1466,7 @@ Dim r As Long
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, y)
         If tLst Is Nothing Then Exit Sub
         s = InputBox("Ajouter un commentaire pour le signet " & tLst.Text, "Ajout d'un commentaire")
         If StrPtr(s) <> 0 Then
@@ -1483,7 +1477,7 @@ Dim r As Long
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, y)
         If tLst Is Nothing Then Exit Sub
         
         r = MsgBox("Supprimer le signet " & tLst.Text & " ?", vbInformation + vbYesNo, "Attention")
@@ -1498,12 +1492,12 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub
 
-Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
     If Button = 2 Then
         Me.PopupMenu frmContent.mnuPopupIcon
     End If
@@ -1575,7 +1569,7 @@ End Sub
 'procède à la sauvegarde du fichier avec changements à l'emplacement sFile2
 '=======================================================
 Public Function GetNewFile(ByVal sFile2 As String) As String
-Dim x As Long, s As String
+Dim X As Long, s As String
 Dim tmpText As String
 Dim dblAdv As Double
 Dim y As Long
@@ -1715,7 +1709,7 @@ End Sub
 '=======================================================
 Private Sub ModifyData()
 Dim s As String
-Dim x As Long
+Dim X As Long
 Dim I_tem As ItemElement
 
     Set I_tem = HW.Item
@@ -1724,9 +1718,9 @@ Dim I_tem As ItemElement
     
     'définit s (nouvelle string)
     s = vbNullString
-    For x = 1 To 16
-        s = s & Hex2Str_(frmContent.ActiveForm.HW.Value(I_tem.Line, x))
-    Next x
+    For X = 1 To 16
+        s = s & Hex2Str_(frmContent.ActiveForm.HW.Value(I_tem.Line, X))
+    Next X
 
     frmContent.ActiveForm.AddChange frmContent.ActiveForm.HW.FirstOffset + 16 * (I_tem.Line - 1), I_tem.Col, s
     

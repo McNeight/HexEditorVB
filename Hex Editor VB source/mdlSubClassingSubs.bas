@@ -38,38 +38,17 @@ Option Explicit
 '=======================================================
 
 
-Private IMG As ImageList    'contient un ImageList
+Private IMG As MSComctlLib.ImageList      'contient un ImageList v6.0
 Public cSub As clsFrmSubClass
 
 '=======================================================
 'ajoute les icones au menu
 '=======================================================
-Public Sub AddIconsToMenus(ByVal Frm As Form, tIMG As ImageList)
+Public Sub AddIconsToMenus(ByVal hWnd As Long, tIMG As MSComctlLib.ImageList)
 Dim hMenu As Long
     
     'récupère le handle du menu de la form
-    hMenu = GetMenu(Frm.hWnd)
-    
-    'vérifie qu'il existe bien un menu
-    If hMenu = 0 Then
-        Exit Sub
-    End If
-    
-    'récupère l'imagelist en privé (car nécessaire ailleurs)
-    Set IMG = tIMG
-    
-    Call AddSub(hMenu)  'liste récursivement les menus
-                
-End Sub
-
-'=======================================================
-'ajoute les icones au menu
-'=======================================================
-Public Sub AddIconsToMenusMDI(ByVal Frm As MDIForm, tIMG As ImageList)
-Dim hMenu As Long
-    
-    'récupère le handle du menu de la form
-    hMenu = GetMenu(Frm.hWnd)
+    hMenu = GetMenu(hWnd)
     
     'vérifie qu'il existe bien un menu
     If hMenu = 0 Then
@@ -96,7 +75,6 @@ Dim lRet As Long
 
     'récupère le nombre d'items dans le menu
     mnuC = GetMenuItemCount(hMenu)
-
 
     'pour chaque item
     For i = 0 To mnuC - 1
@@ -133,12 +111,34 @@ End Function
 'ajoute une bitmap au menu spécifié
 '=======================================================
 Private Sub AddBitmap(ByVal hSubMenu As Long, lPos As Long, id As String)
-    
+Dim id2 As String
+
     On Error Resume Next    'pas d'erreur si jamais pas de bitmap définie
     
+    'on supprime le raccourci dans le caption
+    If LCase$(Mid$(Right$(id, 6), 1, 5)) = "ctrl+" Then
+        'présence du raccourci
+        id = Left$(id, Len(id) - 7)
+    End If
+    
+    'vire les '&'
+    id = Replace$(id, "&", vbNullString, 1, , vbBinaryCompare)
+    'vire les &H9
+    id = Replace$(id, Chr$(9), vbNullString, 1, , vbBinaryCompare)
+    
+    If InStr(1, id, "erreur") Then id = "Aide|Rap"
+    
+    'gère les "checked" du menu affichage
+    If Left$(id, 9) = "Affichage" Then
+        id2 = id & "_checked"
+    Else
+        id2 = id
+    End If
+    
     'affecte la bitmap
-    SetMenuItemBitmaps hSubMenu, lPos, MF_BYPOSITION, IMG.ListImages.Item(id).Picture, _
-        IMG.ListImages.Item(id).Picture
+    SetMenuItemBitmaps hSubMenu, lPos, MF_BYPOSITION, IMG.ListImages(id).Picture, _
+        IMG.ListImages(id2).Picture
+        
 End Sub
 
 '=======================================================

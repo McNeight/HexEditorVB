@@ -4,7 +4,7 @@ Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MsComCtl.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Begin VB.Form frmScript 
    Caption         =   "Editeur de script"
-   ClientHeight    =   5520
+   ClientHeight    =   5610
    ClientLeft      =   60
    ClientTop       =   750
    ClientWidth     =   9165
@@ -19,9 +19,51 @@ Begin VB.Form frmScript
    EndProperty
    Icon            =   "frmScript.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   5520
+   ScaleHeight     =   5610
    ScaleWidth      =   9165
    StartUpPosition =   2  'CenterScreen
+   Begin MSComctlLib.ImageList ImageList2 
+      Left            =   360
+      Top             =   3600
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      ImageWidth      =   16
+      ImageHeight     =   16
+      MaskColor       =   12632256
+      _Version        =   393216
+      BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
+         NumListImages   =   7
+         BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmScript.frx":08CA
+            Key             =   "Script|ExécuterF5"
+         EndProperty
+         BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmScript.frx":0C1C
+            Key             =   "Fichier|Ouvrir..."
+         EndProperty
+         BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmScript.frx":0F6E
+            Key             =   "Fichier|Nouveau"
+         EndProperty
+         BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmScript.frx":12C0
+            Key             =   "Script|Vérifier la cohérenceF9"
+         EndProperty
+         BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmScript.frx":1612
+            Key             =   "Fichier|Imprimer..."
+         EndProperty
+         BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmScript.frx":1964
+            Key             =   "Fichier|Enregistrer..."
+         EndProperty
+         BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmScript.frx":1CB6
+            Key             =   "Aide|Aide...F1"
+         EndProperty
+      EndProperty
+   End
    Begin VB.ListBox lst 
       BeginProperty Font 
          Name            =   "Courier New"
@@ -33,9 +75,9 @@ Begin VB.Form frmScript
          Strikethrough   =   0   'False
       EndProperty
       Height          =   2370
-      ItemData        =   "frmScript.frx":08CA
+      ItemData        =   "frmScript.frx":2008
       Left            =   5160
-      List            =   "frmScript.frx":09A9
+      List            =   "frmScript.frx":20E7
       Sorted          =   -1  'True
       TabIndex        =   2
       Top             =   720
@@ -53,7 +95,7 @@ Begin VB.Form frmScript
       BorderStyle     =   0
       ScrollBars      =   3
       Appearance      =   0
-      TextRTF         =   $"frmScript.frx":0F09
+      TextRTF         =   $"frmScript.frx":2647
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Courier New"
          Size            =   8.25
@@ -65,15 +107,15 @@ Begin VB.Form frmScript
       EndProperty
    End
    Begin MSComDlg.CommonDialog CMD 
-      Left            =   4440
-      Top             =   2880
+      Left            =   360
+      Top             =   5040
       _ExtentX        =   847
       _ExtentY        =   847
       _Version        =   393216
    End
    Begin MSComctlLib.ImageList ImageList1 
-      Left            =   4440
-      Top             =   2280
+      Left            =   360
+      Top             =   4320
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -84,92 +126,92 @@ Begin VB.Form frmScript
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   22
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":0F89
+            Picture         =   "frmScript.frx":26C7
             Key             =   "New"
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":291B
+            Picture         =   "frmScript.frx":4059
             Key             =   ""
             Object.Tag             =   "Copy"
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":42AD
+            Picture         =   "frmScript.frx":59EB
             Key             =   "Cut"
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":5C3F
+            Picture         =   "frmScript.frx":737D
             Key             =   "Paste"
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":75D1
+            Picture         =   "frmScript.frx":8D0F
             Key             =   "Save"
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":8F63
-            Key             =   "Undo"
-         EndProperty
-         BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":A8F5
-            Key             =   "Redo"
-         EndProperty
-         BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":C287
+            Picture         =   "frmScript.frx":A6A1
             Key             =   "Signet"
          EndProperty
+         BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmScript.frx":C033
+            Key             =   "Undo"
+         EndProperty
+         BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmScript.frx":C5CD
+            Key             =   "Redo"
+         EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":DC19
+            Picture         =   "frmScript.frx":CB67
             Key             =   "Left"
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":F5AB
+            Picture         =   "frmScript.frx":E4F9
             Key             =   "Right"
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":10F3D
+            Picture         =   "frmScript.frx":FE8B
             Key             =   "Up"
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":128CF
+            Picture         =   "frmScript.frx":1181D
             Key             =   "Down"
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":14261
+            Picture         =   "frmScript.frx":131AF
             Key             =   "Add"
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":15BF3
+            Picture         =   "frmScript.frx":14B41
             Key             =   "Trash"
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":17585
+            Picture         =   "frmScript.frx":164D3
             Key             =   "Print"
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":18F17
+            Picture         =   "frmScript.frx":17E65
             Key             =   "FolderOpen"
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":1A8A9
+            Picture         =   "frmScript.frx":197F7
             Key             =   "FileOpen"
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":1C23B
+            Picture         =   "frmScript.frx":1B189
             Key             =   "Computer"
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":1DBCD
+            Picture         =   "frmScript.frx":1CB1B
             Key             =   "Settings"
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":1F55F
+            Picture         =   "frmScript.frx":1E4AD
             Key             =   ""
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":219B1
+            Picture         =   "frmScript.frx":208FF
             Key             =   ""
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmScript.frx":21EC2
+            Picture         =   "frmScript.frx":20E10
             Key             =   ""
          EndProperty
       EndProperty
@@ -240,12 +282,12 @@ Begin VB.Form frmScript
          BeginProperty Button11 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Undo"
             Object.ToolTipText     =   "Défaire"
-            ImageIndex      =   6
+            ImageIndex      =   7
          EndProperty
          BeginProperty Button12 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "Redo"
             Object.ToolTipText     =   "Refaire"
-            ImageIndex      =   7
+            ImageIndex      =   8
          EndProperty
          BeginProperty Button13 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Style           =   3
@@ -343,6 +385,7 @@ Private bIsModified As Boolean  'contient si le fichier est modifié ou non
 
 
 Private Sub Form_Load()
+    Call AddIconsToMenus(Me.hWnd, Me.ImageList2)    'ajoute les icones au menu
     bIsModified = False 'pas de modification actuellement
 End Sub
 
@@ -421,7 +464,7 @@ End Sub
 Private Sub mnuOpen_Click()
 'ouverture de fichier
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -460,7 +503,7 @@ End Sub
 Private Sub mnuSaveAs_Click()
 'sauvegarde
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -474,8 +517,8 @@ Dim x As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'sauvegarde du fichier
