@@ -16,9 +16,331 @@ Begin VB.MDIForm frmContent
    OLEDropMode     =   1  'Manual
    StartUpPosition =   3  'Windows Default
    WindowState     =   2  'Maximized
+   Begin MSComctlLib.ImageList ImageList2 
+      Left            =   120
+      Top             =   4680
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   16777215
+      ImageWidth      =   16
+      ImageHeight     =   16
+      MaskColor       =   16777215
+      _Version        =   393216
+      BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
+         NumListImages   =   77
+         BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":5E8A
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":61DC
+            Key             =   "Nouveau|Nouveau fichier..."
+         EndProperty
+         BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":652E
+            Key             =   "Position|Fin"
+         EndProperty
+         BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":6880
+            Key             =   "Nouveau|Démarrer un processus..."
+         EndProperty
+         BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":6BD2
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":6F24
+            Key             =   "Position|Monter d'une page"
+         EndProperty
+         BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":7276
+            Key             =   "Fichier|Exécuter"
+         EndProperty
+         BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":75C8
+            Key             =   "Position|Début"
+         EndProperty
+         BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":791A
+            Key             =   "Position|Descendre d'une page"
+         EndProperty
+         BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":7C6C
+            Key             =   "Affichage|Tableau_checked"
+         EndProperty
+         BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":7FBE
+            Key             =   "Aide|A propos"
+         EndProperty
+         BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":8510
+            Key             =   "Ouvrir|Ouvrir un processus en mémoire..."
+         EndProperty
+         BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":8862
+            Key             =   "Ouvrir|Ouvrir un disque physique..."
+         EndProperty
+         BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":8BB4
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":8F06
+            Key             =   "Signets|Ouvrir une liste de signets..."
+         EndProperty
+         BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":9258
+            Key             =   "Signets|Enregistrer la liste des signets..."
+         EndProperty
+         BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":95AA
+            Key             =   "Signets|Ajouter une liste de signets..."
+         EndProperty
+         BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":98FC
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":9C4E
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":9FA0
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":A2F2
+            Key             =   "Edition|Coller"
+         EndProperty
+         BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":A644
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":A996
+            Key             =   "Fichier|Imprimer..."
+         EndProperty
+         BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":ACE8
+            Key             =   "Edition|Couper"
+         EndProperty
+         BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":B03A
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":B38C
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":B6DE
+            Key             =   "Fichier|Ouvrir"
+         EndProperty
+         BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":BA30
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":BD82
+            Key             =   "Ouvrir|Ouvrir un fichier..."
+         EndProperty
+         BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":C0D4
+            Key             =   "Ouvrir|Ouvrir un dossier de fichiers..."
+         EndProperty
+         BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":C426
+            Key             =   "Fichier|Nouveau"
+         EndProperty
+         BeginProperty ListImage32 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":C778
+            Key             =   "Edition|Copier"
+         EndProperty
+         BeginProperty ListImage33 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":CACA
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage34 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":CE1C
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage35 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":D16E
+            Key             =   "Signets|Basculer un signet"
+         EndProperty
+         BeginProperty ListImage36 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":D4C0
+            Key             =   "Signets|Signet précédent"
+         EndProperty
+         BeginProperty ListImage37 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":D812
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage38 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":DB64
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage39 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":DEB6
+            Key             =   "Signets|Signet suivant"
+         EndProperty
+         BeginProperty ListImage40 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":E208
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage41 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":E55A
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage42 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":E8AC
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage43 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":EBFE
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage44 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":EF50
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage45 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":F2A2
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage46 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":F5F4
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage47 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":F946
+            Key             =   "Signets|Supprimer les signets de l'offset"
+         EndProperty
+         BeginProperty ListImage48 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":FC98
+            Key             =   "Signets|Supprimer tous les signets"
+         EndProperty
+         BeginProperty ListImage49 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":FFEA
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage50 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":1033C
+            Key             =   "Position|Aller à l'offset..."
+         EndProperty
+         BeginProperty ListImage51 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":1068E
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage52 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":109E0
+            Key             =   "Rechercher|Chaines de caractères..."
+         EndProperty
+         BeginProperty ListImage53 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":10D32
+            Key             =   "Outils|Recherche de fichiers..."
+         EndProperty
+         BeginProperty ListImage54 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":11084
+            Key             =   "Aide|Aide...F1"
+         EndProperty
+         BeginProperty ListImage55 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":113D6
+            Key             =   "Aide|Rap"
+         EndProperty
+         BeginProperty ListImage56 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":11728
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage57 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":11A7A
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage58 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":11DCC
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage59 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":1211E
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage60 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":12470
+            Key             =   "Aide|Faire un don..."
+         EndProperty
+         BeginProperty ListImage61 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":127C2
+            Key             =   "Fichier|Imprimer"
+         EndProperty
+         BeginProperty ListImage62 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":12B14
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage63 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":12E66
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage64 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":131B8
+            Key             =   "Fichier|Propriétés"
+         EndProperty
+         BeginProperty ListImage65 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":1350A
+            Key             =   "Edition|Refaire"
+         EndProperty
+         BeginProperty ListImage66 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":1385C
+            Key             =   "Fichier|Enregistrer"
+         EndProperty
+         BeginProperty ListImage67 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":13BAE
+            Key             =   "Fichier|Enregistrer sous..."
+         EndProperty
+         BeginProperty ListImage68 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":13F00
+            Key             =   "Edition|Créer un fichier depuis la sélection..."
+         EndProperty
+         BeginProperty ListImage69 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":14252
+            Key             =   "Rechercher|Texte..."
+         EndProperty
+         BeginProperty ListImage70 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":145A4
+            Key             =   "Rechercher|Valeurs hexa..."
+         EndProperty
+         BeginProperty ListImage71 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":148F6
+            Key             =   "Edition|Tout sélectionner"
+         EndProperty
+         BeginProperty ListImage72 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":14C48
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage73 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":14F9A
+            Key             =   "Affichage|Tableau"
+         EndProperty
+         BeginProperty ListImage74 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":152EC
+            Key             =   "Outils|Options..."
+         EndProperty
+         BeginProperty ListImage75 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":1563E
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage76 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":15990
+            Key             =   "Edition|Annuler"
+         EndProperty
+         BeginProperty ListImage77 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":15CE2
+            Key             =   "Aide|Hex Editor VB sur Internet"
+         EndProperty
+      EndProperty
+   End
    Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   1440
-      Top             =   3720
+      Left            =   120
+      Top             =   5520
       _ExtentX        =   1402
       _ExtentY        =   1402
    End
@@ -102,6 +424,7 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -109,20 +432,23 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "22:18"
+            TextSave        =   "15:30"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "23/02/2007"
+            TextSave        =   "25/02/2007"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -270,92 +596,92 @@ Begin VB.MDIForm frmContent
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   22
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":628A
+            Picture         =   "frmContent.frx":16034
             Key             =   "New"
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":7C1C
+            Picture         =   "frmContent.frx":179C6
             Key             =   ""
             Object.Tag             =   "Copy"
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":95AE
+            Picture         =   "frmContent.frx":19358
             Key             =   "Cut"
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":AF40
+            Picture         =   "frmContent.frx":1ACEA
             Key             =   "Paste"
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":C8D2
+            Picture         =   "frmContent.frx":1C67C
             Key             =   "Save"
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":E264
+            Picture         =   "frmContent.frx":1E00E
             Key             =   "Undo"
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":FBF6
+            Picture         =   "frmContent.frx":1F9A0
             Key             =   "Redo"
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":11588
+            Picture         =   "frmContent.frx":21332
             Key             =   "Signet"
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":12F1A
+            Picture         =   "frmContent.frx":22CC4
             Key             =   "Left"
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":148AC
+            Picture         =   "frmContent.frx":24656
             Key             =   "Right"
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1623E
+            Picture         =   "frmContent.frx":25FE8
             Key             =   "Up"
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":17BD0
+            Picture         =   "frmContent.frx":2797A
             Key             =   "Down"
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":19562
+            Picture         =   "frmContent.frx":2930C
             Key             =   "Add"
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1AEF4
+            Picture         =   "frmContent.frx":2AC9E
             Key             =   "Trash"
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1C886
+            Picture         =   "frmContent.frx":2C630
             Key             =   "Print"
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1E218
+            Picture         =   "frmContent.frx":2DFC2
             Key             =   "FolderOpen"
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1FBAA
+            Picture         =   "frmContent.frx":2F954
             Key             =   "FileOpen"
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":2153C
+            Picture         =   "frmContent.frx":312E6
             Key             =   "Computer"
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":22ECE
+            Picture         =   "frmContent.frx":32C78
             Key             =   "Settings"
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":24860
+            Picture         =   "frmContent.frx":3460A
             Key             =   ""
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":26CB2
+            Picture         =   "frmContent.frx":36A5C
             Key             =   ""
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":271C3
+            Picture         =   "frmContent.frx":36F6D
             Key             =   ""
          EndProperty
       EndProperty
@@ -470,6 +796,15 @@ Begin VB.MDIForm frmContent
             Shortcut        =   ^V
          End
       End
+      Begin VB.Menu mnuEditTiret212 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuThisIsTheBeginnig 
+         Caption         =   "&Désigner comme début de sélection"
+      End
+      Begin VB.Menu mnuThisIsTheEnd 
+         Caption         =   "Désigner comme fin de sélection"
+      End
       Begin VB.Menu mnuEditTiret2 
          Caption         =   "-"
       End
@@ -495,6 +830,9 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuFillSelection 
          Caption         =   "&Remplir la sélection..."
       End
+      Begin VB.Menu mnuDeleteSelection 
+         Caption         =   "&Supprimer la sélection"
+      End
       Begin VB.Menu mnuCreateFileFromSelelection 
          Caption         =   "&Créer un fichier depuis la sélection..."
       End
@@ -513,7 +851,7 @@ Begin VB.MDIForm frmContent
          Shortcut        =   ^F
       End
       Begin VB.Menu mnuSearchH 
-         Caption         =   "&Valeur hexa..."
+         Caption         =   "&Valeurs hexa..."
       End
       Begin VB.Menu mnuFinTiret1 
          Caption         =   "-"
@@ -523,13 +861,13 @@ Begin VB.MDIForm frmContent
          Shortcut        =   ^R
       End
       Begin VB.Menu mnuReplaceH 
-         Caption         =   "&Remplacer valeur hexa..."
+         Caption         =   "&Remplacer valeurs hexa..."
       End
       Begin VB.Menu mnuFindTiret2 
          Caption         =   "-"
       End
       Begin VB.Menu mnuSearchForString 
-         Caption         =   "&Chaine de caractères..."
+         Caption         =   "&Chaines de caractères..."
       End
       Begin VB.Menu mnuFindTiret3 
          Caption         =   "-"
@@ -624,7 +962,7 @@ Begin VB.MDIForm frmContent
       Caption         =   "&Signets"
       Enabled         =   0   'False
       Begin VB.Menu mnuAddSignet 
-         Caption         =   "&Ajouter un signet"
+         Caption         =   "&Basculer un signet"
          Shortcut        =   ^B
       End
       Begin VB.Menu mnuRemoveSignet 
@@ -790,58 +1128,6 @@ Begin VB.MDIForm frmContent
       End
       Begin VB.Menu mnuAbout 
          Caption         =   "&A propos"
-      End
-   End
-   Begin VB.Menu mnuPopupGrid 
-      Caption         =   "Popup_Grid"
-      Visible         =   0   'False
-      Begin VB.Menu mnuThisIsTheBeginnig 
-         Caption         =   "&Désigner comme début de sélection"
-      End
-      Begin VB.Menu mnuThisIsTheEnd 
-         Caption         =   "&Désigner comme fin de sélection"
-      End
-      Begin VB.Menu mnuPopupGridTiret0 
-         Caption         =   "-"
-      End
-      Begin VB.Menu mnuPopupCut 
-         Caption         =   "&Couper"
-      End
-      Begin VB.Menu mnuPopCopy 
-         Caption         =   "&Copier"
-         Begin VB.Menu mnuPopupCopy2 
-            Caption         =   "&Valeurs ASCII formatées"
-         End
-         Begin VB.Menu mnuPopupCopy22 
-            Caption         =   "&Valeurs ASCII formatées bas niveau"
-         End
-         Begin VB.Menu mnuPopupCopy3 
-            Caption         =   "&Valeurs ASCII réelles"
-         End
-         Begin VB.Menu mnuPopupCopy 
-            Caption         =   "&Valeurs hexa"
-         End
-      End
-      Begin VB.Menu mnuPopupPaste 
-         Caption         =   "&Coller"
-         Begin VB.Menu mnuPasteHexaPopup 
-            Caption         =   "&Valeurs hexa"
-         End
-         Begin VB.Menu mnuPasteASCIIPopup 
-            Caption         =   "&Valeurs ASCII"
-         End
-      End
-      Begin VB.Menu mnuPopupGridTiret1 
-         Caption         =   "-"
-      End
-      Begin VB.Menu mnuDelete 
-         Caption         =   "&Supprimer la sélection..."
-      End
-      Begin VB.Menu mnuFillSelectionPopUp 
-         Caption         =   "&Remplir la sélection..."
-      End
-      Begin VB.Menu mnuCreateFileFromSel2 
-         Caption         =   "&Créer un fichier à partir de la sélection..."
       End
    End
    Begin VB.Menu mnuPopupExplore 
@@ -1058,6 +1344,11 @@ Private Sub MDIForm_Load()
     Else
         Me.mnuFileRenamer.Enabled = True
     End If
+    
+    
+    'ajoute les icones aux menus
+    frmSplash.lblState.Caption = "Ajout des icones aux menus..."
+    Call AddIconsToMenus(Me.hWnd, Me.ImageList2)
         
     frmSplash.lblState.Caption = "Application de la langue..."
     lNbChildFrm = 0
@@ -1138,6 +1429,21 @@ Dim s As String
     Clipboard.SetData Me.ActiveForm.pct.Image
     
     Set Me.ActiveForm.pct.Picture = Nothing
+End Sub
+
+Private Sub mnuCut_Click()
+'coupe la sélection
+
+End Sub
+
+Private Sub mnuDeleteSelection_Click()
+'efface les éléments de la sélection
+    
+    'affiche la boite de demande de confirmation
+    frmCreateBackup.Show vbModal
+    
+    'procède à la suppression de la zone et sauvegarde dans un backup
+    If bAcceptBackup Then frmContent.ActiveForm.DeleteZone
 End Sub
 
 Private Sub pctPath_Change()
@@ -1335,16 +1641,259 @@ Private Sub mnuConvert_Click()
 End Sub
 
 Private Sub mnuCopyASCII_Click()
-    mnuPopupCopy2_Click
+'copier la sélection (strings) formatée
+Dim X As Long
+Dim y As Long
+Dim s As String
+Dim curPos2 As Currency
+Dim curSize2 As Currency
+Dim curSize As Currency
+Dim curPos As Currency
+
+    If Me.ActiveForm Is Nothing Then Exit Sub
+    
+    s = vbNullString    'contiendra la string à copier
+    
+    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
+        
+    'vide le clipboard
+    Clipboard.Clear
+    
+    'détermine la taille
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    
+    'détermine la position du premier offset
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+    
+    Select Case TypeOfForm(frmContent.ActiveForm)
+        Case "Fichier"
+            'édition d'un fichier ==> va piocher avec ReadFile
+
+            'récupère la string
+            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
+            
+        Case "Processus"
+        
+            'récupère la string
+            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+
+        Case "Disque"
+        
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+
+            'récupère la string
+            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
+            
+    End Select
+
+    'formate la string
+    s = FormatednString(s)
+            
+    Clipboard.SetText s
+    Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 Private Sub mnuCopyASCII2_Click()
-    mnuPopupCopy22_Click
+'copier la sélection (strings) formatée en bas niveau
+Dim X As Long
+Dim y As Long
+Dim s As String
+Dim curSize As Currency
+Dim curPos2 As Currency
+Dim curSize2 As Currency
+Dim curPos As Currency
+
+    If Me.ActiveForm Is Nothing Then Exit Sub
+    
+    s = vbNullString    'contiendra la string à copier
+    
+    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
+        
+    'vide le clipboard
+    Clipboard.Clear
+
+    'détermine la taille
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    
+    'détermine la position du premier offset
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+    
+    Select Case TypeOfForm(frmContent.ActiveForm)
+        Case "Fichier"
+            'édition d'un fichier ==> va piocher avec ReadFile
+                        
+            'récupère la string
+            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
+            
+        Case "Processus"
+        
+            'récupère la string
+            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+          
+        Case "Disque"
+        
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+
+            'récupère la string
+            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
+            
+    End Select
+
+    'formate la string
+    s = Replace$(s, vbNullChar, Chr$(32), , , vbBinaryCompare)
+    
+    Clipboard.SetText s
+    Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 Private Sub mnuCopyASCIIReal_Click()
-    mnuPopupCopy3_Click
+'copie les valeurs ASCII réelles vers le clipboard
+'/!\ NULL TERMINATED STRING
+Dim X As Long
+Dim y As Long
+Dim s As String
+Dim curPos2 As Currency
+Dim curSize2 As Currency
+Dim curSize As Currency
+Dim curPos As Currency
+
+    If Me.ActiveForm Is Nothing Then Exit Sub
+    
+    s = vbNullString    'contiendra la string à copier
+
+    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
+    
+    'vide le clipboard
+    Clipboard.Clear
+    
+    'détermine la taille
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    
+    'détermine la position du premier offset
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+            
+    Select Case TypeOfForm(frmContent.ActiveForm)
+        Case "Fichier"
+            'édition d'un fichier ==> va piocher avec ReadFile
+            
+            'récupère la string
+            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
+        
+        Case "Processus"
+            
+            'récupère la string
+            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+        
+        Case "Disque"
+        
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+
+            'récupère la string
+            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
+            
+    End Select
+
+    Clipboard.SetText s, vbCFText   'format fichier texte
+    Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 Private Sub mnuCopyhexa_Click()
-    mnuPopupCopy_Click
+'copier la sélection (hexa)
+Dim X As Long
+Dim y As Long
+Dim s As String
+Dim s2 As String
+Dim curSize As Currency
+Dim curPos2 As Currency
+Dim curSize2 As Currency
+Dim curPos As Currency
+
+    If Me.ActiveForm Is Nothing Then Exit Sub
+    
+    s = vbNullString    'contiendra la string à copier
+    
+    'vide le clipboard
+    Clipboard.Clear
+    
+    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
+
+    'détermine la taille
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    
+    'détermine la position du premier offset
+    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+    
+    Select Case TypeOfForm(frmContent.ActiveForm)
+        Case "Fichier"
+            'édition d'un fichier ==> va piocher avec ReadFile
+                        
+            'récupère la string
+            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
+            
+        Case "Processus"
+        
+            'récupère la string
+            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+
+        Case "Disque"
+        
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+
+            'récupère la string
+            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
+            
+    End Select
+
+    'formate la string
+    s2 = vbNullString
+    For X = 1 To Len(s)
+        If (X Mod 1000) = 0 Then DoEvents 'rend la main
+        s2 = s2 & Str2Hex_(Mid$(s, X, 1))
+    Next X
+            
+    Clipboard.SetText s2
+    Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 
 Private Sub mnuCreateFileFormSel_Click()
@@ -1393,7 +1942,7 @@ Dim bOver As Boolean
 CancelPushed:
 End Sub
 
-Private Sub mnuCreateFileFromSel2_Click()
+Private Sub mnuCreateFileFromSelelection_Click()
 'créé un fichier depuis la sélection
 Dim X As Long
 Dim y As Long
@@ -1502,29 +2051,9 @@ CancelPushed:
     Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 
-Private Sub mnuCreateFileFromSelelection_Click()
-    Call mnuCreateFileFromSel2_Click    'créé fichier à partir de la sélection
-End Sub
-
-Private Sub mnuCut_Click()
-'coupe la sélection
-    Call mnuPopupCut_Click
-End Sub
-
 Private Sub mnuCutCopyFiles_Click()
     'découpage/collage
     frmCut.Show vbModal
-End Sub
-
-Private Sub mnuDelete_Click()
-'efface les éléments de la sélection
-    
-    'affiche la boite de demande de confirmation
-    frmCreateBackup.Show vbModal
-    
-    'procède à la suppression de la zone et sauvegarde dans un backup
-    If bAcceptBackup Then frmContent.ActiveForm.DeleteZone
-    
 End Sub
 
 Private Sub mnuDiskInfos_Click()
@@ -1784,10 +2313,6 @@ Private Sub mnuFillSelection_Click()
 
 End Sub
 
-Private Sub mnuFillSelectionPopUp_Click()
-    mnuFillSelection_Click
-End Sub
-
 Private Sub mnuGestWindows_Click()
 'affiche la form de gestion des fenêtres
     frmGestWindows.Show vbModal
@@ -2002,275 +2527,6 @@ End Sub
 
 Private Sub mnuOptions_Click()
     frmOptions.Show vbModal
-End Sub
-
-Private Sub mnuPopupCopy_Click()
-'copier la sélection (hexa)
-Dim X As Long
-Dim y As Long
-Dim s As String
-Dim s2 As String
-Dim curSize As Currency
-Dim curPos2 As Currency
-Dim curSize2 As Currency
-Dim curPos As Currency
-
-    If Me.ActiveForm Is Nothing Then Exit Sub
-    
-    s = vbNullString    'contiendra la string à copier
-    
-    'vide le clipboard
-    Clipboard.Clear
-    
-    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
-
-    'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
-    
-    'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
-    
-    Select Case TypeOfForm(frmContent.ActiveForm)
-        Case "Fichier"
-            'édition d'un fichier ==> va piocher avec ReadFile
-                        
-            'récupère la string
-            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
-            
-        Case "Processus"
-        
-            'récupère la string
-            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
-
-        Case "Disque"
-        
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
-                
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
-            
-    End Select
-
-    'formate la string
-    s2 = vbNullString
-    For X = 1 To Len(s)
-        If (X Mod 1000) = 0 Then DoEvents 'rend la main
-        s2 = s2 & Str2Hex_(Mid$(s, X, 1))
-    Next X
-            
-    Clipboard.SetText s2
-    Me.Sb.Panels(1).Text = "Status=[Ready]"
-End Sub
-
-Private Sub mnuPopupCopy22_Click()
-'copier la sélection (strings) formatée en bas niveau
-Dim X As Long
-Dim y As Long
-Dim s As String
-Dim curSize As Currency
-Dim curPos2 As Currency
-Dim curSize2 As Currency
-Dim curPos As Currency
-
-    If Me.ActiveForm Is Nothing Then Exit Sub
-    
-    s = vbNullString    'contiendra la string à copier
-    
-    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
-        
-    'vide le clipboard
-    Clipboard.Clear
-
-    'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
-    
-    'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
-    
-    Select Case TypeOfForm(frmContent.ActiveForm)
-        Case "Fichier"
-            'édition d'un fichier ==> va piocher avec ReadFile
-                        
-            'récupère la string
-            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
-            
-        Case "Processus"
-        
-            'récupère la string
-            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
-          
-        Case "Disque"
-        
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
-                
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
-            
-    End Select
-
-    'formate la string
-    s = Replace$(s, vbNullChar, Chr$(32), , , vbBinaryCompare)
-    
-    Clipboard.SetText s
-    Me.Sb.Panels(1).Text = "Status=[Ready]"
-End Sub
-
-Private Sub mnuPopupCopy2_Click()
-'copier la sélection (strings) formatée
-Dim X As Long
-Dim y As Long
-Dim s As String
-Dim curPos2 As Currency
-Dim curSize2 As Currency
-Dim curSize As Currency
-Dim curPos As Currency
-
-    If Me.ActiveForm Is Nothing Then Exit Sub
-    
-    s = vbNullString    'contiendra la string à copier
-    
-    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
-        
-    'vide le clipboard
-    Clipboard.Clear
-    
-    'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
-    
-    'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
-    
-    Select Case TypeOfForm(frmContent.ActiveForm)
-        Case "Fichier"
-            'édition d'un fichier ==> va piocher avec ReadFile
-
-            'récupère la string
-            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
-            
-        Case "Processus"
-        
-            'récupère la string
-            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
-
-        Case "Disque"
-        
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
-                
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
-            
-    End Select
-
-    'formate la string
-    s = FormatednString(s)
-            
-    Clipboard.SetText s
-    Me.Sb.Panels(1).Text = "Status=[Ready]"
-End Sub
-
-Private Sub mnuPopupCopy3_Click()
-'copie les valeurs ASCII réelles vers le clipboard
-'/!\ NULL TERMINATED STRING
-Dim X As Long
-Dim y As Long
-Dim s As String
-Dim curPos2 As Currency
-Dim curSize2 As Currency
-Dim curSize As Currency
-Dim curPos As Currency
-
-    If Me.ActiveForm Is Nothing Then Exit Sub
-    
-    s = vbNullString    'contiendra la string à copier
-
-    Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
-    
-    'vide le clipboard
-    Clipboard.Clear
-    
-    'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
-    
-    'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
-            
-    Select Case TypeOfForm(frmContent.ActiveForm)
-        Case "Fichier"
-            'édition d'un fichier ==> va piocher avec ReadFile
-            
-            'récupère la string
-            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
-        
-        Case "Processus"
-            
-            'récupère la string
-            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
-        
-        Case "Disque"
-        
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
-                
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
-            
-    End Select
-
-    Clipboard.SetText s, vbCFText   'format fichier texte
-    Me.Sb.Panels(1).Text = "Status=[Ready]"
-End Sub
-
-Private Sub mnuPopupCut_Click()
-'couper la sélection
-
-End Sub
-
-Private Sub mnuPopupPaste_Click()
-'coller
-
 End Sub
 
 Private Sub mnuPrint_Click()
@@ -2704,7 +2960,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
             Call Me.ActiveForm.HW.Refresh
             Me.ActiveForm.VS.Value = Me.ActiveForm.HW.FirstOffset / 16
         Case "Copy"
-            Call mnuPopupCopy2_Click
+            Call mnuCopyASCIIReal_Click
         Case "Convert"
             frmConvert.Show
         Case "Settings"
@@ -2722,7 +2978,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
         Case "Print"
             Call mnuPrint_Click
         Case "Cut"
-            Call mnuPopupCut_Click
+            Call mnuCut_Click
         Case "Paste"
             
     End Select
@@ -2793,8 +3049,7 @@ Public Function ChangeEnabledMenus()
         Me.mnuCut.Enabled = False
         Me.mnuOpenInBN = False
         Me.mnuStats.Enabled = False
-        Me.mnuPopupCut.Enabled = False
-        Me.mnuDelete.Enabled = False
+        Me.mnuDeleteSelection.Enabled = False
         Me.mnuShowIcons.Enabled = True
         Me.mnuSaveAs.Enabled = True
         Me.mnuPrint.Enabled = True
@@ -2821,8 +3076,7 @@ Public Function ChangeEnabledMenus()
         Me.mnuCut.Enabled = True
         Me.mnuOpenInBN = True
         Me.mnuStats.Enabled = True
-        Me.mnuPopupCut.Enabled = True
-        Me.mnuDelete.Enabled = True
+        Me.mnuDeleteSelection.Enabled = True
         Me.mnuShowIcons.Enabled = True
         Me.mnuSaveAs.Enabled = True
         Me.mnuPrint.Enabled = True
@@ -2848,8 +3102,7 @@ Public Function ChangeEnabledMenus()
         Me.mnuCut.Enabled = False
         Me.mnuOpenInBN = False
         Me.mnuStats.Enabled = False
-        Me.mnuPopupCut.Enabled = False
-        Me.mnuDelete.Enabled = False
+        Me.mnuDeleteSelection.Enabled = False
         Me.mnuShowIcons.Enabled = False
         Me.mnuSaveAs.Enabled = False
         Me.mnuPrint.Enabled = False
@@ -2875,8 +3128,7 @@ Public Function ChangeEnabledMenus()
         Me.mnuCut.Enabled = True
         Me.mnuOpenInBN = True
         Me.mnuStats.Enabled = True
-        Me.mnuPopupCut.Enabled = True
-        Me.mnuDelete.Enabled = True
+        Me.mnuDeleteSelection.Enabled = True
         Me.mnuShowIcons.Enabled = False
         Me.mnuSaveAs.Enabled = True
         Me.mnuPrint.Enabled = True
