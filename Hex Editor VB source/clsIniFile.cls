@@ -122,6 +122,7 @@ Dim strIniFile As String
         LetPref "General", "AllowMultipleInstances", .general_AllowMultipleInstances, .IniFilePath
         LetPref "General", "DoNotChangeDates", .general_DoNotChangeDates, .IniFilePath
         LetPref "General", "Splash", .general_Splash, .IniFilePath
+        LetPref "General", "QuickBackup", .general_QuickBackup, .IniFilePath
         LetPref "Environnement", "OS", .env_OS, .IniFilePath  '0=XP,1=Vista
         LetPref "Environnement", "Lang", .env_Lang, .IniFilePath
         LetPref "Historique", "NumberOfSave", .histo_NumberOfSave, .IniFilePath
@@ -188,6 +189,7 @@ Dim strIniFile As String
         .general_Splash = (Val(GetPref("General", "Splash", sFile)))
         .general_ResoX = Val(GetPref("General", "ResoX", sFile))
         .general_ResoY = Val(GetPref("General", "ResoY", sFile))
+        .general_QuickBackup = Val(GetPref("General", "QuickBackup", sFile))
         .general_AllowMultipleInstances = (Val(GetPref("General", "AllowMultipleInstances", sFile)))
         .general_DoNotChangeDates = (Val(GetPref("General", "DoNotChangeDates", sFile)))
         .env_OS = Val(GetPref("Environnement", "OS", sFile))

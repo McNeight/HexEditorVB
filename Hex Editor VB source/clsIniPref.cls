@@ -78,6 +78,7 @@ Public general_DisplayInfos As Byte
 Public general_DisplayData As Byte
 Public general_ResoX As Long
 Public general_ResoY As Long
+Public general_QuickBackup As Byte
 Public general_OpenSubFiles As Byte
 Public general_CloseHomeWhenChosen As Byte
 Public general_AllowMultipleInstances As Byte

@@ -237,9 +237,6 @@ Option Explicit
 '=======================================================
 
 
-'classe de gestion des processus
-Private clsProc As clsProcess
-
 Private Sub Form_Load()
 'ajoute les en-têtes de colonne
 
@@ -261,8 +258,6 @@ Private Sub Form_Load()
         .ColumnHeaders.Add , , "Priorité", 1000
     End With
     
-    Set clsProc = New clsProcess
-    
     'refresh
     RefreshProcList
 End Sub
@@ -273,10 +268,6 @@ Private Sub Form_Resize()
     LV.Left = 0
     LV.Width = Me.Width - 100
     LV.Height = Me.Height - 820
-End Sub
-
-Private Sub Form_Unload(Cancel As Integer)
-    Set clsProc = Nothing
 End Sub
 
 Private Sub LV_Click()
@@ -325,33 +316,74 @@ Dim s As String
         LV_Click
         
         'affiche le popup menu
-        Me.PopupMenu Me.mnuPopup
+        Me.PopupMenu Me.mnuPopUp
     End If
         
 End Sub
 
 Private Sub mnuAboveP_Click()
 'change la priorité
-    clsProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), ABOVE_NORMAL_PRIORITY
+    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), ABOVE_NORMAL_PRIORITY
     RefreshPriority
     LV_Click
 End Sub
 
 Private Sub mnuAutorizeProc_Click()
-'autorise le process
-    clsProc.ResumeProcess Val(LV.SelectedItem.SubItems(1))
+Dim pr() As ProcessItem
+Dim tmp As ProcessItem
+Dim x As Long
+
+    'autorise le process
+    cProc.ResumeProcess Val(LV.SelectedItem.SubItems(1))
+    
+    'supprime le process de la liste des process bloqués si il est présent
+    'ajoute dans pr tous les processus bloqués différents de celui qu'on débloque
+    ReDim pr(0)
+    
+    'récupère le process qui est libéré
+    Set tmp = cProc.GetProcess(Val(LV.SelectedItem.SubItems(1)))
+    For x = 1 To UBound(JailedProcess())
+        With JailedProcess(x)
+            If tmp.szImagePath = .szImagePath And tmp.th32ProcessID = .th32ProcessID And _
+                tmp.th32ParentProcessID = .th32ParentProcessID Then
+                'alors on considère que les processus sont les mêmes (même PID, même process parent
+                'et même exécutable)
+                'donc dans ce cas on ne garde pas ce process dans la liste des process Jailes
+            Else
+                'alors là on récupère le process
+                ReDim Preserve pr(UBound(pr()) + 1)
+                Set pr(UBound(pr())) = JailedProcess(x)
+            End If
+        End With
+    Next x
+    
+    'on sauvegarde pr dans JailedProcess
+    ReDim JailedProcess(UBound(pr()))
+    For x = 1 To UBound(pr())
+        Set JailedProcess(x) = pr(x)
+    Next x
+        
+    'libère
+    Set tmp = Nothing
+    
 End Sub
 
 Private Sub mnuBelowP_Click()
 'change la priorité
-    clsProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), BELOW_NORMAL_PRIORITY
+    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), BELOW_NORMAL_PRIORITY
     RefreshPriority
     LV_Click
 End Sub
 
 Private Sub mnuBlockProcess_Click()
-'bloque le processus
-    clsProc.SuspendProcess Val(LV.SelectedItem.SubItems(1))
+
+    'bloque le processus
+    cProc.SuspendProcess Val(LV.SelectedItem.SubItems(1))
+    
+    'sauvegarde ce processus bloqué dans la liste des process bloqués
+    ReDim Preserve JailedProcess(UBound(JailedProcess()) + 1)
+    Set JailedProcess(UBound(JailedProcess())) = cProc.GetProcess(Val(LV.SelectedItem.SubItems(1)))
+    
 End Sub
 
 Private Sub mnuDeActivate_Click()
@@ -380,7 +412,7 @@ End Sub
 
 Private Sub mnuHighP_Click()
 'change la priorité
-    clsProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), HIGH_PRIORITY
+    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), HIGH_PRIORITY
     RefreshPriority
     LV_Click
 End Sub
@@ -392,7 +424,7 @@ End Sub
 
 Private Sub mnuIdleP_Click()
 'change la priorité
-    clsProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), IDLE_PRIORITY
+    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), IDLE_PRIORITY
     RefreshPriority
     LV_Click
 End Sub
@@ -441,7 +473,7 @@ End Sub
 
 Private Sub mnuNormalP_Click()
 'change la priorité
-    clsProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), NORMAL_PRIORITY
+    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), NORMAL_PRIORITY
     RefreshPriority
     LV_Click
 End Sub
@@ -469,7 +501,7 @@ End Sub
 
 Private Sub mnuRealTimeP_Click()
 'change la priorité
-    clsProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), REALTIME_PRIORITY
+    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), REALTIME_PRIORITY
     RefreshPriority
     LV_Click
 End Sub
@@ -505,7 +537,7 @@ End Sub
 
 Private Sub mnuTerminate_Click()
 'termine le processus sélectionné
-    If clsProc.TerminateProc(Val(LV.SelectedItem.SubItems(1)), True) Then
+    If cProc.TerminateProc(Val(LV.SelectedItem.SubItems(1)), True) Then
         DoEvents: RefreshProcList
     End If
 End Sub
@@ -522,7 +554,7 @@ Private Sub RefreshPriority()
 Dim p As ProcessItem
 
     'obtient le process désiré
-    Set p = clsProc.GetProcess(Val(LV.SelectedItem.SubItems(1)), False, False, False)
+    Set p = cProc.GetProcess(Val(LV.SelectedItem.SubItems(1)), False, False, False)
     
     'affichage dans le LV
     '/!\ on GELE l'affichage pour éviter le clignotement
@@ -531,6 +563,8 @@ Dim p As ProcessItem
     LV.SelectedItem.SubItems(14) = PriorityFromLong(p.pcPriClassBase) & " [" & p.pcPriClassBase & "]"
     
     InvalidateRect LV.hWnd, 0&, 0&   'dégèle le display
+    
+    Set p = Nothing
 
 End Sub
 
@@ -546,7 +580,7 @@ Dim sKey As String
     On Error GoTo ErrGestion
     
     'énumération des processus
-    lCount = clsProc.EnumerateProcesses(p(), False, False, True)
+    lCount = cProc.EnumerateProcesses(p(), False, False, True)
     
     'affichage dans le LV
     '/!\ on GELE l'affichage pour éviter le clignotement
@@ -587,7 +621,7 @@ Dim sKey As String
                 .Item(x + 1).SubItems(9) = p(x).procMemory.QuotaPeakNonPagedPoolUsage
                 .Item(x + 1).SubItems(10) = p(x).procMemory.QuotaPagedPoolUsage
                 .Item(x + 1).SubItems(11) = p(x).procMemory.QuotaPeakPagedPoolUsage
-                .Item(x + 1).SubItems(12) = clsProc.GetProcessFromPID(p(x).th32ParentProcessID) & "[" & p(x).th32ParentProcessID & "]"
+                .Item(x + 1).SubItems(12) = cProc.GetProcessFromPID(p(x).th32ParentProcessID) & "[" & p(x).th32ParentProcessID & "]"
                 .Item(x + 1).SubItems(13) = p(x).cntThreads
                 .Item(x + 1).SubItems(14) = PriorityFromLong(p(x).pcPriClassBase) & " [" & p(x).pcPriClassBase & "]"
             End With
@@ -610,7 +644,7 @@ Dim sKey As String
                 .Item(x + 1).SubItems(9) = p(x).procMemory.QuotaPeakNonPagedPoolUsage
                 .Item(x + 1).SubItems(10) = p(x).procMemory.QuotaPagedPoolUsage
                 .Item(x + 1).SubItems(11) = p(x).procMemory.QuotaPeakPagedPoolUsage
-                .Item(x + 1).SubItems(12) = clsProc.GetProcessFromPID(p(x).th32ParentProcessID) & "[" & p(x).th32ParentProcessID & "]"
+                .Item(x + 1).SubItems(12) = cProc.GetProcessFromPID(p(x).th32ParentProcessID) & "[" & p(x).th32ParentProcessID & "]"
                 .Item(x + 1).SubItems(13) = p(x).cntThreads
                 .Item(x + 1).SubItems(14) = PriorityFromLong(p(x).pcPriClassBase) & " [" & p(x).pcPriClassBase & "]"
             End With
