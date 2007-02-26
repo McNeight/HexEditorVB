@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin VB.Form frmNew 
    BorderStyle     =   3  'Fixed Dialog
-   Caption         =   "           Nouveau fichier"
+   Caption         =   "Nouveau fichier"
    ClientHeight    =   1695
    ClientLeft      =   45
    ClientTop       =   360
@@ -43,9 +43,9 @@ Begin VB.Form frmNew
    End
    Begin VB.ComboBox cdUnit 
       Height          =   315
-      ItemData        =   "frmNew.frx":000C
+      ItemData        =   "frmNew.frx":058A
       Left            =   1200
-      List            =   "frmNew.frx":001C
+      List            =   "frmNew.frx":059A
       Style           =   2  'Dropdown List
       TabIndex        =   1
       Tag             =   "pref"

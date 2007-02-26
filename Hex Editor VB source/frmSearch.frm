@@ -3,7 +3,7 @@ Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{6ADE9E73-F694-428F-BF86-06ADD29476A5}#1.0#0"; "ProgressBar_OCX.ocx"
 Begin VB.Form frmSearch 
    BorderStyle     =   1  'Fixed Single
-   Caption         =   " Recherche d'expressions"
+   Caption         =   "Recherche d'expressions"
    ClientHeight    =   6765
    ClientLeft      =   45
    ClientTop       =   360
@@ -223,7 +223,7 @@ Begin VB.Form frmSearch
             Height          =   615
             Left            =   120
             TabIndex        =   19
-            ToolTipText     =   $"frmSearch.frx":08CA
+            ToolTipText     =   $"frmSearch.frx":058A
             Top             =   240
             Width           =   3255
          End
@@ -239,8 +239,8 @@ Begin VB.Form frmSearch
             BackColorBottom =   15724527
             Min             =   0
             Value           =   0
-            BackPicture     =   "frmSearch.frx":096D
-            FrontPicture    =   "frmSearch.frx":0989
+            BackPicture     =   "frmSearch.frx":062D
+            FrontPicture    =   "frmSearch.frx":0649
          End
          Begin VB.Label Label2 
             Caption         =   "Expression à rechercher :"
@@ -432,7 +432,7 @@ End Sub
 Private Sub cmdSearch_Click()
 'lance la recherche
 Dim tRes() As Long
-Dim x As Long
+Dim X As Long
 Dim s As String
 
     If txtSearch.Text = vbNullString Then Exit Sub
@@ -499,14 +499,14 @@ Dim s As String
     
 
     '//affiche les résultats
-    For x = 1 To UBound(tRes())
-        LV.ListItems.Add Text:="Trouvé à l'offset " & CStr(By16D(tRes(x)))
+    For X = 1 To UBound(tRes())
+        LV.ListItems.Add Text:="Trouvé à l'offset " & CStr(By16D(tRes(X)))
         If Check2.Value Then
-            frmContent.ActiveForm.HW.AddSignet By16D(tRes(x))
-            frmContent.ActiveForm.lstSignets.ListItems.Add Text:=Str$(By16D(tRes(x)))
+            frmContent.ActiveForm.HW.AddSignet By16D(tRes(X))
+            frmContent.ActiveForm.lstSignets.ListItems.Add Text:=Str$(By16D(tRes(X)))
             frmContent.ActiveForm.lstSignets.ListItems.Item(frmContent.ActiveForm.lstSignets.ListItems.Count).SubItems(1) = "Found [" & Trim$(txtSearch.Text) & "]"
         End If
-    Next x
+    Next X
     
     Frame1(4).Caption = "Résultats : " & CStr(UBound(tRes()))
         

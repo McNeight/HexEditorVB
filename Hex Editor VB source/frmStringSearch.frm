@@ -35,8 +35,8 @@ Begin VB.Form frmStringSearch
       BackColorTop    =   13027014
       BackColorBottom =   15724527
       Value           =   1
-      BackPicture     =   "frmStringSearch.frx":08CA
-      FrontPicture    =   "frmStringSearch.frx":08E6
+      BackPicture     =   "frmStringSearch.frx":058A
+      FrontPicture    =   "frmStringSearch.frx":05A6
    End
    Begin ComctlLib.ListView LV 
       Height          =   3735
@@ -357,7 +357,7 @@ Private Sub cmdSave_Click()
 'sauvegarde les résultats
 Dim lFile As Long
 Dim sFile As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -382,10 +382,10 @@ Dim x As Long
     
     Print #lFile, "Recherche de [" & txtSize.Text & "] caractères consécutifs" & vbNewLine & "[fichier]=" & sFile & vbNewLine & "[date]=" & Date$ & "  " & Time$ & vbNewLine & "[match]=" & LV.ListItems.Count
     
-    For x = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
-        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(x)) & "  [string]=" & LV.ListItems.Item(x).SubItems(1)
+    For X = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
+        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(X)) & "  [string]=" & LV.ListItems.Item(X).SubItems(1)
         DoEvents
-    Next x
+    Next X
     
     Close lFile
     

@@ -167,7 +167,7 @@ End Sub
 
 Private Sub Form_Load()
 Dim var As Variant
-Dim x As Long
+Dim X As Long
     
     'obtient les infos sur les erreurs
     var = clsERREUR.GetErrors
@@ -175,14 +175,14 @@ Dim x As Long
     'affiche tout за dans le LV
     LV.ListItems.Clear
     
-    For x = 1 To clsERREUR.NumberOfErrorInLogFile
-        LV.ListItems.Add Text:=var(x).ErrDate
-        LV.ListItems.Item(x).SubItems(1) = var(x).ErrTime
-        LV.ListItems.Item(x).SubItems(2) = var(x).ErrZone
-        LV.ListItems.Item(x).SubItems(3) = var(x).ErrSource
-        LV.ListItems.Item(x).SubItems(4) = var(x).ErrNumber
-        LV.ListItems.Item(x).SubItems(5) = var(x).ErrDescription
-    Next x
+    For X = 1 To clsERREUR.NumberOfErrorInLogFile
+        LV.ListItems.Add Text:=var(X).ErrDate
+        LV.ListItems.Item(X).SubItems(1) = var(X).ErrTime
+        LV.ListItems.Item(X).SubItems(2) = var(X).ErrZone
+        LV.ListItems.Item(X).SubItems(3) = var(X).ErrSource
+        LV.ListItems.Item(X).SubItems(4) = var(X).ErrNumber
+        LV.ListItems.Item(X).SubItems(5) = var(X).ErrDescription
+    Next X
     
     If clsERREUR.NumberOfErrorInLogFile <> 0 Then
         'il y a des erreurs

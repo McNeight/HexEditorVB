@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin VB.Form frmPrint 
    BorderStyle     =   3  'Fixed Dialog
-   Caption         =   "                                 Impression"
+   Caption         =   "Impression"
    ClientHeight    =   4800
    ClientLeft      =   45
    ClientTop       =   360

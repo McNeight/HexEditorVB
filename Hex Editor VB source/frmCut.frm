@@ -37,8 +37,8 @@ Begin VB.Form frmCut
       BackColorTop    =   13027014
       BackColorBottom =   15724527
       Value           =   1
-      BackPicture     =   "frmCut.frx":08CA
-      FrontPicture    =   "frmCut.frx":08E6
+      BackPicture     =   "frmCut.frx":058A
+      FrontPicture    =   "frmCut.frx":05A6
    End
    Begin VB.TextBox txtBufSize 
       Alignment       =   2  'Center
@@ -82,13 +82,11 @@ Begin VB.Form frmCut
          NumTabs         =   2
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Découper"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fusionner"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -250,9 +248,9 @@ Begin VB.Form frmCut
                End
                Begin VB.ComboBox cdUnit 
                   Height          =   315
-                  ItemData        =   "frmCut.frx":0902
+                  ItemData        =   "frmCut.frx":05C2
                   Left            =   3000
-                  List            =   "frmCut.frx":0912
+                  List            =   "frmCut.frx":05D2
                   Style           =   2  'Dropdown List
                   TabIndex        =   8
                   Tag             =   "pref"

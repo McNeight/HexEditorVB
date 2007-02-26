@@ -119,7 +119,7 @@ Begin VB.Form frmOptions
             Height          =   255
             Left            =   120
             TabIndex        =   85
-            ToolTipText     =   $"frmOptions.frx":08CA
+            ToolTipText     =   $"frmOptions.frx":058A
             Top             =   3360
             Width           =   4455
          End
@@ -425,9 +425,9 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbGrid 
             Height          =   315
-            ItemData        =   "frmOptions.frx":095C
+            ItemData        =   "frmOptions.frx":061C
             Left            =   5640
-            List            =   "frmOptions.frx":0972
+            List            =   "frmOptions.frx":0632
             Style           =   2  'Dropdown List
             TabIndex        =   46
             ToolTipText     =   "Type de grille à afficher"
@@ -608,7 +608,7 @@ Begin VB.Form frmOptions
             Left            =   5280
             TabIndex        =   42
             Text            =   "C:\"
-            ToolTipText     =   $"frmOptions.frx":0A01
+            ToolTipText     =   $"frmOptions.frx":06C1
             Top             =   4680
             Width           =   2535
          End
@@ -634,9 +634,9 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbExpInitDir 
             Height          =   315
-            ItemData        =   "frmOptions.frx":0A9F
+            ItemData        =   "frmOptions.frx":075F
             Left            =   2520
-            List            =   "frmOptions.frx":0AA9
+            List            =   "frmOptions.frx":0769
             Style           =   2  'Dropdown List
             TabIndex        =   37
             ToolTipText     =   "Type de chemin par défaut de l'explorateur de fichiers"
@@ -656,9 +656,9 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbExpIcon 
             Height          =   315
-            ItemData        =   "frmOptions.frx":0ACD
+            ItemData        =   "frmOptions.frx":078D
             Left            =   2520
-            List            =   "frmOptions.frx":0ADA
+            List            =   "frmOptions.frx":079A
             Style           =   2  'Dropdown List
             TabIndex        =   35
             ToolTipText     =   "Type d'icones à afficher dans l'explorateur de fichiers"
@@ -830,9 +830,9 @@ Begin VB.Form frmOptions
          Width           =   7455
          Begin VB.ComboBox cbLang 
             Height          =   315
-            ItemData        =   "frmOptions.frx":0B11
+            ItemData        =   "frmOptions.frx":07D1
             Left            =   2040
-            List            =   "frmOptions.frx":0B18
+            List            =   "frmOptions.frx":07D8
             Style           =   2  'Dropdown List
             TabIndex        =   74
             ToolTipText     =   "Langue par défaut"
@@ -841,9 +841,9 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbOS 
             Height          =   315
-            ItemData        =   "frmOptions.frx":0B24
+            ItemData        =   "frmOptions.frx":07E4
             Left            =   2040
-            List            =   "frmOptions.frx":0B2E
+            List            =   "frmOptions.frx":07EE
             Style           =   2  'Dropdown List
             TabIndex        =   72
             ToolTipText     =   "Système d'exploitation utilisant le logiciel"

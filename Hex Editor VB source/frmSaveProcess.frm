@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin VB.Form frmSaveProcess 
    BorderStyle     =   3  'Fixed Dialog
-   Caption         =   "            Sauvegarder le contenu mémoire du processus"
+   Caption         =   "Sauvegarder le contenu mémoire du processus"
    ClientHeight    =   4110
    ClientLeft      =   45
    ClientTop       =   360
@@ -216,7 +216,7 @@ End Sub
 
 Private Sub cmdBrowse_Click()
 'browse
-Dim x As Long
+Dim X As Long
     
     On Error GoTo CancelPushed
     
@@ -230,8 +230,8 @@ Dim x As Long
     
     If cFile.FileExists(txtPath.Text) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        If Not (X = vbYes) Then Exit Sub
     End If
     
 CancelPushed:
@@ -266,25 +266,25 @@ End Sub
 Private Sub RecalcSize()
 'alors on recalcule la taille du fichier résultat
 Dim lSize As Long
-Dim x As Long
+Dim X As Long
 Dim y As Long
 Dim s As String
     
     lSize = 0
-    For x = 0 To lstList.ListCount - 1
-        s = Left$(lstList.List(x), Len(lstList.List(x)) - 1)  'garde l'item sans le ']' final
+    For X = 0 To lstList.ListCount - 1
+        s = Left$(lstList.List(X), Len(lstList.List(X)) - 1)  'garde l'item sans le ']' final
         y = InStrRev(s, "[", , vbBinaryCompare)
         s = Mid$(s, y + 1, Len(s) - y) 'contient la taille
         
-        If lstList.Selected(x) Then
+        If lstList.Selected(X) Then
             'ajoute la taille
             lSize = lSize + Val(s)
         End If
-    Next x
+    Next X
     lblSize.Caption = "Taille du fichier résultant=[" & Trim$(Str$(lSize)) & "]" & vbNewLine & FormatedSize(lSize)
 End Sub
 
-Private Sub lstList_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstList_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
 'affiche le popup menu sur le listbox
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
     
@@ -293,13 +293,13 @@ End Sub
 
 Private Sub mnuDeselectAll_Click()
 'décoche toutes les cases
-Dim x As Long
+Dim X As Long
     
     lstList.Visible = False
     
-    For x = lstList.ListCount - 1 To 0 Step -1
-        lstList.Selected(x) = False
-    Next x
+    For X = lstList.ListCount - 1 To 0 Step -1
+        lstList.Selected(X) = False
+    Next X
     
     lblSize.Caption = "Taille du fichier résultant=[0]"
     lstList.Visible = True
@@ -307,14 +307,14 @@ End Sub
 
 Private Sub mnuSelectAll_Click()
 'coche toutes les cases
-Dim x As Long
+Dim X As Long
     
     lstList.Visible = False
     
-    For x = lstList.ListCount - 1 To 0 Step -1
-        ValidateRect lstList.hwnd, 0&
-        lstList.Selected(x) = True
-    Next x
+    For X = lstList.ListCount - 1 To 0 Step -1
+        ValidateRect lstList.hWnd, 0&
+        lstList.Selected(X) = True
+    Next X
     
     lstList.Visible = True
     
@@ -327,7 +327,7 @@ End Sub
 Public Sub GetProcess(ByVal lPID As Long, sFile As String)
 Dim clsProc As clsMemoryRW
 Dim LB() As Long
-Dim x As Long
+Dim X As Long
 
     txtPath.Text = sFile
     
@@ -340,9 +340,9 @@ Dim x As Long
     lstList.Visible = False
     
     'les ajoute
-    For x = 1 To UBound(LS())
-        lstList.AddItem "Offset=[" & CStr(LB(x)) & "], taille=[" & CStr(LS(x)) & "]"
-    Next x
+    For X = 1 To UBound(LS())
+        lstList.AddItem "Offset=[" & CStr(LB(X)) & "], taille=[" & CStr(LS(X)) & "]"
+    Next X
     
     lstList.Visible = True
         
