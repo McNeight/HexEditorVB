@@ -36,19 +36,16 @@ Begin VB.Form frmPropertyShow
          NumTabs         =   3
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fichier"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Disque"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Processus"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -241,12 +238,12 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-Dim x As Long
-    For x = 0 To 2
-        Frame1(x).Top = 600
-        Frame1(x).Left = 120
-        Frame1(x).Visible = False
-    Next x
+Dim X As Long
+    For X = 0 To 2
+        Frame1(X).Top = 600
+        Frame1(X).Left = 120
+        Frame1(X).Visible = False
+    Next X
 End Sub
 
 '=======================================================

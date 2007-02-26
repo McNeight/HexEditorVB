@@ -241,8 +241,8 @@ Begin VB.Form frmCPF
       BackColorTop    =   13027014
       BackColorBottom =   15724527
       Value           =   1
-      BackPicture     =   "frmCPF.frx":08CA
-      FrontPicture    =   "frmCPF.frx":08E6
+      BackPicture     =   "frmCPF.frx":058A
+      FrontPicture    =   "frmCPF.frx":05A6
    End
 End
 Attribute VB_Name = "frmCPF"
@@ -354,7 +354,7 @@ End Sub
 '=======================================================
 Private Sub LaunchAnalys()
 Dim lLenght1 As Long, lLenght2 As Long
-Dim x As Long
+Dim X As Long
 Dim y As Long
 Dim b As Byte
 Dim l As Long
@@ -367,14 +367,14 @@ Dim curByteOld As Currency
     On Error GoTo ErrGestion
     
     'vide les listes
-    For x = 0 To 255
-        F1(x) = 0: F2(x) = 0
-    Next x
+    For X = 0 To 255
+        F1(X) = 0: F2(X) = 0
+    Next X
     
     'prépare la progressbar
     lLenght1 = cFile.GetFileSize(txtFile1.Text): lLenght2 = cFile.GetFileSize(txtFile2.Text)
     pgb.Min = 0: pgb.Max = lLenght1 + lLenght2: pgb.Value = 0
-    x = 0
+    X = 0
     
     'obtient le handle du fichier
     lngFile = CreateFile(txtFile1.Text, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
@@ -388,7 +388,7 @@ Dim curByteOld As Currency
     curByte = 0
     Do Until curByte > lLenght1  'tant que le fichier n'est pas fini
     
-        x = x + 1
+        X = X + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
@@ -410,7 +410,7 @@ Dim curByteOld As Currency
             F1(b) = F1(b) + 1
         Next y
         
-        If (x Mod 10) = 0 Then
+        If (X Mod 10) = 0 Then
             'rend la main
             DoEvents
             pgb.Value = curByte
@@ -425,7 +425,7 @@ Dim curByteOld As Currency
       
 
  
-    x = 0: curByteOld = curByte
+    X = 0: curByteOld = curByte
     
     'obtient le handle du fichier
     lngFile = CreateFile(txtFile2.Text, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
@@ -439,7 +439,7 @@ Dim curByteOld As Currency
     curByte = 0
     Do Until curByte > lLenght2  'tant que le fichier n'est pas fini
     
-        x = x + 1
+        X = X + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
@@ -461,7 +461,7 @@ Dim curByteOld As Currency
             F2(b) = F2(b) + 1
         Next y
         
-        If (x Mod 10) = 0 Then
+        If (X Mod 10) = 0 Then
             'rend la main
             DoEvents
             pgb.Value = curByte + curByteOld
@@ -486,7 +486,7 @@ End Sub
 'affiche les résultats (graphes & labels)
 '=======================================================
 Private Sub DisplayResults()
-Dim x As Long
+Dim X As Long
 
     'remplit les graphes
     BG1.ClearGraphe
@@ -494,10 +494,10 @@ Dim x As Long
     BG2.ClearGraphe
     BG2.ClearValues
     
-    For x = 0 To 255
-        BG1.AddValue x, F1(x)
-        BG2.AddValue x, F2(x)
-    Next x
+    For X = 0 To 255
+        BG1.AddValue X, F1(X)
+        BG2.AddValue X, F2(X)
+    Next X
 
     'trace les graphes
     BG1.TraceGraph

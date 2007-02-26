@@ -85,9 +85,9 @@ Begin VB.Form frmConvert
          End
          Begin VB.ComboBox cbO 
             Height          =   315
-            ItemData        =   "frmConvert.frx":08CA
+            ItemData        =   "frmConvert.frx":058A
             Left            =   2520
-            List            =   "frmConvert.frx":08E0
+            List            =   "frmConvert.frx":05A0
             Style           =   2  'Dropdown List
             TabIndex        =   4
             Tag             =   "pref"
@@ -150,9 +150,9 @@ Begin VB.Form frmConvert
          End
          Begin VB.ComboBox cbI 
             Height          =   315
-            ItemData        =   "frmConvert.frx":0920
+            ItemData        =   "frmConvert.frx":05E0
             Left            =   2520
-            List            =   "frmConvert.frx":0936
+            List            =   "frmConvert.frx":05F6
             Style           =   2  'Dropdown List
             TabIndex        =   1
             Tag             =   "pref"

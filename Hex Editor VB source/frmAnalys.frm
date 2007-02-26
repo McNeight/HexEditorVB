@@ -206,8 +206,8 @@ Begin VB.Form frmAnalys
             BackColorTop    =   13027014
             BackColorBottom =   15724527
             Value           =   1
-            BackPicture     =   "frmAnalys.frx":08CA
-            FrontPicture    =   "frmAnalys.frx":08E6
+            BackPicture     =   "frmAnalys.frx":058A
+            FrontPicture    =   "frmAnalys.frx":05A6
          End
          Begin BGraphe_OCX.BGraphe BG 
             Height          =   5055
@@ -346,14 +346,14 @@ Dim cF As clsFile
   
 End Sub
 
-Private Sub BG_MouseMove(bByteX As Byte, lOccurence As Long, Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub BG_MouseMove(bByteX As Byte, lOccurence As Long, Button As Integer, Shift As Integer, X As Single, y As Single)
     Label1.Caption = "Byte=[" & CStr(bByteX) & "] = [" & Byte2FormatedString(bByteX) & "]  :   " & CStr(lOccurence)
 End Sub
 
 Public Sub cmdAnalyse_Click()
 'lance l'analyse du fichier sFile
 Dim lngLen As Long
-Dim x As Long
+Dim X As Long
 Dim y As Long
 Dim b As Byte
 Dim l As Long
@@ -384,7 +384,7 @@ Dim lngFile As Long
     curByte = 0
     Do Until curByte > lngLen  'tant que le fichier n'est pas fini
     
-        x = x + 1
+        X = X + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
@@ -406,7 +406,7 @@ Dim lngFile As Long
             F(b) = F(b) + 1
         Next y
         
-        If (x Mod 10) = 0 Then
+        If (X Mod 10) = 0 Then
             'rend la main
             DoEvents
             pgb.Value = curByte
@@ -419,9 +419,9 @@ Dim lngFile As Long
     CloseHandle lngFile
     
     'remplit le BG
-    For x = 0 To 255
-        BG.AddValue x, F(x)
-    Next x
+    For X = 0 To 255
+        BG.AddValue X, F(X)
+    Next X
         
     pgb.Value = pgb.Max
     BG.TraceGraph
@@ -438,7 +438,7 @@ End Sub
 Private Sub cmdSaveBMP_Click()
 'sauvegarder en bmp
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo Err
     
@@ -456,8 +456,8 @@ Dim x As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        If Not (X = vbYes) Then Exit Sub
     End If
 
     'sauvegarde
@@ -469,7 +469,7 @@ End Sub
 Private Sub cmdSaveStats_Click()
 'sauvegarde les stats dans un fichier *.log
 Dim s As String
-Dim x As Long
+Dim X As Long
 Dim s2 As String
 
     On Error GoTo Err
@@ -488,8 +488,8 @@ Dim s2 As String
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'créé le fichier
@@ -497,9 +497,9 @@ Dim s2 As String
     
     s2 = vbNullString
     'créé la string
-    For x = 0 To 255
-        s2 = s2 & "Byte=[" & Trim$(Str$(x)) & "] --> occurence=[" & Trim$(Str$(BG.GetValue(x))) & "]" & vbNewLine
-    Next x
+    For X = 0 To 255
+        s2 = s2 & "Byte=[" & Trim$(Str$(X)) & "] --> occurence=[" & Trim$(Str$(BG.GetValue(X))) & "]" & vbNewLine
+    Next X
     
     'sauvegarde le fichier
     cFile.SaveDATAinFile s, Left$(s2, Len(s2) - 2), True

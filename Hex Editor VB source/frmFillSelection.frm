@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin VB.Form frmFillSelection 
    BorderStyle     =   3  'Fixed Dialog
-   Caption         =   "           Insertion / remplissage de bytes"
+   Caption         =   "Insertion / remplissage de bytes"
    ClientHeight    =   3540
    ClientLeft      =   45
    ClientTop       =   360
@@ -283,7 +283,7 @@ End Sub
 Private Sub cmdDelete_Click()
 'enlève un élément de la liste
 Dim l As Long
-Dim x As Long
+Dim X As Long
 Dim tPTmp() As PASSE_TYPE
 
     On Error GoTo ErrGestion
@@ -298,19 +298,19 @@ Dim tPTmp() As PASSE_TYPE
     
     If UBound(tPTmp) = 0 Then Exit Sub   'rien à enlever
     
-    For x = 0 To l - 1
-        tPasses(x) = tPTmp(x)
-    Next x
-    For x = l + 1 To UBound(tPTmp) - 1
-        tPasses(x - 1) = tPTmp(x)
-    Next x
+    For X = 0 To l - 1
+        tPasses(X) = tPTmp(X)
+    Next X
+    For X = l + 1 To UBound(tPTmp) - 1
+        tPasses(X - 1) = tPTmp(X)
+    Next X
     
     lstPasses.Clear   'enlève les éléments de la liste
     
     'rajoute n-1 passes
-    For x = 1 To UBound(tPTmp) - 1
-        lstPasses.AddItem "Passe " & CStr(x)
-    Next x
+    For X = 1 To UBound(tPTmp) - 1
+        lstPasses.AddItem "Passe " & CStr(X)
+    Next X
     
     lstPasses.ListIndex = l - 1
     Call lstPasses_Click
