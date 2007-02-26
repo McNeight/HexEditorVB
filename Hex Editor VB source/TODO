@@ -40,6 +40,7 @@ string search|recherche strings dans disque| 10| 3
 subclassing menus|foire| 10| 8
 support de vista|ajouter resize de certains composants si vista| 10| 1
 supprimer|ajout de la suppresion d'une partie de bytes| 10| 3
+temp|ajouter les fichiers temp à virer dans la liste TempFiles()| 45| 3
 toolbar|gérer le toolbar (manque juste Paste)| 82| 1
 tooltiptext|ajouter des tooltiptext dans la form Options| 10| 1
 traduction|traduction anglaise| 30| 1

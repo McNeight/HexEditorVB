@@ -403,6 +403,8 @@ End Function
 Public Function SaveStringInfile(ByVal sFile As String, ByVal sContenuFichier As String, Optional ByVal bDeleteActualFile As Boolean = False) As Long
 Dim lFile As Long
     
+    On Error GoTo FileInexists
+    
     'si le fichier est inexistant ou bien si on doit l'overwrite
     If Me.FileExists(sFile) = False Or bDeleteActualFile = True Then
         Me.CreateEmptyFile sFile, True
@@ -417,9 +419,10 @@ Dim lFile As Long
     'sauvegarde la string
     Print #lFile, sContenuFichier
     
+FileInexists:
+
     'referme le fichier
     Close lFile
-    
 End Function
 
 '=======================================================
@@ -586,10 +589,10 @@ End Function
 '=======================================================
 'loade un fichier en string
 '=======================================================
-Public Function LoadFileInString(ByVal sFile As String, Optional ByRef sLoadIsOk As Long) As String
+Public Function LoadFileInString(ByVal sFile As String, Optional ByRef lLoadIsOk As Long) As String
 Dim hFile As Long
 Dim lSize As Long
-Dim Ret As Long
+Dim ret As Long
 Dim s As String
     
     'On Error GoTo ErrGestion
@@ -607,13 +610,13 @@ Dim s As String
     s = String$(lSize, 0)
     
     'charge le fichier
-    Ret = ReadFile(hFile, ByVal s, lSize, Ret, ByVal 0&)
+    ret = ReadFile(hFile, ByVal s, lSize, ret, ByVal 0&)
      
     LoadFileInString = s
     
-    If Not (IsMissing(sLoadIsOk)) Then
+    If Not (IsMissing(lLoadIsOk)) Then
         'alors on renvoie si la fonction a marché ou pas
-        sLoadIsOk = IIf(Ret > 0 And hFile > 0, 1, 0)
+        lLoadIsOk = IIf(ret > 0 And hFile > 0, 1, 0)
     End If
     
 ErrGestion:

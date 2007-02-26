@@ -141,7 +141,7 @@ Dim Frm As Form
     
     'possible affiche une nouvelle fenêtre
     Set Frm = New MemPfm
-    Call Frm.GetFile(Val(LV.SelectedItem.Text), LV.SelectedItem.SubItems(1))
+    Call Frm.GetFile(Val(LV.SelectedItem.Text))
     Frm.Show
     lNbChildFrm = lNbChildFrm + 1
     frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"

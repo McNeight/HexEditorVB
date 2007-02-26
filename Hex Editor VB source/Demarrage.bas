@@ -57,6 +57,7 @@ Public cPref As clsIniPref
 Public lNbChildFrm As Long
 Public bEndSplash As Boolean
 
+
 '=======================================================
 '//DEMARRAGE DU PROGRAMME
 '=======================================================
@@ -64,7 +65,7 @@ Sub Main()
 Dim Frm As Form
 Dim sFile() As String
 Dim m() As String
-Dim x As Long
+Dim X As Long
 Dim y As Long
 Dim s As String
 
@@ -73,8 +74,8 @@ Dim s As String
 
     
     '//vérifie la version de Windows
-        x = GetWindowsVersion(s, y)
-        If x <> [Windows Vista] And x <> [Windows XP] Then
+        X = GetWindowsVersion(s, y)
+        If X <> [Windows Vista] And X <> [Windows XP] Then
             'OS non compatible
             MsgBox "Votre système d'exploitation est [" & s & "] build [" & Trim$(Str$(y)) & "]" & vbNewLine & "Ce logiciel n'est compatible qu'avec Windows XP et Windows Vista." & vbNewLine & "Hex Editor VB va donc se fermer", vbCritical, "Système d'exploitation non compatible"
             End
@@ -189,15 +190,15 @@ Dim s As String
                     'affiche la form
                     frmShredd.Show
                     
-                    For x = 1 To UBound(sFile())
+                    For X = 1 To UBound(sFile())
                         'teste l'existence de chaque path
                     
-                        If cFile.FileExists(sFile(x)) Then
+                        If cFile.FileExists(sFile(X)) Then
                             'ouvre un fichier
-                            frmShredd.LV.ListItems.Add Text:=sFile(x)
-                        ElseIf cFile.FolderExists(sFile(x)) Then
+                            frmShredd.LV.ListItems.Add Text:=sFile(X)
+                        ElseIf cFile.FolderExists(sFile(X)) Then
                             'ouvre un dossier - liste les fichiers
-                            If cFile.EnumFilesFromFolder(sFile(x), m) <> 0 Then
+                            If cFile.EnumFilesFromFolder(sFile(X), m) <> 0 Then
                                 'les ouvre un par un
                                 For y = 1 To UBound(m)
                                     If cFile.FileExists(m(y)) Then
@@ -207,7 +208,7 @@ Dim s As String
                                 Next y
                             End If
                         End If
-                    Next x
+                    Next X
                 End If
             ElseIf InStrRev(Command, "date", , vbBinaryCompare) Then
                 If Right$(Command, 6) = Chr$(34) & "date" & Chr$(34) Then
@@ -226,22 +227,22 @@ Dim s As String
                     'sépare Command en plusieurs path
                     SplitString Chr$(34), Command, sFile()
                     
-                    For x = 1 To UBound(sFile())
+                    For X = 1 To UBound(sFile())
                         'teste l'existence de chaque path
                     
-                        If cFile.FileExists(sFile(x)) Then
+                        If cFile.FileExists(sFile(X)) Then
                             'ouvre un fichier
                             Set Frm = New Pfm
-                            Call Frm.GetFile(sFile(x))
+                            Call Frm.GetFile(sFile(X))
                             Frm.Show
-                        ElseIf cFile.FolderExists(sFile(x)) Then
+                        ElseIf cFile.FolderExists(sFile(X)) Then
                             'ouvre un dossier - liste les fichiers
-                            If cFile.EnumFilesFromFolder(sFile(x), m) <> 0 Then
+                            If cFile.EnumFilesFromFolder(sFile(X), m) <> 0 Then
                                 'les ouvre un par un
                                 For y = 1 To UBound(m)
                                     If cFile.FileExists(m(y)) Then
                                         Set Frm = New Pfm
-                                        Call Frm.GetFile(m(x))
+                                        Call Frm.GetFile(m(X))
                                         Frm.Show
                                         lNbChildFrm = lNbChildFrm + 1
                                         frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
@@ -251,7 +252,7 @@ Dim s As String
                                 Next y
                              End If
                         End If
-                    Next x
+                    Next X
             
                 End If
             Else
@@ -262,21 +263,21 @@ Dim s As String
                  'sépare Command en plusieurs path
                  SplitString Chr$(34), Command, sFile()
                  
-                 For x = 1 To UBound(sFile())
+                 For X = 1 To UBound(sFile())
                      'teste l'existence de chaque path
-                     If cFile.FileExists(sFile(x)) Then
+                     If cFile.FileExists(sFile(X)) Then
                          'ouvre un fichier
                          Set Frm = New Pfm
-                         Call Frm.GetFile(sFile(x))
+                         Call Frm.GetFile(sFile(X))
                          Frm.Show
-                     ElseIf cFile.FolderExists(sFile(x)) Then
+                     ElseIf cFile.FolderExists(sFile(X)) Then
                          'ouvre un dossier - liste les fichiers
-                         If cFile.EnumFilesFromFolder(sFile(x), m) <> 0 Then
+                         If cFile.EnumFilesFromFolder(sFile(X), m) <> 0 Then
                              'les ouvre un par un
                              For y = 1 To UBound(m)
                                  If cFile.FileExists(m(y)) Then
                                      Set Frm = New Pfm
-                                     Call Frm.GetFile(m(x))
+                                     Call Frm.GetFile(m(X))
                                      Frm.Show
                                      lNbChildFrm = lNbChildFrm + 1
                                      frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
@@ -286,7 +287,7 @@ Dim s As String
                              Next y
                         End If
                      End If
-                 Next x
+                 Next X
             End If
                 
             
@@ -299,13 +300,11 @@ Dim s As String
             If cPref.general_QuickBackup Then
             
                 'alors on vérifie l'existence du fichier
-                If cFile.FileExists(App.Path & "\Preferences\QuickBackup.ini") = False Then Exit Sub
+                'If cFile.FileExists(App.Path & "\Preferences\QuickBackup.ini") = False Then Exit Sub
                 
-                'charge
-                
-                
-                
-                
+                'charge les données
+                Call LoadQuickBackupINIFile
+
             End If
             
         End If
@@ -319,58 +318,179 @@ End Sub
 'termine le programme
 '=======================================================
 Public Sub EndProgram()
-Dim s As String
-Dim x As Long
-Dim ret As Long
+Dim X As Long
 
-    'prévient des processus bloqués
-    If UBound(JailedProcess()) > 0 Then
-        'alors des processus bloqués
-        If MsgBox("Ces processus on été bloqués, voulez vous quitter Hex Editor VB sans les débloquer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then
-            
-            'alors on libère tout
-            For x = 1 To UBound(JailedProcess())
-                cProc.ResumeProcess (JailedProcess(x).th32ProcessID)
-            Next x
+    '//prévient des processus bloqués
+        If UBound(JailedProcess()) > 0 Then
+            'alors des processus bloqués
+            If MsgBox("Ces processus on été bloqués, voulez vous quitter Hex Editor VB sans les débloquer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then
+                
+                'alors on libère tout
+                For X = 1 To UBound(JailedProcess())
+                    cProc.ResumeProcess (JailedProcess(X).th32ProcessID)
+                Next X
+            End If
         End If
-    End If
         
 
-    'supprime les fichiers temporaires de TempFiles
+    '//supprime les fichiers temporaires de TempFiles
+        For X = 1 To UBound(TempFiles())
+            cFile.KillFile TempFiles(X)
+        Next X
     
+    '//libère les classes
+        Set clsERREUR = Nothing
+        Set cFile = Nothing
+        Set cMem = Nothing
+        Set cDisk = Nothing
+        Set cProc = Nothing
     
-    'sauvegarde l'état du programme si l'option QuickBackup est active
+    '//affecte la valeur False au crash (car si on est là, c'est que c'est bien fermé)
+        cPref.exe_HasCrashed = 0
+        
+        'sauvegarde les pref (met à jour la valeur)
+        clsPref.SaveIniFile cPref
+        
+        'libère les dernières classes
+        Set cPref = Nothing
+        Set clsPref = Nothing
+        
+    
+    End 'quitte
+End Sub
+
+'=======================================================
+'charge les données qui permettent de rendre le logiciel dans l'état dans lequel on a quitté
+'=======================================================
+Private Sub LoadQuickBackupINIFile()
+Dim X As Long
+Dim s2() As String
+Dim s3 As String
+Dim s As String
+Dim s4() As String
+Dim bIsOk As Long
+Dim Frm As Form
+Dim lFrom As Currency
+Dim lTo As Currency
+
+    On Error Resume Next
+    
+    'extrait la première ligne qui détermine le type de form à ouvrir
+    Dim s8 As String
+    s = cFile.LoadFileInString(App.Path & "\Preferences\QuickBackup.ini", bIsOk)
+    
+    If bIsOk = False Then Exit Sub  'fichier inacessible en lecture (ou inexistant)
+    
+    'extrait la première ligne
+    s2() = Split(s, vbNewLine, , vbBinaryCompare) ' Left$(s, InStr(1, s, vbNewLine) - 1)
+    s3 = Right$(s2(0), Len(s2(0)) - InStr(1, s, "|"))   'contient le PID, le disque ou le fichier
+    
+    Select Case Left$(s2(0), 1)
+        Case "P"
+            'processus
+            Set Frm = New MemPfm
+            Call Frm.GetFile(Val(s3))   'le PID en paramètre
+        Case "D"
+            'disque
+            Set Frm = New diskPfm
+            Call Frm.GetDrive(s3)
+        Case "F"
+            'fichier
+            Set Frm = New Pfm
+            Call Frm.GetFile(s3)
+        Case Else
+            'fichier non valide (trafiqué)
+            Exit Sub
+    End Select
+    
+    'affiche la form
+    Frm.Show
+    lNbChildFrm = lNbChildFrm + 1
+    frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+    
+    DoEvents    '/!\ IMPORTANT DO NOT REMOVE
+    
+    'extrait la seconde ligne (qui contient la sélection et le VS.Value)
+    s4() = Split(s2(1), "|", , vbBinaryCompare)
+    
+    If UBound(s4()) <> 9 Then Exit Sub  'fichier corrompu
+    
+    With frmContent.ActiveForm.HW
+    
+        .FirstOffset = Val(s4(7))
+
+        'change le VS.Value et refresh le HW
+        lFrom = Val(s4(0)) + Val(s4(1))
+        lTo = Val(s4(2)) + Val(s4(3)) + (s4(3) <> "1") '-1 pour corriger la valeur erronnée si Col>1
+        
+        'donne le focus au HW et positionne à la bonne place
+        .Item.Offset = Val(s4(5))
+        .Item.Col = Val(s4(6))
+        .Item.Line = Val(s4(8))
+        .Item.tType = Val(s4(9))
+        Call frmContent.ActiveForm.HW_MouseDown(1, 0, 1, 1, .Item)
+        
+        'sélectionne la zone désirée
+        .SelectZone 16 - (By16(lFrom) - lFrom), By16(lFrom) - 16, 17 - (By16(lTo) - lTo), _
+            By16(lTo) - 16
+        frmContent.ActiveForm.VS.Value = Val(s4(4))
+        Call frmContent.ActiveForm.VS_Change(frmContent.ActiveForm.VS.Value)
+        Call frmContent.ActiveForm.cmdMAJ_Click 'MAJ du fichier et de la sélection, Offset courant...
+
+        .Refresh
+    End With
+    
+    'extrait les signets et les ajoute
+    
+            
+    
+End Sub
+
+'=======================================================
+'sauve les données qui permettent de rendre le logiciel dans l'état dans lequel on a quitté
+'=======================================================
+Public Sub SaveQuickBackupINIFile()
+Dim s As String
+Dim X As Long
+
     If cPref.general_QuickBackup Then
         'on lance la sauvegarde de plusieurs choses : type de form, fichier/disque/processus
         'zone de sélection et signets éventuels
         
         'créé la string à enregistrer
+        If Not (frmContent.ActiveForm Is Nothing) Then
         
-        
-        
-        
-        'lance la sauvegarde
-        cFile.SaveStringInfile App.Path & "\Preferences\QuickBackup.ini", s, True
-     
+            With frmContent.ActiveForm
+                'sauvegarde le type de form et le path (ou PID) correspondant
+                Select Case TypeOfForm(frmContent.ActiveForm)
+                    Case "Processus"
+                        s = "Process|" & Trim$(Str$(.Tag))
+                    Case "Disque"
+                        s = "Disk|" & Right$(.Caption, 3)
+                    Case "Fichier"
+                        s = "File|" & .Caption
+                End Select
+            
+                'maintenant on sauve la zone sélectionnée et la valeur du VS
+                s = s & vbNewLine & Trim$(Str$(.HW.FirstSelectionItem.Offset)) & "|" & _
+                    Trim$(Str$(.HW.FirstSelectionItem.Col)) & "|" & _
+                    Trim$(Str$(.HW.SecondSelectionItem.Offset)) & "|" & _
+                    Trim$(Str$(.HW.SecondSelectionItem.Col)) & "|" & Trim$(Str$(.VS.Value)) & "|" & _
+                    Trim$(Str$(.HW.Item.Offset)) & "|" & Trim$(Str$(.HW.Item.Col)) & "|" & _
+                    Trim$(Str$(.HW.FirstOffset)) & "|" & Trim$(Str$(.HW.Item.Line)) & "|" & _
+                    Trim$(Str$(.HW.Item.tType))
+                
+                'maintenant on sauvegarde tous les signets
+                For X = 1 To .lstSignets.ListItems.Count
+                    s = s & vbNewLine & .lstSignets.ListItems.Item(X) & "|" & .lstSignets.ListItems.Item(X).SubItems(1)
+                Next X
+            End With
+            
+            'lance la sauvegarde
+            cFile.SaveStringInfile App.Path & "\Preferences\QuickBackup.ini", s, True
+        Else
+            'on delete le fichier
+            cFile.KillFile App.Path & "\Preferences\QuickBackup.ini"
+        End If
     End If
-    
-    
-    'libère les classes
-    Set clsERREUR = Nothing
-    Set cFile = Nothing
-    Set cMem = Nothing
-    Set cDisk = Nothing
-    Set cProc = Nothing
-    
-    'affecte la valeur False au crash (car si on est là, c'est que c'est bien fermé)
-    cPref.exe_HasCrashed = 0
-    
-    'sauvegarde les pref (met à jour la valeur)
-    clsPref.SaveIniFile cPref
-    
-    'libère les dernières classes
-    Set cPref = Nothing
-    Set clsPref = Nothing
-    
-    End 'quitte
 End Sub

@@ -445,7 +445,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "19:05"
+            TextSave        =   "20:59"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -1412,6 +1412,10 @@ Private Sub MDIForm_Load()
 
 End Sub
 
+Private Sub MDIForm_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    Call SaveQuickBackupINIFile     'permet de sauver (si nécessaire) l'état du programme
+End Sub
+
 Private Sub mnuCopyBitmapToClipBoard_Click()
 'enregistre l'icone de l'active form en bitmap
 Dim s As String
@@ -1545,8 +1549,10 @@ Private Sub MDIForm_Unload(Cancel As Integer)
         Call cSub.UnHookFormMenu(Me.hWnd)
         Set cSub = Nothing
     #End If
-    
+        
     Unload Me
+    
+    'lance la procédure d'arrêt
     EndProgram
 End Sub
 
