@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.1#0"; "FileView_OCX.ocx"
 Object = "{276EF1C1-20F1-4D85-BE7B-06C736C9DCE9}#1.0#0"; "ExtendedVScrollbar_OCX.ocx"
-Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.0#0"; "HexViewer_OCX.ocx"
+Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.1#0"; "HexViewer_OCX.ocx"
 Begin VB.Form diskPfm 
    Caption         =   "Ouverture d'un disque..."
    ClientHeight    =   8415
@@ -29,13 +29,14 @@ Begin VB.Form diskPfm
       Height          =   285
       Left            =   720
       TabIndex        =   63
+      TabStop         =   0   'False
       Top             =   6840
       Width           =   1575
    End
    Begin HexViewer_OCX.HexViewer HW 
       Height          =   2415
       Left            =   240
-      TabIndex        =   61
+      TabIndex        =   0
       Top             =   600
       Width           =   2535
       _ExtentX        =   4471
@@ -46,7 +47,7 @@ Begin VB.Form diskPfm
    Begin ExtVS.ExtendedVScrollBar VS 
       Height          =   3615
       Left            =   3120
-      TabIndex        =   60
+      TabIndex        =   1
       Top             =   480
       Width           =   255
       _ExtentX        =   450
@@ -61,7 +62,7 @@ Begin VB.Form diskPfm
       ForeColor       =   &H00000000&
       Height          =   2535
       Left            =   2520
-      TabIndex        =   23
+      TabIndex        =   29
       Top             =   4920
       Width           =   2055
       Begin VB.PictureBox Picture2 
@@ -71,7 +72,8 @@ Begin VB.Form diskPfm
          Left            =   120
          ScaleHeight     =   2175
          ScaleWidth      =   1815
-         TabIndex        =   24
+         TabIndex        =   30
+         TabStop         =   0   'False
          Top             =   240
          Width           =   1815
          Begin VB.CommandButton cmdNext 
@@ -79,7 +81,7 @@ Begin VB.Form diskPfm
             Left            =   1320
             Picture         =   "diskPfm.frx":058A
             Style           =   1  'Graphical
-            TabIndex        =   29
+            TabIndex        =   11
             ToolTipText     =   "Fragment suivant"
             Top             =   1380
             Width           =   495
@@ -89,7 +91,7 @@ Begin VB.Form diskPfm
             Left            =   1320
             Picture         =   "diskPfm.frx":1F0C
             Style           =   1  'Graphical
-            TabIndex        =   28
+            TabIndex        =   10
             ToolTipText     =   "Fragment précédent"
             Top             =   660
             Width           =   495
@@ -99,7 +101,7 @@ Begin VB.Form diskPfm
             ItemData        =   "diskPfm.frx":388E
             Left            =   0
             List            =   "diskPfm.frx":3890
-            TabIndex        =   27
+            TabIndex        =   9
             ToolTipText     =   "Liste des fragments (numéro de cluster)"
             Top             =   480
             Width           =   1215
@@ -108,7 +110,7 @@ Begin VB.Form diskPfm
             Caption         =   "Adresses des fragments"
             Height          =   255
             Left            =   0
-            TabIndex        =   26
+            TabIndex        =   32
             Top             =   240
             Width           =   1815
          End
@@ -116,7 +118,7 @@ Begin VB.Form diskPfm
             Caption         =   "Fragments=[0]"
             Height          =   255
             Left            =   0
-            TabIndex        =   25
+            TabIndex        =   31
             Top             =   0
             Width           =   1815
          End
@@ -127,7 +129,7 @@ Begin VB.Form diskPfm
       ForeColor       =   &H00FF0000&
       Height          =   5415
       Left            =   7080
-      TabIndex        =   41
+      TabIndex        =   44
       Top             =   2520
       Width           =   2175
       Begin VB.PictureBox Picture3 
@@ -136,7 +138,8 @@ Begin VB.Form diskPfm
          Left            =   50
          ScaleHeight     =   5055
          ScaleWidth      =   2085
-         TabIndex        =   42
+         TabIndex        =   45
+         TabStop         =   0   'False
          Top             =   240
          Width           =   2085
          Begin VB.TextBox TextBox 
@@ -146,7 +149,7 @@ Begin VB.Form diskPfm
             Index           =   22
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   59
+            TabIndex        =   61
             Text            =   "Fichier=[path]"
             Top             =   3840
             Width           =   2895
@@ -158,7 +161,7 @@ Begin VB.Form diskPfm
             Index           =   21
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   58
+            TabIndex        =   60
             Text            =   "Fichier=[path]"
             Top             =   3600
             Width           =   2895
@@ -170,7 +173,7 @@ Begin VB.Form diskPfm
             Index           =   20
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   57
+            TabIndex        =   59
             Text            =   "Taille=[taille]"
             Top             =   3360
             Width           =   2895
@@ -182,7 +185,7 @@ Begin VB.Form diskPfm
             Index           =   27
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   54
+            TabIndex        =   57
             Text            =   "Taille=[taille]"
             Top             =   2760
             Width           =   2895
@@ -194,7 +197,7 @@ Begin VB.Form diskPfm
             Index           =   26
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   53
+            TabIndex        =   56
             Text            =   "Fichier=[path]"
             Top             =   3000
             Width           =   2895
@@ -206,7 +209,7 @@ Begin VB.Form diskPfm
             Index           =   19
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   52
+            TabIndex        =   55
             Text            =   "Fichier=[path]"
             Top             =   1920
             Width           =   2895
@@ -218,7 +221,7 @@ Begin VB.Form diskPfm
             Index           =   18
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   51
+            TabIndex        =   54
             Text            =   "Fichier=[path]"
             Top             =   1560
             Width           =   2895
@@ -230,7 +233,7 @@ Begin VB.Form diskPfm
             Index           =   17
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   50
+            TabIndex        =   53
             Text            =   "Taille=[taille]"
             Top             =   0
             Width           =   2895
@@ -242,7 +245,7 @@ Begin VB.Form diskPfm
             Index           =   16
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   49
+            TabIndex        =   52
             Text            =   "Fichier=[path]"
             Top             =   240
             Width           =   2895
@@ -254,7 +257,7 @@ Begin VB.Form diskPfm
             Index           =   7
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   48
+            TabIndex        =   51
             Text            =   "Fichier=[path]"
             Top             =   480
             Width           =   2895
@@ -266,7 +269,7 @@ Begin VB.Form diskPfm
             Index           =   6
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   47
+            TabIndex        =   50
             Text            =   "Fichier=[path]"
             Top             =   840
             Width           =   2895
@@ -278,7 +281,7 @@ Begin VB.Form diskPfm
             Index           =   5
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   46
+            TabIndex        =   49
             Text            =   "Fichier=[path]"
             Top             =   1080
             Width           =   2895
@@ -290,7 +293,7 @@ Begin VB.Form diskPfm
             Index           =   4
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   45
+            TabIndex        =   48
             Text            =   "Fichier=[path]"
             Top             =   1320
             Width           =   2895
@@ -302,7 +305,7 @@ Begin VB.Form diskPfm
             Index           =   3
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   44
+            TabIndex        =   47
             Text            =   "Fichier=[path]"
             Top             =   2400
             Width           =   2895
@@ -314,7 +317,7 @@ Begin VB.Form diskPfm
             Index           =   2
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   43
+            TabIndex        =   46
             Text            =   "Fichier=[path]"
             Top             =   2160
             Width           =   2895
@@ -324,7 +327,7 @@ Begin VB.Form diskPfm
    Begin FileView_OCX.FileView FV 
       Height          =   1575
       Left            =   240
-      TabIndex        =   22
+      TabIndex        =   7
       Top             =   5160
       Width           =   2415
       _ExtentX        =   4260
@@ -349,7 +352,7 @@ Begin VB.Form diskPfm
       ForeColor       =   &H00000000&
       Height          =   1455
       Left            =   7200
-      TabIndex        =   12
+      TabIndex        =   23
       Top             =   840
       Width           =   1695
       Begin VB.PictureBox Picture1 
@@ -358,7 +361,8 @@ Begin VB.Form diskPfm
          Left            =   50
          ScaleHeight     =   1095
          ScaleWidth      =   1605
-         TabIndex        =   13
+         TabIndex        =   24
+         TabStop         =   0   'False
          Top             =   240
          Width           =   1600
          Begin VB.TextBox txtValue 
@@ -366,7 +370,7 @@ Begin VB.Form diskPfm
             Height          =   195
             Index           =   3
             Left            =   960
-            TabIndex        =   17
+            TabIndex        =   6
             Top             =   720
             Width           =   495
          End
@@ -376,7 +380,7 @@ Begin VB.Form diskPfm
             Index           =   0
             Left            =   960
             MaxLength       =   2
-            TabIndex        =   16
+            TabIndex        =   3
             Top             =   0
             Width           =   495
          End
@@ -386,7 +390,7 @@ Begin VB.Form diskPfm
             Index           =   1
             Left            =   960
             MaxLength       =   3
-            TabIndex        =   15
+            TabIndex        =   4
             Top             =   240
             Width           =   495
          End
@@ -396,7 +400,7 @@ Begin VB.Form diskPfm
             Index           =   2
             Left            =   960
             MaxLength       =   1
-            TabIndex        =   14
+            TabIndex        =   5
             Top             =   480
             Width           =   495
          End
@@ -405,7 +409,7 @@ Begin VB.Form diskPfm
             Height          =   255
             Index           =   3
             Left            =   0
-            TabIndex        =   21
+            TabIndex        =   28
             Top             =   720
             Width           =   855
          End
@@ -414,7 +418,7 @@ Begin VB.Form diskPfm
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   20
+            TabIndex        =   27
             Top             =   0
             Width           =   855
          End
@@ -423,7 +427,7 @@ Begin VB.Form diskPfm
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   19
+            TabIndex        =   26
             Top             =   240
             Width           =   855
          End
@@ -432,7 +436,7 @@ Begin VB.Form diskPfm
             Height          =   255
             Index           =   2
             Left            =   0
-            TabIndex        =   18
+            TabIndex        =   25
             Top             =   480
             Width           =   855
          End
@@ -443,13 +447,14 @@ Begin VB.Form diskPfm
       ForeColor       =   &H00FF0000&
       Height          =   6975
       Left            =   3720
-      TabIndex        =   1
+      TabIndex        =   13
       Top             =   240
       Width           =   3135
       Begin ComctlLib.ListView lstHisto 
          Height          =   1575
          Left            =   120
          TabIndex        =   62
+         TabStop         =   0   'False
          Top             =   4800
          Width           =   2895
          _ExtentX        =   5106
@@ -483,7 +488,8 @@ Begin VB.Form diskPfm
          Left            =   120
          ScaleHeight     =   6615
          ScaleWidth      =   2955
-         TabIndex        =   2
+         TabIndex        =   14
+         TabStop         =   0   'False
          Top             =   240
          Width           =   2950
          Begin VB.TextBox TextBox 
@@ -493,7 +499,8 @@ Begin VB.Form diskPfm
             Index           =   1
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   39
+            TabIndex        =   42
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   2160
             Width           =   2895
@@ -505,7 +512,8 @@ Begin VB.Form diskPfm
             Index           =   0
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   38
+            TabIndex        =   41
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   2400
             Width           =   2895
@@ -517,7 +525,8 @@ Begin VB.Form diskPfm
             Index           =   13
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   37
+            TabIndex        =   40
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1440
             Width           =   2895
@@ -529,7 +538,8 @@ Begin VB.Form diskPfm
             Index           =   12
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   36
+            TabIndex        =   39
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1200
             Width           =   2895
@@ -541,7 +551,8 @@ Begin VB.Form diskPfm
             Index           =   11
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   35
+            TabIndex        =   38
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   960
             Width           =   2895
@@ -553,7 +564,8 @@ Begin VB.Form diskPfm
             Index           =   10
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   34
+            TabIndex        =   37
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   720
             Width           =   2895
@@ -565,7 +577,8 @@ Begin VB.Form diskPfm
             Index           =   9
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   33
+            TabIndex        =   36
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   480
             Width           =   2895
@@ -577,7 +590,8 @@ Begin VB.Form diskPfm
             Index           =   8
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   32
+            TabIndex        =   35
+            TabStop         =   0   'False
             Text            =   "Taille=[taille]"
             Top             =   240
             Width           =   2895
@@ -589,7 +603,8 @@ Begin VB.Form diskPfm
             Index           =   14
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   31
+            TabIndex        =   34
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1680
             Width           =   2895
@@ -601,7 +616,8 @@ Begin VB.Form diskPfm
             Index           =   15
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   30
+            TabIndex        =   33
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1920
             Width           =   2895
@@ -610,7 +626,7 @@ Begin VB.Form diskPfm
             Caption         =   "Mettre à jour"
             Height          =   255
             Left            =   600
-            TabIndex        =   3
+            TabIndex        =   2
             ToolTipText     =   "Mettre à jour les informations"
             Top             =   6240
             Width           =   1695
@@ -618,7 +634,8 @@ Begin VB.Form diskPfm
          Begin ComctlLib.ListView lstSignets 
             Height          =   1575
             Left            =   0
-            TabIndex        =   4
+            TabIndex        =   15
+            TabStop         =   0   'False
             Top             =   4560
             Visible         =   0   'False
             Width           =   2895
@@ -651,7 +668,8 @@ Begin VB.Form diskPfm
          Begin ComctlLib.TabStrip TB 
             Height          =   375
             Left            =   0
-            TabIndex        =   5
+            TabIndex        =   16
+            TabStop         =   0   'False
             Top             =   4160
             Width           =   2895
             _ExtentX        =   5106
@@ -680,7 +698,7 @@ Begin VB.Form diskPfm
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   40
+            TabIndex        =   43
             Top             =   0
             Width           =   2895
          End
@@ -691,7 +709,7 @@ Begin VB.Form diskPfm
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   11
+            TabIndex        =   22
             Top             =   2640
             Width           =   2895
          End
@@ -700,7 +718,7 @@ Begin VB.Form diskPfm
             Height          =   200
             Index           =   8
             Left            =   0
-            TabIndex        =   10
+            TabIndex        =   21
             Top             =   2880
             Width           =   2895
          End
@@ -709,7 +727,7 @@ Begin VB.Form diskPfm
             Height          =   200
             Index           =   9
             Left            =   0
-            TabIndex        =   9
+            TabIndex        =   20
             Top             =   3120
             Width           =   2895
          End
@@ -718,7 +736,7 @@ Begin VB.Form diskPfm
             Height          =   200
             Index           =   10
             Left            =   0
-            TabIndex        =   8
+            TabIndex        =   19
             Top             =   3360
             Width           =   2895
          End
@@ -727,7 +745,7 @@ Begin VB.Form diskPfm
             Height          =   200
             Index           =   11
             Left            =   0
-            TabIndex        =   7
+            TabIndex        =   18
             Top             =   3600
             Width           =   2895
          End
@@ -736,7 +754,7 @@ Begin VB.Form diskPfm
             Height          =   200
             Index           =   12
             Left            =   0
-            TabIndex        =   6
+            TabIndex        =   17
             Top             =   3840
             Width           =   2895
          End
@@ -746,7 +764,7 @@ Begin VB.Form diskPfm
       Align           =   2  'Align Bottom
       Height          =   255
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   12
       Top             =   8160
       Width           =   10155
       _ExtentX        =   17912
@@ -792,7 +810,7 @@ Begin VB.Form diskPfm
    Begin FileView_OCX.FileView FV2 
       Height          =   1575
       Left            =   480
-      TabIndex        =   55
+      TabIndex        =   8
       Top             =   3240
       Width           =   2415
       _ExtentX        =   4260
@@ -817,7 +835,7 @@ Begin VB.Form diskPfm
       Caption         =   "Aller à ..."
       Height          =   255
       Left            =   240
-      TabIndex        =   56
+      TabIndex        =   58
       Top             =   7320
       Width           =   855
    End
@@ -869,7 +887,7 @@ Option Explicit
 Private lBgAdress As Long   'offset de départ de page
 Private lEdAdress As Long   'offset de fin de page
 Private NumberPerPage As Long   'nombre de lignes visibles par Page
-Private pRs As Long, pR As Long, pC As Long, pCs As Long 'sauvegarde de la sélection
+Private pRs As Long, pr As Long, pc As Long, pCs As Long 'sauvegarde de la sélection
 Private lLenght As Currency 'taille du fichier
 Private lBytesPerSector As Long
 Private ChangeListO() As Long
@@ -1930,24 +1948,28 @@ Dim I_tem As ItemElement
     If KeyCode = 13 Then
         'alors appui sur "enter"
     
-        If Index = 0 Then
-            'alors on change les autres champs que le champ "Hexa"
-            txtValue(1).Text = Hex2Dec(txtValue(0).Text)
-            txtValue(2).Text = Hex2Str(txtValue(0).Text)
-            txtValue(3).Text = Hex2Oct(txtValue(0).Text)
-        End If
-        If Index = 1 Then
-            'alors on change les autres champs que le champ "decimal"
-            txtValue(0).Text = Hex$(Val(txtValue(1).Text))
-            txtValue(2).Text = Byte2FormatedString(Val(txtValue(1).Text))
-            txtValue(3).Text = Oct$(Val(txtValue(1).Text))
-        End If
-        If Index = 2 Then
-            'alors on change les autres champs que le champ "string"
-            txtValue(0).Text = Str2Hex(Val(txtValue(2).Text))
-            txtValue(1).Text = Str2Dec(txtValue(2).Text)
-            txtValue(3).Text = Str2Oct(Val(txtValue(2).Text))
-        End If
+        Select Case Index
+            Case 0
+                'alors on change les autres champs que le champ "Hexa"
+                txtValue(1).Text = Hex2Dec(txtValue(0).Text)
+                txtValue(2).Text = Hex2Str(txtValue(0).Text)
+                txtValue(3).Text = Hex2Oct(txtValue(0).Text)
+            Case 1
+                'alors on change les autres champs que le champ "decimal"
+                txtValue(0).Text = Hex$(Val(txtValue(1).Text))
+                txtValue(2).Text = Byte2FormatedString(Val(txtValue(1).Text))
+                txtValue(3).Text = Oct$(Val(txtValue(1).Text))
+            Case 2
+                'alors on change les autres champs que le champ "ASCII"
+                txtValue(0).Text = Str2Hex(txtValue(2).Text)
+                txtValue(1).Text = Str2Dec(txtValue(2).Text)
+                txtValue(3).Text = Str2Oct(txtValue(2).Text)
+            Case 3
+                'alors on change les autres champs que le champ "octal"
+                txtValue(0).Text = Hex$(Oct2Dec(Val(txtValue(3).Text)))
+                txtValue(1).Text = Oct2Dec(Val(txtValue(3).Text))
+                txtValue(2).Text = Chr$(Oct2Dec(Val(txtValue(3).Text)))
+        End Select
 
         With frmContent.ActiveForm.HW
             '.AddHexValue I_tem.Line, I_tem.Col, txtValue(0).Text

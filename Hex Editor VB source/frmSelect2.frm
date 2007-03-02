@@ -27,7 +27,7 @@ Begin VB.Form frmSelect2
       Caption         =   "Fermer"
       Height          =   375
       Left            =   1485
-      TabIndex        =   5
+      TabIndex        =   3
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   960
       Width           =   1095
@@ -36,7 +36,7 @@ Begin VB.Form frmSelect2
       Caption         =   "Sélectionner"
       Height          =   375
       Left            =   165
-      TabIndex        =   4
+      TabIndex        =   2
       ToolTipText     =   "Procéder à la restriction"
       Top             =   960
       Width           =   1095
@@ -45,7 +45,7 @@ Begin VB.Form frmSelect2
       BorderStyle     =   0  'None
       Height          =   285
       Left            =   1680
-      TabIndex        =   3
+      TabIndex        =   1
       ToolTipText     =   "Taille de la sélection"
       Top             =   480
       Width           =   975
@@ -54,7 +54,7 @@ Begin VB.Form frmSelect2
       BorderStyle     =   0  'None
       Height          =   285
       Left            =   1560
-      TabIndex        =   2
+      TabIndex        =   0
       ToolTipText     =   "Offset de départ"
       Top             =   120
       Width           =   1095
@@ -64,7 +64,7 @@ Begin VB.Form frmSelect2
       Height          =   255
       Index           =   1
       Left            =   120
-      TabIndex        =   1
+      TabIndex        =   5
       Top             =   480
       Width           =   1455
    End
@@ -73,7 +73,7 @@ Begin VB.Form frmSelect2
       Height          =   255
       Index           =   0
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   4
       Top             =   120
       Width           =   1215
    End

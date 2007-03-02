@@ -27,7 +27,7 @@ Begin VB.Form frmSaveProcess
       Caption         =   "Fermer"
       Height          =   375
       Left            =   5880
-      TabIndex        =   11
+      TabIndex        =   1
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   3600
       Width           =   1575
@@ -36,7 +36,7 @@ Begin VB.Form frmSaveProcess
       Caption         =   "Sauvegarder"
       Height          =   375
       Left            =   4200
-      TabIndex        =   10
+      TabIndex        =   0
       ToolTipText     =   "Sauvegarder dans le fichier sélectionné"
       Top             =   3600
       Width           =   1575
@@ -45,7 +45,7 @@ Begin VB.Form frmSaveProcess
       Caption         =   "..."
       Height          =   255
       Left            =   7080
-      TabIndex        =   9
+      TabIndex        =   7
       ToolTipText     =   "Sélectionner l'emplacement du fichier à sauvegarder"
       Top             =   3000
       Width           =   375
@@ -54,7 +54,7 @@ Begin VB.Form frmSaveProcess
       BorderStyle     =   0  'None
       Height          =   285
       Left            =   4200
-      TabIndex        =   8
+      TabIndex        =   6
       ToolTipText     =   "Chemin du fichier résultat"
       Top             =   3000
       Width           =   2775
@@ -63,7 +63,7 @@ Begin VB.Form frmSaveProcess
       Caption         =   "Contenu de l'enregistrement"
       Height          =   1575
       Left            =   4200
-      TabIndex        =   3
+      TabIndex        =   10
       Top             =   120
       Width           =   3255
       Begin VB.PictureBox Picture1 
@@ -72,14 +72,15 @@ Begin VB.Form frmSaveProcess
          Left            =   120
          ScaleHeight     =   1215
          ScaleWidth      =   3015
-         TabIndex        =   4
+         TabIndex        =   11
+         TabStop         =   0   'False
          Top             =   240
          Width           =   3015
          Begin VB.CheckBox chkOffset 
             Caption         =   "Sauvegarder les offsets"
             Height          =   255
             Left            =   0
-            TabIndex        =   7
+            TabIndex        =   5
             Tag             =   "pref"
             ToolTipText     =   "La sauvegarde des offsets nécessite la sauvegarde de strings formatées"
             Top             =   840
@@ -89,7 +90,7 @@ Begin VB.Form frmSaveProcess
             Caption         =   "Sauvegarder les valeurs ASCII"
             Height          =   255
             Left            =   0
-            TabIndex        =   6
+            TabIndex        =   4
             Tag             =   "pref"
             ToolTipText     =   "Sauvegarder les valeurs ASCII réelles uniquement si coché seul"
             Top             =   480
@@ -99,7 +100,7 @@ Begin VB.Form frmSaveProcess
             Caption         =   "Sauvegarder les valeurs hexa"
             Height          =   255
             Left            =   0
-            TabIndex        =   5
+            TabIndex        =   3
             Tag             =   "pref"
             ToolTipText     =   "Sauvegarder les valeurs hexa"
             Top             =   120
@@ -111,7 +112,7 @@ Begin VB.Form frmSaveProcess
       Caption         =   "Tout enregistrer (au minimum 2Go sont requis)"
       Height          =   375
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   8
       Tag             =   "pref"
       ToolTipText     =   "Enregistre toute la mémoire (/!\ 2Go sont requis)"
       Top             =   3600
@@ -121,7 +122,7 @@ Begin VB.Form frmSaveProcess
       Height          =   2985
       Left            =   120
       Style           =   1  'Checkbox
-      TabIndex        =   1
+      TabIndex        =   2
       Top             =   480
       Width           =   3855
    End
@@ -146,7 +147,7 @@ Begin VB.Form frmSaveProcess
       Caption         =   "Zones mémoire à enregistrer"
       Height          =   255
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   9
       Top             =   120
       Width           =   2175
    End

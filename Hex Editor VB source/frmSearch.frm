@@ -28,7 +28,7 @@ Begin VB.Form frmSearch
       Height          =   1095
       Index           =   5
       Left            =   120
-      TabIndex        =   24
+      TabIndex        =   28
       Top             =   120
       Width           =   3015
       Begin VB.PictureBox Picture2 
@@ -37,7 +37,8 @@ Begin VB.Form frmSearch
          Left            =   120
          ScaleHeight     =   735
          ScaleWidth      =   1575
-         TabIndex        =   25
+         TabIndex        =   29
+         TabStop         =   0   'False
          Top             =   240
          Width           =   1575
          Begin VB.OptionButton Option4 
@@ -45,7 +46,7 @@ Begin VB.Form frmSearch
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   29
+            TabIndex        =   4
             Tag             =   "pref1"
             ToolTipText     =   "Rechercher une valeur ASCII"
             Top             =   480
@@ -57,7 +58,7 @@ Begin VB.Form frmSearch
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   28
+            TabIndex        =   3
             Tag             =   "pref0"
             ToolTipText     =   "Recherche une valeur hexa"
             Top             =   120
@@ -70,7 +71,7 @@ Begin VB.Form frmSearch
       Height          =   2055
       Index           =   2
       Left            =   120
-      TabIndex        =   13
+      TabIndex        =   25
       Top             =   4680
       Width           =   3015
       Begin VB.PictureBox Picture1 
@@ -80,7 +81,8 @@ Begin VB.Form frmSearch
          Left            =   120
          ScaleHeight     =   1695
          ScaleWidth      =   2775
-         TabIndex        =   14
+         TabIndex        =   26
+         TabStop         =   0   'False
          Top             =   240
          Width           =   2775
          Begin VB.CheckBox Check3 
@@ -88,7 +90,7 @@ Begin VB.Form frmSearch
             Enabled         =   0   'False
             Height          =   255
             Left            =   0
-            TabIndex        =   32
+            TabIndex        =   14
             Tag             =   "pref"
             ToolTipText     =   "Rechercher un mot entier"
             Top             =   840
@@ -98,7 +100,7 @@ Begin VB.Form frmSearch
             Caption         =   "Ajouter des signets"
             Height          =   255
             Left            =   0
-            TabIndex        =   31
+            TabIndex        =   13
             Tag             =   "pref"
             ToolTipText     =   "Ajoute un signet pour chaque résultat trouvé"
             Top             =   480
@@ -109,7 +111,7 @@ Begin VB.Form frmSearch
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   17
+            TabIndex        =   16
             Tag             =   "pref1"
             ToolTipText     =   "Commencer la recherche par en haut"
             Top             =   1460
@@ -120,7 +122,7 @@ Begin VB.Form frmSearch
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   16
+            TabIndex        =   15
             Tag             =   "pref0"
             ToolTipText     =   "Commencer la recherche par en bas"
             Top             =   1160
@@ -131,7 +133,7 @@ Begin VB.Form frmSearch
             Caption         =   "Respecter la casse"
             Height          =   255
             Left            =   0
-            TabIndex        =   15
+            TabIndex        =   12
             Tag             =   "pref"
             ToolTipText     =   "Le respect de la casse est aussi valable pour des valeurs hexa"
             Top             =   120
@@ -144,7 +146,7 @@ Begin VB.Form frmSearch
       Height          =   4935
       Index           =   4
       Left            =   3240
-      TabIndex        =   3
+      TabIndex        =   20
       Top             =   1800
       Width           =   5415
       Begin VB.PictureBox Picture3 
@@ -153,13 +155,14 @@ Begin VB.Form frmSearch
          Left            =   30
          ScaleHeight     =   4560
          ScaleWidth      =   5325
-         TabIndex        =   26
+         TabIndex        =   30
+         TabStop         =   0   'False
          Top             =   260
          Width           =   5330
          Begin ComctlLib.ListView LV 
             Height          =   4575
             Left            =   45
-            TabIndex        =   27
+            TabIndex        =   31
             Top             =   0
             Width           =   5175
             _ExtentX        =   9128
@@ -187,7 +190,7 @@ Begin VB.Form frmSearch
       Height          =   1575
       Index           =   3
       Left            =   3240
-      TabIndex        =   2
+      TabIndex        =   19
       Top             =   120
       Width           =   5415
       Begin VB.PictureBox Picture1 
@@ -197,14 +200,15 @@ Begin VB.Form frmSearch
          Left            =   120
          ScaleHeight     =   1215
          ScaleWidth      =   5175
-         TabIndex        =   6
+         TabIndex        =   23
+         TabStop         =   0   'False
          Top             =   240
          Width           =   5175
          Begin VB.CommandButton cmdQuit 
             Caption         =   "Fermer"
             Height          =   375
             Left            =   3720
-            TabIndex        =   21
+            TabIndex        =   2
             ToolTipText     =   "Fermer cette fenêtre"
             Top             =   480
             Width           =   1335
@@ -213,7 +217,7 @@ Begin VB.Form frmSearch
             Caption         =   "Rechercher"
             Height          =   375
             Left            =   3720
-            TabIndex        =   20
+            TabIndex        =   1
             ToolTipText     =   "lancer la recherche"
             Top             =   0
             Width           =   1335
@@ -222,7 +226,7 @@ Begin VB.Form frmSearch
             BorderStyle     =   0  'None
             Height          =   615
             Left            =   120
-            TabIndex        =   19
+            TabIndex        =   0
             ToolTipText     =   $"frmSearch.frx":058A
             Top             =   240
             Width           =   3255
@@ -230,7 +234,7 @@ Begin VB.Form frmSearch
          Begin ProgressBar_OCX.pgrBar PGB 
             Height          =   255
             Left            =   120
-            TabIndex        =   30
+            TabIndex        =   32
             Top             =   960
             Width           =   4935
             _ExtentX        =   8705
@@ -246,7 +250,7 @@ Begin VB.Form frmSearch
             Caption         =   "Expression à rechercher :"
             Height          =   255
             Left            =   120
-            TabIndex        =   18
+            TabIndex        =   27
             Top             =   0
             Width           =   1935
          End
@@ -257,7 +261,7 @@ Begin VB.Form frmSearch
       Height          =   1935
       Index           =   1
       Left            =   120
-      TabIndex        =   1
+      TabIndex        =   18
       Top             =   2640
       Width           =   3015
       Begin VB.PictureBox Picture1 
@@ -267,7 +271,8 @@ Begin VB.Form frmSearch
          Left            =   120
          ScaleHeight     =   1575
          ScaleWidth      =   2775
-         TabIndex        =   5
+         TabIndex        =   22
+         TabStop         =   0   'False
          Top             =   240
          Width           =   2775
          Begin VB.TextBox txtTo 
@@ -275,7 +280,7 @@ Begin VB.Form frmSearch
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   1560
-            TabIndex        =   11
+            TabIndex        =   9
             Tag             =   "pref"
             ToolTipText     =   "Offset supérieur"
             Top             =   400
@@ -286,7 +291,7 @@ Begin VB.Form frmSearch
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   120
-            TabIndex        =   10
+            TabIndex        =   8
             Tag             =   "pref"
             ToolTipText     =   "Offset inférieur"
             Top             =   400
@@ -297,7 +302,7 @@ Begin VB.Form frmSearch
             Height          =   255
             Index           =   2
             Left            =   120
-            TabIndex        =   9
+            TabIndex        =   11
             Tag             =   "pref"
             ToolTipText     =   "Rechercher de partout"
             Top             =   1200
@@ -309,7 +314,7 @@ Begin VB.Form frmSearch
             Height          =   255
             Index           =   1
             Left            =   120
-            TabIndex        =   8
+            TabIndex        =   10
             Tag             =   "pref1"
             ToolTipText     =   "Ne recherche que dans la sélection"
             Top             =   840
@@ -330,7 +335,7 @@ Begin VB.Form frmSearch
             Caption         =   "à"
             Height          =   255
             Left            =   1320
-            TabIndex        =   12
+            TabIndex        =   24
             Top             =   400
             Width           =   135
          End
@@ -341,7 +346,7 @@ Begin VB.Form frmSearch
       Height          =   1215
       Index           =   0
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   17
       Top             =   1320
       Width           =   3015
       Begin VB.PictureBox Picture1 
@@ -351,7 +356,8 @@ Begin VB.Form frmSearch
          Left            =   120
          ScaleHeight     =   855
          ScaleWidth      =   2775
-         TabIndex        =   4
+         TabIndex        =   21
+         TabStop         =   0   'False
          Top             =   240
          Width           =   2775
          Begin VB.OptionButton Option1 
@@ -360,7 +366,7 @@ Begin VB.Form frmSearch
             Height          =   255
             Index           =   3
             Left            =   0
-            TabIndex        =   23
+            TabIndex        =   5
             Tag             =   "pref3"
             ToolTipText     =   "Effectuer une recherche à l'aide d'une expression régulière"
             Top             =   120
@@ -371,7 +377,7 @@ Begin VB.Form frmSearch
             Height          =   255
             Index           =   2
             Left            =   0
-            TabIndex        =   22
+            TabIndex        =   6
             Tag             =   "pref2"
             ToolTipText     =   "Effectuer une recherche simple"
             Top             =   480

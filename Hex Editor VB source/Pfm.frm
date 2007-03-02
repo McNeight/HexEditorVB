@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{276EF1C1-20F1-4D85-BE7B-06C736C9DCE9}#1.0#0"; "ExtendedVScrollbar_OCX.ocx"
-Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.0#0"; "HexViewer_OCX.ocx"
+Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.1#0"; "HexViewer_OCX.ocx"
 Begin VB.Form Pfm 
    Caption         =   "Ouverture d'un fichier..."
    ClientHeight    =   8115
@@ -28,7 +28,7 @@ Begin VB.Form Pfm
       ForeColor       =   &H00000000&
       Height          =   1455
       Left            =   600
-      TabIndex        =   26
+      TabIndex        =   32
       Top             =   3000
       Width           =   1695
       Begin VB.PictureBox Picture1 
@@ -37,7 +37,7 @@ Begin VB.Form Pfm
          Left            =   50
          ScaleHeight     =   1095
          ScaleWidth      =   1605
-         TabIndex        =   27
+         TabIndex        =   33
          Top             =   240
          Width           =   1600
          Begin VB.TextBox txtValue 
@@ -45,7 +45,7 @@ Begin VB.Form Pfm
             Height          =   195
             Index           =   3
             Left            =   960
-            TabIndex        =   31
+            TabIndex        =   6
             Top             =   720
             Width           =   495
          End
@@ -55,7 +55,7 @@ Begin VB.Form Pfm
             Index           =   0
             Left            =   960
             MaxLength       =   2
-            TabIndex        =   30
+            TabIndex        =   3
             Top             =   0
             Width           =   495
          End
@@ -65,7 +65,7 @@ Begin VB.Form Pfm
             Index           =   1
             Left            =   960
             MaxLength       =   3
-            TabIndex        =   29
+            TabIndex        =   4
             Top             =   240
             Width           =   495
          End
@@ -75,7 +75,7 @@ Begin VB.Form Pfm
             Index           =   2
             Left            =   960
             MaxLength       =   1
-            TabIndex        =   28
+            TabIndex        =   5
             Top             =   480
             Width           =   495
          End
@@ -84,7 +84,7 @@ Begin VB.Form Pfm
             Height          =   255
             Index           =   3
             Left            =   0
-            TabIndex        =   35
+            TabIndex        =   37
             Top             =   720
             Width           =   855
          End
@@ -93,7 +93,7 @@ Begin VB.Form Pfm
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   34
+            TabIndex        =   36
             Top             =   0
             Width           =   855
          End
@@ -102,7 +102,7 @@ Begin VB.Form Pfm
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   33
+            TabIndex        =   35
             Top             =   240
             Width           =   855
          End
@@ -111,7 +111,7 @@ Begin VB.Form Pfm
             Height          =   255
             Index           =   2
             Left            =   0
-            TabIndex        =   32
+            TabIndex        =   34
             Top             =   480
             Width           =   855
          End
@@ -124,7 +124,8 @@ Begin VB.Form Pfm
       Left            =   2760
       ScaleHeight     =   555
       ScaleWidth      =   555
-      TabIndex        =   25
+      TabIndex        =   31
+      TabStop         =   0   'False
       Top             =   4560
       Visible         =   0   'False
       Width           =   615
@@ -134,13 +135,14 @@ Begin VB.Form Pfm
       ForeColor       =   &H00000000&
       Height          =   2895
       Left            =   360
-      TabIndex        =   23
+      TabIndex        =   29
       Top             =   4440
       Width           =   1695
       Begin ComctlLib.ListView lvIcon 
          Height          =   2535
          Left            =   65
-         TabIndex        =   24
+         TabIndex        =   30
+         TabStop         =   0   'False
          Top             =   240
          Width           =   1550
          _ExtentX        =   2752
@@ -165,7 +167,7 @@ Begin VB.Form Pfm
       ForeColor       =   &H00FF0000&
       Height          =   6975
       Left            =   3720
-      TabIndex        =   1
+      TabIndex        =   8
       Top             =   240
       Width           =   3135
       Begin VB.PictureBox pctContain_cmdMAJ 
@@ -174,7 +176,8 @@ Begin VB.Form Pfm
          Left            =   120
          ScaleHeight     =   6615
          ScaleWidth      =   2955
-         TabIndex        =   2
+         TabIndex        =   9
+         TabStop         =   0   'False
          Top             =   240
          Width           =   2950
          Begin VB.TextBox txtFile 
@@ -183,7 +186,8 @@ Begin VB.Form Pfm
             Height          =   200
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   14
+            TabIndex        =   20
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   240
             Width           =   2895
@@ -195,7 +199,8 @@ Begin VB.Form Pfm
             Index           =   0
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   13
+            TabIndex        =   19
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   480
             Width           =   2895
@@ -207,7 +212,8 @@ Begin VB.Form Pfm
             Index           =   1
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   12
+            TabIndex        =   18
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   720
             Width           =   2895
@@ -219,7 +225,8 @@ Begin VB.Form Pfm
             Index           =   2
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   11
+            TabIndex        =   17
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   960
             Width           =   2895
@@ -231,7 +238,8 @@ Begin VB.Form Pfm
             Index           =   3
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   10
+            TabIndex        =   16
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1200
             Width           =   2895
@@ -243,7 +251,8 @@ Begin VB.Form Pfm
             Index           =   4
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   9
+            TabIndex        =   15
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1440
             Width           =   2895
@@ -255,7 +264,8 @@ Begin VB.Form Pfm
             Index           =   5
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   8
+            TabIndex        =   14
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1680
             Width           =   2895
@@ -267,7 +277,8 @@ Begin VB.Form Pfm
             Index           =   6
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   7
+            TabIndex        =   13
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1920
             Width           =   2895
@@ -279,7 +290,8 @@ Begin VB.Form Pfm
             Index           =   7
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   6
+            TabIndex        =   12
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   2160
             Width           =   2895
@@ -288,7 +300,7 @@ Begin VB.Form Pfm
             Caption         =   "Mettre à jour"
             Height          =   255
             Left            =   600
-            TabIndex        =   3
+            TabIndex        =   2
             ToolTipText     =   "Mettre à jour les informations"
             Top             =   6240
             Width           =   1695
@@ -296,7 +308,8 @@ Begin VB.Form Pfm
          Begin ComctlLib.ListView lstSignets 
             Height          =   1575
             Left            =   0
-            TabIndex        =   4
+            TabIndex        =   10
+            TabStop         =   0   'False
             Top             =   4560
             Visible         =   0   'False
             Width           =   2895
@@ -329,7 +342,8 @@ Begin VB.Form Pfm
          Begin ComctlLib.TabStrip TB 
             Height          =   375
             Left            =   0
-            TabIndex        =   5
+            TabIndex        =   11
+            TabStop         =   0   'False
             Top             =   4160
             Width           =   2895
             _ExtentX        =   5106
@@ -354,7 +368,8 @@ Begin VB.Form Pfm
          Begin ComctlLib.ListView lstHisto 
             Height          =   1575
             Left            =   0
-            TabIndex        =   22
+            TabIndex        =   28
+            TabStop         =   0   'False
             Top             =   4560
             Width           =   2895
             _ExtentX        =   5106
@@ -389,7 +404,7 @@ Begin VB.Form Pfm
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   21
+            TabIndex        =   27
             Top             =   0
             Width           =   2895
          End
@@ -400,7 +415,7 @@ Begin VB.Form Pfm
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   20
+            TabIndex        =   26
             Top             =   2520
             Width           =   2895
          End
@@ -409,7 +424,7 @@ Begin VB.Form Pfm
             Height          =   200
             Index           =   8
             Left            =   0
-            TabIndex        =   19
+            TabIndex        =   25
             Top             =   2880
             Width           =   2895
          End
@@ -418,7 +433,7 @@ Begin VB.Form Pfm
             Height          =   200
             Index           =   9
             Left            =   0
-            TabIndex        =   18
+            TabIndex        =   24
             Top             =   3120
             Width           =   2895
          End
@@ -427,7 +442,7 @@ Begin VB.Form Pfm
             Height          =   200
             Index           =   10
             Left            =   0
-            TabIndex        =   17
+            TabIndex        =   23
             Top             =   3360
             Width           =   2895
          End
@@ -436,7 +451,7 @@ Begin VB.Form Pfm
             Height          =   200
             Index           =   11
             Left            =   0
-            TabIndex        =   16
+            TabIndex        =   22
             Top             =   3600
             Width           =   2895
          End
@@ -445,7 +460,7 @@ Begin VB.Form Pfm
             Height          =   200
             Index           =   12
             Left            =   0
-            TabIndex        =   15
+            TabIndex        =   21
             Top             =   3840
             Width           =   2895
          End
@@ -455,7 +470,7 @@ Begin VB.Form Pfm
       Align           =   2  'Align Bottom
       Height          =   255
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   7
       Top             =   7860
       Width           =   7635
       _ExtentX        =   13467
@@ -501,7 +516,7 @@ Begin VB.Form Pfm
    Begin ExtVS.ExtendedVScrollBar VS 
       Height          =   2895
       Left            =   3240
-      TabIndex        =   36
+      TabIndex        =   1
       Top             =   240
       Width           =   255
       _ExtentX        =   450
@@ -514,7 +529,7 @@ Begin VB.Form Pfm
    Begin HexViewer_OCX.HexViewer HW 
       Height          =   2535
       Left            =   240
-      TabIndex        =   37
+      TabIndex        =   0
       Top             =   240
       Width           =   2415
       _ExtentX        =   4260
@@ -580,7 +595,7 @@ Option Explicit
 Private lBgAdress As Long   'offset de départ de page
 Private lEdAdress As Long   'offset de fin de page
 Private NumberPerPage As Long   'nombre de lignes visibles par Page
-Private pRs As Long, pr As Long, pC As Long, pCs As Long 'sauvegarde de la sélection
+Private pRs As Long, pr As Long, pc As Long, pCs As Long 'sauvegarde de la sélection
 Private lLenght As Long 'taille du fichier
 Private ChangeListO() As Long
 Private ChangeListC() As Long
@@ -1682,24 +1697,28 @@ Dim I_tem As ItemElement
     If KeyCode = 13 Then
         'alors appui sur "enter"
     
-        If Index = 0 Then
-            'alors on change les autres champs que le champ "Hexa"
-            txtValue(1).Text = Hex2Dec(txtValue(0).Text)
-            txtValue(2).Text = Hex2Str(txtValue(0).Text)
-            txtValue(3).Text = Hex2Oct(txtValue(0).Text)
-        End If
-        If Index = 1 Then
-            'alors on change les autres champs que le champ "decimal"
-            txtValue(0).Text = Hex$(Val(txtValue(1).Text))
-            txtValue(2).Text = Byte2FormatedString(Val(txtValue(1).Text))
-            txtValue(3).Text = Oct$(Val(txtValue(1).Text))
-        End If
-        If Index = 2 Then
-            'alors on change les autres champs que le champ "string"
-            txtValue(0).Text = Str2Hex(Val(txtValue(2).Text))
-            txtValue(1).Text = Str2Dec(txtValue(2).Text)
-            txtValue(3).Text = Str2Oct(Val(txtValue(2).Text))
-        End If
+        Select Case Index
+            Case 0
+                'alors on change les autres champs que le champ "Hexa"
+                txtValue(1).Text = Hex2Dec(txtValue(0).Text)
+                txtValue(2).Text = Hex2Str(txtValue(0).Text)
+                txtValue(3).Text = Hex2Oct(txtValue(0).Text)
+            Case 1
+                'alors on change les autres champs que le champ "decimal"
+                txtValue(0).Text = Hex$(Val(txtValue(1).Text))
+                txtValue(2).Text = Byte2FormatedString(Val(txtValue(1).Text))
+                txtValue(3).Text = Oct$(Val(txtValue(1).Text))
+            Case 2
+                'alors on change les autres champs que le champ "ASCII"
+                txtValue(0).Text = Str2Hex(txtValue(2).Text)
+                txtValue(1).Text = Str2Dec(txtValue(2).Text)
+                txtValue(3).Text = Str2Oct(txtValue(2).Text)
+            Case 3
+                'alors on change les autres champs que le champ "octal"
+                txtValue(0).Text = Hex$(Oct2Dec(Val(txtValue(3).Text)))
+                txtValue(1).Text = Oct2Dec(Val(txtValue(3).Text))
+                txtValue(2).Text = Chr$(Oct2Dec(Val(txtValue(3).Text)))
+        End Select
 
         With frmContent.ActiveForm.HW
             .AddHexValue I_tem.Line, I_tem.Col, txtValue(0).Text

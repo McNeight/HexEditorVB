@@ -27,7 +27,7 @@ Begin VB.Form frmSelect
       Caption         =   "Fermer"
       Height          =   375
       Left            =   1485
-      TabIndex        =   5
+      TabIndex        =   3
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   960
       Width           =   1095
@@ -36,7 +36,7 @@ Begin VB.Form frmSelect
       Caption         =   "Sélectionner"
       Height          =   375
       Left            =   165
-      TabIndex        =   4
+      TabIndex        =   2
       ToolTipText     =   "Procéder à la restriction"
       Top             =   960
       Width           =   1095
@@ -45,7 +45,7 @@ Begin VB.Form frmSelect
       BorderStyle     =   0  'None
       Height          =   285
       Left            =   1560
-      TabIndex        =   3
+      TabIndex        =   1
       ToolTipText     =   "Offset supérieur"
       Top             =   480
       Width           =   1095
@@ -54,7 +54,7 @@ Begin VB.Form frmSelect
       BorderStyle     =   0  'None
       Height          =   285
       Left            =   1560
-      TabIndex        =   2
+      TabIndex        =   0
       ToolTipText     =   "Offset inférieur"
       Top             =   120
       Width           =   1095
@@ -64,7 +64,7 @@ Begin VB.Form frmSelect
       Height          =   255
       Index           =   1
       Left            =   120
-      TabIndex        =   1
+      TabIndex        =   5
       Top             =   480
       Width           =   1215
    End
@@ -73,7 +73,7 @@ Begin VB.Form frmSelect
       Height          =   255
       Index           =   0
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   4
       Top             =   120
       Width           =   1215
    End
@@ -126,7 +126,7 @@ Private Sub cmdOk_Click()
 'valide
 Dim lFrom As Currency
 Dim lTo As Currency
-Dim x As Currency
+Dim X As Currency
 
     'On Error GoTo ErrGestion
     
@@ -136,9 +136,9 @@ Dim x As Currency
     
     'fait en sorte que lFrom soit le plus petit
     If lFrom > lTo Then
-        x = lFrom
+        X = lFrom
         lFrom = lTo
-        lTo = x
+        lTo = X
     End If
         
     If byteFunc = 0 Then    'il s'agit d'une sélection paramétrée

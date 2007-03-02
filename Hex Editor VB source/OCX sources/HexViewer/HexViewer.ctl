@@ -1962,6 +1962,7 @@ End Function
 '=======================================================
 'SUBS FOR SELF-SUBCLASSING
 'cette partie n'est pas de moi
+'thx to Paul Caton
 '=======================================================
 
 'Determine if the passed function is supported
