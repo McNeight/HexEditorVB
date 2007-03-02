@@ -190,7 +190,7 @@ End Sub
 'renvoie a^b (plus rapide que a^b)
 '=======================================================
 Public Function AexpB(ByVal a As Long, ByVal b As Long) As Currency
-Dim x As Long
+Dim X As Long
 Dim l As Long
 
     On Error Resume Next
@@ -201,9 +201,9 @@ Dim l As Long
     End If
     
     l = 1
-    For x = 1 To b
+    For X = 1 To b
         l = l * a
-    Next x
+    Next X
     AexpB = l
 
 End Function
@@ -392,17 +392,17 @@ End Function
 '=======================================================
 Public Sub LoadIconesToLV(ByVal sFile As String, LV As ListView, pct As PictureBox, IMG As ImageList)
 Dim lIcon As Long
-Dim x As Long
+Dim X As Long
 Dim b As Long
     
     On Error GoTo ErrGestion
     
     LV.ListItems.Clear
-    lIcon = 1: x = 0
+    lIcon = 1: X = 0
     
     'tant que l'on trouve des icones
     Do
-        lIcon = ExtractIcon(App.hInstance, sFile, x)
+        lIcon = ExtractIcon(App.hInstance, sFile, X)
         
         If lIcon = 0 Then Exit Do   'plus d'icone, quitte
         
@@ -414,7 +414,7 @@ Dim b As Long
         ValidateRect LV.hWnd, 0&    'gèle l'affichage
         
         'Incrementation de l'emplacement de l'icone pour l'extraction
-        x = x + 1
+        X = X + 1
         
         LV.ListItems.Add , , vbNullString, , "_" & CStr(lIcon)    'ajout de l'icone
         DoEvents
@@ -481,7 +481,7 @@ Public Function MaWinProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam A
     'Intercepte le Message Windows de redimensionnement de fenêtre
     If uMsg = WM_GETMINMAXINFO Then
         CopyMemory MinMax, ByVal lParam, Len(MinMax)
-        MinMax.ptMinTrackSize.x = MinX \ Screen.TwipsPerPixelX
+        MinMax.ptMinTrackSize.X = MinX \ Screen.TwipsPerPixelX
         MinMax.ptMinTrackSize.y = MinY \ Screen.TwipsPerPixelY
 
         CopyMemory ByVal lParam, MinMax, Len(MinMax)
@@ -615,7 +615,17 @@ Dim ST As SYSTEMTIME
         
 End Function
 
-
+'=======================================================
+'enable ou non les fleches Signet suivant/précédent
+'=======================================================
+Public Sub RefreshBookMarkEnabled()
+    With frmContent
+        .Toolbar1.Buttons.Item(16).Enabled = (.ActiveForm.HW.NumberOfSignets > 0)
+        .Toolbar1.Buttons.Item(17).Enabled = .Toolbar1.Buttons.Item(16).Enabled
+        .mnuSignetNext.Enabled = .Toolbar1.Buttons.Item(16).Enabled
+        .mnuSignetPrev.Enabled = .Toolbar1.Buttons.Item(16).Enabled
+    End With
+End Sub
 
 
 
@@ -646,12 +656,12 @@ Public Function Str2Oct(ByVal s As String) As String
     Str2Oct = Oct$(Str2Dec(s))
 End Function
 Public Function Hex2Dec(ByVal s As String) As Long
-Dim x As Long
+Dim X As Long
 Dim l As Long
 
-    For x = Len(s) To 1 Step -1
-        l = l + HexVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(16, x - 1)
-    Next x
+    For X = Len(s) To 1 Step -1
+        l = l + HexVal(Mid$(s, Len(s) - X + 1, 1)) * AexpB(16, X - 1)
+    Next X
 
     Hex2Dec = l
 End Function
@@ -665,40 +675,40 @@ Public Function Hex2Oct(ByVal s As String) As String
     Hex2Oct = Oct$(Hex2Dec(s))
 End Function
 Public Function Dec2Bin(ByVal l As Long, Optional ByVal lSize As Long = 8) As String
-Dim x As Long
+Dim X As Long
 Dim s As String
 
     s = vbNullString
 
-    For x = lSize - 1 To 0 Step -1
-        If l >= AexpB(2, x) Then
-            l = l - AexpB(2, x)
+    For X = lSize - 1 To 0 Step -1
+        If l >= AexpB(2, X) Then
+            l = l - AexpB(2, X)
             s = s & "1"
         Else
             s = s & "0"
         End If
-    Next x
+    Next X
     
     Dec2Bin = s
         
 End Function
 Public Function Bin2Dec(ByVal s As String) As Long
-Dim x As Long
+Dim X As Long
 Dim l As Long
 
-    For x = Len(s) To 1 Step -1
-        l = l + FormatedVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(2, x - 1)
-    Next x
+    For X = Len(s) To 1 Step -1
+        l = l + FormatedVal(Mid$(s, Len(s) - X + 1, 1)) * AexpB(2, X - 1)
+    Next X
 
     Bin2Dec = l
 End Function
 Public Function Oct2Dec(ByVal s As String) As Long
-Dim x As Long
+Dim X As Long
 Dim l As Long
 
-    For x = Len(s) To 1 Step -1
-        l = l + FormatedVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(8, x - 1)
-    Next x
+    For X = Len(s) To 1 Step -1
+        l = l + FormatedVal(Mid$(s, Len(s) - X + 1, 1)) * AexpB(8, X - 1)
+    Next X
 
     Oct2Dec = l
 End Function
@@ -746,7 +756,7 @@ Public Function HexVal(ByVal s As String) As Long
     End If
 End Function
 Public Function ExtendedHex(ByVal cVal As Currency) As String
-Dim x As Long
+Dim X As Long
 Dim s As String
 Dim table16(15) As Currency
 Dim res(15) As Byte
@@ -769,16 +779,16 @@ Dim res(15) As Byte
     table16(12) = 281474976710656#
 
     'enlève, en partant des plus grosses valeurs, un maximum de fois un 16^x
-    For x = 12 To 0 Step -1
-        While cVal > table16(x)
-            cVal = cVal - table16(x)
-            res(x) = res(x) + 1 'ajoute 1 à l'occurence de table16(x)
+    For X = 12 To 0 Step -1
+        While cVal > table16(X)
+            cVal = cVal - table16(X)
+            res(X) = res(X) + 1 'ajoute 1 à l'occurence de table16(x)
         Wend
-    Next x
+    Next X
     
     'créé la string
-    For x = 12 To 0 Step -1
-        s = s & Hex(res(x))
+    For X = 12 To 0 Step -1
+        s = s & Hex(res(X))
     Next
     
     ExtendedHex = s
@@ -789,7 +799,7 @@ End Function
 Public Function HexValues2String(ByVal sString As String) As String
 Dim Sep As Boolean
 Dim sRes As String
-Dim x As Long
+Dim X As Long
 
     Sep = True  'recherche un séparant entre les valeurs hexa (de longueur 2)
 
@@ -811,9 +821,9 @@ Dim x As Long
     
     sRes = vbNullString
     'maintenant que la string ne comporte plus de séparants, on créé le résultat
-    For x = 1 To Int(Len(sString) / 2)
-        sRes = sRes & Chr$(Hex2Dec(Mid$(sString, 2 * x - 1, 2)))
-    Next x
+    For X = 1 To Int(Len(sString) / 2)
+        sRes = sRes & Chr$(Hex2Dec(Mid$(sString, 2 * X - 1, 2)))
+    Next X
     
     HexValues2String = sRes
 End Function

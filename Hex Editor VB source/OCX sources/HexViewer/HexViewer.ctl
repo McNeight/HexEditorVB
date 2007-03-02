@@ -349,6 +349,7 @@ Public Property Get strTag2() As String: strTag2 = str_Tag2: End Property
 Public Property Let strTag2(strTag2 As String): str_Tag2 = strTag2: End Property
 Public Property Get DisableHexDisplay() As Boolean: DisableHexDisplay = bDisableHexDisplay: End Property
 Public Property Let DisableHexDisplay(DisableHexDisplay As Boolean): bDisableHexDisplay = DisableHexDisplay: End Property
+Public Property Get NumberOfSignets() As Long: NumberOfSignets = UBound(M_S()) - 1: End Property
 
 
 
@@ -1026,6 +1027,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     Me.strTag1 = PropBag.ReadProperty("strTag1", 0)
     Me.strTag2 = PropBag.ReadProperty("strTag2", 0)
     Me.DisableHexDisplay = PropBag.ReadProperty("DisableHexDisplay", False)
+
     
     'alors c'est bon, on rafraichit
     'ceci évite de rafraichir pour CHAQUE property à l'entrée dans le controle
