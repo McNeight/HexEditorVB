@@ -166,7 +166,7 @@ Begin VB.MDIForm frmContent
          EndProperty
          BeginProperty ListImage35 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":D16E
-            Key             =   "Ouvrir|Ouvrir un fichier..."
+            Key             =   "Ouvrir|Ouvrir des fichiers..."
          EndProperty
          BeginProperty ListImage36 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":D4C0
@@ -238,7 +238,7 @@ Begin VB.MDIForm frmContent
          EndProperty
          BeginProperty ListImage53 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":10D32
-            Key             =   "Signets|Supprimer les signets de l'offset"
+            Key             =   "Signets|Supprimer le signet de l'offset"
          EndProperty
          BeginProperty ListImage54 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":11084
@@ -452,6 +452,7 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -459,13 +460,15 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "22:23"
+            TextSave        =   "22:59"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -473,6 +476,7 @@ Begin VB.MDIForm frmContent
             Object.Width           =   2117
             MinWidth        =   2117
             TextSave        =   "02/03/2007"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -2451,7 +2455,8 @@ Dim s() As String
 Dim s2 As String
 Dim X As Long
 Dim Frm As Form
-
+    
+    ReDim s(0)
     s2 = cFile.ShowOpen("Choix des fichiers à ouvrir", Me.hWnd, "Tous|*.*", , , , , _
         OFN_EXPLORER + OFN_ALLOWMULTISELECT, 4096, s())
     

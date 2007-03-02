@@ -667,6 +667,9 @@ Private Sub Form_Load()
         Call LoadResizing(Me.hWnd, 9000, 6000)
     #End If
     
+    'subclasse également lvIcon pour éviter le drag & drop
+    Call HookLVDragAndDrop(lvIcon.hWnd)
+    
     'instancie la classe Undo
     Set cUndo = New clsUndoItem
     
@@ -1070,6 +1073,9 @@ Private Sub Form_Unload(Cancel As Integer)
         'alors enlève le subclassing
         Call RestoreResizing(Me.hWnd)
     #End If
+    
+    'enleve le hook sur lvIcon également
+    Call UnHookLVDragAndDrop(lvIcon.hWnd)
 End Sub
 
 Private Sub HW_GotFocus()
