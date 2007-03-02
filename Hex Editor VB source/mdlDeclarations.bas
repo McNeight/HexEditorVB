@@ -55,8 +55,15 @@ Public Const STANDARD_RIGHTS_REQUIRED           As Long = &HF0000 'aussi pour d'
 Public Const PROCESS_ALL_ACCESS                 As Long = (STANDARD_RIGHTS_REQUIRED Or _
         SYNCHRONIZE Or &HFFF)
 Public Const SPECIFIC_RIGHTS_ALL                As Long = &HFFFF
-Public Const PROCESS_READ_WRITE_QUERY           As Long = PROCESS_VM_READ Or PROCESS_VM_WRITE Or _
-        PROCESS_VM_OPERATION Or PROCESS_QUERY_INFORMATION
+Public Const PROCESS_READ_WRITE_QUERY           As Long = PROCESS_VM_READ Or _
+    PROCESS_VM_WRITE Or PROCESS_VM_OPERATION Or PROCESS_QUERY_INFORMATION
+
+'constantes paramètres du type TRACKMOUSEEVENTTYPE
+Public Const TME_CANCEL                         As Long = &H80000000
+Public Const TME_HOVER                          As Long = &H1&
+Public Const TME_LEAVE                          As Long = &H2&
+Public Const TME_NONCLIENT                      As Long = &H10&
+Public Const TME_QUERY                          As Long = &H40000000
 
 'constantes utilisées pour la gestion des menus
 Public Const MF_HILITE                          As Long = &H80
@@ -78,8 +85,8 @@ Public Const MF_OWNERDRAW                       As Long = &H100
 Public Const MFT_OWNERDRAW                      As Long = MF_OWNERDRAW
 Public Const MFS_DEFAULT                        As Long = &H1000
 Public Const MF_STRING                          As Long = &H0
-Public Const MF_GRAYED                         As Long = &H1
-Public Const MF_CHECKED                        As Long = &H8
+Public Const MF_GRAYED                          As Long = &H1
+Public Const MF_CHECKED                         As Long = &H8
 
 Public Const MEM_PUBLIC                         As Long = &H20000
 Public Const MEM_COMMIT                         As Long = &H1000
@@ -121,11 +128,13 @@ Public Const IID_IICON                          As String = "{7BF80980-BF32-101A
 Public Const WM_MOUSEMOVE                       As Long = &H200
 Public Const WM_LBUTTONDOWN                     As Long = &H201
 Public Const WM_LBUTTONUP                       As Long = &H202
+Public Const WM_MOUSEHOVER                      As Long = &H2A1
+Public Const WM_MOUSELEAVE                      As Long = &H2A3
 Public Const WM_MENUSELECT                      As Long = &H11F
 Public Const WM_CLOSE                           As Long = &H10
 Public Const WM_SHOWWINDOW                      As Long = &H18
-Public Const VISIBLEFLAGS                       As Long = &H2 Or &H1 Or &H40 Or &H10
 Public Const WM_GETMINMAXINFO                   As Long = &H24
+Public Const VISIBLEFLAGS                       As Long = &H2 Or &H1 Or &H40 Or &H10
 Public Const GWL_WNDPROC                        As Long = -4&
 
 'constantes pour l'impression
@@ -189,16 +198,15 @@ Public Declare Function CompareFileTime Lib "kernel32" (lpFileTime1 As Currency,
 'APIS pour les menus
 Public Declare Function CreatePopupMenu Lib "user32" () As Long
 Public Declare Function InsertMenuItem Lib "user32.dll" Alias "InsertMenuItemA" (ByVal hMenu As Long, ByVal uItem As Long, ByVal fByPosition As Long, lpmii As MENUITEMINFO) As Long
-Public Declare Function TrackPopupMenuEx Lib "user32" (ByVal hMenu As Long, ByVal wFlags As Long, ByVal x As Long, ByVal y As Long, ByVal hwnd As Long, ByVal lptpm As Any) As Long
+Public Declare Function TrackPopupMenuEx Lib "user32" (ByVal hMenu As Long, ByVal wFlags As Long, ByVal x As Long, ByVal y As Long, ByVal hWnd As Long, ByVal lptpm As Any) As Long
 Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
 Public Declare Function DestroyMenu Lib "user32" (ByVal hMenu As Long) As Long
-Public Declare Function GetMenu Lib "user32" (ByVal hwnd As Long) As Long
+Public Declare Function GetMenu Lib "user32" (ByVal hWnd As Long) As Long
 Public Declare Function GetSubMenu Lib "user32" (ByVal hMenu As Long, ByVal nPos As Long) As Long
 Public Declare Function SetMenuItemBitmaps Lib "user32" (ByVal hMenu As Long, ByVal nPosition As Long, ByVal wFlags As Long, ByVal hBitmapUnchecked As Long, ByVal hBitmapChecked As Long) As Long
 Public Declare Function GetMenuItemCount Lib "user32" (ByVal hMenu As Long) As Long
 Public Declare Function GetMenuState Lib "user32" (ByVal hMenu As Long, ByVal wID As Long, ByVal wFlags As Long) As Long
 Public Declare Function GetMenuString Lib "user32" Alias "GetMenuStringA" (ByVal hMenu As Long, ByVal wIDItem As Long, ByVal lpString As String, ByVal nMaxCount As Long, ByVal wFlag As Long) As Long
-
 
 'APIs sur les processus
 Public Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
@@ -260,21 +268,24 @@ Public Declare Function OleCreatePictureIndirect Lib "olepro32.dll" (lpPictDesc 
 Public Declare Function ImageList_Draw Lib "Comctl32.dll" (ByVal himl&, ByVal i&, ByVal hDCDest&, ByVal x&, ByVal y&, ByVal FLAGS&) As Long
 
 'APIs pour l'affichage/gestion des fenêtres
-Public Declare Sub InvalidateRect Lib "user32" (ByVal hwnd As Long, ByVal t As Long, ByVal bErase As Long)
-Public Declare Sub ValidateRect Lib "user32" (ByVal hwnd As Long, ByVal t As Long)
-Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
-Public Declare Function UpdateWindow Lib "user32" (ByVal hwnd As Long) As Long
-Public Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
-Public Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long) As Long
-Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
-Public Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hwnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Declare Sub InvalidateRect Lib "user32" (ByVal hWnd As Long, ByVal t As Long, ByVal bErase As Long)
+Public Declare Sub ValidateRect Lib "user32" (ByVal hWnd As Long, ByVal t As Long)
+Public Declare Function SetWindowPos Lib "user32" (ByVal hWnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
+Public Declare Function UpdateWindow Lib "user32" (ByVal hWnd As Long) As Long
+Public Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+Public Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hWnd As Long, ByVal nIndex As Long) As Long
+Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hWnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
+Public Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Declare Function RectValidateRect Lib "user32" Alias "ValidateRect" (ByVal hWnd As Long, lpRect As RECT) As Long
+Public Declare Function RectInvalidateRect Lib "user32" Alias "InvalidateRect" (ByVal hWnd As Long, lpRect As RECT, ByVal bErase As Long) As Long
+Public Declare Function TrackMouseEvent Lib "user32" (lpEventTrack As TRACKMOUSEEVENTTYPE) As Long
 
 'APIs pour "l'environnement Windows"
 Public Declare Function SHGetSpecialFolderLocation Lib "shell32.dll" (ByVal hwndOwner As Long, ByVal nFolder As Long, pidl As ITEMIDLIST) As Long
 Public Declare Function SHGetPathFromIDList Lib "shell32.dll" Alias "SHGetPathFromIDListA" (ByVal pidl As Long, ByVal pszPath As String) As Long
 Public Declare Function SHRunDialog Lib "shell32" Alias "#61" (ByVal hOwner As Long, ByVal Unknown1 As Long, ByVal Unknown2 As Long, ByVal szTitle As String, ByVal szPrompt As String, ByVal uFlags As Long) As Long
 Public Declare Function SHGetFileInfo Lib "shell32" Alias "SHGetFileInfoA" (ByVal pszPath As Any, ByVal dwFileAttributes As Long, psfi As SHFILEINFO, ByVal cbFileInfo As Long, ByVal uFlags As Long) As Long
-Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
+Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 Public Declare Function ShellExecuteEX Lib "shell32.dll" Alias "ShellExecuteEx" (SEI As SHELLEXECUTEINFO) As Long
 Public Declare Function PrintDlg Lib "comdlg32.dll" Alias "PrintDlgA" (pPrintdlg As PRINTER_INFO) As Long
 Public Declare Function GetVersionEx Lib "kernel32" Alias "GetVersionExA" (lpVersionInformation As OSVERSIONINFO) As Long
@@ -453,7 +464,7 @@ End Type
 Public Type SHELLEXECUTEINFO
     cbSize As Long
     fMask As Long
-    hwnd As Long
+    hWnd As Long
     lpVerb As String
     lpFile As String
     lpParameters As String
@@ -626,4 +637,12 @@ Public Type RECT
    Top As Long
    Right As Long
    Bottom As Long
+End Type
+
+'type nécessaire à l'API TrackMouseEvent pour capter les event souris comme MOUSE_LEAVE
+Public Type TRACKMOUSEEVENTTYPE
+    cbSize As Long
+    dwFlags As Long
+    hwndTrack As Long
+    dwHoverTime As Long
 End Type
