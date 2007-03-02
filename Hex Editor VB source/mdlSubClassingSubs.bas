@@ -278,6 +278,8 @@ End Function
 'Private Const WM_MOUSEACTIVATE = &H21
 'Private Const WM_MOUSEFIRST = &H200
 'Private Const WM_MOUSELAST = &H209
+'Private Const WM_MOUSEHOVER = &H2A1
+'Private Const WM_MOUSELEAVE = &H2A3
 'Private Const WM_MOUSEMOVE = &H200
 'Private Const WM_MOVE = &H3
 'Private Const WM_NCACTIVATE = &H86
