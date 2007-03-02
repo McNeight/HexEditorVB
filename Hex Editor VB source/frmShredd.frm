@@ -127,6 +127,7 @@ Dim s() As String
 Dim s2 As String
 Dim X As Long
 
+    ReDim s(0)
     s2 = cFile.ShowOpen("Choix des fichiers à supprimer", Me.hWnd, "Tous|*.*", , , , , _
         OFN_EXPLORER + OFN_ALLOWMULTISELECT, 4096, s())
     
