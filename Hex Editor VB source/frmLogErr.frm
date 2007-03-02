@@ -28,7 +28,7 @@ Begin VB.Form frmLogErr
       Caption         =   "Reset..."
       Height          =   375
       Left            =   7320
-      TabIndex        =   1
+      TabIndex        =   2
       ToolTipText     =   "Supprimer toutes les entrées du rapport d'erreur"
       Top             =   840
       Width           =   1095
@@ -39,7 +39,7 @@ Begin VB.Form frmLogErr
       Left            =   120
       Locked          =   -1  'True
       MultiLine       =   -1  'True
-      TabIndex        =   2
+      TabIndex        =   0
       Top             =   120
       Width           =   6975
    End
@@ -107,7 +107,7 @@ Begin VB.Form frmLogErr
       Caption         =   "Fermer"
       Height          =   375
       Left            =   7320
-      TabIndex        =   0
+      TabIndex        =   1
       ToolTipText     =   "Fermer la fenêtre"
       Top             =   240
       Width           =   1095

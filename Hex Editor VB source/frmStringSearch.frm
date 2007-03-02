@@ -26,7 +26,8 @@ Begin VB.Form frmStringSearch
    Begin ProgressBar_OCX.pgrBar PGB 
       Height          =   255
       Left            =   120
-      TabIndex        =   10
+      TabIndex        =   15
+      TabStop         =   0   'False
       ToolTipText     =   "Progression de la recherche"
       Top             =   2280
       Width           =   4335
@@ -41,7 +42,8 @@ Begin VB.Form frmStringSearch
    Begin ComctlLib.ListView LV 
       Height          =   3735
       Left            =   120
-      TabIndex        =   9
+      TabIndex        =   14
+      TabStop         =   0   'False
       Top             =   3000
       Width           =   6375
       _ExtentX        =   11245
@@ -73,7 +75,7 @@ Begin VB.Form frmStringSearch
       Caption         =   "Fermer"
       Height          =   375
       Left            =   4800
-      TabIndex        =   7
+      TabIndex        =   10
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   1800
       Width           =   1575
@@ -82,7 +84,7 @@ Begin VB.Form frmStringSearch
       Caption         =   "Sauvegarder les résultats"
       Height          =   495
       Left            =   4800
-      TabIndex        =   6
+      TabIndex        =   9
       ToolTipText     =   "Sauvegarder les résultats (format texte)"
       Top             =   960
       Width           =   1575
@@ -91,7 +93,7 @@ Begin VB.Form frmStringSearch
       Caption         =   "Lancer la recherche"
       Height          =   375
       Left            =   4800
-      TabIndex        =   5
+      TabIndex        =   0
       ToolTipText     =   "Lancer la recherche"
       Top             =   240
       Width           =   1575
@@ -100,7 +102,7 @@ Begin VB.Form frmStringSearch
       Caption         =   "Options de recherche"
       Height          =   2055
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   11
       Top             =   120
       Width           =   4335
       Begin VB.PictureBox Picture1 
@@ -109,14 +111,15 @@ Begin VB.Form frmStringSearch
          Left            =   120
          ScaleHeight     =   1695
          ScaleWidth      =   4095
-         TabIndex        =   1
+         TabIndex        =   12
+         TabStop         =   0   'False
          Top             =   240
          Width           =   4095
          Begin VB.CheckBox chkAccent 
             Caption         =   "Rechercher des caractères accentués"
             Height          =   255
             Left            =   0
-            TabIndex        =   15
+            TabIndex        =   5
             Tag             =   "pref"
             ToolTipText     =   "Rechercher des caractères avec des accents ("
             Top             =   960
@@ -126,7 +129,7 @@ Begin VB.Form frmStringSearch
             Caption         =   "Ajouter un signet pour les chaines trouvées"
             Height          =   255
             Left            =   0
-            TabIndex        =   14
+            TabIndex        =   6
             Tag             =   "pref"
             ToolTipText     =   "Ajouter un signet à chaque offset où une string est trouvée"
             Top             =   1200
@@ -136,7 +139,7 @@ Begin VB.Form frmStringSearch
             Caption         =   "Rechercher des signes"
             Height          =   255
             Left            =   0
-            TabIndex        =   13
+            TabIndex        =   4
             Tag             =   "pref"
             ToolTipText     =   "Inclure les signes dans la recherche"
             Top             =   720
@@ -146,7 +149,7 @@ Begin VB.Form frmStringSearch
             Caption         =   "Rechercher des majuscules"
             Height          =   255
             Left            =   0
-            TabIndex        =   12
+            TabIndex        =   3
             Tag             =   "pref"
             ToolTipText     =   "Inclure les majuscules dans la recherche"
             Top             =   480
@@ -157,7 +160,7 @@ Begin VB.Form frmStringSearch
             Caption         =   "Rechercher des minuscules"
             Height          =   255
             Left            =   0
-            TabIndex        =   11
+            TabIndex        =   2
             Tag             =   "pref"
             ToolTipText     =   "Inclure les minuscules dans la recherche"
             Top             =   240
@@ -169,7 +172,7 @@ Begin VB.Form frmStringSearch
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   3240
-            TabIndex        =   4
+            TabIndex        =   8
             Tag             =   "pref"
             Text            =   "5"
             ToolTipText     =   "Taille minimale (au dessous de cette taille, les suites de caractères ne sont pas considérées comme des strings)"
@@ -180,7 +183,7 @@ Begin VB.Form frmStringSearch
             Caption         =   "Rechercher des chiffres"
             Height          =   255
             Left            =   0
-            TabIndex        =   2
+            TabIndex        =   1
             Tag             =   "pref"
             ToolTipText     =   "Inclure les chiffres dans la recherche"
             Top             =   0
@@ -190,7 +193,7 @@ Begin VB.Form frmStringSearch
             Caption         =   "Taille minimale de la chaîne de caractères :"
             Height          =   255
             Left            =   0
-            TabIndex        =   3
+            TabIndex        =   7
             Top             =   1460
             Width           =   3135
          End
@@ -202,7 +205,7 @@ Begin VB.Form frmStringSearch
       Caption         =   "Résultats de la recherche"
       Height          =   255
       Left            =   120
-      TabIndex        =   8
+      TabIndex        =   13
       Top             =   2760
       Width           =   6375
    End

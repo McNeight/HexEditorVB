@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{276EF1C1-20F1-4D85-BE7B-06C736C9DCE9}#1.0#0"; "ExtendedVScrollbar_OCX.ocx"
-Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.0#0"; "HexViewer_OCX.ocx"
+Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.1#0"; "HexViewer_OCX.ocx"
 Begin VB.Form MemPfm 
    Caption         =   "Ouverture d'un processus..."
    ClientHeight    =   8295
@@ -27,13 +27,13 @@ Begin VB.Form MemPfm
       ForeColor       =   &H00000000&
       Height          =   2895
       Left            =   240
-      TabIndex        =   23
+      TabIndex        =   27
       Top             =   5160
       Width           =   1695
       Begin ComctlLib.ListView lvIcon 
          Height          =   2535
          Left            =   65
-         TabIndex        =   24
+         TabIndex        =   28
          Top             =   240
          Width           =   1550
          _ExtentX        =   2752
@@ -60,7 +60,7 @@ Begin VB.Form MemPfm
       Left            =   3840
       ScaleHeight     =   555
       ScaleWidth      =   555
-      TabIndex        =   22
+      TabIndex        =   26
       Top             =   6240
       Visible         =   0   'False
       Width           =   615
@@ -70,7 +70,7 @@ Begin VB.Form MemPfm
       ForeColor       =   &H00000000&
       Height          =   1455
       Left            =   1920
-      TabIndex        =   12
+      TabIndex        =   20
       Top             =   4440
       Width           =   1695
       Begin VB.PictureBox Picture1 
@@ -79,7 +79,8 @@ Begin VB.Form MemPfm
          Left            =   50
          ScaleHeight     =   1095
          ScaleWidth      =   1605
-         TabIndex        =   13
+         TabIndex        =   21
+         TabStop         =   0   'False
          Top             =   240
          Width           =   1600
          Begin VB.TextBox txtValue 
@@ -88,7 +89,7 @@ Begin VB.Form MemPfm
             Index           =   2
             Left            =   960
             MaxLength       =   1
-            TabIndex        =   17
+            TabIndex        =   8
             Top             =   480
             Width           =   495
          End
@@ -98,7 +99,7 @@ Begin VB.Form MemPfm
             Index           =   1
             Left            =   960
             MaxLength       =   3
-            TabIndex        =   16
+            TabIndex        =   7
             Top             =   240
             Width           =   495
          End
@@ -108,7 +109,7 @@ Begin VB.Form MemPfm
             Index           =   0
             Left            =   960
             MaxLength       =   2
-            TabIndex        =   15
+            TabIndex        =   6
             Top             =   0
             Width           =   495
          End
@@ -117,7 +118,7 @@ Begin VB.Form MemPfm
             Height          =   195
             Index           =   3
             Left            =   960
-            TabIndex        =   14
+            TabIndex        =   9
             Top             =   720
             Width           =   495
          End
@@ -126,7 +127,7 @@ Begin VB.Form MemPfm
             Height          =   255
             Index           =   2
             Left            =   0
-            TabIndex        =   21
+            TabIndex        =   25
             Top             =   480
             Width           =   855
          End
@@ -135,7 +136,7 @@ Begin VB.Form MemPfm
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   20
+            TabIndex        =   24
             Top             =   240
             Width           =   855
          End
@@ -144,7 +145,7 @@ Begin VB.Form MemPfm
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   19
+            TabIndex        =   23
             Top             =   0
             Width           =   855
          End
@@ -153,7 +154,7 @@ Begin VB.Form MemPfm
             Height          =   255
             Index           =   3
             Left            =   0
-            TabIndex        =   18
+            TabIndex        =   22
             Top             =   720
             Width           =   855
          End
@@ -164,13 +165,14 @@ Begin VB.Form MemPfm
       ForeColor       =   &H00FF0000&
       Height          =   6975
       Left            =   4920
-      TabIndex        =   2
+      TabIndex        =   11
       Top             =   720
       Width           =   3135
       Begin ComctlLib.ListView lstHisto 
          Height          =   1575
          Left            =   120
          TabIndex        =   48
+         TabStop         =   0   'False
          Top             =   4800
          Width           =   2895
          _ExtentX        =   5106
@@ -205,7 +207,8 @@ Begin VB.Form MemPfm
          Left            =   120
          ScaleHeight     =   2175
          ScaleWidth      =   2895
-         TabIndex        =   38
+         TabIndex        =   40
+         TabStop         =   0   'False
          Top             =   720
          Visible         =   0   'False
          Width           =   2895
@@ -213,7 +216,7 @@ Begin VB.Form MemPfm
             Caption         =   "Rafraichir les infos processus"
             Height          =   300
             Left            =   240
-            TabIndex        =   46
+            TabIndex        =   4
             ToolTipText     =   "Rafraichir les infos sur le processus"
             Top             =   1845
             Width           =   2415
@@ -222,7 +225,7 @@ Begin VB.Form MemPfm
             Caption         =   "Gestionnaire de processus..."
             Height          =   300
             Left            =   240
-            TabIndex        =   45
+            TabIndex        =   3
             ToolTipText     =   "Afficher le gestionnaire de processus"
             Top             =   1560
             Width           =   2415
@@ -234,7 +237,8 @@ Begin VB.Form MemPfm
             Index           =   13
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   44
+            TabIndex        =   46
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1320
             Width           =   2895
@@ -246,7 +250,8 @@ Begin VB.Form MemPfm
             Index           =   12
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   43
+            TabIndex        =   45
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1080
             Width           =   2895
@@ -258,7 +263,8 @@ Begin VB.Form MemPfm
             Index           =   11
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   42
+            TabIndex        =   44
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   840
             Width           =   2895
@@ -270,7 +276,8 @@ Begin VB.Form MemPfm
             Index           =   10
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   41
+            TabIndex        =   43
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   600
             Width           =   2895
@@ -282,7 +289,8 @@ Begin VB.Form MemPfm
             Index           =   9
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   40
+            TabIndex        =   42
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   360
             Width           =   2895
@@ -294,7 +302,8 @@ Begin VB.Form MemPfm
             Index           =   8
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   39
+            TabIndex        =   41
+            TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   120
             Width           =   2895
@@ -307,7 +316,8 @@ Begin VB.Form MemPfm
          Left            =   120
          ScaleHeight     =   2175
          ScaleWidth      =   2895
-         TabIndex        =   27
+         TabIndex        =   29
+         TabStop         =   0   'False
          Top             =   720
          Width           =   2895
          Begin VB.TextBox txtFile 
@@ -316,7 +326,7 @@ Begin VB.Form MemPfm
             Height          =   200
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   36
+            TabIndex        =   38
             Text            =   "Fichier=[path]"
             Top             =   0
             Width           =   2895
@@ -328,7 +338,7 @@ Begin VB.Form MemPfm
             Index           =   0
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   35
+            TabIndex        =   37
             Text            =   "Fichier=[path]"
             Top             =   240
             Width           =   2895
@@ -340,7 +350,7 @@ Begin VB.Form MemPfm
             Index           =   1
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   34
+            TabIndex        =   36
             Text            =   "Fichier=[path]"
             Top             =   480
             Width           =   2895
@@ -352,7 +362,7 @@ Begin VB.Form MemPfm
             Index           =   2
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   33
+            TabIndex        =   35
             Text            =   "Fichier=[path]"
             Top             =   720
             Width           =   2895
@@ -364,7 +374,7 @@ Begin VB.Form MemPfm
             Index           =   3
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   32
+            TabIndex        =   34
             Text            =   "Fichier=[path]"
             Top             =   960
             Width           =   2895
@@ -376,7 +386,7 @@ Begin VB.Form MemPfm
             Index           =   4
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   31
+            TabIndex        =   33
             Text            =   "Fichier=[path]"
             Top             =   1200
             Width           =   2895
@@ -388,7 +398,7 @@ Begin VB.Form MemPfm
             Index           =   5
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   30
+            TabIndex        =   32
             Text            =   "Fichier=[path]"
             Top             =   1440
             Width           =   2895
@@ -400,7 +410,7 @@ Begin VB.Form MemPfm
             Index           =   6
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   29
+            TabIndex        =   31
             Text            =   "Fichier=[path]"
             Top             =   1680
             Width           =   2895
@@ -412,7 +422,7 @@ Begin VB.Form MemPfm
             Index           =   7
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   28
+            TabIndex        =   30
             Text            =   "Fichier=[path]"
             Top             =   1920
             Width           =   2895
@@ -424,13 +434,15 @@ Begin VB.Form MemPfm
          Left            =   120
          ScaleHeight     =   6615
          ScaleWidth      =   2955
-         TabIndex        =   3
+         TabIndex        =   12
+         TabStop         =   0   'False
          Top             =   240
          Width           =   2950
          Begin ComctlLib.ListView lstSignets 
             Height          =   1575
             Left            =   0
             TabIndex        =   47
+            TabStop         =   0   'False
             Top             =   4560
             Visible         =   0   'False
             Width           =   2895
@@ -463,7 +475,8 @@ Begin VB.Form MemPfm
          Begin ComctlLib.TabStrip TB2 
             Height          =   375
             Left            =   0
-            TabIndex        =   37
+            TabIndex        =   39
+            TabStop         =   0   'False
             Top             =   0
             Width           =   2895
             _ExtentX        =   5106
@@ -489,7 +502,7 @@ Begin VB.Form MemPfm
             Caption         =   "Mettre à jour"
             Height          =   255
             Left            =   600
-            TabIndex        =   4
+            TabIndex        =   5
             ToolTipText     =   "Mettre à jour les informations"
             Top             =   6240
             Width           =   1695
@@ -497,7 +510,8 @@ Begin VB.Form MemPfm
          Begin ComctlLib.TabStrip TB 
             Height          =   375
             Left            =   0
-            TabIndex        =   5
+            TabIndex        =   13
+            TabStop         =   0   'False
             Top             =   4160
             Width           =   2895
             _ExtentX        =   5106
@@ -524,7 +538,7 @@ Begin VB.Form MemPfm
             Height          =   255
             Index           =   12
             Left            =   0
-            TabIndex        =   11
+            TabIndex        =   19
             Top             =   3840
             Width           =   2895
          End
@@ -533,7 +547,7 @@ Begin VB.Form MemPfm
             Height          =   255
             Index           =   11
             Left            =   0
-            TabIndex        =   10
+            TabIndex        =   18
             Top             =   3600
             Width           =   2895
          End
@@ -542,7 +556,7 @@ Begin VB.Form MemPfm
             Height          =   255
             Index           =   10
             Left            =   0
-            TabIndex        =   9
+            TabIndex        =   17
             Top             =   3360
             Width           =   2895
          End
@@ -551,7 +565,7 @@ Begin VB.Form MemPfm
             Height          =   255
             Index           =   9
             Left            =   0
-            TabIndex        =   8
+            TabIndex        =   16
             Top             =   3120
             Width           =   2895
          End
@@ -560,7 +574,7 @@ Begin VB.Form MemPfm
             Height          =   255
             Index           =   8
             Left            =   0
-            TabIndex        =   7
+            TabIndex        =   15
             Top             =   2880
             Width           =   2895
          End
@@ -571,7 +585,7 @@ Begin VB.Form MemPfm
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   6
+            TabIndex        =   14
             Top             =   2640
             Width           =   2895
          End
@@ -580,7 +594,7 @@ Begin VB.Form MemPfm
    Begin ComctlLib.TabStrip MemTB 
       Height          =   375
       Left            =   480
-      TabIndex        =   1
+      TabIndex        =   2
       ToolTipText     =   "Liste des plages disponibles"
       Top             =   3480
       Width           =   2175
@@ -601,7 +615,7 @@ Begin VB.Form MemPfm
       Align           =   2  'Align Bottom
       Height          =   255
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   10
       Top             =   8040
       Width           =   8730
       _ExtentX        =   15399
@@ -647,7 +661,7 @@ Begin VB.Form MemPfm
    Begin HexViewer_OCX.HexViewer HW 
       Height          =   2535
       Left            =   120
-      TabIndex        =   25
+      TabIndex        =   0
       Top             =   360
       Width           =   2415
       _ExtentX        =   4260
@@ -658,7 +672,7 @@ Begin VB.Form MemPfm
    Begin ExtVS.ExtendedVScrollBar VS 
       Height          =   2895
       Left            =   3840
-      TabIndex        =   26
+      TabIndex        =   1
       Top             =   720
       Width           =   255
       _ExtentX        =   450
@@ -726,7 +740,7 @@ Option Explicit
 Private lBgAdress As Long   'offset de départ de page
 Private lEdAdress As Long   'offset de fin de page
 Private NumberPerPage As Long   'nombre de lignes visibles par Page
-Private pRs As Long, pr As Long, pC As Long, pCs As Long 'sauvegarde de la sélection
+Private pRs As Long, pr As Long, pc As Long, pCs As Long 'sauvegarde de la sélection
 Private lLenght As Long 'taille du fichier
 Private ChangeListO() As Long
 Private ChangeListC() As Long
@@ -979,7 +993,7 @@ Dim s2 As String
 Dim mbi As MEMORY_BASIC_INFORMATION
 Dim lLenMBI As Long
 Dim si As SYSTEM_INFO
-Dim lpMem As Long, ret As Long, lPos As Long, sBuffer As String
+Dim lpMem As Long, Ret As Long, lPos As Long, sBuffer As String
 Dim lWritten As Long
 Dim sSearchString As String
 Dim CalcAddress As Long
@@ -1025,19 +1039,19 @@ End Sub
 'renvoie si l'offset contient une modification
 '=======================================================
 Private Function IsOffsetModified(ByVal lOffset As Long, ByRef lPlace As Long) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsOffsetModified = False
     
-    For x = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
+    For X = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
     'dans le cas où il y a eu plusieurs modifs dans le même offset
-        If ChangeListO(x) = lOffset + 1 Then
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            lPlace = x
+            lPlace = X
             IsOffsetModified = True
             Exit Function
         End If
-    Next x
+    Next X
     
 End Function
 
@@ -1045,19 +1059,19 @@ End Function
 'renvoie si la case a été modifiée ou non (permet l'affichage en couleur dans HW)
 '=======================================================
 Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Long) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsModified = False
     
-    For x = 2 To ChangeListDim
-        If ChangeListO(x) = lOffset + 1 Then
+    For X = 2 To ChangeListDim
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            If ChangeListC(x) = lCol Then
+            If ChangeListC(X) = lCol Then
                 IsModified = True
                 Exit Function
             End If
         End If
-    Next x
+    Next X
 End Function
 
 '=======================================================
@@ -1265,7 +1279,7 @@ ErrGestion:
     clsERREUR.AddError "MemPfm.KeyDown", True
 End Sub
 
-Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
     If Button = 2 Then
         Me.PopupMenu frmContent.mnuPopupIcon
     End If
@@ -1277,7 +1291,7 @@ Dim s As String
 Dim sKey As Long
 Dim bytHex As Byte
 Dim Valu As Byte
-Dim x As Byte
+Dim X As Byte
 
     On Error GoTo ErrGestion
 
@@ -1345,7 +1359,7 @@ ErrGestion:
     clsERREUR.AddError "Pfm.KeyPress", True
 End Sub
 
-Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As ItemElement)
+Private Sub HW_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single, Item As ItemElement)
 Dim s As String
 Dim r As Long
 
@@ -1429,7 +1443,7 @@ Dim r As Long
     
 End Sub
 
-Private Sub HW_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub HW_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
     Me.Sb.Panels(4).Text = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(9) = Me.Sb.Panels(4).Text
 End Sub
@@ -1466,7 +1480,7 @@ Private Sub lstSignets_ItemClick(ByVal Item As ComctlLib.ListItem)
     End If
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
 Dim tLst As ListItem
 Dim s As String
 Dim r As Long
@@ -1474,7 +1488,7 @@ Dim r As Long
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, y)
         If tLst Is Nothing Then Exit Sub
         s = InputBox("Ajouter un commentaire pour le signet " & tLst.Text, "Ajout d'un commentaire")
         If StrPtr(s) <> 0 Then
@@ -1485,7 +1499,7 @@ Dim r As Long
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, y)
         If tLst Is Nothing Then Exit Sub
         
         r = MsgBox("Supprimer le signet " & tLst.Text & " ?", vbInformation + vbYesNo, "Attention")
@@ -1527,7 +1541,7 @@ Dim l As Long
 
 End Sub
 
-Private Sub MemTB_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub MemTB_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
 'affiche un popupmenu créé dynamiquement
 Dim l As Long
 
@@ -1566,7 +1580,7 @@ Private Sub TB2_Click()
     End If
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub
@@ -1650,7 +1664,7 @@ Dim pMenuInfo As MENUITEMINFO 'définit les info de l'item de menu ajouté
 Dim pPositionCurseur As POINTAPI 'stocke la position actuelle du curseur
 Dim lHandleMenu As Long 'stocke le handle du menu
 Dim lHandleSousMenu() As Long 'stocke les handles des sous-menus
-Dim x As Long
+Dim X As Long
 
 
     On Error GoTo erreur0
@@ -1661,29 +1675,29 @@ Dim x As Long
     Let lHandleMenu = CreatePopupMenu
     
     'insère MemTB.Tabs.Count sous-menus
-    For x = MemTB.Tabs.Count To 1 Step -1
+    For X = MemTB.Tabs.Count To 1 Step -1
         With pMenuInfo
             .cbSize = Len(pMenuInfo)
             .fType = MFT_STRING
             .fState = MFS_ENABLED
-            .dwTypeData = MemTB.Tabs.Item(x).Caption
+            .dwTypeData = MemTB.Tabs.Item(X).Caption
             .cch = Len(pMenuInfo.dwTypeData)
-            .wID = x
+            .wID = X
             .fMask = MIIM_ID Or MIIM_TYPE Or MIIM_STATE
             .hSubMenu = lHandleMenu
         End With
         Call InsertMenuItem(lHandleMenu, 0, True, pMenuInfo)
-        lHandleSousMenu(x) = CreatePopupMenu
-    Next x
+        lHandleSousMenu(X) = CreatePopupMenu
+    Next X
     
     'on affiche le menu crée
     Call GetCursorPos(pPositionCurseur)
-    AfficherMenu = TrackPopupMenuEx(lHandleMenu, TPM_LEFTALIGN Or TPM_RIGHTBUTTON Or TPM_RETURNCMD, pPositionCurseur.x, pPositionCurseur.y, Me.hWnd, ByVal 0&)
+    AfficherMenu = TrackPopupMenuEx(lHandleMenu, TPM_LEFTALIGN Or TPM_RIGHTBUTTON Or TPM_RETURNCMD, pPositionCurseur.X, pPositionCurseur.y, Me.hWnd, ByVal 0&)
     
     Call DestroyMenu(lHandleMenu)
-    For x = 1 To MemTB.Tabs.Count
+    For X = 1 To MemTB.Tabs.Count
         Call DestroyMenu(lHandleSousMenu(0))
-    Next x
+    Next X
 
 Exit Function
 
@@ -1708,7 +1722,7 @@ End Function
 '=======================================================
 Public Sub AddAChange(ByVal sNewByte As Long)
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     'écrit le nouveau byte dans la mémoire
     cMem.WriteBytesH lHandle, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, Chr$(sNewByte)
@@ -1729,24 +1743,28 @@ Dim I_tem As ItemElement
     If KeyCode = 13 Then
         'alors appui sur "enter"
     
-        If Index = 0 Then
-            'alors on change les autres champs que le champ "Hexa"
-            txtValue(1).Text = Hex2Dec(txtValue(0).Text)
-            txtValue(2).Text = Hex2Str(txtValue(0).Text)
-            txtValue(3).Text = Hex2Oct(txtValue(0).Text)
-        End If
-        If Index = 1 Then
-            'alors on change les autres champs que le champ "decimal"
-            txtValue(0).Text = Hex$(Val(txtValue(1).Text))
-            txtValue(2).Text = Byte2FormatedString(Val(txtValue(1).Text))
-            txtValue(3).Text = Oct$(Val(txtValue(1).Text))
-        End If
-        If Index = 2 Then
-            'alors on change les autres champs que le champ "string"
-            txtValue(0).Text = Str2Hex(Val(txtValue(2).Text))
-            txtValue(1).Text = Str2Dec(txtValue(2).Text)
-            txtValue(3).Text = Str2Oct(Val(txtValue(2).Text))
-        End If
+        Select Case Index
+            Case 0
+                'alors on change les autres champs que le champ "Hexa"
+                txtValue(1).Text = Hex2Dec(txtValue(0).Text)
+                txtValue(2).Text = Hex2Str(txtValue(0).Text)
+                txtValue(3).Text = Hex2Oct(txtValue(0).Text)
+            Case 1
+                'alors on change les autres champs que le champ "decimal"
+                txtValue(0).Text = Hex$(Val(txtValue(1).Text))
+                txtValue(2).Text = Byte2FormatedString(Val(txtValue(1).Text))
+                txtValue(3).Text = Oct$(Val(txtValue(1).Text))
+            Case 2
+                'alors on change les autres champs que le champ "ASCII"
+                txtValue(0).Text = Str2Hex(txtValue(2).Text)
+                txtValue(1).Text = Str2Dec(txtValue(2).Text)
+                txtValue(3).Text = Str2Oct(txtValue(2).Text)
+            Case 3
+                'alors on change les autres champs que le champ "octal"
+                txtValue(0).Text = Hex$(Oct2Dec(Val(txtValue(3).Text)))
+                txtValue(1).Text = Oct2Dec(Val(txtValue(3).Text))
+                txtValue(2).Text = Chr$(Oct2Dec(Val(txtValue(3).Text)))
+        End Select
 
         AddAChange (Hex2Dec(txtValue(0).Text))
         

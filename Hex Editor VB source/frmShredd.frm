@@ -27,7 +27,7 @@ Begin VB.Form frmShredd
       Caption         =   "Fermer"
       Height          =   375
       Left            =   1763
-      TabIndex        =   3
+      TabIndex        =   2
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   4200
       Width           =   1335
@@ -37,7 +37,7 @@ Begin VB.Form frmShredd
       Enabled         =   0   'False
       Height          =   375
       Left            =   2543
-      TabIndex        =   2
+      TabIndex        =   1
       ToolTipText     =   "Détruit les fichiers (/!\ suppression IRRECUPERABLE)"
       Top             =   3600
       Width           =   2175
@@ -46,7 +46,7 @@ Begin VB.Form frmShredd
       Caption         =   "Ajouter des fichiers..."
       Height          =   375
       Left            =   143
-      TabIndex        =   1
+      TabIndex        =   0
       ToolTipText     =   "Permet l'ajout de fichiers à détruire"
       Top             =   3600
       Width           =   2175
@@ -54,7 +54,7 @@ Begin VB.Form frmShredd
    Begin ComctlLib.ListView LV 
       Height          =   3375
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   3
       Top             =   0
       Width           =   4815
       _ExtentX        =   8493
@@ -125,16 +125,16 @@ Private Sub cmdAddFile_Click()
 'ajoute un fichier à la liste à supprimer
 Dim s() As String
 Dim s2 As String
-Dim x As Long
+Dim X As Long
 
     s2 = cFile.ShowOpen("Choix des fichiers à supprimer", Me.hWnd, "Tous|*.*", , , , , _
         OFN_EXPLORER + OFN_ALLOWMULTISELECT, 4096, s())
     
-    For x = 1 To UBound(s())
-        If cFile.FileExists(s(x)) Then
-            LV.ListItems.Add Text:=s(x) 'ajoute l'élément
+    For X = 1 To UBound(s())
+        If cFile.FileExists(s(X)) Then
+            LV.ListItems.Add Text:=s(X) 'ajoute l'élément
         End If
-    Next x
+    Next X
     
     'dans le cas d'un fichier simple
     If cFile.FileExists(s2) Then LV.ListItems.Add Text:=s2
@@ -146,18 +146,18 @@ End Sub
 
 Private Sub cmdProceed_Click()
 'procède à la suppression définitive
-Dim x As Long
+Dim X As Long
 
     'affiche un advertissement
-    x = MsgBox("Les fichiers sélectionnés seront IRRECUPERABLES." & vbNewLine & "Procéder à la suppression ?", vbYesNo + vbInformation, "Attention")
+    X = MsgBox("Les fichiers sélectionnés seront IRRECUPERABLES." & vbNewLine & "Procéder à la suppression ?", vbYesNo + vbInformation, "Attention")
     
-    If Not (x = vbYes) Then Exit Sub
+    If Not (X = vbYes) Then Exit Sub
     
     
-    For x = LV.ListItems.Count To 1 Step -1
+    For X = LV.ListItems.Count To 1 Step -1
         DoEvents    'rend quand même la main, si bcp de fichiers, c'est utile
-        If ShreddFile(LV.ListItems.Item(x)) Then    'procède à la suppression
-            LV.ListItems.Remove (x) 'enlève l'item si la suppression à échoué
+        If ShreddFile(LV.ListItems.Item(X)) Then    'procède à la suppression
+            LV.ListItems.Remove (X) 'enlève l'item si la suppression à échoué
         End If
     Next
     
@@ -196,7 +196,7 @@ Private Sub CheckBtn()
     Me.cmdProceed.Enabled = (LV.ListItems.Count > 0)
 End Sub
 
-Private Sub LV_OLEDragDrop(Data As ComctlLib.DataObject, Effect As Long, Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub LV_OLEDragDrop(Data As ComctlLib.DataObject, Effect As Long, Button As Integer, Shift As Integer, X As Single, y As Single)
 Dim i As Long
 
     'gestion de la dépose des fichiers sur le listview
