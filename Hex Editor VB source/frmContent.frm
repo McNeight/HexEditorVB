@@ -452,6 +452,7 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -459,13 +460,15 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "19:39"
+            TextSave        =   "19:45"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -473,6 +476,7 @@ Begin VB.MDIForm frmContent
             Object.Width           =   2117
             MinWidth        =   2117
             TextSave        =   "02/03/2007"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -620,7 +624,7 @@ Begin VB.MDIForm frmContent
          EndProperty
          BeginProperty Button2 {66833FEA-8583-11D1-B16A-00C0F0283628} 
             Key             =   "OpenFile"
-            Object.ToolTipText     =   "Ouvrir un fichier"
+            Object.ToolTipText     =   "Ouvrir un ou plusieurs fichiers"
             ImageIndex      =   17
          EndProperty
          BeginProperty Button3 {66833FEA-8583-11D1-B16A-00C0F0283628} 
@@ -725,7 +729,7 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuROpen 
          Caption         =   "&Ouvrir"
          Begin VB.Menu mnuOpen 
-            Caption         =   "&Ouvrir un fichier..."
+            Caption         =   "&Ouvrir des fichiers..."
             Shortcut        =   ^O
          End
          Begin VB.Menu mnuOpenFolder 
@@ -2436,30 +2440,35 @@ Private Sub mnuNewProcess_Click()
 End Sub
 
 Private Sub mnuOpen_Click()
+'ajoute un fichier à la liste à supprimer
+Dim s() As String
+Dim s2 As String
+Dim X As Long
 Dim Frm As Form
-    'ouvre un fichier
 
-    On Error GoTo ErrGestion
-
-    'demande le fichier
-    CMD.Filter = "Tous |*.*"
-    CMD.DialogTitle = "Sélection du fichier à ouvrir"
-    CMD.CancelError = True
-    CMD.ShowOpen
-
-    If cFile.FileExists(CMD.Filename) = False Then Exit Sub
+    s2 = cFile.ShowOpen("Choix des fichiers à ouvrir", Me.hWnd, "Tous|*.*", , , , , _
+        OFN_EXPLORER + OFN_ALLOWMULTISELECT, 4096, s())
     
-    'affiche une nouvelle fenêtre
-    Set Frm = New Pfm
-    Call Frm.GetFile(CMD.Filename)
-    Frm.Show
-    lNbChildFrm = lNbChildFrm + 1
+    For X = 1 To UBound(s())
+        If cFile.FileExists(s(X)) Then
+            Set Frm = New Pfm
+            Call Frm.GetFile(s(X))
+            Frm.Show
+            lNbChildFrm = lNbChildFrm + 1
+        End If
+        DoEvents    '/!\ IMPORTANT DO NOT REMOVE
+    Next X
+    
+    'dans le cas d'un fichier simple
+    If cFile.FileExists(s2) Then
+        Set Frm = New Pfm
+        Call Frm.GetFile(s2)
+        Frm.Show
+        lNbChildFrm = lNbChildFrm + 1
+    End If
+
     Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
     
-    'Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
-    
-    Exit Sub
-ErrGestion:
 End Sub
 
 Private Sub mnuOpenDisk_Click()
