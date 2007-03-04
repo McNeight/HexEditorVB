@@ -467,7 +467,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "22:59"
+            TextSave        =   "12:27"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -475,7 +475,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "02/03/2007"
+            TextSave        =   "04/03/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -2967,6 +2967,7 @@ End Sub
 
 Private Sub Timer1_Timer()
     Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
+    Call RefreshToolbarEnableState  'active ou pas certain boutons dans la toolbar
     
     'réaffiche le choix des dossiers (si choix = true)
     frmContent.pctExplorer.Visible = frmContent.mnuExploreDisplay.Checked And Not (TypeOfActiveForm = "Disk")
@@ -3202,3 +3203,30 @@ Public Function ChangeEnabledMenus()
     End If
     
 End Function
+
+'=======================================================
+'permet d'activer ou non les boutons de la ToolBar
+'=======================================================
+Private Sub RefreshToolbarEnableState()
+
+    If Me.ActiveForm Is Nothing Then
+        'alors pas de Copier/coller/rechercher/couper/signets
+        Me.Toolbar1.Buttons.Item(4).Enabled = False
+        Me.Toolbar1.Buttons.Item(5).Enabled = False
+        Me.Toolbar1.Buttons.Item(7).Enabled = False
+        Me.Toolbar1.Buttons.Item(8).Enabled = False
+        Me.Toolbar1.Buttons.Item(9).Enabled = False
+        Me.Toolbar1.Buttons.Item(10).Enabled = False
+        Me.Toolbar1.Buttons.Item(15).Enabled = False
+    Else
+        'on active
+        Me.Toolbar1.Buttons.Item(4).Enabled = True
+        Me.Toolbar1.Buttons.Item(5).Enabled = True
+        Me.Toolbar1.Buttons.Item(7).Enabled = True
+        Me.Toolbar1.Buttons.Item(8).Enabled = True
+        Me.Toolbar1.Buttons.Item(9).Enabled = True
+        Me.Toolbar1.Buttons.Item(10).Enabled = True
+        Me.Toolbar1.Buttons.Item(15).Enabled = True
+    End If
+        
+End Sub

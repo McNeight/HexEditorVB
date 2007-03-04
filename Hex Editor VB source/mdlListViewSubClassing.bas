@@ -33,8 +33,7 @@ Attribute VB_Name = "mdlListViewSubClassing"
 Option Explicit
 
 '=======================================================
-'//MODULE POUR SUBCLASSER LA PICTURE DE FRMCONTENT CONTENANT LE FV
-'//PERMET LE RESIZE
+'//MODULE POUR SUBCLASSER LES LISTVIEW LVICON
 '=======================================================
 
 Private AddrWndProc As Long   'adresse de la routine standart de traitement des events
