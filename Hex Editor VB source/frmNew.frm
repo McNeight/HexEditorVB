@@ -136,6 +136,12 @@ Dim s As String
     Set Frm = New Pfm
     
     'calcule la taille du fichier
+    If Len(txtSize.Text) = 0 Or Len(cdUnit.Text) = 0 Then
+        'rien sélectionné
+        MsgBox "Vous devez sélectionner une taille valide.", vbInformation, "Attention"
+        Exit Sub
+    End If
+    
     lLen = Abs(Val(txtSize.Text))
     If cdUnit.Text = "Ko" Then lLen = lLen * 1024
     If cdUnit.Text = "Mo" Then lLen = (lLen * 1024) * 1024
