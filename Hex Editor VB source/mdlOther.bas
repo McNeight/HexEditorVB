@@ -627,6 +627,217 @@ Public Sub RefreshBookMarkEnabled()
     End With
 End Sub
 
+'=======================================================
+'création d'un fichier depuis la sélection dans la activeform
+'=======================================================
+Public Sub CreateFileFromCurrentSelection()
+'créé un fichier depuis la sélection
+Dim X As Long
+Dim y As Long
+Dim s2 As String
+Dim s() As String
+Dim sFile As String
+Dim curBuf As Currency
+Dim curPos2 As Currency
+Dim curSize2 As Currency
+Dim curSize As Currency
+Dim curPos As Currency
+Dim lLastBufSize As Long
+Dim lSect As Long
+
+
+    If frmContent.ActiveForm Is Nothing Then Exit Sub
+    
+    On Error GoTo CancelPushed
+
+    frmContent.Sb.Panels(1).Text = "Status=[Creating file from selection]"
+    
+    'détermine la taille
+    curSize = frmContent.ActiveForm.HW.SecondSelectionItem.Offset + frmContent.ActiveForm.HW.SecondSelectionItem.Col - _
+        frmContent.ActiveForm.HW.FirstSelectionItem.Offset - frmContent.ActiveForm.HW.FirstSelectionItem.Col + 1
+    
+    'détermine la position du premier offset
+    curPos = frmContent.ActiveForm.HW.FirstSelectionItem.Offset + frmContent.ActiveForm.HW.FirstSelectionItem.Col - 1
+        
+    With frmContent.CMD
+        .CancelError = True
+        .DialogTitle = "Sélection du fichier à sauvegarder"
+        .Filter = "Tous|*.*"
+        .ShowSave
+        sFile = .Filename
+    End With
+    
+    If cFile.FileExists(sFile) Then
+        'fichier déjà existant
+        If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+    End If
+    
+    Select Case TypeOfForm(frmContent.ActiveForm)
+        Case "Fichier"
+            'édition d'un fichier ==> va piocher avec ReadFile et sauvegarde à la volée (buffers de 500Ko)
+            
+            If curSize <= 512000 Then
+                'alors tout rentre dans un buffer
+                'récupère la string
+                s2 = GetBytesFromFile(frmContent.ActiveForm.Caption, curSize, curPos)
+                GoTo CreateMyFileFromOneBuffer
+            Else
+                'plusieurs buffers nécessaire
+                
+                GoTo CreateMyFileFromBuffers
+            End If
+        
+        Case "Processus"
+            'sauvegarde avec un buffer de 50Ko
+            If curSize <= 512000 Then
+                'alors tout rentre dans un buffer
+                s2 = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+                GoTo CreateMyFileFromOneBuffer
+            Else
+                'alors plusieurs buffers nécessaires
+                
+                GoTo CreateMyFileFromBuffers
+            End If
+            
+        Case "Disque"
+            'sauvegarde avec un buffer de 50Ko
+            
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, frmContent.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = frmContent.ActiveForm.HW.SecondSelectionItem.Offset + frmContent.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, frmContent.ActiveForm.GetDriveInfos.BytesPerSector)
+            
+            If curSize2 <= frmContent.ActiveForm.GetDriveInfos.BytesPerSector Then
+                'alors tout rentre dans un buffer (de la taille d'un secteur)
+                'récupère la string
+                DirectReadS frmContent.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                    curPos2 / frmContent.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                    frmContent.ActiveForm.GetDriveInfos.BytesPerSector, s2
+                    
+                'recoupe la string pour récupérer ce qui intéresse vraiment
+                s2 = Mid$(s2, curPos - curPos2 + 1, curSize)
+                GoTo CreateMyFileFromOneBuffer
+            Else
+                'plusieurs buffers nécessaires
+                
+                GoTo CreateMyFileFromBuffers
+            End If
+    End Select
+
+CreateMyFileFromOneBuffer:
+    'sauvegarde le fichier (un seul buffer)
+    cFile.SaveDATAinFile sFile, s2, True   'lance la sauvegarde
+    
+    GoTo CancelPushed
+    
+CreateMyFileFromBuffers:
+    'sauvegarde le fichier (plusieurs buffers)
+    
+    'commence par créer un fichier vierge
+    cFile.CreateEmptyFile sFile, True
+    
+    Select Case TypeOfForm(frmContent.ActiveForm)
+        Case "Fichier"
+            'édition d'un fichier ==> va piocher avec ReadFile et sauvegarde à la volée (buffers de 500Ko)
+
+            'détermine le nombre de buffers à utiliser
+            curBuf = Int(curSize / 512000) + IIf(Mod2(curSize, 512000) = 0, 0, 1)
+            
+            'détermine la taille du dernier buffer
+            lLastBufSize = curSize - (curBuf - 1) * 512000
+            
+            'récupère la string pour chaque buffer <> du dernier
+            For X = 1 To curBuf - 1
+                
+                'récupère la string
+                s2 = GetBytesFromFile(frmContent.ActiveForm.Caption, 512000, curPos + 512000 * (X - 1) + 1)
+                
+                'sauve le morceau à la fin du fichier
+                WriteBytesToFileEnd sFile, s2
+            Next X
+
+            's'occupe du dernier buffer
+            s2 = GetBytesFromFile(frmContent.ActiveForm.Caption, lLastBufSize, curPos + 512000 * (curBuf - 1) + 1)
+            
+            'sauvegarde la string
+            WriteBytesToFileEnd sFile, s2
+        
+        Case "Processus"
+            'sauvegarde avec un buffer de 50Ko
+            
+            'détermine le nombre de buffers à utiliser
+            curBuf = Int(curSize / 512000) + IIf(Mod2(curSize, 512000) = 0, 0, 1)
+            
+            'détermine la taille du dernier buffer
+            lLastBufSize = curSize - (curBuf - 1) * 512000
+            
+            'récupère la string pour chaque buffer <> du dernier
+            For X = 1 To curBuf - 1
+            
+                'récupère la string
+                s2 = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos + 512000 * (X - 1) + 1), CLng(512000))
+                
+                'sauve le morceau à la fin du fichier
+                WriteBytesToFileEnd sFile, s2
+            Next X
+
+            's'occupe du dernier buffer
+            s2 = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos + 512000 * (curBuf - 1) + 1), CLng(512000))
+            
+            'sauvegarde la string
+            WriteBytesToFileEnd sFile, s2
+            
+        Case "Disque"
+            'sauvegarde avec un buffer de frmContent.ActiveForm.GetDriveInfos.BytesPerSector octets
+            
+            'bytes par secteur
+            lSect = frmContent.ActiveForm.GetDriveInfos.BytesPerSector
+            
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, lSect)
+            curSize2 = frmContent.ActiveForm.HW.SecondSelectionItem.Offset + frmContent.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, lSect)
+
+            'détermine le nombre de buffers à utiliser
+            curBuf = Int(curSize / (lSect * 1000)) + IIf(Mod2(curSize, (lSect * 1000)) = 0, 0, 1)
+            
+            'détermine la taille du dernier buffer
+            lLastBufSize = curSize - (curBuf - 1) * (lSect * 1000)
+            
+            For X = 1 To curBuf - 1
+                
+                'récupère la string
+                DirectReadS frmContent.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                    curPos2 / lSect + (X - 1) * 1000, CLng(curSize2), lSect, s2
+                
+                'recoupe la string pour récupérer ce qui intéresse vraiment
+                s2 = Mid$(s2, curPos - curPos2 + 1, (lSect * 1000))
+            
+                'écrit dans le fichier (à la fin)
+                WriteBytesToFileEnd sFile, s2
+            Next X
+            
+            'maintenant on s'occupe du dernier morceau de fichier
+            DirectReadS frmContent.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                    curPos2 / lSect + (curBuf - 1) * 1000, CLng(curSize2), lSect, s2
+                    
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s2 = Mid$(s2, curPos - curPos2 + 1, lLastBufSize)
+            
+            'écrit dans le fichier
+            WriteBytesToFileEnd sFile, s2
+            
+    End Select
+
+CancelPushed:
+    frmContent.Sb.Panels(1).Text = "Status=[Ready]"
+End Sub
+
+
 
 
 

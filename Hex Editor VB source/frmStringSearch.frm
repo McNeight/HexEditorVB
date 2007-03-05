@@ -325,7 +325,7 @@ Dim bAddSign As Boolean
                 frmContent.ActiveForm.HW.TraceSignets
                 
                 'ajoute le signet à la listview
-                frmContent.ActiveForm.lstSignets.ListItems.Add Text:=CStr(By16(tRes(i).curOffset))
+                frmContent.ActiveForm.lstSignets.ListItems.Add Text:=Trim$(Str$((By16(tRes(i).curOffset))))
                 frmContent.ActiveForm.lstSignets.ListItems.Item(frmContent.ActiveForm.lstSignets.ListItems.Count).SubItems(1) = tRes(i).strString
             End If
             .ListItems.Add Text:=CStr(tRes(i).curOffset)

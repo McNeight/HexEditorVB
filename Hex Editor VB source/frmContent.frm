@@ -7,10 +7,10 @@ Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx
 Begin VB.MDIForm frmContent 
    BackColor       =   &H8000000C&
    Caption         =   "Editeur hexadécimal"
-   ClientHeight    =   7800
+   ClientHeight    =   7665
    ClientLeft      =   225
    ClientTop       =   825
-   ClientWidth     =   9870
+   ClientWidth     =   9750
    Icon            =   "frmContent.frx":0000
    LinkTopic       =   "Editeur hexadécimal"
    OLEDropMode     =   1  'Manual
@@ -392,11 +392,11 @@ Begin VB.MDIForm frmContent
       Height          =   2200
       Left            =   0
       ScaleHeight     =   2205
-      ScaleWidth      =   9870
+      ScaleWidth      =   9750
       TabIndex        =   3
       TabStop         =   0   'False
       Top             =   330
-      Width           =   9870
+      Width           =   9750
       Begin VB.TextBox pctPath 
          BorderStyle     =   0  'None
          BeginProperty Font 
@@ -439,9 +439,9 @@ Begin VB.MDIForm frmContent
       Height          =   255
       Left            =   0
       TabIndex        =   2
-      Top             =   7545
-      Width           =   9870
-      _ExtentX        =   17410
+      Top             =   7410
+      Width           =   9750
+      _ExtentX        =   17198
       _ExtentY        =   450
       SimpleText      =   ""
       _Version        =   327682
@@ -452,7 +452,6 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -460,15 +459,13 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "18:15"
-            Key             =   ""
+            TextSave        =   "19:32"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -476,7 +473,6 @@ Begin VB.MDIForm frmContent
             Object.Width           =   2117
             MinWidth        =   2117
             TextSave        =   "05/03/2007"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -606,8 +602,8 @@ Begin VB.MDIForm frmContent
       Left            =   0
       TabIndex        =   4
       Top             =   0
-      Width           =   9870
-      _ExtentX        =   17410
+      Width           =   9750
+      _ExtentX        =   17198
       _ExtentY        =   582
       ButtonWidth     =   609
       ButtonHeight    =   582
@@ -1987,112 +1983,8 @@ CancelPushed:
 End Sub
 
 Private Sub mnuCreateFileFromSelelection_Click()
-'créé un fichier depuis la sélection
-Dim X As Long
-Dim y As Long
-Dim s2 As String
-Dim s() As String
-Dim sFile As String
-Dim curPos2 As Currency
-Dim curSize2 As Currency
-Dim curSize As Currency
-Dim curPos As Currency
-
-    If Me.ActiveForm Is Nothing Then Exit Sub
-    
-    On Error GoTo CancelPushed
-
-    Me.Sb.Panels(1).Text = "Status=[Creating file from selection]"
-    
-    'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
-    
-    'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
-        
-    With CMD
-        .CancelError = True
-        .DialogTitle = "Sélection du fichier à sauvegarder"
-        .Filter = "Tous|*.*"
-        .ShowSave
-        sFile = .Filename
-    End With
-    
-    If cFile.FileExists(sFile) Then
-        'fichier déjà existant
-        If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
-    End If
-    
-    Select Case TypeOfForm(frmContent.ActiveForm)
-        Case "Fichier"
-            'édition d'un fichier ==> va piocher avec ReadFile et sauvegarde à la volée (buffers de 500Ko)
-            
-            If curSize <= 512000 Then
-                'alors tout rentre dans un buffer
-                'récupère la string
-                s2 = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
-                GoTo CreateMyFileFromOneBuffer
-            Else
-                'plusieurs buffers nécessaire
-                
-                
-                GoTo CreateMyFileFromBuffers
-            End If
-        
-        Case "Processus"
-            'sauvegarde avec un buffer de 50Ko
-            If curSize <= 512000 Then
-                'alors tout rentre dans un buffer
-                s2 = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
-                GoTo CreateMyFileFromOneBuffer
-            Else
-                'alors plusieurs buffers nécessaires
-                
-                
-                
-                GoTo CreateMyFileFromBuffers
-            End If
-            
-        Case "Disque"
-            'sauvegarde avec un buffer de 50Ko
-            
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            
-            If curSize2 <= 512000 Then
-                'alors tout rentre dans un buffer
-                'récupère la string
-                DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                    curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                    Me.ActiveForm.GetDriveInfos.BytesPerSector, s2
-                    
-                'recoupe la string pour récupérer ce qui intéresse vraiment
-                s2 = Mid$(s2, curPos - curPos2 + 1, curSize)
-                GoTo CreateMyFileFromOneBuffer
-            Else
-                'plusieurs buffers nécessaires
-                
-                
-                GoTo CreateMyFileFromBuffers
-            End If
-    End Select
-
-CreateMyFileFromOneBuffer:
-    'sauvegarde le fichier (un seul buffer)
-    cFile.SaveDATAinFile sFile, s2, True   'lance la sauvegarde
-    
-    GoTo CancelPushed
-    
-CreateMyFileFromBuffers:
-    'sauvegarde le fichier (plusieurs buffers)
-
-CancelPushed:
-    Me.Sb.Panels(1).Text = "Status=[Ready]"
+    'créé un fichier depuis la sélection
+    Call CreateFileFromCurrentSelection
 End Sub
 
 Private Sub mnuCutCopyFiles_Click()
@@ -2752,9 +2644,9 @@ Private Sub mnuSelectAll_Click()
 'tout sélectionner
     
     If Me.ActiveForm Is Nothing Then Exit Sub
-    
+
     Me.ActiveForm.HW.SelectZone 0, 0, 16 - (By16(Me.ActiveForm.HW.MaxOffset) _
-    - Me.ActiveForm.HW.MaxOffset), By16(Me.ActiveForm.HW.MaxOffset) - 16
+    - Me.ActiveForm.HW.MaxOffset) - 1, By16(Me.ActiveForm.HW.MaxOffset) - 16
     Me.ActiveForm.HW.Refresh
     
     'refresh le label qui contient la taille de la sélection
