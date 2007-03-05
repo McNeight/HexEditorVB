@@ -467,7 +467,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "12:27"
+            TextSave        =   "18:15"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -475,7 +475,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "04/03/2007"
+            TextSave        =   "05/03/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty

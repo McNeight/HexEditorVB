@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
-Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.0#0"; "HexViewer_OCX.ocx"
+Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.1#0"; "HexViewer_OCX.ocx"
 Begin VB.Form frmOptions 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Options"
@@ -24,7 +24,7 @@ Begin VB.Form frmOptions
    ScaleWidth      =   10350
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdSauvegarder 
-      Caption         =   "Sauvegarder les options"
+      Caption         =   "OK"
       Height          =   495
       Left            =   1320
       TabIndex        =   80
@@ -32,7 +32,7 @@ Begin VB.Form frmOptions
       Width           =   1335
    End
    Begin VB.CommandButton cmdDefault 
-      Caption         =   "Options par défaut"
+      Caption         =   "Par défaut"
       Height          =   495
       Left            =   0
       TabIndex        =   79
@@ -89,7 +89,7 @@ Begin VB.Form frmOptions
       EndProperty
    End
    Begin VB.CommandButton cmdQuitter 
-      Caption         =   "Fermer"
+      Caption         =   "Annuler"
       Height          =   495
       Left            =   3000
       TabIndex        =   81
