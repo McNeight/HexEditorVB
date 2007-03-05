@@ -509,7 +509,7 @@ Dim s As String
         LV.ListItems.Add Text:="Trouvé à l'offset " & CStr(By16D(tRes(X)))
         If Check2.Value Then
             frmContent.ActiveForm.HW.AddSignet By16D(tRes(X))
-            frmContent.ActiveForm.lstSignets.ListItems.Add Text:=Str$(By16D(tRes(X)))
+            frmContent.ActiveForm.lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(X))))
             frmContent.ActiveForm.lstSignets.ListItems.Item(frmContent.ActiveForm.lstSignets.ListItems.Count).SubItems(1) = "Found [" & Trim$(txtSearch.Text) & "]"
         End If
     Next X
