@@ -465,7 +465,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "19:32"
+            TextSave        =   "20:18"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -1066,6 +1066,9 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuShredder 
          Caption         =   "&Suppression de fichiers..."
       End
+      Begin VB.Menu mnuRecoverFiles 
+         Caption         =   "&Récupération de fichiers..."
+      End
       Begin VB.Menu mnuToolsTiret2 
          Caption         =   "-"
       End
@@ -1475,6 +1478,11 @@ Private Sub mnuDeleteSelection_Click()
     
     'procède à la suppression de la zone et sauvegarde dans un backup
     If bAcceptBackup Then frmContent.ActiveForm.DeleteZone
+End Sub
+
+Private Sub mnuRecoverFiles_Click()
+'récupération de fichiers
+    frmRecoverFiles.Show
 End Sub
 
 Private Sub pctExplorer_Resize()
@@ -1983,8 +1991,12 @@ CancelPushed:
 End Sub
 
 Private Sub mnuCreateFileFromSelelection_Click()
+Dim X As Long
+
     'créé un fichier depuis la sélection
-    Call CreateFileFromCurrentSelection
+    X = MsgBox("Voulez vous créer un nouveau fichier ('non' permet de stocker les données à la suite du fichier) ?", vbQuestion + vbYesNo, "Type de sauvegarde")
+    
+    Call CreateFileFromCurrentSelection(X)
 End Sub
 
 Private Sub mnuCutCopyFiles_Click()

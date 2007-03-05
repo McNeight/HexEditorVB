@@ -190,7 +190,7 @@ End Sub
 'renvoie a^b (plus rapide que a^b)
 '=======================================================
 Public Function AexpB(ByVal a As Long, ByVal b As Long) As Currency
-Dim X As Long
+Dim x As Long
 Dim l As Long
 
     On Error Resume Next
@@ -201,9 +201,9 @@ Dim l As Long
     End If
     
     l = 1
-    For X = 1 To b
+    For x = 1 To b
         l = l * a
-    Next X
+    Next x
     AexpB = l
 
 End Function
@@ -392,17 +392,17 @@ End Function
 '=======================================================
 Public Sub LoadIconesToLV(ByVal sFile As String, LV As ListView, pct As PictureBox, IMG As ImageList)
 Dim lIcon As Long
-Dim X As Long
+Dim x As Long
 Dim b As Long
     
     On Error GoTo ErrGestion
     
     LV.ListItems.Clear
-    lIcon = 1: X = 0
+    lIcon = 1: x = 0
     
     'tant que l'on trouve des icones
     Do
-        lIcon = ExtractIcon(App.hInstance, sFile, X)
+        lIcon = ExtractIcon(App.hInstance, sFile, x)
         
         If lIcon = 0 Then Exit Do   'plus d'icone, quitte
         
@@ -414,7 +414,7 @@ Dim b As Long
         ValidateRect LV.hWnd, 0&    'gèle l'affichage
         
         'Incrementation de l'emplacement de l'icone pour l'extraction
-        X = X + 1
+        x = x + 1
         
         LV.ListItems.Add , , vbNullString, , "_" & CStr(lIcon)    'ajout de l'icone
         DoEvents
@@ -481,7 +481,7 @@ Public Function MaWinProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam A
     'Intercepte le Message Windows de redimensionnement de fenêtre
     If uMsg = WM_GETMINMAXINFO Then
         CopyMemory MinMax, ByVal lParam, Len(MinMax)
-        MinMax.ptMinTrackSize.X = MinX \ Screen.TwipsPerPixelX
+        MinMax.ptMinTrackSize.x = MinX \ Screen.TwipsPerPixelX
         MinMax.ptMinTrackSize.y = MinY \ Screen.TwipsPerPixelY
 
         CopyMemory ByVal lParam, MinMax, Len(MinMax)
@@ -630,9 +630,9 @@ End Sub
 '=======================================================
 'création d'un fichier depuis la sélection dans la activeform
 '=======================================================
-Public Sub CreateFileFromCurrentSelection()
+Public Sub CreateFileFromCurrentSelection(ByVal lCreateNewFileOrNot As Long)
 'créé un fichier depuis la sélection
-Dim X As Long
+Dim x As Long
 Dim y As Long
 Dim s2 As String
 Dim s() As String
@@ -645,7 +645,14 @@ Dim curPos As Currency
 Dim lLastBufSize As Long
 Dim lSect As Long
 
-
+    '//A FAIRE
+    If lCreateNewFileOrNot = vbYes Then
+        'alors on créé un nouveau fichier
+    Else
+        'alors pas nouveau fichier, à la suite
+    End If
+    
+    
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     
     On Error GoTo CancelPushed
@@ -749,14 +756,14 @@ CreateMyFileFromBuffers:
             lLastBufSize = curSize - (curBuf - 1) * 512000
             
             'récupère la string pour chaque buffer <> du dernier
-            For X = 1 To curBuf - 1
+            For x = 1 To curBuf - 1
                 
                 'récupère la string
-                s2 = GetBytesFromFile(frmContent.ActiveForm.Caption, 512000, curPos + 512000 * (X - 1) + 1)
+                s2 = GetBytesFromFile(frmContent.ActiveForm.Caption, 512000, curPos + 512000 * (x - 1) + 1)
                 
                 'sauve le morceau à la fin du fichier
                 WriteBytesToFileEnd sFile, s2
-            Next X
+            Next x
 
             's'occupe du dernier buffer
             s2 = GetBytesFromFile(frmContent.ActiveForm.Caption, lLastBufSize, curPos + 512000 * (curBuf - 1) + 1)
@@ -774,14 +781,14 @@ CreateMyFileFromBuffers:
             lLastBufSize = curSize - (curBuf - 1) * 512000
             
             'récupère la string pour chaque buffer <> du dernier
-            For X = 1 To curBuf - 1
+            For x = 1 To curBuf - 1
             
                 'récupère la string
-                s2 = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos + 512000 * (X - 1) + 1), CLng(512000))
+                s2 = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos + 512000 * (x - 1) + 1), CLng(512000))
                 
                 'sauve le morceau à la fin du fichier
                 WriteBytesToFileEnd sFile, s2
-            Next X
+            Next x
 
             's'occupe du dernier buffer
             s2 = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos + 512000 * (curBuf - 1) + 1), CLng(512000))
@@ -808,18 +815,18 @@ CreateMyFileFromBuffers:
             'détermine la taille du dernier buffer
             lLastBufSize = curSize - (curBuf - 1) * (lSect * 1000)
             
-            For X = 1 To curBuf - 1
+            For x = 1 To curBuf - 1
                 
                 'récupère la string
                 DirectReadS frmContent.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                    curPos2 / lSect + (X - 1) * 1000, CLng(curSize2), lSect, s2
+                    curPos2 / lSect + (x - 1) * 1000, CLng(curSize2), lSect, s2
                 
                 'recoupe la string pour récupérer ce qui intéresse vraiment
                 s2 = Mid$(s2, curPos - curPos2 + 1, (lSect * 1000))
             
                 'écrit dans le fichier (à la fin)
                 WriteBytesToFileEnd sFile, s2
-            Next X
+            Next x
             
             'maintenant on s'occupe du dernier morceau de fichier
             DirectReadS frmContent.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
@@ -867,12 +874,12 @@ Public Function Str2Oct(ByVal s As String) As String
     Str2Oct = Oct$(Str2Dec(s))
 End Function
 Public Function Hex2Dec(ByVal s As String) As Long
-Dim X As Long
+Dim x As Long
 Dim l As Long
 
-    For X = Len(s) To 1 Step -1
-        l = l + HexVal(Mid$(s, Len(s) - X + 1, 1)) * AexpB(16, X - 1)
-    Next X
+    For x = Len(s) To 1 Step -1
+        l = l + HexVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(16, x - 1)
+    Next x
 
     Hex2Dec = l
 End Function
@@ -886,40 +893,40 @@ Public Function Hex2Oct(ByVal s As String) As String
     Hex2Oct = Oct$(Hex2Dec(s))
 End Function
 Public Function Dec2Bin(ByVal l As Long, Optional ByVal lSize As Long = 8) As String
-Dim X As Long
+Dim x As Long
 Dim s As String
 
     s = vbNullString
 
-    For X = lSize - 1 To 0 Step -1
-        If l >= AexpB(2, X) Then
-            l = l - AexpB(2, X)
+    For x = lSize - 1 To 0 Step -1
+        If l >= AexpB(2, x) Then
+            l = l - AexpB(2, x)
             s = s & "1"
         Else
             s = s & "0"
         End If
-    Next X
+    Next x
     
     Dec2Bin = s
         
 End Function
 Public Function Bin2Dec(ByVal s As String) As Long
-Dim X As Long
+Dim x As Long
 Dim l As Long
 
-    For X = Len(s) To 1 Step -1
-        l = l + FormatedVal(Mid$(s, Len(s) - X + 1, 1)) * AexpB(2, X - 1)
-    Next X
+    For x = Len(s) To 1 Step -1
+        l = l + FormatedVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(2, x - 1)
+    Next x
 
     Bin2Dec = l
 End Function
 Public Function Oct2Dec(ByVal s As String) As Long
-Dim X As Long
+Dim x As Long
 Dim l As Long
 
-    For X = Len(s) To 1 Step -1
-        l = l + FormatedVal(Mid$(s, Len(s) - X + 1, 1)) * AexpB(8, X - 1)
-    Next X
+    For x = Len(s) To 1 Step -1
+        l = l + FormatedVal(Mid$(s, Len(s) - x + 1, 1)) * AexpB(8, x - 1)
+    Next x
 
     Oct2Dec = l
 End Function
@@ -967,7 +974,7 @@ Public Function HexVal(ByVal s As String) As Long
     End If
 End Function
 Public Function ExtendedHex(ByVal cVal As Currency) As String
-Dim X As Long
+Dim x As Long
 Dim s As String
 Dim table16(15) As Currency
 Dim res(15) As Byte
@@ -990,16 +997,16 @@ Dim res(15) As Byte
     table16(12) = 281474976710656#
 
     'enlève, en partant des plus grosses valeurs, un maximum de fois un 16^x
-    For X = 12 To 0 Step -1
-        While cVal > table16(X)
-            cVal = cVal - table16(X)
-            res(X) = res(X) + 1 'ajoute 1 à l'occurence de table16(x)
+    For x = 12 To 0 Step -1
+        While cVal > table16(x)
+            cVal = cVal - table16(x)
+            res(x) = res(x) + 1 'ajoute 1 à l'occurence de table16(x)
         Wend
-    Next X
+    Next x
     
     'créé la string
-    For X = 12 To 0 Step -1
-        s = s & Hex(res(X))
+    For x = 12 To 0 Step -1
+        s = s & Hex(res(x))
     Next
     
     ExtendedHex = s
@@ -1010,7 +1017,7 @@ End Function
 Public Function HexValues2String(ByVal sString As String) As String
 Dim Sep As Boolean
 Dim sRes As String
-Dim X As Long
+Dim x As Long
 
     Sep = True  'recherche un séparant entre les valeurs hexa (de longueur 2)
 
@@ -1032,9 +1039,9 @@ Dim X As Long
     
     sRes = vbNullString
     'maintenant que la string ne comporte plus de séparants, on créé le résultat
-    For X = 1 To Int(Len(sString) / 2)
-        sRes = sRes & Chr$(Hex2Dec(Mid$(sString, 2 * X - 1, 2)))
-    Next X
+    For x = 1 To Int(Len(sString) / 2)
+        sRes = sRes & Chr$(Hex2Dec(Mid$(sString, 2 * x - 1, 2)))
+    Next x
     
     HexValues2String = sRes
 End Function
