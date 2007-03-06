@@ -844,6 +844,20 @@ CancelPushed:
     frmContent.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 
+'=======================================================
+'récupère une string contenant l'erreur pointée par hError
+'=======================================================
+Public Function GetError(ByVal hError As Long) As String
+Dim Buffer As String
+    
+    'buffer
+    Buffer = Space$(1024)
+    
+    'récupère la string
+    FormatMessage FORMAT_MESSAGE_FROM_SYSTEM, ByVal 0&, hError, LANG_NEUTRAL, Buffer, Len(Buffer), ByVal 0&
+    GetError = Trim$(Buffer)
+    
+End Function
 
 
 

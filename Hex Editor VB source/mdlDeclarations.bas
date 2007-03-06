@@ -39,6 +39,10 @@ Option Explicit
 '=======================================================
 
 
+Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByVal dwFlags As Long, lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As String, ByVal nSize As Long, Arguments As Long) As Long
+Public Declare Function GetLastError Lib "kernel32" () As Long
+Public Declare Function WriteFileEx Lib "kernel32" (ByVal hFile As Long, lpBuffer As Any, ByVal nNumberOfBytesToWrite As Long, lpOverlapped As OVERLAPPED, ByVal lpCompletionRoutine As Long) As Long
+Public Const FILE_FLAG_OVERLAPPED = &H40000000
 
 '=======================================================
 '//CONSTANTES
@@ -64,6 +68,11 @@ Public Const TME_HOVER                          As Long = &H1&
 Public Const TME_LEAVE                          As Long = &H2&
 Public Const TME_NONCLIENT                      As Long = &H10&
 Public Const TME_QUERY                          As Long = &H40000000
+
+'constantes pour la récupération des codes d'erreur
+Public Const FORMAT_MESSAGE_FROM_SYSTEM         As Long = &H1000
+Public Const LANG_NEUTRAL                       As Long = &H0
+Public Const SUBLANG_DEFAULT                    As Long = &H1
 
 'constantes utilisées pour la gestion des menus
 Public Const MF_HILITE                          As Long = &H80
@@ -136,6 +145,9 @@ Public Const WM_SHOWWINDOW                      As Long = &H18
 Public Const WM_GETMINMAXINFO                   As Long = &H24
 Public Const VISIBLEFLAGS                       As Long = &H2 Or &H1 Or &H40 Or &H10
 Public Const GWL_WNDPROC                        As Long = -4&
+Public Const GWL_STYLE                          As Long = -16
+Public Const WS_BORDER                          As Long = &H800000
+Public Const WS_THICKFRAME                      As Long = &H40000
 
 'constantes pour l'impression
 Public Const CCHDEVICENAME                      As Long = 32&

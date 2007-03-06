@@ -142,13 +142,13 @@ Dim Ret As Long
 Dim hDevice As Long
 Dim lLowPart As Long, lHighPart As Long
 
-    On Error GoTo dskerror
+    'On Error GoTo dskerror
     
     'obtient un path valide pour l'API CreateFIle si nécessaire
     If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
 
     'ouvre le drive
-    hDevice = CreateFile(sDrive, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    hDevice = CreateFile(sDrive, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, FILE_FLAG_NO_BUFFERING, 0&)
    
     'quitte si le handle n'est pas valide
     If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
@@ -168,8 +168,8 @@ Dim lLowPart As Long, lHighPart As Long
     Call LockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
     
     'écriture disque
-    Ret = WriteFile(hDevice, ByVal sStringToWrite, nBytes, 0&, 0)
-
+    Ret = WriteFile(hDevice, ByVal sStringToWrite, nBytes, Ret, ByVal 0&)
+    
     'on vide les buffers internes et on dévérouille la zone
     Call FlushFileBuffers(hDevice)
     Call UnlockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
@@ -662,9 +662,60 @@ End Function
 '=======================================================
 'écriture de bytes dans un disque physique
 '=======================================================
-Public Sub DirectWrite(ByVal iStartSec As Currency, ByVal nBytes As Long)
-'
+Public Sub DirectWrite(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sStringToWrite As String)
+'/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
+Dim BytesRead As Long
+Dim Pointeur As Currency
+Dim Ret As Long
+Dim OVER As OVERLAPPED
+Dim hDevice As Long
+Dim lLowPart As Long, lHighPart As Long
 
+    'On Error GoTo dskerror
+    
+    'obtient un path valide pour l'API CreateFIle si nécessaire
+    If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
+
+    'ouvre le drive
+    hDevice = CreateFile(sDrive, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, 0&)
+   
+    'quitte si le handle n'est pas valide
+    If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
+   
+    'détermine le byte de départ du secteur
+    Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
+
+    'transforme un currency en 2 long pour une structure LARGE_INTEGER
+    GetLargeInteger Pointeur, lLowPart, lHighPart
+    
+    'définit le OVERLAPPED
+    With OVER
+        .Offset = lLowPart
+        .OffsetHigh = lHighPart
+    End With
+    
+    'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
+    'byte que l'on veut lire (donné par deux long)
+    
+    'Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
+    'If Ret = -1 Then GoTo dskerror
+    
+    'verrouilage de la zone du disque à écrire
+    Call LockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
+    
+    'écriture disque
+    Ret = WriteFileEx(hDevice, ByVal sStringToWrite, nBytes, OVER, AddressOf CallBackFunction)
+    
+    If Ret = 0 Then Stop
+    
+    'on vide les buffers internes et on dévérouille la zone
+    Call FlushFileBuffers(hDevice)
+    Call UnlockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
+    
+dskerror:
+
+    'ferme le handle
+    CloseHandle hDevice
 End Sub
 
 '=======================================================
