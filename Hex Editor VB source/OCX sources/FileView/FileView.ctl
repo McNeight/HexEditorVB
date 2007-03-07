@@ -818,7 +818,9 @@ End Sub
 Public Sub AddItemManually(ByVal sItem As String, ByVal tTypeOfItem As Item_Type, Optional ByVal sSubItem1 As String = vbNullString, Optional ByVal sSubItem2 As String = vbNullString, Optional ByVal sSubItem3 As String = vbNullString, Optional ByVal sSubItem4 As String = vbNullString, Optional ByVal sSubItem5 As String = vbNullString, Optional ByVal sSubItem6 As String = vbNullString, Optional ByVal bFillSubItemsAuto As Boolean = True)
 Dim g As Long
 Dim l As Long
-Dim s As String, key As String
+Dim s As String
+Dim key As String
+Dim it As Scripting.File
 
 
     l = MustGetAttr(sItem)  'attribut
@@ -882,13 +884,14 @@ Dim s As String, key As String
     If bFillSubItemsAuto Then
         'alors remplit automatiquement les champs
         If fs.FileExists(sItem) Then
+            Set it = fs.GetFile(sItem)  'récupère les infos sur le fichier
             With LV.ListItems(LV.ListItems.Count)
                 .SubItems(1) = FormatedSize(GetFileSize(sItem), iSizeDecimals)
-                .SubItems(2) = fs.GetFile(sItem).Type
-                .SubItems(3) = fs.GetFile(sItem).DateCreated
-                .SubItems(4) = fs.GetFile(sItem).DateLastAccessed
-                .SubItems(5) = fs.GetFile(sItem).DateLastModified
-                .SubItems(6) = fs.GetFile(sItem).Attributes
+                .SubItems(2) = it.Type
+                .SubItems(3) = it.DateCreated
+                .SubItems(4) = GetDateLastAccessed(it)
+                .SubItems(5) = it.DateLastModified
+                .SubItems(6) = it.Attributes
             End With
         End If
     Else
@@ -902,6 +905,8 @@ Dim s As String, key As String
             .SubItems(6) = sSubItem6
         End With
     End If
+    
+    Set it = Nothing
 End Sub
 
 '=======================================================
@@ -1302,6 +1307,7 @@ End Function
 Private Sub AddFileToLV(ByVal sFile As String, ByVal sImageKey As String, ByVal lAttribute As Long)
 Dim g As Long
 Dim l As Long
+Dim it As Scripting.File
 
     l = lAttribute
     
@@ -1314,13 +1320,14 @@ Dim l As Long
             g = LV.ListItems.Count
             If fs.FileExists(sFile) Then
                 lFiles = lFiles + 1
+                Set it = fs.GetFile(sFile)  'récupère les infos sur le fichier
                 With LV.ListItems.Item(g)
                     .SubItems(1) = FormatedSize(GetFileSize(sFile), iSizeDecimals)
-                    .SubItems(2) = fs.GetFile(sFile).Type
-                    .SubItems(3) = fs.GetFile(sFile).DateCreated
-                    .SubItems(4) = fs.GetFile(sFile).DateLastAccessed
-                    .SubItems(5) = fs.GetFile(sFile).DateLastModified
-                    .SubItems(6) = fs.GetFile(sFile).Attributes
+                    .SubItems(2) = it.Type
+                    .SubItems(3) = it.DateCreated
+                    .SubItems(4) = GetDateLastAccessed(it)
+                    .SubItems(5) = it.DateLastModified
+                    .SubItems(6) = it.Attributes
                 End With
             End If
         End If
@@ -1333,18 +1340,20 @@ Dim l As Long
             LV.ListItems.Item(LV.ListItems.Count).Tag = sFile
             g = LV.ListItems.Count
             If fs.FileExists(sFile) Then
+                Set it = fs.GetFile(sFile)  'récupère les infos sur le fichier
                 With LV.ListItems.Item(g)
                     .SubItems(1) = FormatedSize(GetFileSize(sFile), iSizeDecimals)
-                    .SubItems(2) = fs.GetFile(sFile).Type
-                    .SubItems(3) = fs.GetFile(sFile).DateCreated
-                    .SubItems(4) = fs.GetFile(sFile).DateLastAccessed
-                    .SubItems(5) = fs.GetFile(sFile).DateLastModified
-                    .SubItems(6) = fs.GetFile(sFile).Attributes
+                    .SubItems(2) = it.Type
+                    .SubItems(3) = it.DateCreated
+                    .SubItems(4) = GetDateLastAccessed(it)
+                    .SubItems(5) = it.DateLastModified
+                    .SubItems(6) = it.Attributes
                 End With
             End If
         End If
     End If
 
+    Set it = Nothing
 End Sub
 
 '=======================================================
@@ -1506,4 +1515,14 @@ Dim curSize As Currency
     GetFileSize = curSize * 10000 'multiplie par 10^4 pour obtenir un nombre entier
        
 End Function
+
+'=======================================================
+'récupère la date de dernier accès d'un fichier
+'séparément du reste car info non disponible sous CDFS ==> provoquerais un bug
+'=======================================================
+Private Function GetDateLastAccessed(ByVal it As Scripting.File) As String
+    On Error Resume Next
+    GetDateLastAccessed = it.DateLastAccessed
+End Function
+
 
