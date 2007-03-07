@@ -1264,7 +1264,7 @@ Dim lDecal As Long
     ReDim RT(lBytesPerSector * (IIf(UBound(RA) > 0, 1, 0) + IIf(UBound(RB) > 0, 1, 0) + 1) - 1) 'nombre de bytes lus dans les 3 secteurs lus ou pas
 
     '//remplit le tableau temporaire contenant la réunion des secteurs lus
-        For x = 0 To 511
+        For x = 0 To lBytesPerSector - 1
             If UBound(RB) > 0 Then
                 'alors on pioche dans le secteur 1
                 RT(x) = RB(x)
@@ -1273,21 +1273,21 @@ Dim lDecal As Long
                 RT(x) = r(x)
             End If
         Next x
-        If UBound(RT) > 512 Then
-            For x = 512 To 1023
+        If UBound(RT) > lBytesPerSector Then
+            For x = lBytesPerSector To 2 * lBytesPerSector - 1
                 If UBound(RB) > 0 Then
                     'alors on pioche dans le secteur 2
-                    RT(x) = r(x - 512)
+                    RT(x) = r(x - lBytesPerSector)
                 Else
                     'alors on pioche dans le secteur 3
-                    RT(x) = RA(x - 512)
+                    RT(x) = RA(x - lBytesPerSector)
                 End If
             Next x
         End If
-        If UBound(RT) > 1024 Then
-            For x = 1024 To 1535
+        If UBound(RT) > 2 * lBytesPerSector Then
+            For x = 2 * lBytesPerSector To 3 * lBytesPerSector - 1
                 'on pioche forcément dans le 3eme secteur
-                RT(x) = RA(x - 1024)
+                RT(x) = RA(x - 2 * lBytesPerSector)
             Next x
         End If
         
