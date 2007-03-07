@@ -17,6 +17,7 @@ folder|dates des dossiers mauvaises| 10| 4
 gestion erreur|clsERREUR.AddError "Pfm.OpenFile", True           à pleins d'endroits| 35| 3
 grp|support du type *.grp| 10| 3
 historique|ajout de l'historique + gestion redo/undo| 75| 5
+journal|journal des évenements (erreur, crash, ouvertures, durée d'utilisation...)| 10| 9
 limite fichier|éviter de pouvoir visualiser le fichier après sa limite affichable| 10| 3
 menu save|menu enregistrer (pas sous)| 10| 1
 mergeur|ajouter comparaison (comme Windiff) de fichiers| 10| 3
