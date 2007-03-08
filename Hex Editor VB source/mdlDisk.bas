@@ -593,9 +593,9 @@ Dim clsDrive As clsDiskInfos
     If bCasse = False Then sMatch = LCase$(sMatch)  'cherche que les minuscules
 
     For i = 0 To nbSec Step 20000  'pour chaque secteur logique
-    
+        
         'obtient les bytes du secteur visualisé en partie
-        DirectReadS strDrive, i, 20000 * btPerSec, btPerSec, strBufT
+        DirectReadS strDrive, CCur(i), 20000 * btPerSec, btPerSec, strBufT
         
         If bCasse = False Then strBufT = LCase$(strBufT)    'cherche que des minuscules (pas de casse respectée)
          
