@@ -644,14 +644,10 @@ Dim curSize As Currency
 Dim curPos As Currency
 Dim lLastBufSize As Long
 Dim lSect As Long
+Dim bOverWrite As Boolean
 
-    '//A FAIRE
-    If lCreateNewFileOrNot = vbYes Then
-        'alors on créé un nouveau fichier
-    Else
-        'alors pas nouveau fichier, à la suite
-    End If
-    
+    'oui ou non ou fait à la suite d'un fichier
+    bOverWrite = (lCreateNewFileOrNot = vbYes)
     
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     
@@ -674,7 +670,7 @@ Dim lSect As Long
         sFile = .Filename
     End With
     
-    If cFile.FileExists(sFile) Then
+    If cFile.FileExists(sFile) And bOverWrite Then
         'fichier déjà existant
         If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
     End If
@@ -735,7 +731,7 @@ Dim lSect As Long
 
 CreateMyFileFromOneBuffer:
     'sauvegarde le fichier (un seul buffer)
-    cFile.SaveDATAinFile sFile, s2, True   'lance la sauvegarde
+    cFile.SaveDATAinFile sFile, s2, bOverWrite   'lance la sauvegarde
     
     GoTo CancelPushed
     
@@ -743,7 +739,7 @@ CreateMyFileFromBuffers:
     'sauvegarde le fichier (plusieurs buffers)
     
     'commence par créer un fichier vierge
-    cFile.CreateEmptyFile sFile, True
+    cFile.CreateEmptyFile sFile, bOverWrite
     
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"

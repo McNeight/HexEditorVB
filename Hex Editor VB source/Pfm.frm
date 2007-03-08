@@ -592,13 +592,12 @@ Option Explicit
 '=======================================================
 'VARIABLES PRIVEES
 '=======================================================
-Private lBgAdress As Long   'offset de départ de page
-Private lEdAdress As Long   'offset de fin de page
+Private lBgAdress As Currency   'offset de départ de page
+Private lEdAdress As Currency   'offset de fin de page
 Private NumberPerPage As Long   'nombre de lignes visibles par Page
-Private pRs As Long, pr As Long, pc As Long, pCs As Long 'sauvegarde de la sélection
-Private lLenght As Long 'taille du fichier
-Private ChangeListO() As Long
-Private ChangeListC() As Long
+Private lLenght As Currency 'taille du fichier
+Private ChangeListO() As Currency
+Private ChangeListC() As Currency
 Private ChangeListS() As String
 Private ChangeListDim As Long
 Private lFile As Long   'n° d'ouverture du fichier
@@ -652,8 +651,8 @@ Private Sub Form_Activate()
     cmdMAJ_Click
     If HW.Visible Then HW.SetFocus
     Call VS_Change(VS.Value)
-    ReDim ChangeListO(1) As Long
-    ReDim ChangeListC(1) As Long
+    ReDim ChangeListO(1) As Currency
+    ReDim ChangeListC(1) As Currency
     ReDim ChangeListS(1) As String
     ChangeListDim = 1
     
@@ -818,7 +817,7 @@ End Sub
 'affiche dans le HW les valeurs hexa qui correspondent à la partie
 'du fichier qui est visualisée
 '=======================================================
-Private Sub OpenFile(ByVal lBg As Long, ByVal lEd As Long)
+Private Sub OpenFile(ByVal lBg As Currency, ByVal lEd As Currency)
 Dim tmpText As String
 Dim a As Long
 Dim s As String
@@ -828,11 +827,11 @@ Dim s2 As String
 Dim lLenght As Long
 Dim e As Byte
 Dim sTemp() As String
-Dim lOff As Long
+Dim lOff As Currency
 Dim lPlace As Long
 Dim Ret As Long
     
-    On Error GoTo ErrGestion
+    'On Error GoTo ErrGestion
     
     If bOkToOpen = False Then Exit Sub  'pas prêt à ouvrir
     
@@ -912,7 +911,7 @@ End Sub
 '=======================================================
 'renvoie si l'offset contient une modification
 '=======================================================
-Public Function IsOffsetModified(ByVal lOffset As Long, ByRef lPlace As Long) As Boolean
+Public Function IsOffsetModified(ByVal lOffset As Currency, ByRef lPlace As Long) As Boolean
 Dim x As Long
     
     IsOffsetModified = False
@@ -1037,7 +1036,7 @@ End Sub
 '=======================================================
 'renvoie si la case a été modifiée ou non
 '=======================================================
-Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Long) As Boolean
+Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Currency) As Boolean
 Dim x As Long
     
     IsModified = False
@@ -1057,7 +1056,7 @@ End Function
 'obtient le nom du fichier à ouvrir, et l'ouvre
 '=======================================================
 Public Sub GetFile(ByVal sFile As String)
-Dim l As Long
+Dim l As Currency
 
     On Error GoTo ErrGestion
 
@@ -1589,7 +1588,7 @@ End Sub
 Public Sub VS_Change(Value As Currency)
 Dim lPages As Long
 
-    On Error GoTo ErrGestion
+    'On Error GoTo ErrGestion
     
     If NumberPerPage = 0 Then Exit Sub
     
@@ -1613,13 +1612,13 @@ End Sub
 '=======================================================
 'ajoute une valeur changée dans la liste des valeurs changées
 '=======================================================
-Public Sub AddChange(ByVal lOffset As Long, ByVal lCol As Long, ByVal sString As String)
+Public Sub AddChange(ByVal lOffset As Currency, ByVal lCol As Long, ByVal sString As String)
    
     'redimensionne le tableau
     ChangeListDim = ChangeListDim + 1
-    ReDim Preserve ChangeListO(ChangeListDim) As Long
+    ReDim Preserve ChangeListO(ChangeListDim) As Currency
     ReDim Preserve ChangeListS(ChangeListDim) As String
-    ReDim Preserve ChangeListC(ChangeListDim) As Long
+    ReDim Preserve ChangeListC(ChangeListDim) As Currency
     
     'ajoute les nouvelles valeurs
     ChangeListO(ChangeListDim) = lOffset + 1
