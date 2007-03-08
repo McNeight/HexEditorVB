@@ -18,7 +18,9 @@
 '
 '
 '                         HISTORIQUE DES VERSIONS
-' 
+'
+'
+' v1.5 ajout de la recherche de fichiers, des options, des icones, correction de nombreux bugs, support des formats CDFS et UDF, support des fichiers de plus de 900To
 ' v1.4 ajout des options, de la recherche en mémoire, de la conversion avancée, de la copie dans le presse papier et du fusionneur/découpeur de fichiers
 ' v1.3 support de l'historique
 ' v1.2 Ajout de la gestion des disques

@@ -29,6 +29,25 @@ Begin VB.Form frmSplash
       Left            =   683
       Top             =   413
    End
+   Begin VB.Label lblVersionWarning 
+      BackStyle       =   0  'Transparent
+      Caption         =   "Pre Alpha version"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   14.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H000000FF&
+      Height          =   375
+      Left            =   120
+      TabIndex        =   7
+      Top             =   120
+      Width           =   2535
+   End
    Begin VB.Label lblState 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
