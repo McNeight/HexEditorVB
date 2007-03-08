@@ -61,6 +61,25 @@ Begin VB.Form frmAbout
       Top             =   4040
       Width           =   6705
    End
+   Begin VB.Label lblVersionWarning 
+      BackStyle       =   0  'Transparent
+      Caption         =   "Pre Alpha version"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   14.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H000000FF&
+      Height          =   375
+      Left            =   120
+      TabIndex        =   10
+      Top             =   120
+      Width           =   2535
+   End
    Begin VB.Label Label1 
       BackColor       =   &H00FFFFFF&
       Height          =   1815
@@ -88,7 +107,7 @@ Begin VB.Form frmAbout
       Top             =   2872
       Width           =   3015
    End
-   Begin VB.Label lblWarning 
+   Begin VB.Label lblWARNING 
       BackStyle       =   0  'Transparent
       Caption         =   "Avertissement : ce logiciel est protégé par la license GNU General Public License"
       BeginProperty Font 
@@ -235,27 +254,6 @@ Attribute VB_Exposed = False
 
 
 Option Explicit
-
-
-'=======================================================--------------------
-'                            HEX EDITOR VB
-'                         CODED BY VIOLENT_KEN
-'
-'
-'
-'                        DESCRIPTION DU PROGRAMME
-'
-' Ce logiciel vous permet d'éditer le contenu de vos fichiers
-' ainsi que le contenu de la mémoire virtuelle de vos
-' processus et le contenu de vos disques physiques.
-'
-' Ce programme est conçu pour Windows XP/Vista, avec une résolution
-' optimale minimale de 1024*768.
-'
-'
-'
-'=======================================================--------------------
-
 
 Private Sub cmdLicense_Click()
 'affiche le ReadMe
