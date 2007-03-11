@@ -395,6 +395,7 @@ Option Explicit
 '=======================================================
 
 Private clsPref As clsIniForm
+Private cConv As clsConvert
 
 Private Sub cmdCLose_Click()
     Unload Me
@@ -408,6 +409,8 @@ End Sub
 Private Sub Form_Load()
     'loading des preferences
     Set clsPref = New clsIniForm
+    Set cConv = New clsConvert
+    
     clsPref.GetFormSettings App.Path & "\Preferences\AdvancedConversion.ini", Me
     optSep(1).Value = Not (optSep(0).Value)
 End Sub
@@ -466,13 +469,14 @@ Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde les prefs
     clsPref.SaveFormSettings App.Path & "\Preferences\AdvancedConversion.ini", Me
     Set clsPref = Nothing
+    Set cConv = Nothing
 End Sub
 
-Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
 End Sub
-Private Sub Frame2_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub Frame2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp2
 End Sub
@@ -510,11 +514,11 @@ Private Sub optUseSeparator_Click()
     End If
 End Sub
 
-Private Sub Picture1_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub Picture1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
 End Sub
-Private Sub Picture2_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub Picture2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp2
 End Sub
@@ -526,9 +530,9 @@ Private Sub LaunchExtraConversion()
 Dim sO As String
 Dim s As String
 Dim LS As Long
-Dim lMax As Long
+Dim lmax As Long
 Dim sSep As String
-Dim X As Long
+Dim x As Long
 Dim sA() As String
 
     If cbI.ListIndex < 0 Or cbO.ListIndex < 0 Then Exit Sub 'pas de base sélectionnée
@@ -548,17 +552,17 @@ Dim sA() As String
         
         Me.Caption = "Conversion..."
         
-        lMax = Len(txtI.Text)
-        For X = 1 To lMax Step LS
+        lmax = Len(txtI.Text)
+        For x = 1 To lmax Step LS
         
-            If (X Mod 1000) = 0 Then DoEvents
+            If (x Mod 1000) = 0 Then DoEvents
             
             'on extrait le(s) caractère(s)
-            s = Mid$(txtI.Text, X, LS)
+            s = Mid$(txtI.Text, x, LS)
             
             'on récupère la valeur formatée et on ajoute au buffer final
             sO = sO & GetCv(s)
-        Next X
+        Next x
         
         'on affiche çà
         txtO.Text = sO
@@ -581,11 +585,11 @@ Dim sA() As String
         'récupère toutes les valeurs séparément
         sA() = Split(txtI.Text, sSep, , vbBinaryCompare)
         
-        For X = 0 To UBound(sA())
+        For x = 0 To UBound(sA())
         
-            If (X Mod 1000) = 0 Then DoEvents
-            sO = sO & GetCv(sA(X)) & sSep
-        Next X
+            If (x Mod 1000) = 0 Then DoEvents
+            sO = sO & GetCv(sA(x)) & sSep
+        Next x
         
         'on affiche en virant le dernier séparateur
         txtO.Text = Left$(sO, Len(sO) - Len(sSep))
@@ -597,105 +601,43 @@ Dim sA() As String
 End Sub
 
 '=======================================================
-'renvoie une aleur formatée en fonction des choix de base
+'renvoie une valeur formatée en fonction des choix de base
 '=======================================================
 Private Function GetCv(ByVal sIn As String) As String
 Dim s2 As String
 
-    'On Error Resume Next    'évite les dépassement de capacité si l'user rentre n'importe quoi
-
+    cConv.CurrentString = sIn
+    
     Select Case cbI.Text
         Case "Décimale"
-            Select Case cbO.Text
-                Case "Décimale"
-                    s2 = sIn
-                Case "Octale"
-                    s2 = Oct$(FormatedVal(sIn))
-                Case "Héxadécimale"
-                    s2 = Hex$(FormatedVal(sIn))
-                Case "Binaire"
-                    s2 = Dec2Bin(FormatedVal(sIn))
-                Case "ANSI ASCII"
-                    s2 = Byte2FormatedString(FormatedVal(sIn))
-                Case "Autre"
-                    
-            End Select
+            cConv.CurrentBase = 10
         Case "Octale"
-            Select Case cbO.Text
-                Case "Décimale"
-                    s2 = Oct2Dec(sIn)
-                Case "Octale"
-                    s2 = sIn
-                Case "Héxadécimale"
-                    s2 = Hex$(Oct2Dec(sIn))
-                Case "Binaire"
-                    s2 = Dec2Bin(Oct2Dec(sIn))
-                Case "ANSI ASCII"
-                    s2 = Byte2FormatedString(Oct2Dec(sIn))
-                Case "Autre"
-                
-            End Select
+            cConv.CurrentBase = 8
         Case "Héxadécimale"
-            Select Case cbO.Text
-                Case "Décimale"
-                    s2 = Hex2Dec(sIn)
-                Case "Octale"
-                    s2 = Hex2Oct(sIn)
-                Case "Héxadécimale"
-                    s2 = sIn
-                Case "Binaire"
-                    s2 = Dec2Bin(Hex2Dec(sIn))
-                Case "ANSI ASCII"
-                    s2 = Hex2Str(sIn)
-                Case "Autre"
-                
-            End Select
-        Case "Binaire"
-            Select Case cbO.Text
-                Case "Décimale"
-                    s2 = Bin2Dec(sIn)
-                Case "Octale"
-                    s2 = Oct$(Bin2Dec(sIn))
-                Case "Héxadécimale"
-                    s2 = Hex$(Bin2Dec(sIn))
-                Case "Binaire"
-                    s2 = sIn
-                Case "ANSI ASCII"
-                    s2 = Byte2FormatedString(Bin2Dec(sIn))
-                Case "Autre"
-                
-            End Select
-        Case "ANSI ASCII"
-            Select Case cbO.Text
-                Case "Décimale"
-                    s2 = Str2Dec(sIn)
-                Case "Octale"
-                    s2 = Str2Oct(sIn)
-                Case "Héxadécimale"
-                    s2 = Str2Hex(sIn)
-                Case "Binaire"
-                    s2 = Dec2Bin(Str2Dec(sIn))
-                Case "ANSI ASCII"
-                    s2 = sIn
-                Case "Autre"
-                
-            End Select
+            cConv.CurrentBase = 16
+        Case "Bianire"
+            cConv.CurrentBase = 2
         Case "Autre"
-            Select Case cbO.Text
-                Case "Décimale"
-                    
-                Case "Octale"
-                    
-                Case "Héxadécimale"
-                    
-                Case "Binaire"
-                    
-                Case "ANSI ASCII"
-                    
-                Case "Autre"
-                    
-            End Select
+            cConv.CurrentBase = Val(txtBaseI.Text)
+        Case Else
+            'ANSI ASCII
     End Select
+    
+    Select Case cbO.Text
+        Case "Décimale"
+            s2 = cConv.Convert(10)
+        Case "Octale"
+            s2 = cConv.Convert(8)
+        Case "Héxadécimale"
+            s2 = cConv.Convert(16)
+        Case "Bianire"
+            s2 = cConv.Convert(2)
+        Case "Autre"
+            s2 = cConv.Convert(Val(txtBaseI.Text))
+        Case Else
+            'ANSI ASCII
+    End Select
+    'Byte2FormatedString
     
     GetCv = s2
 End Function

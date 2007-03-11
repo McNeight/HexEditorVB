@@ -216,13 +216,16 @@ Option Explicit
 '=======================================================
 
 Private clsPref As clsIniForm
+Private cConv As clsConvert
 
 Private Sub cbI_Click()
     DisplayResult
+    txtBase(0).Enabled = cbI.Text = "Autre"
 End Sub
 
 Private Sub cbO_Click()
     DisplayResult
+    txtBase(1).Enabled = cbO.Text = "Autre"
 End Sub
 
 Private Sub chkPlan_Click()
@@ -242,112 +245,53 @@ End Sub
 'affiche la conversion
 '=======================================================
 Private Sub DisplayResult()
-Dim s1 As String
 Dim s2 As String
 
-    'On Error Resume Next    'évite les dépassement de capacité si l'user rentre n'importe quoi
-
-    s1 = txtI(0).Text
-
+    cConv.CurrentString = txtI(0).Text
+    
     Select Case cbI.Text
         Case "Décimale"
-            Select Case cbO.Text
-                Case "Décimale"
-                    s2 = s1
-                Case "Octale"
-                    s2 = Oct$(FormatedVal(s1))
-                Case "Héxadécimale"
-                    s2 = Hex$(FormatedVal(s1))
-                Case "Binaire"
-                    s2 = Dec2Bin(FormatedVal(s1))
-                Case "ANSI ASCII"
-                    s2 = Byte2FormatedString(FormatedVal(s1))
-                Case "Autre"
-                    
-            End Select
+            cConv.CurrentBase = 10
         Case "Octale"
-            Select Case cbO.Text
-                Case "Décimale"
-                    s2 = Oct2Dec(s1)
-                Case "Octale"
-                    s2 = s1
-                Case "Héxadécimale"
-                    s2 = Hex$(Oct2Dec(s1))
-                Case "Binaire"
-                    s2 = Dec2Bin(Oct2Dec(s1))
-                Case "ANSI ASCII"
-                    s2 = Byte2FormatedString(Oct2Dec(s1))
-                Case "Autre"
-                
-            End Select
+            cConv.CurrentBase = 8
         Case "Héxadécimale"
-            Select Case cbO.Text
-                Case "Décimale"
-                    s2 = Hex2Dec(s1)
-                Case "Octale"
-                    s2 = Hex2Oct(s1)
-                Case "Héxadécimale"
-                    s2 = s1
-                Case "Binaire"
-                    s2 = Dec2Bin(Hex2Dec(s1))
-                Case "ANSI ASCII"
-                    s2 = Hex2Str(s1)
-                Case "Autre"
-                
-            End Select
+            cConv.CurrentBase = 16
         Case "Binaire"
-            Select Case cbO.Text
-                Case "Décimale"
-                    s2 = Bin2Dec(s1)
-                Case "Octale"
-                    s2 = Oct$(Bin2Dec(s1))
-                Case "Héxadécimale"
-                    s2 = Hex$(Bin2Dec(s1))
-                Case "Binaire"
-                    s2 = s1
-                Case "ANSI ASCII"
-                    s2 = Byte2FormatedString(Bin2Dec(s1))
-                Case "Autre"
-                
-            End Select
-        Case "ANSI ASCII"
-            Select Case cbO.Text
-                Case "Décimale"
-                    s2 = Str2Dec(s1)
-                Case "Octale"
-                    s2 = Str2Oct(s1)
-                Case "Héxadécimale"
-                    s2 = Str2Hex(s1)
-                Case "Binaire"
-                    s2 = Dec2Bin(Str2Dec(s1))
-                Case "ANSI ASCII"
-                    s2 = s1
-                Case "Autre"
-                
-            End Select
+            cConv.CurrentBase = 2
         Case "Autre"
-            Select Case cbO.Text
-                Case "Décimale"
-                    
-                Case "Octale"
-                    
-                Case "Héxadécimale"
-                    
-                Case "Binaire"
-                    
-                Case "ANSI ASCII"
-                    
-                Case "Autre"
-                    
-            End Select
+            cConv.CurrentBase = Val(txtBase(0).Text)
+        Case Else
+            'ANSI ASCII
     End Select
     
-    txtI(1).Text = s2
+    Select Case cbO.Text
+        Case "Décimale"
+            s2 = cConv.Convert(10)
+        Case "Octale"
+            s2 = cConv.Convert(8)
+        Case "Héxadécimale"
+            s2 = cConv.Convert(16)
+        Case "Binaire"
+            s2 = cConv.Convert(2)
+        Case "Autre"
+            s2 = cConv.Convert(Val(txtBase(1).Text))
+        Case Else
+            'ANSI ASCII
+    End Select
+    
+    If cConv.ConversionFailed Then
+        txtI(1).ForeColor = RED_COLOR
+        txtI(1).Text = "Echec"
+    Else
+        txtI(1).ForeColor = vbBlack
+        txtI(1).Text = s2
+    End If
 End Sub
 
 Private Sub Form_Load()
     'loading des preferences
     Set clsPref = New clsIniForm
+    Set cConv = New clsConvert
     clsPref.GetFormSettings App.Path & "\Preferences\Conversion.ini", Me
 End Sub
 
@@ -355,6 +299,11 @@ Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
     clsPref.SaveFormSettings App.Path & "\Preferences\Conversion.ini", Me
     Set clsPref = Nothing
+    Set cConv = Nothing
+End Sub
+
+Private Sub txtBase_Change(Index As Integer)
+    DisplayResult
 End Sub
 
 Private Sub txtI_Change(Index As Integer)

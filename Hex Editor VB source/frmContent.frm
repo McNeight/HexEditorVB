@@ -456,7 +456,6 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -464,23 +463,20 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "00:17"
-            Key             =   ""
+            TextSave        =   "12:09"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "10/03/2007"
-            Key             =   ""
+            TextSave        =   "11/03/2007"
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -637,11 +633,13 @@ Begin VB.MDIForm frmContent
             ImageIndex      =   16
          EndProperty
          BeginProperty Button4 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
             Key             =   "Save"
             Object.ToolTipText     =   "Sauvegarder l'objet ouvert"
             ImageIndex      =   5
          EndProperty
          BeginProperty Button5 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
             Key             =   "Print"
             Object.ToolTipText     =   "Imprimer"
             ImageIndex      =   15
@@ -650,21 +648,25 @@ Begin VB.MDIForm frmContent
             Style           =   3
          EndProperty
          BeginProperty Button7 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
             Key             =   "Search"
             Object.ToolTipText     =   "Effectuer une recherche dans l'objet"
             ImageIndex      =   20
          EndProperty
          BeginProperty Button8 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
             Key             =   "Cut"
             Object.ToolTipText     =   "Couper la sélection"
             ImageIndex      =   3
          EndProperty
          BeginProperty Button9 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
             Key             =   "Copy"
             Object.ToolTipText     =   "Copier la sélection"
             ImageIndex      =   2
          EndProperty
          BeginProperty Button10 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
             Key             =   "Paste"
             Object.ToolTipText     =   "Coller le contenu du presse-papier"
             ImageIndex      =   4
@@ -673,11 +675,13 @@ Begin VB.MDIForm frmContent
             Style           =   3
          EndProperty
          BeginProperty Button12 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
             Key             =   "Undo"
             Object.ToolTipText     =   "Défaire"
             ImageIndex      =   6
          EndProperty
          BeginProperty Button13 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
             Key             =   "Redo"
             Object.ToolTipText     =   "Refaire"
             ImageIndex      =   7
@@ -686,16 +690,19 @@ Begin VB.MDIForm frmContent
             Style           =   3
          EndProperty
          BeginProperty Button15 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
             Key             =   "Signet"
             Object.ToolTipText     =   "Basculer le signet à l'offset sélectionné"
             ImageIndex      =   8
          EndProperty
          BeginProperty Button16 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
             Key             =   "Up"
             Object.ToolTipText     =   "Aller au signet précédent"
             ImageIndex      =   11
          EndProperty
          BeginProperty Button17 {66833FEA-8583-11D1-B16A-00C0F0283628} 
+            Enabled         =   0   'False
             Key             =   "Down"
             Object.ToolTipText     =   "Aller au signet suivant"
             ImageIndex      =   12
