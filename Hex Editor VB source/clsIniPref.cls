@@ -81,6 +81,7 @@ Public general_ResoY As Long
 Public general_QuickBackup As Byte
 Public general_OpenSubFiles As Byte
 Public general_CloseHomeWhenChosen As Byte
+Public general_ShowAlert As Byte
 Public general_AllowMultipleInstances As Byte
 Public general_DoNotChangeDates As Byte
 Public general_Splash As Byte
