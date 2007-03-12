@@ -114,6 +114,15 @@ Begin VB.Form frmOptions
          TabIndex        =   11
          Top             =   240
          Width           =   9435
+         Begin VB.CheckBox Check11 
+            Caption         =   "Afficher les messages de confirmation"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   86
+            ToolTipText     =   "Si cette case est cochée, les messages de confirmation seront affichés (recommandé)"
+            Top             =   3720
+            Width           =   4455
+         End
          Begin VB.CheckBox Check10 
             Caption         =   "Ouvrir Hex Editor VB dans le même état qu'en partant"
             Height          =   255
@@ -167,7 +176,7 @@ Begin VB.Form frmOptions
             TabIndex        =   19
             Text            =   "480"
             ToolTipText     =   "Hauteur"
-            Top             =   3840
+            Top             =   4200
             Width           =   495
          End
          Begin VB.TextBox Text3 
@@ -178,7 +187,7 @@ Begin VB.Form frmOptions
             TabIndex        =   18
             Text            =   "640"
             ToolTipText     =   "Largeur"
-            Top             =   3840
+            Top             =   4200
             Width           =   495
          End
          Begin VB.CheckBox Check6 
@@ -231,7 +240,7 @@ Begin VB.Form frmOptions
             Height          =   255
             Left            =   5280
             TabIndex        =   20
-            Top             =   3840
+            Top             =   4200
             Width           =   135
          End
          Begin VB.Label Label4 
@@ -239,7 +248,7 @@ Begin VB.Form frmOptions
             Height          =   255
             Left            =   120
             TabIndex        =   17
-            Top             =   3840
+            Top             =   4200
             Width           =   4575
          End
       End
@@ -1064,6 +1073,7 @@ Dim s As String
     Check8.Value = 0
     Check9.Value = 1
     Check10.Value = 1
+    Check11.Value = 1
     Text3.Text = 640
     Text4.Text = 480
 
@@ -1126,6 +1136,7 @@ Dim s As String
             .general_DisplayIcon = Check2.Value
             .general_DisplayData = Check3.Value
             .general_DisplayInfos = Check4.Value
+            .general_ShowAlert = Check11.Value
             .general_AllowMultipleInstances = Check5.Value
             .general_DoNotChangeDates = Check6.Value
             .general_OpenSubFiles = Check7.Value
@@ -1360,6 +1371,7 @@ Dim s As String
             Check8.Value = .general_CloseHomeWhenChosen
             Check9.Value = .general_Splash
             Check10.Value = .general_QuickBackup
+            Check11.Value = .general_ShowAlert
             Text3.Text = .general_ResoX
             Text4.Text = .general_ResoY
         End With

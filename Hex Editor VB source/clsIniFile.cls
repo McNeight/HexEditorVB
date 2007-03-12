@@ -112,6 +112,7 @@ Dim strIniFile As String
         LetPref "Integration", "FolderContextual", .integ_FolderContextual, .IniFilePath
         LetPref "Integration", "SendTo", .integ_SendTo, .IniFilePath
         LetPref "General", "MaximizeWhenOpen", .general_MaximizeWhenOpen, .IniFilePath
+        LetPref "General", "ShowAlert", .general_ShowAlert, .IniFilePath
         LetPref "General", "DisplayIcon", .general_DisplayIcon, .IniFilePath
         LetPref "General", "DisplayInfos", .general_DisplayInfos, .IniFilePath
         LetPref "General", "DisplayData", .general_DisplayData, .IniFilePath
@@ -188,6 +189,7 @@ Dim strIniFile As String
         .general_DisplayData = (Val(GetPref("General", "DisplayData", sFile)))
         .general_Splash = (Val(GetPref("General", "Splash", sFile)))
         .general_ResoX = Val(GetPref("General", "ResoX", sFile))
+        .general_ShowAlert = Val(GetPref("General", "ShowAlert", sFile))
         .general_ResoY = Val(GetPref("General", "ResoY", sFile))
         .general_QuickBackup = Val(GetPref("General", "QuickBackup", sFile))
         .general_AllowMultipleInstances = (Val(GetPref("General", "AllowMultipleInstances", sFile)))

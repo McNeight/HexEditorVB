@@ -471,7 +471,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "19:33"
+            TextSave        =   "20:17"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1500,6 +1500,24 @@ End Sub
 Private Sub mnuRecoverFiles_Click()
 'récupération de fichiers
     frmRecoverFiles.Show
+End Sub
+
+Private Sub mnuSave_Click()
+'lance la sauvegarde (écrasement)
+    
+    If Me.ActiveForm Is Nothing Then Exit Sub
+    
+    If TypeOfForm(Me.ActiveForm) = "Fichier" Then
+        'alors c'est un fichier
+        
+        If cPref.general_ShowAlert Then
+            'alors il nous faut demander confirmation
+            frmSave.Show vbModal
+        Else
+            'alors lance la sauvegarde
+            
+        End If
+    End If
 End Sub
 
 Private Sub pctExplorer_Resize()
@@ -3098,7 +3116,7 @@ Public Function ChangeEnabledMenus()
     Else
         'diskfrm
         Me.mnuExploreDisk.Enabled = True
-        Me.mnuSave.Enabled = True
+        Me.mnuSave.Enabled = False
         Me.mnuExecute.Enabled = True
         Me.mnuCut.Enabled = True
         Me.mnuOpenInBN = True
@@ -3141,7 +3159,7 @@ Private Sub RefreshToolbarEnableState()
         Me.Toolbar1.Buttons.Item(15).Enabled = False
     Else
         'on active
-        Me.Toolbar1.Buttons.Item(4).Enabled = True
+        If TypeOfForm(Me.ActiveForm) = "Fichier" Then Me.Toolbar1.Buttons.Item(4).Enabled = True
         Me.Toolbar1.Buttons.Item(5).Enabled = True
         Me.Toolbar1.Buttons.Item(7).Enabled = True
         Me.Toolbar1.Buttons.Item(8).Enabled = True
