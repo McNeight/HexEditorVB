@@ -114,7 +114,9 @@ Begin VB.Form frmAdvancedConversion
          Width           =   615
       End
       Begin VB.TextBox txtBaseO 
+         Alignment       =   2  'Center
          BorderStyle     =   0  'None
+         Enabled         =   0   'False
          Height          =   285
          Left            =   3120
          TabIndex        =   5
@@ -163,7 +165,9 @@ Begin VB.Form frmAdvancedConversion
          Width           =   1455
       End
       Begin VB.TextBox txtBaseI 
+         Alignment       =   2  'Center
          BorderStyle     =   0  'None
+         Enabled         =   0   'False
          Height          =   285
          Left            =   3120
          TabIndex        =   3
@@ -397,6 +401,14 @@ Option Explicit
 Private clsPref As clsIniForm
 Private cConv As clsConvert
 
+Private Sub cbI_Click()
+    txtBaseI.Enabled = (cbI.Text = "Autre")
+End Sub
+
+Private Sub cbO_Click()
+    txtBaseO.Enabled = (cbO.Text = "Autre")
+End Sub
+
 Private Sub cmdCLose_Click()
     Unload Me
 End Sub
@@ -615,7 +627,7 @@ Dim s2 As String
             cConv.CurrentBase = 8
         Case "Héxadécimale"
             cConv.CurrentBase = 16
-        Case "Bianire"
+        Case "Binaire"
             cConv.CurrentBase = 2
         Case "Autre"
             cConv.CurrentBase = Val(txtBaseI.Text)
@@ -630,7 +642,7 @@ Dim s2 As String
             s2 = cConv.Convert(8)
         Case "Héxadécimale"
             s2 = cConv.Convert(16)
-        Case "Bianire"
+        Case "Binaire"
             s2 = cConv.Convert(2)
         Case "Autre"
             s2 = cConv.Convert(Val(txtBaseI.Text))

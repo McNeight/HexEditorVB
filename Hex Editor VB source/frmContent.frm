@@ -456,6 +456,7 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -463,20 +464,23 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "12:09"
+            TextSave        =   "19:33"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "11/03/2007"
+            TextSave        =   "12/03/2007"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1371,8 +1375,8 @@ Private Sub MDIForm_Load()
     
     On Error Resume Next
     
+    'lance le subclassing pour le resize de la picturebox
     Call HookPictureResizement(Me.pctExplorer)
-    
     
     #If USE_FRMC_SUBCLASSING Then
         'instancie les classes
@@ -1390,7 +1394,6 @@ Private Sub MDIForm_Load()
         Me.mnuFileRenamer.Enabled = True
     End If
     
-    
     'ajoute les icones aux menus
     frmSplash.lblState.Caption = "Ajout des icones aux menus..."
     Call AddIconsToMenus(Me.hWnd, Me.ImageList2)
@@ -1400,7 +1403,6 @@ Private Sub MDIForm_Load()
     Lang.LangFolder = App.Path & "\Lang"
     
     'Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
-    
     
     frmSplash.lblState.Caption = "Lecture des préférences..."
     Me.mnuEditTools.Checked = cPref.general_DisplayData
