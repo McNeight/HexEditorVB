@@ -958,6 +958,17 @@ Private Sub UserControl_InitProperties()
     Me.strTag2 = vbNullString
     Me.DisableHexDisplay = False
 End Sub
+
+Private Sub UserControl_Show()
+    'alors c'est bon, on rafraichit
+    'ceci évite de rafraichir 50 fois pour rien au loading
+
+    If bStillOkForRefresh Then
+        bStillOkForRefresh = False  'on ne rafraichira plus à l'entrée au focus
+        'Refresh
+    End If
+End Sub
+
 Private Sub UserControl_Terminate()
 'enleve le hook
     sc_Terminate
@@ -1039,15 +1050,6 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     Me.strTag1 = PropBag.ReadProperty("strTag1", 0)
     Me.strTag2 = PropBag.ReadProperty("strTag2", 0)
     Me.DisableHexDisplay = PropBag.ReadProperty("DisableHexDisplay", False)
-
-    
-    'alors c'est bon, on rafraichit
-    'ceci évite de rafraichir pour CHAQUE property à l'entrée dans le controle
-
-    If bStillOkForRefresh Then
-        bStillOkForRefresh = False  'on ne rafraichira plus à l'entrée au focus
-        Refresh
-    End If
     
     
     'c'est la bonne place pour commencer à subclasser
