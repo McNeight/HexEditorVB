@@ -23,236 +23,6 @@ Begin VB.Form frmOptions
    ScaleHeight     =   8550
    ScaleWidth      =   10350
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdSauvegarder 
-      Caption         =   "OK"
-      Height          =   495
-      Left            =   1320
-      TabIndex        =   80
-      Top             =   120
-      Width           =   1335
-   End
-   Begin VB.CommandButton cmdDefault 
-      Caption         =   "Par défaut"
-      Height          =   495
-      Left            =   0
-      TabIndex        =   79
-      Top             =   0
-      Width           =   1335
-   End
-   Begin ComctlLib.TabStrip TB 
-      Height          =   375
-      Left            =   0
-      TabIndex        =   1
-      Top             =   30
-      Width           =   9975
-      _ExtentX        =   17595
-      _ExtentY        =   661
-      _Version        =   327682
-      BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-         NumTabs         =   6
-         BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Apparence du tableau"
-            Key             =   ""
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Intégration dans Explorer"
-            Key             =   ""
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Options générales"
-            Key             =   ""
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Environnement"
-            Key             =   ""
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Historique/signets"
-            Key             =   ""
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab6 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Explorateur de fichiers"
-            Key             =   ""
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-      EndProperty
-   End
-   Begin VB.CommandButton cmdQuitter 
-      Caption         =   "Annuler"
-      Height          =   495
-      Left            =   3000
-      TabIndex        =   81
-      Top             =   120
-      Width           =   1335
-   End
-   Begin VB.Frame Frame1 
-      Height          =   7575
-      Index           =   2
-      Left            =   0
-      TabIndex        =   4
-      Top             =   600
-      Visible         =   0   'False
-      Width           =   9855
-      Begin VB.PictureBox pctManifest 
-         BorderStyle     =   0  'None
-         Height          =   5895
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   5895
-         ScaleWidth      =   9435
-         TabIndex        =   11
-         Top             =   240
-         Width           =   9435
-         Begin VB.CheckBox Check11 
-            Caption         =   "Afficher les messages de confirmation"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   86
-            ToolTipText     =   "Si cette case est cochée, les messages de confirmation seront affichés (recommandé)"
-            Top             =   3720
-            Width           =   4455
-         End
-         Begin VB.CheckBox Check10 
-            Caption         =   "Ouvrir Hex Editor VB dans le même état qu'en partant"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   85
-            ToolTipText     =   $"frmOptions.frx":058A
-            Top             =   3360
-            Width           =   4455
-         End
-         Begin VB.CheckBox Check9 
-            Caption         =   "Afficher le splash screen"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   82
-            ToolTipText     =   "Autorise l'affichage du splash screen au démarrage du logiciel"
-            Top             =   3000
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check1 
-            Caption         =   "Maximiser les fenêtres à leur ouverture"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   78
-            ToolTipText     =   "Lance les fenêtres d'édition en grand lors de leur ouverture"
-            Top             =   120
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check8 
-            Caption         =   "Fermer la fenêtre de démarrage après le choix d'un objet à ouvrir"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   77
-            ToolTipText     =   "Referme la fenêtre de démarrage rapide après le choix d'une action"
-            Top             =   2640
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check7 
-            Caption         =   "Ouvrir également les fichiers des sous-dossiers lors de l'ouverture d'un dossier"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   76
-            ToolTipText     =   "Liste et ouvre tous les fichiers des sous dossiers lors de l'ouverture d'un dossier (lent - déconseillé)"
-            Top             =   2280
-            Width           =   6615
-         End
-         Begin VB.TextBox Text4 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   5520
-            TabIndex        =   19
-            Text            =   "480"
-            ToolTipText     =   "Hauteur"
-            Top             =   4200
-            Width           =   495
-         End
-         Begin VB.TextBox Text3 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   4680
-            TabIndex        =   18
-            Text            =   "640"
-            ToolTipText     =   "Largeur"
-            Top             =   4200
-            Width           =   495
-         End
-         Begin VB.CheckBox Check6 
-            Caption         =   "Ne pas changer les dates des fichiers modifiés"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   16
-            ToolTipText     =   "Conserve les dates originelles du fichiers après sa modification et sa sauvegarde"
-            Top             =   1920
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check5 
-            Caption         =   "Permettre plusieurs instances du programme"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   15
-            ToolTipText     =   "Permet au logiciel de se lancer plusieurs fois en même temps"
-            Top             =   1560
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check4 
-            Caption         =   "Afficher les informations fichier par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   14
-            ToolTipText     =   "Affiche les informations sur les fichiers dans les fenêtres d'édition"
-            Top             =   1200
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check3 
-            Caption         =   "Afficher les données par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   13
-            ToolTipText     =   "Afficher la zone de changement rapide de donnée lors de l'ouverture des fenêtres d'édition"
-            Top             =   840
-            Width           =   6615
-         End
-         Begin VB.CheckBox Check2 
-            Caption         =   "Afficher la liste des icones par défaut"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   12
-            ToolTipText     =   "Affiche la liste des icones par défaut (fichier et processus)"
-            Top             =   480
-            Width           =   6615
-         End
-         Begin VB.Label Label5 
-            Caption         =   "X"
-            Height          =   255
-            Left            =   5280
-            TabIndex        =   20
-            Top             =   4200
-            Width           =   135
-         End
-         Begin VB.Label Label4 
-            Caption         =   "Résolution de sauvegarde des images d'analyse des fichiers :"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   17
-            Top             =   4200
-            Width           =   4575
-         End
-      End
-   End
    Begin VB.Frame Frame1 
       Height          =   7455
       Index           =   0
@@ -434,9 +204,9 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbGrid 
             Height          =   315
-            ItemData        =   "frmOptions.frx":061C
+            ItemData        =   "frmOptions.frx":058A
             Left            =   5640
-            List            =   "frmOptions.frx":0632
+            List            =   "frmOptions.frx":05A0
             Style           =   2  'Dropdown List
             TabIndex        =   46
             ToolTipText     =   "Type de grille à afficher"
@@ -575,25 +345,6 @@ Begin VB.Form frmOptions
       End
    End
    Begin VB.Frame Frame1 
-      Height          =   5775
-      Index           =   4
-      Left            =   840
-      TabIndex        =   6
-      Top             =   1680
-      Visible         =   0   'False
-      Width           =   7935
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   5175
-         Left            =   120
-         ScaleHeight     =   5175
-         ScaleWidth      =   7455
-         TabIndex        =   21
-         Top             =   240
-         Width           =   7455
-      End
-   End
-   Begin VB.Frame Frame1 
       Height          =   6375
       Index           =   5
       Left            =   120
@@ -617,7 +368,7 @@ Begin VB.Form frmOptions
             Left            =   5280
             TabIndex        =   42
             Text            =   "C:\"
-            ToolTipText     =   $"frmOptions.frx":06C1
+            ToolTipText     =   $"frmOptions.frx":062F
             Top             =   4680
             Width           =   2535
          End
@@ -643,9 +394,9 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbExpInitDir 
             Height          =   315
-            ItemData        =   "frmOptions.frx":075F
+            ItemData        =   "frmOptions.frx":06CD
             Left            =   2520
-            List            =   "frmOptions.frx":0769
+            List            =   "frmOptions.frx":06D7
             Style           =   2  'Dropdown List
             TabIndex        =   37
             ToolTipText     =   "Type de chemin par défaut de l'explorateur de fichiers"
@@ -665,9 +416,9 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbExpIcon 
             Height          =   315
-            ItemData        =   "frmOptions.frx":078D
+            ItemData        =   "frmOptions.frx":06FB
             Left            =   2520
-            List            =   "frmOptions.frx":079A
+            List            =   "frmOptions.frx":0708
             Style           =   2  'Dropdown List
             TabIndex        =   35
             ToolTipText     =   "Type d'icones à afficher dans l'explorateur de fichiers"
@@ -818,6 +569,255 @@ Begin VB.Form frmOptions
             Top             =   4440
             Width           =   1935
          End
+      End
+   End
+   Begin VB.CommandButton cmdSauvegarder 
+      Caption         =   "OK"
+      Height          =   495
+      Left            =   1320
+      TabIndex        =   80
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdDefault 
+      Caption         =   "Par défaut"
+      Height          =   495
+      Left            =   0
+      TabIndex        =   79
+      Top             =   0
+      Width           =   1335
+   End
+   Begin ComctlLib.TabStrip TB 
+      Height          =   375
+      Left            =   0
+      TabIndex        =   1
+      Top             =   30
+      Width           =   9975
+      _ExtentX        =   17595
+      _ExtentY        =   661
+      _Version        =   327682
+      BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
+         NumTabs         =   6
+         BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Apparence du tableau"
+            Key             =   ""
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Intégration dans Explorer"
+            Key             =   ""
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Options générales"
+            Key             =   ""
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Environnement"
+            Key             =   ""
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Historique/signets"
+            Key             =   ""
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab6 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Explorateur de fichiers"
+            Key             =   ""
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+      EndProperty
+   End
+   Begin VB.CommandButton cmdQuitter 
+      Caption         =   "Annuler"
+      Height          =   495
+      Left            =   3000
+      TabIndex        =   81
+      Top             =   120
+      Width           =   1335
+   End
+   Begin VB.Frame Frame1 
+      Height          =   7575
+      Index           =   2
+      Left            =   0
+      TabIndex        =   4
+      Top             =   600
+      Visible         =   0   'False
+      Width           =   9855
+      Begin VB.PictureBox pctManifest 
+         BorderStyle     =   0  'None
+         Height          =   5895
+         Index           =   1
+         Left            =   120
+         ScaleHeight     =   5895
+         ScaleWidth      =   9435
+         TabIndex        =   11
+         Top             =   240
+         Width           =   9435
+         Begin VB.CheckBox Check11 
+            Caption         =   "Afficher les messages de confirmation"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   86
+            ToolTipText     =   "Si cette case est cochée, les messages de confirmation seront affichés (recommandé)"
+            Top             =   3720
+            Width           =   4455
+         End
+         Begin VB.CheckBox Check10 
+            Caption         =   "Ouvrir Hex Editor VB dans le même état qu'en partant"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   85
+            ToolTipText     =   $"frmOptions.frx":073F
+            Top             =   3360
+            Width           =   4455
+         End
+         Begin VB.CheckBox Check9 
+            Caption         =   "Afficher le splash screen"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   82
+            ToolTipText     =   "Autorise l'affichage du splash screen au démarrage du logiciel"
+            Top             =   3000
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check1 
+            Caption         =   "Maximiser les fenêtres à leur ouverture"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   78
+            ToolTipText     =   "Lance les fenêtres d'édition en grand lors de leur ouverture"
+            Top             =   120
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check8 
+            Caption         =   "Fermer la fenêtre de démarrage après le choix d'un objet à ouvrir"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   77
+            ToolTipText     =   "Referme la fenêtre de démarrage rapide après le choix d'une action"
+            Top             =   2640
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check7 
+            Caption         =   "Ouvrir également les fichiers des sous-dossiers lors de l'ouverture d'un dossier"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   76
+            ToolTipText     =   "Liste et ouvre tous les fichiers des sous dossiers lors de l'ouverture d'un dossier (lent - déconseillé)"
+            Top             =   2280
+            Width           =   6615
+         End
+         Begin VB.TextBox Text4 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   200
+            Left            =   5520
+            TabIndex        =   19
+            Text            =   "480"
+            ToolTipText     =   "Hauteur"
+            Top             =   4200
+            Width           =   495
+         End
+         Begin VB.TextBox Text3 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   200
+            Left            =   4680
+            TabIndex        =   18
+            Text            =   "640"
+            ToolTipText     =   "Largeur"
+            Top             =   4200
+            Width           =   495
+         End
+         Begin VB.CheckBox Check6 
+            Caption         =   "Ne pas changer les dates des fichiers modifiés"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   16
+            ToolTipText     =   "Conserve les dates originelles du fichiers après sa modification et sa sauvegarde"
+            Top             =   1920
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check5 
+            Caption         =   "Permettre plusieurs instances du programme"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   15
+            ToolTipText     =   "Permet au logiciel de se lancer plusieurs fois en même temps"
+            Top             =   1560
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check4 
+            Caption         =   "Afficher les informations fichier par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   14
+            ToolTipText     =   "Affiche les informations sur les fichiers dans les fenêtres d'édition"
+            Top             =   1200
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check3 
+            Caption         =   "Afficher les données par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   13
+            ToolTipText     =   "Afficher la zone de changement rapide de donnée lors de l'ouverture des fenêtres d'édition"
+            Top             =   840
+            Width           =   6615
+         End
+         Begin VB.CheckBox Check2 
+            Caption         =   "Afficher la liste des icones par défaut"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   12
+            ToolTipText     =   "Affiche la liste des icones par défaut (fichier et processus)"
+            Top             =   480
+            Width           =   6615
+         End
+         Begin VB.Label Label5 
+            Caption         =   "X"
+            Height          =   255
+            Left            =   5280
+            TabIndex        =   20
+            Top             =   4200
+            Width           =   135
+         End
+         Begin VB.Label Label4 
+            Caption         =   "Résolution de sauvegarde des images d'analyse des fichiers :"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   17
+            Top             =   4200
+            Width           =   4575
+         End
+      End
+   End
+   Begin VB.Frame Frame1 
+      Height          =   5775
+      Index           =   4
+      Left            =   840
+      TabIndex        =   6
+      Top             =   1680
+      Visible         =   0   'False
+      Width           =   7935
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   5175
+         Left            =   120
+         ScaleHeight     =   5175
+         ScaleWidth      =   7455
+         TabIndex        =   21
+         Top             =   240
+         Width           =   7455
       End
    End
    Begin VB.Frame Frame1 
@@ -1453,9 +1453,11 @@ End Sub
 Private Sub pctColor_Click(Index As Integer)
 'alors ouvre un CMD pour pouvoir choisir une couleur
 
+    On Error GoTo ErrGestion
+    
     'affiche la couleur dans la picturebox
     With frmContent.CMD
-        .CancelError = False
+        .CancelError = True
         .DialogTitle = "Choisissez une couleur"
         .ShowColor
         pctColor(Index).BackColor = .Color
@@ -1474,6 +1476,7 @@ Private Sub pctColor_Click(Index As Integer)
     'HW.ModifiedItemColor = pctColor(9).BackColor
     'HW.ModifiedSelectedItemColor = pctColor(10).BackColor
     
+ErrGestion:
 End Sub
 
 Private Sub TB_Click()
