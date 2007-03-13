@@ -471,7 +471,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "17:30"
+            TextSave        =   "19:51"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -763,6 +763,15 @@ Begin VB.MDIForm frmContent
       End
       Begin VB.Menu mnuSaveAs 
          Caption         =   "&Enregistrer sous..."
+      End
+      Begin VB.Menu rmnuExport 
+         Caption         =   "&Exporter"
+         Begin VB.Menu mnuExport 
+            Caption         =   "&Le fichier entier..."
+         End
+         Begin VB.Menu mnuExportSel 
+            Caption         =   "&La sélection..."
+         End
       End
       Begin VB.Menu mnuFileTiret1 
          Caption         =   "-"
@@ -1507,6 +1516,12 @@ Private Sub mnuDeleteSelection_Click()
     
     'procède à la suppression de la zone et sauvegarde dans un backup
     If bAcceptBackup Then frmContent.ActiveForm.DeleteZone
+End Sub
+
+Private Sub mnuExport_Click()
+'exporte les valeurs hexa du fichier entier
+    Call frmExport.IsEntireFile
+    frmExport.Show vbModal
 End Sub
 
 Private Sub mnuRecoverFiles_Click()
@@ -3072,6 +3087,9 @@ Public Function ChangeEnabledMenus()
         Me.rmnuFind.Enabled = True
         Me.mnuGoOn.Enabled = True
         Me.rmnuWindow.Enabled = True
+        Me.mnuExportSel.Enabled = True
+        Me.mnuExport.Enabled = False
+        Me.rmnuExport.Enabled = True
     ElseIf (Me.ActiveForm Is Nothing) = False And TypeOfActiveForm = "Pfm" Then
         'ActiveForm=Pfm
         'alors on affiche les options qui auraient pu être cachées
@@ -3099,6 +3117,9 @@ Public Function ChangeEnabledMenus()
         Me.rmnuFind.Enabled = True
         Me.mnuGoOn.Enabled = True
         Me.rmnuWindow.Enabled = True
+        Me.mnuExport.Enabled = True
+        Me.mnuExportSel.Enabled = True
+        Me.rmnuExport.Enabled = True
     ElseIf Me.ActiveForm Is Nothing Then
         'ActiveForm = nothing
         Me.mnuExploreDisk.Enabled = False
@@ -3125,6 +3146,7 @@ Public Function ChangeEnabledMenus()
         Me.rmnuFind.Enabled = False
         Me.mnuGoOn.Enabled = False
         Me.rmnuWindow.Enabled = False
+        Me.rmnuExport.Enabled = False
     Else
         'diskfrm
         Me.mnuExploreDisk.Enabled = True
@@ -3151,6 +3173,9 @@ Public Function ChangeEnabledMenus()
         Me.rmnuFind.Enabled = True
         Me.mnuGoOn.Enabled = True
         Me.rmnuWindow.Enabled = True
+        Me.rmnuExport.Enabled = True
+        Me.mnuExportSel.Enabled = True
+        Me.mnuExport.Enabled = False
     End If
     
 End Function

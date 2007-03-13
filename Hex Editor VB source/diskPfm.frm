@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.1#0"; "FileView_OCX.ocx"
 Object = "{276EF1C1-20F1-4D85-BE7B-06C736C9DCE9}#1.1#0"; "ExtendedVScrollbar_OCX.ocx"
-Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.1#0"; "HexViewer_OCX.ocx"
+Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.2#0"; "HexViewer_OCX.ocx"
 Begin VB.Form diskPfm 
    Caption         =   "Ouverture d'un disque..."
    ClientHeight    =   8415
@@ -968,6 +968,8 @@ Private Sub Form_Unload(Cancel As Integer)
         'alors enlève le subclassing
         Call RestoreResizing(Me.hWnd)
     #End If
+    
+    'Call frmContent.MDIForm_Resize 'évite le bug d'affichage
 End Sub
 
 Private Sub FV2_ItemClick(ByVal Item As ComctlLib.ListItem)
