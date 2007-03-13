@@ -264,6 +264,7 @@ Dim OldCase As HexCase
     End If
     
     z = CCur((NewCase.lOffset - OldCase.lOffset - 16) + (16 - OldCase.lCol) + NewCase.lCol)
+    If z < 0 Then z = -z   'évite le bug lors de la sélection sur une même ligne de droite à gauche
 
     NumberOfSelectedItems = z + 1: lNumberOfSelectedItems = z + 1: End Property
 Public Property Get StringForeColor() As OLE_COLOR: StringForeColor = lStringForeColor: End Property
