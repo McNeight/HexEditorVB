@@ -471,7 +471,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "16:42"
+            TextSave        =   "17:30"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1456,7 +1456,19 @@ Private Sub MDIForm_Load()
 End Sub
 
 Private Sub MDIForm_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+Dim Frm As Object
+
     Call SaveQuickBackupINIFile     'permet de sauver (si nécessaire) l'état du programme
+    
+    'ferme toute les fenêtres
+    Me.Visible = False
+    
+    For Each Frm In Me.Controls
+        If TypeOf Frm Is Form Then
+            Unload Frm
+        End If
+    Next Frm
+    
 End Sub
 
 Private Sub mnuCopyBitmapToClipBoard_Click()

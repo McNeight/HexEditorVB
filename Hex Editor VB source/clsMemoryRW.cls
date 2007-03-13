@@ -426,7 +426,7 @@ End Function
 'ne cherche pas une string en particulier, mais toutes les strings qui ressemblent à des mots
 'stocke dans un tableau de 1 à Ubound
 '=======================================================
-Public Sub SearchEntireStringMemory(ByVal PID As Long, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef lngRes() As Long, ByRef strRes() As String, Optional pgb As pgrbar)
+Public Sub SearchEntireStringMemory(ByVal PID As Long, ByVal lMinimalLength As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef lngRes() As Long, ByRef strRes() As String, Optional pgb As pgrbar)
 Dim strCtemp As String
 Dim x As Long
 Dim lngLen As Long
@@ -490,7 +490,7 @@ Dim LS() As Long
                 strCtemp = strCtemp & Chr(bytAsc)
             Else
                 strCtemp = Trim$(strCtemp)
-                If Len(strCtemp) > lMinimalLenght Then
+                If Len(strCtemp) > lMinimalLength Then
                     'trouvé la chaine correspondante
                     ReDim Preserve tRes(UBound(tRes) + 1)
                     tRes(UBound(tRes)).curOffset = i + LB(x) - Len(strCtemp) + 1
@@ -500,7 +500,7 @@ Dim LS() As Long
             End If
         Next i
             
-        If Len(strCtemp) > lMinimalLenght Then
+        If Len(strCtemp) > lMinimalLength Then
             'trouvé la dernière chaine possible (dernier byte compris dans cette chaine)
             ReDim Preserve tRes(UBound(tRes) + 1)
             tRes(UBound(tRes)).curOffset = LS(x) + LB(x) - Len(strCtemp) + 1

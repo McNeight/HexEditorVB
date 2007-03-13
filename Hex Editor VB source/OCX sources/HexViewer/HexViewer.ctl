@@ -19,8 +19,8 @@ Begin VB.UserControl HexViewer
    Begin VB.Timer Timer1 
       Enabled         =   0   'False
       Interval        =   1
-      Left            =   1560
-      Top             =   1560
+      Left            =   2040
+      Top             =   1680
    End
 End
 Attribute VB_Name = "HexViewer"
@@ -205,6 +205,8 @@ Private cur_Tag2 As Currency
 Private str_Tag1 As String
 Private str_Tag2 As String
 Private bDisableHexDisplay As Boolean
+Private curFileSize As Currency     'pour ne pas pourvoir sélectionner les derniers bytes
+'du tableau si > taille du fichier
 
    
    
@@ -350,7 +352,7 @@ Public Property Let strTag2(strTag2 As String): str_Tag2 = strTag2: End Property
 Public Property Get DisableHexDisplay() As Boolean: DisableHexDisplay = bDisableHexDisplay: End Property
 Public Property Let DisableHexDisplay(DisableHexDisplay As Boolean): bDisableHexDisplay = DisableHexDisplay: End Property
 Public Property Get NumberOfSignets() As Long: NumberOfSignets = UBound(M_S()) - 1: End Property
-
+Public Property Let FileSize(FileSize As Currency): curFileSize = FileSize: End Property
 
 
 '=======================================================
@@ -402,13 +404,13 @@ End Sub
 'EVENEMENTS NON SIMPLES
 '=======================================================
 Private Sub UserControl_MouseDown(Button As Integer, Shift As Integer, x As Single, Y As Single)
-'click sur le picturebox
 Dim it As New ItemElement
 Dim z As Long, z2 As Long
 Dim yCase As Currency
 Dim xCase As Long
 
     
+          
     If Button <> 1 Then GoTo RaiseEv
     
     
@@ -418,7 +420,7 @@ Dim xCase As Long
    '         Msel(z, z2) = False
    '     Next z2
    ' Next z
-        
+ 
         
     'détermine colonne et ligne en fonction de x et y
     yCase = Round((Y - 180) / 260, 0) 'y en coordonnée de matrice
@@ -430,6 +432,12 @@ Dim xCase As Long
         'alors c'est une zone de valeurs hexa
         xCase = Round((x - 1250) / 360, 0)
     End If
+    
+    'détermine si oui ou non la nouvelle position de la souris est
+    'EN DEHORS DU FICHIER, c'est à dire si la zone sélectionnée est sur des bytes
+    'existants ou non
+    If (Me.FirstOffset + 16 * (yCase - 1) + xCase) > curFileSize Then Exit Sub 'dépasse du fichier
+          
     
     'stocke dans la variable contenant la nouvelle case sélectionnée
     hexNewCase.lCol = xCase
@@ -579,7 +587,6 @@ Dim xCase As Long
 Dim lStep As Long
 
 
-
     yCase = Round((Y - 180) / 260, 0) 'y en coordonnée de matrice
     
     If (x > 7500 And x < 9450) Then
@@ -589,6 +596,11 @@ Dim lStep As Long
         'alors c'est une zone de valeurs hexa
         xCase = Round((x - 1250) / 360, 0)
     End If
+    
+    'détermine si oui ou non la nouvelle position de la souris est
+    'EN DEHORS DU FICHIER, c'est à dire si la zone sélectionnée est sur des bytes
+    'existants ou non
+    If (Me.FirstOffset + 16 * (yCase - 1) + xCase) > curFileSize Then Exit Sub 'dépasse du fichier
     
     
     '//détermine si il faut ou non activer le changement d'offset
@@ -1773,14 +1785,26 @@ End Sub
 'écrit une String à la ligne lLine
 '=======================================================
 Private Sub PasteString(ByVal lLine As Long, ByVal sString As String)
+    
+    If (Me.FirstOffset + 16 * (lLine - 1) + 1) > curFileSize Then Exit Sub 'dépasse du fichier
+        
     UserControl.ForeColor = lStringForeColor
     Pos 7500, 260 * (lLine) + 100
+    
+    'tronque la string si on est au bout du fichier
+    If (Me.FirstOffset + 16 * lLine) > curFileSize Then
+        sString = Left$(sString, curFileSize - Me.FirstOffset - 16 * (lLine - 1))
+    End If
+    
     UserControl.Print sString
 End Sub
 '=======================================================
 'écrit une valeurs hexa a un endroit de la matrice
 '=======================================================
 Private Sub PasteHex(ByVal lLine As Long, ByVal lCol As Long, ByVal sString As String)
+
+    If (Me.FirstOffset + 16 * (lLine - 1) + lCol) > curFileSize Then Exit Sub 'dépasse du fichier
+    
     If M_M(lCol, lLine) = False Then
         'case normale
         UserControl.ForeColor = lHexForeColor

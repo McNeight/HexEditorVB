@@ -604,7 +604,6 @@ Begin VB.Form MemPfm
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
          NumTabs         =   1
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   ""
             Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
@@ -741,7 +740,7 @@ Private lBgAdress As Long   'offset de départ de page
 Private lEdAdress As Long   'offset de fin de page
 Private NumberPerPage As Long   'nombre de lignes visibles par Page
 Private pRs As Long, pr As Long, pc As Long, pCs As Long 'sauvegarde de la sélection
-Private lLenght As Long 'taille du fichier
+Private lLength As Long 'taille du fichier
 Private ChangeListO() As Long
 Private ChangeListC() As Long
 Private ChangeListS() As String
@@ -823,7 +822,7 @@ Dim cF As clsFile
     Label2(8).Caption = Me.Sb.Panels(2).Text
     Label2(9).Caption = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(10).Caption = Me.Sb.Panels(3).Text
-    Label2(11).Caption = "Offset maximum=[" & CStr(16 * Int(lLenght / 16)) & "]"
+    Label2(11).Caption = "Offset maximum=[" & CStr(16 * Int(lLength / 16)) & "]"
     'Label2(12).Caption = "[" & sDescription & "]"
     
     'affiche les informations concernant le processus
@@ -990,7 +989,7 @@ Dim a As Long
 Dim s As String
 Dim b As Long
 Dim c As Long
-Dim lLenght As Long
+Dim lLength As Long
 Dim e As Byte
 Dim s2 As String
 Dim mbi As MEMORY_BASIC_INFORMATION
@@ -1140,6 +1139,7 @@ Dim si As SYSTEM_INFO
     'stocke dans les tag les valeurs Max et Min des offsets
     HW.curTag1 = HW.FirstOffset
     HW.curTag2 = HW.MaxOffset
+    HW.FileSize = 2147483648# '2Go de mémoire virtuelle
     
     
     'affiche aussi les icones du fichier
@@ -1622,7 +1622,7 @@ Dim lPages As Long
     OpenFile 16 * Value + 1, VS.Value * 16 + NumberPerPage * 16
     
     'calcule le nbre de pages
-    lPages = lLenght / (NumberPerPage * 16) + 1
+    lPages = lLength / (NumberPerPage * 16) + 1
     Me.Sb.Panels(2).Text = "Page=[" & CStr(1 + Int(VS.Value / NumberPerPage)) & "/" & CStr(lPages) & "]"
     Label2(8).Caption = Me.Sb.Panels(2).Text
     

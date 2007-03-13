@@ -60,7 +60,7 @@ Dim l As Long
     '#COMMAND_FILE                      ==> contient le path du fichier qui ouvre le script (argument Command)
     '#D                                 ==> variable D
     '#DESKTOP_DIRECTORY                 ==> contient le path du bureau
-    '#FILE_LENGHT                       ==> cotient la taille du fichier utilisé
+    '#FILE_LENGTH                       ==> cotient la taille du fichier utilisé
     '#FILE_PATH                         ==> contient le path du fichier utilisé
     '#PROCESS_PATH                      ==> contient le path du processus utilisé
     '#PROCESS_PID                       ==> contient le PID du processus utilisé

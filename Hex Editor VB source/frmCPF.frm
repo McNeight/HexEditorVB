@@ -357,7 +357,7 @@ End Sub
 'lance l'analyse des deux fichiers
 '=======================================================
 Private Sub LaunchAnalys()
-Dim lLenght1 As Long, lLenght2 As Long
+Dim lLength1 As Long, lLength2 As Long
 Dim x As Long
 Dim y As Long
 Dim b As Byte
@@ -376,8 +376,8 @@ Dim curByteOld As Currency
     Next x
     
     'prépare la progressbar
-    lLenght1 = cFile.GetFileSize(txtFile1.Text): lLenght2 = cFile.GetFileSize(txtFile2.Text)
-    pgb.Min = 0: pgb.Max = lLenght1 + lLenght2: pgb.Value = 0
+    lLength1 = cFile.GetFileSize(txtFile1.Text): lLength2 = cFile.GetFileSize(txtFile2.Text)
+    pgb.Min = 0: pgb.Max = lLength1 + lLength2: pgb.Value = 0
     x = 0
     
     'obtient le handle du fichier
@@ -390,7 +390,7 @@ Dim curByteOld As Currency
     strBuffer = String$(51200, 0) 'buffer de 50K
     
     curByte = 0
-    Do Until curByte > lLenght1  'tant que le fichier n'est pas fini
+    Do Until curByte > lLength1  'tant que le fichier n'est pas fini
     
         x = x + 1
     
@@ -400,12 +400,12 @@ Dim curByteOld As Currency
         'obtient la string sur le buffer
         ReadFileEx lngFile, ByVal strBuffer, 51200, tOver, AddressOf CallBackFunction
         
-        If curByte + 51200 <= lLenght1 Then
+        If curByte + 51200 <= lLength1 Then
             'alors on prend bien 51200 car
             l = 51200
         Else
             'on prend que les derniers car
-            l = lLenght1 - curByte
+            l = lLength1 - curByte
         End If
         
         For y = 1 To l
@@ -441,7 +441,7 @@ Dim curByteOld As Currency
     strBuffer = String$(51200, 0) 'buffer de 50K
     
     curByte = 0
-    Do Until curByte > lLenght2  'tant que le fichier n'est pas fini
+    Do Until curByte > lLength2  'tant que le fichier n'est pas fini
     
         x = x + 1
     
@@ -451,12 +451,12 @@ Dim curByteOld As Currency
         'obtient la string sur le buffer
         ReadFileEx lngFile, ByVal strBuffer, 51200, tOver, AddressOf CallBackFunction
         
-        If curByte + 51200 <= lLenght2 Then
+        If curByte + 51200 <= lLength2 Then
             'alors on prend bien 51200 car
             l = 51200
         Else
             'on prend que les derniers car
-            l = lLenght2 - curByte
+            l = lLength2 - curByte
         End If
         
         For y = 1 To l
