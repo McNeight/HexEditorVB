@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{276EF1C1-20F1-4D85-BE7B-06C736C9DCE9}#1.1#0"; "ExtendedVScrollbar_OCX.ocx"
-Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.1#0"; "HexViewer_OCX.ocx"
+Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.2#0"; "HexViewer_OCX.ocx"
 Begin VB.Form Pfm 
    Caption         =   "Ouverture d'un fichier..."
    ClientHeight    =   8115
@@ -1151,6 +1151,12 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
         'pour l'édition dynamique au clavier
         
         'alors descend
+        
+        'on vérifie que l'on ne dépasse pas la fin du fichier
+        If (HW.FirstOffset + 16 * HW.Item.Line + HW.Item.Col) > lLength Then _
+            Exit Sub    'dépasse du fichier
+            
+            
         If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) Then Exit Sub  'tout en bas
         'on descend d'une ligne alors
         HW.Item.Line = HW.Item.Line + 1
@@ -1227,7 +1233,12 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
         bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
         'pour l'édition dynamique au clavier
         
-        'alors va à droite
+        'alors on va à droite
+        
+        'on vérifie que l'on ne dépasse pas la fin du fichier
+        If (HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col) >= lLength Then _
+            Exit Sub    'dépasse du fichier
+        
         If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) And HW.Item.Col = 16 Then Exit Sub  'tout à la fin déjà
         If HW.Item.Col = 16 Then
             'tout à droite ==> on descend d'une ligne alors
@@ -1271,7 +1282,7 @@ Dim x As Byte
 Dim s2 As String
 
     On Error GoTo ErrGestion
-
+    
     If HW.Item.tType = tHex Then  'si l'on est dans la zone hexa
         If (KeyAscii >= 48 And KeyAscii <= 57) Or (KeyAscii >= 65 And KeyAscii <= 70) Or (KeyAscii >= 97 And KeyAscii <= 102) Then
             'alors on a ajouté 0,1,...,9,A,B,....,F
