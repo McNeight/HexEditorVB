@@ -1113,6 +1113,8 @@ Private Sub Form_Unload(Cancel As Integer)
     
     'enleve le hook sur lvIcon également
     Call UnHookLVDragAndDrop(lvIcon.hWnd)
+    
+    'Call frmContent.MDIForm_Resize 'évite le bug d'affichage
 End Sub
 
 Private Sub HW_GotFocus()

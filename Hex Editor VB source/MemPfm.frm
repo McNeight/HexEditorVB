@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{276EF1C1-20F1-4D85-BE7B-06C736C9DCE9}#1.1#0"; "ExtendedVScrollbar_OCX.ocx"
-Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.1#0"; "HexViewer_OCX.ocx"
+Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.2#0"; "HexViewer_OCX.ocx"
 Begin VB.Form MemPfm 
    Caption         =   "Ouverture d'un processus..."
    ClientHeight    =   8295
@@ -1161,6 +1161,8 @@ Private Sub Form_Unload(Cancel As Integer)
     
     'enleve le hook sur lvIcon également
     Call UnHookLVDragAndDrop(lvIcon.hWnd)
+    
+    'Call frmContent.MDIForm_Resize 'évite le bug d'affichage
 End Sub
 
 Private Sub HW_GotFocus()
