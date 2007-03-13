@@ -65,6 +65,10 @@ Option Explicit
 'contexte, il sera nécessaire d'effectuer des vérifications
 'plus poussées dans les Property Let des propriétés Min, Max et Value
 'pour prévenir tout bug de la part d'un utilisateur
+'
+'//NOTE : THE SUBCLASSING PART OF THIS CODE BELONGS TO PAUL CATON
+'//FOR MORE INFORMATIONS ABOUT THE COPYRIGHT, PLEASE REFER TO
+'//http://www.planet-source-code.com/vb/scripts/ShowCode.asp?txtCodeId=64867&lngWId=1
 '=======================================================
 
 
@@ -207,6 +211,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     Call PropBag.WriteProperty("Max", Me.Max, 100)
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
+    
     Me.Min = PropBag.ReadProperty("Min", 1)
     Me.Value = PropBag.ReadProperty("Value", 50)
     Me.Max = PropBag.ReadProperty("Max", 100)
@@ -655,34 +660,6 @@ Bail:
   z_ScMem = nBase                                                           'Restore the value of z_ScMem
 End Sub
 
-'Delete the message from the specified table of the window handle
-Private Sub zDelMsg(ByVal uMsg As Long, ByVal nTable As Long)
-  Dim nCount As Long                                                        'Table entry count
-  Dim nBase  As Long                                                        'Remember z_ScMem
-  Dim i      As Long                                                        'Loop index
-
-  nBase = z_ScMem                                                           'Remember z_ScMem so that we can restore its value on exit
-  z_ScMem = zData(nTable)                                                   'Map zData() to the specified table
-
-  If uMsg = ALL_MESSAGES Then                                               'If ALL_MESSAGES are being deleted from the table...
-    zData(0) = 0                                                            'Zero the table entry count
-  Else
-    nCount = zData(0)                                                       'Get the table entry count
-    
-    For i = 1 To nCount                                                     'Loop through the table entries
-      If zData(i) = uMsg Then                                               'If the message is found...
-        zData(i) = 0                                                        'Null the msg value -- also frees the element for re-use
-        GoTo Bail                                                           'Bail
-      End If
-    Next i                                                                  'Next message table entry
-    
-    zError "zDelMsg", "Message &H" & Hex$(uMsg) & " not found in table"
-  End If
-  
-Bail:
-  z_ScMem = nBase                                                           'Restore the value of z_ScMem
-End Sub
-
 'Error handler
 Private Sub zError(ByVal sRoutine As String, ByVal sMsg As String)
   App.LogEvent TypeName(Me) & "." & sRoutine & ": " & sMsg, vbLogEventTypeError
@@ -710,6 +687,42 @@ Private Function zMap_hWnd(ByVal lng_hWnd As Long) As Long
 Catch:
   zError "zMap_hWnd", "Window handle isn't subclassed"
 End Function
+
+'Call the original WndProc
+Private Function sc_CallOrigWndProc(ByVal lng_hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+  If IsBadCodePtr(zMap_hWnd(lng_hWnd)) = 0 Then                             'Ensure that the thunk hasn't already released its memory
+    sc_CallOrigWndProc = _
+        CallWindowProcA(zData(IDX_WNDPROC), lng_hWnd, uMsg, wParam, lParam) 'Call the original WndProc of the passed window handle parameter
+  End If
+End Function
+
+'Delete the message from the specified table of the window handle
+Private Sub zDelMsg(ByVal uMsg As Long, ByVal nTable As Long)
+  Dim nCount As Long                                                        'Table entry count
+  Dim nBase  As Long                                                        'Remember z_ScMem
+  Dim i      As Long                                                        'Loop index
+
+  nBase = z_ScMem                                                           'Remember z_ScMem so that we can restore its value on exit
+  z_ScMem = zData(nTable)                                                   'Map zData() to the specified table
+
+  If uMsg = ALL_MESSAGES Then                                               'If ALL_MESSAGES are being deleted from the table...
+    zData(0) = 0                                                            'Zero the table entry count
+  Else
+    nCount = zData(0)                                                       'Get the table entry count
+    
+    For i = 1 To nCount                                                     'Loop through the table entries
+      If zData(i) = uMsg Then                                               'If the message is found...
+        zData(i) = 0                                                        'Null the msg value -- also frees the element for re-use
+        GoTo Bail                                                           'Bail
+      End If
+    Next i                                                                  'Next message table entry
+    
+    zError "zDelMsg", "Message &H" & Hex$(uMsg) & " not found in table"
+  End If
+  
+Bail:
+  z_ScMem = nBase                                                           'Restore the value of z_ScMem
+End Sub
 
 'Return the address of the specified ordinal method on the oCallback object, 1 = last private method, 2 = second last private method, etc
 Private Function zAddressOf(ByVal oCallback As Object, ByVal nOrdinal As Long) As Long

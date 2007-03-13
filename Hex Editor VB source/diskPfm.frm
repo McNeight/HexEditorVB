@@ -888,7 +888,7 @@ Private lBgAdress As Long   'offset de départ de page
 Private lEdAdress As Long   'offset de fin de page
 Private NumberPerPage As Long   'nombre de lignes visibles par Page
 Private pRs As Long, pr As Long, pc As Long, pCs As Long 'sauvegarde de la sélection
-Private lLenght As Currency 'taille du fichier
+Private lLength As Currency 'taille du fichier
 Private lBytesPerSector As Long
 Private ChangeListO() As Long
 Private ChangeListC() As Long
@@ -916,7 +916,7 @@ Dim lPages As Long
     Label2(8).Caption = Me.Sb.Panels(2).Text
     Label2(9).Caption = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(10).Caption = Me.Sb.Panels(3).Text
-    Label2(11).Caption = "Offset maximum=[" & CStr(16 * Int(lLenght / 16)) & "]"
+    Label2(11).Caption = "Offset maximum=[" & CStr(16 * Int(lLength / 16)) & "]"
     'Label2(12).Caption = "[" & sDescription & "]"
 
 End Sub
@@ -1376,8 +1376,9 @@ Dim l As Currency
     'appelle la classe
     Set cDrive = clsDrive.GetLogicalDrive(strDrive)
     lBytesPerSector = cDrive.BytesPerSector
-    lLenght = cDrive.PartitionLength    'taille totale
-    HW.MaxOffset = lLenght 'offset maximal
+    lLength = cDrive.PartitionLength    'taille totale
+    HW.MaxOffset = lLength 'offset maximal
+    HW.FileSize = lLength
     Me.Caption = "Disque " & Right$(strDrive, 2) & "\"
     
     'affiche les infos disque dans les textboxes
@@ -1810,7 +1811,7 @@ Dim lPages As Long
     OpenDrive
     
     'calcule le nbre de pages
-    lPages = lLenght / (NumberPerPage * 16) + 1
+    lPages = lLength / (NumberPerPage * 16) + 1
     Me.Sb.Panels(2).Text = "Page=[" & CStr(1 + Int(VS.Value / NumberPerPage)) & "/" & CStr(lPages) & "]"
     Label2(8).Caption = Me.Sb.Panels(2).Text
     
@@ -1869,7 +1870,7 @@ Dim lPlace As Long
        
     'créé un buffer de longueur divisible par 16
     'recoupera à la fin pour la longueur exacte du fichier
-    lLen = By16(lLenght)
+    lLen = By16(lLength)
     tmpText = String$(16, 0)
        
         For a = 1 To lLen Step 16  'remplit par intervalles de 16
@@ -1883,8 +1884,8 @@ Dim lPlace As Long
                 'ne formate PAS la string
                 
                 'vérifie que l'on est pas dans la dernière ligne, si oui, ne prend que la longueur nécessaire
-                If a + 16 > lLenght Then
-                    s = Mid$(ChangeListS(lPlace), 1, lLenght - a + 1)
+                If a + 16 > lLength Then
+                    s = Mid$(ChangeListS(lPlace), 1, lLength - a + 1)
                 Else
                     s = ChangeListS(lPlace)
                 End If
@@ -1893,8 +1894,8 @@ Dim lPlace As Long
                 'pas de modif, prend à partir du fichier source
                 'vérfie que l'on est pas dans la dernière ligne
                 
-                If a + 16 > lLenght Then
-                    s = Mid$(tmpText, 1, lLenght - a + 1)
+                If a + 16 > lLength Then
+                    s = Mid$(tmpText, 1, lLength - a + 1)
                 Else
                     s = tmpText
                 End If
@@ -1904,7 +1905,7 @@ Dim lPlace As Long
             
             If (a Mod 160017) = 0 Then
                 'rend un peu la main
-                frmContent.Sb.Panels(1).Text = "Status=[Saving " & Me.Caption & "]" & "[" & Round(100 * a / lLenght, 2) & " %]"
+                frmContent.Sb.Panels(1).Text = "Status=[Saving " & Me.Caption & "]" & "[" & Round(100 * a / lLength, 2) & " %]"
                 DoEvents
             End If
 

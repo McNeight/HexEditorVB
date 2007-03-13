@@ -93,7 +93,6 @@ Begin VB.Form frmScript
       _ExtentY        =   4895
       _Version        =   393217
       BorderStyle     =   0
-      Enabled         =   -1  'True
       ScrollBars      =   3
       Appearance      =   0
       TextRTF         =   $"frmScript.frx":2307
@@ -465,7 +464,7 @@ End Sub
 Private Sub mnuOpen_Click()
 'ouverture de fichier
 Dim s As String
-Dim X As Long
+Dim x As Long
 
     On Error GoTo CancelPushed
     
@@ -504,7 +503,7 @@ End Sub
 Private Sub mnuSaveAs_Click()
 'sauvegarde
 Dim s As String
-Dim X As Long
+Dim x As Long
 
     On Error GoTo CancelPushed
     
@@ -518,8 +517,8 @@ Dim X As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        X = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (X = vbYes) Then Exit Sub
+        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        If Not (x = vbYes) Then Exit Sub
     End If
     
     'sauvegarde du fichier

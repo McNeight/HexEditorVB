@@ -595,7 +595,7 @@ Option Explicit
 Private lBgAdress As Currency   'offset de départ de page
 Private lEdAdress As Currency   'offset de fin de page
 Private NumberPerPage As Long   'nombre de lignes visibles par Page
-Private lLenght As Currency 'taille du fichier
+Private lLength As Currency 'taille du fichier
 Private ChangeListO() As Currency
 Private ChangeListC() As Currency
 Private ChangeListS() As String
@@ -639,7 +639,7 @@ Dim cFic As clsFile
     Label2(8).Caption = Me.Sb.Panels(2).Text
     Label2(9).Caption = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(10).Caption = Me.Sb.Panels(3).Text
-    Label2(11).Caption = "Offset maximum=[" & CStr(16 * Int(lLenght / 16)) & "]"
+    Label2(11).Caption = "Offset maximum=[" & CStr(16 * Int(lLength / 16)) & "]"
     'Label2(12).Caption = "[" & sDescription & "]"
     
     Set cFic = Nothing
@@ -824,7 +824,7 @@ Dim s As String
 Dim b As Long
 Dim c As Long
 Dim s2 As String
-Dim lLenght As Long
+Dim lLength As Long
 Dim e As Byte
 Dim sTemp() As String
 Dim lOff As Currency
@@ -964,9 +964,9 @@ Dim OfF As Currency, OfL As Currency
        
     'créé un buffer de longueur divisible par 16
     'recoupera à la fin pour la longueur exacte du fichier
-    lLen = By16(lLenght)
+    lLen = By16(lLength)
     
-    tempFileLen = lLenght   'contient la taille que fera le fichier temporaire (après suppression)
+    tempFileLen = lLength   'contient la taille que fera le fichier temporaire (après suppression)
     'pour l'instant c'est la taille normale
     
     lNewPos = 0 'pas de décalage pour le moment
@@ -997,7 +997,7 @@ Dim OfF As Currency, OfL As Currency
                     'vérfie que l'on est pas dans la dernière ligne
                     
                     If a + 16 > tempFileLen Then
-                        s = Mid$(tmpText, 1, lLenght - a + 1)
+                        s = Mid$(tmpText, 1, lLength - a + 1)
                     Else
                         s = tmpText
                     End If
@@ -1008,13 +1008,13 @@ Dim OfF As Currency, OfL As Currency
             Else
                 'ALORS appartient à la zone enlevée
                 lNewPos = -OfL + OfF    'décalage
-                tempFileLen = lLenght - OfL + OfF  'change la taille du fichier temp
+                tempFileLen = lLength - OfL + OfF  'change la taille du fichier temp
             End If
             
             
             If (a Mod 160017) = 0 Then
                 'rend un peu la main
-                frmContent.Sb.Panels(1).Text = "Status=[Creating backup " & Me.Caption & "]" & "[" & Round(100 * a / lLenght, 2) & " %]"
+                frmContent.Sb.Panels(1).Text = "Status=[Creating backup " & Me.Caption & "]" & "[" & Round(100 * a / lLength, 2) & " %]"
                 DoEvents
             End If
 
@@ -1064,9 +1064,10 @@ Dim l As Currency
     Set TheFile = cFile.GetFile(sFile)
     
     'récupère le contenu du fichier
-    lLenght = TheFile.FileSize
+    lLength = TheFile.FileSize
     
-    HW.MaxOffset = lLenght 'offset maximal
+    HW.MaxOffset = lLength 'offset maximal
+    HW.FileSize = lLength
     
     Me.Caption = sFile
     
@@ -1080,7 +1081,7 @@ Dim l As Currency
         
     'règle la taille de VS
     VS.Min = 0
-    l = Int(lLenght / 16)
+    l = Int(lLength / 16)
     VS.Max = l
     VS.Value = 0
     VS.SmallChange = 1
@@ -1596,7 +1597,7 @@ Dim lPages As Long
     OpenFile 16 * Value + 1, VS.Value * 16 + NumberPerPage * 16
     
     'calcule le nbre de pages
-    lPages = lLenght / (NumberPerPage * 16) + 1
+    lPages = lLength / (NumberPerPage * 16) + 1
     Me.Sb.Panels(2).Text = "Page=[" & CStr(1 + Int(VS.Value / NumberPerPage)) & "/" & CStr(lPages) & "]"
     Label2(8).Caption = Me.Sb.Panels(2).Text
     
@@ -1653,7 +1654,7 @@ Dim Ret As Long
 
     'créé un buffer de longueur divisible par 16
     'recoupera à la fin pour la longueur exacte du fichier
-    lLen = By16(lLenght)
+    lLen = By16(lLength)
     tmpText = String$(16, 0)
        
         For a = 1 To lLen Step 16  'remplit par intervalles de 16
@@ -1675,8 +1676,8 @@ Dim Ret As Long
                 'ne formate PAS la string
                 
                 'vérifie que l'on est pas dans la dernière ligne, si oui, ne prend que la longueur nécessaire
-                If a + 16 > lLenght Then
-                    s = Mid$(ChangeListS(lPlace), 1, lLenght - a + 1)
+                If a + 16 > lLength Then
+                    s = Mid$(ChangeListS(lPlace), 1, lLength - a + 1)
                 Else
                     s = ChangeListS(lPlace)
                 End If
@@ -1685,8 +1686,8 @@ Dim Ret As Long
                 'pas de modif, prend à partir du fichier source
                 'vérfie que l'on est pas dans la dernière ligne
                 
-                If a + 16 > lLenght Then
-                    s = Mid$(tmpText, 1, lLenght - a + 1)
+                If a + 16 > lLength Then
+                    s = Mid$(tmpText, 1, lLength - a + 1)
                 Else
                     s = tmpText
                 End If
@@ -1700,7 +1701,7 @@ Dim Ret As Long
             
             If (a Mod 160017) = 0 Then
                 'rend un peu la main
-                dblAdv = Round((100 * a) / lLenght, 3)
+                dblAdv = Round((100 * a) / lLength, 3)
                 frmContent.Sb.Panels(1).Text = "Status=[Saving " & Me.Caption & "]" & "[" & CStr(dblAdv) & " %]"
                 DoEvents
             End If

@@ -339,7 +339,7 @@ End Function
 'fonction de recherche de string complètes dans un fichier
 'stocke dans un tableau de 1 à Ubound
 '=======================================================
-Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLenght As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef tRes() As SearchResult, Optional pgb As pgrbar)
+Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLength As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef tRes() As SearchResult, Optional pgb As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
 Dim strCtemp As String
@@ -404,7 +404,7 @@ Dim i As Long
                 strCtemp = strCtemp & Chr(bytAsc)
             Else
                 strCtemp = Trim$(strCtemp)
-                If Len(strCtemp) > lMinimalLenght Then
+                If Len(strCtemp) > lMinimalLength Then
                     'trouvé la chaine correspondante
                     ReDim Preserve tRes(UBound(tRes) + 1)
                     tRes(UBound(tRes)).curOffset = curByte + i - Len(strCtemp) + 1
@@ -414,7 +414,7 @@ Dim i As Long
             End If
         Next i
         
-        If Len(strCtemp) > lMinimalLenght Then
+        If Len(strCtemp) > lMinimalLength Then
             'trouvé la dernière chaine possible (dernier byte compris dans cette chaine)
             ReDim Preserve tRes(UBound(tRes) + 1)
             tRes(UBound(tRes)).curOffset = curByte + 51199 - Len(strCtemp) + 1
