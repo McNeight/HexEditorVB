@@ -154,7 +154,7 @@ Public Function Byte2FormatedString(ByVal bCar As Long) As String
 
     'renvoie un "." pour les caractères non affichables
 
-    If bCar < 32 Or bCar > 255 Then
+    If bCar < 32 Or bCar > 255 Or bCar = 144 Or bCar = 143 Then
         'caractère non affichable
         Byte2FormatedString = "."
     Else
