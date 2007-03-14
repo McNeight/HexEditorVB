@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "Comdlg32.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MsComCtl.ocx"
 Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.1#0"; "FileView_OCX.ocx"
@@ -471,7 +471,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "19:51"
+            TextSave        =   "19:41"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -479,7 +479,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "13/03/2007"
+            TextSave        =   "14/03/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1465,19 +1465,22 @@ Private Sub MDIForm_Load()
 End Sub
 
 Private Sub MDIForm_QueryUnload(Cancel As Integer, UnloadMode As Integer)
-Dim Frm As Object
+Dim Frm As Form
 
     Call SaveQuickBackupINIFile     'permet de sauver (si nécessaire) l'état du programme
     
-    'ferme toute les fenêtres
-    Me.Visible = False
+    'on cache notre form pour éviter de montrer que le programme met du temps à se fermer...
+    Me.Hide
+
+    On Error Resume Next
     
-    For Each Frm In Me.Controls
-        If TypeOf Frm Is Form Then
-            Unload Frm
+    'ferme toute les fenêtres
+    For Each Frm In Forms
+        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Then
+            SendMessage Frm.hWnd, WM_CLOSE, 0, 0
         End If
     Next Frm
-    
+
 End Sub
 
 Private Sub mnuCopyBitmapToClipBoard_Click()
