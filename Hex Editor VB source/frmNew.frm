@@ -119,7 +119,7 @@ Option Explicit
 
 Private clsPref As clsIniForm
 
-Private Sub cmdNo_Click()
+Private Sub cmdNO_Click()
     Unload Me
 End Sub
 
@@ -136,7 +136,7 @@ Dim s As String
     Set Frm = New Pfm
     
     'calcule la taille du fichier
-    If Len(txtSize.Text) = 0 Or Len(cdUnit.Text) = 0 Then
+    If Len(txtSize.Text) = 0 Or Len(cdUnit.Text) = 0 Or Val(txtSize.Text) <= 0 Then
         'rien sélectionné
         MsgBox "Vous devez sélectionner une taille valide.", vbInformation, "Attention"
         Exit Sub
