@@ -144,6 +144,10 @@ Dim strIniFile As String
         LetPref "FileExplorer", "HideColumnTitle", .explo_HideColumnTitle, .IniFilePath
         LetPref "Executable", "HasCrashed", .exe_HasCrashed, .IniFilePath
         LetPref "Appearance", "OffsetTitleForeColor", .app_OffsetTitleForeColor, .IniFilePath
+        LetPref "Console", "ForeColor", .console_ForeColor, .IniFilePath
+        LetPref "Console", "BackColor", .console_BackColor, .IniFilePath
+        LetPref "Console", "Heigth", .console_Heigth, .IniFilePath
+        LetPref "Console", "Load", .console_Load, .IniFilePath
     End With
     
     SaveIniFile = True
@@ -215,6 +219,10 @@ Dim strIniFile As String
         .exe_HasCrashed = (Val(GetPref("Executable", "HasCrashed", sFile)))
         .general_OpenSubFiles = Val(GetPref("General", "OpenSubFiles", sFile))
         .general_CloseHomeWhenChosen = Val(GetPref("General", "CloseHomeWhenChosen", sFile))
+        .console_BackColor = Val(GetPref("Console", "BackColor", sFile))
+        .console_ForeColor = Val(GetPref("Console", "ForeColor", sFile))
+        .console_Heigth = Val(GetPref("Console", "Heigth", sFile))
+        .console_Load = Val(GetPref("Console", "Load", sFile))
         .IniFilePath = sFile
     End With
         
