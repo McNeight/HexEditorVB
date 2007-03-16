@@ -2,6 +2,7 @@ VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "Comdlg32.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MsComCtl.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.1#0"; "FileView_OCX.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.MDIForm frmContent 
@@ -16,6 +17,71 @@ Begin VB.MDIForm frmContent
    OLEDropMode     =   1  'Manual
    StartUpPosition =   3  'Windows Default
    WindowState     =   2  'Maximized
+   Begin VB.PictureBox pctConsole 
+      Align           =   1  'Align Top
+      BackColor       =   &H00000000&
+      BorderStyle     =   0  'None
+      Height          =   1320
+      Left            =   0
+      ScaleHeight     =   1320
+      ScaleWidth      =   9750
+      TabIndex        =   5
+      Top             =   2535
+      Width           =   9750
+      Begin RichTextLib.RichTextBox txtE 
+         Height          =   255
+         Left            =   120
+         TabIndex        =   6
+         Top             =   3000
+         Width           =   2775
+         _ExtentX        =   4895
+         _ExtentY        =   450
+         _Version        =   393217
+         BackColor       =   0
+         BorderStyle     =   0
+         MultiLine       =   0   'False
+         Appearance      =   0
+         OLEDragMode     =   0
+         OLEDropMode     =   0
+         TextRTF         =   $"frmContent.frx":5E8A
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Lucida Console"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin RichTextLib.RichTextBox txt 
+         Height          =   2895
+         Left            =   0
+         TabIndex        =   7
+         Top             =   0
+         Width           =   5655
+         _ExtentX        =   9975
+         _ExtentY        =   5106
+         _Version        =   393217
+         BackColor       =   0
+         BorderStyle     =   0
+         ReadOnly        =   -1  'True
+         ScrollBars      =   2
+         Appearance      =   0
+         OLEDragMode     =   0
+         OLEDropMode     =   1
+         TextRTF         =   $"frmContent.frx":5F0D
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Lucida Console"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+   End
    Begin MSComctlLib.ImageList ImageList2 
       Left            =   120
       Top             =   4680
@@ -27,345 +93,349 @@ Begin VB.MDIForm frmContent
       MaskColor       =   16777215
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   85
+         NumListImages   =   86
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":5E8A
+            Picture         =   "frmContent.frx":5F90
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":61DC
-            Key             =   "Fenêtres|Gestion des fenêtres..."
+            Picture         =   "frmContent.frx":62E2
+            Key             =   "Affichage|ConsoleF4"
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":652E
-            Key             =   "Outils|Statistiques du fichier..."
+            Picture         =   "frmContent.frx":6834
+            Key             =   "Fenêtres|Gestion des fenêtres..."
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":6880
-            Key             =   "Outils|Récupération de fichiers..."
+            Picture         =   "frmContent.frx":6B86
+            Key             =   "Outils|Statistiques du fichier..."
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":6BD2
-            Key             =   "Outils|Ouvrir avec le bloc-notes"
+            Picture         =   "frmContent.frx":6ED8
+            Key             =   "Outils|Récupération de fichiers..."
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":6F24
-            Key             =   "Outils|Calculatrice"
+            Picture         =   "frmContent.frx":722A
+            Key             =   "Outils|Ouvrir avec le bloc-notes"
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":7276
-            Key             =   "Nouveau|Nouveau fichier..."
+            Picture         =   "frmContent.frx":757C
+            Key             =   "Outils|Calculatrice"
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":75C8
-            Key             =   "Position|Fin"
+            Picture         =   "frmContent.frx":78CE
+            Key             =   "Nouveau|Nouveau fichier..."
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":791A
-            Key             =   "Nouveau|Démarrer un processus..."
+            Picture         =   "frmContent.frx":7C20
+            Key             =   "Position|Fin"
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":7C6C
-            Key             =   "Outils|Convertisseur..."
+            Picture         =   "frmContent.frx":7F72
+            Key             =   "Nouveau|Démarrer un processus..."
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":7FBE
-            Key             =   "Outils|Renommage massif de fichiers..."
+            Picture         =   "frmContent.frx":82C4
+            Key             =   "Outils|Convertisseur..."
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":8310
-            Key             =   "Position|Monter d'une page"
+            Picture         =   "frmContent.frx":8616
+            Key             =   "Outils|Renommage massif de fichiers..."
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":8662
-            Key             =   "Fichier|Exécuter"
+            Picture         =   "frmContent.frx":8968
+            Key             =   "Position|Monter d'une page"
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":89B4
-            Key             =   "Outils|Exécuter le scriptF9"
+            Picture         =   "frmContent.frx":8CBA
+            Key             =   "Fichier|Exécuter"
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":8D06
-            Key             =   "Position|Début"
+            Picture         =   "frmContent.frx":900C
+            Key             =   "Outils|Exécuter le scriptF9"
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":9058
-            Key             =   "Position|Descendre d'une page"
+            Picture         =   "frmContent.frx":935E
+            Key             =   "Position|Début"
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":93AA
-            Key             =   "Affichage|Tableau_checked"
+            Picture         =   "frmContent.frx":96B0
+            Key             =   "Position|Descendre d'une page"
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":96FC
-            Key             =   "Aide|A propos"
+            Picture         =   "frmContent.frx":9A02
+            Key             =   "Affichage|Tableau_checked"
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":9C4E
-            Key             =   "Ouvrir|Ouvrir un processus en mémoire..."
+            Picture         =   "frmContent.frx":9D54
+            Key             =   "Aide|A propos"
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":9FA0
-            Key             =   "Ouvrir|Ouvrir un disque physique..."
+            Picture         =   "frmContent.frx":A2A6
+            Key             =   "Ouvrir|Ouvrir un processus en mémoire..."
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":A2F2
-            Key             =   ""
+            Picture         =   "frmContent.frx":A5F8
+            Key             =   "Ouvrir|Ouvrir un disque physique..."
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":A644
-            Key             =   "Signets|Ouvrir une liste de signets..."
-         EndProperty
-         BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":A996
-            Key             =   "Signets|Enregistrer la liste des signets..."
-         EndProperty
-         BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":ACE8
-            Key             =   "Signets|Ajouter une liste de signets..."
-         EndProperty
-         BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":B03A
+            Picture         =   "frmContent.frx":A94A
             Key             =   ""
          EndProperty
+         BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":AC9C
+            Key             =   "Signets|Ouvrir une liste de signets..."
+         EndProperty
+         BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":AFEE
+            Key             =   "Signets|Enregistrer la liste des signets..."
+         EndProperty
+         BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":B340
+            Key             =   "Signets|Ajouter une liste de signets..."
+         EndProperty
          BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":B38C
+            Picture         =   "frmContent.frx":B692
             Key             =   ""
          EndProperty
          BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":B6DE
-            Key             =   "Outils|Démarrer une tâche..."
+            Picture         =   "frmContent.frx":B9E4
+            Key             =   ""
          EndProperty
          BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":BA30
-            Key             =   "Edition|Coller"
+            Picture         =   "frmContent.frx":BD36
+            Key             =   "Outils|Démarrer une tâche..."
          EndProperty
          BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":BD82
-            Key             =   ""
+            Picture         =   "frmContent.frx":C088
+            Key             =   "Edition|Coller"
          EndProperty
          BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":C0D4
-            Key             =   "Fichier|Imprimer..."
-         EndProperty
-         BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":C426
-            Key             =   "Edition|Couper"
-         EndProperty
-         BeginProperty ListImage32 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":C778
+            Picture         =   "frmContent.frx":C3DA
             Key             =   ""
          EndProperty
+         BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":C72C
+            Key             =   "Fichier|Imprimer..."
+         EndProperty
+         BeginProperty ListImage32 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":CA7E
+            Key             =   "Edition|Couper"
+         EndProperty
          BeginProperty ListImage33 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":CACA
+            Picture         =   "frmContent.frx":CDD0
             Key             =   ""
          EndProperty
          BeginProperty ListImage34 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":CE1C
-            Key             =   "Fichier|Ouvrir"
-         EndProperty
-         BeginProperty ListImage35 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":D16E
-            Key             =   "Outils|Gestion des processus..."
-         EndProperty
-         BeginProperty ListImage36 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":D4C0
-            Key             =   "Ouvrir|Ouvrir des fichiers..."
-         EndProperty
-         BeginProperty ListImage37 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":D812
-            Key             =   "Ouvrir|Ouvrir un dossier de fichiers..."
-         EndProperty
-         BeginProperty ListImage38 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":DB64
-            Key             =   "Fichier|Nouveau"
-         EndProperty
-         BeginProperty ListImage39 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":DEB6
-            Key             =   "Edition|Copier"
-         EndProperty
-         BeginProperty ListImage40 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":E208
+            Picture         =   "frmContent.frx":D122
             Key             =   ""
          EndProperty
+         BeginProperty ListImage35 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":D474
+            Key             =   "Fichier|Ouvrir"
+         EndProperty
+         BeginProperty ListImage36 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":D7C6
+            Key             =   "Outils|Gestion des processus..."
+         EndProperty
+         BeginProperty ListImage37 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":DB18
+            Key             =   "Ouvrir|Ouvrir des fichiers..."
+         EndProperty
+         BeginProperty ListImage38 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":DE6A
+            Key             =   "Ouvrir|Ouvrir un dossier de fichiers..."
+         EndProperty
+         BeginProperty ListImage39 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":E1BC
+            Key             =   "Fichier|Nouveau"
+         EndProperty
+         BeginProperty ListImage40 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":E50E
+            Key             =   "Edition|Copier"
+         EndProperty
          BeginProperty ListImage41 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":E55A
+            Picture         =   "frmContent.frx":E860
             Key             =   ""
          EndProperty
          BeginProperty ListImage42 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":E8AC
-            Key             =   "Signets|Basculer un signet"
-         EndProperty
-         BeginProperty ListImage43 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":EBFE
-            Key             =   "Signets|Signet précédent"
-         EndProperty
-         BeginProperty ListImage44 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":EF50
+            Picture         =   "frmContent.frx":EBB2
             Key             =   ""
          EndProperty
+         BeginProperty ListImage43 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":EF04
+            Key             =   "Signets|Basculer un signet"
+         EndProperty
+         BeginProperty ListImage44 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":F256
+            Key             =   "Signets|Signet précédent"
+         EndProperty
          BeginProperty ListImage45 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":F2A2
+            Picture         =   "frmContent.frx":F5A8
             Key             =   ""
          EndProperty
          BeginProperty ListImage46 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":F5F4
-            Key             =   "Signets|Signet suivant"
-         EndProperty
-         BeginProperty ListImage47 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":F946
-            Key             =   "Edition|Visualiser une partie restreinte..."
-         EndProperty
-         BeginProperty ListImage48 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":FC98
+            Picture         =   "frmContent.frx":F8FA
             Key             =   ""
          EndProperty
+         BeginProperty ListImage47 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":FC4C
+            Key             =   "Signets|Signet suivant"
+         EndProperty
+         BeginProperty ListImage48 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":FF9E
+            Key             =   "Edition|Visualiser une partie restreinte..."
+         EndProperty
          BeginProperty ListImage49 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":FFEA
+            Picture         =   "frmContent.frx":102F0
             Key             =   ""
          EndProperty
          BeginProperty ListImage50 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1033C
+            Picture         =   "frmContent.frx":10642
             Key             =   ""
          EndProperty
          BeginProperty ListImage51 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1068E
+            Picture         =   "frmContent.frx":10994
             Key             =   ""
          EndProperty
          BeginProperty ListImage52 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":109E0
+            Picture         =   "frmContent.frx":10CE6
             Key             =   ""
          EndProperty
          BeginProperty ListImage53 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":10D32
-            Key             =   "Outils|Découper/fusionner des fichiers..."
+            Picture         =   "frmContent.frx":11038
+            Key             =   ""
          EndProperty
          BeginProperty ListImage54 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":11084
-            Key             =   "Signets|Supprimer le signet de l'offset"
+            Picture         =   "frmContent.frx":1138A
+            Key             =   "Outils|Découper/fusionner des fichiers..."
          EndProperty
          BeginProperty ListImage55 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":113D6
-            Key             =   "Signets|Supprimer tous les signets"
+            Picture         =   "frmContent.frx":116DC
+            Key             =   "Signets|Supprimer le signet de l'offset"
          EndProperty
          BeginProperty ListImage56 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":11728
-            Key             =   "Outils|Suppression de fichiers..."
+            Picture         =   "frmContent.frx":11A2E
+            Key             =   "Signets|Supprimer tous les signets"
          EndProperty
          BeginProperty ListImage57 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":11A7A
-            Key             =   ""
+            Picture         =   "frmContent.frx":11D80
+            Key             =   "Outils|Suppression de fichiers..."
          EndProperty
          BeginProperty ListImage58 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":11DCC
-            Key             =   "Position|Aller à l'offset..."
+            Picture         =   "frmContent.frx":120D2
+            Key             =   ""
          EndProperty
          BeginProperty ListImage59 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1211E
-            Key             =   ""
+            Picture         =   "frmContent.frx":12424
+            Key             =   "Position|Aller à l'offset..."
          EndProperty
          BeginProperty ListImage60 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":12470
-            Key             =   "Rechercher|Chaines de caractères..."
-         EndProperty
-         BeginProperty ListImage61 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":127C2
-            Key             =   "Outils|Recherche de fichiers..."
-         EndProperty
-         BeginProperty ListImage62 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":12B14
-            Key             =   "Aide|Aide...F1"
-         EndProperty
-         BeginProperty ListImage63 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":12E66
-            Key             =   "Aide|Rap"
-         EndProperty
-         BeginProperty ListImage64 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":131B8
+            Picture         =   "frmContent.frx":12776
             Key             =   ""
          EndProperty
+         BeginProperty ListImage61 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":12AC8
+            Key             =   "Rechercher|Chaines de caractères..."
+         EndProperty
+         BeginProperty ListImage62 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":12E1A
+            Key             =   "Outils|Recherche de fichiers..."
+         EndProperty
+         BeginProperty ListImage63 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":1316C
+            Key             =   "Aide|Aide...F1"
+         EndProperty
+         BeginProperty ListImage64 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":134BE
+            Key             =   "Aide|Rap"
+         EndProperty
          BeginProperty ListImage65 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1350A
+            Picture         =   "frmContent.frx":13810
             Key             =   ""
          EndProperty
          BeginProperty ListImage66 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1385C
+            Picture         =   "frmContent.frx":13B62
             Key             =   ""
          EndProperty
          BeginProperty ListImage67 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":13BAE
+            Picture         =   "frmContent.frx":13EB4
             Key             =   ""
          EndProperty
          BeginProperty ListImage68 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":13F00
-            Key             =   "Aide|Faire un don..."
+            Picture         =   "frmContent.frx":14206
+            Key             =   ""
          EndProperty
          BeginProperty ListImage69 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":14252
-            Key             =   "Fichier|Imprimer"
+            Picture         =   "frmContent.frx":14558
+            Key             =   "Aide|Faire un don..."
          EndProperty
          BeginProperty ListImage70 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":145A4
-            Key             =   "Outils|Editeur de script"
+            Picture         =   "frmContent.frx":148AA
+            Key             =   "Fichier|Imprimer"
          EndProperty
          BeginProperty ListImage71 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":148F6
-            Key             =   ""
+            Picture         =   "frmContent.frx":14BFC
+            Key             =   "Outils|Editeur de script"
          EndProperty
          BeginProperty ListImage72 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":14C48
-            Key             =   "Fichier|Propriétés"
-         EndProperty
-         BeginProperty ListImage73 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":14F9A
-            Key             =   "Edition|Refaire"
-         EndProperty
-         BeginProperty ListImage74 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":152EC
-            Key             =   "Fichier|Enregistrer"
-         EndProperty
-         BeginProperty ListImage75 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1563E
-            Key             =   "Fichier|Enregistrer sous..."
-         EndProperty
-         BeginProperty ListImage76 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":15990
-            Key             =   "Edition|Créer un fichier depuis la sélection..."
-         EndProperty
-         BeginProperty ListImage77 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":15CE2
-            Key             =   "Rechercher|Texte..."
-         EndProperty
-         BeginProperty ListImage78 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":16034
-            Key             =   "Rechercher|Valeurs hexa..."
-         EndProperty
-         BeginProperty ListImage79 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":16386
-            Key             =   "Edition|Tout sélectionner"
-         EndProperty
-         BeginProperty ListImage80 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":166D8
-            Key             =   "Edition|Remplir la sélection..."
-         EndProperty
-         BeginProperty ListImage81 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":16A2A
-            Key             =   "Affichage|Tableau"
-         EndProperty
-         BeginProperty ListImage82 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":16D7C
-            Key             =   "Outils|Options..."
-         EndProperty
-         BeginProperty ListImage83 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":170CE
+            Picture         =   "frmContent.frx":14F4E
             Key             =   ""
          EndProperty
+         BeginProperty ListImage73 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":152A0
+            Key             =   "Fichier|Propriétés"
+         EndProperty
+         BeginProperty ListImage74 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":155F2
+            Key             =   "Edition|Refaire"
+         EndProperty
+         BeginProperty ListImage75 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":15944
+            Key             =   "Fichier|Enregistrer"
+         EndProperty
+         BeginProperty ListImage76 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":15C96
+            Key             =   "Fichier|Enregistrer sous..."
+         EndProperty
+         BeginProperty ListImage77 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":15FE8
+            Key             =   "Edition|Créer un fichier depuis la sélection..."
+         EndProperty
+         BeginProperty ListImage78 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":1633A
+            Key             =   "Rechercher|Texte..."
+         EndProperty
+         BeginProperty ListImage79 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":1668C
+            Key             =   "Rechercher|Valeurs hexa..."
+         EndProperty
+         BeginProperty ListImage80 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":169DE
+            Key             =   "Edition|Tout sélectionner"
+         EndProperty
+         BeginProperty ListImage81 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":16D30
+            Key             =   "Edition|Remplir la sélection..."
+         EndProperty
+         BeginProperty ListImage82 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":17082
+            Key             =   "Affichage|Tableau"
+         EndProperty
+         BeginProperty ListImage83 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":173D4
+            Key             =   "Outils|Options..."
+         EndProperty
          BeginProperty ListImage84 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":17420
-            Key             =   "Edition|Annuler"
+            Picture         =   "frmContent.frx":17726
+            Key             =   ""
          EndProperty
          BeginProperty ListImage85 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":17772
+            Picture         =   "frmContent.frx":17A78
+            Key             =   "Edition|Annuler"
+         EndProperty
+         BeginProperty ListImage86 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":17DCA
             Key             =   "Aide|Hex Editor VB sur Internet"
          EndProperty
       EndProperty
@@ -456,6 +526,7 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -463,20 +534,23 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "20:18"
+            TextSave        =   "23:57"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "14/03/2007"
+            TextSave        =   "16/03/2007"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -510,92 +584,92 @@ Begin VB.MDIForm frmContent
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   22
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":17AC4
+            Picture         =   "frmContent.frx":1811C
             Key             =   "New"
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":19456
+            Picture         =   "frmContent.frx":19AAE
             Key             =   ""
             Object.Tag             =   "Copy"
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1ADE8
+            Picture         =   "frmContent.frx":1B440
             Key             =   "Cut"
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1C77A
+            Picture         =   "frmContent.frx":1CDD2
             Key             =   "Paste"
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1E10C
+            Picture         =   "frmContent.frx":1E764
             Key             =   "Save"
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1FA9E
+            Picture         =   "frmContent.frx":200F6
             Key             =   "Undo"
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":20038
+            Picture         =   "frmContent.frx":20690
             Key             =   "Redo"
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":205D2
+            Picture         =   "frmContent.frx":20C2A
             Key             =   "Signet"
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":21F64
+            Picture         =   "frmContent.frx":225BC
             Key             =   "Left"
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":238F6
+            Picture         =   "frmContent.frx":23F4E
             Key             =   "Right"
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":25288
+            Picture         =   "frmContent.frx":258E0
             Key             =   "Up"
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":26C1A
+            Picture         =   "frmContent.frx":27272
             Key             =   "Down"
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":285AC
+            Picture         =   "frmContent.frx":28C04
             Key             =   "Add"
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":29F3E
+            Picture         =   "frmContent.frx":2A596
             Key             =   "Trash"
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":2B8D0
+            Picture         =   "frmContent.frx":2BF28
             Key             =   "Print"
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":2D262
+            Picture         =   "frmContent.frx":2D8BA
             Key             =   ""
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":2D7FC
+            Picture         =   "frmContent.frx":2DE54
             Key             =   "FileOpen"
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":2F18E
+            Picture         =   "frmContent.frx":2F7E6
             Key             =   "Computer"
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":30B20
+            Picture         =   "frmContent.frx":31178
             Key             =   ""
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":310BA
+            Picture         =   "frmContent.frx":31712
             Key             =   ""
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":3350C
+            Picture         =   "frmContent.frx":33B64
             Key             =   ""
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":33A1D
+            Picture         =   "frmContent.frx":34075
             Key             =   ""
          EndProperty
       EndProperty
@@ -968,6 +1042,13 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuDisplayTiret2 
          Caption         =   "-"
       End
+      Begin VB.Menu mnuShowConsole 
+         Caption         =   "&Console"
+         Shortcut        =   {F4}
+      End
+      Begin VB.Menu mnuDisplayTiret215 
+         Caption         =   "-"
+      End
       Begin VB.Menu mnuStatusOK 
          Caption         =   "&Réinitialiser le status"
          Shortcut        =   ^{F5}
@@ -1288,6 +1369,10 @@ Option Explicit
 
 Implements IOverMenuEvent
 Private bDonneeForm As Boolean
+Private sTxt() As String    'contient les différentes commances entrées 1 à Ubound
+Private lngPos As Long  'numéro de la commande de l'historique
+Private clsPref As clsIniForm
+
 
 Private Sub cSubEvent_MenuOver(ByVal strCaption As String)
     'cet event est libéré lors du survol des menus
@@ -1380,7 +1465,19 @@ Private Sub MDIForm_Load()
     
     On Error Resume Next
     
-    'lance le subclassing pour le resize de la picturebox
+    
+    'loading des preferences
+    Set clsPref = New clsIniForm
+    clsPref.GetFormSettings App.Path & "\Preferences\FrmContent.ini", Me
+    
+    'valeurs par défaut
+    ReDim sTxt(0)
+    lngPos = 0
+    txt.SelColor = vbWhite
+    txt.Refresh
+    
+    'lance le subclassing pour le resize des pictureboxes
+    Call HookPictureResizement(Me.pctConsole, 1)
     Call HookPictureResizement(Me.pctExplorer)
     
     #If USE_FRMC_SUBCLASSING Then
@@ -1410,13 +1507,25 @@ Private Sub MDIForm_Load()
     'Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
     
     frmSplash.lblState.Caption = "Lecture des préférences..."
-    Me.mnuEditTools.Checked = cPref.general_DisplayData
-    Me.mnuInformations.Checked = cPref.general_DisplayInfos
-    Me.mnuShowIcons.Checked = cPref.general_DisplayIcon
+    With cPref
+        Me.mnuEditTools.Checked = .general_DisplayData
+        Me.mnuInformations.Checked = .general_DisplayInfos
+        Me.mnuShowIcons.Checked = .general_DisplayIcon
+    End With
     
     frmSplash.lblState.Caption = "Lancement de l'explorateur de fichiers..."
     'loading de la taille de l'explorer
     Me.pctExplorer.Height = cPref.explo_Height
+    
+    'loading des pref de la console
+    With cPref
+        Me.pctConsole.BackColor = .console_BackColor
+        frmContent.txt.BackColor = .console_BackColor
+        frmContent.txtE.BackColor = .console_BackColor
+        Me.pctConsole.Height = .console_Heigth
+        Me.mnuShowConsole.Checked = CBool(.console_Load)
+        Me.pctConsole.Visible = CBool(.console_Load)
+    End With
     
     'charge les prefs de l'explorer
     '/!\ C'est ce code qui fait charger le logiciel lentement
@@ -1546,6 +1655,30 @@ Private Sub mnuSave_Click()
     End If
 End Sub
 
+Private Sub mnuShowConsole_Click()
+'affiche la console
+    pctConsole.Visible = Not (pctConsole.Visible)
+    Me.mnuShowConsole.Checked = pctConsole.Visible
+End Sub
+
+Private Sub pctConsole_Resize()
+    On Error Resume Next
+    'resize des 2 RTF
+    With txtE
+        .Left = 0
+        .Width = pctConsole.Width
+        .Height = 220
+        .Top = pctConsole.Height - 250
+    End With
+    With txt
+        .Left = 0
+        .Top = 0
+        .Width = pctConsole.Width
+        .Height = pctConsole.Height - 250
+    End With
+    cPref.console_Heigth = Me.pctConsole.Height  'sauvegarde la position actuelle
+End Sub
+
 Private Sub pctExplorer_Resize()
     Call MDIForm_Resize
     cPref.explo_Height = Me.pctExplorer.Height  'sauvegarde la position actuelle
@@ -1641,6 +1774,11 @@ End Sub
 
 Private Sub MDIForm_Unload(Cancel As Integer)
     
+    'sauvegarde des preferences
+    clsPref.SaveFormSettings App.Path & "\Preferences\FrmContent.ini", Me
+    Set clsPref = Nothing
+    
+    Call UnHookPictureResizement(Me.pctConsole.hWnd, 1)
     Call UnHookPictureResizement(Me.pctExplorer.hWnd)
     
     #If USE_FRMC_SUBCLASSING Then
@@ -1703,8 +1841,9 @@ Private Sub mnuBeginning_Click()
     Call Me.ActiveForm.VS_Change(Me.ActiveForm.VS.Value)
 End Sub
 
-Private Sub mnuCalc_Click()
+Public Sub mnuCalc_Click()
     'lance la calcultarice
+    On Error Resume Next
     Shell cFile.GetSpecialFolder(CSIDL_WINDOWS) & "\System32\calc.exe", vbNormalFocus
 End Sub
 
@@ -2283,7 +2422,7 @@ Dim sExt As String
     ExecuteTempFile Me.hWnd, Me.ActiveForm, sExt
 End Sub
 
-Private Sub mnuExit_Click()
+Public Sub mnuExit_Click()
     'quitte
     Call MDIForm_Unload(0)
 End Sub
@@ -2559,11 +2698,12 @@ Private Sub mnuProperty_Click()
     frmPropertyShow.Show
 End Sub
 
-Private Sub mnuRedo_Click()
+Public Sub mnuRedo_Click()
+    If Me.ActiveForm Is Nothing Then Exit Sub
     Call Me.ActiveForm.RedoM
 End Sub
 
-Private Sub mnuRefreh_Click()
+Public Sub mnuRefreh_Click()
 'refresh
 
     If Me.ActiveForm Is Nothing Then Exit Sub
@@ -2785,7 +2925,7 @@ Private Sub mnuSourceForge_Click()
     cFile.ShellOpenFile "http://sourceforge.net/projects/hexeditorvb/", Me.hWnd, , App.Path
 End Sub
 
-Private Sub mnuStats_Click()
+Public Sub mnuStats_Click()
 'affiche les statistiques du fichier
 Dim Frm As Form
 
@@ -2904,7 +3044,8 @@ Private Sub mnuThisIsTheEnd_Click()
     frmContent.ActiveForm.HW.SecondSelectionItem.Offset = frmContent.ActiveForm.HW.Item.Offset
 End Sub
 
-Private Sub mnuUndo_Click()
+Public Sub mnuUndo_Click()
+    If Me.ActiveForm Is Nothing Then Exit Sub
     Call Me.ActiveForm.UndoM
 End Sub
 
@@ -3204,4 +3345,174 @@ Private Sub RefreshToolbarEnableState()
         Me.Toolbar1.Buttons.Item(15).Enabled = True
     End If
         
+End Sub
+
+
+
+
+
+
+
+
+
+'=======================================================
+'permet de récupérer les strings depuis le fichier *.ini
+'=======================================================
+Private Function GetHelp(ByVal sSection As String) As String
+Dim s As String
+Dim l As Long
+Dim l2 As Long
+
+    On Error Resume Next
+
+    'récupère le contenu du fichier
+    #If MODE_DEBUG Then
+        s = cFile.LoadFileInString("C:\HEX EDITOR VB\Executable folder\ConsoleHelp.ini")
+    #Else
+        s = cFile.LoadFileInString(App.Path & "\ConsoleHelp.ini")
+    #End If
+    
+    'récupère la position de la section
+    l = InStr(1, s, sSection, vbBinaryCompare)
+    
+    'récupère la position du premier '|' après la section
+    l2 = InStr(l + 1, s, "|", vbBinaryCompare)
+    
+    GetHelp = Mid$(s, l + Len(sSection) + 1, l2 - l - Len(sSection) - 1)
+    
+End Function
+
+Private Sub txtE_Change()
+'on applique la couleur RGB(192,192,192)
+    txtE.SelStart = 0
+    txtE.SelLength = Len(txtE.Text)
+    txtE.SelColor = cPref.console_ForeColor
+    txtE.SelStart = Len(txtE.Text)
+End Sub
+
+Private Sub txtE_KeyDown(KeyCode As Integer, Shift As Integer)
+    If KeyCode = vbKeyUp Then
+        'alors on récupère la précédente commande
+        If lngPos > 1 Then lngPos = lngPos - 1
+        txtE.Text = GetCommand
+    ElseIf KeyCode = vbKeyDown Then
+        'on récupère la commande suivante
+        If lngPos < UBound(sTxt()) Then lngPos = lngPos + 1
+        txtE.Text = GetCommand
+    ElseIf KeyCode = vbKeyReturn Then
+        'alors on a validé une commande
+        If txtE.Text <> vbNullString Then
+            lngPos = lngPos + 1
+            Call LaunchCommand
+            txtE.Text = vbNullString
+        End If
+    End If
+End Sub
+
+'=======================================================
+'lance la commande validée
+'=======================================================
+Private Sub LaunchCommand()
+Dim s As String
+Dim s2 As String
+    
+    'commence par ajouter à la liste la commande entrée
+    ReDim Preserve sTxt(UBound(sTxt()) + 1)
+    sTxt(UBound(sTxt())) = txtE.Text
+    Call AddTextToConsole(txtE.Text)
+    
+    'exécute la commande
+    s2 = "Commande invalide"
+    
+    s = LCase$(txtE.Text)
+    If s = "help" Then
+        'on affiche l'aide
+        s2 = "Pour plus d'informations sur une commandes, tappez Help [commande]"
+        s2 = s2 & vbNewLine & "ABOUT  A propos"
+        s2 = s2 & vbNewLine & "BOOKMARK  Gestion des signet" 'TODO
+        s2 = s2 & vbNewLine & "BUGREPORT  Affiche le rapport d'erreurs"
+        s2 = s2 & vbNewLine & "CALC  Lance la calculatrice"
+        s2 = s2 & vbNewLine & "CLOSE  Ferme le fichier ouvert" 'TODO
+        s2 = s2 & vbNewLine & "CONVERT  Afficher la fenêtre de conversion" 'TODO
+        s2 = s2 & vbNewLine & "COPY  Copier la sélection" 'TODO
+        s2 = s2 & vbNewLine & "CUT  Couper la sélection" 'TODO
+        s2 = s2 & vbNewLine & "SEARCHFILE  Affiche la recherche de fichier"
+        s2 = s2 & vbNewLine & "KILL  Supprimer un fichier" 'TODO
+        s2 = s2 & vbNewLine & "MOVE  Effectue un déplacement de la vue" 'TODO
+        s2 = s2 & vbNewLine & "NEWFILE  Créer un fichier" 'TODO
+        s2 = s2 & vbNewLine & "OPEN  Ouvrir un fichier, processus ou disque" 'TODO
+        s2 = s2 & vbNewLine & "OPTIONS  Affiche les options"
+        s2 = s2 & vbNewLine & "PASTE  Coller la sélection" 'TODO
+        s2 = s2 & vbNewLine & "PRINT  Lancer une impression"
+        s2 = s2 & vbNewLine & "PROCESS  Gestion des processus" 'TODO
+        s2 = s2 & vbNewLine & "PROPERTY  Afficher les propriétés"
+        s2 = s2 & vbNewLine & "QUIT  Quitter le programme"
+        s2 = s2 & vbNewLine & "REDO  Refaire"
+        s2 = s2 & vbNewLine & "REFRESH  Rafraichit les valeurs hexa"
+        s2 = s2 & vbNewLine & "REPLACE  Remplacer" 'TODO
+        s2 = s2 & vbNewLine & "SCRIPT  Démarre l'éditeur de script"
+        s2 = s2 & vbNewLine & "SEARCH  Effectuer une recherche"
+        s2 = s2 & vbNewLine & "SELECT  Effectuer une sélection" 'TODO
+        s2 = s2 & vbNewLine & "START  Démarre une tâche"
+        s2 = s2 & vbNewLine & "STAT  Affiche les statistiques du fichier"
+        s2 = s2 & vbNewLine & "UNDO  Défaire"
+    ElseIf Left$(s, 5) = "help " And Len(s) > 5 Then
+        'affiche l'aide de la commande
+        s2 = GetHelp(s)
+        If s2 = vbNullString Then s2 = "Aide non supportée"
+    ElseIf s = "about" Then frmAbout.Show vbModal: s2 = "Fenêtre d'A propos affichée"
+    ElseIf s = "start" Then frmHome.Show: PremierPlan frmHome, MettreAuPremierPlan: s2 = "Fenêtre de démarrage de tâche affichée"
+    ElseIf s = "quit" Then frmContent.mnuExit_Click: s2 = "Quitte le programme..."
+    ElseIf s = "property" Then frmPropertyShow.Show: s2 = "Fenêtre de propriétés affichée"
+    ElseIf s = "print" Then frmPrint.Show vbModal: s2 = "Fenêtre d'impression affichée"
+    ElseIf s = "bugreport" Then frmLogErr.Show vbModal: s2 = "Fenêtre de log affichée"
+    ElseIf s = "calc" Then frmContent.mnuCalc_Click: s2 = "Calculatrice lancée"
+    ElseIf s = "searchfile" Then frmFileSearch.Show: s2 = "Fenêtre de recherche de fichiers affichée"
+    ElseIf s = "stat" Then frmContent.mnuStats_Click: s2 = "Fenêtre de statistiques affichée"
+    ElseIf s = "search" Then frmSearch.Show: s2 = "Fenêtre de recherche affichée"
+    ElseIf s = "script" Then frmScript.Show: s2 = "Editeur de script lancé"
+    ElseIf s = "refresh" Then frmContent.mnuRefreh_Click: s2 = "Rafraichissement de la vue effectuée"
+    ElseIf s = "options" Then frmOptions.Show vbModal: s2 = "Fenêtre d'options affichée"
+    ElseIf s = "redo" Then frmContent.mnuRedo_Click: s2 = "Commande 'Redo' lancée"
+    ElseIf s = "undo" Then frmContent.mnuUndo_Click: s2 = "Commande 'Undo' lancée"
+    ElseIf Left$(s, 7) = "convert" Then
+        If InStr(7, s, "-a", vbBinaryCompare) Then
+            'alors c'est le convertisseur avancé
+            frmAdvancedConversion.Show
+            s2 = "Fenêtre de conversion avancée affichée"
+        Else
+            'converion simple
+            frmConvert.Show
+            s2 = "Fenêtre de conversion simple affichée"
+        End If
+    ElseIf s = vbNullString Then
+        s2 = vbNewLine
+    End If
+    
+    'affiche à la console le résultat
+    Call AddTextToConsole(s2)
+End Sub
+
+'=======================================================
+'récupère la commande correspondant à la position dans l'historique
+'=======================================================
+Private Function GetCommand() As String
+    On Error Resume Next
+    GetCommand = sTxt(lngPos)
+End Function
+
+'=======================================================
+'refresh la liste des anciennes commandes en ajoutant la dernière string
+'=======================================================
+Public Sub AddTextToConsole(ByVal sText As String)
+    txt.Text = txt.Text & IIf(Len(txt.Text) > 0, vbNewLine, vbNullString) & sText
+    txt.SelStart = 0
+    txt.SelLength = Len(txt.Text)
+    txt.SelColor = cPref.console_ForeColor
+    txt.SelStart = Len(txt.Text)
+End Sub
+
+Private Sub txtE_KeyPress(KeyAscii As Integer)
+'évite le 'BIP' lors de l'appui sur la touche entrée
+    If KeyAscii = 13 Then KeyAscii = 0
 End Sub

@@ -19,6 +19,7 @@ processsave|pb lors de la sélection (non check) ==> affichage de la taille faux|
 quickbackup|la sélection est allongée de 1 quand SecondItem.Col=1| 10| 3
 rechercher cdfs|décalage de 30720000 bytes| 10| 9
 reorganisation listview|réorganisation correcte des fichiers par taille dans les FileView| 10| 3
+resize pct|hauteurs non sauvegardées hors IDE avec redimensionnement manuel| 10| 3
 searchdiskforfile|faire chevaucher les secteurs| 30| 3
 sel|la sélection devient négative pour une sélection de droite --> gauche sur une même ligne| 10| 3
 select all|dernier byte pas sélectionné (mais quand même pris en compte)| 30| 3

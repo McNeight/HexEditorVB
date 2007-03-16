@@ -104,6 +104,10 @@ Public explo_Pattern As String
 Public explo_Height As Long
 Public explo_HideColumnTitle As Byte
 Public exe_HasCrashed As Byte
+Public console_ForeColor As Long
+Public console_BackColor As Long
+Public console_Heigth As Long
+Public console_Load As Byte
  
 
 'RESTE :
