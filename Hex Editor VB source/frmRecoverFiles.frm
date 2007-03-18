@@ -18,6 +18,7 @@ Begin VB.Form frmRecoverFiles
    EndProperty
    Icon            =   "frmRecoverFiles.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   5325
@@ -54,23 +55,17 @@ Begin VB.Form frmRecoverFiles
          NumTabs         =   3
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fichiers effacés"
-            Key             =   ""
             Object.Tag             =   ""
-            Object.ToolTipText     =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fichiers existants"
-            Key             =   ""
             Object.Tag             =   ""
-            Object.ToolTipText     =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Extraire des données"
-            Key             =   ""
             Object.Tag             =   ""
-            Object.ToolTipText     =   ""
             ImageVarType    =   2
          EndProperty
       EndProperty

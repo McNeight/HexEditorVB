@@ -17,6 +17,7 @@ Begin VB.Form frmSaveProcess
    EndProperty
    Icon            =   "frmSaveProcess.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   4110

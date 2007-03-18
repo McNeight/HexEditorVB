@@ -20,6 +20,7 @@ Begin VB.Form frmFileSearch
    EndProperty
    Icon            =   "frmFileSearch.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   5820
    ScaleWidth      =   9780
@@ -314,7 +315,7 @@ Begin VB.Form frmFileSearch
             _Version        =   393216
             Enabled         =   0   'False
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   84541443
+            Format          =   98435075
             CurrentDate     =   39133.9583333333
          End
       End

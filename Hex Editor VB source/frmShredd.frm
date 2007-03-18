@@ -17,6 +17,7 @@ Begin VB.Form frmShredd
       Strikethrough   =   0   'False
    EndProperty
    Icon            =   "frmShredd.frx":0000
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   4680

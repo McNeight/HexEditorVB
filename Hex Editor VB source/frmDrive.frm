@@ -18,6 +18,7 @@ Begin VB.Form frmDrive
    EndProperty
    Icon            =   "frmDrive.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   4335
@@ -148,7 +149,7 @@ Dim cDr As clsDiskInfos
  
 End Sub
 
-Private Sub cmdNo_Click()
+Private Sub cmdNO_Click()
     Unload Me
 End Sub
 

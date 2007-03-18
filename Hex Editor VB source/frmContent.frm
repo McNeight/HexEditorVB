@@ -14,6 +14,7 @@ Begin VB.MDIForm frmContent
    ClientWidth     =   9750
    Icon            =   "frmContent.frx":0000
    LinkTopic       =   "Editeur hexadécimal"
+   LockControls    =   -1  'True
    OLEDropMode     =   1  'Manual
    StartUpPosition =   3  'Windows Default
    WindowState     =   2  'Maximized
@@ -40,7 +41,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -67,7 +67,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -545,7 +544,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "14:11"
+            TextSave        =   "15:03"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -577,7 +576,7 @@ Begin VB.MDIForm frmContent
    End
    Begin MSComctlLib.ImageList ImageList1 
       Left            =   120
-      Top             =   3360
+      Top             =   6480
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643

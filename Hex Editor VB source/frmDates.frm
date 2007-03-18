@@ -18,6 +18,7 @@ Begin VB.Form frmDates
    EndProperty
    Icon            =   "frmDates.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   4680
@@ -156,7 +157,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   80674819
+            Format          =   98435075
             CurrentDate     =   39133
          End
       End
@@ -201,7 +202,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   80674819
+            Format          =   98435075
             CurrentDate     =   39133
          End
       End
@@ -225,7 +226,7 @@ Begin VB.Form frmDates
          _ExtentY        =   529
          _Version        =   393216
          CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-         Format          =   80674819
+         Format          =   98435075
          CurrentDate     =   39133.9583333333
       End
       Begin VB.PictureBox Picture1 

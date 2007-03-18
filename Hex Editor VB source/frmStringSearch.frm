@@ -19,6 +19,7 @@ Begin VB.Form frmStringSearch
    EndProperty
    Icon            =   "frmStringSearch.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   6810
    ScaleWidth      =   6585

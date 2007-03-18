@@ -18,6 +18,7 @@ Begin VB.Form frmGestWindows
    EndProperty
    Icon            =   "frmGestWindows.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   3840
@@ -139,7 +140,7 @@ Option Explicit
 Private Sub cmdCLoseIt_Click()
 'ferme les fenêtres sélectionnées
 Dim Frm As Form
-Dim X As Long
+Dim x As Long
 
     On Error GoTo ErrGestion
     
@@ -156,15 +157,15 @@ Dim X As Long
     'liste les form et ferme les sélectionnées
     For Each Frm In Forms
         If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Then
-            For X = LV.ListItems.Count To 1 Step -1
-                If LV.ListItems.Item(X).Selected And LV.ListItems.Item(X).SubItems(1) = _
+            For x = LV.ListItems.Count To 1 Step -1
+                If LV.ListItems.Item(x).Selected And LV.ListItems.Item(x).SubItems(1) = _
                 Frm.Caption Then
                     SendMessage Frm.hWnd, WM_CLOSE, 0, 0
                     'Unload frm
                     'lNbChildFrm = lNbChildFrm - 1
-                    LV.ListItems.Remove X
+                    LV.ListItems.Remove x
                 End If
-            Next X
+            Next x
         End If
     Next Frm
     

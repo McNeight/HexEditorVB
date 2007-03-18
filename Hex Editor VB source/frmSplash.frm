@@ -19,6 +19,7 @@ Begin VB.Form frmSplash
    Icon            =   "frmSplash.frx":0000
    KeyPreview      =   -1  'True
    LinkTopic       =   "Form2"
+   LockControls    =   -1  'True
    Picture         =   "frmSplash.frx":000C
    ScaleHeight     =   3945
    ScaleWidth      =   7065

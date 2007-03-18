@@ -19,6 +19,7 @@ Begin VB.Form MemPfm
    EndProperty
    Icon            =   "MemPfm.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MDIChild        =   -1  'True
    ScaleHeight     =   8295
    ScaleWidth      =   8730
@@ -486,13 +487,11 @@ Begin VB.Form MemPfm
                NumTabs         =   2
                BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Fichier cible"
-                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
                BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Processus"
-                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
@@ -521,13 +520,11 @@ Begin VB.Form MemPfm
                NumTabs         =   2
                BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Historique"
-                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
                BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Signets"
-                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
@@ -604,7 +601,6 @@ Begin VB.Form MemPfm
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
          NumTabs         =   1
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -628,7 +624,6 @@ Begin VB.Form MemPfm
             MinWidth        =   4410
             Text            =   "Fichier=[Modifié]"
             TextSave        =   "Fichier=[Modifié]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -636,7 +631,6 @@ Begin VB.Form MemPfm
             MinWidth        =   4410
             Text            =   "Page=[0/0]"
             TextSave        =   "Page=[0/0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -644,7 +638,6 @@ Begin VB.Form MemPfm
             MinWidth        =   3175
             Text            =   "Offset=[0]"
             TextSave        =   "Offset=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -652,7 +645,6 @@ Begin VB.Form MemPfm
             MinWidth        =   5292
             Text            =   "Sélection=[0 Bytes]"
             TextSave        =   "Sélection=[0 Bytes]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty

@@ -18,6 +18,7 @@ Begin VB.Form frmProcess
    EndProperty
    Icon            =   "frmProcess.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   5415
    ScaleWidth      =   7335
    StartUpPosition =   2  'CenterScreen

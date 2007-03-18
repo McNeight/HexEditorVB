@@ -19,6 +19,7 @@ Begin VB.Form frmScript
    EndProperty
    Icon            =   "frmScript.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   5610
    ScaleWidth      =   9165
    StartUpPosition =   2  'CenterScreen
@@ -93,7 +94,6 @@ Begin VB.Form frmScript
       _ExtentY        =   4895
       _Version        =   393217
       BorderStyle     =   0
-      Enabled         =   -1  'True
       ScrollBars      =   3
       Appearance      =   0
       TextRTF         =   $"frmScript.frx":2307

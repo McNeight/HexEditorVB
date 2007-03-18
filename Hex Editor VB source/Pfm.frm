@@ -19,6 +19,7 @@ Begin VB.Form Pfm
    EndProperty
    Icon            =   "Pfm.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MDIChild        =   -1  'True
    ScaleHeight     =   8115
    ScaleWidth      =   7635
