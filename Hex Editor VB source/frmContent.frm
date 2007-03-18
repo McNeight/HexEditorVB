@@ -25,13 +25,13 @@ Begin VB.MDIForm frmContent
       Left            =   0
       ScaleHeight     =   1320
       ScaleWidth      =   9750
-      TabIndex        =   5
+      TabIndex        =   6
       Top             =   2535
       Width           =   9750
       Begin RichTextLib.RichTextBox txtE 
          Height          =   255
          Left            =   120
-         TabIndex        =   6
+         TabIndex        =   0
          Top             =   3000
          Width           =   2775
          _ExtentX        =   4895
@@ -39,6 +39,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -65,6 +66,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -467,7 +469,7 @@ Begin VB.MDIForm frmContent
       Left            =   0
       ScaleHeight     =   2205
       ScaleWidth      =   9750
-      TabIndex        =   3
+      TabIndex        =   4
       TabStop         =   0   'False
       Top             =   330
       Width           =   9750
@@ -484,14 +486,14 @@ Begin VB.MDIForm frmContent
          EndProperty
          Height          =   285
          Left            =   0
-         TabIndex        =   1
+         TabIndex        =   2
          Top             =   0
          Width           =   1575
       End
       Begin FileView_OCX.FileView LV 
          Height          =   2055
          Left            =   120
-         TabIndex        =   0
+         TabIndex        =   1
          Top             =   120
          Width           =   7095
          _ExtentX        =   12515
@@ -512,7 +514,7 @@ Begin VB.MDIForm frmContent
       Align           =   2  'Align Bottom
       Height          =   255
       Left            =   0
-      TabIndex        =   2
+      TabIndex        =   3
       Top             =   7410
       Width           =   9750
       _ExtentX        =   17198
@@ -541,7 +543,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "12:10"
+            TextSave        =   "12:24"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -678,7 +680,7 @@ Begin VB.MDIForm frmContent
       Align           =   1  'Align Top
       Height          =   330
       Left            =   0
-      TabIndex        =   4
+      TabIndex        =   5
       Top             =   0
       Width           =   9750
       _ExtentX        =   17198
@@ -3597,6 +3599,15 @@ Dim Frm As Form
         End If
     ElseIf s = "cut" Then Call mnuCut_Click: s2 = "Sélection coupée"
     ElseIf s = "sourceforge" Then Call mnuSourceForge_Click: s2 = "Ouverture de la page SourceForge du projet"
+    ElseIf s = "vbfrance" Then Call mnuVbfrance_Click: s2 = "Ouverture de la page VBfrance de l'auteur"
+    ElseIf s = "options.ini" Or s = "config.ini" Or s = "config" Then
+        Call cFile.ShellOpenFile(App.Path & "\Preferences\config.ini", Me.hWnd)
+        s2 = "Fichier d'options ouvert"
+    ElseIf s = "console.ini" Or s = "consolehelp.ini" Then
+        Call cFile.ShellOpenFile(App.Path & "\ConsoleHelp.in", Me.hWnd)
+        s2 = "Fichier d'aide de la console ouvert"
+    ElseIf s = "version" Then MsgBox "Version " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision)), vbInformation + vbOKOnly, "Hex Editor VB": s2 = vbNullString
+    ElseIf s = "test" Then MsgBox "Test", vbCritical, "Test": s2 = vbNullString
     
     
     End If
