@@ -74,6 +74,8 @@ Public integ_FolderContextual As Byte
 Public integ_SendTo As Byte
 Public general_MaximizeWhenOpen As Byte
 Public general_DisplayIcon As Byte
+Public general_DisplayExplore As Byte
+Public general_DisplayConsole As Byte
 Public general_DisplayInfos As Byte
 Public general_DisplayData As Byte
 Public general_ResoX As Long
@@ -116,4 +118,4 @@ Public console_Load As Byte
 'general_DoNotChangeDates
 'general_AllowMultipleInstances
 'general_ResoY/X (fixer bug qui ne change pas la taille)
-'general_DisplayArray (plutôt FrameIcons)
+
