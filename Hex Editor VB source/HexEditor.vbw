@@ -1,5 +1,5 @@
 Pfm = 4, 578, 678, 738, C, 44, 58, 616, 488, C
-frmContent = 70, 424, 700, 733, C, 154, 308, 726, 738, C
+frmContent = 70, 424, 700, 733, Z, 154, 308, 726, 738, C
 AfClsManifest = 88, 420, 726, 738, C
 Demarrage = 70, 312, 634, 733, C
 mdlStrings = 0, 569, 682, 738, C
@@ -42,7 +42,7 @@ clsIniFile = 44, 569, 726, 738, C
 clsIniForm = 0, 264, 682, 433, C
 frmGestWindows = 44, 322, 726, 491, C, 22, 29, 594, 459, C
 clsErr = 22, 29, 704, 198, C
-clsGetionErreur = 22, 29, 705, 428, Z
+clsGetionErreur = 22, 29, 705, 428, C
 frmLogErr = 0, 264, 682, 433, C, 44, 58, 616, 488, C
 frmPropertyShow = 0, 0, 682, 169, C, 0, 0, 572, 430, C
 clsFileInfos = 0, 264, 638, 582, C
