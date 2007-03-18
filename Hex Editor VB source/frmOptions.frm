@@ -25,123 +25,6 @@ Begin VB.Form frmOptions
    ScaleWidth      =   10350
    StartUpPosition =   2  'CenterScreen
    Begin VB.Frame Frame1 
-      Height          =   5775
-      Index           =   4
-      Left            =   2280
-      TabIndex        =   6
-      Top             =   1800
-      Visible         =   0   'False
-      Width           =   7935
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   5175
-         Left            =   120
-         ScaleHeight     =   5175
-         ScaleWidth      =   7455
-         TabIndex        =   21
-         Top             =   240
-         Width           =   7455
-         Begin VB.CheckBox Check12 
-            Caption         =   "Afficher la console par défaut"
-            Height          =   255
-            Left            =   240
-            TabIndex        =   94
-            ToolTipText     =   "Affiche la console par défaut"
-            Top             =   4080
-            Width           =   4575
-         End
-         Begin VB.TextBox txtC 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   2400
-            TabIndex        =   92
-            Text            =   "2000"
-            ToolTipText     =   "Hauteur de la console"
-            Top             =   3720
-            Width           =   2655
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   13
-            Left            =   3360
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   89
-            Top             =   3360
-            Width           =   375
-         End
-         Begin VB.PictureBox pctColor 
-            BackColor       =   &H00C0C0FF&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   12
-            Left            =   3360
-            ScaleHeight     =   195
-            ScaleWidth      =   375
-            TabIndex        =   88
-            Top             =   3120
-            Width           =   375
-         End
-         Begin RichTextLib.RichTextBox txt 
-            Height          =   2655
-            Left            =   0
-            TabIndex        =   87
-            Top             =   0
-            Width           =   5655
-            _ExtentX        =   9975
-            _ExtentY        =   4683
-            _Version        =   393217
-            BackColor       =   0
-            BorderStyle     =   0
-            Enabled         =   -1  'True
-            ReadOnly        =   -1  'True
-            ScrollBars      =   2
-            Appearance      =   0
-            OLEDragMode     =   0
-            OLEDropMode     =   1
-            TextRTF         =   $"frmOptions.frx":058A
-            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-               Name            =   "Lucida Console"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Hauteur du composant :"
-            Height          =   255
-            Index           =   19
-            Left            =   240
-            TabIndex        =   93
-            Top             =   3720
-            Width           =   2055
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur de la police"
-            Height          =   255
-            Index           =   18
-            Left            =   240
-            TabIndex        =   91
-            Top             =   3360
-            Width           =   2295
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Couleur de fond"
-            Height          =   255
-            Index           =   17
-            Left            =   240
-            TabIndex        =   90
-            Top             =   3120
-            Width           =   2055
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
       Height          =   6375
       Index           =   5
       Left            =   120
@@ -158,6 +41,17 @@ Begin VB.Form frmOptions
          TabIndex        =   24
          Top             =   120
          Width           =   9615
+         Begin VB.CheckBox chkEx 
+            Caption         =   "Afficher l'explorateur par défaut"
+            Height          =   255
+            Index           =   10
+            Left            =   240
+            TabIndex        =   95
+            ToolTipText     =   "Affiche l'explorateur au chargement du logiciel"
+            Top             =   5880
+            Value           =   1  'Checked
+            Width           =   8655
+         End
          Begin VB.TextBox txtExpPath 
             BorderStyle     =   0  'None
             Enabled         =   0   'False
@@ -165,7 +59,7 @@ Begin VB.Form frmOptions
             Left            =   5280
             TabIndex        =   42
             Text            =   "C:\"
-            ToolTipText     =   $"frmOptions.frx":060D
+            ToolTipText     =   $"frmOptions.frx":058A
             Top             =   4680
             Width           =   2535
          End
@@ -191,9 +85,9 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbExpInitDir 
             Height          =   315
-            ItemData        =   "frmOptions.frx":06AB
+            ItemData        =   "frmOptions.frx":0628
             Left            =   2520
-            List            =   "frmOptions.frx":06B5
+            List            =   "frmOptions.frx":0632
             Style           =   2  'Dropdown List
             TabIndex        =   37
             ToolTipText     =   "Type de chemin par défaut de l'explorateur de fichiers"
@@ -213,9 +107,9 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbExpIcon 
             Height          =   315
-            ItemData        =   "frmOptions.frx":06D9
+            ItemData        =   "frmOptions.frx":0656
             Left            =   2520
-            List            =   "frmOptions.frx":06E6
+            List            =   "frmOptions.frx":0663
             Style           =   2  'Dropdown List
             TabIndex        =   35
             ToolTipText     =   "Type d'icones à afficher dans l'explorateur de fichiers"
@@ -368,6 +262,122 @@ Begin VB.Form frmOptions
          End
       End
    End
+   Begin VB.Frame Frame1 
+      Height          =   5775
+      Index           =   4
+      Left            =   2280
+      TabIndex        =   6
+      Top             =   1800
+      Visible         =   0   'False
+      Width           =   7935
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   5175
+         Left            =   120
+         ScaleHeight     =   5175
+         ScaleWidth      =   7455
+         TabIndex        =   21
+         Top             =   240
+         Width           =   7455
+         Begin VB.CheckBox Check12 
+            Caption         =   "Afficher la console par défaut"
+            Height          =   255
+            Left            =   240
+            TabIndex        =   94
+            ToolTipText     =   "Affiche la console par défaut"
+            Top             =   4080
+            Width           =   4575
+         End
+         Begin VB.TextBox txtC 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   2400
+            TabIndex        =   92
+            Text            =   "2000"
+            ToolTipText     =   "Hauteur de la console"
+            Top             =   3720
+            Width           =   2655
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   13
+            Left            =   3360
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   89
+            Top             =   3360
+            Width           =   375
+         End
+         Begin VB.PictureBox pctColor 
+            BackColor       =   &H00C0C0FF&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   12
+            Left            =   3360
+            ScaleHeight     =   195
+            ScaleWidth      =   375
+            TabIndex        =   88
+            Top             =   3120
+            Width           =   375
+         End
+         Begin RichTextLib.RichTextBox txt 
+            Height          =   2655
+            Left            =   0
+            TabIndex        =   87
+            Top             =   0
+            Width           =   5655
+            _ExtentX        =   9975
+            _ExtentY        =   4683
+            _Version        =   393217
+            BackColor       =   0
+            BorderStyle     =   0
+            ReadOnly        =   -1  'True
+            ScrollBars      =   2
+            Appearance      =   0
+            OLEDragMode     =   0
+            OLEDropMode     =   1
+            TextRTF         =   $"frmOptions.frx":069A
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "Lucida Console"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Hauteur du composant :"
+            Height          =   255
+            Index           =   19
+            Left            =   240
+            TabIndex        =   93
+            Top             =   3720
+            Width           =   2055
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur de la police"
+            Height          =   255
+            Index           =   18
+            Left            =   240
+            TabIndex        =   91
+            Top             =   3360
+            Width           =   2295
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Couleur de fond"
+            Height          =   255
+            Index           =   17
+            Left            =   240
+            TabIndex        =   90
+            Top             =   3120
+            Width           =   2055
+         End
+      End
+   End
    Begin VB.CommandButton cmdSauvegarder 
       Caption         =   "OK"
       Height          =   495
@@ -397,31 +407,37 @@ Begin VB.Form frmOptions
          NumTabs         =   6
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Apparence du tableau"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Intégration dans Explorer"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Options générales"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Environnement"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Console"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab6 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Explorateur de fichiers"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -1200,6 +1216,7 @@ Dim s As String
     chkEx(7).Value = 1
     chkEx(8).Value = 1
     chkEx(9).Value = 1
+    chkEx(10).Value = 1
     chkEx(11).Value = 0
     txtHeight.Text = 2200
     txtExpPattern.Text = "*.*"
@@ -1242,6 +1259,7 @@ Dim s As String
             .app_Grid = cbGrid.ListIndex
             
             .general_MaximizeWhenOpen = Check1.Value
+            .general_DisplayExplore = chkEx(10).Value
             .general_DisplayIcon = Check2.Value
             .general_DisplayData = Check3.Value
             .general_DisplayInfos = Check4.Value
@@ -1563,6 +1581,7 @@ Dim s As String
             chkEx(7).Value = .explo_ShowSystemFiles
             chkEx(8).Value = .explo_AllowMultipleSelection
             chkEx(9).Value = .explo_ShowROFiles
+            chkEx(10).Value = .general_DisplayExplore
             chkEx(11).Value = .explo_HideColumnTitle
             txtHeight.Text = .explo_Height
             txtExpPattern.Text = .explo_Pattern

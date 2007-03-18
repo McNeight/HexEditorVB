@@ -113,6 +113,8 @@ Dim strIniFile As String
         LetPref "Integration", "SendTo", .integ_SendTo, .IniFilePath
         LetPref "General", "MaximizeWhenOpen", .general_MaximizeWhenOpen, .IniFilePath
         LetPref "General", "ShowAlert", .general_ShowAlert, .IniFilePath
+        LetPref "General", "DisplayConsole", .general_DisplayConsole, .IniFilePath
+        LetPref "General", "DisplayExplore", .general_DisplayExplore, .IniFilePath
         LetPref "General", "DisplayIcon", .general_DisplayIcon, .IniFilePath
         LetPref "General", "DisplayInfos", .general_DisplayInfos, .IniFilePath
         LetPref "General", "DisplayData", .general_DisplayData, .IniFilePath
@@ -189,6 +191,8 @@ Dim strIniFile As String
         .integ_SendTo = (Val(GetPref("Integration", "SendTo", sFile)))
         .general_MaximizeWhenOpen = (Val(GetPref("General", "MaximizeWhenOpen", sFile)))
         .general_DisplayIcon = (Val(GetPref("General", "DisplayIcon", sFile)))
+        .general_DisplayConsole = (Val(GetPref("General", "DisplayConsole", sFile)))
+        .general_DisplayExplore = (Val(GetPref("General", "DisplayExplore", sFile)))
         .general_DisplayInfos = (Val(GetPref("General", "DisplayInfos", sFile)))
         .general_DisplayData = (Val(GetPref("General", "DisplayData", sFile)))
         .general_Splash = (Val(GetPref("General", "Splash", sFile)))

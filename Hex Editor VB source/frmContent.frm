@@ -27,6 +27,7 @@ Begin VB.MDIForm frmContent
       ScaleWidth      =   9750
       TabIndex        =   6
       Top             =   2535
+      Visible         =   0   'False
       Width           =   9750
       Begin RichTextLib.RichTextBox txtE 
          Height          =   255
@@ -472,6 +473,7 @@ Begin VB.MDIForm frmContent
       TabIndex        =   4
       TabStop         =   0   'False
       Top             =   330
+      Visible         =   0   'False
       Width           =   9750
       Begin VB.TextBox pctPath 
          BorderStyle     =   0  'None
@@ -543,7 +545,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "12:24"
+            TextSave        =   "14:11"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1371,8 +1373,6 @@ Option Explicit
 
 Implements IOverMenuEvent
 Private bDonneeForm As Boolean
-Private sTxt() As String    'contient les différentes commances entrées 1 à Ubound
-Private lngPos As Long  'numéro de la commande de l'historique
 Private clsPref As clsIniForm
 
 
@@ -1473,8 +1473,8 @@ Private Sub MDIForm_Load()
     clsPref.GetFormSettings App.Path & "\Preferences\FrmContent.ini", Me
     
     'valeurs par défaut
-    ReDim sTxt(0)
-    lngPos = 0
+    ReDim strConsoleText(0)
+    lngConsolePos = 0
     txt.SelColor = vbWhite
     txt.Refresh
     
@@ -1512,12 +1512,11 @@ Private Sub MDIForm_Load()
     With cPref
         Me.mnuEditTools.Checked = .general_DisplayData
         Me.mnuInformations.Checked = .general_DisplayInfos
+        Me.mnuShowConsole.Checked = .console_Load
+        Me.pctConsole.Visible = CBool(.general_DisplayExplore)
+        Me.mnuExploreDisplay.Checked = .general_DisplayExplore
         Me.mnuShowIcons.Checked = .general_DisplayIcon
     End With
-    
-    frmSplash.lblState.Caption = "Lancement de l'explorateur de fichiers..."
-    'loading de la taille de l'explorer
-    Me.pctExplorer.Height = cPref.explo_Height
     
     'loading des pref de la console
     With cPref
@@ -1529,45 +1528,53 @@ Private Sub MDIForm_Load()
         Me.pctConsole.Visible = CBool(.console_Load)
     End With
     
-    'charge les prefs de l'explorer
-    '/!\ C'est ce code qui fait charger le logiciel lentement
-    '==> on cache le LV
-    With LV
-        .Visible = False
+    
+    If cPref.general_DisplayExplore Then
+        frmSplash.lblState.Caption = "Lancement de l'explorateur de fichiers..."
         
+        'loading de la taille de l'explorer
+        Me.pctExplorer.Height = cPref.explo_Height
         
-        .Height = cPref.explo_Height - 145
-        
-        If cPref.explo_DefaultPath = "Dossier du programme" Then
-            'alors c'est dans app.path
-            .Path = App.Path
-        Else
-            'alors un dossier perso
-            .Path = cPref.explo_DefaultPath
-        End If
-        .ShowEntirePath = CBool(cPref.explo_ShowPath)
-        .ShowHiddenDirectories = CBool(cPref.explo_ShowHiddenFolders)
-        .ShowHiddenFiles = CBool(cPref.explo_ShowHiddenFiles)
-        .ShowSystemDirectories = CBool(cPref.explo_ShowSystemFodlers)
-        .ShowSystemFiles = CBool(cPref.explo_ShowSystemFiles)
-        .ShowReadOnlyDirectories = CBool(cPref.explo_ShowROFolders)
-        .ShowReadOnlyFiles = CBool(cPref.explo_ShowROFiles)
-        .AllowMultiSelect = CBool(cPref.explo_AllowMultipleSelection)
-        .AllowFileDeleting = CBool(cPref.explo_AllowFileSuppression)
-        .Pattern = cPref.explo_Pattern
-        .HideColumnHeaders = CBool(cPref.explo_HideColumnTitle)
-        Select Case cPref.explo_IconType
-            Case 0
-                .DisplayIcons = BasicIcons
-            Case 1
-                .DisplayIcons = FileIcons
-            Case 2
-                .DisplayIcons = NoIcons
-        End Select
-        
-        .Visible = True
-        .RefreshListViewOnly    '/!\ DO NOT REMOVE
-    End With
+        'charge les prefs de l'explorer
+        '/!\ C'est ce code qui fait charger le logiciel lentement
+        '==> on cache le LV
+        With LV
+            .Visible = False
+            
+            
+            .Height = cPref.explo_Height - 145
+            
+            If cPref.explo_DefaultPath = "Dossier du programme" Then
+                'alors c'est dans app.path
+                .Path = App.Path
+            Else
+                'alors un dossier perso
+                .Path = cPref.explo_DefaultPath
+            End If
+            .ShowEntirePath = CBool(cPref.explo_ShowPath)
+            .ShowHiddenDirectories = CBool(cPref.explo_ShowHiddenFolders)
+            .ShowHiddenFiles = CBool(cPref.explo_ShowHiddenFiles)
+            .ShowSystemDirectories = CBool(cPref.explo_ShowSystemFodlers)
+            .ShowSystemFiles = CBool(cPref.explo_ShowSystemFiles)
+            .ShowReadOnlyDirectories = CBool(cPref.explo_ShowROFolders)
+            .ShowReadOnlyFiles = CBool(cPref.explo_ShowROFiles)
+            .AllowMultiSelect = CBool(cPref.explo_AllowMultipleSelection)
+            .AllowFileDeleting = CBool(cPref.explo_AllowFileSuppression)
+            .Pattern = cPref.explo_Pattern
+            .HideColumnHeaders = CBool(cPref.explo_HideColumnTitle)
+            Select Case cPref.explo_IconType
+                Case 0
+                    .DisplayIcons = BasicIcons
+                Case 1
+                    .DisplayIcons = FileIcons
+                Case 2
+                    .DisplayIcons = NoIcons
+            End Select
+            
+            .Visible = True
+            .RefreshListViewOnly    '/!\ DO NOT REMOVE
+        End With
+    End If
 
     'ajoute du texte à la console
     Call AddTextToConsole("Hex Editor VB is ready")
@@ -1592,6 +1599,9 @@ Dim Frm As Form
             SendMessage Frm.hWnd, WM_CLOSE, 0, 0
         End If
     Next Frm
+    
+    'sauvegarde des preferences
+    clsPref.SaveFormSettings App.Path & "\Preferences\FrmContent.ini", frmContent
 
 End Sub
 
@@ -1621,7 +1631,7 @@ Dim s As String
     Call AddTextToConsole("Icone copiée dans le presse-papier")
 End Sub
 
-Private Sub mnuCut_Click()
+Public Sub mnuCut_Click()
 'coupe la sélection
 
 End Sub
@@ -1787,8 +1797,6 @@ End Sub
 
 Private Sub MDIForm_Unload(Cancel As Integer)
     
-    'sauvegarde des preferences
-    clsPref.SaveFormSettings App.Path & "\Preferences\FrmContent.ini", frmContent
     Set clsPref = Nothing
     
     Call UnHookPictureResizement(Me.pctConsole.hWnd, 1)
@@ -2478,7 +2486,52 @@ End Sub
 Private Sub mnuExploreDisplay_Click()
     mnuExploreDisplay.Checked = Not (mnuExploreDisplay.Checked)
     pctExplorer.Visible = mnuExploreDisplay.Checked
-    Call frmContent.ActiveForm.ResizeMe
+    
+    If pctExplorer.Visible = True Then
+        'alors il faut rafraichir le Expore
+        
+        'loading de la taille de l'explorer
+        Me.pctExplorer.Height = cPref.explo_Height
+    
+        With LV
+            .Visible = False
+            
+            
+            .Height = cPref.explo_Height - 145
+            
+            If cPref.explo_DefaultPath = "Dossier du programme" Then
+                'alors c'est dans app.path
+                .Path = App.Path
+            Else
+                'alors un dossier perso
+                .Path = cPref.explo_DefaultPath
+            End If
+            .ShowEntirePath = CBool(cPref.explo_ShowPath)
+            .ShowHiddenDirectories = CBool(cPref.explo_ShowHiddenFolders)
+            .ShowHiddenFiles = CBool(cPref.explo_ShowHiddenFiles)
+            .ShowSystemDirectories = CBool(cPref.explo_ShowSystemFodlers)
+            .ShowSystemFiles = CBool(cPref.explo_ShowSystemFiles)
+            .ShowReadOnlyDirectories = CBool(cPref.explo_ShowROFolders)
+            .ShowReadOnlyFiles = CBool(cPref.explo_ShowROFiles)
+            .AllowMultiSelect = CBool(cPref.explo_AllowMultipleSelection)
+            .AllowFileDeleting = CBool(cPref.explo_AllowFileSuppression)
+            .Pattern = cPref.explo_Pattern
+            .HideColumnHeaders = CBool(cPref.explo_HideColumnTitle)
+            Select Case cPref.explo_IconType
+                Case 0
+                    .DisplayIcons = BasicIcons
+                Case 1
+                    .DisplayIcons = FileIcons
+                Case 2
+                    .DisplayIcons = NoIcons
+            End Select
+            
+            .Visible = True
+            .RefreshListViewOnly    '/!\ DO NOT REMOVE
+        End With
+    End If
+    
+    If (frmContent.ActiveForm Is Nothing) = False Then Call frmContent.ActiveForm.ResizeMe
 End Sub
 
 Private Sub mnuFileViewMode_Click()
@@ -2972,7 +3025,7 @@ Private Sub mnuSignetPrev_Click()
     Me.ActiveForm.VS.Value = Me.ActiveForm.HW.FirstOffset / 16
 End Sub
 
-Private Sub mnuSourceForge_Click()
+Public Sub mnuSourceForge_Click()
 'page source forge
     cFile.ShellOpenFile "http://sourceforge.net/projects/hexeditorvb/", Me.hWnd, , App.Path
 End Sub
@@ -3101,7 +3154,7 @@ Public Sub mnuUndo_Click()
     Call Me.ActiveForm.UndoM
 End Sub
 
-Private Sub mnuVbfrance_Click()
+Public Sub mnuVbfrance_Click()
 'vbfrance.com
     cFile.ShellOpenFile "http://www.vbfrance.com/auteurdetail.aspx?ID=523601&print=1", Me.hWnd, , App.Path
 End Sub
@@ -3401,41 +3454,6 @@ Private Sub RefreshToolbarEnableState()
         
 End Sub
 
-
-
-
-
-
-
-
-
-'=======================================================
-'permet de récupérer les strings depuis le fichier *.ini
-'=======================================================
-Private Function GetHelp(ByVal sSection As String) As String
-Dim s As String
-Dim l As Long
-Dim l2 As Long
-
-    On Error Resume Next
-
-    'récupère le contenu du fichier
-    #If MODE_DEBUG Then
-        s = cFile.LoadFileInString("C:\HEX EDITOR VB\Executable folder\ConsoleHelp.ini")
-    #Else
-        s = cFile.LoadFileInString(App.Path & "\ConsoleHelp.ini")
-    #End If
-    
-    'récupère la position de la section
-    l = InStr(1, s, sSection, vbBinaryCompare)
-    
-    'récupère la position du premier '|' après la section
-    l2 = InStr(l + 1, s, "|", vbBinaryCompare)
-    
-    GetHelp = Mid$(s, l + Len(sSection) + 1, l2 - l - Len(sSection) - 1)
-    
-End Function
-
 Private Sub txtE_Change()
 'on applique la couleur RGB(192,192,192)
     txtE.SelStart = 0
@@ -3447,186 +3465,24 @@ End Sub
 Private Sub txtE_KeyDown(KeyCode As Integer, Shift As Integer)
     If KeyCode = vbKeyUp Then
         'alors on récupère la précédente commande
-        If lngPos > 1 Then lngPos = lngPos - 1
+        If lngConsolePos > 1 Then lngConsolePos = lngConsolePos - 1
         txtE.Text = GetCommand
     ElseIf KeyCode = vbKeyDown Then
         'on récupère la commande suivante
-        If lngPos < UBound(sTxt()) Then lngPos = lngPos + 1
+        If lngConsolePos < UBound(strConsoleText()) Then lngConsolePos = lngConsolePos + 1
         txtE.Text = GetCommand
     ElseIf KeyCode = vbKeyReturn Then
         'alors on a validé une commande
         If txtE.Text <> vbNullString Then
-            lngPos = lngPos + 1
+            lngConsolePos = lngConsolePos + 1
             Call LaunchCommand
             txtE.Text = vbNullString
         End If
     End If
 End Sub
 
-'=======================================================
-'lance la commande validée
-'=======================================================
-Private Sub LaunchCommand()
-Dim s As String
-Dim s2 As String
-Dim Frm As Form
-
-    'commence par ajouter à la liste la commande entrée
-    ReDim Preserve sTxt(UBound(sTxt()) + 1)
-    sTxt(UBound(sTxt())) = txtE.Text
-    Call AddTextToConsole(txtE.Text)
-    
-    'exécute la commande
-    s2 = "Commande invalide"
-    
-    s = LCase$(txtE.Text)
-    If s = "help" Then
-        'on affiche l'aide
-        s2 = "Pour plus d'informations sur une commandes, tappez Help [commande]"
-        s2 = s2 & vbNewLine & "ABOUT  A propos"
-        s2 = s2 & vbNewLine & "BOOKMARK  Gestion des signet" 'TODO
-        s2 = s2 & vbNewLine & "BUGREPORT  Affiche le rapport d'erreurs"
-        s2 = s2 & vbNewLine & "CALC  Lance la calculatrice"
-        s2 = s2 & vbNewLine & "CLOSE  Ferme les fenêtres ouvertes" 'TODO
-        s2 = s2 & vbNewLine & "CLS  Efface la console"
-        s2 = s2 & vbNewLine & "CONVERT  Afficher la fenêtre de conversion" 'TODO
-        s2 = s2 & vbNewLine & "COPY  Copier la sélection" 'TODO
-        s2 = s2 & vbNewLine & "CUT  Couper la sélection" 'TODO
-        s2 = s2 & vbNewLine & "SEARCHFILE  Affiche la recherche de fichier"
-        s2 = s2 & vbNewLine & "KILL  Supprimer un fichier"
-        s2 = s2 & vbNewLine & "LICENSE  Affiche la license"
-        s2 = s2 & vbNewLine & "MOVE  Effectue un déplacement de la vue" 'TODO
-        s2 = s2 & vbNewLine & "NEWFILE  Créer un fichier" 'TODO
-        s2 = s2 & vbNewLine & "OPEN  Ouvrir un fichier, processus ou disque" 'TODO
-        s2 = s2 & vbNewLine & "OPTIONS  Affiche les options"
-        s2 = s2 & vbNewLine & "PASTE  Coller la sélection" 'TODO
-        s2 = s2 & vbNewLine & "PRINT  Lancer une impression"
-        s2 = s2 & vbNewLine & "PROCESS  Gestion des processus" 'TODO
-        s2 = s2 & vbNewLine & "PROPERTY  Afficher les propriétés"
-        s2 = s2 & vbNewLine & "QUIT  Quitter le programme"
-        s2 = s2 & vbNewLine & "REDO  Refaire"
-        s2 = s2 & vbNewLine & "REFRESH  Rafraichit les valeurs hexa"
-        s2 = s2 & vbNewLine & "REPLACE  Remplacer" 'TODO
-        s2 = s2 & vbNewLine & "SCRIPT  Démarre l'éditeur de script"
-        s2 = s2 & vbNewLine & "SEARCH  Effectuer une recherche"
-        s2 = s2 & vbNewLine & "SELECT  Effectuer une sélection" 'TODO
-        s2 = s2 & vbNewLine & "SHELL  Lance une commande"
-        s2 = s2 & vbNewLine & "START  Démarre une tâche"
-        s2 = s2 & vbNewLine & "STAT  Affiche les statistiques du fichier"
-        s2 = s2 & vbNewLine & "UNDO  Défaire"
-    ElseIf Left$(s, 5) = "help " And Len(s) > 5 Then
-        'affiche l'aide de la commande
-        s2 = GetHelp(s)
-        If s2 = vbNullString Then s2 = "Aide non supportée"
-    ElseIf s = "about" Then frmAbout.Show vbModal: s2 = "Fenêtre d'A propos affichée"
-    ElseIf s = "start" Then frmHome.Show: PremierPlan frmHome, MettreAuPremierPlan: s2 = "Fenêtre de démarrage de tâche affichée"
-    ElseIf s = "quit" Then frmContent.mnuExit_Click: s2 = "Quitte le programme..."
-    ElseIf s = "property" Then frmPropertyShow.Show: s2 = "Fenêtre de propriétés affichée"
-    ElseIf s = "print" Then frmPrint.Show vbModal: s2 = "Fenêtre d'impression affichée"
-    ElseIf s = "bugreport" Then frmLogErr.Show vbModal: s2 = "Fenêtre de log affichée"
-    ElseIf s = "calc" Then frmContent.mnuCalc_Click: s2 = "Calculatrice lancée"
-    ElseIf s = "searchfile" Then frmFileSearch.Show: s2 = "Fenêtre de recherche de fichiers affichée"
-    ElseIf s = "stat" Then frmContent.mnuStats_Click: s2 = "Fenêtre de statistiques affichée"
-    ElseIf s = "search" Then frmSearch.Show: s2 = "Fenêtre de recherche affichée"
-    ElseIf s = "script" Then frmScript.Show: s2 = "Editeur de script lancé"
-    ElseIf s = "refresh" Then frmContent.mnuRefreh_Click: s2 = "Rafraichissement de la vue effectuée"
-    ElseIf s = "options" Then frmOptions.Show vbModal: s2 = "Fenêtre d'options affichée"
-    ElseIf s = "redo" Then frmContent.mnuRedo_Click: s2 = "Commande 'Redo' lancée"
-    ElseIf s = "undo" Then frmContent.mnuUndo_Click: s2 = "Commande 'Undo' lancée"
-    ElseIf Left$(s, 7) = "convert" Then
-        If InStr(7, s, "-a", vbBinaryCompare) Then
-            'alors c'est le convertisseur avancé
-            frmAdvancedConversion.Show
-            s2 = "Fenêtre de conversion avancée affichée"
-        Else
-            'converion simple
-            frmConvert.Show
-            s2 = "Fenêtre de conversion simple affichée"
-        End If
-    ElseIf s = vbNullString Then
-        s2 = vbNewLine
-    ElseIf s = "license" Then Call cFile.ShellOpenFile(App.Path & "\license.txt", Me.hWnd): s2 = "License affichée"
-    ElseIf s = "cls" Then txt.Text = vbNullString: s2 = "Cls"
-    ElseIf s = "shell" Then s2 = "Paramètre manquant"
-    ElseIf Left$(s, 6) = "shell " Then
-        Shell Right$(s, Len(s) - 6), vbNormalFocus
-        s2 = "Commance lancée"
-    ElseIf Left$(s, 5) = "kill " Then
-        If cFile.FileExists(Right$(s, Len(s) - 5)) = False Then
-            s2 = "Fichier inexistant"
-        Else
-            cFile.KillFile Right$(s, Len(s) - 5)
-            s2 = IIf(cFile.FileExists(Right$(s, Len(s) - 5)), "Fichier encore existant", "Fichier effacé")
-        End If
-    ElseIf Left$(s, 5) = "close" Then
-        If InStr(1, s, "-a") Then
-            'alors on ferme toutes les fenêtres
-            If Me.ActiveForm Is Nothing Then
-                s2 = "Aucune fenêtre à fermer"
-            Else
-                For Each Frm In Forms
-                    If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Then
-                        SendMessage Frm.hWnd, WM_CLOSE, 0, 0
-                    End If
-                Next Frm
-                    
-                '/!\ NE PAS ENLEVER
-                '/!\ BUG NON RESOLU
-                '/!\ Après déchargement des form (juste en haut), des form nommées "Form1" (caption par
-                'défaut) subsistent
-                For Each Frm In Forms
-                    If Frm.Caption = "Form1" Then SendMessage Frm.hWnd, WM_CLOSE, 0, 0
-                Next Frm
-                s2 = "Toutes les fenêtres ont été fermées"
-            End If
-        Else
-            'juste l'active
-            If Me.ActiveForm Is Nothing Then
-                s2 = "Aucune fenêtre à fermer"
-            Else
-            
-                SendMessage Me.ActiveForm.hWnd, WM_CLOSE, 0, 0
-    
-                '/!\ NE PAS ENLEVER
-                '/!\ BUG NON RESOLU
-                '/!\ Après déchargement des form (juste en haut), des form nommées "Form1" (caption par
-                'défaut) subsistent
-                For Each Frm In Forms
-                    If Frm.Caption = "Form1" Then SendMessage Frm.hWnd, WM_CLOSE, 0, 0
-                Next Frm
-                s2 = "Fenêtre fermée"
-            End If
-        End If
-    ElseIf s = "cut" Then Call mnuCut_Click: s2 = "Sélection coupée"
-    ElseIf s = "sourceforge" Then Call mnuSourceForge_Click: s2 = "Ouverture de la page SourceForge du projet"
-    ElseIf s = "vbfrance" Then Call mnuVbfrance_Click: s2 = "Ouverture de la page VBfrance de l'auteur"
-    ElseIf s = "options.ini" Or s = "config.ini" Or s = "config" Then
-        Call cFile.ShellOpenFile(App.Path & "\Preferences\config.ini", Me.hWnd)
-        s2 = "Fichier d'options ouvert"
-    ElseIf s = "console.ini" Or s = "consolehelp.ini" Then
-        Call cFile.ShellOpenFile(App.Path & "\ConsoleHelp.in", Me.hWnd)
-        s2 = "Fichier d'aide de la console ouvert"
-    ElseIf s = "version" Then MsgBox "Version " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision)), vbInformation + vbOKOnly, "Hex Editor VB": s2 = vbNullString
-    ElseIf s = "test" Then MsgBox "Test", vbCritical, "Test": s2 = vbNullString
-    
-    
-    End If
-    
-    
-    
-    'affiche à la console le résultat
-    Call AddTextToConsole(s2)
-End Sub
-
-'=======================================================
-'récupère la commande correspondant à la position dans l'historique
-'=======================================================
-Private Function GetCommand() As String
-    On Error Resume Next
-    GetCommand = sTxt(lngPos)
-End Function
-
 Private Sub txtE_KeyPress(KeyAscii As Integer)
 'évite le 'BIP' lors de l'appui sur la touche entrée
     If KeyAscii = 13 Then KeyAscii = 0
 End Sub
+
