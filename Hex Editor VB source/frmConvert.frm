@@ -17,6 +17,7 @@ Begin VB.Form frmConvert
    EndProperty
    Icon            =   "frmConvert.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   2370
    ScaleWidth      =   5265

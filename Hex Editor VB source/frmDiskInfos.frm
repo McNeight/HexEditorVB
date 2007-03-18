@@ -18,6 +18,7 @@ Begin VB.Form frmDiskInfos
    EndProperty
    Icon            =   "frmDiskInfos.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   6345
    ScaleWidth      =   9720

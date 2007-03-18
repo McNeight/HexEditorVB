@@ -18,6 +18,7 @@ Begin VB.Form frmLogErr
    EndProperty
    Icon            =   "frmLogErr.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   4170

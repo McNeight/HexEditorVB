@@ -19,6 +19,7 @@ Begin VB.Form frmCut
    EndProperty
    Icon            =   "frmCut.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   5490
@@ -82,13 +83,11 @@ Begin VB.Form frmCut
          NumTabs         =   2
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Découper"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fusionner"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty

@@ -17,6 +17,7 @@ Begin VB.Form frmPropertyShow
       Strikethrough   =   0   'False
    EndProperty
    Icon            =   "frmPropertyShow.frx":0000
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   6810
@@ -238,12 +239,12 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-Dim X As Long
-    For X = 0 To 2
-        Frame1(X).Top = 600
-        Frame1(X).Left = 120
-        Frame1(X).Visible = False
-    Next X
+Dim x As Long
+    For x = 0 To 2
+        Frame1(x).Top = 600
+        Frame1(x).Left = 120
+        Frame1(x).Visible = False
+    Next x
 End Sub
 
 '=======================================================

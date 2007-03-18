@@ -19,6 +19,7 @@ Begin VB.Form frmCPF
    EndProperty
    Icon            =   "frmCPF.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   6990
    ScaleWidth      =   8250
