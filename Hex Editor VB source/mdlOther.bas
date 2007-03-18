@@ -653,6 +653,9 @@ Dim bOverWrite As Boolean
     
     On Error GoTo CancelPushed
 
+    'ajoute du texte à la console
+    Call AddTextToConsole("Création du fichier...")
+    
     frmContent.Sb.Panels(1).Text = "Status=[Creating file from selection]"
     
     'détermine la taille
@@ -732,6 +735,9 @@ Dim bOverWrite As Boolean
 CreateMyFileFromOneBuffer:
     'sauvegarde le fichier (un seul buffer)
     cFile.SaveDATAinFile sFile, s2, bOverWrite   'lance la sauvegarde
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Le fichier a été créé")
     
     GoTo CancelPushed
     
@@ -836,7 +842,11 @@ CreateMyFileFromBuffers:
             
     End Select
 
+    'ajoute du texte à la console
+    Call AddTextToConsole("Le fichier a été créé")
+    
 CancelPushed:
+    
     frmContent.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 

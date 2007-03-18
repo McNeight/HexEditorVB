@@ -1086,6 +1086,9 @@ Dim si As SYSTEM_INFO
 
     On Error GoTo 5
     
+    'ajoute du texte à la console
+    Call AddTextToConsole("Ouverture du processus " & Trim$(Str$(lPID)) & " ...")
+    
     'obtient les infos sur le processus
     Set clsProc = New clsProcess
     Set pProcess = clsProc.GetProcess(lPID, True, True, True)
@@ -1146,6 +1149,9 @@ Dim si As SYSTEM_INFO
     LoadIconesToLV pProcess.szImagePath, lvIcon, Me.pct, Me.IMG
  
     cmdMAJ_Click    'refresh les infos
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Processus ouvert")
     
     Exit Sub
 ErrGestion:

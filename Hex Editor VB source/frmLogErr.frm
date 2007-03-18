@@ -163,11 +163,14 @@ Private Sub cmdReset_Click()
     'supprime le log
     If clsERREUR.DeleteLogFile <> 0 Then LV.ListItems.Clear
     Call Form_Load
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Log supprimé")
 End Sub
 
 Private Sub Form_Load()
 Dim var As Variant
-Dim X As Long
+Dim x As Long
     
     'obtient les infos sur les erreurs
     var = clsERREUR.GetErrors
@@ -175,14 +178,14 @@ Dim X As Long
     'affiche tout çà dans le LV
     LV.ListItems.Clear
     
-    For X = 1 To clsERREUR.NumberOfErrorInLogFile
-        LV.ListItems.Add Text:=var(X).ErrDate
-        LV.ListItems.Item(X).SubItems(1) = var(X).ErrTime
-        LV.ListItems.Item(X).SubItems(2) = var(X).ErrZone
-        LV.ListItems.Item(X).SubItems(3) = var(X).ErrSource
-        LV.ListItems.Item(X).SubItems(4) = var(X).ErrNumber
-        LV.ListItems.Item(X).SubItems(5) = var(X).ErrDescription
-    Next X
+    For x = 1 To clsERREUR.NumberOfErrorInLogFile
+        LV.ListItems.Add Text:=var(x).ErrDate
+        LV.ListItems.Item(x).SubItems(1) = var(x).ErrTime
+        LV.ListItems.Item(x).SubItems(2) = var(x).ErrZone
+        LV.ListItems.Item(x).SubItems(3) = var(x).ErrSource
+        LV.ListItems.Item(x).SubItems(4) = var(x).ErrNumber
+        LV.ListItems.Item(x).SubItems(5) = var(x).ErrDescription
+    Next x
     
     If clsERREUR.NumberOfErrorInLogFile <> 0 Then
         'il y a des erreurs

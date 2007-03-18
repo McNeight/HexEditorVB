@@ -4,7 +4,9 @@ bug de resize|bug de resize des composants après la fermeture d'une childform| 1
 bug extendedvs|bug du ExtentedVS lorsqu'il arrive en bas (pour les disques) ==> plus moyen de le remonter avec l'ascenseur (oblibé de faire de la molette)| 10| 7
 bug lors de sauvegarde|bug de la sauvegarde d'un fichier en mode compilé (echec probable de readfile, null partout sauf zones modifiées)| 10| 3
 bug refresh|pas de refresh des form tant que frmHome modale après le choix d'un fichier| 10| 4
+close|bug lors de la fermeture de l'activeform avec la commande Close| 30| 3
 cluster|erreur cartographie FAT32| 10| 3
+console|help oil ?| 10| 3
 crash|crash dû au mauvais subclassing des ExtendedVS quand on quitte le prog| 10| 4
 ctrl+z|bug si appui de plusieurs fois ==> retour avant le premier| 10| 4
 data|bug pour le changement des values dans framedata| 10| 4

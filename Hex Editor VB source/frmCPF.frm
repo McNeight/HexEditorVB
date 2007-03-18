@@ -343,14 +343,24 @@ Private Sub cmdGo_Click()
         Exit Sub
     End If
     
+    'ajoute du texte à la console
+    Call AddTextToConsole("Analyses en cours...")
+    
     LaunchAnalys    'lance l'analyse
     DisplayResults  'affiche les résultats
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Analyses terminées")
     
 End Sub
 
 Private Sub cmdSaveReport_Click()
-'sauvagarde le rapport
+'sauvegarde le rapport
 
+
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Sauvegarde du rapport terminée")
 End Sub
 
 '=======================================================

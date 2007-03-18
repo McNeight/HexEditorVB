@@ -1366,6 +1366,9 @@ End Function
 Public Sub GetDrive(ByVal sDrive As String)
 Dim l As Currency
 
+    'ajoute du texte à la console
+    Call AddTextToConsole("Ouverture du disque " & sDrive & " ...")
+    
     strDrive = BuildDrive(sDrive)   'psa formaté
     
     FV.Path = Left$(sDrive, 3)  'affecte le drive sélectionné au path du FV
@@ -1430,6 +1433,9 @@ Dim l As Currency
     
     'affichage
     OpenDrive
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Disque " & sDrive & " ouvert")
     
 End Sub
 

@@ -71,7 +71,7 @@ End Function
 '=======================================================
 Public Function ProcLVSubClassProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, _
     ByVal lParam As Long) As Long
-   Debug.Print uMsg & "  " & wParam & "  " & lParam
+   'Debug.Print uMsg & "  " & wParam & "  " & lParam
     Select Case uMsg
         
         Case 4111, 4137, 4110

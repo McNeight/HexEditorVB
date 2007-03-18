@@ -148,7 +148,7 @@ Public Function MaWndProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam A
     ByVal lParam As Long) As Long
     
     
-    Debug.Print uMsg & "  " & wParam & "  " & lParam
+    'Debug.Print uMsg & "  " & wParam & "  " & lParam
     
     Select Case uMsg
                 

@@ -120,7 +120,9 @@ Private Sub cmdYES_Click()
 'procède à la sauvegarde
     
     
-    
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Sauvegarde terminée")
     
     Call cmdNO_Click    'quitte la form en sauvant les pref
 End Sub

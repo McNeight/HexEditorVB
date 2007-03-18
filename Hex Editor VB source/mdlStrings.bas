@@ -300,6 +300,20 @@ Dim s As String
 End Function
 
 '=======================================================
+'refresh la liste des anciennes commandes en ajoutant la dernière string
+'=======================================================
+Public Sub AddTextToConsole(ByVal sText As String)
+    If sText = "Cls" Then Exit Sub
+    With frmContent.txt
+        .Text = .Text & IIf(Len(.Text) > 0, vbNewLine, vbNullString) & sText
+        .SelStart = 0
+        .SelLength = Len(.Text)
+        .SelColor = cPref.console_ForeColor
+        .SelStart = Len(.Text)
+    End With
+End Sub
+
+'=======================================================
 'créé une string contenant les données en langage HTML à sauvegarder
 'prend en paramètre les infos à afficher (deux listviews contenant les infos disques)
 '=======================================================

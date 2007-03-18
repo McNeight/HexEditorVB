@@ -272,6 +272,9 @@ Dim bAddSign As Boolean
     End If
 
     If frmContent.ActiveForm Is Nothing Then Exit Sub
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Recherche de strings en cours...")
     
     cmdSave.Enabled = False
     chkNumb3r.Enabled = False
@@ -311,6 +314,9 @@ Dim bAddSign As Boolean
         
     End If
     
+    'ajoute du texte à la console
+    Call AddTextToConsole("Affichage des résultats...")
+    
     LV.ListItems.Clear
     
     bAddSign = chkAddSignet.Value
@@ -345,6 +351,9 @@ Dim bAddSign As Boolean
     cmdQuit.Enabled = True
     chkAddSignet.Enabled = True
     chkAccent.Enabled = True
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Recherche terminée")
     
     Exit Sub
 ErrGestion:
@@ -360,7 +369,7 @@ Private Sub cmdSave_Click()
 'sauvegarde les résultats
 Dim lFile As Long
 Dim sFile As String
-Dim X As Long
+Dim x As Long
 
     On Error GoTo CancelPushed
     
@@ -385,10 +394,10 @@ Dim X As Long
     
     Print #lFile, "Recherche de [" & txtSize.Text & "] caractères consécutifs" & vbNewLine & "[fichier]=" & sFile & vbNewLine & "[date]=" & Date$ & "  " & Time$ & vbNewLine & "[match]=" & LV.ListItems.Count
     
-    For X = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
-        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(X)) & "  [string]=" & LV.ListItems.Item(X).SubItems(1)
+    For x = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
+        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(x)) & "  [string]=" & LV.ListItems.Item(x).SubItems(1)
         DoEvents
-    Next X
+    Next x
     
     Close lFile
     

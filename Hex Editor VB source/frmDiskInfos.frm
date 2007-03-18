@@ -389,12 +389,15 @@ Private Sub mnuRefresh_Click()
 Dim strDisk As String
 Dim s As String
 Dim cDrive As clsDrive
-Dim X As Byte, y As Byte
+Dim x As Byte, y As Byte
 Dim s_t() As String
 
     On Error GoTo ErrGestion
     
-    LV1.ListItems.Clear: X = 0
+    'ajoute du texte à la console
+    Call AddTextToConsole("Récupération des informations sur les disques...")
+    
+    LV1.ListItems.Clear: x = 0
 
     'obtient les infos sur les drives physiques
     For y = 0 To clsDisk.NumberOfPhysicalDrives - 1
@@ -403,15 +406,15 @@ Dim s_t() As String
         Set cDrive = clsDisk.GetPhysicalDrive(y)
         
         If clsDisk.IsPhysicalDriveAccessible(y) Then
-            X = X + 1
+            x = x + 1
             With LV1.ListItems
                 .Add Text:=CStr(y)
-                .Item(X).SubItems(1) = cDrive.TotalSpace
-                .Item(X).SubItems(2) = cDrive.Cylinders
-                .Item(X).SubItems(3) = cDrive.TracksPerCylinder
-                .Item(X).SubItems(4) = cDrive.SectorsPerTrack
-                .Item(X).SubItems(5) = cDrive.BytesPerSector
-                .Item(X).SubItems(6) = cDrive.strMediaType
+                .Item(x).SubItems(1) = cDrive.TotalSpace
+                .Item(x).SubItems(2) = cDrive.Cylinders
+                .Item(x).SubItems(3) = cDrive.TracksPerCylinder
+                .Item(x).SubItems(4) = cDrive.SectorsPerTrack
+                .Item(x).SubItems(5) = cDrive.BytesPerSector
+                .Item(x).SubItems(6) = cDrive.strMediaType
             End With
         End If
     Next y
@@ -421,7 +424,7 @@ Dim s_t() As String
     clsDisk.GetLogicalDrivesList s_t()
 
         
-    LV2.ListItems.Clear: X = 0
+    LV2.ListItems.Clear: x = 0
     
     For y = 0 To UBound(s_t()) - 1
     
@@ -429,35 +432,38 @@ Dim s_t() As String
         
         If clsDisk.IsLogicalDriveAccessible(s_t(y)) Then
             'le drive est accessible
-            X = X + 1
+            x = x + 1
             With LV2.ListItems
                 .Add Text:=cDrive.VolumeName
-                .Item(X).SubItems(1) = cDrive.TotalSpace
-                .Item(X).SubItems(2) = cDrive.PartitionLength
-                .Item(X).SubItems(3) = cDrive.UsedSpace
-                .Item(X).SubItems(4) = cDrive.FreeSpace
-                .Item(X).SubItems(5) = cDrive.PercentageFree
-                .Item(X).SubItems(6) = cDrive.BytesPerCluster
-                .Item(X).SubItems(7) = cDrive.UsedClusters
-                .Item(X).SubItems(8) = cDrive.FreeClusters
-                .Item(X).SubItems(9) = cDrive.TotalClusters
-                .Item(X).SubItems(10) = cDrive.HiddenSectors
-                .Item(X).SubItems(11) = cDrive.TotalLogicalSectors
-                .Item(X).SubItems(12) = cDrive.TotalPhysicalSectors
-                .Item(X).SubItems(13) = cDrive.strMediaType
-                .Item(X).SubItems(14) = Hex$(cDrive.VolumeSerialNumber)
-                .Item(X).SubItems(15) = cDrive.BytesPerSector
-                .Item(X).SubItems(16) = cDrive.SectorPerCluster
-                .Item(X).SubItems(17) = cDrive.Cylinders
-                .Item(X).SubItems(18) = cDrive.TracksPerCylinder
-                .Item(X).SubItems(19) = cDrive.SectorsPerTrack
-                .Item(X).SubItems(20) = cDrive.StartingOffset
-                .Item(X).SubItems(21) = cDrive.FileSystemName
-                .Item(X).SubItems(22) = cDrive.strDriveType
+                .Item(x).SubItems(1) = cDrive.TotalSpace
+                .Item(x).SubItems(2) = cDrive.PartitionLength
+                .Item(x).SubItems(3) = cDrive.UsedSpace
+                .Item(x).SubItems(4) = cDrive.FreeSpace
+                .Item(x).SubItems(5) = cDrive.PercentageFree
+                .Item(x).SubItems(6) = cDrive.BytesPerCluster
+                .Item(x).SubItems(7) = cDrive.UsedClusters
+                .Item(x).SubItems(8) = cDrive.FreeClusters
+                .Item(x).SubItems(9) = cDrive.TotalClusters
+                .Item(x).SubItems(10) = cDrive.HiddenSectors
+                .Item(x).SubItems(11) = cDrive.TotalLogicalSectors
+                .Item(x).SubItems(12) = cDrive.TotalPhysicalSectors
+                .Item(x).SubItems(13) = cDrive.strMediaType
+                .Item(x).SubItems(14) = Hex$(cDrive.VolumeSerialNumber)
+                .Item(x).SubItems(15) = cDrive.BytesPerSector
+                .Item(x).SubItems(16) = cDrive.SectorPerCluster
+                .Item(x).SubItems(17) = cDrive.Cylinders
+                .Item(x).SubItems(18) = cDrive.TracksPerCylinder
+                .Item(x).SubItems(19) = cDrive.SectorsPerTrack
+                .Item(x).SubItems(20) = cDrive.StartingOffset
+                .Item(x).SubItems(21) = cDrive.FileSystemName
+                .Item(x).SubItems(22) = cDrive.strDriveType
             End With
         End If
    
     Next y
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Informations récupérées")
     
     Exit Sub
 ErrGestion:
