@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "Comdlg32.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MsComCtl.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Begin VB.Form frmScript 
@@ -93,6 +93,7 @@ Begin VB.Form frmScript
       _ExtentY        =   4895
       _Version        =   393217
       BorderStyle     =   0
+      Enabled         =   -1  'True
       ScrollBars      =   3
       Appearance      =   0
       TextRTF         =   $"frmScript.frx":2307
@@ -450,6 +451,8 @@ End Sub
 Private Sub mnuLauch_Click()
 'exécute le script
 
+    'ajoute du texte à la console
+    Call AddTextToConsole("Script lancé")
 End Sub
 
 Private Sub mnuNew_Click()

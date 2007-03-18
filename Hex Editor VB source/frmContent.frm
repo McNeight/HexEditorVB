@@ -541,7 +541,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "23:57"
+            TextSave        =   "12:10"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -549,7 +549,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "16/03/2007"
+            TextSave        =   "18/03/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1567,11 +1567,16 @@ Private Sub MDIForm_Load()
         .RefreshListViewOnly    '/!\ DO NOT REMOVE
     End With
 
+    'ajoute du texte à la console
+    Call AddTextToConsole("Hex Editor VB is ready")
 End Sub
 
 Private Sub MDIForm_QueryUnload(Cancel As Integer, UnloadMode As Integer)
 Dim Frm As Form
 
+    'ajoute du texte à la console
+    Call AddTextToConsole("Fermeture du logiciel...")
+    
     Call SaveQuickBackupINIFile     'permet de sauver (si nécessaire) l'état du programme
     
     'on cache notre form pour éviter de montrer que le programme met du temps à se fermer...
@@ -1609,6 +1614,9 @@ Dim s As String
     Clipboard.SetData Me.ActiveForm.pct.Image
     
     Set Me.ActiveForm.pct.Picture = Nothing
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Icone copiée dans le presse-papier")
 End Sub
 
 Private Sub mnuCut_Click()
@@ -1624,6 +1632,9 @@ Private Sub mnuDeleteSelection_Click()
     
     'procède à la suppression de la zone et sauvegarde dans un backup
     If bAcceptBackup Then frmContent.ActiveForm.DeleteZone
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Sélection supprimée")
 End Sub
 
 Private Sub mnuExport_Click()
@@ -1775,7 +1786,7 @@ End Sub
 Private Sub MDIForm_Unload(Cancel As Integer)
     
     'sauvegarde des preferences
-    clsPref.SaveFormSettings App.Path & "\Preferences\FrmContent.ini", Me
+    clsPref.SaveFormSettings App.Path & "\Preferences\FrmContent.ini", frmContent
     Set clsPref = Nothing
     
     Call UnHookPictureResizement(Me.pctConsole.hWnd, 1)
@@ -2175,6 +2186,9 @@ Dim bOver As Boolean
         cFile.CreateEmptyFile .Filename, True
     End With
     
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Création du fichier en cours...")
     
     If TypeOfForm(Me.ActiveForm) = "Fichier" Then
         'alors on sauvegarde en utilisant ReadFile dans un fichier
@@ -2186,6 +2200,9 @@ Dim bOver As Boolean
         'alors lecture en mémoire
         
     End If
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Fichier créé")
     
 CancelPushed:
 End Sub
@@ -2289,11 +2306,20 @@ End Sub
 
 Private Sub mnuExecuteScript_Click()
 'execute le script actif
+
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Script exécuté")
 End Sub
 
 Private Sub mnuFileRenamer_Click()
-'lance FileRenamer.exe
+
+    'lance FileRenamer.exe
     cFile.ShellOpenFile App.Path & "\FileRenamer.exe", Me.hWnd, , App.Path
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Application de renommage massif lancée")
+    
 End Sub
 
 Private Sub mnuFileSearch_Click()
@@ -2419,7 +2445,13 @@ Dim sExt As String
     'obtient la termaison
     sExt = cFile.GetFileExtension(Me.ActiveForm.Caption)
     
+    'ajoute du texte à la console
+    Call AddTextToConsole("Création d'un fichier temporaire pour l'exécution...")
+    
     ExecuteTempFile Me.hWnd, Me.ActiveForm, sExt
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Fichier temporaire exécuté")
 End Sub
 
 Public Sub mnuExit_Click()
@@ -2492,6 +2524,9 @@ Private Sub mnuHelp_Click()
 'affiche l'aide
 
     On Error GoTo 5
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Affichage de l'aide")
     
     'ShellExecute Me.hWnd, "open", App.Path & "\aide.chm", vbNullString, vbNullString, 1
     
@@ -2648,8 +2683,14 @@ On Error Resume Next
         x = MsgBox("Votre fichier fait plus de 1Mo." & vbNewLine & "Il n'est pas conseillé d'ouvrir un fichier de cette taille" & vbNewLine & "avec le bloc-notes. Continuer ?", vbInformation + vbYesNo, "Attention")
         If Not (x = vbYes) Then Exit Sub
     End If
-        
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Ouverture dans le bloc notes...")
+    
     Shell "notepad " & Me.ActiveForm.Caption, vbNormalFocus
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Ouverture dans le bloc notes terminée")
 End Sub
 
 Private Sub mnuOpenProcess_Click()
@@ -2722,6 +2763,9 @@ Private Sub mnuRemoveAll_Click()
     
     Me.ActiveForm.HW.RemoveAllSignets
     Me.ActiveForm.lstSignets.ListItems.Clear
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Signets supprimés")
 End Sub
 
 Private Sub mnuRemoveSignet_Click()
@@ -2785,6 +2829,9 @@ Dim s As String
     'lance la sauvegarde
     SavePicture Me.ActiveForm.pct.Image, s
     
+    'ajoute du texte à la console
+    Call AddTextToConsole("Icone sauvegardée")
+    
 Err:
     Set Me.ActiveForm.pct.Picture = Nothing
 End Sub
@@ -2827,6 +2874,9 @@ Dim x As Long
     Next x
     
     Close lFile
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Signets sauvegarés")
     
 ErrGestion:
     
@@ -3192,6 +3242,8 @@ Dim l As Long
     
     Close lFile
     
+    'ajoute du texte à la console
+    Call AddTextToConsole("Signets ajoutés")
 ErrGestion:
 End Sub
 
@@ -3415,7 +3467,8 @@ End Sub
 Private Sub LaunchCommand()
 Dim s As String
 Dim s2 As String
-    
+Dim Frm As Form
+
     'commence par ajouter à la liste la commande entrée
     ReDim Preserve sTxt(UBound(sTxt()) + 1)
     sTxt(UBound(sTxt())) = txtE.Text
@@ -3432,12 +3485,14 @@ Dim s2 As String
         s2 = s2 & vbNewLine & "BOOKMARK  Gestion des signet" 'TODO
         s2 = s2 & vbNewLine & "BUGREPORT  Affiche le rapport d'erreurs"
         s2 = s2 & vbNewLine & "CALC  Lance la calculatrice"
-        s2 = s2 & vbNewLine & "CLOSE  Ferme le fichier ouvert" 'TODO
+        s2 = s2 & vbNewLine & "CLOSE  Ferme les fenêtres ouvertes" 'TODO
+        s2 = s2 & vbNewLine & "CLS  Efface la console"
         s2 = s2 & vbNewLine & "CONVERT  Afficher la fenêtre de conversion" 'TODO
         s2 = s2 & vbNewLine & "COPY  Copier la sélection" 'TODO
         s2 = s2 & vbNewLine & "CUT  Couper la sélection" 'TODO
         s2 = s2 & vbNewLine & "SEARCHFILE  Affiche la recherche de fichier"
-        s2 = s2 & vbNewLine & "KILL  Supprimer un fichier" 'TODO
+        s2 = s2 & vbNewLine & "KILL  Supprimer un fichier"
+        s2 = s2 & vbNewLine & "LICENSE  Affiche la license"
         s2 = s2 & vbNewLine & "MOVE  Effectue un déplacement de la vue" 'TODO
         s2 = s2 & vbNewLine & "NEWFILE  Créer un fichier" 'TODO
         s2 = s2 & vbNewLine & "OPEN  Ouvrir un fichier, processus ou disque" 'TODO
@@ -3453,6 +3508,7 @@ Dim s2 As String
         s2 = s2 & vbNewLine & "SCRIPT  Démarre l'éditeur de script"
         s2 = s2 & vbNewLine & "SEARCH  Effectuer une recherche"
         s2 = s2 & vbNewLine & "SELECT  Effectuer une sélection" 'TODO
+        s2 = s2 & vbNewLine & "SHELL  Lance une commande"
         s2 = s2 & vbNewLine & "START  Démarre une tâche"
         s2 = s2 & vbNewLine & "STAT  Affiche les statistiques du fichier"
         s2 = s2 & vbNewLine & "UNDO  Défaire"
@@ -3487,7 +3543,65 @@ Dim s2 As String
         End If
     ElseIf s = vbNullString Then
         s2 = vbNewLine
+    ElseIf s = "license" Then Call cFile.ShellOpenFile(App.Path & "\license.txt", Me.hWnd): s2 = "License affichée"
+    ElseIf s = "cls" Then txt.Text = vbNullString: s2 = "Cls"
+    ElseIf s = "shell" Then s2 = "Paramètre manquant"
+    ElseIf Left$(s, 6) = "shell " Then
+        Shell Right$(s, Len(s) - 6), vbNormalFocus
+        s2 = "Commance lancée"
+    ElseIf Left$(s, 5) = "kill " Then
+        If cFile.FileExists(Right$(s, Len(s) - 5)) = False Then
+            s2 = "Fichier inexistant"
+        Else
+            cFile.KillFile Right$(s, Len(s) - 5)
+            s2 = IIf(cFile.FileExists(Right$(s, Len(s) - 5)), "Fichier encore existant", "Fichier effacé")
+        End If
+    ElseIf Left$(s, 5) = "close" Then
+        If InStr(1, s, "-a") Then
+            'alors on ferme toutes les fenêtres
+            If Me.ActiveForm Is Nothing Then
+                s2 = "Aucune fenêtre à fermer"
+            Else
+                For Each Frm In Forms
+                    If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Then
+                        SendMessage Frm.hWnd, WM_CLOSE, 0, 0
+                    End If
+                Next Frm
+                    
+                '/!\ NE PAS ENLEVER
+                '/!\ BUG NON RESOLU
+                '/!\ Après déchargement des form (juste en haut), des form nommées "Form1" (caption par
+                'défaut) subsistent
+                For Each Frm In Forms
+                    If Frm.Caption = "Form1" Then SendMessage Frm.hWnd, WM_CLOSE, 0, 0
+                Next Frm
+                s2 = "Toutes les fenêtres ont été fermées"
+            End If
+        Else
+            'juste l'active
+            If Me.ActiveForm Is Nothing Then
+                s2 = "Aucune fenêtre à fermer"
+            Else
+            
+                SendMessage Me.ActiveForm.hWnd, WM_CLOSE, 0, 0
+    
+                '/!\ NE PAS ENLEVER
+                '/!\ BUG NON RESOLU
+                '/!\ Après déchargement des form (juste en haut), des form nommées "Form1" (caption par
+                'défaut) subsistent
+                For Each Frm In Forms
+                    If Frm.Caption = "Form1" Then SendMessage Frm.hWnd, WM_CLOSE, 0, 0
+                Next Frm
+                s2 = "Fenêtre fermée"
+            End If
+        End If
+    ElseIf s = "cut" Then Call mnuCut_Click: s2 = "Sélection coupée"
+    ElseIf s = "sourceforge" Then Call mnuSourceForge_Click: s2 = "Ouverture de la page SourceForge du projet"
+    
+    
     End If
+    
+    
     
     'affiche à la console le résultat
     Call AddTextToConsole(s2)
@@ -3500,17 +3614,6 @@ Private Function GetCommand() As String
     On Error Resume Next
     GetCommand = sTxt(lngPos)
 End Function
-
-'=======================================================
-'refresh la liste des anciennes commandes en ajoutant la dernière string
-'=======================================================
-Public Sub AddTextToConsole(ByVal sText As String)
-    txt.Text = txt.Text & IIf(Len(txt.Text) > 0, vbNewLine, vbNullString) & sText
-    txt.SelStart = 0
-    txt.SelLength = Len(txt.Text)
-    txt.SelColor = cPref.console_ForeColor
-    txt.SelStart = Len(txt.Text)
-End Sub
 
 Private Sub txtE_KeyPress(KeyAscii As Integer)
 'évite le 'BIP' lors de l'appui sur la touche entrée

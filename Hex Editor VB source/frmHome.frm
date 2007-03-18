@@ -586,7 +586,7 @@ Private Sub cmdOk_Click()
 'ouvre l'élément sélectionné
 Dim m() As String
 Dim Frm As Form
-Dim X As Long
+Dim x As Long
 Dim sDrive As String
 Dim cDr As clsDiskInfos
 Dim lH As Long
@@ -617,16 +617,16 @@ Dim lLen As Double
             If cFile.EnumFilesFromFolder(txtFolder.Text, m, optFolderSub(0).Value) < 1 Then Exit Sub
             
             'les ouvre un par un
-            For X = 1 To UBound(m)
-                If cFile.FileExists(m(X)) Then
+            For x = 1 To UBound(m)
+                If cFile.FileExists(m(x)) Then
                     Set Frm = New Pfm
-                    Call Frm.GetFile(m(X))
+                    Call Frm.GetFile(m(x))
                     Frm.Show
                     lNbChildFrm = lNbChildFrm + 1
                     frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
                     DoEvents
                 End If
-            Next X
+            Next x
     
         Case 3
             'disque
@@ -682,6 +682,9 @@ Dim lLen As Double
             If cdUnit.Text = "Mo" Then lLen = (lLen * 1024) * 1024
             If cdUnit.Text = "Go" Then lLen = ((lLen * 1024) * 1024) * 1024
             
+            'ajoute du texte à la console
+            Call AddTextToConsole("Création d'un nouveau fichier...")
+    
             'obtient un numéro de fichier disponible
             lFile = FreeFile
             
@@ -724,7 +727,7 @@ End Sub
 'FORM HOME ==> CHOIX DE L'OBJET A OUVRIR
 '=======================================================
 Private Sub Form_Load()
-Dim X As Long
+Dim x As Long
 Dim p() As ProcessItem
 Dim clsProc As clsProcess   'appel à une classe de gestion de processus
 
@@ -734,12 +737,12 @@ Dim clsProc As clsProcess   'appel à une classe de gestion de processus
     optFolderSub(1).Value = Not (optFolderSub(0).Value)
     
     'réorganise les Frames
-    For X = 0 To Frame1.Count - 1
-        Frame1(X).Left = 120
-        Frame1(X).Top = 480
-        Frame1(X).Width = 6600
-        Frame1(X).Height = 4500
-    Next X
+    For x = 0 To Frame1.Count - 1
+        Frame1(x).Left = 120
+        Frame1(x).Top = 480
+        Frame1(x).Width = 6600
+        Frame1(x).Height = 4500
+    Next x
     
     'prépare le FileView
     With FV
@@ -761,10 +764,10 @@ Dim clsProc As clsProcess   'appel à une classe de gestion de processus
     clsProc.EnumerateProcesses p()
     
     'affiche la liste
-    For X = 0 To UBound(p) - 1
-        LV.ListItems.Add Text:=p(X).th32ProcessID
-        LV.ListItems.Item(X + 1).SubItems(1) = p(X).szExeFile
-    Next X
+    For x = 0 To UBound(p) - 1
+        LV.ListItems.Add Text:=p(x).th32ProcessID
+        LV.ListItems.Item(x + 1).SubItems(1) = p(x).szExeFile
+    Next x
     
     'affiche un seul frame
     MaskFrames 0
@@ -774,11 +777,11 @@ End Sub
 'masque tous les frames sauf un
 '=======================================================
 Private Sub MaskFrames(ByVal lFrame As Long)
-Dim X As Long
+Dim x As Long
 
-    For X = 0 To Frame1.Count - 1
-        Frame1(X).Visible = False
-    Next X
+    For x = 0 To Frame1.Count - 1
+        Frame1(x).Visible = False
+    Next x
     Frame1(lFrame).Visible = True
     
     If lFrame = 4 Then

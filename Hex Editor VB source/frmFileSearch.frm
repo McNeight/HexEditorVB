@@ -314,7 +314,7 @@ Begin VB.Form frmFileSearch
             _Version        =   393216
             Enabled         =   0   'False
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   82247683
+            Format          =   84541443
             CurrentDate     =   39133.9583333333
          End
       End
@@ -493,6 +493,10 @@ End Sub
 
 Private Sub cmdGo_Click()
 'lance la recherche
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Recherche de fichiers en cours...")
+    
     If Option1(0).Value Then
         'alors recherche par nom de fichier
         Call LaunchSearch([Recherche de fichiers])
@@ -503,6 +507,9 @@ Private Sub cmdGo_Click()
         'alors recherche par contenu de fichier
         Call LaunchSearch([Recherche de contenu de fichier])
     End If
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Recherche de fichiers terminée")
 End Sub
 
 Private Sub cmdQuit_Click()
@@ -569,6 +576,8 @@ Dim lFile As Long
         If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
     End If
         
+    'ajoute du texte à la console
+    Call AddTextToConsole("Sauvegarde des résultats")
     
     'récupère un numéro vide
     lFile = FreeFile
@@ -583,6 +592,9 @@ Dim lFile As Long
     
     'referme le fichier
     Close lFile
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Résultats sauvegardés")
     
 CancelPushed:
 End Sub

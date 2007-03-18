@@ -280,6 +280,9 @@ Private clsPref As clsIniForm
 Private Sub cmdPrint_Click()
 'impression
 
+
+    'ajoute du texte à la console
+    Call AddTextToConsole("Impression terminée")
 End Sub
 
 Private Sub cmdPrintOpt_Click()

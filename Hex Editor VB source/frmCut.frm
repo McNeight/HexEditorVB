@@ -82,11 +82,13 @@ Begin VB.Form frmCut
          NumTabs         =   2
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Découper"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fusionner"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -414,7 +416,7 @@ Private Sub cmdProceed_Click()
 Dim tMethod As CUT_METHOD
 Dim lLen As Double
 Dim lTime As Long
-
+    
     lBufSize = Abs(Int(Val(txtBufSize.Text))) * 1024 * 1024
     If lBufSize < 1048576 Then
         'alors buffer trop faible
@@ -446,6 +448,9 @@ Dim lTime As Long
 
     If Frame1(0).Visible Then
         'alors on découpe
+        
+        'ajoute du texte à la console
+        Call AddTextToConsole("Découpage lancé...")
         
         If Option1(0).Value Then
             'taille
@@ -482,12 +487,19 @@ Dim lTime As Long
         
     Else
     
+        'ajoute du texte à la console
+        Call AddTextToConsole("Fusion lancée...")
+        
         'lance la fusion
         lTime = PasteFile(txtGrFile.Text, txtFolderFus.Text)
         
     End If
 
     Me.Caption = "Effectué en " & Trim$(Str$(lTime / 1000)) & " s"
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Opération terminée")
+    
 CannotCut:
     cmdQuit.Enabled = True
     cmdProceed.Enabled = True

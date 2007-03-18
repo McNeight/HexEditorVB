@@ -150,6 +150,9 @@ Dim s As String
     lLen = Int(lLen)
     
     Unload Me
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Création d'un nouveau fichier...")
         
     'obtient un path temporaire
     ObtainTempPathFile "new" & CStr(lNbChildFrm), sFile, vbNullString

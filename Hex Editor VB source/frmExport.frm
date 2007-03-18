@@ -181,6 +181,9 @@ End Sub
 Private Sub cmdSave_Click()
 'lance la sauvegarde
 
+    'ajoute du texte à la console
+    Call AddTextToConsole("Exportation en cours...")
+    
     Select Case cbFormat.Text
         Case "HTML"
         
@@ -205,6 +208,9 @@ Private Sub cmdSave_Click()
         Case "Source JAVA"
             
     End Select
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Exportation terminée")
             
 End Sub
 

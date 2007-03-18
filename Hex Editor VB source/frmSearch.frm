@@ -438,7 +438,7 @@ End Sub
 Private Sub cmdSearch_Click()
 'lance la recherche
 Dim tRes() As Long
-Dim X As Long
+Dim x As Long
 Dim s As String
 
     If txtSearch.Text = vbNullString Then Exit Sub
@@ -450,12 +450,19 @@ Dim s As String
             'recherche dans un fichier
             If Option4(1).Value And Option1(2).Value Then
                 'alors c'est une string en recherche simple
+                
+                'ajoute du texte à la console
+                Call AddTextToConsole("Recherche en cours...")
+    
                 SearchForStringFile frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
                 tRes(), Me.pgb
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
                 
+                'ajoute du texte à la console
+                Call AddTextToConsole("Recherche en cours...")
+                    
                 'lance la recherche de la string
                 SearchForStringFile frmContent.ActiveForm.Caption, s, Check1.Value, _
                 tRes(), Me.pgb
@@ -467,11 +474,19 @@ Dim s As String
             'recherche dans un disque
             If Option4(1).Value And Option1(2).Value Then
                 'alors c'est une string en recherche simple
+                
+                'ajoute du texte à la console
+                Call AddTextToConsole("Recherche en cours...")
+                
                 SearchForStringDisk frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
                 tRes(), Me.pgb
+                
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
+                
+                'ajoute du texte à la console
+                Call AddTextToConsole("Recherche en cours...")
                 
                 'lance la recherche de la string
                 SearchForStringDisk frmContent.ActiveForm.Caption, s, Check1.Value, _
@@ -487,12 +502,18 @@ Dim s As String
                 'alors c'est une string en recherche simple
                 ' ==> le PID avait été stocké dans le Tag
 
+                'ajoute du texte à la console
+                Call AddTextToConsole("Recherche en cours...")
+                
                 'lance la recherche
                 cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), txtSearch.Text, Check1.Value, _
                 tRes(), Me.pgb
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
+
+                'ajoute du texte à la console
+                Call AddTextToConsole("Recherche en cours...")
                 
                 'lance la recherche de la string
                 cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), s, Check1.Value, _
@@ -503,19 +524,23 @@ Dim s As String
             
     End Select
     
+    'ajoute du texte à la console
+    Call AddTextToConsole("Affichage des résultats...")
 
     '//affiche les résultats
-    For X = 1 To UBound(tRes())
-        LV.ListItems.Add Text:="Trouvé à l'offset " & CStr(By16D(tRes(X)))
+    For x = 1 To UBound(tRes())
+        LV.ListItems.Add Text:="Trouvé à l'offset " & CStr(By16D(tRes(x)))
         If Check2.Value Then
-            frmContent.ActiveForm.HW.AddSignet By16D(tRes(X))
-            frmContent.ActiveForm.lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(X))))
+            frmContent.ActiveForm.HW.AddSignet By16D(tRes(x))
+            frmContent.ActiveForm.lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(x))))
             frmContent.ActiveForm.lstSignets.ListItems.Item(frmContent.ActiveForm.lstSignets.ListItems.Count).SubItems(1) = "Found [" & Trim$(txtSearch.Text) & "]"
         End If
-    Next X
+    Next x
     
     Frame1(4).Caption = "Résultats : " & CStr(UBound(tRes()))
         
+    'ajoute du texte à la console
+    Call AddTextToConsole("Recherche terminée")
 End Sub
 
 Private Sub Form_Load()

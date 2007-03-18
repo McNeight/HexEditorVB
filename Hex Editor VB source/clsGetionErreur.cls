@@ -121,6 +121,9 @@ Dim sTemp As String
 
     'On Error Resume Next
     
+    'ajoute du texte à la console
+    Call AddTextToConsole("Erreur rencontrée, écriture dans le log...")
+    
     'obtient un N° de fichier dispo
     lFile = FreeFile
     
@@ -167,6 +170,11 @@ Dim sTemp As String
     
     Close lFile 'ferme le fichier
 
+    'ajoute du texte à la console
+    Call AddTextToConsole(sTemp)
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Erreur écrite dans le log")
 End Sub
 
 '=======================================================
