@@ -30,7 +30,6 @@ Begin VB.Form frmMain
       _ExtentY        =   4260
       _Version        =   393217
       BorderStyle     =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       Appearance      =   0
@@ -96,6 +95,9 @@ Option Explicit
 'FORM DE TEST DE LA DLL DE DESASSEMBLAGE
 '=======================================================
 
+'=======================================================
+'APIS
+'=======================================================
 Private Declare Function GetTickCount Lib "kernel32.dll" () As Long
 
 Private Sub Form_Resize()
@@ -113,19 +115,20 @@ Dim l As Long
 Dim s As String
 Dim cFile As New clsFileInfos
     
-    s = InputBox("Nom de l'exe à désassembler ?", "Test de désassemblage", "C:\projet1.exe")
+    s = cFile.ShowOpen("Choix du fichier à désassembler (un répertoire sera créé dans le dossier de ce programme)", Me.hWnd, "Executables|*.exe|Dll|*.dll")
+    
     If cFile.FileExists(s) = False Then Exit Sub
     
     Me.Caption = "Désassemblage en cours...."
     
     l = GetTickCount
     
-    'appelle la dll
+    'appelle la dll et lance le désassemblage du fichier
     Call DisassembleWin32Executable(s, cFile.GetFolderFromPath(s) & "\DisAsm_Dir\")
     
     Me.Caption = "Désassemblage terminé en " & Trim$(Str$(GetTickCount - l)) & " ms"
     
-    'affiche le résultat
+    'affiche le résultat (instructions ASM uniquement)
     Call RTB.LoadFile(cFile.GetFolderFromPath(s) & "\DisAsm_Dir\" & Left$(cFile.GetFileFromPath(s), Len(cFile.GetFileFromPath(s)) - 4) & ".asm")
     
 End Sub

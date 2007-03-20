@@ -1,4 +1,4 @@
-Attribute VB_Name = "modTiming"
+Attribute VB_Name = "mdlAbout"
 ' =======================================================
 '
 ' Disassembler DLL
@@ -26,27 +26,18 @@ Attribute VB_Name = "modTiming"
 '
 ' =======================================================
 
-Option Explicit
 
-Private Declare Function QueryPerformanceCounter Lib "kernel32.dll" (ByRef lpPerformanceCount As Currency) As Long
-Private Declare Function QueryPerformanceFrequency Lib "kernel32.dll" (ByRef lpFrequency As Currency) As Long
 
-Dim perffreq As Currency
-Dim starttime As Currency
-Dim stoptime As Currency
 
-Public Sub ResetTimer()
-QueryPerformanceFrequency perffreq
-starttime = 0
-stoptime = 0
-End Sub
-
-Public Sub StartTimer()
-QueryPerformanceCounter starttime
-End Sub
-
-Public Function StopTimer() As Single
-QueryPerformanceCounter stoptime
-StopTimer = (stoptime - starttime) / perffreq
-End Function
-
+' =======================================================
+' A PROPOS
+' =======================================================
+'
+' Le code source de cette DLL a entièrement été réalisé par ShareVB, merci à lui.
+' Je n'ai fait que créer une DLL à partir des 16 modules de ShareVB.
+'
+' Le code original se trouve sur www.vbfrance.com, à l'adresse
+' http://www.vbfrance.com/codes/DESASSEMBLEUR-FICHIER-PE-VXD-COFF-LIB-MZ_38977.aspx
+'
+' Ce code a lui même été inspiré du travail de Sang Cho, dont le code source en C
+' est disponible à l'adresse : http://www.geocities.com/~sangcho/
