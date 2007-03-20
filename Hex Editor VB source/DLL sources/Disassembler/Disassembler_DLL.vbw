@@ -1,0 +1,17 @@
+clsDisAsm = 23, 23, 528, 453, Z
+mod1632 = 0, 0, 0, 0, C
+modCOFF = 46, 46, 551, 476, C
+modData = 69, 69, 574, 499, C
+modDecode = 0, 0, 0, 0, C
+modDesassemble = 92, 92, 597, 522, 
+modExecType = 69, 69, 643, 354, C
+modImportLib = 0, 0, 0, 0, C
+modLE = 115, 115, 620, 545, C
+modLIB = 138, 138, 643, 568, C
+modMaps = 92, 92, 666, 377, C
+modMZ = 161, 161, 666, 591, 
+modNames = 0, 0, 0, 0, C
+modTiming = 0, 0, 0, 0, C
+modSections = 184, 184, 689, 614, C
+modPrint = 92, 92, 597, 522, 
+modPE = 207, 207, 712, 637, C

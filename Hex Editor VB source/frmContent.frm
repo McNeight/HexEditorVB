@@ -544,7 +544,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "15:03"
+            TextSave        =   "19:05"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -552,7 +552,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "18/03/2007"
+            TextSave        =   "19/03/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1577,6 +1577,11 @@ Private Sub MDIForm_Load()
 
     'ajoute du texte à la console
     Call AddTextToConsole("Hex Editor VB is ready")
+    
+    #If Not (FINAL_VERSION) Then
+        lngTimeLoad = GetTickCount - lngTimeLoad
+        Call AddTextToConsole("Application loaded in " & Trim$(Str$(lngTimeLoad)) & " ms")
+    #End If
 End Sub
 
 Private Sub MDIForm_QueryUnload(Cancel As Integer, UnloadMode As Integer)
@@ -1645,7 +1650,7 @@ Private Sub mnuDeleteSelection_Click()
     If bAcceptBackup Then frmContent.ActiveForm.DeleteZone
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Sélection supprimée")
+    If bAcceptBackup Then Call AddTextToConsole("Sélection supprimée")
 End Sub
 
 Private Sub mnuExport_Click()

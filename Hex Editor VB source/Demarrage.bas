@@ -57,7 +57,7 @@ Public clsPref As clsIniFile
 Public cPref As clsIniPref
 Public lNbChildFrm As Long
 Public bEndSplash As Boolean
-
+Public lngTimeLoad As Long
 
 '=======================================================
 '//DEMARRAGE DU PROGRAMME
@@ -70,6 +70,11 @@ Dim x As Long
 Dim y As Long
 Dim s As String
 
+    'récupère le temps mis pour charger le logiciel
+    #If Not (FINAL_VERSION) Then
+        lngTimeLoad = GetTickCount
+    #End If
+    
     On Error GoTo ErrGestion
     
     '//on quitte si déjà une instance
