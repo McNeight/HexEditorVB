@@ -652,9 +652,6 @@ Dim bOverWrite As Boolean
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     
     On Error GoTo CancelPushed
-
-    'ajoute du texte à la console
-    Call AddTextToConsole("Création du fichier...")
     
     frmContent.Sb.Panels(1).Text = "Status=[Creating file from selection]"
     
@@ -677,6 +674,9 @@ Dim bOverWrite As Boolean
         'fichier déjà existant
         If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
     End If
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Création du fichier...")
     
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"
