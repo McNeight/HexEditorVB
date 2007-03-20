@@ -103,7 +103,7 @@ Private Sub Form_Resize()
         .Left = 0
         .Top = 0
         .Width = Me.Width - 290
-        .Height = Me.Height
+        .Height = Me.Height - 890
     End With
 End Sub
 
@@ -126,7 +126,7 @@ Dim cFile As New clsFileInfos
     Me.Caption = "Désassemblage terminé en " & Trim$(Str$(GetTickCount - l)) & " ms"
     
     'affiche le résultat
-    Call RTB.LoadFile(cFile.GetFolderFromPath(s) & "\DisAsm_Dir\" & Left$(cFile.GetFileFromPath(s), Len(cFile.GetFileFromPath(s)) - 4) & ".exe")
+    Call RTB.LoadFile(cFile.GetFolderFromPath(s) & "\DisAsm_Dir\" & Left$(cFile.GetFileFromPath(s), Len(cFile.GetFileFromPath(s)) - 4) & ".asm")
     
 End Sub
 
