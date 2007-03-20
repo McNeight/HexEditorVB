@@ -39,10 +39,8 @@ Option Explicit
 '=======================================================
 
 
-Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByVal dwFlags As Long, lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As String, ByVal nSize As Long, Arguments As Long) As Long
-Public Declare Function GetLastError Lib "kernel32" () As Long
-Public Declare Function WriteFileEx Lib "kernel32" (ByVal hFile As Long, lpBuffer As Any, ByVal nNumberOfBytesToWrite As Long, lpOverlapped As OVERLAPPED, ByVal lpCompletionRoutine As Long) As Long
-Public Const FILE_FLAG_OVERLAPPED = &H40000000
+
+
 
 '=======================================================
 '//CONSTANTES
@@ -170,6 +168,8 @@ Public Const FILE_END                           As Long = 2&
 Public Const TRUNCATE_EXISTING                  As Long = 5&
 Public Const FILE_FLAG_WRITE_THROUGH            As Long = &H80000000
 Public Const FILE_FLAG_NO_BUFFERING             As Long = &H20000000
+Public Const FILE_FLAG_OVERLAPPED               As Long = &H40000000
+
 
 'constantes d'attributs de fichiers
 Public Const FILE_ATTRIBUTE_TEMPORARY           As Long = &H100
@@ -235,6 +235,7 @@ Public Declare Function SetFilePointerEx Lib "kernel32" (ByVal hFile As Long, By
 Public Declare Function FlushFileBuffers Lib "kernel32" (ByVal hFile As Long) As Long
 Public Declare Function LockFile Lib "kernel32.dll" (ByVal hFile As Long, ByVal dwFileOffsetLow As Long, ByVal dwFileOffsetHigh As Long, ByVal nNumberOfBytesToLockLow As Long, ByVal nNumberOfBytesToLockHigh As Long) As Long
 Public Declare Function UnlockFile Lib "kernel32.dll" (ByVal hFile As Long, ByVal dwFileOffsetLow As Long, ByVal dwFileOffsetHigh As Long, ByVal nNumberOfBytesToUnlockLow As Long, ByVal nNumberOfBytesToUnlockHigh As Long) As Long
+Public Declare Function WriteFileEx Lib "kernel32" (ByVal hFile As Long, lpBuffer As Any, ByVal nNumberOfBytesToWrite As Long, lpOverlapped As OVERLAPPED, ByVal lpCompletionRoutine As Long) As Long
 
 'APIs sur les fichiers
 Public Declare Function DeleteFile Lib "kernel32" Alias "DeleteFileA" (ByVal lpFileName As String) As Long
@@ -303,7 +304,8 @@ Public Declare Function PrintDlg Lib "comdlg32.dll" Alias "PrintDlgA" (pPrintdlg
 Public Declare Function GetVersionEx Lib "kernel32" Alias "GetVersionExA" (lpVersionInformation As OSVERSIONINFO) As Long
 Public Declare Function GetTickCount Lib "kernel32" () As Long
 Public Declare Function GetUserNameA Lib "advapi32.dll" (ByVal lpBuffer As String, nSize As Long) As Long
-
+Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByVal dwFlags As Long, lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As String, ByVal nSize As Long, Arguments As Long) As Long
+Public Declare Function GetLastError Lib "kernel32" () As Long
 
 
 '=======================================================

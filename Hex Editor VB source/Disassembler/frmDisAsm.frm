@@ -26,8 +26,8 @@ Begin VB.MDIForm frmDisAsm
          BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Object.Width           =   14993
             MinWidth        =   14993
-            Text            =   "Status=[Ready]"
-            TextSave        =   "Status=[Ready]"
+            Text            =   "Status = Ready"
+            TextSave        =   "Status = Ready"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -63,6 +63,34 @@ Begin VB.MDIForm frmDisAsm
          Shortcut        =   ^Q
       End
    End
+   Begin VB.Menu rmnuDisplay 
+      Caption         =   "&Affichage"
+      Begin VB.Menu mnuShowASM 
+         Caption         =   "&Code ASM"
+         Checked         =   -1  'True
+         Shortcut        =   {F3}
+      End
+      Begin VB.Menu mnuShowLog 
+         Caption         =   "&Log"
+         Shortcut        =   {F4}
+      End
+      Begin VB.Menu mnuShowInfos 
+         Caption         =   "&Informations sur le fichier"
+         Shortcut        =   {F5}
+      End
+      Begin VB.Menu mnuShowImp 
+         Caption         =   "&Imports"
+         Shortcut        =   {F6}
+      End
+      Begin VB.Menu mnuShowExports 
+         Caption         =   "&Exports"
+         Shortcut        =   {F7}
+      End
+      Begin VB.Menu mnuShowDat 
+         Caption         =   "&Données"
+         Shortcut        =   {F8}
+      End
+   End
    Begin VB.Menu rmnuWindow 
       Caption         =   "&Fenêtres"
       WindowList      =   -1  'True
@@ -83,6 +111,7 @@ Begin VB.MDIForm frmDisAsm
       Caption         =   "&Aide"
       Begin VB.Menu mnuHelp 
          Caption         =   "&Aide..."
+         Shortcut        =   {F1}
       End
       Begin VB.Menu mnuTiret2 
          Caption         =   "-"
@@ -134,6 +163,66 @@ Option Explicit
 'PROJET DE DESASSEMBLAGE D'EXECUTABLES
 '=======================================================
 
+Private Sub mnuDisAsm_Click()
+'ouvre un fichier
+Dim s As String
+Dim b As Boolean
+Dim s2 As String
+
+    'choix du fichier
+    s = cFile.ShowOpen("Choix du fichier à désassembler", Me.hWnd, _
+        "Fichiers désassemblables|*.exe;*.dll|Tous|*.*", App.Path, , b)
+    If b Then Exit Sub
+    If cFile.FileExists(s) = False Then Exit Sub
+    
+    'récupère le path temporaire et créé un nom de dossier
+    s2 = ObtainTempPath & "\" & cFile.GetFileFromPath(s)
+    
+    'on lance la procédure de désassemblage
+    Sb.Panels(1).Text = "Désassemblage en cours..."
+    
+    Call DisassembleWin32Executable(s, s2)
+    
+    Sb.Panels(1).Text = "Status = Ready"
+    
+End Sub
+
+Private Sub MDIForm_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    EndProgram
+End Sub
+Private Sub mnuAbout_Click()
+    frmAbout.Show vbModal
+End Sub
+Private Sub mnuCascade_Click()
+    Me.Arrange vbCascade
+End Sub
+Private Sub mnuMH_Click()
+    Me.Arrange vbTileHorizontal
+End Sub
+Private Sub mnuMV_Click()
+    Me.Arrange vbTileVertical
+End Sub
 Private Sub mnuQuit_Click()
-    Unload Me
+    Call EndProgram
+End Sub
+Private Sub mnuReorganize_Click()
+    Me.Arrange vbArrangeIcons
+End Sub
+Private Sub mnuShowASM_Click()
+    Me.mnuShowASM.Checked = Not (Me.mnuShowASM.Checked)
+End Sub
+Private Sub mnuShowDat_Click()
+    Me.mnuShowDat.Checked = Not (Me.mnuShowDat.Checked)
+End Sub
+Private Sub mnuShowExports_Click()
+    Me.mnuShowExports.Checked = Not (Me.mnuShowExports.Checked)
+End Sub
+Private Sub mnuShowImp_Click()
+    Me.mnuShowImp.Checked = Not (Me.mnuShowImp.Checked)
+End Sub
+Private Sub mnuShowInfos_Click()
+    Me.mnuShowInfos.Checked = Not (Me.mnuShowInfos.Checked)
+End Sub
+Private Sub mnuShowLog_Click()
+    Me.mnuShowLog.Checked = Not (Me.mnuShowLog.Checked)
 End Sub

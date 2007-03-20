@@ -563,7 +563,7 @@ Dim s As String, l As Long
             Exit Function
     End Select
     
-    GetWindowsVersion = Unknown
+    GetWindowsVersion = [UnKnown_OS]
     
 End Function
 
