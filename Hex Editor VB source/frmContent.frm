@@ -41,7 +41,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -68,7 +67,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -531,7 +529,6 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -539,15 +536,13 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "19:39"
-            Key             =   ""
+            TextSave        =   "20:59"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -555,7 +550,6 @@ Begin VB.MDIForm frmContent
             Object.Width           =   2117
             MinWidth        =   2117
             TextSave        =   "20/03/2007"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1203,6 +1197,12 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuToolsTiret4 
          Caption         =   "-"
       End
+      Begin VB.Menu mnuDisAsm 
+         Caption         =   "&Désassembleur..."
+      End
+      Begin VB.Menu mnuToolsTiret41 
+         Caption         =   "-"
+      End
       Begin VB.Menu mnuOptions 
          Caption         =   "&Options..."
       End
@@ -1491,12 +1491,18 @@ Private Sub MDIForm_Load()
         Call cSub.HookFormMenu(Me, True)
     #End If
     
-    frmSplash.lblState.Caption = "Vérifie la présence de FileRenamer..."
+    frmSplash.lblState.Caption = "Vérifie la présence de FileRenamer et de Disassembler..."
     'vérifie la présence de FileRenamer.exe
     If cFile.FileExists(App.Path & "\FileRenamer.exe") = False Then
         Me.mnuFileRenamer.Enabled = False
     Else
         Me.mnuFileRenamer.Enabled = True
+    End If
+    'vérifie la présence de Disassembler.exe
+    If cFile.FileExists(App.Path & "\Disassembler.exe") = False Then
+        Me.mnuDisAsm.Enabled = False
+    Else
+        Me.mnuDisAsm.Enabled = True
     End If
     
     'ajoute les icones aux menus
@@ -1653,6 +1659,15 @@ Private Sub mnuDeleteSelection_Click()
 
     'ajoute du texte à la console
     If bAcceptBackup Then Call AddTextToConsole("Sélection supprimée")
+End Sub
+
+Private Sub mnuDisAsm_Click()
+'lance Disassembler.exe
+    cFile.ShellOpenFile App.Path & "\Disassembler.exe", Me.hWnd, , App.Path
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Application de désassemblage lancée")
+
 End Sub
 
 Private Sub mnuExport_Click()
