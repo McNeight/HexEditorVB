@@ -65,9 +65,14 @@ Begin VB.MDIForm frmDisAsm
    End
    Begin VB.Menu rmnuDisplay 
       Caption         =   "&Affichage"
+      Begin VB.Menu mnuDisplayAll 
+         Caption         =   "&Tout afficher"
+      End
+      Begin VB.Menu mnuTiret189 
+         Caption         =   "-"
+      End
       Begin VB.Menu mnuShowASM 
          Caption         =   "&Code ASM"
-         Checked         =   -1  'True
          Shortcut        =   {F3}
       End
       Begin VB.Menu mnuShowLog 
@@ -163,11 +168,14 @@ Option Explicit
 'PROJET DE DESASSEMBLAGE D'EXECUTABLES
 '=======================================================
 
+Private sFile As String 'fichier ouvert
+Private sFolder As String
+Private sFileW As String
+
 Private Sub mnuDisAsm_Click()
 'ouvre un fichier
 Dim s As String
 Dim b As Boolean
-Dim s2 As String
 
     'choix du fichier
     s = cFile.ShowOpen("Choix du fichier à désassembler", Me.hWnd, _
@@ -175,13 +183,19 @@ Dim s2 As String
     If b Then Exit Sub
     If cFile.FileExists(s) = False Then Exit Sub
     
+    'récupère le nom du fichier sans l'extension
+    sFileW = Left$(cFile.GetFileFromPath(s), Len(cFile.GetFileFromPath(s)) - Len(cFile.GetFileExtension(s)))
+    
     'récupère le path temporaire et créé un nom de dossier
-    s2 = ObtainTempPath & "\" & cFile.GetFileFromPath(s)
+    sFolder = ObtainTempPath & "\" & cFile.GetFileFromPath(s)
     
     'on lance la procédure de désassemblage
     Sb.Panels(1).Text = "Désassemblage en cours..."
     
-    Call DisassembleWin32Executable(s, s2)
+    Call DisassembleWin32Executable(s, sFolder)
+    
+    'affiche les infos dans les form
+    Call OpenFileInForms
     
     Sb.Panels(1).Text = "Status = Ready"
     
@@ -195,6 +209,20 @@ Private Sub mnuAbout_Click()
 End Sub
 Private Sub mnuCascade_Click()
     Me.Arrange vbCascade
+End Sub
+Private Sub mnuDisplayAll_Click()
+    Me.mnuShowASM.Checked = True
+    Me.mnuShowDat.Checked = True
+    Me.mnuShowExports.Checked = True
+    Me.mnuShowImp.Checked = True
+    Me.mnuShowLog.Checked = True
+    Me.mnuShowInfos.Checked = True
+    frmASM.Visible = True
+    frmLog.Visible = True
+    frmImport.Visible = True
+    frmInformations.Visible = True
+    frmExport.Visible = True
+    frmDat.Visible = True
 End Sub
 Private Sub mnuMH_Click()
     Me.Arrange vbTileHorizontal
@@ -210,19 +238,56 @@ Private Sub mnuReorganize_Click()
 End Sub
 Private Sub mnuShowASM_Click()
     Me.mnuShowASM.Checked = Not (Me.mnuShowASM.Checked)
+    frmASM.Visible = Me.mnuShowASM.Checked
 End Sub
 Private Sub mnuShowDat_Click()
     Me.mnuShowDat.Checked = Not (Me.mnuShowDat.Checked)
+    frmDat.Visible = Me.mnuShowDat.Checked
 End Sub
 Private Sub mnuShowExports_Click()
     Me.mnuShowExports.Checked = Not (Me.mnuShowExports.Checked)
+    frmExport.Visible = Me.mnuShowExports.Checked
 End Sub
 Private Sub mnuShowImp_Click()
     Me.mnuShowImp.Checked = Not (Me.mnuShowImp.Checked)
+    frmImport.Visible = Me.mnuShowImp.Checked
 End Sub
 Private Sub mnuShowInfos_Click()
     Me.mnuShowInfos.Checked = Not (Me.mnuShowInfos.Checked)
+    frmInformations.Visible = Me.mnuShowInfos.Checked
 End Sub
 Private Sub mnuShowLog_Click()
     Me.mnuShowLog.Checked = Not (Me.mnuShowLog.Checked)
+    frmLog.Visible = Me.mnuShowLog.Checked
+End Sub
+
+'=======================================================
+'gère l'affichage des infos sur le fichier dans les form
+'=======================================================
+Private Sub OpenFileInForms()
+Dim sF As String
+
+    Sb.Panels(1).Text = "Chargement des fichiers créés..."
+    
+    sF = sFolder & "\" & sFileW
+    
+    'affiche les valeurs hexa dans frmASM
+    Call frmASM.RTB.LoadFile(sF & ".asm")
+    frmASM.Show
+    
+    'récupère les infos sur l'executable
+    Call frmInformations.GetFileInfos(sF & ".pe")
+    
+    'affiche les infos sur le log de l'opération
+    Call frmLog.RTB.LoadFile(sF & ".log")
+    
+    'affiche les infos sur les exports
+    Call frmExport.GetFileInfosExp(sF & ".exp")
+    
+    'sur les imports
+    Call frmImport.GetFileInfosImp(sF & ".imp")
+    
+    'sur le fichier dat
+    Call frmDat.GetFileInfosDat(sF & ".dat")
+    
 End Sub

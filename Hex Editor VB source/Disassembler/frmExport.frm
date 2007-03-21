@@ -1,10 +1,20 @@
 VERSION 5.00
 Begin VB.Form frmExport 
-   Caption         =   "Form1"
+   Caption         =   "Exports"
    ClientHeight    =   3060
    ClientLeft      =   120
    ClientTop       =   420
    ClientWidth     =   4560
+   BeginProperty Font 
+      Name            =   "Tahoma"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
+   Icon            =   "frmExport.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   3060
@@ -51,3 +61,14 @@ Option Explicit
 '=======================================================
 'AFFICHAGE DES EXPORTS
 '=======================================================
+
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    frmDisAsm.mnuShowExports.Checked = False
+End Sub
+
+'=======================================================
+'récupère le path d'un fichier et affiche les infos
+'=======================================================
+Public Sub GetFileInfosExp(ByVal sFile As String)
+'
+End Sub

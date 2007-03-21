@@ -53,8 +53,6 @@ Dim s As String
 Dim x As WINDOWS_VERSION
 Dim y As Long
 
-    '//on quitte si déjà une instance
-    If App.PrevInstance Then End
     
     '//vérifie la version de Windows
         x = GetWindowsVersion(s, y)
