@@ -1,14 +1,51 @@
 VERSION 5.00
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Begin VB.Form frmLog 
-   Caption         =   "Form1"
+   Caption         =   "Log"
    ClientHeight    =   3060
    ClientLeft      =   120
    ClientTop       =   420
-   ClientWidth     =   4560
+   ClientWidth     =   4845
+   BeginProperty Font 
+      Name            =   "Tahoma"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
+   Icon            =   "frmLog.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True
    ScaleHeight     =   3060
-   ScaleWidth      =   4560
+   ScaleWidth      =   4845
+   Begin RichTextLib.RichTextBox RTB 
+      Height          =   975
+      Left            =   0
+      TabIndex        =   0
+      Top             =   0
+      Width           =   1095
+      _ExtentX        =   1931
+      _ExtentY        =   1720
+      _Version        =   393217
+      BorderStyle     =   0
+      ReadOnly        =   -1  'True
+      ScrollBars      =   2
+      Appearance      =   0
+      OLEDragMode     =   0
+      OLEDropMode     =   0
+      TextRTF         =   $"frmLog.frx":000C
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Courier New"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
 End
 Attribute VB_Name = "frmLog"
 Attribute VB_GlobalNameSpace = False
@@ -51,3 +88,17 @@ Option Explicit
 '=======================================================
 'AFFICHAGE DU LOG
 '=======================================================
+
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+    frmDisAsm.mnuShowLog.Checked = False
+End Sub
+
+Private Sub Form_Resize()
+    With RTB
+        .Left = 0
+        .Top = 0
+        .Width = Me.Width - 290
+        .Height = Me.Height - 590
+    End With
+End Sub
+
