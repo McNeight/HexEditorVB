@@ -41,6 +41,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -67,6 +68,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -538,7 +540,6 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -546,15 +547,13 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "19:32"
-            Key             =   ""
+            TextSave        =   "20:13"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -562,7 +561,6 @@ Begin VB.MDIForm frmContent
             Object.Width           =   2117
             MinWidth        =   2117
             TextSave        =   "22/03/2007"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1800,7 +1798,7 @@ Dim Frm As Form
             'alors on ajoute le fichier
             'affiche une nouvelle fenêtre
             Set Frm = New Pfm
-            Call Frm.GetFile(CMD.Filename)
+            Call Frm.GetFile(Data.Files.Item(i))
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
             Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
@@ -1826,9 +1824,7 @@ Dim Frm As Form
         End If
         
     Next i
-    
-    'vire le contenu
-    Data.Clear
+
 End Sub
 
 Public Sub MDIForm_Resize()

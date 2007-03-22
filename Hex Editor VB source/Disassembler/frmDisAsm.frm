@@ -63,6 +63,28 @@ Begin VB.MDIForm frmDisAsm
          Shortcut        =   ^Q
       End
    End
+   Begin VB.Menu rmnuEdit 
+      Caption         =   "&Edition"
+      Begin VB.Menu mnuCopy 
+         Caption         =   "&Copier"
+         Shortcut        =   ^C
+      End
+      Begin VB.Menu mnuSelectAll 
+         Caption         =   "&Sélectionner tout"
+         Shortcut        =   ^A
+      End
+      Begin VB.Menu mnuTiretOp 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuSearch 
+         Caption         =   "&Rechercher..."
+         Shortcut        =   ^F
+      End
+      Begin VB.Menu mnuNext 
+         Caption         =   "&Suivant"
+         Shortcut        =   +{F3}
+      End
+   End
    Begin VB.Menu rmnuDisplay 
       Caption         =   "&Affichage"
       Begin VB.Menu mnuDisplayAll 
@@ -172,6 +194,11 @@ Private sFile As String 'fichier ouvert
 Private sFolder As String
 Private sFileW As String
 
+Private Sub mnuCopy_Click()
+'copie dans le clipboard
+    SendKeys "^C"
+End Sub
+
 Private Sub mnuDisAsm_Click()
 'ouvre un fichier
 Dim s As String
@@ -238,6 +265,12 @@ End Sub
 Private Sub mnuReorganize_Click()
     Me.Arrange vbArrangeIcons
 End Sub
+
+Private Sub mnuSelectAll_Click()
+'sélectionner tout
+    SendKeys "^A"   '==> GNE ??
+End Sub
+
 Private Sub mnuShowASM_Click()
     Me.mnuShowASM.Checked = Not (Me.mnuShowASM.Checked)
     frmASM.Visible = Me.mnuShowASM.Checked
