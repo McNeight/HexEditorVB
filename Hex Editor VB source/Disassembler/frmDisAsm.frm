@@ -3,10 +3,10 @@ Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Begin VB.MDIForm frmDisAsm 
    BackColor       =   &H8000000C&
    Caption         =   "Désassembleur d'exécutables"
-   ClientHeight    =   5640
+   ClientHeight    =   9420
    ClientLeft      =   120
    ClientTop       =   720
-   ClientWidth     =   7425
+   ClientWidth     =   13440
    Icon            =   "frmDisAsm.frx":0000
    LinkTopic       =   "MDIForm1"
    StartUpPosition =   2  'CenterScreen
@@ -15,9 +15,9 @@ Begin VB.MDIForm frmDisAsm
       Height          =   255
       Left            =   0
       TabIndex        =   0
-      Top             =   5385
-      Width           =   7425
-      _ExtentX        =   13097
+      Top             =   9165
+      Width           =   13440
+      _ExtentX        =   23707
       _ExtentY        =   450
       SimpleText      =   ""
       _Version        =   327682
@@ -183,6 +183,8 @@ Dim b As Boolean
     If b Then Exit Sub
     If cFile.FileExists(s) = False Then Exit Sub
     
+    Me.Caption = s
+    
     'récupère le nom du fichier sans l'extension
     sFileW = Left$(cFile.GetFileFromPath(s), Len(cFile.GetFileFromPath(s)) - Len(cFile.GetFileExtension(s)))
     
@@ -267,6 +269,8 @@ End Sub
 Private Sub OpenFileInForms()
 Dim sF As String
 
+    On Error Resume Next
+    
     Sb.Panels(1).Text = "Chargement des fichiers créés..."
     
     sF = sFolder & "\" & sFileW
@@ -275,9 +279,7 @@ Dim sF As String
     Call frmASM.RTB.LoadFile(sF & ".asm")
     frmASM.Show
     
-    'récupère les infos sur l'executable
-    Call frmInformations.GetFileInfos(sF & ".pe")
-    
+
     'affiche les infos sur le log de l'opération
     Call frmLog.RTB.LoadFile(sF & ".log")
     
@@ -290,4 +292,33 @@ Dim sF As String
     'sur le fichier dat
     Call frmDat.GetFileInfosDat(sF & ".dat")
     
+    'récupère les infos sur l'executable
+    Call frmInformations.GetFileInfos(sF & ".pe")
+End Sub
+
+Public Sub DisAsmFile(ByVal sFile As String)
+'ouvre un fichier
+Dim s As String
+Dim b As Boolean
+
+    'choix du fichier
+    If cFile.FileExists(sFile) = False Then Exit Sub
+    
+    Me.Caption = sFile
+    
+    'récupère le nom du fichier sans l'extension
+    sFileW = Left$(cFile.GetFileFromPath(sFile), Len(cFile.GetFileFromPath(sFile)) - Len(cFile.GetFileExtension(sFile)))
+    
+    'récupère le path temporaire et créé un nom de dossier
+    sFolder = ObtainTempPath & "\" & cFile.GetFileFromPath(sFile)
+    
+    'on lance la procédure de désassemblage
+    Sb.Panels(1).Text = "Désassemblage en cours..."
+    
+    Call DisassembleWin32Executable(sFile, sFolder)
+    
+    'affiche les infos dans les form
+    Call OpenFileInForms
+    
+    Sb.Panels(1).Text = "Status = Ready"
 End Sub

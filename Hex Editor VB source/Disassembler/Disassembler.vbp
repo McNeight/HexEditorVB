@@ -18,6 +18,7 @@ Module=mdlDeclarations; mdlDeclarations.bas
 Module=mdlDisassemblerDemarrage; mdlDisassemblerDemarrage.bas
 Module=mdlOther; mdlOther.bas
 Class=AfClsManifest; ..\AfClsManifest.cls
+IconForm="frmDisAsm"
 Startup="Sub Main"
 HelpFile=""
 Title="Disassembler"

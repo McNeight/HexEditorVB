@@ -80,8 +80,13 @@ Dim y As Long
         Set cFile = New clsFileInfos
     
 
-    'affiche la form principale
-    frmDisAsm.Show
+    '//affiche la form principale
+        frmDisAsm.Show
+    
+    '//gère le Command si nécessaire
+        If Len(Command) > 0 Then
+            Call frmDisAsm.DisAsmFile(Mid$(Command, 2, Len(Command) - 2))
+        End If
     
 End Sub
 

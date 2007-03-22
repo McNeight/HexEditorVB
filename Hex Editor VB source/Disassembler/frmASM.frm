@@ -35,9 +35,9 @@ Begin VB.Form frmASM
       Appearance      =   0
       OLEDragMode     =   0
       OLEDropMode     =   0
-      TextRTF         =   $"frmASM.frx":000C
+      TextRTF         =   $"frmASM.frx":08CA
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
+         Name            =   "Courier New"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -91,6 +91,8 @@ Option Explicit
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     frmDisAsm.mnuShowASM.Checked = False
+    Me.Hide
+    Cancel = 1
 End Sub
 
 Private Sub Form_Resize()
