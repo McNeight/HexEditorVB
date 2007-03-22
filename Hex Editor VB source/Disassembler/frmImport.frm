@@ -64,6 +64,8 @@ Option Explicit
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     frmDisAsm.mnuShowImp.Checked = False
+    Me.Hide
+    Cancel = 1
 End Sub
 
 '=======================================================

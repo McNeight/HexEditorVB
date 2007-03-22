@@ -119,12 +119,13 @@ Begin VB.Form frmInformations
       _ExtentY        =   1720
       _Version        =   393217
       BorderStyle     =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       Appearance      =   0
       OLEDragMode     =   0
       OLEDropMode     =   0
-      TextRTF         =   $"frmInformations.frx":000C
+      TextRTF         =   $"frmInformations.frx":08CA
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Courier New"
          Size            =   8.25
@@ -134,6 +135,25 @@ Begin VB.Form frmInformations
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+   End
+   Begin VB.Label Label1 
+      Alignment       =   2  'Center
+      BackColor       =   &H00C0C0C0&
+      Caption         =   "Sections"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   2040
+      TabIndex        =   2
+      Top             =   840
+      Width           =   1335
    End
 End
 Attribute VB_Name = "frmInformations"
@@ -182,6 +202,8 @@ Private sStr As String
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     frmDisAsm.mnuShowInfos.Checked = False
+    Me.Hide
+    Cancel = 1
 End Sub
 
 '=======================================================
@@ -225,42 +247,36 @@ Dim s2 As String
         'PointerToRelocations :      00000000H
         'NumberOfRelocations :        0
         ';------------------------------------------------------------------
+        
     With LV
         .ListItems.Clear
-        For x = 3 To UBound(s())
+        For x = 3 To UBound(s()) Step 11
+        
             l = x - 3 + 11
-            If (l Mod 11) = 0 Then
-                'Name
-                .ListItems.Add Text:=Right$(s(x), Len(s(x)) - 28)
-            ElseIf (l Mod 12) = 0 Then
-                'Characteristics
-                .ListItems.Item(.ListItems.Count).SubItems(1) = Right$(s(x), Len(s(x)) - 29)
-            ElseIf (l Mod 13) = 0 Then
-                'PointerToRawData
-                .ListItems.Item(.ListItems.Count).SubItems(2) = Right$(s(x), Len(s(x)) - 28)
-            ElseIf (l Mod 14) = 0 Then
-                'SizeOfRawData
-                .ListItems.Item(.ListItems.Count).SubItems(3) = Right$(s(x), Len(s(x)) - 29)
-            ElseIf (l Mod 15) = 0 Then
-                'VirtualAddress
-                .ListItems.Item(.ListItems.Count).SubItems(4) = Right$(s(x), Len(s(x)) - 28)
-            ElseIf (l Mod 16) = 0 Then
-                'VirtualSize
-                .ListItems.Item(.ListItems.Count).SubItems(5) = Right$(s(x), Len(s(x)) - 29)
-            ElseIf (l Mod 17) = 0 Then
-                'PointerToLinenumbers
-                .ListItems.Item(.ListItems.Count).SubItems(6) = Right$(s(x), Len(s(x)) - 28)
-            ElseIf (l Mod 18) = 0 Then
-                'NumberOfLinenumbers
-                .ListItems.Item(.ListItems.Count).SubItems(7) = Right$(s(x), Len(s(x)) - 29)
-            ElseIf (l Mod 19) = 0 Then
-                'PointerToRelocations
-                .ListItems.Item(.ListItems.Count).SubItems(8) = Right$(s(x), Len(s(x)) - 28)
-            ElseIf (l Mod 20) = 0 Then
-                'NumberOfRelocations
-                .ListItems.Item(.ListItems.Count).SubItems(9) = Right$(s(x), Len(s(x)) - 29)
-            End If
             
+            '/!\ IMPORTANT : DO NOT REMOVE !
+            If x + 9 > UBound(s()) Then Exit Sub
+            
+            'Name
+            .ListItems.Add Text:=Right$(s(x), Len(s(x)) - 28)
+            'Characteristics
+            .ListItems.Item(.ListItems.Count).SubItems(1) = Right$(s(x + 1), Len(s(x + 1)) - 28)
+            'PointerToRawData
+            .ListItems.Item(.ListItems.Count).SubItems(2) = Right$(s(x + 2), Len(s(x + 2)) - 28)
+            'SizeOfRawData
+            .ListItems.Item(.ListItems.Count).SubItems(3) = Right$(s(x + 3), Len(s(x + 3)) - 28)
+            'VirtualAddress
+            .ListItems.Item(.ListItems.Count).SubItems(4) = Right$(s(x + 4), Len(s(x + 4)) - 28)
+            'VirtualSize
+            .ListItems.Item(.ListItems.Count).SubItems(5) = Right$(s(x + 5), Len(s(x + 5)) - 28)
+            'PointerToLinenumbers
+            .ListItems.Item(.ListItems.Count).SubItems(6) = Right$(s(x + 6), Len(s(x + 6)) - 28)
+            'NumberOfLinenumbers
+            .ListItems.Item(.ListItems.Count).SubItems(7) = Right$(s(x + 7), Len(s(x + 7)) - 28)
+            'PointerToRelocations
+            .ListItems.Item(.ListItems.Count).SubItems(8) = Right$(s(x + 8), Len(s(x + 8)) - 28)
+            'NumberOfRelocations
+            .ListItems.Item(.ListItems.Count).SubItems(9) = Right$(s(x + 9), Len(s(x + 9)) - 28)
         Next x
     End With
     
@@ -272,12 +288,19 @@ Private Sub Form_Resize()
         .Left = 0
         .Top = 0
         .Width = Me.Width - 290
-        .Height = Me.Height - 2590
+        .Height = Me.Height - 2340
+    End With
+    With Label1
+        .Left = 0
+        .Top = RTB.Height
+        .Width = Me.Width
+        .Height = 255
     End With
     With LV
         .Left = 0
-        .Top = RTB.Height
-        .Width = Me.Width - 400
-        .Height = 2000
+        .Top = Label1.Top + 255
+        .Width = Me.Width - 290
+        .Height = 1500
     End With
+
 End Sub
