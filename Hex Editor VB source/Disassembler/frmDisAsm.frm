@@ -52,37 +52,15 @@ Begin VB.MDIForm frmDisAsm
          Caption         =   "-"
       End
       Begin VB.Menu rnuSave 
-         Caption         =   "&Enregistrer"
-         Begin VB.Menu mnuSaveASM 
-            Caption         =   "&Liste des instructions ASM..."
-            Shortcut        =   ^S
-         End
+         Caption         =   "&Ouvrir le dossier des fichiers générés..."
+         Enabled         =   0   'False
+      End
+      Begin VB.Menu mnuTiret178 
+         Caption         =   "-"
       End
       Begin VB.Menu mnuQuit 
          Caption         =   "&Quitter"
          Shortcut        =   ^Q
-      End
-   End
-   Begin VB.Menu rmnuEdit 
-      Caption         =   "&Edition"
-      Begin VB.Menu mnuCopy 
-         Caption         =   "&Copier"
-         Shortcut        =   ^C
-      End
-      Begin VB.Menu mnuSelectAll 
-         Caption         =   "&Sélectionner tout"
-         Shortcut        =   ^A
-      End
-      Begin VB.Menu mnuTiretOp 
-         Caption         =   "-"
-      End
-      Begin VB.Menu mnuSearch 
-         Caption         =   "&Rechercher..."
-         Shortcut        =   ^F
-      End
-      Begin VB.Menu mnuNext 
-         Caption         =   "&Suivant"
-         Shortcut        =   +{F3}
       End
    End
    Begin VB.Menu rmnuDisplay 
@@ -191,13 +169,7 @@ Option Explicit
 '=======================================================
 
 Private sFile As String 'fichier ouvert
-Private sFolder As String
 Private sFileW As String
-
-Private Sub mnuCopy_Click()
-'copie dans le clipboard
-    SendKeys "^C"
-End Sub
 
 Private Sub mnuDisAsm_Click()
 'ouvre un fichier
@@ -216,17 +188,18 @@ Dim b As Boolean
     sFileW = Left$(cFile.GetFileFromPath(s), Len(cFile.GetFileFromPath(s)) - Len(cFile.GetFileExtension(s)))
     
     'récupère le path temporaire et créé un nom de dossier
-    sFolder = ObtainTempPath & "\" & cFile.GetFileFromPath(s)
+    tmpDir = ObtainTempPath & "\" & cFile.GetFileFromPath(s)
     
     'on lance la procédure de désassemblage
     Sb.Panels(1).Text = "Désassemblage en cours..."
     
-    Call DisassembleWin32Executable(s, sFolder)
+    Call DisassembleWin32Executable(s, tmpDir)
     
     'affiche les infos dans les form
     Call OpenFileInForms
     
     Sb.Panels(1).Text = "Status = Ready"
+    Me.rnuSave.Enabled = True
     
 End Sub
 
@@ -253,6 +226,11 @@ Private Sub mnuDisplayAll_Click()
     frmExport.Visible = True
     frmDat.Visible = True
 End Sub
+
+Private Sub mnuHelp_Click()
+    MsgBox "Aide indisponible", vbCritical, "Attention"
+End Sub
+
 Private Sub mnuMH_Click()
     Me.Arrange vbTileHorizontal
 End Sub
@@ -264,11 +242,6 @@ Private Sub mnuQuit_Click()
 End Sub
 Private Sub mnuReorganize_Click()
     Me.Arrange vbArrangeIcons
-End Sub
-
-Private Sub mnuSelectAll_Click()
-'sélectionner tout
-    SendKeys "^A"   '==> GNE ??
 End Sub
 
 Private Sub mnuShowASM_Click()
@@ -306,27 +279,32 @@ Dim sF As String
     
     Sb.Panels(1).Text = "Chargement des fichiers créés..."
     
-    sF = sFolder & "\" & sFileW
+    sF = tmpDir & "\" & sFileW
     
     'affiche les valeurs hexa dans frmASM
     Call frmASM.RTB.LoadFile(sF & ".asm")
-    frmASM.Show
-    
-
+    Me.mnuShowASM.Checked = True
+        
     'affiche les infos sur le log de l'opération
     Call frmLog.RTB.LoadFile(sF & ".log")
+    Me.mnuShowLog.Checked = True
     
     'affiche les infos sur les exports
     Call frmExport.GetFileInfosExp(sF & ".exp")
-    
+    Me.mnuShowExports.Checked = True
+     
     'sur les imports
     Call frmImport.GetFileInfosImp(sF & ".imp")
+    Me.mnuShowImp.Checked = True
     
     'sur le fichier dat
     Call frmDat.GetFileInfosDat(sF & ".dat")
+    Me.mnuShowDat.Checked = True
     
     'récupère les infos sur l'executable
     Call frmInformations.GetFileInfos(sF & ".pe")
+    Me.mnuShowInfos.Checked = True
+    
 End Sub
 
 Public Sub DisAsmFile(ByVal sFile As String)
@@ -343,15 +321,20 @@ Dim b As Boolean
     sFileW = Left$(cFile.GetFileFromPath(sFile), Len(cFile.GetFileFromPath(sFile)) - Len(cFile.GetFileExtension(sFile)))
     
     'récupère le path temporaire et créé un nom de dossier
-    sFolder = ObtainTempPath & "\" & cFile.GetFileFromPath(sFile)
+    tmpDir = ObtainTempPath & "\" & cFile.GetFileFromPath(sFile)
     
     'on lance la procédure de désassemblage
     Sb.Panels(1).Text = "Désassemblage en cours..."
     
-    Call DisassembleWin32Executable(sFile, sFolder)
+    Call DisassembleWin32Executable(sFile, tmpDir)
     
     'affiche les infos dans les form
     Call OpenFileInForms
     
     Sb.Panels(1).Text = "Status = Ready"
+    Me.rnuSave.Enabled = True
+End Sub
+
+Private Sub rnuSave_Click()
+    Shell "explorer " & Replace$(tmpDir, "\\", "\"), vbNormalFocus
 End Sub
