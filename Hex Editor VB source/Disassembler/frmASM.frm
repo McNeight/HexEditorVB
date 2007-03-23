@@ -20,6 +20,7 @@ Begin VB.Form frmASM
    MDIChild        =   -1  'True
    ScaleHeight     =   3060
    ScaleWidth      =   4560
+   WindowState     =   2  'Maximized
    Begin RichTextLib.RichTextBox RTB 
       Height          =   975
       Left            =   840
@@ -30,6 +31,7 @@ Begin VB.Form frmASM
       _ExtentY        =   1720
       _Version        =   393217
       BorderStyle     =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       Appearance      =   0

@@ -43,6 +43,7 @@ Option Explicit
 '=======================================================
 Public cFile As clsFileInfos
 Private AfManifest As AfClsManifest
+Public tmpDir As String
 
 
 '=======================================================
@@ -91,18 +92,40 @@ Dim y As Long
 End Sub
 
 
-
 '=======================================================
 'quitte le programme
 '=======================================================
 Public Sub EndProgram()
+Dim sF() As String
+Dim x As Long
+Dim cp As String
 
+    On Error Resume Next
+    
     'décharge la form principale
     Unload frmDisAsm
     
+    
+    'vire tous les fichiers temp et le dossier temp
+    ReDim sF(0)
+    cp = cFile.GetParentDirectory(tmpDir)
+    
+    '//VERIFIE QUE L'ON KILL BIEN DES FICHIERS D'UN SOUS DOSSIER DU DOSSIER TEMP
+    If Left$(cp, Len(cp) - 1) <> ObtainTempPath Then GoTo DONOTKILL
+    
+    'liste
+    Call cFile.EnumFilesFromFolder(tmpDir, sF(), True)
+    For x = 1 To UBound(sF())
+        Call cFile.KillFile(sF(x))  'delete
+    Next x
+    Call RmDir(tmpDir)
+    
+    
+DONOTKILL:
+
     'libère les classes
     Set cFile = Nothing
-    
+
     'quitte
     End
 End Sub
