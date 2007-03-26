@@ -10,7 +10,7 @@ Attribute VB_Name = "clsDiskInfos"
 Attribute VB_GlobalNameSpace = True
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_Exposed = True
 ' =======================================================
 '
 ' Hex Editor VB
