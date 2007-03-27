@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{7BED1103-77AD-4441-9055-363D7F4DD7F9}#1.0#0"; "DriveView_OCX.ocx"
+Object = "{82BC04E4-311C-4338-9872-80D446B3C793}#1.1#0"; "DriveView_OCX.ocx"
 Begin VB.Form Form1 
    Caption         =   "Test"
    ClientHeight    =   5715
@@ -19,6 +19,14 @@ Begin VB.Form Form1
    ScaleHeight     =   5715
    ScaleWidth      =   5355
    StartUpPosition =   3  'Windows Default
+   Begin VB.CommandButton cmdColorIt 
+      Caption         =   "Montrer les drives inaccessibles"
+      Height          =   615
+      Left            =   3240
+      TabIndex        =   6
+      Top             =   2520
+      Width           =   1695
+   End
    Begin VB.CheckBox Check2 
       Caption         =   "Disques physiques"
       Height          =   375
@@ -79,6 +87,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private bShow As Boolean
+
 Private Sub Check1_Click()
     DriveView1.DisplayLogicalDrives = CBool(Check1.Value)
 End Sub
@@ -87,9 +97,55 @@ Private Sub Check2_Click()
     DriveView1.DisplayPhysicalDrives = CBool(Check2.Value)
 End Sub
 
+Private Sub cmdColorIt_Click()
+Dim x As Long
+
+    If bShow = False Then
+    
+        'alors on les montre
+        bShow = True
+        cmdColorIt.Caption = "Ne pas les montrer"
+
+        With DriveView1
+            For x = 1 To .Nodes.Count
+                If .Nodes.Item(x).Children = 0 Then
+                    'alors c'est un noeud fils (disque et pas titre)
+                    
+                    'si la gauche de la string de la clé est "log" alors c'est un disque logique
+                    If Left$(.Nodes.Item(x).Key, 3) = "log" Then
+                        If .Drives.IsLogicalDriveAccessible(.Nodes.Item(x).Text) = False Then
+                            'on place l'image ayant la key "inaccessible_drive"
+                            '/!\ A TOUJOURS UTILISER LA MEME CLE
+                            .Nodes.Item(x).Image = "inaccessible_drive"
+                        End If
+                    Else
+                        If .Drives.IsPhysicalDriveAccessible(Val(Mid$(.Nodes.Item(x).Text, 3, 1))) = False Then
+                            'on place l'image ayant la key "inaccessible_drive"
+                            '/!\ A TOUJOURS UTILISER LA MEME CLE
+                            .Nodes.Item(x).Image = "inaccessible_drive"
+                        End If
+                    End If
+                End If
+            Next x
+        End With
+    Else
+        'montre pas ==> refresh
+        cmdColorIt.Caption = "Montrer les drives inaccessibles"
+        
+        bShow = False
+        DriveView1.Refresh
+    End If
+        
+        
+End Sub
+
 Private Sub DriveView1_NodeClick(ByVal Node As ComctlLib.INode)
     If Node.Text <> DriveView1.LogicalDrivesString And Node.Text <> DriveView1.PhysicalDrivesString Then _
     MsgBox "Disque " & Node.Text & " " & IIf(DriveView1.IsSelectedDriveAccessible, vbNullString, "in") & "accessible. Taille = " & CStr(DriveView1.GetSelectedDrive.TotalSpace), vbInformation, "Test"
+End Sub
+
+Private Sub Form_Load()
+    bShow = False
 End Sub
 
 Private Sub Option1_Click()

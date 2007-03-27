@@ -58,10 +58,14 @@ Begin VB.UserControl DriveView
       MaskColor       =   12632256
       _Version        =   327682
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   1
+         NumListImages   =   2
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "DriveView.ctx":0000
             Key             =   "PhysicalDrive"
+         EndProperty
+         BeginProperty ListImage2 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "DriveView.ctx":0352
+            Key             =   "inaccessible_drive"
          EndProperty
       EndProperty
    End
@@ -257,7 +261,9 @@ End Sub
 Public Property Get Sorted() As Boolean: Sorted = TV.Sorted: End Property
 Public Property Let Sorted(Sorted As Boolean): TV.Sorted = Sorted: End Property
 Public Property Get SelectedItem() As Node: Set SelectedItem = TV.SelectedItem: End Property
+Public Property Let SelectedItem(SelectedItem As Node): Set TV.SelectedItem = SelectedItem: End Property
 Public Property Get Nodes() As Nodes: Set Nodes = TV.Nodes: End Property
+Public Property Let Nodes(Nodes As Nodes): Set TV.Nodes = Nodes: End Property
 Public Property Get Object() As Object: Set Object = TV.Object: End Property
 Public Property Get Style() As TreeStyleConstants: Style = TV.Style: End Property
 Public Property Let Style(Style As TreeStyleConstants): TV.Style = Style: End Property
@@ -389,6 +395,14 @@ End Function
 Public Function HitTest(x As Single, y As Single) As Node
     Set HitTest = TV.HitTest(x, y)
 End Function
+
+'=======================================================
+'pour récupérer les informations sur les drives
+'=======================================================
+Public Function Drives() As clsDiskInfos
+    Set Drives = cDrives
+End Function
+
 
 
 
