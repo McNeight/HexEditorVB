@@ -237,7 +237,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.DisplayPhysicalDrives = .ReadProperty("DisplayPhysicalDrives", True)
         Me.HideSelection = .ReadProperty("HideSelection", False)
         Me.LogicalDrivesString = .ReadProperty("LogicalDrivesString", "Disques logiques")
-        Me.PhysicalDrivesString = .ReadProperty("PhysicalDrivesString", "Disques logiques")
+        Me.PhysicalDrivesString = .ReadProperty("PhysicalDrivesString", "Disques physiques")
     End With
 End Sub
 Private Sub UserControl_Resize()
@@ -265,8 +265,8 @@ Public Property Get LineStyle() As TreeLineStyleConstants: LineStyle = TV.LineSt
 Public Property Let LineStyle(LineStyle As TreeLineStyleConstants): TV.LineStyle = LineStyle: End Property
 Public Property Get Index() As Integer: Index = TV.Index: End Property
 Public Property Get hwnd() As Long: hwnd = TV.hwnd: End Property
-Public Property Get BorderStyle() As Byte: BorderStyle = TV.BorderStyle: End Property
-Public Property Let BorderStyle(BorderStyle As Byte): TV.BorderStyle = BorderStyle: End Property
+Public Property Get BorderStyle() As ComctlLib.BorderStyleConstants: BorderStyle = TV.BorderStyle: End Property
+Public Property Let BorderStyle(BorderStyle As ComctlLib.BorderStyleConstants): TV.BorderStyle = BorderStyle: End Property
 Public Property Get Appearance() As AppearanceConstants: Appearance = TV.Appearance: End Property
 Public Property Let Appearance(Appearance As AppearanceConstants): TV.Appearance = Appearance: End Property
 Public Property Get Indentation() As Long: Indentation = TV.Indentation: End Property

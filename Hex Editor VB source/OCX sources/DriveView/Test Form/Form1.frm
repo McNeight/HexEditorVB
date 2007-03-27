@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{8536549B-3A21-4343-AAB6-D03F570E5256}#23.1#0"; "DriveView_OCX.ocx"
+Object = "{7BED1103-77AD-4441-9055-363D7F4DD7F9}#1.0#0"; "DriveView_OCX.ocx"
 Begin VB.Form Form1 
    Caption         =   "Test"
    ClientHeight    =   5715
