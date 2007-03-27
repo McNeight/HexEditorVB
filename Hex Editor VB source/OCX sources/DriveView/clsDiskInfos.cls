@@ -450,7 +450,7 @@ Dim s() As String
     Next x
     
     strDrives = s
-    GetLogicalDrivesList = CByte(x / 4 - 1)
+    GetLogicalDrivesList = lngLen + 1
 End Function
 
 
