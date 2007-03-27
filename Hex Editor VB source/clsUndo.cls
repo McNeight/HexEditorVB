@@ -56,6 +56,7 @@ Public Enum EDITION_TYPE   'contient le type d'édition à annuler
     edtFile 'fichier
     edtProcess  'mémoire
     edtDisk 'disque
+    edtPhys 'disque physique
 End Enum
 
 '=======================================================

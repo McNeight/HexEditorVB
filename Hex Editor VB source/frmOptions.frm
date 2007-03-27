@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.2#0"; "HexViewer_OCX.ocx"
 Begin VB.Form frmOptions 
@@ -409,31 +409,37 @@ Begin VB.Form frmOptions
          NumTabs         =   6
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Apparence du tableau"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Intégration dans Explorer"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Options générales"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Environnement"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Console"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab6 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Explorateur de fichiers"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -1307,7 +1313,7 @@ Dim s As String
     'On Error Resume Next
     'on change l'apparence de tous les HW de toutes les forms
     For Each x In Forms
-        If (TypeOf x Is Pfm) Or (TypeOf x Is diskPfm) Or (TypeOf x Is MemPfm) Then
+        If (TypeOf x Is Pfm) Or (TypeOf x Is diskPfm) Or (TypeOf x Is MemPfm) Or (TypeOf x Is physPfm) Then
 
                 With x.HW
                     'on applique ces couleurs au HW de CETTE form
@@ -1331,7 +1337,7 @@ Dim s As String
                 'change les Visible des frames de toutes les forms active
                 x.FrameData.Visible = CBool(cPref.general_DisplayData)
                 x.FrameInfos.Visible = CBool(cPref.general_DisplayInfos)
-                If TypeOf x Is diskPfm Then x.FrameInfo2.Visible = CBool(cPref.general_DisplayInfos)
+                If (TypeOf x Is diskPfm) Or (TypeOf x Is physPfm) Then x.FrameInfo2.Visible = CBool(cPref.general_DisplayInfos)
             'End If
         End If
     Next x

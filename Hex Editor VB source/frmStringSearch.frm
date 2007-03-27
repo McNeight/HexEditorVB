@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{6ADE9E73-F694-428F-BF86-06ADD29476A5}#1.0#0"; "ProgressBar_OCX.ocx"
 Begin VB.Form frmStringSearch 
    BorderStyle     =   1  'Fixed Single
@@ -307,9 +307,15 @@ Dim bAddSign As Boolean
             tRes(i).strString = strRes(i)
         Next i
         
-    Else
+    ElseIf TypeOfActiveForm = "Disk" Then
         'alors c'est dans le disque
 
+        'lance la recherche
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
+        
+    Else
+        'disque physique
+        
         'lance la recherche
         SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
         

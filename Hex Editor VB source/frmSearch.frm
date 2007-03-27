@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{6ADE9E73-F694-428F-BF86-06ADD29476A5}#1.0#0"; "ProgressBar_OCX.ocx"
 Begin VB.Form frmSearch 
    BorderStyle     =   1  'Fixed Single
@@ -456,7 +456,7 @@ Dim s As String
                 Call AddTextToConsole("Recherche en cours...")
     
                 SearchForStringFile frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
@@ -466,7 +466,7 @@ Dim s As String
                     
                 'lance la recherche de la string
                 SearchForStringFile frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
             Else
                 Exit Sub
             End If
@@ -480,7 +480,7 @@ Dim s As String
                 Call AddTextToConsole("Recherche en cours...")
                 
                 SearchForStringDisk frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
                 
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
@@ -491,7 +491,34 @@ Dim s As String
                 
                 'lance la recherche de la string
                 SearchForStringDisk frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
+            Else
+                Exit Sub
+            End If
+            
+            
+            
+        Case "Disque physique"
+            'recherche dans un disque PHYSIQUE
+            If Option4(1).Value And Option1(2).Value Then
+                'alors c'est une string en recherche simple
+                
+                'ajoute du texte à la console
+                Call AddTextToConsole("Recherche en cours...")
+                
+                SearchForStringDisk frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
+                tRes(), Me.PGB, True
+                
+            ElseIf Option1(2).Value Then
+                'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
+                s = HexValues2String(txtSearch.Text)
+                
+                'ajoute du texte à la console
+                Call AddTextToConsole("Recherche en cours...")
+                
+                'lance la recherche de la string
+                SearchForStringDisk frmContent.ActiveForm.Caption, s, Check1.Value, _
+                tRes(), Me.PGB, True
             Else
                 Exit Sub
             End If
@@ -508,7 +535,7 @@ Dim s As String
                 
                 'lance la recherche
                 cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), txtSearch.Text, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
@@ -518,7 +545,7 @@ Dim s As String
                 
                 'lance la recherche de la string
                 cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), s, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
             Else
                 Exit Sub
             End If

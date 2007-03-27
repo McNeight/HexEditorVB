@@ -122,54 +122,54 @@ Dim s As String
 
     
     '//récupère les préférences
-         #If MODE_DEBUG Then
-             'alors on est dans la phase Debug, donc on a le dossier du source
-             clsPref.sDefaultPath = cFile.GetParentDirectory(App.Path) & "\Executable folder\Preferences\config.ini"
-         #Else
-             'alors c'est plus la phase debug, donc plus d'IDE possible
-             clsPref.sDefaultPath = App.Path & "\Preferences\config.ini" 'détermine le fichier de config par défaut
-         #End If
+        #If MODE_DEBUG Then
+            'alors on est dans la phase Debug, donc on a le dossier du source
+            clsPref.sDefaultPath = cFile.GetParentDirectory(App.Path) & "\Executable folder\Preferences\config.ini"
+        #Else
+            'alors c'est plus la phase debug, donc plus d'IDE possible
+            clsPref.sDefaultPath = App.Path & "\Preferences\config.ini" 'détermine le fichier de config par défaut
+        #End If
+        
+        If cFile.FileExists(clsPref.sDefaultPath) = False Then
+            'le fichier de configuration est inexistant
+            'il est necesasire de le crér (par défaut)
+            cFile.CreateEmptyFile clsPref.sDefaultPath, True
+            
+            'remplit le fichier
+            cFile.SaveStringInfile clsPref.sDefaultPath, DEFAULT_INI, False
+        End If
          
-         If cFile.FileExists(clsPref.sDefaultPath) = False Then
-             'le fichier de configuration est inexistant
-             'il est necesasire de le crér (par défaut)
-             cFile.CreateEmptyFile clsPref.sDefaultPath, True
-             
-             'remplit le fichier
-             cFile.SaveStringInfile clsPref.sDefaultPath, DEFAULT_INI, False
-         End If
-         
-         Set cPref = clsPref.GetIniFile
-         cPref.IniFilePath = clsPref.sDefaultPath
-         
-         bEndSplash = False
-         'affiche le splash si souhaité
-         If cPref.general_Splash Then
-             frmSplash.Show
-             DoEvents    '/!\ DO NOT REMOVE (permet d'afficher le splash screen correctement)
-         End If
-         
-         frmSplash.lblState.Caption = "Configuration des options..."
-         'détermine si le programme a crashé ou pas
-         If cPref.exe_HasCrashed = 1 Then
-             'alors on sort d'un crash ==> informe
-             MsgBox "Le programme n'a pas été fermé correctement, il récupère probablement d'une erreur critique." & vbNewLine & "Merci de me contacter par mail en précisant le contexte et les causes, si possible, du crash." & vbNewLine & "Vous pouvez me contacter en cliquant sur 'Hex Editor VB sur Internet' dans le menu d'aide." & vbNewLine & "Vous pouvez également envoyer le rapport d'erreur (menu Aide ==> rapport d'erreur)." & vbNewLine & "Merci de votre contribution.", vbCritical + vbOKOnly, "Erreur critique lors de la précédente fermeture"
-         End If
-         'affecte la valeur True au crash
-         cPref.exe_HasCrashed = 1
-         'sauvegarde les pref (met à jour la valeur)
-         Call clsPref.SaveIniFile(cPref) '//CHANGER CA ET NE SAUVER QUE LA VARIABLE CRASH
+        Set cPref = clsPref.GetIniFile
+        cPref.IniFilePath = clsPref.sDefaultPath
+        
+        bEndSplash = False
+        'affiche le splash si souhaité
+        If cPref.general_Splash Then
+            frmSplash.Show
+            DoEvents    '/!\ DO NOT REMOVE (permet d'afficher le splash screen correctement)
+        End If
+        
+        frmSplash.lblState.Caption = "Configuration des options..."
+        'détermine si le programme a crashé ou pas
+        If cPref.exe_HasCrashed = 1 Then
+            'alors on sort d'un crash ==> informe
+            MsgBox "Le programme n'a pas été fermé correctement, il récupère probablement d'une erreur critique." & vbNewLine & "Merci de me contacter par mail en précisant le contexte et les causes, si possible, du crash." & vbNewLine & "Vous pouvez me contacter en cliquant sur 'Hex Editor VB sur Internet' dans le menu d'aide." & vbNewLine & "Vous pouvez également envoyer le rapport d'erreur (menu Aide ==> rapport d'erreur)." & vbNewLine & "Merci de votre contribution.", vbCritical + vbOKOnly, "Erreur critique lors de la précédente fermeture"
+        End If
+        'affecte la valeur True au crash
+        cPref.exe_HasCrashed = 1
+        'sauvegarde les pref (met à jour la valeur)
+        Call clsPref.SaveIniFile(cPref) '//CHANGER CA ET NE SAUVER QUE LA VARIABLE CRASH
          
          
-         frmSplash.lblState.Caption = "Génération de l'intégration dans Explorer..."
-         'créé le raccourci 'envoyer vers...'
-         'Shortcut True
-         'ajoute au menu contextuel de windows les entrées de HexEditor
-         'AddContextMenu 1    'fichiers
+        frmSplash.lblState.Caption = "Génération de l'intégration dans Explorer..."
+        'créé le raccourci 'envoyer vers...'
+        'Shortcut True
+        'ajoute au menu contextuel de windows les entrées de HexEditor
+        'AddContextMenu 1    'fichiers
         ' AddContextMenu 0    'dossiers
          
-         'ajout du type de fichier *.hescr à HexEditor VB.exe
-         Call Reg_HESCR_file
+        'ajout du type de fichier *.hescr à HexEditor VB.exe
+        Call Reg_HESCR_file
         
     
         frmSplash.lblState.Caption = "Lancement du logiciel..."
@@ -392,19 +392,48 @@ Dim lTo As Currency
     s2() = Split(s, vbNewLine, , vbBinaryCompare) ' Left$(s, InStr(1, s, vbNewLine) - 1)
     s3 = Right$(s2(0), Len(s2(0)) - InStr(1, s, "|"))   'contient le PID, le disque ou le fichier
     
-    Select Case Left$(s2(0), 1)
-        Case "P"
+    Select Case Left$(s2(0), 2)
+        Case "Pr"
             'processus
+            If cProc.DoesPIDExist(Val(s3)) = False Then
+                'process inexistant
+                MsgBox "Le processus de PID " & s3 & " est inexistant.", vbCritical, "Erreur"
+                Exit Sub
+            End If
             Set Frm = New MemPfm
             Call Frm.GetFile(Val(s3))   'le PID en paramètre
-        Case "D"
+        Case "Di"
             'disque
+            If cFile.FolderExists(s3) = False Or Len(s3) <> 3 Then
+                'disque inexistant
+                MsgBox "Le disque " & s3 & " n'existe pas.", vbCritical, "Erreur"
+                Exit Sub
+            End If
+            If cDisk.IsLogicalDriveAccessible(s3) = False Then
+                'disque inaccessible
+                MsgBox "Le disque " & s3 & " n'est pas accessibe.", vbCritical, "Erreur"
+                Exit Sub
+            End If
             Set Frm = New diskPfm
             Call Frm.GetDrive(s3)
-        Case "F"
+        Case "Fi"
+            If cFile.FileExists(s3) = False Then
+                'fichier invalide
+                MsgBox "Le fichier " & s3 & " n'est pas valide.", vbCritical, "Erreur"
+                Exit Sub
+            End If
             'fichier
             Set Frm = New Pfm
             Call Frm.GetFile(s3)
+        Case "Ph"
+            'disque physique
+            If cDisk.IsPhysicalDriveAccessible(Val(s3)) = False Then
+                'disque inaccessible
+                MsgBox "Le disque " & s3 & " n'est pas accessibe ou inexistant.", vbCritical, "Erreur"
+                Exit Sub
+            End If
+            Set Frm = New physPfm
+            Call Frm.GetDrive(Val(s3))   'le numéro du disque en paramètre
         Case Else
             'fichier non valide (trafiqué)
             Exit Sub
@@ -476,6 +505,8 @@ Dim x As Long
                         s = "Disk|" & Right$(.Caption, 3)
                     Case "Fichier"
                         s = "File|" & .Caption
+                    Case "Disque physique"
+                        s = "Phys|" & Trim$(Str$(.Tag))
                 End Select
             
                 'maintenant on sauve la zone sélectionnée et la valeur du VS

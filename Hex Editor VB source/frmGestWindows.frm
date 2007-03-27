@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Begin VB.Form frmGestWindows 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Gestion des fenêtres"
@@ -156,7 +156,7 @@ Dim x As Long
 
     'liste les form et ferme les sélectionnées
     For Each Frm In Forms
-        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Then
+        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Or (TypeOf Frm Is physPfm) Then
             For x = LV.ListItems.Count To 1 Step -1
                 If LV.ListItems.Item(x).Selected And LV.ListItems.Item(x).SubItems(1) = _
                 Frm.Caption Then
@@ -196,7 +196,7 @@ Dim Frm As Form
 
     'liste les form et affiche celle qui est sélectionnée
     For Each Frm In Forms
-        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Then
+        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Or (TypeOf Frm Is physPfm) Then
             If LV.SelectedItem.SubItems(1) = Frm.Caption Then
                 'SendMessage frm.hwnd, WM_SHOWWINDOW, 0, 0   'pas de .Show car form modale affichée
                 Frm.ZOrder 0
@@ -214,7 +214,7 @@ Dim Frm As Form
     
     'liste les forms et les ajoute au LV
     For Each Frm In Forms
-        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Then
+        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Or (TypeOf Frm Is physPfm) Then
             LV.ListItems.Add Text:=TypeOfForm(Frm)
             LV.ListItems.Item(LV.ListItems.Count).SubItems(1) = Frm.Caption
         End If

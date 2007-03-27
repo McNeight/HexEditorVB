@@ -132,6 +132,50 @@ dskerror:
 End Sub
 
 '=======================================================
+'permet de lire des bytes directement dans le disque PHYSIQUE
+'=======================================================
+Public Sub DirectReadPhys(ByVal bytDrive As Byte, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef ReadOctet() As Byte)
+' Attention le nombre d'octets lus ou écrits ainsi que l'offset du premier octet lu ou écrit
+' doivent impérativement être un multiple de la taille d'un secteur de disque
+' Istartsec et nbytes doivent être des multiples de 512 ( taille standard des secteurs des disques)
+Dim BytesRead As Long
+Dim Pointeur As Currency
+Dim Ret As Long
+Dim hDevice As Long
+Dim lLowPart As Long, lHighPart As Long
+
+    On Error GoTo dskerror
+
+    'ouvre le drive
+    hDevice = CreateFile("\\.\PHYSICALDRIVE" & CStr(bytDrive), GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+   
+    'quitte si le handle n'est pas valide
+    If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
+   
+    'détermine le byte de départ du secteur
+    Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
+    
+    'transforme un currency en 2 long pour une structure LARGE_INTEGER
+    GetLargeInteger Pointeur, lLowPart, lHighPart
+
+    'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
+    'byte que l'on veut lire (donné par deux long)
+    Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
+    If Ret = -1 Then GoTo dskerror
+           
+    'redimensionne le tableaux résultant
+    ReDim ReadOctet(0 To nBytes - 1) 'contient les nBytes lus, de 0 à Ubound-1
+    
+    'appelle l'API de lecture
+    Ret = ReadFile(hDevice, ReadOctet(0), nBytes, BytesRead, 0&)
+    
+dskerror:
+
+    'ferme le handle
+    CloseHandle hDevice
+End Sub
+
+'=======================================================
 'permet de d'écrire de manière directe dans le disque
 '=======================================================
 Public Sub DirectWriteS(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sStringToWrite As String)
@@ -199,6 +243,49 @@ Dim lLowPart As Long, lHighPart As Long
 
     'ouvre le drive
     hDevice = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+   
+    'quitte si le handle n'est pas valide
+    If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
+   
+    'détermine le byte de départ du secteur
+    Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
+    
+    'transforme un currency en 2 long pour une structure LARGE_INTEGER
+    GetLargeInteger Pointeur, lLowPart, lHighPart
+
+    'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
+    'byte que l'on veut lire (donné par deux long)
+    Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
+    If Ret = -1 Then GoTo dskerror
+    
+    'création d'un buffer
+    sBufferOut = Space$(nBytes)
+
+    'obtention de la string
+    Ret = ReadFile(hDevice, ByVal sBufferOut, nBytes, BytesRead, 0&)
+
+dskerror:
+
+    'ferme le handle
+    CloseHandle hDevice
+End Sub
+
+'=======================================================
+'permet de lire des bytes directement dans le disque PHYSIQUE
+'sortie en String
+'=======================================================
+Public Sub DirectReadSPhys(ByVal bytDrive As Byte, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sBufferOut As String)
+'/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
+Dim BytesRead As Long
+Dim Pointeur As Currency
+Dim Ret As Long
+Dim hDevice As Long
+Dim lLowPart As Long, lHighPart As Long
+
+    On Error GoTo dskerror
+
+    'ouvre le drive
+    hDevice = CreateFile("\\.\PHYSICALDRIVE" & CStr(bytDrive), GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
    
     'quitte si le handle n'est pas valide
     If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
@@ -339,7 +426,7 @@ End Function
 'fonction de recherche de string complètes dans un fichier
 'stocke dans un tableau de 1 à Ubound
 '=======================================================
-Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLength As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef tRes() As SearchResult, Optional pgb As pgrbar)
+Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLength As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef tRes() As SearchResult, Optional PGB As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
 Dim strCtemp As String
@@ -357,11 +444,11 @@ Dim i As Long
     'taille du fichier
     lngLen = cFile.GetFileSize(sFile)
     
-    If Not (pgb Is Nothing) Then
+    If Not (PGB Is Nothing) Then
         'on initialise la progressabr
-        pgb.Min = 0
-        pgb.Value = 0
-        pgb.Max = lngLen
+        PGB.Min = 0
+        PGB.Value = 0
+        PGB.Max = lngLen
     End If
 
     'initialise le tableau
@@ -422,14 +509,14 @@ Dim i As Long
         End If
         
         If (x Mod 10) = 0 Then
-            If Not (pgb Is Nothing) Then pgb.Value = curByte    'refresh progressbar
+            If Not (PGB Is Nothing) Then PGB.Value = curByte    'refresh progressbar
             DoEvents    'rend la main
         End If
         
         curByte = curByte + 51200   'incrémente la position
     Loop
     
-    If Not (pgb Is Nothing) Then pgb.Value = lngLen
+    If Not (PGB Is Nothing) Then PGB.Value = lngLen
     
     Let strBuffer = vbNullString
     CloseHandle lngFile 'ferme le handle du fichier
@@ -446,7 +533,7 @@ End Sub
 'fonction de recherche de string dans un fichier
 'de 1 à Ubound
 '=======================================================
-Public Sub SearchForStringFile(ByVal sFile As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional pgb As pgrbar)
+Public Sub SearchForStringFile(ByVal sFile As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrbar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
 Dim x As Long
@@ -465,11 +552,11 @@ Dim i As Long
     'taille du fichier
     lngLen = cFile.GetFileSize(sFile)
     
-    If Not (pgb Is Nothing) Then
+    If Not (PGB Is Nothing) Then
         'on initialise la progressabr
-        pgb.Min = 0
-        pgb.Value = 0
-        pgb.Max = lngLen
+        PGB.Min = 0
+        PGB.Value = 0
+        PGB.Max = lngLen
     End If
 
     'initialise le tableau
@@ -525,14 +612,14 @@ Dim i As Long
         Wend
         
         If (x Mod 10) = 0 Then
-            If Not (pgb Is Nothing) Then pgb.Value = curByte    'refresh progressbar
+            If Not (PGB Is Nothing) Then PGB.Value = curByte    'refresh progressbar
             DoEvents    'rend la main
         End If
         
         curByte = curByte + Len(strBuffer2) + Len(strBuffer) 'incrémente la position
     Loop
     
-    If Not (pgb Is Nothing) Then pgb.Value = lngLen
+    If Not (PGB Is Nothing) Then PGB.Value = lngLen
     
     Let strBufT = vbNullString
     Let strBuffer2 = vbNullString
@@ -552,7 +639,7 @@ End Sub
 'fonction de recherche de string dans un disque
 'de 1 à Ubound
 '=======================================================
-Public Sub SearchForStringDisk(ByVal sDrive As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional pgb As pgrbar)
+Public Sub SearchForStringDisk(ByVal sDrive As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrbar, Optional ByVal IsPhys As Boolean = False)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim x As Long
 Dim r() As Byte
@@ -572,30 +659,40 @@ Dim clsDrive As clsDiskInfos
     'initialise les tableaux
     ReDim tRes(0): ReDim r(0)
     
-    'formate le nom du disque
-    strDrive = BuildDrive(Right$(sDrive, 3))
-    
     'ré-obtient les infos sur les secteurs (nombre et taille)
     Set clsDrive = New clsDiskInfos
-    Set cDrive = clsDrive.GetLogicalDrive(strDrive)
+        
+    If IsPhys Then
+        Set cDrive = clsDrive.GetPhysicalDrive(Val(sDrive))
+    Else
+        'formate le nom du disque
+        strDrive = BuildDrive(Right$(sDrive, 3))
+
+        Set cDrive = clsDrive.GetLogicalDrive(strDrive)
+    End If
     
     'affecte les infos sur les secteurs aux variables
     nbSec = cDrive.TotalLogicalSectors
     btPerSec = cDrive.BytesPerSector
     
-    If Not (pgb Is Nothing) Then
+    If Not (PGB Is Nothing) Then
         'on initialise la progressabr
-        pgb.Min = 0
-        pgb.Value = 0
-        pgb.Max = nbSec
+        PGB.Min = 0
+        PGB.Value = 0
+        PGB.Max = nbSec
     End If
 
     If bCasse = False Then sMatch = LCase$(sMatch)  'cherche que les minuscules
 
     For i = 0 To nbSec Step 20000  'pour chaque secteur logique
         
-        'obtient les bytes du secteur visualisé en partie
-        DirectReadS strDrive, CCur(i), 20000 * btPerSec, btPerSec, strBufT
+        If IsPhys Then
+            'obtient les bytes du secteur visualisé en partie
+            DirectReadSPhys Val(sDrive), CCur(i), 20000 * btPerSec, btPerSec, strBufT
+        Else
+            'obtient les bytes du secteur visualisé en partie
+            DirectReadS strDrive, CCur(i), 20000 * btPerSec, btPerSec, strBufT
+        End If
         
         If bCasse = False Then strBufT = LCase$(strBufT)    'cherche que des minuscules (pas de casse respectée)
          
@@ -609,12 +706,12 @@ Dim clsDrive As clsDiskInfos
             strBufT = Right$(strBufT, Len(strBufT) - InStr(1, strBufT, sMatch, vbBinaryCompare) - Len(sMatch) + 1)
         Wend
         
-        If Not (pgb Is Nothing) Then pgb.Value = i    'refresh progressbar
+        If Not (PGB Is Nothing) Then PGB.Value = i    'refresh progressbar
         DoEvents    'rend la main
         
     Next i
     
-    If Not (pgb Is Nothing) Then pgb.Value = nbSec
+    If Not (PGB Is Nothing) Then PGB.Value = nbSec
     
     Let strBufT = vbNullString
 

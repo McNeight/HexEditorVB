@@ -301,7 +301,7 @@ Public Function TypeOfForm(Frm As Form) As String
     
     On Error Resume Next
     
-    TypeOfForm = IIf(Frm.Useless = "Pfm", "Fichier", vbNullString) & IIf(Frm.Useless = "Mem", "Processus", vbNullString) & IIf(Frm.Useless = "Disk", "Disque", vbNullString)
+    TypeOfForm = IIf(Frm.Useless = "Pfm", "Fichier", vbNullString) & IIf(Frm.Useless = "Mem", "Processus", vbNullString) & IIf(Frm.Useless = "Disk", "Disque", vbNullString) & IIf(Frm.Useless = "Phys", "Disque physique", vbNullString)
 
 End Function
 

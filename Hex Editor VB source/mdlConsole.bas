@@ -198,7 +198,7 @@ Dim sPref As String
                 s2 = "Aucune fenêtre à fermer"
             Else
                 For Each Frm In Forms
-                    If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Then
+                    If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Or (TypeOf Frm Is physPfm) Then
                         SendMessage Frm.hWnd, WM_CLOSE, 0, 0
                     End If
                 Next Frm
@@ -303,7 +303,7 @@ Private Sub MAJoptions()
 Dim x As Form
 
     For Each x In Forms
-        If (TypeOf x Is Pfm) Or (TypeOf x Is diskPfm) Or (TypeOf x Is MemPfm) Then
+        If (TypeOf x Is Pfm) Or (TypeOf x Is diskPfm) Or (TypeOf x Is MemPfm) Or (TypeOf x Is physPfm) Then
 
                 With x.HW
                     'on applique ces couleurs au HW de CETTE form
@@ -327,7 +327,7 @@ Dim x As Form
                 'change les Visible des frames de toutes les forms active
                 x.FrameData.Visible = CBool(cPref.general_DisplayData)
                 x.FrameInfos.Visible = CBool(cPref.general_DisplayInfos)
-                If TypeOf x Is diskPfm Then x.FrameInfo2.Visible = CBool(cPref.general_DisplayInfos)
+                If (TypeOf x Is diskPfm) Or (TypeOf x Is physPfm) Then x.FrameInfo2.Visible = CBool(cPref.general_DisplayInfos)
             'End If
         End If
     Next x
