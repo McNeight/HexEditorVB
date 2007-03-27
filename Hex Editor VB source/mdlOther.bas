@@ -616,6 +616,46 @@ Dim ST As SYSTEMTIME
 End Function
 
 '=======================================================
+'permet de marquer les drives non accessibles
+'=======================================================
+Public Sub MarkUnaccessibleDrives(DV As DriveView)
+Dim x As Long
+Dim tNode As Node
+    
+    With DV
+        For x = 1 To .Nodes.Count
+            If .Nodes.Item(x).Children = 0 Then
+                'alors c'est un noeud fils (disque et pas titre)
+                
+                'si la gauche de la string de la clé est "log" alors c'est un disque logique
+                If Left$(.Nodes.Item(x).Key, 3) = "log" Then
+                    If .Drives.IsLogicalDriveAccessible(.Nodes.Item(x).Text) = False Then
+                        'on place l'image ayant la key "inaccessible_drive"
+                        '/!\ A TOUJOURS UTILISER LA MEME CLE
+                        .Nodes.Item(x).Image = "inaccessible_drive"
+                    End If
+                Else
+                    If .Drives.IsPhysicalDriveAccessible(Val(Mid$(.Nodes.Item(x).Text, 3, 1))) = False Then
+                        'on place l'image ayant la key "inaccessible_drive"
+                        '/!\ A TOUJOURS UTILISER LA MEME CLE
+                        .Nodes.Item(x).Image = "inaccessible_drive"
+                    End If
+                End If
+            End If
+        Next x
+    
+        'expande tous les noeuds
+        For Each tNode In .Nodes
+            tNode.Expanded = True
+        Next tNode
+    
+        'met en surbrillance le premier node
+        .Nodes.Item(1).Selected = True
+    End With
+    
+End Sub
+
+'=======================================================
 'enable ou non les fleches Signet suivant/précédent
 '=======================================================
 Public Sub RefreshBookMarkEnabled()
