@@ -120,6 +120,19 @@ Public Sub RedoMe(Undo As clsUndoItem, ByRef Histo() As clsUndoSubItem)
                     Undo.Frm.HW.MaxOffset = Histo(Undo.lRang + 1).curData2
                     Undo.Frm.HW.Refresh
             End Select
+        ElseIf Undo.tEditType = edtPhys Then
+            'alors c'est un disque physique
+            Select Case .tUndoType
+                Case actByteWritten
+                '/////// A FAIRE
+                    Call Undo.Frm.AddChange(.curData1, .bytData1, .sData2)
+                Case actRestArea
+                '/////// A FAIRE
+                    'alors il faut redimensionner la zone avec les anciens offsets
+                    Undo.Frm.HW.FirstOffset = Histo(Undo.lRang + 1).curData1
+                    Undo.Frm.HW.MaxOffset = Histo(Undo.lRang + 1).curData2
+                    Undo.Frm.HW.Refresh
+            End Select
         Else
             'ben là c'est un processus
             Select Case .tUndoType

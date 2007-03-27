@@ -41,7 +41,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -68,7 +67,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -188,7 +186,7 @@ Begin VB.MDIForm frmContent
          EndProperty
          BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":AC9C
-            Key             =   "Ouvrir|Ouvrir un disque physique..."
+            Key             =   "Ouvrir|Ouvrir un disque..."
          EndProperty
          BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":AFEE
@@ -540,6 +538,7 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -547,20 +546,23 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "20:13"
+            TextSave        =   "16:22"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "22/03/2007"
+            TextSave        =   "27/03/2007"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -834,7 +836,7 @@ Begin VB.MDIForm frmContent
             Caption         =   "&Ouvrir un processus en mémoire..."
          End
          Begin VB.Menu mnuOpenDisk 
-            Caption         =   "&Ouvrir un disque physique..."
+            Caption         =   "&Ouvrir un disque..."
          End
       End
       Begin VB.Menu mnuSave 
@@ -1621,7 +1623,7 @@ Dim Frm As Form
     
     'ferme toute les fenêtres
     For Each Frm In Forms
-        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Then
+        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Or (TypeOf Frm Is physPfm) Then
             SendMessage Frm.hWnd, WM_CLOSE, 0, 0
         End If
     Next Frm
@@ -2011,6 +2013,23 @@ Dim curPos As Currency
                 
             'recoupe la string pour récupérer ce qui intéresse vraiment
             s = Mid$(s, curPos - curPos2 + 1, curSize)
+        
+        Case "Disque physique"
+        
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+
+            'récupère la string
+            DirectReadSPhys Val(Me.ActiveForm.Tag), _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
             
     End Select
 
@@ -2069,6 +2088,23 @@ Dim curPos As Currency
 
             'récupère la string
             DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
+
+        Case "Disque physique"
+        
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+
+            'récupère la string
+            DirectReadSPhys Val(Me.ActiveForm.Tag), _
                 curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
                 Me.ActiveForm.GetDriveInfos.BytesPerSector, s
                 
@@ -2138,6 +2174,23 @@ Dim curPos As Currency
                 
             'recoupe la string pour récupérer ce qui intéresse vraiment
             s = Mid$(s, curPos - curPos2 + 1, curSize)
+
+        Case "Disque physique"
+        
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+
+            'récupère la string
+            DirectReadSPhys Val(Me.ActiveForm.Tag), _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
             
     End Select
 
@@ -2194,6 +2247,23 @@ Dim curPos As Currency
 
             'récupère la string
             DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                
+            'recoupe la string pour récupérer ce qui intéresse vraiment
+            s = Mid$(s, curPos - curPos2 + 1, curSize)
+            
+        Case "Disque physique"
+        
+            'redéfinit correctement la position et la taille (doivent être multiple du nombre
+            'de bytes par secteur)
+            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
+                curPos2  'recalcule la taille en partant du début du secteur
+            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
+
+            'récupère la string
+            DirectReadSPhys Val(Me.ActiveForm.Tag), _
                 curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
                 Me.ActiveForm.GetDriveInfos.BytesPerSector, s
                 
@@ -2664,7 +2734,7 @@ Private Sub mnuInformations_Click()
     
     Me.mnuInformations.Checked = Not (Me.mnuInformations.Checked)
     Me.ActiveForm.FrameInfos.Visible = Me.mnuInformations.Checked
-    If TypeOfForm(Me.ActiveForm) = "Disque" Then Me.ActiveForm.FrameInfo2.Visible = Me.mnuInformations.Checked
+    If (TypeOfForm(Me.ActiveForm) = "Disque") Or (TypeOfForm(Me.ActiveForm) = "Disque physique") Then Me.ActiveForm.FrameInfo2.Visible = Me.mnuInformations.Checked
     Call frmContent.ActiveForm.ResizeMe
 End Sub
 
@@ -3445,7 +3515,7 @@ Public Function ChangeEnabledMenus()
         Me.mnuGoOn.Enabled = False
         Me.rmnuWindow.Enabled = False
         Me.rmnuExport.Enabled = False
-    Else
+    ElseIf (Me.ActiveForm Is Nothing) = False And TypeOfActiveForm = "Disk" Then
         'diskfrm
         Me.mnuDisAsmThisFile.Enabled = False
         Me.mnuExploreDisk.Enabled = True
@@ -3455,6 +3525,36 @@ Public Function ChangeEnabledMenus()
         Me.mnuOpenInBN = True
         Me.mnuStats.Enabled = True
         Me.mnuDeleteSelection.Enabled = True
+        Me.mnuShowIcons.Enabled = False
+        Me.mnuSaveAs.Enabled = True
+        Me.mnuPrint.Enabled = True
+        Me.mnuProperty.Enabled = True
+        Me.mnuCloseAll.Enabled = True
+        Me.rmnuEdit.Enabled = True
+        Me.mnuTab.Enabled = True
+        Me.mnuInformations.Enabled = True
+        Me.mnuEditTools.Enabled = True
+        Me.mnuTdec2Ascii.Enabled = True
+        Me.mnuTableMulti.Enabled = True
+        Me.mnuRefreh.Enabled = True
+        Me.rmnuPos.Enabled = True
+        Me.rmnuSignets.Enabled = True
+        Me.rmnuFind.Enabled = True
+        Me.mnuGoOn.Enabled = True
+        Me.rmnuWindow.Enabled = True
+        Me.rmnuExport.Enabled = True
+        Me.mnuExportSel.Enabled = True
+        Me.mnuExport.Enabled = False
+    Else
+        'phyPfm
+        Me.mnuDisAsmThisFile.Enabled = False
+        Me.mnuExploreDisk.Enabled = False
+        Me.mnuSave.Enabled = False
+        Me.mnuExecute.Enabled = True
+        Me.mnuCut.Enabled = False
+        Me.mnuOpenInBN = False
+        Me.mnuStats.Enabled = True
+        Me.mnuDeleteSelection.Enabled = False
         Me.mnuShowIcons.Enabled = False
         Me.mnuSaveAs.Enabled = True
         Me.mnuPrint.Enabled = True

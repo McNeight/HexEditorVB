@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Begin VB.Form frmPropertyShow 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Propriétés"
@@ -37,16 +37,19 @@ Begin VB.Form frmPropertyShow
          NumTabs         =   3
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fichier"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Disque"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Processus"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -245,6 +248,8 @@ Dim x As Long
         Frame1(x).Left = 120
         Frame1(x).Visible = False
     Next x
+    
+    If TypeOfForm(frmContent.ActiveForm) = "Disque physique" Then Me.mnuDisplayWindowsProp.Enabled = False
 End Sub
 
 '=======================================================
@@ -258,6 +263,10 @@ Private Sub RefreshProp()
         Frame1(0).Visible = True
         ShowFileProp    'affiche les infos sur le fichier
     ElseIf TypeOfForm(frmContent.ActiveForm) = "Disque" Then
+        TabStrip1.Tabs(2).Selected = True
+        Frame1(1).Visible = True
+        ShowDiskProp    'affiche les infos sur le disque
+    ElseIf TypeOfForm(frmContent.ActiveForm) = "Disque physique" Then
         TabStrip1.Tabs(2).Selected = True
         Frame1(1).Visible = True
         ShowDiskProp    'affiche les infos sur le disque

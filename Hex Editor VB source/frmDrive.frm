@@ -1,12 +1,12 @@
 VERSION 5.00
-Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.1#0"; "FileView_OCX.ocx"
+Object = "{82BC04E4-311C-4338-9872-80D446B3C793}#1.1#0"; "DriveView_OCX.ocx"
 Begin VB.Form frmDrive 
    BorderStyle     =   3  'Fixed Dialog
-   Caption         =   "                     Sélection d'un disque"
-   ClientHeight    =   4335
+   Caption         =   "Sélection d'un disque"
+   ClientHeight    =   3825
    ClientLeft      =   45
    ClientTop       =   360
-   ClientWidth     =   4125
+   ClientWidth     =   3255
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -21,45 +21,35 @@ Begin VB.Form frmDrive
    LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4335
-   ScaleWidth      =   4125
+   ScaleHeight     =   3825
+   ScaleWidth      =   3255
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin FileView_OCX.FileView FV 
-      Height          =   3615
-      Left            =   0
-      TabIndex        =   0
-      Top             =   0
-      Width           =   4095
-      _ExtentX        =   7223
-      _ExtentY        =   6376
-      AllowDirectoryEntering=   0   'False
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
+   Begin DriveView_OCX.DriveView DV 
+      Height          =   2895
+      Left            =   120
+      TabIndex        =   2
+      Top             =   120
+      Width           =   3015
+      _ExtentX        =   5318
+      _ExtentY        =   5106
    End
    Begin VB.CommandButton cmdNo 
       Caption         =   "Fermer"
       Height          =   495
-      Left            =   2355
-      TabIndex        =   2
+      Left            =   1920
+      TabIndex        =   1
       ToolTipText     =   "Fermer cette fenêtre"
-      Top             =   3720
+      Top             =   3240
       Width           =   1095
    End
    Begin VB.CommandButton cmdOK 
       Caption         =   "Ouvrir..."
       Height          =   495
-      Left            =   675
-      TabIndex        =   1
+      Left            =   240
+      TabIndex        =   0
       ToolTipText     =   "Ouvrir ce lecteur"
-      Top             =   3720
+      Top             =   3240
       Width           =   1095
    End
 End
@@ -106,19 +96,6 @@ Option Explicit
 'FORM PERMETTANT LE CHOIX DU DRIVE A OUVRIR
 '=======================================================
 
-Private Sub Form_Load()
-'prépare le FileView
-    With FV
-        .Path = Left$(App.Path, 3)  'affiche un drive existant (nécessaire à AddDrives)
-        .ShowFiles = False
-        .ShowDirectories = False
-        .ShowDrives = True 'affiche QUE les drives
-        .AllowDirectoryEntering = False 'ne RENTRE PAS dans les dossiers (drives)
-        .View = lvwList 'pas de columns
-        .AddDrives    'affiche les drives
-    End With
-End Sub
-
 
 '=======================================================
 'ouvre diskFrm
@@ -128,31 +105,67 @@ Dim Frm As Form
 Dim sDrive As String
 Dim cDr As clsDiskInfos
 
-    'vérifié que le drive est accessible
+    If DV.SelectedItem Is Nothing Then Exit Sub
+    
     Set cDr = New clsDiskInfos
-    If cDr.IsLogicalDriveAccessible(FV.ListItems.Item(FV.ListIndex).Text) = False Then
-        Set cDr = Nothing   'inaccessible, alors on sort de cette procédure
-        Exit Sub
+    
+    'on check si c'est un disque logique ou un disque physique
+    If Left$(DV.SelectedItem.Key, 3) = "log" Then
+    
+        'disque logique
+    
+        'vérifie que le drive est accessible
+        If DV.IsSelectedDriveAccessible = False Then
+            Set cDr = Nothing   'inaccessible, alors on sort de cette procédure
+            Exit Sub
+        End If
+        
+        'affiche une nouvelle fenêtre
+        Set Frm = New diskPfm
+        
+        Call Frm.GetDrive(DV.SelectedItem.Text)  'renseigne sur le path sélectionné
+        
+        Unload Me   'quitte cette form
+        
+        Frm.Show    'affiche la nouvelle
+        lNbChildFrm = lNbChildFrm + 1
+        frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+        
+    Else
+    
+        'disque physique
+        
+        'vérifie que le drive est accessible
+        If DV.IsSelectedDriveAccessible = False Then
+            Set cDr = Nothing   'inaccessible, alors on sort de cette procédure
+            Exit Sub
+        End If
+        
+        'affiche une nouvelle fenêtre
+        Set Frm = New physPfm
+        
+        Call Frm.GetDrive(Val(Mid$(DV.SelectedItem.Text, 3, 1))) 'renseigne sur le path sélectionné
+        
+        Unload Me   'quitte cette form
+        
+        Frm.Show    'affiche la nouvelle
+        lNbChildFrm = lNbChildFrm + 1
+        frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+        
+        
     End If
-    Set cDr = Nothing
     
-    'affiche une nouvelle fenêtre
-    Set Frm = New diskPfm
-    
-    Call Frm.GetDrive(FV.ListItems.Item(FV.ListIndex).Text) 'renseigne sur le path sélectionné
-    
-    Unload Me   'quitte cette form
-    
-    Frm.Show    'affiche la nouvelle
-    lNbChildFrm = lNbChildFrm + 1
-    frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
  
+    'libère la classe
+    Set cDr = Nothing
 End Sub
 
 Private Sub cmdNO_Click()
     Unload Me
 End Sub
 
-Private Sub FV_ItemDblSelection(Item As ComctlLib.ListItem)
+Private Sub DV_DblClick()
+    If DV.SelectedItem Is Nothing Then Exit Sub
+    If DV.SelectedItem.Children <> 0 Then Exit Sub
     cmdOk_Click
 End Sub

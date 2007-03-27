@@ -332,6 +332,9 @@ Dim tGeom As DISK_GEOMETRY
 
     '//tailles
         tDrive.TotalSpace = tDrive.SectorsPerTrack * tDrive.TracksPerCylinder * tDrive.Cylinders * tDrive.BytesPerSector
+        
+    '//secteurs
+        tDrive.TotalPhysicalSectors = CCur(tDrive.SectorsPerTrack * tDrive.TracksPerCylinder * tDrive.Cylinders)
     
     '//nom du disque physique
         tDrive.VolumeName = Trim$(GetPhysicalDriveName(Drive))
