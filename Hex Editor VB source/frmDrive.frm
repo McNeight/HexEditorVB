@@ -3,10 +3,10 @@ Object = "{82BC04E4-311C-4338-9872-80D446B3C793}#1.1#0"; "DriveView_OCX.ocx"
 Begin VB.Form frmDrive 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sélection d'un disque"
-   ClientHeight    =   3825
+   ClientHeight    =   3705
    ClientLeft      =   45
    ClientTop       =   360
-   ClientWidth     =   3255
+   ClientWidth     =   3450
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -21,36 +21,45 @@ Begin VB.Form frmDrive
    LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   3825
-   ScaleWidth      =   3255
+   ScaleHeight     =   3705
+   ScaleWidth      =   3450
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cmdRefresh 
+      Caption         =   "Actualiser"
+      Height          =   375
+      Left            =   1238
+      TabIndex        =   3
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   3240
+      Width           =   975
+   End
    Begin DriveView_OCX.DriveView DV 
       Height          =   2895
       Left            =   120
       TabIndex        =   2
       Top             =   120
-      Width           =   3015
-      _ExtentX        =   5318
+      Width           =   3255
+      _ExtentX        =   5741
       _ExtentY        =   5106
    End
    Begin VB.CommandButton cmdNo 
       Caption         =   "Fermer"
-      Height          =   495
-      Left            =   1920
+      Height          =   375
+      Left            =   2400
       TabIndex        =   1
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   3240
-      Width           =   1095
+      Width           =   975
    End
    Begin VB.CommandButton cmdOK 
       Caption         =   "Ouvrir..."
-      Height          =   495
-      Left            =   240
+      Height          =   375
+      Left            =   120
       TabIndex        =   0
       ToolTipText     =   "Ouvrir ce lecteur"
       Top             =   3240
-      Width           =   1095
+      Width           =   975
    End
 End
 Attribute VB_Name = "frmDrive"
@@ -164,8 +173,18 @@ Private Sub cmdNO_Click()
     Unload Me
 End Sub
 
+Private Sub cmdRefresh_Click()
+'on refresh la liste des drives
+    Call DV.Refresh
+    Call MarkUnaccessibleDrives(Me.DV)
+End Sub
+
 Private Sub DV_DblClick()
     If DV.SelectedItem Is Nothing Then Exit Sub
     If DV.SelectedItem.Children <> 0 Then Exit Sub
     cmdOk_Click
+End Sub
+
+Private Sub Form_Activate()
+    Call MarkUnaccessibleDrives(Me.DV)  'marque les drives inaccessibles
 End Sub

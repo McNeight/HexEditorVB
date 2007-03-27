@@ -41,6 +41,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -67,6 +68,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -553,7 +555,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "16:22"
+            TextSave        =   "18:37"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -2796,7 +2798,6 @@ End Sub
 
 Private Sub mnuOpenDisk_Click()
 'ouvre un disque physique
-
     frmDrive.Show vbModal
 End Sub
 

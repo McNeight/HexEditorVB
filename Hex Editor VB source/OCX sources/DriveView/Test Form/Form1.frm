@@ -105,7 +105,7 @@ Dim x As Long
         'alors on les montre
         bShow = True
         cmdColorIt.Caption = "Ne pas les montrer"
-
+        
         With DriveView1
             For x = 1 To .Nodes.Count
                 If .Nodes.Item(x).Children = 0 Then
