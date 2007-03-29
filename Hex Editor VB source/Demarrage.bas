@@ -51,6 +51,7 @@ Public bAcceptBackup As Boolean 'variable qui détermine si la création d'un back
 Public clsERREUR As clsGetionErreur
 Public cFile As clsFileInfos
 Public cMem As clsMemoryRW
+Public clsConv As clsConvert
 Public cProc As clsProcess
 Public cDisk As clsDiskInfos
 Public clsPref As clsIniFile
@@ -115,6 +116,7 @@ Dim s As String
         Set clsPref = New clsIniFile
         Set cPref = New clsIniPref
         Set cProc = New clsProcess
+        Set clsConv = New clsConvert
     
     '//initialise les tableaux
         ReDim JailedProcess(0)  'contient les process bloqués
@@ -351,6 +353,7 @@ Dim x As Long
         Set cMem = Nothing
         Set cDisk = Nothing
         Set cProc = Nothing
+        Set clsConv = Nothing
     
     '//affecte la valeur False au crash (car si on est là, c'est que c'est bien fermé)
         cPref.exe_HasCrashed = 0
