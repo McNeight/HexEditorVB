@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Begin VB.UserControl FileView 
    ClientHeight    =   6825
    ClientLeft      =   0
@@ -344,6 +344,7 @@ Private lDrives As Long
 Private bShowEntirePath As Boolean
 Private bShowDrives As Boolean
 Private lItemWidth As Long
+Private bBlockDisplay As Boolean
 
 
 '=======================================================
@@ -362,6 +363,8 @@ Private Sub LV_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Si
 '=======================================================
 'PROPERTIES (gros bloc....)
 '=======================================================
+Public Property Get BlockDisplay() As Boolean: BlockDisplay = bBlockDisplay: End Property
+Public Property Let BlockDisplay(BlockDisplay As Boolean): bBlockDisplay = BlockDisplay: End Property
 Public Property Get LabelWrap() As Boolean: LabelWrap = bLabelWrap: End Property
 Public Property Let LabelWrap(LabelWrap As Boolean): bLabelWrap = LabelWrap: LV.LabelWrap = LabelWrap: End Property
 Public Property Get View() As ListViewConstants: View = tView: End Property
@@ -488,10 +491,10 @@ Private Sub UserControl_InitProperties()
     Me.SizeDecimals = 3
     Me.View = lvwReport
     Me.ShowEntirePath = True
-    bStillOkForRefresh = False
     Me.ShowDrives = True
     Me.ItemWidth = 5500
     Me.Font = Ambient.Font
+    Me.BlockDisplay = False
     Refresh
 End Sub
 Private Sub UserControl_Resize()
@@ -535,8 +538,19 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.SizeDecimals = .ReadProperty("SizeDecimals", 3)
         Me.ItemWidth = .ReadProperty("ItemWidth", 5500)
         Set Me.Font = .ReadProperty("Font", Ambient.Font)
+        Me.BlockDisplay = .ReadProperty("BlockDisplay", False)
     End With
     
+    'alors c'est bon, on rafraichit
+    'ceci évite de rafraichir pour CHAQUE property à l'entrée dans le controle
+
+    'If bStillOkForRefresh Then
+     '   bStillOkForRefresh = False  'on ne rafraichira plus à l'entrée au focus
+    '    Refresh
+   ' End If
+End Sub
+
+Private Sub UserControl_Show()
     'alors c'est bon, on rafraichit
     'ceci évite de rafraichir pour CHAQUE property à l'entrée dans le controle
 
@@ -545,11 +559,13 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Refresh
     End If
 End Sub
+
 Private Sub UserControl_Terminate()
     Set fs = Nothing
 End Sub
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     With PropBag
+        Call .WriteProperty("BlockDisplay", Me.BlockDisplay, False)
         Call .WriteProperty("ShowEntirePath", Me.ShowEntirePath, True)
         Call .WriteProperty("SizeDecimals", Me.SizeDecimals, 3)
         Call .WriteProperty("AllowDirectoryDeleting", Me.AllowDirectoryDeleting, True)
@@ -792,7 +808,7 @@ End Sub
 '=======================================================
 Public Sub Refresh()
 
-    If bStillOkForRefresh = True Then Exit Sub  'contrôle pas encore chargé
+    If bStillOkForRefresh Or bBlockDisplay Then Exit Sub  'contrôle pas encore chargé ou bloqué
 
     LV.Visible = False
     
