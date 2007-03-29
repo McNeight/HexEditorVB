@@ -132,6 +132,7 @@ Dim lFile As Long
 Dim lLen As Double
 Dim s As String
     
+    On Error GoTo ErrGestion
     
     'affiche une nouvelle fenêtre
     Set Frm = New Pfm
@@ -173,7 +174,8 @@ Dim s As String
     frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
     
     Unload Me
-
+    
+ErrGestion:
 End Sub
 
 Private Sub Form_Load()

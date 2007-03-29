@@ -41,7 +41,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -68,7 +67,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -540,7 +538,6 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -548,15 +545,13 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "14:31"
-            Key             =   ""
+            TextSave        =   "16:56"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -564,7 +559,6 @@ Begin VB.MDIForm frmContent
             Object.Width           =   2117
             MinWidth        =   2117
             TextSave        =   "29/03/2007"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -2620,8 +2614,7 @@ Private Sub mnuExploreDisplay_Click()
             .BlockDisplay = True    'bloque l'affichage pour éviter le refresh à chaque changement de property
             .Visible = False
             
-            
-            .Height = cPref.explo_Height - 145
+            .Height = cPref.explo_Height - 370
             
             If cPref.explo_DefaultPath = "Dossier du programme" Then
                 'alors c'est dans app.path
@@ -2691,7 +2684,7 @@ Dim l As Currency
     If StrPtr(s) = 0 Then Exit Sub  'cancel
     
     'alors on va à l'offset (si possible)
-    l = By16(Int(Abs(Val(s))))  'formatage de l'offset
+    l = By16(Int(Abs(Val(s))) - 15)  'formatage de l'offset
     
     If l <= By16(Me.ActiveForm.HW.MaxOffset) Then
         'alors c'est ok

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{276EF1C1-20F1-4D85-BE7B-06C736C9DCE9}#1.1#0"; "ExtendedVScrollbar_OCX.ocx"
 Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.2#0"; "HexViewer_OCX.ocx"
 Begin VB.Form Pfm 
@@ -24,6 +24,53 @@ Begin VB.Form Pfm
    ScaleHeight     =   8115
    ScaleWidth      =   7635
    Visible         =   0   'False
+   Begin ComctlLib.StatusBar Sb 
+      Align           =   2  'Align Bottom
+      Height          =   255
+      Left            =   0
+      TabIndex        =   7
+      Top             =   7860
+      Width           =   7635
+      _ExtentX        =   13467
+      _ExtentY        =   450
+      SimpleText      =   ""
+      _Version        =   327682
+      BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
+         NumPanels       =   4
+         BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   4410
+            MinWidth        =   4410
+            Text            =   "Fichier=[Modifié]"
+            TextSave        =   "Fichier=[Modifié]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+         BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   4410
+            MinWidth        =   4410
+            Text            =   "Page=[0/0]"
+            TextSave        =   "Page=[0/0]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+         BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   3175
+            MinWidth        =   3175
+            Text            =   "Offset=[0]"
+            TextSave        =   "Offset=[0]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+         BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   5292
+            MinWidth        =   5292
+            Text            =   "Sélection=[0 Bytes]"
+            TextSave        =   "Sélection=[0 Bytes]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+      EndProperty
+   End
    Begin VB.Frame FrameData 
       Caption         =   "Valeur"
       ForeColor       =   &H00000000&
@@ -354,11 +401,13 @@ Begin VB.Form Pfm
                NumTabs         =   2
                BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Historique"
+                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
                BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Signets"
+                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
@@ -464,49 +513,6 @@ Begin VB.Form Pfm
             Width           =   2895
          End
       End
-   End
-   Begin ComctlLib.StatusBar Sb 
-      Align           =   2  'Align Bottom
-      Height          =   255
-      Left            =   0
-      TabIndex        =   7
-      Top             =   7860
-      Width           =   7635
-      _ExtentX        =   13467
-      _ExtentY        =   450
-      SimpleText      =   ""
-      _Version        =   327682
-      BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
-         NumPanels       =   4
-         BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   4410
-            MinWidth        =   4410
-            Text            =   "Fichier=[Modifié]"
-            TextSave        =   "Fichier=[Modifié]"
-            Object.Tag             =   ""
-         EndProperty
-         BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   4410
-            MinWidth        =   4410
-            Text            =   "Page=[0/0]"
-            TextSave        =   "Page=[0/0]"
-            Object.Tag             =   ""
-         EndProperty
-         BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   3175
-            MinWidth        =   3175
-            Text            =   "Offset=[0]"
-            TextSave        =   "Offset=[0]"
-            Object.Tag             =   ""
-         EndProperty
-         BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   5292
-            MinWidth        =   5292
-            Text            =   "Sélection=[0 Bytes]"
-            TextSave        =   "Sélection=[0 Bytes]"
-            Object.Tag             =   ""
-         EndProperty
-      EndProperty
    End
    Begin ExtVS.ExtendedVScrollBar VS 
       Height          =   2895
@@ -1366,6 +1372,7 @@ End Sub
 Public Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As ItemElement)
 Dim s As String
 Dim r As Long
+Dim l As Currency
 
     'popup menu
     If Button = 2 Then
@@ -1373,7 +1380,17 @@ Dim r As Long
         frmContent.mnuCut.Enabled = True
         Me.PopupMenu frmContent.rmnuEdit ', X + GD.Left, Y + GD.Top
     End If
-    Me.Sb.Panels(3).Text = "Offset=[" & CStr(Item.Line * 16 + HW.FirstOffset - 16) & "]"
+    
+    'calcule l'offset (hexa ou décimal)
+    l = Item.Line * 16 + HW.FirstOffset - 16 + Item.Col - 1
+    If cPref.app_OffsetsHex Then
+        clsConv.CurrentString = Trim$(Str$(l))
+        s = clsConv.Convert(16, 10)
+    Else
+        s = CStr(l)
+    End If
+    Me.Sb.Panels(3).Text = "Offset=[" & s & "]"
+    
     Label2(10).Caption = Me.Sb.Panels(3).Text
     
     
