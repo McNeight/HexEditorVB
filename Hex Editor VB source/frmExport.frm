@@ -69,6 +69,16 @@ Begin VB.Form frmExport
          TabIndex        =   5
          Top             =   240
          Width           =   3975
+         Begin VB.TextBox txtOpt 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   2400
+            TabIndex        =   12
+            Text            =   "Text1"
+            Top             =   720
+            Visible         =   0   'False
+            Width           =   1455
+         End
          Begin VB.CheckBox chkString 
             Caption         =   "Ajouter les valeurs ASCII"
             Height          =   195
@@ -76,7 +86,7 @@ Begin VB.Form frmExport
             TabIndex        =   10
             ToolTipText     =   "Permet l'ajout des valeurs ASCII au fichier"
             Top             =   840
-            Width           =   3495
+            Width           =   2175
          End
          Begin VB.ComboBox cbFormat 
             Height          =   315
@@ -89,6 +99,15 @@ Begin VB.Form frmExport
             ToolTipText     =   "Format d'exportation"
             Top             =   120
             Width           =   3975
+         End
+         Begin VB.Label lbl 
+            Caption         =   "Label1"
+            Height          =   255
+            Left            =   2400
+            TabIndex        =   11
+            Top             =   480
+            Visible         =   0   'False
+            Width           =   1335
          End
       End
    End
@@ -175,34 +194,78 @@ Option Explicit
 
 Private bEntireFile As Boolean
 
+Private Sub cbFormat_Click()
+'affiche l'option du format
+
+    lbl.Visible = False
+    txtOpt.Visible = False
+    
+    Select Case cbFormat.Text
+        Case "RTF"
+        
+        Case "Texte"
+        
+        Case "Source C"
+        
+        Case "Source VB"
+        
+        Case "Source JAVA"
+        
+        Case "HTML"
+            Me.Caption = "Exporter en HTML (fichier 13 fois plus grand)"
+            lbl.Caption = "Taille (1-10)"
+            txtOpt.Text = "3"
+            lbl.Visible = True
+            txtOpt.Visible = True
+        Case "Else"
+            Me.Caption = "Exporter"
+    End Select
+End Sub
+
+Private Sub cmdBrowse_Click()
+'browse for file
+    txtFile.Text = cFile.ShowSave("Sélectionner le fichier à créer", Me.hWnd, "Tous|*.*", App.Path)
+End Sub
+
 Private Sub cmdQuit_Click()
     Unload Me
 End Sub
 
 Private Sub cmdSave_Click()
 'lance la sauvegarde
+Dim x As Long
 
     'ajoute du texte à la console
     Call AddTextToConsole("Exportation en cours...")
+    Frame1(0).Enabled = False
+    Frame1(1).Enabled = False
+    cmdSave.Enabled = False
+    cmdQuit.Enabled = False
     
     Select Case cbFormat.Text
         Case "HTML"
-        
+            
+            x = Int(Abs(Val(txtOpt.Text)))
+            If x < 1 Or x > 10 Then
+                MsgBox "Taille non valide", vbCritical, "Attention"
+                GoTo ResumeMe
+            End If
+            
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    frmContent.ActiveForm.Caption, -1)
+                    frmContent.ActiveForm.Caption, -1, x)
             Else
                 'sauvegarde d'une plage d'offset
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    "az", 1, 1)
+                    "az", 1, 1, x)
             End If
             
         Case "RTF"
             
         Case "Texte"
             
-        Case "Source c"
+        Case "Source C"
             
         Case "Source VB"
             
@@ -210,13 +273,13 @@ Private Sub cmdSave_Click()
             
     End Select
     
+ResumeMe:
+    Frame1(0).Enabled = True
+    Frame1(1).Enabled = True
+    cmdSave.Enabled = True
+    cmdQuit.Enabled = True
     'ajoute du texte à la console
     Call AddTextToConsole("Exportation terminée")
-            
-End Sub
-
-Private Sub Form_Load()
-    bEntireFile = False
 End Sub
 
 '=======================================================
