@@ -75,7 +75,7 @@ Begin VB.Form frmExport
             Height          =   285
             Left            =   2400
             TabIndex        =   2
-            Text            =   "Text1"
+            Text            =   "texte de l'option"
             Top             =   720
             Visible         =   0   'False
             Width           =   1455
@@ -102,7 +102,7 @@ Begin VB.Form frmExport
             Width           =   3975
          End
          Begin VB.Label lbl 
-            Caption         =   "Label1"
+            Caption         =   "option"
             Height          =   255
             Left            =   2400
             TabIndex        =   12
@@ -214,7 +214,14 @@ Private Sub cbFormat_Click()
             chkString.Enabled = False
             chkOffset.Enabled = False
         Case "Source VB"
-            
+            Me.Caption = "Exporter en code VB (fichier 2 fois plus grand)"
+            chkString.Enabled = False
+            chkOffset.Enabled = False
+            lbl.Caption = "Car. séparateur"
+            txtOpt.Text = vbNullString
+            lbl.Visible = True
+            txtOpt.ToolTipText = "Caractère de séparation des valeurs hexadécimales"
+            txtOpt.Visible = True
         Case "Source JAVA"
             Me.Caption = "Exporter en code JAVA (fichier 6 fois plus grand)"
             chkString.Enabled = False
@@ -224,6 +231,7 @@ Private Sub cbFormat_Click()
             lbl.Caption = "Taille (1-10)"
             txtOpt.Text = "3"
             lbl.Visible = True
+            txtOpt.ToolTipText = "Taille du texte"
             txtOpt.Visible = True
         Case "Else"
             Me.Caption = "Exporter"
@@ -312,7 +320,13 @@ Dim x As Long
             End If
             
         Case "Source VB"
-            
+            If bEntireFile Then
+                'sauvegarde d'un fichier entier
+                Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, -1, , txtOpt.Text)
+            Else
+                'sauvegarde d'une plage d'offset
+                Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1, txtOpt.Text)
+            End If
             
         Case "Source JAVA"
             If bEntireFile Then
