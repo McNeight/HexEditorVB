@@ -319,3 +319,272 @@ Dim sRes As String
     End If
     
 End Sub
+
+'=======================================================
+'sauvegarde en CODE C
+'paramètres : sOutputFile (fichier de sortie)
+'sStringHex : contient la suite des valeurs hexa, ou le fichier d'entrée si fichier entier
+'curFirstOffset : premier offset de la sélection (-1 si fichier entier)
+'=======================================================
+Public Sub SaveAsC(ByVal sOutputFile As String, ByVal sStringHex As String, _
+    ByVal curFirstOffset As Currency, Optional ByVal curSecondOffset As Currency)
+
+Dim s As String
+Dim curS As Currency
+Dim x As Long
+Dim y As Long
+Dim s3 As String
+Dim s2 As String
+Dim z As Long
+Dim s4 As String
+Dim sRes As String
+    
+    'exemple de string au format CODE C
+    '/* Source File: AUTHORS.TXT
+    'Length: 118*/
+    'unsigned char rawData[118] =
+    '{
+    '    0x43, 0x6F, 0x70, 0x79, 0x72, 0x69, 0x67, 0x68, 0x74, 0x20, 0x62, 0x79, 0x0D, 0x0A, 0x41, 0x6C,
+    '    0x61, 0x69, 0x6E, 0x20, 0x44, 0x65, 0x73, 0x63, 0x6F, 0x74, 0x65, 0x73, 0x20, 0x28, 0x76, 0x69,
+    '    0x6F, 0x6C, 0x65, 0x6E, 0x74, 0x5F, 0x6B, 0x65, 0x6E, 0x29, 0x0D, 0x0A, 0x3C, 0x61, 0x6C, 0x61,
+    '    0x69, 0x6E, 0x64, 0x65, 0x73, 0x63, 0x6F, 0x74, 0x65, 0x73, 0x40, 0x68, 0x6F, 0x74, 0x6D, 0x61,
+    '    0x69, 0x6C, 0x2E, 0x66, 0x72, 0x2C, 0x20, 0x61, 0x6C, 0x61, 0x69, 0x6E, 0x64, 0x65, 0x73, 0x63,
+    '    0x6F, 0x74, 0x65, 0x73, 0x40, 0x67, 0x6D, 0x61, 0x69, 0x6C, 0x2E, 0x63, 0x6F, 0x6D, 0x2C, 0x20,
+    '    0x68, 0x65, 0x78, 0x65, 0x64, 0x69, 0x74, 0x6F, 0x72, 0x76, 0x62, 0x40, 0x67, 0x6D, 0x61, 0x69,
+    '    0x6C, 0x2E, 0x63, 0x6F, 0x6D, 0x3E,
+    '} ;
+    
+    
+    If frmContent.ActiveForm Is Nothing Then Exit Sub
+    DoEvents
+    
+    If curFirstOffset = -1 Then
+        'alors c'est le fichier/disque/process entier
+    
+        'la méthode de sauvegarde dépend du type d'activeform
+        Select Case TypeOfForm(frmContent.ActiveForm)
+        
+            Case "Fichier"
+                'sauvegarde du fichier
+                'lecture de 16kB en 16kB
+                               
+                'récupère la taille du fichier
+                curS = cFile.GetFileSize(sStringHex)
+                Call cFile.CreateEmptyFile(sOutputFile, True)
+                
+                'pose le header
+                s = "/* Source File: " & cFile.GetFileFromPath(sStringHex)
+                s = s & vbNewLine & "Length: " & Trim$(Str$(curS)) & "*/" & vbNewLine
+                s = s & "unsigned char rawData[" & Trim$(Str$(curS)) & "] =" & vbNewLine & "{" & vbNewLine
+                Call WriteBytesToFileEnd(sOutputFile, s)
+                
+                For x = 1 To Int(curS / 16000)
+                    'récupère les bytes
+                    s = GetBytesFromFile(sStringHex, 16000, 16000 * (x - 1))
+                    sRes = vbNullString
+                    
+                    'maintenant on créé le buffer
+                    For y = 1 To Len(s) Step 16
+        
+                    'on récupère toutes les valeurs hexa
+                    sRes = sRes & "   "
+                    s2 = Mid$(s, y, 16)
+                    For z = 1 To Len(s2)
+                        sRes = sRes & "0x" & Hex_(Asc(Mid$(s, y + z - 1, 1))) & ", "
+                    Next z
+                    sRes = sRes & vbNewLine
+                        
+                    Next y
+                    Call WriteBytesToFileEnd(sOutputFile, sRes): DoEvents
+                Next x
+                
+                's'occupe de la dernière partie du fichier
+                s = GetBytesFromFile(sStringHex, curS - 16000 * (x - 1), 16000 * (x - 1))
+                sRes = vbNullString
+                
+                'maintenant on créé le buffer
+                For y = 1 To Len(s) Step 16
+    
+                    'on récupère toutes les valeurs hexa
+                    sRes = sRes & "   "
+                    s2 = Mid$(s, y, 16)
+                    For z = 1 To Len(s2)
+                        sRes = sRes & "0x" & Hex_(Asc(Mid$(s, y + z - 1, 1))) & ", "
+                    Next z
+                    sRes = sRes & vbNewLine
+                    
+                Next y
+                Call WriteBytesToFileEnd(sOutputFile, sRes): DoEvents
+                Call WriteBytesToFileEnd(sOutputFile, vbNewLine & "};")
+            Case "Disque"
+            
+            Case "Processus"
+            
+            Case "Disque physique"
+            
+            
+            Case Else
+                MsgBox "Form not defined", vbCritical, "Internal error"
+                Exit Sub
+        End Select
+        
+        
+    Else
+        'alors juste la sélection
+    
+        
+        'la méthode de sauvegarde dépend du type d'activeform
+        Select Case TypeOfForm(frmContent.ActiveForm)
+        
+            Case "Fichier"
+                
+            Case "Disque"
+            
+            Case "Processus"
+            
+            Case "Disque physique"
+            
+            
+            Case Else
+                MsgBox "Form not defined", vbCritical, "Internal error"
+                Exit Sub
+        End Select
+        
+    End If
+    
+End Sub
+
+'=======================================================
+'sauvegarde en CODE JAVA
+'paramètres : sOutputFile (fichier de sortie)
+'sStringHex : contient la suite des valeurs hexa, ou le fichier d'entrée si fichier entier
+'curFirstOffset : premier offset de la sélection (-1 si fichier entier)
+'=======================================================
+Public Sub SaveAsJAVA(ByVal sOutputFile As String, ByVal sStringHex As String, _
+    ByVal curFirstOffset As Currency, Optional ByVal curSecondOffset As Currency)
+
+Dim s As String
+Dim curS As Currency
+Dim x As Long
+Dim y As Long
+Dim s3 As String
+Dim s2 As String
+Dim z As Long
+Dim s4 As String
+Dim sRes As String
+    
+    'exemple de string au format CODE JAVA
+    '/* Source File: AUTHORS.TXT
+    'Length: 118*/
+    'byte char rawData[] =
+    '{
+    '    0x43, 0x6F, 0x70, 0x79, 0x72, 0x69, 0x67, 0x68, 0x74, 0x20, 0x62, 0x79, 0x0D, 0x0A, 0x41, 0x6C,
+    '    0x61, 0x69, 0x6E, 0x20, 0x44, 0x65, 0x73, 0x63, 0x6F, 0x74, 0x65, 0x73, 0x20, 0x28, 0x76, 0x69,
+    '    0x6F, 0x6C, 0x65, 0x6E, 0x74, 0x5F, 0x6B, 0x65, 0x6E, 0x29, 0x0D, 0x0A, 0x3C, 0x61, 0x6C, 0x61,
+    '    0x69, 0x6E, 0x64, 0x65, 0x73, 0x63, 0x6F, 0x74, 0x65, 0x73, 0x40, 0x68, 0x6F, 0x74, 0x6D, 0x61,
+    '    0x69, 0x6C, 0x2E, 0x66, 0x72, 0x2C, 0x20, 0x61, 0x6C, 0x61, 0x69, 0x6E, 0x64, 0x65, 0x73, 0x63,
+    '    0x6F, 0x74, 0x65, 0x73, 0x40, 0x67, 0x6D, 0x61, 0x69, 0x6C, 0x2E, 0x63, 0x6F, 0x6D, 0x2C, 0x20,
+    '    0x68, 0x65, 0x78, 0x65, 0x64, 0x69, 0x74, 0x6F, 0x72, 0x76, 0x62, 0x40, 0x67, 0x6D, 0x61, 0x69,
+    '    0x6C, 0x2E, 0x63, 0x6F, 0x6D, 0x3E,
+    '} ;
+    
+    
+    If frmContent.ActiveForm Is Nothing Then Exit Sub
+    DoEvents
+    
+    If curFirstOffset = -1 Then
+        'alors c'est le fichier/disque/process entier
+    
+        'la méthode de sauvegarde dépend du type d'activeform
+        Select Case TypeOfForm(frmContent.ActiveForm)
+        
+            Case "Fichier"
+                'sauvegarde du fichier
+                'lecture de 16kB en 16kB
+                               
+                'récupère la taille du fichier
+                curS = cFile.GetFileSize(sStringHex)
+                Call cFile.CreateEmptyFile(sOutputFile, True)
+                
+                'pose le header
+                s = "/* Source File: " & cFile.GetFileFromPath(sStringHex)
+                s = s & vbNewLine & "Length: " & Trim$(Str$(curS)) & "*/" & vbNewLine
+                s = s & "byte rawData[] =" & vbNewLine & "{" & vbNewLine
+                Call WriteBytesToFileEnd(sOutputFile, s)
+                
+                For x = 1 To Int(curS / 16000)
+                    'récupère les bytes
+                    s = GetBytesFromFile(sStringHex, 16000, 16000 * (x - 1))
+                    sRes = vbNullString
+                    
+                    'maintenant on créé le buffer
+                    For y = 1 To Len(s) Step 16
+        
+                    'on récupère toutes les valeurs hexa
+                    sRes = sRes & "   "
+                    s2 = Mid$(s, y, 16)
+                    For z = 1 To Len(s2)
+                        sRes = sRes & "0x" & Hex_(Asc(Mid$(s, y + z - 1, 1))) & ", "
+                    Next z
+                    sRes = sRes & vbNewLine
+                        
+                    Next y
+                    Call WriteBytesToFileEnd(sOutputFile, sRes): DoEvents
+                Next x
+                
+                's'occupe de la dernière partie du fichier
+                s = GetBytesFromFile(sStringHex, curS - 16000 * (x - 1), 16000 * (x - 1))
+                sRes = vbNullString
+                
+                'maintenant on créé le buffer
+                For y = 1 To Len(s) Step 16
+    
+                    'on récupère toutes les valeurs hexa
+                    sRes = sRes & "   "
+                    s2 = Mid$(s, y, 16)
+                    For z = 1 To Len(s2)
+                        sRes = sRes & "0x" & Hex_(Asc(Mid$(s, y + z - 1, 1))) & ", "
+                    Next z
+                    sRes = sRes & vbNewLine
+                    
+                Next y
+                Call WriteBytesToFileEnd(sOutputFile, sRes): DoEvents
+                Call WriteBytesToFileEnd(sOutputFile, vbNewLine & "};")
+            Case "Disque"
+            
+            Case "Processus"
+            
+            Case "Disque physique"
+            
+            
+            Case Else
+                MsgBox "Form not defined", vbCritical, "Internal error"
+                Exit Sub
+        End Select
+        
+        
+    Else
+        'alors juste la sélection
+    
+        
+        'la méthode de sauvegarde dépend du type d'activeform
+        Select Case TypeOfForm(frmContent.ActiveForm)
+        
+            Case "Fichier"
+                
+            Case "Disque"
+            
+            Case "Processus"
+            
+            Case "Disque physique"
+            
+            
+            Case Else
+                MsgBox "Form not defined", vbCritical, "Internal error"
+                Exit Sub
+        End Select
+        
+    End If
+    
+End Sub
+

@@ -980,6 +980,18 @@ Dim l As Long
 
     Bin2Dec = l
 End Function
+Public Function Hex_(ByVal l As Long, Optional ByVal Size As Long = 2) As String
+Dim lng As Long
+Dim s As String
+
+    s = Hex$(l): l = Len(s)
+    If l < Size Then
+        Hex_ = String$(Size - l, "0") & s
+    Else
+        Hex_ = s
+    End If
+
+End Function
 Public Function Oct2Dec(ByVal s As String) As Long
 Dim x As Long
 Dim l As Long

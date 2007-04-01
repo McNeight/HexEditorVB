@@ -29,7 +29,7 @@ Begin VB.Form frmSignets
       Caption         =   "Appliquer les changements"
       Height          =   375
       Left            =   120
-      TabIndex        =   13
+      TabIndex        =   8
       ToolTipText     =   "Applique les changements à la fenêtre active"
       Top             =   4680
       Width           =   2655
@@ -39,7 +39,7 @@ Begin VB.Form frmSignets
       Height          =   1215
       Index           =   1
       Left            =   60
-      TabIndex        =   7
+      TabIndex        =   12
       Top             =   3360
       Width           =   5295
       Begin VB.PictureBox Picture1 
@@ -49,14 +49,15 @@ Begin VB.Form frmSignets
          Left            =   100
          ScaleHeight     =   885
          ScaleWidth      =   5100
-         TabIndex        =   8
+         TabIndex        =   13
+         TabStop         =   0   'False
          Top             =   240
          Width           =   5100
          Begin VB.CommandButton cmdComment 
             Caption         =   "Ajouter un commentaite sur le signet sélectionné"
             Height          =   375
             Left            =   0
-            TabIndex        =   12
+            TabIndex        =   7
             ToolTipText     =   "Ajoute un commentaire sur les signets sélectionnés"
             Top             =   480
             Width           =   5055
@@ -65,7 +66,7 @@ Begin VB.Form frmSignets
             Caption         =   "Nouveau"
             Height          =   375
             Left            =   0
-            TabIndex        =   11
+            TabIndex        =   4
             ToolTipText     =   "Créé un nouveau signet"
             Top             =   0
             Width           =   1455
@@ -74,7 +75,7 @@ Begin VB.Form frmSignets
             Caption         =   "Supprimer sélection"
             Height          =   375
             Left            =   1560
-            TabIndex        =   10
+            TabIndex        =   5
             ToolTipText     =   "Supprime les fichiers sélectionnés"
             Top             =   0
             Width           =   1815
@@ -83,7 +84,7 @@ Begin VB.Form frmSignets
             Caption         =   "Supprimer tout"
             Height          =   375
             Left            =   3600
-            TabIndex        =   9
+            TabIndex        =   6
             ToolTipText     =   "Supprime tous les signets"
             Top             =   0
             Width           =   1455
@@ -94,7 +95,7 @@ Begin VB.Form frmSignets
       Caption         =   "Fermer"
       Height          =   375
       Left            =   3840
-      TabIndex        =   6
+      TabIndex        =   9
       ToolTipText     =   "Ferme cette fenêtre"
       Top             =   4680
       Width           =   1455
@@ -104,7 +105,7 @@ Begin VB.Form frmSignets
       Height          =   735
       Index           =   0
       Left            =   60
-      TabIndex        =   1
+      TabIndex        =   10
       Top             =   2640
       Width           =   5295
       Begin VB.PictureBox Picture1 
@@ -114,14 +115,15 @@ Begin VB.Form frmSignets
          Left            =   100
          ScaleHeight     =   405
          ScaleWidth      =   5100
-         TabIndex        =   2
+         TabIndex        =   11
+         TabStop         =   0   'False
          Top             =   240
          Width           =   5100
          Begin VB.CommandButton cmdSave 
             Caption         =   "Sauvegarder..."
             Height          =   375
             Left            =   3600
-            TabIndex        =   5
+            TabIndex        =   3
             ToolTipText     =   "Sauvegarde la liste de signets actuelle"
             Top             =   0
             Width           =   1455
@@ -130,7 +132,7 @@ Begin VB.Form frmSignets
             Caption         =   "Ajouter..."
             Height          =   375
             Left            =   1800
-            TabIndex        =   4
+            TabIndex        =   2
             ToolTipText     =   "Ajoute une liste de signets"
             Top             =   0
             Width           =   1455
@@ -139,7 +141,7 @@ Begin VB.Form frmSignets
             Caption         =   "Ouvrir..."
             Height          =   375
             Left            =   0
-            TabIndex        =   3
+            TabIndex        =   1
             ToolTipText     =   "Ouvre une liste de signets"
             Top             =   0
             Width           =   1455
