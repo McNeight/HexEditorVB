@@ -9,7 +9,7 @@ Attribute VB_Name = "About_Description"
 
 
 
-
+ 
 
 
 ' =======================================================
@@ -90,6 +90,8 @@ Attribute VB_Name = "About_Description"
 ' Le logiciel permet la création/sauvegarder/chargement de signets, la personnalisation de
 ' la visualisation du fichier, l'implémentation dans le menu contextuel de Explorer,
 ' un explorateur de fichiers pour permettre l'ouverture rapide, un explorateur de disque...
+'
+' Inclut également un module de désassemblage d'exécutables Win32.
 
 
 
@@ -128,7 +130,8 @@ Attribute VB_Name = "About_Description"
 ' The software allows creation/saving/loading of bookmarks, the personalization of the
 ' visualization of the file, the implementation in the contextual menu of Explorer,
 ' a file explorer to allow the fast opening, a disk explorer…
-
+'
+' Also includes a disassembler module for Win32 binaries.
 
 
 
@@ -206,6 +209,9 @@ Attribute VB_Name = "About_Description"
 '
 ' VERSIONS PRE ALPHA :
 '
+'   v1.6 Optimisations du logiciel (démarrage, ouverture des fichiers...), correction de bugs
+' d'affichage, corrections de bugs divers, support des disques physiques ajouté, ajout de la
+' console, ajout du module de désassemblage
 '   v1.5 Ajout de la recherche de fichiers, des options, des icones, correction de nombreux
 ' bugs, support des formats CDFS et UDF, support des fichiers de plus de 900To
 '   v1.4 Ajout des options, de la recherche en mémoire, de la conversion avancée,
@@ -233,6 +239,8 @@ Attribute VB_Name = "About_Description"
 '
 ' PRE ALPHA RELEASES :
 '
+'   v1.6 Optimized Hex Editor VB (loading, file opening ...), bugs fixed, added support of
+' physical disks, addde Console, added Disassembler module
 '   v1.5 Added search of files, options, icons, bugs fixed, support of CDFS and UDF format,
 ' support of >900 TB files
 '   v1.4 Added options, search in memory, advanced conversion, copy, 'file fusion'
@@ -255,6 +263,8 @@ Attribute VB_Name = "About_Description"
 '
 ' Certains morceaux de codes codés par d'autres personnes ont été réutilisés.
 ' Merci à eux, à savoir (ordre alphabétique) : Galain, PCPT, Paul Caton, Renfield, ShareVB
+'
+' La Dll de désassemblage est directement issue du travail de ShareVB.
 
 
 
@@ -267,7 +277,8 @@ Attribute VB_Name = "About_Description"
 '
 ' Few parts of code have been coded by other people.
 ' Thanks to them (in alphabetic order) : Galain, PCPT, Paul Caton, Renfield, ShareVB
-
+'
+' Disassembler DLL was coded by ShareVB.
 
 
 
