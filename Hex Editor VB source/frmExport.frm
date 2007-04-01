@@ -204,7 +204,7 @@ Private Sub cbFormat_Click()
         Case "RTF"
         
         Case "Texte"
-        
+            Me.Caption = "Exporter en texte simple (fichier 5 fois plus grand)"
         Case "Source C"
         
         Case "Source VB"
@@ -238,9 +238,17 @@ Dim x As Long
     'ajoute du texte à la console
     Call AddTextToConsole("Exportation en cours...")
     Frame1(0).Enabled = False
+    txtFile.Enabled = False
+    chkOffset.Enabled = False
+    chkString.Enabled = False
+    lbl.Enabled = False
+    txtOpt.Enabled = False
+    cbFormat.Enabled = False
+    cmdBrowse.Enabled = False
     Frame1(1).Enabled = False
     cmdSave.Enabled = False
     cmdQuit.Enabled = False
+    DoEvents
     
     Select Case cbFormat.Text
         Case "HTML"
@@ -258,26 +266,48 @@ Dim x As Long
             Else
                 'sauvegarde d'une plage d'offset
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    "az", 1, 1, x)
+                    "az", 1, 1)
             End If
             
         Case "RTF"
             
+            
+            
         Case "Texte"
+            If bEntireFile Then
+                'sauvegarde d'un fichier entier
+                Call SaveAsTEXT(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
+                    frmContent.ActiveForm.Caption, -1, x)
+            Else
+                'sauvegarde d'une plage d'offset
+                Call SaveAsTEXT(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
+                    "az", 1, 1)
+            End If
             
         Case "Source C"
             
+            
         Case "Source VB"
             
+            
         Case "Source JAVA"
+            
             
     End Select
     
 ResumeMe:
     Frame1(0).Enabled = True
+    txtFile.Enabled = True
+    chkOffset.Enabled = True
+    chkString.Enabled = True
+    lbl.Enabled = True
+    txtOpt.Enabled = True
+    cbFormat.Enabled = True
+    cmdBrowse.Enabled = True
     Frame1(1).Enabled = True
     cmdSave.Enabled = True
     cmdQuit.Enabled = True
+    DoEvents
     'ajoute du texte à la console
     Call AddTextToConsole("Exportation terminée")
 End Sub
