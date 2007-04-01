@@ -52,6 +52,8 @@ Public Function Formated16String(ByVal sString As String) As String
 Dim x As Long
 Dim s As String
 
+    On Error Resume Next
+    
     s = vbNullString
     
     For x = 1 To 16

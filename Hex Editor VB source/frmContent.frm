@@ -553,7 +553,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "13:23"
+            TextSave        =   "15:04"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1714,6 +1714,11 @@ Private Sub mnuExport_Click()
 'exporte les valeurs hexa du fichier entier
     Call frmExport.IsEntireFile
     frmExport.Show vbModal
+End Sub
+
+Private Sub mnuExportSel_Click()
+'exporte la sélection
+
 End Sub
 
 Private Sub mnuGestSignets_Click()
