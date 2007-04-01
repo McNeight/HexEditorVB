@@ -588,3 +588,163 @@ Dim sRes As String
     
 End Sub
 
+'=======================================================
+'sauvegarde en CODE VB
+'paramètres : sOutputFile (fichier de sortie)
+'sStringHex : contient la suite des valeurs hexa, ou le fichier d'entrée si fichier entier
+'curFirstOffset : premier offset de la sélection (-1 si fichier entier)
+'=======================================================
+Public Sub SaveAsVB(ByVal sOutputFile As String, ByVal sStringHex As String, _
+    ByVal curFirstOffset As Currency, Optional ByVal curSecondOffset As Currency, _
+    Optional ByVal sSep As String = vbNullString)
+
+Dim s As String
+Dim curS As Currency
+Dim x As Long
+Dim z2 As Long
+Dim y As Long
+Dim s3 As String
+Dim s2 As String
+Dim z As Long
+Dim s4 As String
+Dim o As Long
+Dim ov As Long
+Dim sRes As String
+    
+    'exemple de string au format CODE VB
+    ''==========================================
+    ''Source file: fichier.txt
+    ''Length: 13
+    '==========================================
+    'Private Const HEX_VALUES = "48455820454449544F52205642"
+    
+    
+    If frmContent.ActiveForm Is Nothing Then Exit Sub
+    DoEvents
+    
+    If curFirstOffset = -1 Then
+        'alors c'est le fichier/disque/process entier
+    
+        'la méthode de sauvegarde dépend du type d'activeform
+        Select Case TypeOfForm(frmContent.ActiveForm)
+        
+            Case "Fichier"
+                'sauvegarde du fichier
+                'lecture de 16kB en 16kB
+                               
+                'récupère la taille du fichier
+                curS = cFile.GetFileSize(sStringHex)
+                Call cFile.CreateEmptyFile(sOutputFile, True)
+                
+                'pose le header
+                s = "'==========================================" & vbNewLine & "'Source File: " & cFile.GetFileFromPath(sStringHex)
+                s = s & vbNewLine & "'Length: " & Trim$(Str$(curS)) & vbNewLine & "'==========================================" & vbNewLine
+                s = s & "Private Const HEX_VALUES = " & Chr$(34)
+                Call WriteBytesToFileEnd(sOutputFile, s)
+                
+                o = 0   'nombre de retours à la ligne
+                ov = 0
+                
+                For x = 1 To Int(curS / 16000)
+                    'récupère les bytes
+                    s = GetBytesFromFile(sStringHex, 16000, 16000 * (x - 1))
+                    sRes = vbNullString
+                    z2 = 0
+                    
+                    'maintenant on créé le buffer
+                    For y = 1 To Len(s) Step 16
+        
+                        'on récupère toutes les valeurs hexa
+                        s2 = Mid$(s, y, 16)
+                        For z = 1 To Len(s2)
+                            sRes = sRes & Hex_(Asc(Mid$(s, y + z - 1, 1))) & sSep
+                        Next z
+                        
+                        If Len(sRes) - z2 > 800 Then
+                            'alors il faut faire un saut de ligne
+                            z2 = Len(sRes)
+                            sRes = sRes & Chr$(34) & IIf(o < 10, " & _" & vbNewLine & "    " & Chr$(34), vbNewLine)
+                            o = o + 1
+                        End If
+                        
+                        If o > 10 Then
+                            'alors trop de retours à la ligne
+                            ov = ov + 1
+                            sRes = sRes & IIf(o <> 11, Chr$(34), vbNullString) & vbNewLine & "Private Const HEX_VALUES_" & Trim$(Str$(ov)) & " = " & Chr$(34)
+                            o = 0
+                        End If
+                        
+                    Next y
+                    Call WriteBytesToFileEnd(sOutputFile, sRes): DoEvents
+                Next x
+                
+                's'occupe de la dernière partie du fichier
+                s = GetBytesFromFile(sStringHex, curS - 16000 * (x - 1), 16000 * (x - 1))
+                sRes = vbNullString
+                z2 = 0
+
+                'maintenant on créé le buffer
+                For y = 1 To Len(s) Step 16
+    
+                    'on récupère toutes les valeurs hexa
+                    s2 = Mid$(s, y, 16)
+                    For z = 1 To Len(s2)
+                        sRes = sRes & Hex_(Asc(Mid$(s, y + z - 1, 1))) & sSep
+                    Next z
+                    
+                    If Len(sRes) - z2 > 800 Then
+                        'alors il faut faire un saut de ligne
+                        z2 = Len(sRes)
+                        sRes = sRes & Chr$(34) & IIf(o < 10, " & _" & vbNewLine & "    " & Chr$(34), vbNewLine)
+                        o = o + 1
+                    End If
+                    
+                    If o > 10 Then
+                        'alors trop de retours à la ligne
+                        ov = ov + 1
+                        sRes = sRes & IIf(o <> 11, Chr$(34), vbNullString) & vbNewLine & "Private Const HEX_VALUES_" & Trim$(Str$(ov)) & " = " & Chr$(34)
+                        o = 0
+                    End If
+                    
+                Next y
+                Call WriteBytesToFileEnd(sOutputFile, sRes): DoEvents
+                Call WriteBytesToFileEnd(sOutputFile, Chr$(34))
+            Case "Disque"
+            
+            Case "Processus"
+            
+            Case "Disque physique"
+            
+            
+            Case Else
+                MsgBox "Form not defined", vbCritical, "Internal error"
+                Exit Sub
+        End Select
+        
+        
+    Else
+        'alors juste la sélection
+    
+        
+        'la méthode de sauvegarde dépend du type d'activeform
+        Select Case TypeOfForm(frmContent.ActiveForm)
+        
+            Case "Fichier"
+                
+            Case "Disque"
+            
+            Case "Processus"
+            
+            Case "Disque physique"
+            
+            
+            Case Else
+                MsgBox "Form not defined", vbCritical, "Internal error"
+                Exit Sub
+        End Select
+        
+    End If
+    
+End Sub
+
+
