@@ -538,6 +538,7 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -545,20 +546,23 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "16:56"
+            TextSave        =   "13:23"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "29/03/2007"
+            TextSave        =   "01/04/2007"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1135,6 +1139,12 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuSaveSignets 
          Caption         =   "&Enregistrer la liste des signets..."
       End
+      Begin VB.Menu mnuTiretAgainAndAgain 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuGestSignets 
+         Caption         =   "&Gestionnaire de signets..."
+      End
    End
    Begin VB.Menu rmnuTools 
       Caption         =   "&Outils"
@@ -1704,6 +1714,12 @@ Private Sub mnuExport_Click()
 'exporte les valeurs hexa du fichier entier
     Call frmExport.IsEntireFile
     frmExport.Show vbModal
+End Sub
+
+Private Sub mnuGestSignets_Click()
+'affiche la liste des signets
+    If frmContent.ActiveForm Is Nothing Then Exit Sub
+    frmSignets.Show vbModal
 End Sub
 
 Private Sub mnuRecoverFiles_Click()
