@@ -28,7 +28,7 @@ Begin VB.Form frmExport
       Caption         =   "Fermer"
       Height          =   375
       Left            =   2880
-      TabIndex        =   8
+      TabIndex        =   7
       ToolTipText     =   "Ne pas sauvegarder"
       Top             =   2760
       Width           =   1455
@@ -37,7 +37,7 @@ Begin VB.Form frmExport
       Caption         =   "Lancer la sauvegarde"
       Height          =   375
       Left            =   120
-      TabIndex        =   7
+      TabIndex        =   6
       ToolTipText     =   "Lancer la sauvegarde"
       Top             =   2760
       Width           =   2175
@@ -47,14 +47,14 @@ Begin VB.Form frmExport
       Height          =   1575
       Index           =   1
       Left            =   120
-      TabIndex        =   4
+      TabIndex        =   10
       Top             =   1080
       Width           =   4215
       Begin VB.CheckBox chkOffset 
          Caption         =   "Ajouter les offsets"
          Height          =   195
          Left            =   120
-         TabIndex        =   9
+         TabIndex        =   4
          ToolTipText     =   "Permer d'ajouter les offsets au fichier (en hexa ou décimal, selon les préférences)"
          Top             =   840
          Width           =   1695
@@ -66,14 +66,15 @@ Begin VB.Form frmExport
          Left            =   120
          ScaleHeight     =   1215
          ScaleWidth      =   3975
-         TabIndex        =   5
+         TabIndex        =   11
+         TabStop         =   0   'False
          Top             =   240
          Width           =   3975
          Begin VB.TextBox txtOpt 
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   2400
-            TabIndex        =   12
+            TabIndex        =   2
             Text            =   "Text1"
             Top             =   720
             Visible         =   0   'False
@@ -83,7 +84,7 @@ Begin VB.Form frmExport
             Caption         =   "Ajouter les valeurs ASCII"
             Height          =   195
             Left            =   0
-            TabIndex        =   10
+            TabIndex        =   5
             ToolTipText     =   "Permet l'ajout des valeurs ASCII au fichier"
             Top             =   840
             Width           =   2175
@@ -94,7 +95,7 @@ Begin VB.Form frmExport
             Left            =   0
             List            =   "frmExport.frx":0022
             Style           =   2  'Dropdown List
-            TabIndex        =   6
+            TabIndex        =   3
             Tag             =   "pref"
             ToolTipText     =   "Format d'exportation"
             Top             =   120
@@ -104,7 +105,7 @@ Begin VB.Form frmExport
             Caption         =   "Label1"
             Height          =   255
             Left            =   2400
-            TabIndex        =   11
+            TabIndex        =   12
             Top             =   480
             Visible         =   0   'False
             Width           =   1335
@@ -116,7 +117,7 @@ Begin VB.Form frmExport
       Height          =   855
       Index           =   0
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   8
       Top             =   120
       Width           =   4215
       Begin VB.PictureBox Picture1 
@@ -126,14 +127,15 @@ Begin VB.Form frmExport
          Left            =   120
          ScaleHeight     =   495
          ScaleWidth      =   3975
-         TabIndex        =   1
+         TabIndex        =   9
+         TabStop         =   0   'False
          Top             =   240
          Width           =   3975
          Begin VB.CommandButton cmdBrowse 
             Caption         =   "..."
             Height          =   315
             Left            =   3480
-            TabIndex        =   3
+            TabIndex        =   1
             ToolTipText     =   "Choix du fichier à sauvegarder"
             Top             =   120
             Width           =   375
@@ -142,7 +144,7 @@ Begin VB.Form frmExport
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   0
-            TabIndex        =   2
+            TabIndex        =   0
             ToolTipText     =   "Emplacement du fichier à sauvegarder"
             Top             =   120
             Width           =   3255
@@ -199,18 +201,24 @@ Private Sub cbFormat_Click()
 
     lbl.Visible = False
     txtOpt.Visible = False
-    
+    chkString.Enabled = True
+    chkOffset.Enabled = True
+            
     Select Case cbFormat.Text
         Case "RTF"
         
         Case "Texte"
-            Me.Caption = "Exporter en texte simple (fichier 5 fois plus grand)"
+            Me.Caption = "Exporter en texte (fichier 5 fois plus grand)"
         Case "Source C"
-        
+            Me.Caption = "Exporter en code C (fichier 6 fois plus grand)"
+            chkString.Enabled = False
+            chkOffset.Enabled = False
         Case "Source VB"
-        
+            
         Case "Source JAVA"
-        
+            Me.Caption = "Exporter en code JAVA (fichier 6 fois plus grand)"
+            chkString.Enabled = False
+            chkOffset.Enabled = False
         Case "HTML"
             Me.Caption = "Exporter en HTML (fichier 13 fois plus grand)"
             lbl.Caption = "Taille (1-10)"
@@ -224,7 +232,17 @@ End Sub
 
 Private Sub cmdBrowse_Click()
 'browse for file
-    txtFile.Text = cFile.ShowSave("Sélectionner le fichier à créer", Me.hWnd, "Tous|*.*", App.Path)
+Dim sFile As String
+
+    sFile = cFile.ShowSave("Sélectionner le fichier à créer", Me.hWnd, "Tous|*.*", App.Path)
+    
+    If cFile.FileExists(sFile) Then
+        'fichier déjà existant
+        If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+    End If
+    
+    txtFile.Text = sFile
+        
 End Sub
 
 Private Sub cmdQuit_Click()
@@ -262,7 +280,7 @@ Dim x As Long
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    frmContent.ActiveForm.Caption, -1, x)
+                    frmContent.ActiveForm.Caption, -1, , x)
             Else
                 'sauvegarde d'une plage d'offset
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
@@ -277,7 +295,7 @@ Dim x As Long
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
                 Call SaveAsTEXT(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    frmContent.ActiveForm.Caption, -1, x)
+                    frmContent.ActiveForm.Caption, -1)
             Else
                 'sauvegarde d'une plage d'offset
                 Call SaveAsTEXT(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
@@ -285,13 +303,25 @@ Dim x As Long
             End If
             
         Case "Source C"
-            
+            If bEntireFile Then
+                'sauvegarde d'un fichier entier
+                Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, -1)
+            Else
+                'sauvegarde d'une plage d'offset
+                Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1)
+            End If
             
         Case "Source VB"
             
             
         Case "Source JAVA"
-            
+            If bEntireFile Then
+                'sauvegarde d'un fichier entier
+                Call SaveAsJAVA(txtFile.Text, frmContent.ActiveForm.Caption, -1)
+            Else
+                'sauvegarde d'une plage d'offset
+                Call SaveAsJAVA(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1)
+            End If
             
     End Select
     
