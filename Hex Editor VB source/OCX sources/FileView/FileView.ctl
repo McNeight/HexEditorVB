@@ -128,7 +128,7 @@ Begin VB.UserControl FileView
       MaskColor       =   12632256
       _Version        =   327682
       BeginProperty Images {0713E8C2-850A-101B-AFC0-4210102A8DA7} 
-         NumListImages   =   4
+         NumListImages   =   5
          BeginProperty ListImage1 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "FileView.ctx":0000
             Key             =   "File"
@@ -139,10 +139,14 @@ Begin VB.UserControl FileView
          EndProperty
          BeginProperty ListImage3 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
             Picture         =   "FileView.ctx":18A4
-            Key             =   "Drive"
+            Key             =   "inaccessible_drive"
          EndProperty
          BeginProperty ListImage4 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
-            Picture         =   "FileView.ctx":33F6
+            Picture         =   "FileView.ctx":1BF6
+            Key             =   "Drive"
+         EndProperty
+         BeginProperty ListImage5 {0713E8C3-850A-101B-AFC0-4210102A8DA7} 
+            Picture         =   "FileView.ctx":3748
             Key             =   "FileWithoutExtension"
          EndProperty
       EndProperty
@@ -226,14 +230,23 @@ Private Declare Sub ValidateRect Lib "user32" (ByVal hwnd As Long, ByVal t As Lo
 'Private Declare Function GetTickCount Lib "kernel32" () As Long
 
 'pour la fonction GetFileSize
-Private Declare Function CreateFile Lib "kernel32" Alias "CreateFileA" (ByVal lpFileName As String, ByVal dwDesiredAccess As Long, ByVal dwShareMode As Long, lpSecurityAttributes As Any, ByVal dwCreationDisposition As Long, ByVal dwFlagsAndAttributes As Long, ByVal hTemplateFile As Long) As Long
+Private Declare Function CreateFile Lib "kernel32" Alias "CreateFileA" (ByVal lpFileName As String, ByVal dwDesiredAccess As Long, ByVal dwShareMode As Long, ByVal lpSecurityAttributes As Long, ByVal dwCreationDisposition As Long, ByVal dwFlagsAndAttributes As Long, ByVal hTemplateFile As Long) As Long
 Private Declare Function GetFileSizeEx Lib "kernel32" (ByVal hFile As Long, lpFileSize As Currency) As Boolean
 Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
+
+'autres
+Private Declare Function GetDiskFreeSpace Lib "kernel32" Alias "GetDiskFreeSpaceA" (ByVal lpRootPathName As String, lpSectorsPerCluster As Long, lpBytesPerSector As Long, lpNumberOfFreeClusters As Long, lpTotalNumberOfClusters As Long) As Long
 
 
 '=======================================================
 'CONSTANTES
 '=======================================================
+Private Const GENERIC_READ                  As Long = &H80000000
+Private Const INVALID_HANDLE_VALUE          As Long = -1
+Private Const GENERIC_WRITE                 As Long = &H40000000
+Private Const FILE_SHARE_READ               As Long = &H1
+Private Const FILE_SHARE_WRITE              As Long = &H2
+Private Const OPEN_EXISTING                 As Long = 3
 Private Const FO_DELETE                     As Long = &H3
 Private Const FOF_ALLOWUNDO                 As Long = &H40
 Private Const SHGFI_DISPLAYNAME             As Long = &H200
@@ -345,6 +358,7 @@ Private bShowEntirePath As Boolean
 Private bShowDrives As Boolean
 Private lItemWidth As Long
 Private bBlockDisplay As Boolean
+Private bShowDriveInfo As Boolean
 
 
 '=======================================================
@@ -455,6 +469,8 @@ Public Property Set Font(Font As StdFont)
     Set UserControl.Font = Font
     LV.Font = Font
 End Property
+Public Property Get ShowDriveInfo() As Boolean: ShowDriveInfo = bShowDriveInfo: End Property
+Public Property Let ShowDriveInfo(ShowDriveInfo As Boolean): bShowDriveInfo = ShowDriveInfo: End Property
 
 
 '=======================================================
@@ -495,6 +511,7 @@ Private Sub UserControl_InitProperties()
     Me.ItemWidth = 5500
     Me.Font = Ambient.Font
     Me.BlockDisplay = False
+    Me.ShowDriveInfo = False
     Refresh
 End Sub
 Private Sub UserControl_Resize()
@@ -539,6 +556,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.ItemWidth = .ReadProperty("ItemWidth", 5500)
         Set Me.Font = .ReadProperty("Font", Ambient.Font)
         Me.BlockDisplay = .ReadProperty("BlockDisplay", False)
+        Me.ShowDriveInfo = .ReadProperty("ShowDriveInfo", False)
     End With
     
     'alors c'est bon, on rafraichit
@@ -598,6 +616,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("ShowDrives", Me.ShowDrives, True)
         Call .WriteProperty("ItemWidth", Me.ItemWidth, 5500)
         Call .WriteProperty("Font", Me.Font, Ambient.Font)
+        Call .WriteProperty("ShowDriveInfo", Me.ShowDriveInfo, False)
     End With
 End Sub
 Private Sub UserControl_Initialize()
@@ -838,7 +857,9 @@ Dim s As String
 Dim key As String
 Dim it As Scripting.File
 
-
+    'vire les deux \\ qui provoquent un bug
+    sItem = Replace$(sItem, "\\", "\", , , vbBinaryCompare)
+    
     l = MustGetAttr(sItem)  'attribut
 
     If tTypeOfItem = Directory Then
@@ -1221,6 +1242,8 @@ Dim x As Long, l As Long
 Dim ssDrive As Object
 Dim s As Object
 Dim s2 As String
+Dim s3 As String
+Dim s4 As String
     
     If fs.DriveExists(Me.Path) = False Then Exit Sub
 
@@ -1237,7 +1260,7 @@ Dim s2 As String
         For Each ssDrive In fs.Drives
             ReDim Preserve sDirectory(UBound(sDirectory) + 1)
             s2 = fs.GetDrive(ssDrive).DriveLetter & ":\"
-            s2 = s2 & " [" & fs.GetDrive(ssDrive).VolumeName & "][" & fs.GetDrive(ssDrive).FileSystem & "]"
+            s2 = s2 & IIf(ShowDriveInfo, " [" & fs.GetDrive(ssDrive).VolumeName & "][" & fs.GetDrive(ssDrive).FileSystem & "]", vbNullString)
             sDirectory(UBound(sDirectory)) = s2
         Next ssDrive
         
@@ -1246,11 +1269,23 @@ Dim s2 As String
             lDrives = lDrives + 1
             If bDisplayIcons <> NoIcons Then
                 'affiche une icone
-                LV.ListItems.Add Text:=sDirectory(x), SmallIcon:="Drive"
-                LV.ListItems.Item(LV.ListItems.Count).Tag = ParentFolder(sDirectory(x))
+                
+                'récupère le drive seul
+                s3 = Left$(sDirectory(x), 3)
+                
+                'le Key change en fonction de la disponibilité du drive
+                If IsLogicalDriveAccessible(s3) = False Then
+                    s4 = "inaccessible_drive"
+                Else
+                    s4 = s3 & "_drive|"
+                End If
+                
+                Call AddIconToIMGDrive(s3, s4)
+                LV.ListItems.Add Text:=sDirectory(x), SmallIcon:=s4
+                LV.ListItems.Item(LV.ListItems.Count).Tag = s3
             Else
                 LV.ListItems.Add Text:=sDirectory(x)
-                LV.ListItems.Item(LV.ListItems.Count).Tag = ParentFolder(sDirectory(x))
+                LV.ListItems.Item(LV.ListItems.Count).Tag = s3
             End If
         Next x
         
@@ -1386,6 +1421,31 @@ Dim pct As IPictureDisp
     
     'obtient le handle de l'icone
     hIcon = SHGetFileInfo(sFile, 0&, ShInfo, Len(ShInfo), BASIC_SHGFI_FLAGS Or SHGFI_SMALLICON)
+        
+    'prépare la picturebox
+    pctIcon.Picture = Nothing
+    
+    'trace l'image
+    ImageList_Draw hIcon, ShInfo.iIcon, pctIcon.hDC, 0, 0, ILD_TRANSPARENT
+    
+    'ajout de l'icone à l'imagelist
+    IMG.ListImages.Add key:=sKey, Picture:=pctIcon.Image
+
+End Sub
+
+'=======================================================
+'ajoute une icone à l'ImageList (à partir du fichier sFile)
+'=======================================================
+Private Sub AddIconToIMGDrive(ByVal sDrive As String, ByVal sKey As String)
+Dim lstImg As ListImage
+Dim hIcon As Long
+Dim ShInfo As SHFILEINFO
+Dim pct As IPictureDisp
+    
+    If DoesKeyExist(sKey) Then Exit Sub    'clé existe déjà
+    
+    'obtient le handle de l'icone
+    hIcon = SHGetFileInfo(sDrive, 0&, ShInfo, Len(ShInfo), BASIC_SHGFI_FLAGS Or SHGFI_SMALLICON)
         
     'prépare la picturebox
     pctIcon.Picture = Nothing
@@ -1541,4 +1601,39 @@ Private Function GetDateLastAccessed(ByVal it As Scripting.File) As String
     GetDateLastAccessed = it.DateLastAccessed
 End Function
 
+'=======================================================
+'vérifie que la partition est accessible
+'=======================================================
+Private Function IsLogicalDriveAccessible(ByVal Drive As String) As Boolean
+Dim hDrive As Long
+Dim strDrive As String
+'temp variables
+Dim a As Long, b As Long, c As Long, e As Long
 
+    On Error GoTo DriveNonDispo
+    
+    IsLogicalDriveAccessible = False
+
+    'obtient un path valide de drive
+    If Len(Drive) <> 6 Then strDrive = BuildDrive(Drive) Else strDrive = Drive
+    
+    '//obtient le handle du drive
+    hDrive = CreateFile(strDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    
+    'récupère des infos sur la taille
+    GetDiskFreeSpace Right$(strDrive, 2) & "\", a, e, b, c
+    
+    If c = 0 Or e = 0 Or a = 0 Or hDrive = INVALID_HANDLE_VALUE Then GoTo DriveNonDispo
+
+    IsLogicalDriveAccessible = True
+
+DriveNonDispo:
+    CloseHandle hDrive
+End Function
+
+'=======================================================
+'renvoie un drive compatible avec l'api CreateFile
+'=======================================================
+Private Function BuildDrive(ByVal sDrive As String) As String
+    BuildDrive = "\\.\" & UCase$(Left$(sDrive, 2))
+End Function

@@ -1356,8 +1356,8 @@ Private Sub pctPath_KeyDown(KeyCode As Integer, Shift As Integer)
 Dim s As String
     If KeyCode = vbKeyReturn Then
         s = pctPath.Text
-        If cFile.FolderExists(pctPath.Text) Then Folder1.Path = pctPath.Text
-        pctPath.Text = s
+        If cFile.FolderExists(s) Then Folder1.Path = s
+        File1.Path = s
     End If
 End Sub
 
@@ -1425,7 +1425,7 @@ Dim s As String
             s = s & "Ajouter (audio) : " & cb5.Text
         Case Video
             s = s & "Ajouter (video) : " & cb6.Text
-        Case Image
+        Case TYPE_OF_MODIFICATION.Image     '/!\ DO NOT CHANGE
             s = s & "Ajouter (image) : " & cb7.Text
     End Select
     
@@ -1571,8 +1571,10 @@ End Sub
 
 Private Sub File1_ItemDblSelection(Item As ComctlLib.ListItem)
 'ajoute à la liste courante
+Dim s As String
+    
     ValidateRect File1.hWnd, 0 'gèle l'affichage pour éviter le clignotement
-    FileR.AddItemManually File1.Path & Item.Text, File, bFillSubItemsAuto:=True
+    FileR.AddItemManually File1.Path & "\" & Item.Text, File, bFillSubItemsAuto:=True
 End Sub
 
 Private Sub File1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1653,6 +1655,7 @@ Dim s As String
 
     s = cFile.BrowseForFolder("Choix du répertoire", Me.hWnd)   'browse for folder
     If cFile.FolderExists(s) Then Folder1.Path = s  'change le folder
+    File1.Path = s
 End Sub
 
 Private Sub mnuDeselectAll_Click()
