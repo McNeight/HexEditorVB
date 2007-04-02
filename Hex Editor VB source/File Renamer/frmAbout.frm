@@ -1,12 +1,12 @@
 VERSION 5.00
 Begin VB.Form frmAbout 
-   BackColor       =   &H00FFFFFF&
+   BackColor       =   &H00760401&
    BorderStyle     =   0  'None
-   Caption         =   "AboutBox"
-   ClientHeight    =   4860
+   Caption         =   "About"
+   ClientHeight    =   6390
    ClientLeft      =   0
    ClientTop       =   0
-   ClientWidth     =   5925
+   ClientWidth     =   7065
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -16,125 +16,228 @@ Begin VB.Form frmAbout
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
-   LinkTopic       =   "Form2"
-   ScaleHeight     =   4860
-   ScaleWidth      =   5925
+   Icon            =   "frmAbout.frx":0000
+   LinkTopic       =   "Form1"
+   Picture         =   "frmAbout.frx":000C
+   ScaleHeight     =   6390
+   ScaleWidth      =   7065
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.Frame Frame1 
-      BackColor       =   &H00FFFFFF&
-      Height          =   4815
-      Left            =   0
+   Begin VB.CommandButton cmdUnload 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   5640
       TabIndex        =   0
-      Top             =   0
-      Width           =   5895
-      Begin VB.PictureBox Picture1 
-         Appearance      =   0  'Flat
-         BackColor       =   &H80000005&
-         BorderStyle     =   0  'None
-         ForeColor       =   &H80000008&
-         Height          =   4485
-         Left            =   120
-         ScaleHeight     =   4485
-         ScaleWidth      =   5655
-         TabIndex        =   1
-         Top             =   240
-         Width           =   5655
-         Begin VB.CommandButton cmdUnload 
-            Caption         =   "Fermer"
-            Height          =   375
-            Left            =   900
-            TabIndex        =   4
-            Top             =   4080
-            Width           =   1335
-         End
-         Begin VB.CommandButton cmdLicense 
-            Caption         =   "Informations de licence"
-            Height          =   375
-            Left            =   2700
-            TabIndex        =   3
-            Top             =   4080
-            Width           =   2055
-         End
-         Begin VB.TextBox txt 
-            BorderStyle     =   0  'None
-            Height          =   2175
-            Left            =   120
-            Locked          =   -1  'True
-            MultiLine       =   -1  'True
-            TabIndex        =   2
-            Top             =   1560
-            Width           =   5415
-         End
-         Begin VB.Image Image1 
-            Height          =   795
-            Left            =   360
-            Picture         =   "frmAbout.frx":0000
-            Stretch         =   -1  'True
-            Top             =   240
-            Width           =   795
-         End
-         Begin VB.Label lblMain 
-            Alignment       =   2  'Center
-            BackColor       =   &H00FFFFFF&
-            Caption         =   "File Renamer VB"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   15.75
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   375
-            Index           =   0
-            Left            =   1800
-            TabIndex        =   7
-            Top             =   240
-            Width           =   3615
-         End
-         Begin VB.Label lblMain 
-            Alignment       =   2  'Center
-            BackColor       =   &H00FFFFFF&
-            Caption         =   "Coded by violent_ken"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   12
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   375
-            Index           =   2
-            Left            =   1800
-            TabIndex        =   6
-            Top             =   1080
-            Width           =   3615
-         End
-         Begin VB.Label lblMain 
-            Alignment       =   2  'Center
-            BackColor       =   &H00FFFFFF&
-            Caption         =   "v 1.0.2"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   12
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   375
-            Index           =   1
-            Left            =   1800
-            TabIndex        =   5
-            Top             =   720
-            Width           =   3615
-         End
-      End
+      ToolTipText     =   "Fermer cette feuille"
+      Top             =   5880
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdLicense 
+      Caption         =   "Informations de licence"
+      Height          =   375
+      Left            =   3360
+      TabIndex        =   1
+      ToolTipText     =   "Afficher les informations sur la licence GNU GPL"
+      Top             =   5880
+      Width           =   2055
+   End
+   Begin VB.TextBox txt 
+      BorderStyle     =   0  'None
+      BeginProperty Font 
+         Name            =   "Courier New"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   1660
+      Left            =   180
+      Locked          =   -1  'True
+      MultiLine       =   -1  'True
+      ScrollBars      =   2  'Vertical
+      TabIndex        =   2
+      Top             =   4040
+      Width           =   6705
+   End
+   Begin VB.Label lblCopyright 
+      Alignment       =   1  'Right Justify
+      BackStyle       =   0  'Transparent
+      Caption         =   "Copyright (c) 2006-2007 Alain Descotes"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   210
+      Left            =   2400
+      TabIndex        =   11
+      Top             =   3000
+      Width           =   4515
+   End
+   Begin VB.Label Label2 
+      Alignment       =   2  'Center
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "File Renamer Tool"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   21.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   525
+      Left            =   2505
+      TabIndex        =   10
+      Top             =   1680
+      Width           =   4005
+   End
+   Begin VB.Label lblVersionWarning 
+      BackStyle       =   0  'Transparent
+      Caption         =   "Pre Alpha version"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   14.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H000000FF&
+      Height          =   375
+      Left            =   120
+      TabIndex        =   9
+      Top             =   120
+      Width           =   2535
+   End
+   Begin VB.Label Label1 
+      BackColor       =   &H00FFFFFF&
+      Height          =   1815
+      Left            =   105
+      TabIndex        =   8
+      Top             =   3960
+      Width           =   6855
+   End
+   Begin VB.Label lblWARNING 
+      BackStyle       =   0  'Transparent
+      Caption         =   "Avertissement : ce logiciel est protégé par la license GNU General Public License"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   195
+      Left            =   120
+      TabIndex        =   7
+      Top             =   3585
+      Width           =   6855
+   End
+   Begin VB.Label lblVersion 
+      Alignment       =   1  'Right Justify
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "Version"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   12
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   285
+      Left            =   5970
+      TabIndex        =   6
+      Top             =   2685
+      Width           =   795
+   End
+   Begin VB.Label lblPlatform 
+      Alignment       =   1  'Right Justify
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "Designed for Windows"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   12.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   315
+      Left            =   3915
+      TabIndex        =   5
+      Top             =   2340
+      Width           =   2910
+   End
+   Begin VB.Label lblProductName 
+      Alignment       =   2  'Center
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "Hex Editor VB"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   30.75
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   735
+      Left            =   2265
+      TabIndex        =   4
+      Top             =   900
+      Width           =   4275
+   End
+   Begin VB.Label lblLicenseTo 
+      Alignment       =   1  'Right Justify
+      BackStyle       =   0  'Transparent
+      Caption         =   "License accordée à [NAME]"
+      BeginProperty Font 
+         Name            =   "Arial"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   255
+      Left            =   90
+      TabIndex        =   3
+      Top             =   165
+      Width           =   6855
+   End
+   Begin VB.Image Image1 
+      Height          =   2265
+      Left            =   127
+      Picture         =   "frmAbout.frx":5AAEA
+      Stretch         =   -1  'True
+      Top             =   982
+      Width           =   1815
    End
 End
 Attribute VB_Name = "frmAbout"
@@ -144,14 +247,15 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 ' =======================================================
 '
-' File Renamer VB (part of Hex Editor VB)
+' Hex Editor VB
 ' Coded by violent_ken (Alain Descotes)
 '
 ' =======================================================
 '
-' A Windows utility which allows to rename lots of file (part of Hex Editor VB)
+' A complete hexadecimal editor for Windows ©
+' (Editeur hexadécimal complet pour Windows ©)
 '
-' Copyright (c) 2006-2007 by Alain Descotes.
+' Copyright © 2006-2007 by Alain Descotes.
 '
 ' This file is part of Hex Editor VB.
 '
@@ -178,8 +282,7 @@ Private Sub cmdLicense_Click()
 'affiche le ReadMe
 
     If cFile.FileExists(App.Path & "\License.txt") = False Then Exit Sub
-    
-    ShellExecute Me.hWnd, "open", App.Path & "\License.txt", vbNullString, vbNullString, 1
+    cFile.ShellOpenFile App.Path & "\License.txt", Me.hWnd
 End Sub
 
 Private Sub cmdUnload_Click()
@@ -188,11 +291,13 @@ End Sub
 
 Private Sub Form_Load()
 Dim s As String
-    'mise à jour de la version
-    lblMain(1).Caption = "v" & App.Major & "." & App.Minor & "." & App.Revision
+    'mise à jour de la version et de l'USER
+    lblLicenseTo.Caption = "License accordée à " & GetUserName
+    lblVersion.Caption = "Version " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision))
     
     'écriture du texte
-    s = "File Renamer VB par violent ken. Dernière version du 02/01/2007. Il s'agit d'un utilitaire permettant de gérer vos fichiers, en particulier les renommer de manière massive et automatisée." & vbNewLine & vbNewLine & "Ce logiciel est prévu pour Windows XP et une résolution minimale de 1024*768." & vbNewLine & vbNewLine & "Ce logiciel est sous licence GNU, veuillez lire le fichier de licence qui accompagne ce logiciel."
+    s = "Hex Editor VB" & vbNewLine & "Copyright (c) 2006-2007 Alain Descotes (violent_ken)" & vbNewLine & "Dernière version du 16/02/2007. Il s'agit d'un éditeur héxadécimal complet permettant de modifier vos fichiers, vos disques et vos processus en mémoire très facilement." & vbNewLine & vbNewLine & "Ce logiciel est prévu pour Windows XP/Vista et une résolution minimale de 1024*768." & vbNewLine & vbNewLine & "Ce logiciel est sous license GNU General Public License, veuillez lire le contrat de licence ci dessous."
+    s = s & vbNewLine & vbNewLine & cFile.LoadFileInString(App.Path & "\License.txt")
     txt.Text = s
     
 End Sub
