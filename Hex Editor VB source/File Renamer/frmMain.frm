@@ -969,7 +969,7 @@ Attribute VB_Exposed = False
 '
 ' =======================================================
 '
-' An Windows utility which allows to rename lots of file (part of Hex Editor VB)
+' A Windows utility which allows to rename lots of file (part of Hex Editor VB)
 '
 ' Copyright (c) 2006-2007 by Alain Descotes.
 '
@@ -1108,6 +1108,26 @@ Private Sub cb4_Click()
     End If
 End Sub
 
+Private Sub mnuCopyFolderTo1_Click()
+'copie les dossiers sélectionnés
+Dim s As String
+Dim sTo As String
+Dim x As Long
+
+    'browse for folder
+    sTo = cFile.BrowseForFolder("Choix du dossier cible", Me.hWnd)
+    If cFile.FolderExists(sTo) = False Then Exit Sub
+    
+    'créé une string qui concatene tous les dossiers
+    For x = 1 To Folder1.ListCount
+        If Folder1.ListItems.Item(x).Selected Then _
+            s = s & Folder1.Path & "\" & Folder1.ListItems.Item(x).Text & vbNullChar
+    Next x
+    
+    Call cFile.CopyFileOrFolder(s, sTo): DoEvents    'copy files
+    Call Folder1.Refresh
+End Sub
+
 Private Sub mnuCopyTo1_Click()
 'copie les fichiers sélectionnés
 Dim s As String
@@ -1142,6 +1162,20 @@ Dim x As Long
     Call File1.Refresh
 End Sub
 
+Private Sub mnuDeleteFolder1_Click()
+Dim s As String
+Dim x As Long
+
+    'créé une string qui concatene tous les dossiers
+    For x = 1 To Folder1.ListCount
+        If Folder1.ListItems.Item(x).Selected Then _
+            s = s & Folder1.Path & "\" & Folder1.ListItems.Item(x).Text & vbNullChar
+    Next x
+    
+    Call cFile.MoveToTrash(s): DoEvents 'à la poubelle
+    Call Folder1.Refresh
+End Sub
+
 Private Sub mnuDisplayProperties1_Click()
 'affiche les properties des dossiers sélectionnés
 Dim x As Long
@@ -1170,6 +1204,26 @@ Dim x As Long
         If File1.ListItems.Item(x).Selected Then _
             Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_HIDDEN)
     Next x
+End Sub
+
+Private Sub mnuMoveFolderTo1_Click()
+'déplace les dossiers sélectionnés
+Dim s As String
+Dim sTo As String
+Dim x As Long
+
+    'browse for folder
+    sTo = cFile.BrowseForFolder("Choix du dossier cible", Me.hWnd)
+    If cFile.FolderExists(sTo) = False Then Exit Sub
+    
+    'créé une string qui concatene tous les dossiers
+    For x = 1 To Folder1.ListCount
+        If Folder1.ListItems.Item(x).Selected Then _
+            s = s & Folder1.Path & "\" & Folder1.ListItems.Item(x).Text & vbNullChar
+    Next x
+    
+    Call cFile.MoveFileOrFolder(s, sTo): DoEvents  'move files
+    Call Folder1.Refresh
 End Sub
 
 Private Sub mnuMoveTo1_Click()
@@ -1235,6 +1289,65 @@ Dim x As Long
         If File1.ListItems.Item(x).Selected Then _
             Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_INVISIBLE_SYSTEM)
     Next x
+End Sub
+
+Private Sub mnuWithoutSubFolder1_Click()
+'on place tous les fichiers des dossiers sélectionnés dans le LV
+Dim x As Long
+Dim y As Long
+Dim s() As String
+
+    'pour chaque dossier sélectionné
+    FileR.Visible = False
+    
+    For x = 1 To Folder1.ListCount
+        If Folder1.ListItems.Item(x).Selected Then
+            
+            'énumère les fichiers
+            Call cFile.EnumFilesFromFolder(Folder1.Path & "\" & Folder1.ListItems.Item(x).Text, s(), False)
+            
+            'ajoute tout çà à la liste
+            For y = 1 To UBound(s())
+                'ajoute les fichiers à FileR
+                s(y) = Replace$(s(y), "\\", "\", , , vbBinaryCompare)   'vire les deux slash
+                FileR.AddItemManually s(y), File, bFillSubItemsAuto:=True
+            Next y
+            
+            DoEvents
+        End If
+    Next x
+            
+    FileR.Visible = True
+    
+End Sub
+
+Private Sub mnuWithSubFolders1_Click()
+'on place tous les fichiers des dossiers sélectionnés dans le LV
+Dim x As Long
+Dim y As Long
+Dim s() As String
+
+    'pour chaque dossier sélectionné
+    FileR.Visible = False
+    
+    For x = 1 To Folder1.ListCount
+        If Folder1.ListItems.Item(x).Selected Then
+            
+            'énumère les fichiers
+            Call cFile.EnumFilesFromFolder(Folder1.Path & "\" & Folder1.ListItems.Item(x).Text, s(), True)
+            
+            'ajoute tout çà à la liste
+            For y = 1 To UBound(s())
+                'ajoute les fichiers à FileR
+                s(y) = Replace$(s(y), "\\", "\", , , vbBinaryCompare)   'vire les deux slash
+                FileR.AddItemManually s(y), File, bFillSubItemsAuto:=True
+            Next y
+            
+            DoEvents
+        End If
+    Next x
+            
+    FileR.Visible = True
 End Sub
 
 Private Sub pctPath_Change()

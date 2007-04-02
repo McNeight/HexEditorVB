@@ -149,7 +149,7 @@ Attribute VB_Exposed = False
 '
 ' =======================================================
 '
-' An Windows utility which allows to rename lots of file (part of Hex Editor VB)
+' A Windows utility which allows to rename lots of file (part of Hex Editor VB)
 '
 ' Copyright (c) 2006-2007 by Alain Descotes.
 '
@@ -179,7 +179,7 @@ Private Sub cmdLicense_Click()
 
     If cFile.FileExists(App.Path & "\License.txt") = False Then Exit Sub
     
-    ShellExecute Me.hwnd, "open", App.Path & "\License.txt", vbNullString, vbNullString, 1
+    ShellExecute Me.hWnd, "open", App.Path & "\License.txt", vbNullString, vbNullString, 1
 End Sub
 
 Private Sub cmdUnload_Click()

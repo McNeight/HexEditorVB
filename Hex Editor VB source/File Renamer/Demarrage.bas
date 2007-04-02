@@ -6,7 +6,7 @@ Attribute VB_Name = "Demarrage"
 '
 ' =======================================================
 '
-' An Windows utility which allows to rename lots of file (part of Hex Editor VB)
+' A Windows utility which allows to rename lots of file (part of Hex Editor VB)
 '
 ' Copyright (c) 2006-2007 by Alain Descotes.
 '
