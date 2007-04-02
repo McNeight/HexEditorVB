@@ -1,9 +1,9 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{88A64AB7-8026-47F4-8E67-1A0451E8679C}#1.0#0"; "ProcessView_OCX.ocx"
 Begin VB.Form frmProcesses 
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Sélection du processus à ouvrir"
-   ClientHeight    =   4095
+   ClientHeight    =   4020
    ClientLeft      =   45
    ClientTop       =   315
    ClientWidth     =   3765
@@ -20,58 +20,46 @@ Begin VB.Form frmProcesses
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4095
+   ScaleHeight     =   4020
    ScaleWidth      =   3765
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdFermer 
-      Caption         =   "Fermer"
-      Height          =   495
-      Left            =   2055
-      TabIndex        =   2
-      ToolTipText     =   "Fermer cette fenêtre"
-      Top             =   3480
-      Width           =   1215
-   End
-   Begin VB.CommandButton cmdOK 
-      Caption         =   "OK"
-      Height          =   495
-      Left            =   480
-      TabIndex        =   1
-      ToolTipText     =   "Ouvrir de processus"
-      Top             =   3480
-      Width           =   1215
-   End
-   Begin ComctlLib.ListView LV 
-      Height          =   3375
+   Begin ProcessView_OCX.ProcessView PV 
+      Height          =   3495
       Left            =   0
-      TabIndex        =   0
+      TabIndex        =   3
       Top             =   0
       Width           =   3735
       _ExtentX        =   6588
-      _ExtentY        =   5953
-      View            =   3
-      LabelEdit       =   1
-      LabelWrap       =   -1  'True
-      HideSelection   =   -1  'True
-      _Version        =   327682
-      ForeColor       =   -2147483640
-      BackColor       =   -2147483643
-      Appearance      =   0
-      NumItems        =   2
-      BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-         Key             =   ""
-         Object.Tag             =   ""
-         Text            =   "PID"
-         Object.Width           =   1411
-      EndProperty
-      BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-         SubItemIndex    =   1
-         Key             =   ""
-         Object.Tag             =   ""
-         Text            =   "Processus"
-         Object.Width           =   4410
-      EndProperty
+      _ExtentY        =   6165
+      Sorted          =   0   'False
+   End
+   Begin VB.CommandButton cmdRefresh 
+      Caption         =   "Rafraichir"
+      Height          =   375
+      Left            =   1080
+      TabIndex        =   2
+      ToolTipText     =   "Ouvrir de processus"
+      Top             =   3600
+      Width           =   1215
+   End
+   Begin VB.CommandButton cmdFermer 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   2520
+      TabIndex        =   1
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   3600
+      Width           =   1095
+   End
+   Begin VB.CommandButton cmdOK 
+      Caption         =   "OK"
+      Height          =   375
+      Left            =   120
+      TabIndex        =   0
+      ToolTipText     =   "Ouvrir de processus"
+      Top             =   3600
+      Width           =   735
    End
 End
 Attribute VB_Name = "frmProcesses"
@@ -116,19 +104,18 @@ Option Explicit
 'FORM QUI INVITE A SELECTIONNER UN PROCESSUS A EDITER
 '=======================================================
 
+Private bFirst As Boolean
+
 Private Sub cmdFermer_Click()
-'fermer
     Unload Me
 End Sub
 
 Private Sub cmdOk_Click()
-'ok
 Dim lH As Long
 Dim Frm As Form
 
-
     'vérfie que le processus est ouvrable
-    lH = OpenProcess(PROCESS_ALL_ACCESS, False, Val(LV.SelectedItem.Text))
+    lH = OpenProcess(PROCESS_ALL_ACCESS, False, Val(PV.SelectedItem.Tag))
     CloseHandle lH
     
     If lH = 0 Then
@@ -141,7 +128,7 @@ Dim Frm As Form
     
     'possible affiche une nouvelle fenêtre
     Set Frm = New MemPfm
-    Call Frm.GetFile(Val(LV.SelectedItem.Text))
+    Call Frm.GetFile(Val(PV.SelectedItem.Tag))
     Frm.Show
     lNbChildFrm = lNbChildFrm + 1
     frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
@@ -151,30 +138,36 @@ Dim Frm As Form
     Unload Me
 End Sub
 
-Private Sub Form_Load()
-'fait la liste des processus en mémoire
-Dim p() As ProcessItem
-Dim x As Long
-Dim clsProc As clsProcess   'appel à une classe de gestion de processus
-
-    Set clsProc = New clsProcess
-
-    LV.ListItems.Clear
-
-    'énumération
-    clsProc.EnumerateProcesses p()
-    
-    'affiche la liste
-    For x = 0 To UBound(p) - 1
-        LV.ListItems.Add Text:=p(x).th32ProcessID
-        LV.ListItems.Item(x + 1).SubItems(1) = p(x).szExeFile
-    Next x
-    
-    LV.ListItems.Item(LV.ListItems.Count).Selected = True   'met le dernier process en surbrillance
-    
+Private Sub cmdRefresh_Click()
+    Call PV.Refresh
 End Sub
 
-Private Sub LV_DblClick()
-    If LV.SelectedItem Is Nothing Then Exit Sub
-    cmdOk_Click
+Private Sub Form_Activate()
+Dim ND As Node
+
+    'on expand si c'est la première activation de la form
+    If bFirst = False Then
+        bFirst = True
+        
+        'on extend tous les noeuds
+        With PV
+            For Each ND In .Nodes
+                ND.Expanded = True
+            Next ND
+            
+            'met en surbrillance le premier
+            .Nodes.Item(1).Selected = True
+            .SetFocus
+        End With
+        
+    End If
+End Sub
+
+Private Sub Form_Load()
+    bFirst = False
+End Sub
+
+Private Sub PV_DblClick()
+    If PV.SelectedItem Is Nothing Then Exit Sub
+    Call cmdOk_Click
 End Sub

@@ -1,6 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{88A64AB7-8026-47F4-8E67-1A0451E8679C}#1.0#0"; "ProcessView_OCX.ocx"
 Begin VB.Form frmProcess 
    Caption         =   "Gestionnaire de processus"
    ClientHeight    =   5415
@@ -22,6 +23,16 @@ Begin VB.Form frmProcess
    ScaleHeight     =   5415
    ScaleWidth      =   7335
    StartUpPosition =   2  'CenterScreen
+   Begin ProcessView_OCX.ProcessView PV 
+      Height          =   2535
+      Left            =   1200
+      TabIndex        =   2
+      Top             =   1320
+      Visible         =   0   'False
+      Width           =   2175
+      _ExtentX        =   3836
+      _ExtentY        =   4471
+   End
    Begin VB.PictureBox pctIcon 
       Appearance      =   0  'Flat
       AutoRedraw      =   -1  'True
@@ -149,6 +160,10 @@ Begin VB.Form frmProcess
       Begin VB.Menu mnuIconesDisplay 
          Caption         =   "&Afficher les icones"
          Checked         =   -1  'True
+      End
+      Begin VB.Menu mnuChangeDisplayType 
+         Caption         =   "&Afficher une arborescence"
+         Shortcut        =   {F2}
       End
       Begin VB.Menu mnuMenuTiret2 
          Caption         =   "-"
@@ -315,10 +330,18 @@ End Sub
 
 Private Sub Form_Resize()
     On Error Resume Next
-    LV.Top = 0
-    LV.Left = 0
-    LV.Width = Me.Width - 100
-    LV.Height = Me.Height - 820
+    With LV
+        .Top = 0
+        .Left = 0
+        .Width = Me.Width - 100
+        .Height = Me.Height - 820
+    End With
+    With PV
+        .Top = 0
+        .Left = 0
+        .Width = LV.Width
+        .Height = LV.Height
+    End With
 End Sub
 
 Private Sub LV_Click()
@@ -435,6 +458,20 @@ Private Sub mnuBlockProcess_Click()
     ReDim Preserve JailedProcess(UBound(JailedProcess()) + 1)
     Set JailedProcess(UBound(JailedProcess())) = cProc.GetProcess(Val(LV.SelectedItem.SubItems(1)))
     
+End Sub
+
+Private Sub mnuChangeDisplayType_Click()
+    If PV.Visible Then
+        'alors on change
+        PV.Visible = False
+        LV.Visible = True
+        mnuChangeDisplayType.Caption = "Afficher une arborescence"
+    Else
+        PV.Visible = True
+        LV.Visible = False
+        mnuChangeDisplayType.Caption = "Afficher une liste"
+    End If
+    Call mnuRefrehNOW_Click
 End Sub
 
 Private Sub mnuDeActivate_Click()
@@ -559,7 +596,7 @@ End Sub
 
 Private Sub mnuRefrehNOW_Click()
 'rafraichissement
-    RefreshProcList
+    Call Timer1_Timer
 End Sub
 
 Private Sub mnuRefreshRapide_Click()
@@ -595,7 +632,13 @@ End Sub
 
 Private Sub Timer1_Timer()
 'rafraichissement
-    RefreshProcList
+    If LV.Visible Then
+        'on refresh la liste
+        RefreshProcList
+    Else
+        'on refresh le PV
+        PV.Refresh
+    End If
 End Sub
 
 '=======================================================
