@@ -279,6 +279,8 @@ Dim sPref As String
         End If
     ElseIf s = "resetconfig" Then s2 = "Paramètre manquant"
     ElseIf s = "mailauthor" Then Shell "MailTo:hexeditorvb@gmail.com": s2 = "Ouverture du logiciel de messagerie"
+    ElseIf s = "aboutthisfile" Then Call cFile.ShellOpenFile(App.Path & "\PLEASE READ ME (eng + fr).TXT", frmContent.hWnd): s2 = vbNullString
+    
     
     End If
     
