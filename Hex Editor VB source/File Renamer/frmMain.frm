@@ -995,17 +995,8 @@ Attribute VB_Exposed = False
 Option Explicit
 
 '=======================================================
-'ENUM
+'FORM PRINCIPALE
 '=======================================================
-Public Enum TYPE_OF_MODIFICATION
-    Style = 1
-    Compteur = 2
-    Remplacer = 3
-    Base = 4
-    Audio = 5
-    Video = 6
-    Image = 7
-End Enum
 
 Private Sub cb1_Click()
     If cb1.Text <> vbNullString Then

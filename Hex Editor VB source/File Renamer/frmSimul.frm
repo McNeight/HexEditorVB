@@ -143,6 +143,11 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+
+'=======================================================
+'FORM D'AFFICHAGE DES RESULTATS DE LA SIMULATION
+'=======================================================
+
 Private Sub cmdOk_Click()
 'ok
     Unload Me
