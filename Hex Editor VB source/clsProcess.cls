@@ -95,6 +95,8 @@ Private Const PROCESS_TERMINAT              As Long = &H1
 Private Const PROCESS_SET_INFORMATION       As Long = &H200
 Private Const MAX_COMPUTERNAME_LENGTH       As Long = 31
 
+Private Const STILL_ACTIVE                  As Long = &H103
+
 
 '=======================================================
 'APIs
@@ -143,6 +145,7 @@ Private Declare Function NtResumeProcess Lib "Ntdll.dll" (ByVal hProc As Long) A
 Private Declare Function GetProcessMemoryInfo Lib "PSAPI.DLL" (ByVal hProcess As Long, ppsmemCounters As PROCESS_MEMORY_COUNTERS, ByVal cb As Long) As Long
 'obtient le ComputerName
 Private Declare Function GetComputerName Lib "kernel32" Alias "GetComputerNameA" (ByVal lpBuffer As String, nSize As Long) As Long
+Private Declare Function GetExitCodeProcess Lib "kernel32" (ByVal hProcess As Long, lpExitCode As Long) As Long
 
 
 '=======================================================
@@ -254,7 +257,7 @@ End Function
 '=======================================================
 'fonction renvoyant le nom complet du fichier en fonction du PID du processus
 '=======================================================
-Public Function GetPathFromPID(ByVal PID As Long) As String
+Public Function GetProcessPathFromPID(ByVal PID As Long) As String
 Dim lHprcss As Long
 Dim Ret As Long
 Dim sResult As String
@@ -263,9 +266,9 @@ Dim hModule As Long
     On Error GoTo ErrGest
 
     If PID = 0 Then
-        GetPathFromPID = "[System Process]"
+        GetProcessPathFromPID = "[System Process]"
     ElseIf PID = 4 Then
-        GetPathFromPID = "System"
+        GetProcessPathFromPID = "System"
     Else
         'création d'un buffer
         sResult = Space$(512)
@@ -287,7 +290,7 @@ Dim hModule As Long
         'ferme le handle
         CloseHandle lHprcss
         'formate la string
-        GetPathFromPID = FormatedPath(FormatedString(sResult))  'Left$(sResult, InStr(sResult, vbNullChar) - 1)
+        GetProcessPathFromPID = FormatedPath(FormatedString(sResult))  'Left$(sResult, InStr(sResult, vbNullChar) - 1)
     End If
     
 ErrGest:
@@ -328,7 +331,7 @@ End Property
 '=======================================================
 'renvoie le nom du processus en fonction de son PID
 '=======================================================
-Public Function GetProcessFromPID(ByVal PID As Long) As String
+Public Function GetProcessNameFromPID(ByVal PID As Long) As String
 Dim hSnapshot As Long
 Dim uProcess As PROCESSENTRY32
 Dim r As Long
@@ -347,7 +350,7 @@ Dim r As Long
     
     Do While r
         If uProcess.th32ProcessID = PID Then
-            GetProcessFromPID = FormatedString(uProcess.szExeFile)
+            GetProcessNameFromPID = FormatedString(uProcess.szExeFile)
             Exit Do
         End If
         'prochain process
@@ -362,7 +365,7 @@ End Function
 '=======================================================
 'termine un processus en fonction de son PID
 '=======================================================
-Public Function TerminateProc(ByVal PID As Long, Optional ByVal Confirm As Boolean = False) As Long
+Public Function TerminateProcessByPID(ByVal PID As Long, Optional ByVal Confirm As Boolean = False) As Long
 Dim lhwndProcess As Long
 Dim lRep As Long
 Dim lExitCode As Long
@@ -377,7 +380,7 @@ Dim lExitCode As Long
     lhwndProcess = OpenProcess(PROCESS_TERMINAT, 0, PID)
     
     'kill le processus
-    TerminateProc = TerminateProcess(lhwndProcess, lExitCode)
+    TerminateProcessByPID = TerminateProcess(lhwndProcess, lExitCode)
     
     'ferme le handle
     CloseHandle lhwndProcess
@@ -387,7 +390,7 @@ End Function
 '=======================================================
 'obtient les infos sur le temps processeur
 '=======================================================
-Public Sub GetProcTimes(ByVal PID As Long, ByRef KernelTime As Double, ByRef UserTime As Double, ByRef ProcessorTime As Double)
+Public Sub GetProcessTimesByPID(ByVal PID As Long, ByRef KernelTime As Double, ByRef UserTime As Double, ByRef ProcessorTime As Double)
 'permet de récupérer les temps kernel, user et processor d'un processus en fonction de son PID
 'Le temps processeur (visible dans TaskMgr) est le temps noyau + temps utilisateur
 Dim T0 As FILETIME  'cette variable n'est pas utilisées, mais est nécessaire comme argument de l'API
@@ -400,7 +403,7 @@ Dim lTime2 As Double 'temps que l'on récupère
     'obtient le handle vers le process
     lProcess = OpenProcess(PROCESS_QUERY_INFORMATION Or PROCESS_VM_READ, 0, PID)
     
-    
+    'récupère les temps
     GetProcessTimes lProcess, T0, T0, curTime, curTime2
     
     'Renvoit le temps en secondes
@@ -409,8 +412,7 @@ Dim lTime2 As Double 'temps que l'on récupère
     
     'Ferme le handle ouvert par OpenProcess
     CloseHandle lProcess
-    
-    
+        
     KernelTime = lTime
     UserTime = lTime2
     'Le temps processeur est la somme des temps kernel et user
@@ -420,9 +422,10 @@ End Sub
 
 
 '=======================================================
-'donne le privilege Debug à l'application (permet d'accéder à tout les processus avec OpenProcess)
+'donne le privilege Debug à l'application
+'(permet d'accéder à tout les processus avec OpenProcess)
 '=======================================================
-Private Sub GetAllPrivileges()
+Private Sub GetDebugPrivilege()
 Dim lhTokenHandle As Long
 Dim tLuid As LUID
 Dim tTokenPriv As TOKEN_PRIVILEGES
@@ -435,6 +438,7 @@ Dim sComputerName As String
     'créé un buffer pour obtenir le nom du PC
     lBufferLen = MAX_COMPUTERNAME_LENGTH + 1
     sComputerName = String$(lBufferLen, "0")
+    
     'obtient le nom
     GetComputerName sComputerName, lBufferLen
     'formate la string
@@ -463,7 +467,10 @@ End Sub
 '=======================================================
 'obtient un processus ==> renseignera sur ses propriétés
 '=======================================================
-Public Function GetProcess(ByVal PID As Long, Optional ByVal EnumerateParent As Boolean = False, Optional ByVal CountModules As Boolean = False, Optional ByVal bGetMemoryInfo As Boolean = False) As ProcessItem
+Public Function GetProcess(ByVal PID As Long, Optional ByVal EnumerateParent As _
+    Boolean = False, Optional ByVal CountModules As Boolean = False, Optional ByVal _
+    bGetMemoryInfo As Boolean = False) As ProcessItem
+    
 Dim hSnapshot As Long
 Dim uProcess As PROCESSENTRY32
 Dim r As Long
@@ -477,6 +484,7 @@ Dim NulProc As ProcessItem
     
     'création du snapshot (liste)
     hSnapshot = CreateToolhelpSnapshot(TH32CS_SNAPPROCESS, 0&)
+    
     If hSnapshot = 0 Then Exit Function
     
     'récupère la taille
@@ -502,7 +510,7 @@ Dim NulProc As ProcessItem
                 .szExeFile = FormatedString(uProcess.szExeFile)
                 .th32ParentProcessID = uProcess.th32ParentProcessID
                 .th32ProcessID = PID
-                .szImagePath = GetPathFromPID(uProcess.th32ProcessID)
+                .szImagePath = GetProcessPathFromPID(uProcess.th32ProcessID)
                 If .th32ProcessID <> 0 And EnumerateParent Then
                     'obtient le processus parent de ce processus (récursivement)
                     Set .procParentProcess = GetProcess(.th32ParentProcessID)
@@ -538,6 +546,7 @@ Dim NulProc As ProcessItem
                     .procMemory.QuotaPeakNonPagedPoolUsage = procMem.QuotaPeakNonPagedPoolUsage
                     .procMemory.QuotaPeakPagedPoolUsage = procMem.QuotaPeakPagedPoolUsage
                     .procMemory.WorkingSetSize = procMem.WorkingSetSize
+                
                 End If
                     .IsProc = True
             End With
@@ -606,7 +615,7 @@ Dim mdTemp() As MODULEENTRY32
     'stockage de la liste des modules
     mdList = mdTemp 'on aurait directement pu travailler sur mdList sans passer par mdTemp, mais il est plus propre de ne changer mdList (d'ailleurs toute autre valeur renvoyée par une sub/fonction) uniquement A LA FIN de cette sub/fonction
     
-    'on le handle du snap
+    'on ferme le handle du snap
     CloseHandle lSnap
 End Sub
 
@@ -645,8 +654,12 @@ End Function
 
 '=======================================================
 'énumère la liste des processus et la stocke dans p
+'de 0 à ubound-1
 '=======================================================
-Public Function EnumerateProcesses(ByRef p() As ProcessItem, Optional ByVal EnumerateParent As Boolean = False, Optional ByVal CountModules As Boolean = False, Optional ByVal bGetMemoryInfo As Boolean = False) As Long
+Public Function EnumerateProcesses(ByRef p() As ProcessItem, Optional ByVal _
+    EnumerateParent As Boolean = False, Optional ByVal CountModules As Boolean = False, _
+    Optional ByVal bGetMemoryInfo As Boolean = False) As Long
+
 Dim hSnapshot As Long
 Dim uProcess As PROCESSENTRY32
 Dim r As Long
@@ -689,7 +702,7 @@ Dim procMem As PROCESS_MEMORY_COUNTERS
             .pcPriClassBase = uProcess.pcPriClassBase
             .th32ModuleID = uProcess.th32ModuleID
             .th32DefaultHeapID = uProcess.th32DefaultHeapID
-            .szImagePath = GetPathFromPID(uProcess.th32ProcessID)
+            .szImagePath = GetProcessPathFromPID(uProcess.th32ProcessID)
             If .th32ProcessID <> 0 And EnumerateParent Then
                 'obtient le processus parent de ce processus
                 Set .procParentProcess = GetProcess(.th32ParentProcessID, EnumerateParent, CountModules)
@@ -730,7 +743,7 @@ Dim procMem As PROCESS_MEMORY_COUNTERS
     Loop
     
     'fermeture du handle
-    Call CloseHandle(hSnapshot)
+    CloseHandle hSnapshot
     
     EnumerateProcesses = x
 
@@ -793,35 +806,22 @@ End Sub
 'renvoie vrai ou faux si le pid existe ou non
 '=======================================================
 Public Function DoesPIDExist(PID As Long) As Boolean
-Dim hSnapshot As Long
-Dim uProcess As PROCESSENTRY32
-Dim r As Long
-
-    DoesPIDExist = False
+Dim hProcess As Long
+Dim lngExit As Long
     
-    'création du snapshot (liste)
-    hSnapshot = CreateToolhelpSnapshot(TH32CS_SNAPPROCESS, 0&)
-    If hSnapshot = 0 Then Exit Function
+    'process [system] et process inactif
+    If PID = 0 Or PID = 4 Then DoesPIDExist = True: Exit Function
     
-    'récupère la taille
-    uProcess.dwSize = Len(uProcess)
+    'tente de récupérer un handle
+    hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, 0&, PID)
+    If hProcess = 0 Then Exit Function  'raté ==> inexistant
     
-    'premier process à être vu
-    r = ProcessFirst(hSnapshot, uProcess)
+    GetExitCodeProcess hProcess, lngExit
     
-    Do While r
-        
-        If uProcess.th32ProcessID = PID Then
-            DoesPIDExist = True
-            Exit Do
-        End If
-        
-        'prochain process
-        r = ProcessNext(hSnapshot, uProcess)
-    Loop
+    'ferme le handle
+    CloseHandle hProcess
     
-    'fermeture du handle
-    Call CloseHandle(hSnapshot)
+    If lngExit = STILL_ACTIVE Then DoesPIDExist = True
 
 End Function
 
@@ -832,7 +832,7 @@ Private Function WindowsDirectory() As String
 Dim sPath As String
 
     'buffer
-    sPath = Space(255)
+    sPath = Space$(255)
     
     'get the directory
     GetWindowsDirectory sPath, Len(sPath)
@@ -872,17 +872,13 @@ Dim s As String
     Wend
     
     'enlève deux antislash successifs et les remplace par un seul
-    x = InStr(1, s, "\\")
-    If x > 0 Then
-        s = Left$(s, x - 1) & "\" & Right$(s, Len(s) - Len(Left$(s, x - 1)) - 2)
-    End If
+    s = Replace$(s, "\\", "\", , , vbBinaryCompare)
     
     'sPath = \??\c:\...
    ' If Left$(sPath, 4) = "\??\" Then
    '     'obtient le répertoire de windows
    '     sPath = Right$(sPath, Len(sPath) - 4)
    ' End If
-    
     
     FormatedPath = s
 End Function
@@ -891,7 +887,7 @@ End Function
 'initialisation de la classe
 '=======================================================
 Private Sub Class_Initialize()
-    GetAllPrivileges    'obtient les privileges nécessaires
+    Call GetDebugPrivilege    'obtient les privileges nécessaires
 End Sub
 
 '=======================================================
@@ -944,5 +940,3 @@ Dim s As String
     
     FormatedString = s
 End Function
-
-
