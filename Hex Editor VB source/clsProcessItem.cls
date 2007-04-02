@@ -98,9 +98,5 @@ Public procParentProcess As ProcessItem
 Public procModulesCount As Long
 Public procMemory As ProcessMemoryItem
 Public IsProc As Boolean
-Public Property Get procModules() As Variant
-    procModules = mdl()
-End Property
-Public Property Let procModules(procModules As Variant)
-    mdl() = procModules
-End Property
+Public Property Get procModules() As Variant: procModules = mdl(): End Property
+Public Property Let procModules(procModules As Variant): mdl() = procModules: End Property

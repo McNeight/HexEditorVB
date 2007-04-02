@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MsComCtl.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmProcess 
    Caption         =   "Gestionnaire de processus"
    ClientHeight    =   5415
@@ -588,7 +588,7 @@ End Sub
 
 Private Sub mnuTerminate_Click()
 'termine le processus sélectionné
-    If cProc.TerminateProc(Val(LV.SelectedItem.SubItems(1)), True) Then
+    If cProc.TerminateProcessByPID(Val(LV.SelectedItem.SubItems(1)), True) Then
         DoEvents: RefreshProcList
     End If
 End Sub
@@ -672,7 +672,7 @@ Dim sKey As String
                 .Item(x + 1).SubItems(9) = p(x).procMemory.QuotaPeakNonPagedPoolUsage
                 .Item(x + 1).SubItems(10) = p(x).procMemory.QuotaPagedPoolUsage
                 .Item(x + 1).SubItems(11) = p(x).procMemory.QuotaPeakPagedPoolUsage
-                .Item(x + 1).SubItems(12) = cProc.GetProcessFromPID(p(x).th32ParentProcessID) & "[" & p(x).th32ParentProcessID & "]"
+                .Item(x + 1).SubItems(12) = cProc.GetProcessNameFromPID(p(x).th32ParentProcessID) & "[" & p(x).th32ParentProcessID & "]"
                 .Item(x + 1).SubItems(13) = p(x).cntThreads
                 .Item(x + 1).SubItems(14) = PriorityFromLong(p(x).pcPriClassBase) & " [" & p(x).pcPriClassBase & "]"
             End With
@@ -695,7 +695,7 @@ Dim sKey As String
                 .Item(x + 1).SubItems(9) = p(x).procMemory.QuotaPeakNonPagedPoolUsage
                 .Item(x + 1).SubItems(10) = p(x).procMemory.QuotaPagedPoolUsage
                 .Item(x + 1).SubItems(11) = p(x).procMemory.QuotaPeakPagedPoolUsage
-                .Item(x + 1).SubItems(12) = cProc.GetProcessFromPID(p(x).th32ParentProcessID) & "[" & p(x).th32ParentProcessID & "]"
+                .Item(x + 1).SubItems(12) = cProc.GetProcessNameFromPID(p(x).th32ParentProcessID) & "[" & p(x).th32ParentProcessID & "]"
                 .Item(x + 1).SubItems(13) = p(x).cntThreads
                 .Item(x + 1).SubItems(14) = PriorityFromLong(p(x).pcPriClassBase) & " [" & p(x).pcPriClassBase & "]"
             End With

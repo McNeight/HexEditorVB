@@ -473,7 +473,7 @@ Dim clsP As clsProcess
     
     If TypeOfForm(frmContent.ActiveForm) = "Processus" Then
         'le PID est stocké dans le Tag
-        cFile.ShowFileProperty clsP.GetPathFromPID(Val(frmContent.ActiveForm.Tag)), Me.hWnd
+        cFile.ShowFileProperty clsP.GetProcessPathFromPID(Val(frmContent.ActiveForm.Tag)), Me.hWnd
     ElseIf TypeOfForm(frmContent.ActiveForm) = "Disque" Then
         cFile.ShowFileProperty Right$(frmContent.ActiveForm.Caption, 3), Me.hWnd
     ElseIf TypeOfForm(frmContent.ActiveForm) = "Fichier" Then
