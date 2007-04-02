@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
-Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.1#0"; "FileView_OCX.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.2#0"; "FileView_OCX.ocx"
 Begin VB.Form frmMain 
    Caption         =   "File Renamer VB"
    ClientHeight    =   10380
@@ -29,14 +29,22 @@ Begin VB.Form frmMain
       TabIndex        =   69
       Top             =   120
       Width           =   10095
+      Begin VB.TextBox pctPath 
+         BorderStyle     =   0  'None
+         Height          =   285
+         Left            =   240
+         TabIndex        =   74
+         Top             =   240
+         Width           =   9615
+      End
       Begin FileView_OCX.FileView File1 
-         Height          =   2775
+         Height          =   6015
          Left            =   3240
-         TabIndex        =   75
+         TabIndex        =   72
          Top             =   600
          Width           =   6735
          _ExtentX        =   11880
-         _ExtentY        =   4895
+         _ExtentY        =   10610
          ShowEntirePath  =   0   'False
          Path            =   "C:\"
          ShowDirectories =   0   'False
@@ -52,13 +60,13 @@ Begin VB.Form frmMain
          EndProperty
       End
       Begin FileView_OCX.FileView Folder1 
-         Height          =   2775
+         Height          =   6015
          Left            =   120
-         TabIndex        =   73
+         TabIndex        =   71
          Top             =   600
          Width           =   3015
          _ExtentX        =   5318
-         _ExtentY        =   4895
+         _ExtentY        =   10610
          ShowEntirePath  =   0   'False
          AllowDirectoryDeleting=   0   'False
          AllowFileDeleting=   0   'False
@@ -68,69 +76,6 @@ Begin VB.Form frmMain
          HideColumnHeaders=   -1  'True
          Path            =   "C:\"
          ShowFiles       =   0   'False
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin VB.ComboBox cbAddress1 
-         Height          =   315
-         Left            =   120
-         TabIndex        =   71
-         Top             =   240
-         Width           =   8175
-      End
-      Begin VB.ComboBox cbAddress2 
-         Height          =   315
-         Left            =   120
-         TabIndex        =   70
-         Top             =   3480
-         Width           =   8175
-      End
-      Begin FileView_OCX.FileView Folder2 
-         Height          =   2775
-         Left            =   120
-         TabIndex        =   74
-         Top             =   3840
-         Width           =   3015
-         _ExtentX        =   5318
-         _ExtentY        =   4895
-         ShowEntirePath  =   0   'False
-         AllowDirectoryDeleting=   0   'False
-         AllowFileDeleting=   0   'False
-         AllowFileRenaming=   0   'False
-         AllowDirectoryRenaming=   0   'False
-         AllowReorganisationByColumn=   0   'False
-         HideColumnHeaders=   -1  'True
-         Path            =   "C:\"
-         ShowFiles       =   0   'False
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin FileView_OCX.FileView File2 
-         Height          =   2775
-         Left            =   3240
-         TabIndex        =   76
-         Top             =   3840
-         Width           =   6735
-         _ExtentX        =   11880
-         _ExtentY        =   4895
-         ShowEntirePath  =   0   'False
-         Path            =   "C:\"
-         ShowDirectories =   0   'False
-         ShowDrives      =   0   'False
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -152,7 +97,7 @@ Begin VB.Form frmMain
       Begin FileView_OCX.FileView FileR 
          Height          =   6375
          Left            =   120
-         TabIndex        =   77
+         TabIndex        =   73
          Top             =   240
          Width           =   4575
          _ExtentX        =   8070
@@ -894,17 +839,14 @@ Begin VB.Form frmMain
       Caption         =   "Liste des transformations à effectuer :"
       Height          =   255
       Left            =   7080
-      TabIndex        =   72
+      TabIndex        =   70
       Top             =   6960
       Width           =   4215
    End
    Begin VB.Menu rmnuFile 
       Caption         =   "&Fichier"
       Begin VB.Menu mnuChangeFolder1 
-         Caption         =   "&Changer le dossier 1..."
-      End
-      Begin VB.Menu mnuChangeFolder2 
-         Caption         =   "&Changer le dossier 2..."
+         Caption         =   "&Changer le dossier..."
       End
       Begin VB.Menu mnuFileTiret1 
          Caption         =   "-"
@@ -943,91 +885,27 @@ Begin VB.Form frmMain
          Caption         =   "&Supprimer"
       End
       Begin VB.Menu mnuMoveTo1 
-         Caption         =   "&Déplacer vers"
-         Begin VB.Menu mnuMoveToWhere1 
-            Caption         =   "&Choisir la destination..."
-         End
-         Begin VB.Menu mnuMoveToTrash1 
-            Caption         =   "&La corbeille"
-         End
-         Begin VB.Menu mnuMoveToFolder2 
-            Caption         =   "&Le dossier courant 2"
-         End
-      End
-      Begin VB.Menu mnuChangeAttr1 
-         Caption         =   "&Changer l'attribut"
-         Begin VB.Menu mnuNormalAttr1 
-            Caption         =   "&Normal"
-         End
-         Begin VB.Menu mnuROattr1 
-            Caption         =   "&Lecture seule"
-         End
-         Begin VB.Menu mnuHiddenAttr1 
-            Caption         =   "&Caché"
-         End
-         Begin VB.Menu mnuSystemAttr1 
-            Caption         =   "&Système"
-         End
+         Caption         =   "&Déplacer vers..."
       End
       Begin VB.Menu mnuCopyTo1 
-         Caption         =   "&Copier vers"
-         Begin VB.Menu mnuCopyFile1 
-            Caption         =   "&Choisir la destination..."
-         End
-         Begin VB.Menu mnuCopyToCurrentFolder2 
-            Caption         =   "&Le dossier courant 2"
-         End
+         Caption         =   "&Copier vers..."
       End
-   End
-   Begin VB.Menu mnuPopupFile2 
-      Caption         =   "popupFile"
-      Visible         =   0   'False
-      Begin VB.Menu mnuAddToCurrentList2 
-         Caption         =   "&Ajouter à la liste des fichiers courante"
-      End
-      Begin VB.Menu mnuDisplayProperties2 
-         Caption         =   "&Afficher les propriétés"
-      End
-      Begin VB.Menu mnuPopupFileTiret12 
-         Caption         =   "-"
-      End
-      Begin VB.Menu mnuDelete2 
-         Caption         =   "&Supprimer"
-      End
-      Begin VB.Menu mnuMoveTo2 
-         Caption         =   "&Déplacer vers"
-         Begin VB.Menu mnuMoveToWhere2 
-            Caption         =   "&Choisir la destination..."
-         End
-         Begin VB.Menu mnuMoveToTrash2 
-            Caption         =   "&La corbeille"
-         End
-         Begin VB.Menu mnuMoveToFolder1 
-            Caption         =   "&Le dossier courant 1"
-         End
-      End
-      Begin VB.Menu mnuChangeAttr2 
+      Begin VB.Menu mnuChangeAttr 
          Caption         =   "&Changer l'attribut"
-         Begin VB.Menu mnuNormalAttr2 
+         Begin VB.Menu mnuNormalAttr 
             Caption         =   "&Normal"
          End
-         Begin VB.Menu mnuROattr2 
+         Begin VB.Menu mnuROattr 
             Caption         =   "&Lecture seule"
          End
-         Begin VB.Menu mnuHiddenAttr2 
+         Begin VB.Menu mnuHiddenAttr 
             Caption         =   "&Caché"
          End
-         Begin VB.Menu mnuSystemAttr2 
+         Begin VB.Menu mnuSystemAttr 
             Caption         =   "&Système"
          End
-      End
-      Begin VB.Menu mnuCopyTo2 
-         Caption         =   "&Copier vers"
-         Begin VB.Menu mnuCopyFile2 
-            Caption         =   "&Choisir la destination..."
-         End
-         Begin VB.Menu mnuCopyToCurrentFolder1 
-            Caption         =   "&Le dossier courant 1"
+         Begin VB.Menu mnuSystemHiddenAttr 
+            Caption         =   "&Système (caché)"
          End
       End
    End
@@ -1058,69 +936,14 @@ Begin VB.Form frmMain
       Begin VB.Menu mnuPopupFolderTiret31 
          Caption         =   "-"
       End
+      Begin VB.Menu mnuDeleteFolder1 
+         Caption         =   "&Supprimer"
+      End
       Begin VB.Menu mnuMoveFolderTo1 
-         Caption         =   "&Déplacer vers"
-         Begin VB.Menu mnuMoveFolderToWhere1 
-            Caption         =   "&Choisir la destination..."
-         End
-         Begin VB.Menu mnuMoveFolderToTrash1 
-            Caption         =   "&La corbeille"
-         End
+         Caption         =   "&Déplacer vers..."
       End
       Begin VB.Menu mnuCopyFolderTo1 
-         Caption         =   "&Copier vers"
-         Begin VB.Menu mnuChooseFolderCopyDest1 
-            Caption         =   "&Choisir la destination..."
-         End
-         Begin VB.Menu mnuCopyFolderToFolder2 
-            Caption         =   "&Le dossier courant 2"
-         End
-      End
-   End
-   Begin VB.Menu mnuPopupFolder2 
-      Caption         =   "popupFile"
-      Visible         =   0   'False
-      Begin VB.Menu mnuOpenExplorer2 
-         Caption         =   "&Ouvrir l'explorateur Windows à cet emplacement"
-      End
-      Begin VB.Menu mnuPopupFolderTiret1 
-         Caption         =   "-"
-      End
-      Begin VB.Menu mnuDisplayPropertiesFolder2 
-         Caption         =   "&Afficher les propriétés"
-      End
-      Begin VB.Menu mnuPopupFolderTiret2 
-         Caption         =   "-"
-      End
-      Begin VB.Menu mnuAddFilesFromFolder2 
-         Caption         =   "&Ajouter les fichiers du dossier"
-         Begin VB.Menu mnuWithoutSubFolder2 
-            Caption         =   "&Sans les sous-dossiers"
-         End
-         Begin VB.Menu mnuWithSubFolders2 
-            Caption         =   "&Avec les sous-dossiers"
-         End
-      End
-      Begin VB.Menu mnuPopupFolderTiret3 
-         Caption         =   "-"
-      End
-      Begin VB.Menu mnuMoveFolderTo2 
-         Caption         =   "&Déplacer vers"
-         Begin VB.Menu mnuMoveFolderToWhere2 
-            Caption         =   "&Choisir la destination..."
-         End
-         Begin VB.Menu mnuMoveFolderToTrash2 
-            Caption         =   "&La corbeille"
-         End
-      End
-      Begin VB.Menu mnuCopyFolderTo2 
-         Caption         =   "&Copier vers"
-         Begin VB.Menu mnuChooseFolderCopyDest2 
-            Caption         =   "&Choisir la destination"
-         End
-         Begin VB.Menu mnuCopyFolderToFolder1 
-            Caption         =   "&Le dossier courant 1"
-         End
+         Caption         =   "&Copier vers..."
       End
    End
    Begin VB.Menu mnuPopupTransfoList 
@@ -1285,22 +1108,153 @@ Private Sub cb4_Click()
     End If
 End Sub
 
-Private Sub cbAddress1_Change()
-'change le path
-    If cFile.FolderExists(cbAddress1.Text) Then Folder1.Path = cbAddress1.Text
+Private Sub mnuCopyTo1_Click()
+'copie les fichiers sélectionnés
+Dim s As String
+Dim sTo As String
+Dim x As Long
+
+    'browse for folder
+    sTo = cFile.BrowseForFolder("Choix du dossier cible", Me.hWnd)
+    If cFile.FolderExists(sTo) = False Then Exit Sub
+    
+    'créé une string qui concatene tous les fichiers
+    For x = 1 To File1.ListCount
+        If File1.ListItems.Item(x).Selected Then _
+            s = s & Folder1.Path & "\" & File1.ListItems.Item(x).Text & vbNullChar
+    Next x
+    
+    Call cFile.CopyFileOrFolder(s, sTo): DoEvents    'copy files
+    Call File1.Refresh
 End Sub
 
-Private Sub cbAddress1_KeyDown(KeyCode As Integer, Shift As Integer)
-    If KeyCode = vbKeyReturn Then cbAddress1.AddItem cbAddress1.Text
+Private Sub mnuDelete1_Click()
+Dim s As String
+Dim x As Long
+
+    'créé une string qui concatene tous les fichiers
+    For x = 1 To File1.ListCount
+        If File1.ListItems.Item(x).Selected Then _
+            s = s & Folder1.Path & "\" & File1.ListItems.Item(x).Text & vbNullChar
+    Next x
+    
+    Call cFile.MoveToTrash(s): DoEvents 'à la poubelle
+    Call File1.Refresh
 End Sub
 
-Private Sub cbAddress2_KeyDown(KeyCode As Integer, Shift As Integer)
-    If KeyCode = vbKeyReturn Then cbAddress2.AddItem cbAddress1.Text
+Private Sub mnuDisplayProperties1_Click()
+'affiche les properties des dossiers sélectionnés
+Dim x As Long
+
+    For x = 1 To File1.ListCount
+        If File1.ListItems.Item(x).Selected Then _
+            Call cFile.ShowFileProperty(Folder1.Path & "\" & File1.ListItems.Item(x).Text, Me.hWnd)
+    Next x
 End Sub
 
-Private Sub cbAddress2_Change()
-'change le path
-    If cFile.FolderExists(cbAddress2.Text) Then Folder2.Path = cbAddress2.Text
+Private Sub mnuDisplayPropertiesFolder1_Click()
+'affiche les properties des dossiers sélectionnés
+Dim x As Long
+
+    For x = 1 To Folder1.ListCount
+        If Folder1.ListItems.Item(x).Selected Then _
+            Call cFile.ShowFileProperty(Folder1.Path & "\" & Folder1.ListItems.Item(x).Text, Me.hWnd)
+    Next x
+End Sub
+
+Private Sub mnuHiddenAttr_Click()
+'attribut caché
+Dim x As Long
+
+    For x = 1 To File1.ListCount
+        If File1.ListItems.Item(x).Selected Then _
+            Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_HIDDEN)
+    Next x
+End Sub
+
+Private Sub mnuMoveTo1_Click()
+'déplace les fichiers sélectionnés
+Dim s As String
+Dim sTo As String
+Dim x As Long
+
+    'browse for folder
+    sTo = cFile.BrowseForFolder("Choix du dossier cible", Me.hWnd)
+    If cFile.FolderExists(sTo) = False Then Exit Sub
+    
+    'créé une string qui concatene tous les fichiers
+    For x = 1 To File1.ListCount
+        If File1.ListItems.Item(x).Selected Then _
+            s = s & Folder1.Path & "\" & File1.ListItems.Item(x).Text & vbNullChar
+    Next x
+    
+    Call cFile.MoveFileOrFolder(s, sTo): DoEvents  'move files
+    Call File1.Refresh
+End Sub
+
+Private Sub mnuNormalAttr_Click()
+'attribut normal
+Dim x As Long
+
+    For x = 1 To File1.ListCount
+        If File1.ListItems.Item(x).Selected Then _
+            Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_NORMAL)
+    Next x
+End Sub
+
+Private Sub mnuOpenExplorer1_Click()
+'ouvre explorer
+    Shell "explorer.exe " & Folder1.Path, vbNormalFocus
+End Sub
+
+Private Sub mnuROattr_Click()
+'attribut lecture seule
+Dim x As Long
+
+    For x = 1 To File1.ListCount
+        If File1.ListItems.Item(x).Selected Then _
+            Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_READONLY)
+    Next x
+End Sub
+
+Private Sub mnuSystemAttr_Click()
+'attribut système
+Dim x As Long
+
+    For x = 1 To File1.ListCount
+        If File1.ListItems.Item(x).Selected Then _
+            Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_SYSTEM)
+    Next x
+End Sub
+
+Private Sub mnuSystemHiddenAttr_Click()
+'attribut système (caché)
+Dim x As Long
+
+    For x = 1 To File1.ListCount
+        If File1.ListItems.Item(x).Selected Then _
+            Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_INVISIBLE_SYSTEM)
+    Next x
+End Sub
+
+Private Sub pctPath_Change()
+    If cFile.FolderExists(cFile.GetFolderFromPath(pctPath.Text & "\")) = False Then
+        'couleur rouge
+        pctPath.ForeColor = RED_COLOR
+    Else
+        'c'est un path ok
+        pctPath.ForeColor = GREEN_COLOR
+    End If
+End Sub
+
+Private Sub pctPath_KeyDown(KeyCode As Integer, Shift As Integer)
+'valide si entrée
+Dim s As String
+    If KeyCode = vbKeyReturn Then
+        s = pctPath.Text
+        If cFile.FolderExists(pctPath.Text) Then Folder1.Path = pctPath.Text
+        pctPath.Text = s
+    End If
 End Sub
 
 Private Sub chkAddText_Click()
@@ -1470,11 +1424,6 @@ Private Sub cmdUp_Click()
     DisplaySample   'refresh le sample
 End Sub
 
-Private Sub File1_AfterLabelEdit(Cancel As Integer, OldString As String, NewString As String)
-'met à jour File2 si le folder est le même
-    If File2.Path = File1.Path Then File2.Refresh
-End Sub
-
 Private Sub File1_DblClick()
 Dim cTag As clsTag
 Dim cTg As clsTagInfo
@@ -1516,21 +1465,10 @@ Private Sub File1_KeyDown(KeyCode As Integer, Shift As Integer)
     If KeyCode = vbKeyF5 Then File1.Refresh
 End Sub
 
-Private Sub File2_AfterLabelEdit(Cancel As Integer, OldString As String, NewString As String)
-'met à jour File1 si le folder est le même
-    If File2.Path = File1.Path Then File1.Refresh
-End Sub
-
 Private Sub File1_ItemDblSelection(Item As ComctlLib.ListItem)
 'ajoute à la liste courante
-    ValidateRect File1.hwnd, 0 'gèle l'affichage pour éviter le clignotement
+    ValidateRect File1.hWnd, 0 'gèle l'affichage pour éviter le clignotement
     FileR.AddItemManually File1.Path & Item.Text, File, bFillSubItemsAuto:=True
-End Sub
-
-Private Sub File2_ItemDblSelection(Item As ComctlLib.ListItem)
-'ajoute à la liste courante
-    ValidateRect File2.hwnd, 0 'gèle l'affichage pour éviter le clignotement
-    FileR.AddItemManually File2.Path & Item.Text, File, bFillSubItemsAuto:=True
 End Sub
 
 Private Sub File1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1545,28 +1483,6 @@ Dim Lst As ListItem
     End If
     
     Set Lst = Nothing
-End Sub
-
-Private Sub File2_KeyDown(KeyCode As Integer, Shift As Integer)
-    If KeyCode = vbKeyF5 Then File2.Refresh
-End Sub
-
-Private Sub File2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
-Dim Lst As ListItem
-
-    Set Lst = File2.HitTest(x, y)
-    
-    If Button = 2 Then
-        'popup menu
-        If Not (Lst Is Nothing) Then Lst.Selected = True
-        Me.PopupMenu Me.mnuPopupFile2
-    End If
-    
-    Set Lst = Nothing
-End Sub
-
-Private Sub Folder1_KeyDown(KeyCode As Integer, Shift As Integer)
-    If KeyCode = vbKeyF5 Then Folder1.Refresh
 End Sub
 
 Private Sub Folder1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -1585,44 +1501,16 @@ End Sub
 
 Private Sub Folder1_PathChange(sOldPath As String, sNewPath As String)
 'mets à jour le combo
-    cbAddress1.Text = sNewPath
+    pctPath.Text = sNewPath
     File1.Path = Folder1.Path
-End Sub
-
-Private Sub Folder2_KeyDown(KeyCode As Integer, Shift As Integer)
-    If KeyCode = vbKeyF5 Then Folder2.Refresh
-End Sub
-
-Private Sub Folder2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
-Dim Lst As ListItem
-
-    Set Lst = Folder2.HitTest(x, y)
-    
-    If Button = 2 Then
-        'popup menu
-        If Not (Lst Is Nothing) Then Lst.Selected = True
-        Me.PopupMenu Me.mnuPopupFolder2
-    End If
-    
-    Set Lst = Nothing
-End Sub
-
-Private Sub Folder2_PathChange(sOldPath As String, sNewPath As String)
-'mets à jour le combo
-    cbAddress2.Text = sNewPath
-    File2.Path = Folder2.Path
 End Sub
 
 Private Sub Form_Load()
     
     '//organise les controles
     Folder1.Path = Left$(App.Path, 3)
-    Folder2.Path = Left$(App.Path, 3)
     FileR.Path = "-inexistant-" 'pas de path
-    cbAddress1.Text = Folder1.Path
-    cbAddress2.Text = Folder2.Path
-    File1.Path = Folder1.Path
-    File2.Path = Folder2.Path
+    pctPath.Text = Folder1.Path
     
 End Sub
 
@@ -1655,37 +1543,12 @@ Dim x As Long
 
 End Sub
 
-Private Sub mnuAddToCurrentList2_Click()
-'ajoute les fichiers à la liste courante
-Dim var As Variant
-Dim x As Long
-    
-    'obtient la liste des sélections
-    File2.GetSelectedItems var
-    
-    FileR.Visible = False
-    For x = 1 To UBound(var)
-        'ajoute les fichiers à FileR
-        FileR.AddItemManually File2.Path & var(x).Text, File, bFillSubItemsAuto:=True
-    Next x
-    FileR.Visible = True
-
-End Sub
-
 Private Sub mnuChangeFolder1_Click()
 'changer le dossier 1
 Dim s As String
 
-    s = cFile.BrowseForFolder("Choix du répertoire", Me.hwnd)   'browse for folder
+    s = cFile.BrowseForFolder("Choix du répertoire", Me.hWnd)   'browse for folder
     If cFile.FolderExists(s) Then Folder1.Path = s  'change le folder
-End Sub
-
-Private Sub mnuChangeFolder2_Click()
-'changer le dossier 2
-Dim s As String
-
-    s = cFile.BrowseForFolder("Choix du répertoire", Me.hwnd)   'browse for folder
-    If cFile.FolderExists(s) Then Folder2.Path = s  'change le folder
 End Sub
 
 Private Sub mnuDeselectAll_Click()
@@ -1722,6 +1585,10 @@ Dim x As Long
     
     lstTransfo.Refresh  'évite un bug d'affichage après le cochage des cases
     
+End Sub
+
+Private Sub pctPath_KeyPress(KeyAscii As Integer)
+    If KeyAscii = 13 Then KeyAscii = 0  'vire le BEEP
 End Sub
 
 Private Sub TB_Click()
