@@ -1,4 +1,4 @@
-Attribute VB_Name = "Declarations"
+Attribute VB_Name = "mdlOther"
 ' =======================================================
 '
 ' File Renamer VB (part of Hex Editor VB)
@@ -31,44 +31,22 @@ Attribute VB_Name = "Declarations"
 
 Option Explicit
 
-'=======================================================
-'//DECLARATIONS DES APIS/TYPES/CONSTANTES/ENUMS
-'=======================================================
 
 '=======================================================
-'//CONSTANTES
+'//MODULE DE SUBS ET PROC DIVERSES
 '=======================================================
 
-'constantes contenant mes couleurs publiques
-Public Const GREEN_COLOR                        As Long = &HC000&
-Public Const RED_COLOR                          As Long = &HC0&
-
-
 '=======================================================
-'//ENUMS
+'récupère le nom de l'utilisateur
 '=======================================================
+Public Function GetUserName() As String
+Dim strS As String
+Dim Ret As Long
 
-Public Enum TYPE_OF_MODIFICATION
-    Style = 1
-    Compteur = 2
-    Remplacer = 3
-    Base = 4
-    Audio = 5
-    Video = 6
-    Image = 7
-End Enum
-
-
-'=======================================================
-'//TYPES
-'=======================================================
-
-
-'=======================================================
-'//APIS
-'=======================================================
-
-Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
-Public Declare Sub ValidateRect Lib "user32" (ByVal hWnd As Long, ByVal t As Long)
-Public Declare Function GetUserNameA Lib "advapi32.dll" (ByVal lpBuffer As String, nSize As Long) As Long
-
+    'créé un buffer
+    strS = String$(200, 0)
+    
+    'récupère le Name
+    Ret = GetUserNameA(strS, 199)
+    If Ret <> 0 Then GetUserName = Left$(strS, 199) Else GetUserName = vbNullString
+End Function

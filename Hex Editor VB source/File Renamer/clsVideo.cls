@@ -43,6 +43,10 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+'=======================================================
+'CLASSE DE RECUPERATION DES INFOS SUR LES VIDEOS
+'=======================================================
+
 
 '=======================================================
 'VARIABLES PUBLIQUES DE LA CLASSE

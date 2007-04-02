@@ -18,6 +18,7 @@ Class=clsVideo; clsVideo.cls
 Module=mdlString; mdlString.bas
 Object={9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.2#0; FileView_OCX.ocx
 Class=clsFileInfos; ..\clsFileInfos.cls
+Module=mdlOther; mdlOther.bas
 IconForm="frmMain"
 Startup="Sub Main"
 HelpFile=""
