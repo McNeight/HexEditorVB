@@ -31,6 +31,10 @@ Attribute VB_Name = "Demarrage"
 
 Option Explicit
 
+'=======================================================
+'MODULE CONTENANT LES PROC DE DEMARRAGE
+'=======================================================
+
 Public AfManifest As New AfClsManifest  'classe appliquant le style XP
 Public cFile As clsFileInfos
 

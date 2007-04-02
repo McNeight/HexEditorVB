@@ -56,3 +56,7 @@ Attribute VB_Exposed = False
 
 
 Option Explicit
+
+'=======================================================
+'FORM D'AFFICHAGE DES RESULTATS
+'=======================================================
