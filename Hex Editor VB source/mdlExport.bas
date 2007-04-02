@@ -46,7 +46,8 @@ Option Explicit
 '=======================================================
 Public Sub SaveAsHTML(ByVal sOutputFile As String, ByVal bOffset As Boolean, _
     bString As Boolean, ByVal sStringHex As String, ByVal curFirstOffset As Currency, _
-    Optional ByVal curSecondOffset As Currency, Optional ByVal lSize As Long = 3)
+    Optional ByVal curSecondOffset As Currency, Optional ByVal lSize As Long = 3, _
+    Optional ByVal bClip As Boolean = False)
 
 Dim s As String
 Dim curS As Currency
@@ -65,6 +66,11 @@ Dim sRes As String
     
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     DoEvents
+    
+    'créé un nom de fichier temp si option "copie dans le clipboard"
+    If bClip Then
+        Call ObtainTempPathFile("temp_clip", sOutputFile, vbNullString)
+    End If
     
     If curFirstOffset = -1 Then
         'alors c'est le fichier/disque/process entier
@@ -183,6 +189,12 @@ Dim sRes As String
         
     End If
     
+    'on copie maintenant dans le clipboard si l'option est activée
+    If bClip Then
+        Call Clipboard.Clear
+        Clipboard.SetText cFile.LoadFileInString(sOutputFile)
+    End If
+    
 End Sub
 
 '=======================================================
@@ -194,7 +206,7 @@ End Sub
 '=======================================================
 Public Sub SaveAsTEXT(ByVal sOutputFile As String, ByVal bOffset As Boolean, _
     bString As Boolean, ByVal sStringHex As String, ByVal curFirstOffset As Currency, _
-    Optional ByVal curSecondOffset As Currency)
+    Optional ByVal curSecondOffset As Currency, Optional ByVal bClip As Boolean = False)
 
 Dim s As String
 Dim curS As Currency
@@ -211,6 +223,11 @@ Dim sRes As String
     
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     DoEvents
+    
+    'créé un nom de fichier temp si option "copie dans le clipboard"
+    If bClip Then
+        Call ObtainTempPathFile("temp_clip", sOutputFile, vbNullString)
+    End If
     
     If curFirstOffset = -1 Then
         'alors c'est le fichier/disque/process entier
@@ -318,6 +335,12 @@ Dim sRes As String
         
     End If
     
+    'on copie maintenant dans le clipboard si l'option est activée
+    If bClip Then
+        Call Clipboard.Clear
+        Clipboard.SetText cFile.LoadFileInString(sOutputFile)
+    End If
+    
 End Sub
 
 '=======================================================
@@ -327,7 +350,8 @@ End Sub
 'curFirstOffset : premier offset de la sélection (-1 si fichier entier)
 '=======================================================
 Public Sub SaveAsC(ByVal sOutputFile As String, ByVal sStringHex As String, _
-    ByVal curFirstOffset As Currency, Optional ByVal curSecondOffset As Currency)
+    ByVal curFirstOffset As Currency, Optional ByVal curSecondOffset As Currency, _
+    Optional ByVal bClip As Boolean = False)
 
 Dim s As String
 Dim curS As Currency
@@ -357,6 +381,11 @@ Dim sRes As String
     
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     DoEvents
+    
+    'créé un nom de fichier temp si option "copie dans le clipboard"
+    If bClip Then
+        Call ObtainTempPathFile("temp_clip", sOutputFile, vbNullString)
+    End If
     
     If curFirstOffset = -1 Then
         'alors c'est le fichier/disque/process entier
@@ -452,6 +481,12 @@ Dim sRes As String
         
     End If
     
+    'on copie maintenant dans le clipboard si l'option est activée
+    If bClip Then
+        Call Clipboard.Clear
+        Clipboard.SetText cFile.LoadFileInString(sOutputFile)
+    End If
+    
 End Sub
 
 '=======================================================
@@ -461,7 +496,8 @@ End Sub
 'curFirstOffset : premier offset de la sélection (-1 si fichier entier)
 '=======================================================
 Public Sub SaveAsJAVA(ByVal sOutputFile As String, ByVal sStringHex As String, _
-    ByVal curFirstOffset As Currency, Optional ByVal curSecondOffset As Currency)
+    ByVal curFirstOffset As Currency, Optional ByVal curSecondOffset As Currency, _
+    Optional ByVal bClip As Boolean = False)
 
 Dim s As String
 Dim curS As Currency
@@ -491,6 +527,11 @@ Dim sRes As String
     
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     DoEvents
+    
+    'créé un nom de fichier temp si option "copie dans le clipboard"
+    If bClip Then
+        Call ObtainTempPathFile("temp_clip", sOutputFile, vbNullString)
+    End If
     
     If curFirstOffset = -1 Then
         'alors c'est le fichier/disque/process entier
@@ -586,6 +627,12 @@ Dim sRes As String
         
     End If
     
+    'on copie maintenant dans le clipboard si l'option est activée
+    If bClip Then
+        Call Clipboard.Clear
+        Clipboard.SetText cFile.LoadFileInString(sOutputFile)
+    End If
+    
 End Sub
 
 '=======================================================
@@ -596,7 +643,7 @@ End Sub
 '=======================================================
 Public Sub SaveAsVB(ByVal sOutputFile As String, ByVal sStringHex As String, _
     ByVal curFirstOffset As Currency, Optional ByVal curSecondOffset As Currency, _
-    Optional ByVal sSep As String = vbNullString)
+    Optional ByVal sSep As String = vbNullString, Optional ByVal bClip As Boolean = False)
 
 Dim s As String
 Dim curS As Currency
@@ -621,6 +668,11 @@ Dim sRes As String
     
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     DoEvents
+    
+    'créé un nom de fichier temp si option "copie dans le clipboard"
+    If bClip Then
+        Call ObtainTempPathFile("temp_clip", sOutputFile, vbNullString)
+    End If
     
     If curFirstOffset = -1 Then
         'alors c'est le fichier/disque/process entier
@@ -743,6 +795,12 @@ Dim sRes As String
                 Exit Sub
         End Select
         
+    End If
+    
+    'on copie maintenant dans le clipboard si l'option est activée
+    If bClip Then
+        Call Clipboard.Clear
+        Clipboard.SetText cFile.LoadFileInString(sOutputFile)
     End If
     
 End Sub

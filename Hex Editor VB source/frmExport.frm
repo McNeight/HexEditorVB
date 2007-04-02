@@ -2,7 +2,7 @@ VERSION 5.00
 Begin VB.Form frmExport 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Exporter"
-   ClientHeight    =   3240
+   ClientHeight    =   3585
    ClientLeft      =   45
    ClientTop       =   345
    ClientWidth     =   4440
@@ -17,29 +17,37 @@ Begin VB.Form frmExport
    EndProperty
    Icon            =   "frmExport.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   3240
+   ScaleHeight     =   3585
    ScaleWidth      =   4440
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CheckBox chkClip 
+      Caption         =   "Copier dans le clipboard"
+      Height          =   195
+      Left            =   120
+      TabIndex        =   2
+      ToolTipText     =   "Permet de copier dans le clipboard plutôt que de créer un fichier"
+      Top             =   1080
+      Width           =   2535
+   End
    Begin VB.CommandButton cmdQuit 
       Caption         =   "Fermer"
       Height          =   375
       Left            =   2880
-      TabIndex        =   7
+      TabIndex        =   8
       ToolTipText     =   "Ne pas sauvegarder"
-      Top             =   2760
+      Top             =   3120
       Width           =   1455
    End
    Begin VB.CommandButton cmdSave 
       Caption         =   "Lancer la sauvegarde"
       Height          =   375
       Left            =   120
-      TabIndex        =   6
+      TabIndex        =   7
       ToolTipText     =   "Lancer la sauvegarde"
-      Top             =   2760
+      Top             =   3120
       Width           =   2175
    End
    Begin VB.Frame Frame1 
@@ -47,8 +55,8 @@ Begin VB.Form frmExport
       Height          =   1575
       Index           =   1
       Left            =   120
-      TabIndex        =   10
-      Top             =   1080
+      TabIndex        =   11
+      Top             =   1440
       Width           =   4215
       Begin VB.CheckBox chkOffset 
          Caption         =   "Ajouter les offsets"
@@ -66,7 +74,7 @@ Begin VB.Form frmExport
          Left            =   120
          ScaleHeight     =   1215
          ScaleWidth      =   3975
-         TabIndex        =   11
+         TabIndex        =   12
          TabStop         =   0   'False
          Top             =   240
          Width           =   3975
@@ -74,7 +82,7 @@ Begin VB.Form frmExport
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   2400
-            TabIndex        =   2
+            TabIndex        =   6
             Text            =   "texte de l'option"
             Top             =   720
             Visible         =   0   'False
@@ -105,7 +113,7 @@ Begin VB.Form frmExport
             Caption         =   "option"
             Height          =   255
             Left            =   2400
-            TabIndex        =   12
+            TabIndex        =   13
             Top             =   480
             Visible         =   0   'False
             Width           =   1335
@@ -117,7 +125,7 @@ Begin VB.Form frmExport
       Height          =   855
       Index           =   0
       Left            =   120
-      TabIndex        =   8
+      TabIndex        =   9
       Top             =   120
       Width           =   4215
       Begin VB.PictureBox Picture1 
@@ -127,7 +135,7 @@ Begin VB.Form frmExport
          Left            =   120
          ScaleHeight     =   495
          ScaleWidth      =   3975
-         TabIndex        =   9
+         TabIndex        =   10
          TabStop         =   0   'False
          Top             =   240
          Width           =   3975
@@ -220,6 +228,8 @@ Private Sub cbFormat_Click()
             lbl.Caption = "Car. séparateur"
             txtOpt.Text = vbNullString
             lbl.Visible = True
+            lbl.Enabled = True
+            txtOpt.Enabled = True
             txtOpt.ToolTipText = "Caractère de séparation des valeurs hexadécimales"
             txtOpt.Visible = True
         Case "Source JAVA"
@@ -231,11 +241,19 @@ Private Sub cbFormat_Click()
             lbl.Caption = "Taille (1-10)"
             txtOpt.Text = "3"
             lbl.Visible = True
+            lbl.Enabled = True
+            txtOpt.Enabled = True
             txtOpt.ToolTipText = "Taille du texte"
             txtOpt.Visible = True
         Case "Else"
             Me.Caption = "Exporter"
     End Select
+End Sub
+
+Private Sub chkClip_Click()
+    txtFile.Enabled = Not (CBool(chkClip.Value))
+    cmdBrowse.Enabled = Not (CBool(chkClip.Value))
+    Frame1(0).Enabled = Not (CBool(chkClip.Value))
 End Sub
 
 Private Sub cmdBrowse_Click()
@@ -275,7 +293,7 @@ Dim x As Long
     cmdSave.Enabled = False
     cmdQuit.Enabled = False
     DoEvents
-    
+
     Select Case cbFormat.Text
         Case "HTML"
             
@@ -288,11 +306,11 @@ Dim x As Long
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    frmContent.ActiveForm.Caption, -1, , x)
+                    frmContent.ActiveForm.Caption, -1, , x, CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    "az", 1, 1)
+                    "az", 1, 1, x, CBool(chkClip.Value))
             End If
             
         Case "RTF"
@@ -303,51 +321,51 @@ Dim x As Long
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
                 Call SaveAsTEXT(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    frmContent.ActiveForm.Caption, -1)
+                    frmContent.ActiveForm.Caption, -1, , CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
                 Call SaveAsTEXT(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    "az", 1, 1)
+                    "az", 1, 1, CBool(chkClip.Value))
             End If
             
         Case "Source C"
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
-                Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, -1)
+                Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, -1, , CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
-                Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1)
+                Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1, CBool(chkClip.Value))
             End If
             
         Case "Source VB"
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
-                Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, -1, , txtOpt.Text)
+                Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, -1, , txtOpt.Text, CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
-                Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1, txtOpt.Text)
+                Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1, txtOpt.Text, CBool(chkClip.Value))
             End If
             
         Case "Source JAVA"
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
-                Call SaveAsJAVA(txtFile.Text, frmContent.ActiveForm.Caption, -1)
+                Call SaveAsJAVA(txtFile.Text, frmContent.ActiveForm.Caption, -1, , CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
-                Call SaveAsJAVA(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1)
+                Call SaveAsJAVA(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1, CBool(chkClip.Value))
             End If
             
     End Select
     
 ResumeMe:
-    Frame1(0).Enabled = True
-    txtFile.Enabled = True
-    chkOffset.Enabled = True
-    chkString.Enabled = True
-    lbl.Enabled = True
-    txtOpt.Enabled = True
+    Frame1(0).Enabled = Not (CBool(chkClip.Value))
+    txtFile.Enabled = Not (CBool(chkClip.Value))
+    chkOffset.Enabled = (cbFormat.Text = "HTML" Or cbFormat.Text = "Texte")
+    chkString.Enabled = (cbFormat.Text = "HTML" Or cbFormat.Text = "Texte")
+    lbl.Enabled = (cbFormat.Text = "HTML" Or cbFormat.Text = "Source VB")
+    txtOpt.Enabled = (cbFormat.Text = "HTML" Or cbFormat.Text = "Source VB")
     cbFormat.Enabled = True
-    cmdBrowse.Enabled = True
+    cmdBrowse.Enabled = Not (CBool(chkClip.Value))
     Frame1(1).Enabled = True
     cmdSave.Enabled = True
     cmdQuit.Enabled = True
