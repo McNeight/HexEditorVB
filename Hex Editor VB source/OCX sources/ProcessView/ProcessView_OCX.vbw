@@ -1,5 +1,0 @@
-ProcessView = 115, 115, 639, 545, , 46, 46, 570, 476, C
-clsProcess = 138, 138, 662, 568, Z
-ProcessItem = 161, 161, 685, 591, C
-ProcessMemoryItem = 184, 184, 708, 614, C
-ProcessModuleItem = 207, 207, 731, 637, C
