@@ -1,6 +1,6 @@
 Type=OleDll
 Class=clsDisAsm; clsDisAsm.cls
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\Windows\system32\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\WINDOWS\System32\stdole2.tlb#OLE Automation
 Module=mod1632; mod1632.bas
 Module=modCOFF; modCOFF.bas
 Module=modData; modData.bas
@@ -32,7 +32,7 @@ CompatibleEXE32="..\..\..\Executable folder\Disassembler_DLL.dll"
 VersionCompatible32="1"
 MajorVer=1
 MinorVer=0
-RevisionVer=8
+RevisionVer=9
 AutoIncrementVer=1
 ServerSupportFiles=0
 VersionComments="Dll de desassemblage d'executable Win32"
@@ -54,3 +54,6 @@ Retained=0
 ThreadPerObject=0
 MaxNumberOfThreads=1
 DebugStartupOption=0
+
+[MS Transaction Server]
+AutoRefresh=1
