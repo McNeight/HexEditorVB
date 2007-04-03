@@ -1,10 +1,2 @@
 VBGROUP 5.0
 StartupProject=Hex Editor VB source\HexEditor.vbp
-Project=Hex Editor VB source\OCX sources\BGraphe\BGraphe_OCX.vbp
-Project=Hex Editor VB source\OCX sources\ExtendedVSrcollbar\ExtendedVScrollbar_OCX.vbp
-Project=Hex Editor VB source\OCX sources\FileView\FileView_OCX.vbp
-Project=Hex Editor VB source\OCX sources\HexViewer\HexViewer_OCX.vbp
-Project=Hex Editor VB source\OCX sources\ProgressBar\ProgressBar_OCX.vbp
-Project=Hex Editor VB source\OCX sources\LanguageTranslator\LanguageTranslator.vbp
-Project=Hex Editor VB source\OCX sources\DriveView\DriveView_OCX.vbp
-Project=Hex Editor VB source\OCX sources\ProcessView\ProcessView_OCX.vbp

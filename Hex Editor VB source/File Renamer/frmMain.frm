@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.2#0"; "FileView_OCX.ocx"
+Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.3#0"; "FileView_OCX.ocx"
 Begin VB.Form frmMain 
    Caption         =   "File Renamer VB"
    ClientHeight    =   10380
