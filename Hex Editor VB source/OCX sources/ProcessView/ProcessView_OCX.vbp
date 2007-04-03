@@ -1,5 +1,5 @@
 Type=Control
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\Windows\system32\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\..\..\WINDOWS\System32\stdole2.tlb#OLE Automation
 Object={6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0; COMCTL32.OCX
 UserControl=ProcessView.ctl
 Class=clsProcess; clsProcess.cls
@@ -20,7 +20,7 @@ CompatibleEXE32="..\..\..\Executable folder\ProcessView_OCX.ocx"
 VersionCompatible32="1"
 MajorVer=1
 MinorVer=0
-RevisionVer=23
+RevisionVer=24
 AutoIncrementVer=1
 ServerSupportFiles=0
 VersionComments="OCX de visualisation des processus sous forme d'arborescence"
@@ -43,3 +43,6 @@ ThreadPerObject=0
 MaxNumberOfThreads=1
 DebugStartupOption=1
 DebugStartupComponent=ProcessView
+
+[MS Transaction Server]
+AutoRefresh=1
