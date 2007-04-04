@@ -2,4 +2,3 @@ VBGROUP 5.0
 StartupProject=Hex Editor VB source\HexEditor.vbp
 Project=Hex Editor VB source\File Renamer\FileRenamer.vbp
 Project=Hex Editor VB source\Disassembler\Disassembler.vbp
-

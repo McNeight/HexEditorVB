@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{88A64AB7-8026-47F4-8E67-1A0451E8679C}#1.0#0"; "ProcessView_OCX.ocx"
+Object = "{2245E336-2835-4C1E-B373-2395637023C8}#1.0#0"; "ProcessView_OCX.ocx"
 Begin VB.Form frmProcesses 
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Sélection du processus à ouvrir"
@@ -144,7 +144,9 @@ End Sub
 
 Private Sub Form_Activate()
 Dim ND As Node
-
+    
+    On Error Resume Next
+    
     'on expand si c'est la première activation de la form
     If bFirst = False Then
         bFirst = True
