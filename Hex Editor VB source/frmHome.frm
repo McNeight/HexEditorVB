@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{82BC04E4-311C-4338-9872-80D446B3C793}#1.1#0"; "DriveView_OCX.ocx"
-Object = "{88A64AB7-8026-47F4-8E67-1A0451E8679C}#1.0#0"; "ProcessView_OCX.ocx"
+Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
+Object = "{2245E336-2835-4C1E-B373-2395637023C8}#1.0#0"; "ProcessView_OCX.ocx"
 Begin VB.Form frmHome 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Menu principal"
@@ -799,6 +799,8 @@ End Sub
 
 Private Sub Form_Activate()
 Dim ND As Node
+    
+    On Error Resume Next
     
     Call MarkUnaccessibleDrives(Me.DV)  'marque les drives inaccessibles
     

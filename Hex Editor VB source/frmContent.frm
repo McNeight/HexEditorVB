@@ -3,14 +3,14 @@ Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.3#0"; "FileView_OCX.ocx"
+Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.MDIForm frmContent 
    BackColor       =   &H8000000C&
    Caption         =   "Hex Editor VB  --- PRE ALPHA v1.6"
    ClientHeight    =   7665
-   ClientLeft      =   225
-   ClientTop       =   825
+   ClientLeft      =   165
+   ClientTop       =   855
    ClientWidth     =   9750
    Icon            =   "frmContent.frx":0000
    LinkTopic       =   "Editeur hexadécimal"
@@ -41,7 +41,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -68,7 +67,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -184,11 +182,11 @@ Begin VB.MDIForm frmContent
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":A94A
-            Key             =   "Ouvrir|Ouvrir un disque..."
+            Key             =   "Ouvrir|Ouvrir un processus en mémoire..."
          EndProperty
          BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":AC9C
-            Key             =   "Ouvrir|Ouvrir un processus en mémoire..."
+            Key             =   "Ouvrir|Ouvrir un disque..."
          EndProperty
          BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":AFEE
@@ -555,7 +553,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "17:21"
+            TextSave        =   "10:49"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -563,7 +561,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "02/04/2007"
+            TextSave        =   "04/04/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
