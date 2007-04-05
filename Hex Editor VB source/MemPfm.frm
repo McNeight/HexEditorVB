@@ -1,7 +1,8 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{276EF1C1-20F1-4D85-BE7B-06C736C9DCE9}#1.1#0"; "ExtendedVScrollbar_OCX.ocx"
-Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.2#0"; "HexViewer_OCX.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{67F3B6F5-143C-4724-BF0B-20B81F5D8E04}#1.0#0"; "ExtendedVScrollbar_OCX.ocx"
+Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form MemPfm 
    Caption         =   "Ouverture d'un processus..."
    ClientHeight    =   8295
@@ -652,7 +653,6 @@ Begin VB.Form MemPfm
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
          NumTabs         =   1
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   ""
             Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
@@ -682,6 +682,12 @@ Begin VB.Form MemPfm
       Value           =   0
       LargeChange     =   100
       SmallChange     =   100
+   End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
    End
    Begin ComctlLib.ImageList IMG 
       Left            =   3240
@@ -858,6 +864,7 @@ Public Sub ResizeMe()
 End Sub
 
 Private Sub Form_Activate()
+
     If HW.Visible Then HW.SetFocus
     'Call VS_Change(VS.Value)
     ReDim ChangeListO(1) As Long
@@ -875,6 +882,29 @@ End Sub
 
 Private Sub Form_Load()
 
+    'instancie la classe Undo
+    Set cUndo = New clsUndoItem
+    
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
     'subclasse la form pour éviter de resizer trop
     #If USE_FORM_SUBCLASSING Then
         Call LoadResizing(Me.hWnd, 9000, 6000)
@@ -882,9 +912,6 @@ Private Sub Form_Load()
     
     'subclasse également lvIcon pour éviter le drag & drop
     Call HookLVDragAndDrop(lvIcon.hWnd)
-    
-    'instancie la classe Undo
-    Set cUndo = New clsUndoItem
     
     'affecte les valeurs générales (type) à l'historique
     cUndo.tEditType = edtProcess
@@ -1047,19 +1074,19 @@ End Sub
 'renvoie si l'offset contient une modification
 '=======================================================
 Private Function IsOffsetModified(ByVal lOffset As Long, ByRef lPlace As Long) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsOffsetModified = False
     
-    For x = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
+    For X = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
     'dans le cas où il y a eu plusieurs modifs dans le même offset
-        If ChangeListO(x) = lOffset + 1 Then
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            lPlace = x
+            lPlace = X
             IsOffsetModified = True
             Exit Function
         End If
-    Next x
+    Next X
     
 End Function
 
@@ -1067,19 +1094,19 @@ End Function
 'renvoie si la case a été modifiée ou non (permet l'affichage en couleur dans HW)
 '=======================================================
 Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Long) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsModified = False
     
-    For x = 2 To ChangeListDim
-        If ChangeListO(x) = lOffset + 1 Then
+    For X = 2 To ChangeListDim
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            If ChangeListC(x) = lCol Then
+            If ChangeListC(X) = lCol Then
                 IsModified = True
                 Exit Function
             End If
         End If
-    Next x
+    Next X
 End Function
 
 '=======================================================
@@ -1299,7 +1326,7 @@ ErrGestion:
     clsERREUR.AddError "MemPfm.KeyDown", True
 End Sub
 
-Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = 2 Then
         Me.PopupMenu frmContent.mnuPopupIcon
     End If
@@ -1311,7 +1338,7 @@ Dim s As String
 Dim sKey As Long
 Dim bytHex As Byte
 Dim Valu As Byte
-Dim x As Byte
+Dim X As Byte
 
     On Error GoTo ErrGestion
 
@@ -1379,7 +1406,7 @@ ErrGestion:
     clsERREUR.AddError "Pfm.KeyPress", True
 End Sub
 
-Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As ItemElement)
+Private Sub HW_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single, Item As ItemElement)
 Dim s As String
 Dim r As Long
 Dim l As Currency
@@ -1474,7 +1501,7 @@ Dim l As Currency
     
 End Sub
 
-Private Sub HW_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub HW_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Me.Sb.Panels(4).Text = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(9) = Me.Sb.Panels(4).Text
 End Sub
@@ -1511,7 +1538,7 @@ Private Sub lstSignets_ItemClick(ByVal Item As ComctlLib.ListItem)
     End If
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 Dim tLst As ListItem
 Dim s As String
 Dim r As Long
@@ -1519,7 +1546,7 @@ Dim r As Long
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
         s = InputBox("Ajouter un commentaire pour le signet " & tLst.Text, "Ajout d'un commentaire")
         If StrPtr(s) <> 0 Then
@@ -1530,7 +1557,7 @@ Dim r As Long
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
         
         r = MsgBox("Supprimer le signet " & tLst.Text & " ?", vbInformation + vbYesNo, "Attention")
@@ -1572,7 +1599,7 @@ Dim l As Long
 
 End Sub
 
-Private Sub MemTB_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub MemTB_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche un popupmenu créé dynamiquement
 Dim l As Long
 
@@ -1611,7 +1638,7 @@ Private Sub TB2_Click()
     End If
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub
@@ -1695,7 +1722,7 @@ Dim pMenuInfo As MENUITEMINFO 'définit les info de l'item de menu ajouté
 Dim pPositionCurseur As POINTAPI 'stocke la position actuelle du curseur
 Dim lHandleMenu As Long 'stocke le handle du menu
 Dim lHandleSousMenu() As Long 'stocke les handles des sous-menus
-Dim x As Long
+Dim X As Long
 
 
     On Error GoTo erreur0
@@ -1706,29 +1733,29 @@ Dim x As Long
     Let lHandleMenu = CreatePopupMenu
     
     'insère MemTB.Tabs.Count sous-menus
-    For x = MemTB.Tabs.Count To 1 Step -1
+    For X = MemTB.Tabs.Count To 1 Step -1
         With pMenuInfo
             .cbSize = Len(pMenuInfo)
             .fType = MFT_STRING
             .fState = MFS_ENABLED
-            .dwTypeData = MemTB.Tabs.Item(x).Caption
+            .dwTypeData = MemTB.Tabs.Item(X).Caption
             .cch = Len(pMenuInfo.dwTypeData)
-            .wID = x
+            .wID = X
             .fMask = MIIM_ID Or MIIM_TYPE Or MIIM_STATE
             .hSubMenu = lHandleMenu
         End With
         Call InsertMenuItem(lHandleMenu, 0, True, pMenuInfo)
-        lHandleSousMenu(x) = CreatePopupMenu
-    Next x
+        lHandleSousMenu(X) = CreatePopupMenu
+    Next X
     
     'on affiche le menu crée
     Call GetCursorPos(pPositionCurseur)
-    AfficherMenu = TrackPopupMenuEx(lHandleMenu, TPM_LEFTALIGN Or TPM_RIGHTBUTTON Or TPM_RETURNCMD, pPositionCurseur.x, pPositionCurseur.y, Me.hWnd, ByVal 0&)
+    AfficherMenu = TrackPopupMenuEx(lHandleMenu, TPM_LEFTALIGN Or TPM_RIGHTBUTTON Or TPM_RETURNCMD, pPositionCurseur.X, pPositionCurseur.Y, Me.hWnd, ByVal 0&)
     
     Call DestroyMenu(lHandleMenu)
-    For x = 1 To MemTB.Tabs.Count
+    For X = 1 To MemTB.Tabs.Count
         Call DestroyMenu(lHandleSousMenu(0))
-    Next x
+    Next X
 
 Exit Function
 
@@ -1753,7 +1780,7 @@ End Function
 '=======================================================
 Public Sub AddAChange(ByVal sNewByte As Long)
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     'écrit le nouveau byte dans la mémoire
     cMem.WriteBytesH lHandle, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, Chr$(sNewByte)

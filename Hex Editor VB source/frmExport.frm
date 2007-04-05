@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmExport 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Exporter"
@@ -159,6 +160,12 @@ Begin VB.Form frmExport
          End
       End
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
 End
 Attribute VB_Name = "frmExport"
 Attribute VB_GlobalNameSpace = False
@@ -277,7 +284,7 @@ End Sub
 
 Private Sub cmdSave_Click()
 'lance la sauvegarde
-Dim x As Long
+Dim X As Long
 
     'ajoute du texte à la console
     Call AddTextToConsole("Exportation en cours...")
@@ -297,8 +304,8 @@ Dim x As Long
     Select Case cbFormat.Text
         Case "HTML"
             
-            x = Int(Abs(Val(txtOpt.Text)))
-            If x < 1 Or x > 10 Then
+            X = Int(Abs(Val(txtOpt.Text)))
+            If X < 1 Or X > 10 Then
                 MsgBox "Taille non valide", vbCritical, "Attention"
                 GoTo ResumeMe
             End If
@@ -306,11 +313,11 @@ Dim x As Long
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    frmContent.ActiveForm.Caption, -1, , x, CBool(chkClip.Value))
+                    frmContent.ActiveForm.Caption, -1, , X, CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    "az", 1, 1, x, CBool(chkClip.Value))
+                    "az", 1, 1, X, CBool(chkClip.Value))
             End If
             
         Case "RTF"
@@ -379,4 +386,26 @@ End Sub
 '=======================================================
 Public Sub IsEntireFile()
     bEntireFile = True
+End Sub
+
+Private Sub Form_Load()
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
 End Sub

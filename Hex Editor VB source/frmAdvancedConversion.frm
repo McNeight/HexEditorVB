@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmAdvancedConversion 
    Caption         =   "Conversion avancée"
    ClientHeight    =   7170
@@ -16,10 +17,15 @@ Begin VB.Form frmAdvancedConversion
    EndProperty
    Icon            =   "frmAdvancedConversion.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    ScaleHeight     =   7170
    ScaleWidth      =   7935
    StartUpPosition =   2  'CenterScreen
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin VB.PictureBox Picture3 
       BorderStyle     =   0  'None
       Height          =   1935
@@ -419,9 +425,31 @@ Private Sub cmdTrad_Click()
 End Sub
 
 Private Sub Form_Load()
+
     'loading des preferences
     Set clsPref = New clsIniForm
     Set cConv = New clsConvert
+    
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+
     
     clsPref.GetFormSettings App.Path & "\Preferences\AdvancedConversion.ini", Me
     optSep(1).Value = Not (optSep(0).Value)
@@ -484,11 +512,11 @@ Private Sub Form_Unload(Cancel As Integer)
     Set cConv = Nothing
 End Sub
 
-Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
 End Sub
-Private Sub Frame2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Frame2_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp2
 End Sub
@@ -526,11 +554,11 @@ Private Sub optUseSeparator_Click()
     End If
 End Sub
 
-Private Sub Picture1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Picture1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
 End Sub
-Private Sub Picture2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Picture2_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp2
 End Sub
@@ -544,7 +572,7 @@ Dim s As String
 Dim LS As Long
 Dim lmax As Long
 Dim sSep As String
-Dim x As Long
+Dim X As Long
 Dim sA() As String
 
     If cbI.ListIndex < 0 Or cbO.ListIndex < 0 Then Exit Sub 'pas de base sélectionnée
@@ -565,16 +593,16 @@ Dim sA() As String
         Me.Caption = "Conversion..."
         
         lmax = Len(txtI.Text)
-        For x = 1 To lmax Step LS
+        For X = 1 To lmax Step LS
         
-            If (x Mod 1000) = 0 Then DoEvents
+            If (X Mod 1000) = 0 Then DoEvents
             
             'on extrait le(s) caractère(s)
-            s = Mid$(txtI.Text, x, LS)
+            s = Mid$(txtI.Text, X, LS)
             
             'on récupère la valeur formatée et on ajoute au buffer final
             sO = sO & GetCv(s)
-        Next x
+        Next X
         
         'on affiche çà
         txtO.Text = sO
@@ -597,11 +625,11 @@ Dim sA() As String
         'récupère toutes les valeurs séparément
         sA() = Split(txtI.Text, sSep, , vbBinaryCompare)
         
-        For x = 0 To UBound(sA())
+        For X = 0 To UBound(sA())
         
-            If (x Mod 1000) = 0 Then DoEvents
-            sO = sO & GetCv(sA(x)) & sSep
-        Next x
+            If (X Mod 1000) = 0 Then DoEvents
+            sO = sO & GetCv(sA(X)) & sSep
+        Next X
         
         'on affiche en virant le dernier séparateur
         txtO.Text = Left$(sO, Len(sO) - Len(sSep))

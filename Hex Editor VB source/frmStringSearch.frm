@@ -1,6 +1,7 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{6ADE9E73-F694-428F-BF86-06ADD29476A5}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmStringSearch 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Recherche de chaînes de caractères"
@@ -200,6 +201,12 @@ Begin VB.Form frmStringSearch
          End
       End
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin VB.Label Label2 
       Alignment       =   2  'Center
       BackColor       =   &H8000000A&
@@ -292,13 +299,13 @@ Dim bAddSign As Boolean
         'alors c'est un fichier classique
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
         
     ElseIf TypeOfActiveForm = "Mem" Then
         'alors c'est dans la mémoire
         
         'lance la recherche
-        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), lngRes(), strRes(), Me.pgb
+        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), lngRes(), strRes(), Me.PGB
         
         'sauvegarde dans la variable tRes
         ReDim tRes(UBound(lngRes()))
@@ -311,13 +318,13 @@ Dim bAddSign As Boolean
         'alors c'est dans le disque
 
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
         
     Else
         'disque physique
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
         
     End If
     
@@ -376,7 +383,7 @@ Private Sub cmdSave_Click()
 'sauvegarde les résultats
 Dim lFile As Long
 Dim sFile As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -401,10 +408,10 @@ Dim x As Long
     
     Print #lFile, "Recherche de [" & txtSize.Text & "] caractères consécutifs" & vbNewLine & "[fichier]=" & sFile & vbNewLine & "[date]=" & Date$ & "  " & Time$ & vbNewLine & "[match]=" & LV.ListItems.Count
     
-    For x = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
-        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(x)) & "  [string]=" & LV.ListItems.Item(x).SubItems(1)
+    For X = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
+        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(X)) & "  [string]=" & LV.ListItems.Item(X).SubItems(1)
         DoEvents
-    Next x
+    Next X
     
     Close lFile
     
@@ -413,8 +420,30 @@ CancelPushed:
 End Sub
 
 Private Sub Form_Load()
-    'loading des preferences
+
     Set clsPref = New clsIniForm
+    
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
+    'loading des preferences
     clsPref.GetFormSettings App.Path & "\Preferences\StringSearch.ini", Me
 End Sub
 

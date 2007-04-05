@@ -1,7 +1,8 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.2#0"; "HexViewer_OCX.ocx"
+Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmOptions 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Options"
@@ -334,7 +335,6 @@ Begin VB.Form frmOptions
             _Version        =   393217
             BackColor       =   0
             BorderStyle     =   0
-            Enabled         =   -1  'True
             ReadOnly        =   -1  'True
             ScrollBars      =   2
             Appearance      =   0
@@ -1039,6 +1039,12 @@ Begin VB.Form frmOptions
          End
       End
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
 End
 Attribute VB_Name = "frmOptions"
 Attribute VB_GlobalNameSpace = False
@@ -1122,8 +1128,8 @@ End Sub
 
 Private Sub cmdDefault_Click()
 'remet tout par défaut
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 Dim s As String
 
     HW.BackColor = vbWhite
@@ -1164,14 +1170,14 @@ Dim s As String
     'affiche un exemple de valeurs Offset, String et Hexa dans le HW
     HW.NumberPerPage = 13
     Randomize
-    For x = 1 To 13
+    For X = 1 To 13
         s = vbNullString
-        For y = 1 To 16
-            HW.AddHexValue x, y, Hex$(y - 1) & "0"
+        For Y = 1 To 16
+            HW.AddHexValue X, Y, Hex$(Y - 1) & "0"
             s = s & Byte2FormatedString(Int(Rnd * 256))
-        Next y
-        HW.AddStringValue x, s
-    Next x
+        Next Y
+        HW.AddStringValue X, s
+    Next X
 
     HW.FillText
     HW.Refresh
@@ -1237,7 +1243,7 @@ Private Sub cmdQuitter_Click()
 End Sub
 
 Private Sub cmdSauvegarder_Click()
-Dim x As Form
+Dim X As Form
 Dim s As String
 
     'sauvegarde les options
@@ -1312,10 +1318,10 @@ Dim s As String
     
     'On Error Resume Next
     'on change l'apparence de tous les HW de toutes les forms
-    For Each x In Forms
-        If (TypeOf x Is Pfm) Or (TypeOf x Is diskPfm) Or (TypeOf x Is MemPfm) Or (TypeOf x Is physPfm) Then
+    For Each X In Forms
+        If (TypeOf X Is Pfm) Or (TypeOf X Is diskPfm) Or (TypeOf X Is MemPfm) Or (TypeOf X Is physPfm) Then
 
-                With x.HW
+                With X.HW
                     'on applique ces couleurs au HW de CETTE form
                     .BackColor = cPref.app_BackGroundColor
                     .OffsetForeColor = cPref.app_OffsetForeColor
@@ -1335,12 +1341,12 @@ Dim s As String
                 End With
                 
                 'change les Visible des frames de toutes les forms active
-                x.FrameData.Visible = CBool(cPref.general_DisplayData)
-                x.FrameInfos.Visible = CBool(cPref.general_DisplayInfos)
-                If (TypeOf x Is diskPfm) Or (TypeOf x Is physPfm) Then x.FrameInfo2.Visible = CBool(cPref.general_DisplayInfos)
+                X.FrameData.Visible = CBool(cPref.general_DisplayData)
+                X.FrameInfos.Visible = CBool(cPref.general_DisplayInfos)
+                If (TypeOf X Is diskPfm) Or (TypeOf X Is physPfm) Then X.FrameInfo2.Visible = CBool(cPref.general_DisplayInfos)
             'End If
         End If
-    Next x
+    Next X
               
     On Error Resume Next
     
@@ -1419,19 +1425,39 @@ Dim s As String
 End Sub
 
 Private Sub Form_Load()
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 Dim s As String
-  
+
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
     TB.ZOrder vbSendToBack  'dernier plan
     
     'remet/redimensionne les frames à leur place et redimensionne la form
-    For x = 0 To Frame1.Count - 1
-        Frame1(x).Top = 430
-        Frame1(x).Width = 9855
-        Frame1(x).Height = 6375
-        Frame1(x).Left = 50
-    Next x
+    For X = 0 To Frame1.Count - 1
+        Frame1(X).Top = 430
+        Frame1(X).Width = 9855
+        Frame1(X).Height = 6375
+        Frame1(X).Left = 50
+    Next X
     Me.Width = 10065
     Me.Height = 7900
     Me.cmdDefault.Left = 1000
@@ -1485,14 +1511,14 @@ Dim s As String
         'affiche un exemple de valeurs Offset, String et Hexa dans le HW
         HW.NumberPerPage = 13
         Randomize
-        For x = 1 To 13
+        For X = 1 To 13
             s = vbNullString
-            For y = 1 To 16
-                HW.AddHexValue x, y, Hex$(y - 1) & "0"
+            For Y = 1 To 16
+                HW.AddHexValue X, Y, Hex$(Y - 1) & "0"
                 s = s & Byte2FormatedString(Int(Rnd * 256))
-            Next y
-            HW.AddStringValue x, s
-        Next x
+            Next Y
+            HW.AddStringValue X, s
+        Next X
     
         HW.FillText
         HW.Refresh
@@ -1603,7 +1629,7 @@ Dim s As String
         
 End Sub
 
-Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As HexViewer_OCX.ItemElement)
+Private Sub HW_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single, Item As HexViewer_OCX.ItemElement)
  
     If Button = 4 And Shift = 0 Then
         'click avec la molette, et pas de Shift or Control
@@ -1666,12 +1692,12 @@ End Sub
 
 Private Sub TB_Click()
 'change le frame Visible
-Dim x As Long
+Dim X As Long
 
     'rend invisible tout les frames
-    For x = 0 To Frame1.Count - 1
-        Frame1(x).Visible = False
-    Next x
+    For X = 0 To Frame1.Count - 1
+        Frame1(X).Visible = False
+    Next X
     
     'affiche le bon en fonction du tab
     Frame1(TB.SelectedItem.Index - 1).Visible = True

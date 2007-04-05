@@ -1,6 +1,7 @@
 VERSION 5.00
-Object = "{2ED9CD5C-C64E-4F0C-B719-F9D0F542DD03}#1.0#0"; "BGraphe_OCX.ocx"
-Object = "{6ADE9E73-F694-428F-BF86-06ADD29476A5}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{EF4A8ABF-4214-4B3F-8F82-ACF6D11FA80D}#1.0#0"; "BGraphe_OCX.ocx"
+Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmAnalys 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Statistiques"
@@ -23,6 +24,12 @@ Begin VB.Form frmAnalys
    ScaleHeight     =   7935
    ScaleWidth      =   10185
    StartUpPosition =   2  'CenterScreen
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin VB.Frame Frame1 
       Caption         =   "Fichier"
       Height          =   1335
@@ -346,15 +353,15 @@ Dim cF As clsFile
   
 End Sub
 
-Private Sub BG_MouseMove(bByteX As Byte, lOccurence As Long, Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub BG_MouseMove(bByteX As Byte, lOccurence As Long, Button As Integer, Shift As Integer, X As Single, Y As Single)
     Label1.Caption = "Byte=[" & CStr(bByteX) & "] = [" & Byte2FormatedString(bByteX) & "]  :   " & CStr(lOccurence)
 End Sub
 
 Public Sub cmdAnalyse_Click()
 'lance l'analyse du fichier sFile
 Dim lngLen As Long
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 Dim b As Byte
 Dim l As Long
 Dim F(255) As Long
@@ -373,7 +380,7 @@ Dim lngFile As Long
     
     'prépare la progressbar
     lngLen = cFile.GetFileSize(sFile)
-    pgb.Min = 0: pgb.Max = lngLen: pgb.Value = 0
+    PGB.Min = 0: PGB.Max = lngLen: PGB.Value = 0
     
     'obtient le handle du fichier
     lngFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
@@ -387,7 +394,7 @@ Dim lngFile As Long
     curByte = 0
     Do Until curByte > lngLen  'tant que le fichier n'est pas fini
     
-        x = x + 1
+        X = X + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
@@ -403,16 +410,16 @@ Dim lngFile As Long
             l = lngLen - curByte
         End If
         
-        For y = 1 To l
-            b = Asc(Mid$(strBuffer, y, 1))
+        For Y = 1 To l
+            b = Asc(Mid$(strBuffer, Y, 1))
             'ajoute une occurence
             F(b) = F(b) + 1
-        Next y
+        Next Y
         
-        If (x Mod 10) = 0 Then
+        If (X Mod 10) = 0 Then
             'rend la main
             DoEvents
-            pgb.Value = curByte
+            PGB.Value = curByte
         End If
         
         curByte = curByte + 51200
@@ -422,11 +429,11 @@ Dim lngFile As Long
     CloseHandle lngFile
     
     'remplit le BG
-    For x = 0 To 255
-        BG.AddValue x, F(x)
-    Next x
+    For X = 0 To 255
+        BG.AddValue X, F(X)
+    Next X
         
-    pgb.Value = pgb.Max
+    PGB.Value = PGB.Max
     BG.TraceGraph
     
     'ajoute du texte à la console
@@ -444,7 +451,7 @@ End Sub
 Private Sub cmdSaveBMP_Click()
 'sauvegarder en bmp
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo Err
     
@@ -462,8 +469,8 @@ Dim x As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        If Not (X = vbYes) Then Exit Sub
     End If
 
     'sauvegarde
@@ -478,7 +485,7 @@ End Sub
 Private Sub cmdSaveStats_Click()
 'sauvegarde les stats dans un fichier *.log
 Dim s As String
-Dim x As Long
+Dim X As Long
 Dim s2 As String
 
     On Error GoTo Err
@@ -497,8 +504,8 @@ Dim s2 As String
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'créé le fichier
@@ -506,9 +513,9 @@ Dim s2 As String
     
     s2 = vbNullString
     'créé la string
-    For x = 0 To 255
-        s2 = s2 & "Byte=[" & Trim$(Str$(x)) & "] --> occurence=[" & Trim$(Str$(BG.GetValue(x))) & "]" & vbNewLine
-    Next x
+    For X = 0 To 255
+        s2 = s2 & "Byte=[" & Trim$(Str$(X)) & "] --> occurence=[" & Trim$(Str$(BG.GetValue(X))) & "]" & vbNewLine
+    Next X
     
     'sauvegarde le fichier
     cFile.SaveDATAinFile s, Left$(s2, Len(s2) - 2), True
@@ -516,4 +523,26 @@ Dim s2 As String
     'ajoute du texte à la console
     Call AddTextToConsole("Fichier de statistiques sauvegardé")
 Err:
+End Sub
+
+Private Sub Form_Load()
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
 End Sub

@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmFillSelection 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Insertion / remplissage de bytes"
@@ -210,6 +211,12 @@ Begin VB.Form frmFillSelection
          End
       End
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
 End
 Attribute VB_Name = "frmFillSelection"
 Attribute VB_GlobalNameSpace = False
@@ -287,7 +294,7 @@ End Sub
 Private Sub cmdDelete_Click()
 'enlève un élément de la liste
 Dim l As Long
-Dim x As Long
+Dim X As Long
 Dim tPTmp() As PASSE_TYPE
 
     On Error GoTo ErrGestion
@@ -302,19 +309,19 @@ Dim tPTmp() As PASSE_TYPE
     
     If UBound(tPTmp) = 0 Then Exit Sub   'rien à enlever
     
-    For x = 0 To l - 1
-        tPasses(x) = tPTmp(x)
-    Next x
-    For x = l + 1 To UBound(tPTmp) - 1
-        tPasses(x - 1) = tPTmp(x)
-    Next x
+    For X = 0 To l - 1
+        tPasses(X) = tPTmp(X)
+    Next X
+    For X = l + 1 To UBound(tPTmp) - 1
+        tPasses(X - 1) = tPTmp(X)
+    Next X
     
     lstPasses.Clear   'enlève les éléments de la liste
     
     'rajoute n-1 passes
-    For x = 1 To UBound(tPTmp) - 1
-        lstPasses.AddItem "Passe " & CStr(x)
-    Next x
+    For X = 1 To UBound(tPTmp) - 1
+        lstPasses.AddItem "Passe " & CStr(X)
+    Next X
     
     lstPasses.ListIndex = l - 1
     Call lstPasses_Click
@@ -357,12 +364,33 @@ Private Sub cmdSanitization_Click()
 End Sub
 
 Private Sub Form_Load()
-    ReDim tPasses(0)   'initialize array
-    
+
     'loading des preferences
     Set clsPref = New clsIniForm
     clsPref.GetFormSettings App.Path & "\Preferences\FillSelection.ini", Me
     
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
+    ReDim tPasses(0)   'initialize array
+
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)

@@ -1,5 +1,6 @@
 VERSION 5.00
-Object = "{82BC04E4-311C-4338-9872-80D446B3C793}#1.1#0"; "DriveView_OCX.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
+Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
 Begin VB.Form frmDrive 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sélection d'un disque"
@@ -60,6 +61,12 @@ Begin VB.Form frmDrive
       ToolTipText     =   "Ouvrir ce lecteur"
       Top             =   3240
       Width           =   975
+   End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
    End
 End
 Attribute VB_Name = "frmDrive"
@@ -187,4 +194,26 @@ End Sub
 
 Private Sub Form_Activate()
     Call MarkUnaccessibleDrives(Me.DV)  'marque les drives inaccessibles
+End Sub
+
+Private Sub Form_Load()
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
 End Sub

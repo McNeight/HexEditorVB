@@ -1,5 +1,6 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmPropertyShow 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Propriétés"
@@ -191,6 +192,12 @@ Begin VB.Form frmPropertyShow
          End
       End
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin VB.Menu mnuDisplayWindowsProp 
       Caption         =   "&Afficher les proriétés Windows"
    End
@@ -242,12 +249,33 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-Dim x As Long
-    For x = 0 To 2
-        Frame1(x).Top = 600
-        Frame1(x).Left = 120
-        Frame1(x).Visible = False
-    Next x
+Dim X As Long
+
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
+    For X = 0 To 2
+        Frame1(X).Top = 600
+        Frame1(X).Left = 120
+        Frame1(X).Visible = False
+    Next X
     
     If TypeOfForm(frmContent.ActiveForm) = "Disque physique" Then Me.mnuDisplayWindowsProp.Enabled = False
 End Sub

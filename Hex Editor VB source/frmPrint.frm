@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmPrint 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Impression"
@@ -233,6 +234,12 @@ Begin VB.Form frmPrint
          End
       End
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
 End
 Attribute VB_Name = "frmPrint"
 Attribute VB_GlobalNameSpace = False
@@ -316,8 +323,29 @@ Private Sub Command1_Click()
 End Sub
 
 Private Sub Form_Load()
-    'loading des preferences
     Set clsPref = New clsIniForm
+    
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
+    'loading des preferences
     clsPref.GetFormSettings App.Path & "\Preferences\PrintFile.ini", Me
 End Sub
 

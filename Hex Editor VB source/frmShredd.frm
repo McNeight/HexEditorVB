@@ -1,5 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmShredd 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Effacement définitif de fichiers"
@@ -79,6 +80,12 @@ Begin VB.Form frmShredd
          Object.Width           =   7056
       EndProperty
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
 End
 Attribute VB_Name = "frmShredd"
 Attribute VB_GlobalNameSpace = False
@@ -126,17 +133,17 @@ Private Sub cmdAddFile_Click()
 'ajoute un fichier à la liste à supprimer
 Dim s() As String
 Dim s2 As String
-Dim x As Long
+Dim X As Long
 
     ReDim s(0)
     s2 = cFile.ShowOpen("Choix des fichiers à supprimer", Me.hWnd, "Tous|*.*", , , , , _
         OFN_EXPLORER + OFN_ALLOWMULTISELECT, 4096, s())
     
-    For x = 1 To UBound(s())
-        If cFile.FileExists(s(x)) Then
-            LV.ListItems.Add Text:=s(x) 'ajoute l'élément
+    For X = 1 To UBound(s())
+        If cFile.FileExists(s(X)) Then
+            LV.ListItems.Add Text:=s(X) 'ajoute l'élément
         End If
-    Next x
+    Next X
     
     'dans le cas d'un fichier simple
     If cFile.FileExists(s2) Then LV.ListItems.Add Text:=s2
@@ -148,18 +155,18 @@ End Sub
 
 Private Sub cmdProceed_Click()
 'procède à la suppression définitive
-Dim x As Long
+Dim X As Long
 
     'affiche un advertissement
-    x = MsgBox("Les fichiers sélectionnés seront IRRECUPERABLES." & vbNewLine & "Procéder à la suppression ?", vbYesNo + vbInformation, "Attention")
+    X = MsgBox("Les fichiers sélectionnés seront IRRECUPERABLES." & vbNewLine & "Procéder à la suppression ?", vbYesNo + vbInformation, "Attention")
     
-    If Not (x = vbYes) Then Exit Sub
+    If Not (X = vbYes) Then Exit Sub
     
     
-    For x = LV.ListItems.Count To 1 Step -1
+    For X = LV.ListItems.Count To 1 Step -1
         DoEvents    'rend quand même la main, si bcp de fichiers, c'est utile
-        If ShreddFile(LV.ListItems.Item(x)) Then    'procède à la suppression
-            LV.ListItems.Remove (x) 'enlève l'item si la suppression à échoué
+        If ShreddFile(LV.ListItems.Item(X)) Then    'procède à la suppression
+            LV.ListItems.Remove (X) 'enlève l'item si la suppression à échoué
         End If
     Next
     
@@ -178,6 +185,28 @@ End Sub
 
 Private Sub cmdQuit_Click()
     Unload Me
+End Sub
+
+Private Sub Form_Load()
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
 End Sub
 
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -200,7 +229,7 @@ Private Sub CheckBtn()
     Me.cmdProceed.Enabled = (LV.ListItems.Count > 0)
 End Sub
 
-Private Sub LV_OLEDragDrop(Data As ComctlLib.DataObject, Effect As Long, Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub LV_OLEDragDrop(Data As ComctlLib.DataObject, Effect As Long, Button As Integer, Shift As Integer, X As Single, Y As Single)
 Dim i As Long
 
     'gestion de la dépose des fichiers sur le listview

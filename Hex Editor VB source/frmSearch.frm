@@ -1,6 +1,7 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{6ADE9E73-F694-428F-BF86-06ADD29476A5}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmSearch 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Recherche d'expressions"
@@ -387,6 +388,12 @@ Begin VB.Form frmSearch
          End
       End
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
 End
 Attribute VB_Name = "frmSearch"
 Attribute VB_GlobalNameSpace = False
@@ -439,7 +446,7 @@ End Sub
 Private Sub cmdSearch_Click()
 'lance la recherche
 Dim tRes() As Long
-Dim x As Long
+Dim X As Long
 Dim s As String
 
     If txtSearch.Text = vbNullString Then Exit Sub
@@ -556,14 +563,14 @@ Dim s As String
     Call AddTextToConsole("Affichage des résultats...")
 
     '//affiche les résultats
-    For x = 1 To UBound(tRes())
-        LV.ListItems.Add Text:="Trouvé à l'offset " & CStr(By16D(tRes(x)))
+    For X = 1 To UBound(tRes())
+        LV.ListItems.Add Text:="Trouvé à l'offset " & CStr(By16D(tRes(X)))
         If Check2.Value Then
-            frmContent.ActiveForm.HW.AddSignet By16D(tRes(x))
-            frmContent.ActiveForm.lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(x))))
+            frmContent.ActiveForm.HW.AddSignet By16D(tRes(X))
+            frmContent.ActiveForm.lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(X))))
             frmContent.ActiveForm.lstSignets.ListItems.Item(frmContent.ActiveForm.lstSignets.ListItems.Count).SubItems(1) = "Found [" & Trim$(txtSearch.Text) & "]"
         End If
-    Next x
+    Next X
     
     Frame1(4).Caption = "Résultats : " & CStr(UBound(tRes()))
         
@@ -572,8 +579,30 @@ Dim s As String
 End Sub
 
 Private Sub Form_Load()
-    'loading des preferences
+
     Set clsPref = New clsIniForm
+    
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
+    'loading des preferences
     clsPref.GetFormSettings App.Path & "\Preferences\Search.ini", Me
 End Sub
 

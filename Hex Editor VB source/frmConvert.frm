@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmConvert 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Conversions"
@@ -172,6 +173,12 @@ Begin VB.Form frmConvert
          End
       End
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
 End
 Attribute VB_Name = "frmConvert"
 Attribute VB_GlobalNameSpace = False
@@ -290,9 +297,31 @@ Dim s2 As String
 End Sub
 
 Private Sub Form_Load()
+
     'loading des preferences
     Set clsPref = New clsIniForm
     Set cConv = New clsConvert
+    
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+
     clsPref.GetFormSettings App.Path & "\Preferences\Conversion.ini", Me
 End Sub
 
