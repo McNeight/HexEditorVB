@@ -45,19 +45,26 @@ Begin VB.Form frmMain
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      NumItems        =   2
+      NumItems        =   3
       BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
          Key             =   ""
          Object.Tag             =   ""
          Text            =   "New string"
-         Object.Width           =   8467
+         Object.Width           =   5644
       EndProperty
       BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
          SubItemIndex    =   1
          Key             =   ""
          Object.Tag             =   ""
          Text            =   "Model string"
-         Object.Width           =   8467
+         Object.Width           =   5644
+      EndProperty
+      BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   2
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Type"
+         Object.Width           =   5644
       EndProperty
    End
    Begin MSComDlg.CommonDialog CMD 
@@ -224,9 +231,8 @@ Dim r As Long
             'élément OK
             r = r + 1
             LV.ListItems.Add Text:=vbNullString
-            LV.ListItems.Item(r).Tag = CStr(x)  'conserve le numéro de la ligne en
-            'tag ==> utile pour la sauvegarde
             LV.ListItems.Item(r).SubItems(1) = Right$(s2(x), Len(s2(x)) - l)
+            LV.ListItems.Item(r).SubItems(2) = Left$(s2(x), l - 1)
         End If
             
     Next x
