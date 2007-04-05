@@ -131,7 +131,7 @@ Dim s As String
 
     
     '// récupère la langue
-        MyLang = "French"
+        MyLang = "English"
         
     
     '//récupère les préférences
