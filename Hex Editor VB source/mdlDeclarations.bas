@@ -39,6 +39,9 @@ Option Explicit
 '=======================================================
 
 
+'emplacement du dossier de langue utilisé LORS DE LA PHASE DE CREATION
+'DU LOGICIEL ==> A CHANGER QUAND ON CHANGE LES SOURCES DE DOSSIER
+Public Const LANG_PATH                          As String = "C:\HEX EDITOR VB\Executable folder\Lang"
 
 
 

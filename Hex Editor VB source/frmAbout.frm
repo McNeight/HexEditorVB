@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmAbout 
    BackColor       =   &H00760401&
    BorderStyle     =   0  'None
@@ -18,11 +19,18 @@ Begin VB.Form frmAbout
    EndProperty
    Icon            =   "frmAbout.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    Picture         =   "frmAbout.frx":000C
    ScaleHeight     =   6390
    ScaleWidth      =   7065
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin VB.CommandButton cmdUnload 
       Caption         =   "Fermer"
       Height          =   375
@@ -268,6 +276,27 @@ End Sub
 
 Private Sub Form_Load()
 Dim s As String
+
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
     'mise à jour de la version et de l'USER
     lblLicenseTo.Caption = "License accordée à " & GetUserName
     lblVersion.Caption = "Version " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision))

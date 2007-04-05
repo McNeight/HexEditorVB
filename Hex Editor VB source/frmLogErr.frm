@@ -1,5 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmLogErr 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Rapport d'erreurs"
@@ -113,6 +114,12 @@ Begin VB.Form frmLogErr
       Top             =   240
       Width           =   1095
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
 End
 Attribute VB_Name = "frmLogErr"
 Attribute VB_GlobalNameSpace = False
@@ -171,7 +178,27 @@ End Sub
 
 Private Sub Form_Load()
 Dim var As Variant
-Dim x As Long
+Dim X As Long
+
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
     
     'obtient les infos sur les erreurs
     var = clsERREUR.GetErrors
@@ -179,14 +206,14 @@ Dim x As Long
     'affiche tout çà dans le LV
     LV.ListItems.Clear
     
-    For x = 1 To clsERREUR.NumberOfErrorInLogFile
-        LV.ListItems.Add Text:=var(x).ErrDate
-        LV.ListItems.Item(x).SubItems(1) = var(x).ErrTime
-        LV.ListItems.Item(x).SubItems(2) = var(x).ErrZone
-        LV.ListItems.Item(x).SubItems(3) = var(x).ErrSource
-        LV.ListItems.Item(x).SubItems(4) = var(x).ErrNumber
-        LV.ListItems.Item(x).SubItems(5) = var(x).ErrDescription
-    Next x
+    For X = 1 To clsERREUR.NumberOfErrorInLogFile
+        LV.ListItems.Add Text:=var(X).ErrDate
+        LV.ListItems.Item(X).SubItems(1) = var(X).ErrTime
+        LV.ListItems.Item(X).SubItems(2) = var(X).ErrZone
+        LV.ListItems.Item(X).SubItems(3) = var(X).ErrSource
+        LV.ListItems.Item(X).SubItems(4) = var(X).ErrNumber
+        LV.ListItems.Item(X).SubItems(5) = var(X).ErrDescription
+    Next X
     
     If clsERREUR.NumberOfErrorInLogFile <> 0 Then
         'il y a des erreurs

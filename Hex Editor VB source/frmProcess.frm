@@ -1,7 +1,8 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{88A64AB7-8026-47F4-8E67-1A0451E8679C}#1.0#0"; "ProcessView_OCX.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
+Object = "{2245E336-2835-4C1E-B373-2395637023C8}#1.0#0"; "ProcessView_OCX.ocx"
 Begin VB.Form frmProcess 
    Caption         =   "Gestionnaire de processus"
    ClientHeight    =   5415
@@ -125,6 +126,12 @@ Begin VB.Form frmProcess
             Key             =   "Menu|Exécuter..."
          EndProperty
       EndProperty
+   End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
    End
    Begin ComctlLib.ImageList IMG 
       Left            =   360
@@ -303,6 +310,26 @@ Option Explicit
 Private Sub Form_Load()
 'ajoute les en-têtes de colonne
 
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
     With LV
         .ColumnHeaders.Add , , "Processus", 1550
         .ColumnHeaders.Add , , "PID", 600
@@ -375,7 +402,7 @@ Dim s As String
     DoEvents
 End Sub
 
-Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub LV_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 Dim It As ListItem
 Dim s As String
 
@@ -384,7 +411,7 @@ Dim s As String
         'alors tout d'abord, on sélectionne l'élément sous le curseur
         LV.SelectedItem.Selected = False
         
-        Set It = LV.HitTest(x, y)
+        Set It = LV.HitTest(X, Y)
         If Not (It Is Nothing) Then It.Selected = True
         
         LV_Click
@@ -405,7 +432,7 @@ End Sub
 Private Sub mnuAutorizeProc_Click()
 Dim pr() As ProcessItem
 Dim tmp As ProcessItem
-Dim x As Long
+Dim X As Long
 
     'autorise le process
     cProc.ResumeProcess Val(LV.SelectedItem.SubItems(1))
@@ -416,8 +443,8 @@ Dim x As Long
     
     'récupère le process qui est libéré
     Set tmp = cProc.GetProcess(Val(LV.SelectedItem.SubItems(1)))
-    For x = 1 To UBound(JailedProcess())
-        With JailedProcess(x)
+    For X = 1 To UBound(JailedProcess())
+        With JailedProcess(X)
             If tmp.szImagePath = .szImagePath And tmp.th32ProcessID = .th32ProcessID And _
                 tmp.th32ParentProcessID = .th32ParentProcessID Then
                 'alors on considère que les processus sont les mêmes (même PID, même process parent
@@ -426,16 +453,16 @@ Dim x As Long
             Else
                 'alors là on récupère le process
                 ReDim Preserve pr(UBound(pr()) + 1)
-                Set pr(UBound(pr())) = JailedProcess(x)
+                Set pr(UBound(pr())) = JailedProcess(X)
             End If
         End With
-    Next x
+    Next X
     
     'on sauvegarde pr dans JailedProcess
     ReDim JailedProcess(UBound(pr()))
-    For x = 1 To UBound(pr())
-        Set JailedProcess(x) = pr(x)
-    Next x
+    For X = 1 To UBound(pr())
+        Set JailedProcess(X) = pr(X)
+    Next X
         
     'libère
     Set tmp = Nothing
@@ -668,7 +695,7 @@ End Sub
 Private Sub RefreshProcList()
 Dim p() As ProcessItem
 Dim lCount As Long
-Dim x As Long
+Dim X As Long
 Dim sKey As String
 
     On Error GoTo ErrGestion
@@ -685,64 +712,64 @@ Dim sKey As String
     If mnuIconesDisplay.Checked Then
         'on affiche les icones
 
-        For x = 0 To lCount - 1
+        For X = 0 To lCount - 1
             With LV.ListItems
                 
                 'ajoute la clé, et l'icone, au IMG
-                sKey = "_" & p(x).szImagePath
+                sKey = "_" & p(X).szImagePath
                 
                 If DoesKeyExist(sKey) Then
                     'clé existe deja, on rajoute pas
-                    .Add Text:=p(x).szExeFile, SmallIcon:="_" & p(x).szImagePath
-                ElseIf AddIconToIMG(p(x).szImagePath, "_" & p(x).szImagePath) Then
+                    .Add Text:=p(X).szExeFile, SmallIcon:="_" & p(X).szImagePath
+                ElseIf AddIconToIMG(p(X).szImagePath, "_" & p(X).szImagePath) Then
                     'clé inexistante, on l'a ajoutée
                     
                     'la clé a été correctement ajoutée, on ajoute l'icone correspondant à sKey
-                    .Add Text:=p(x).szExeFile, SmallIcon:="_" & p(x).szImagePath
+                    .Add Text:=p(X).szExeFile, SmallIcon:="_" & p(X).szImagePath
                 Else
                     'la clé ne peut être ajoutée (exemple : [system process])
-                    .Add Text:=p(x).szExeFile, SmallIcon:="noIcon"
+                    .Add Text:=p(X).szExeFile, SmallIcon:="noIcon"
                 End If
                 
-                .Item(x + 1).SubItems(1) = p(x).th32ProcessID
-                .Item(x + 1).SubItems(2) = p(x).szImagePath
-                .Item(x + 1).SubItems(3) = p(x).procMemory.WorkingSetSize
-                .Item(x + 1).SubItems(4) = p(x).procMemory.PeakWorkingSetSize
-                .Item(x + 1).SubItems(5) = p(x).procMemory.PagefileUsage
-                .Item(x + 1).SubItems(6) = p(x).procMemory.PeakPagefileUsage
-                .Item(x + 1).SubItems(7) = p(x).procMemory.PageFaultCount
-                .Item(x + 1).SubItems(8) = p(x).procMemory.QuotaNonPagedPoolUsage
-                .Item(x + 1).SubItems(9) = p(x).procMemory.QuotaPeakNonPagedPoolUsage
-                .Item(x + 1).SubItems(10) = p(x).procMemory.QuotaPagedPoolUsage
-                .Item(x + 1).SubItems(11) = p(x).procMemory.QuotaPeakPagedPoolUsage
-                .Item(x + 1).SubItems(12) = cProc.GetProcessNameFromPID(p(x).th32ParentProcessID) & "[" & p(x).th32ParentProcessID & "]"
-                .Item(x + 1).SubItems(13) = p(x).cntThreads
-                .Item(x + 1).SubItems(14) = PriorityFromLong(p(x).pcPriClassBase) & " [" & p(x).pcPriClassBase & "]"
+                .Item(X + 1).SubItems(1) = p(X).th32ProcessID
+                .Item(X + 1).SubItems(2) = p(X).szImagePath
+                .Item(X + 1).SubItems(3) = p(X).procMemory.WorkingSetSize
+                .Item(X + 1).SubItems(4) = p(X).procMemory.PeakWorkingSetSize
+                .Item(X + 1).SubItems(5) = p(X).procMemory.PagefileUsage
+                .Item(X + 1).SubItems(6) = p(X).procMemory.PeakPagefileUsage
+                .Item(X + 1).SubItems(7) = p(X).procMemory.PageFaultCount
+                .Item(X + 1).SubItems(8) = p(X).procMemory.QuotaNonPagedPoolUsage
+                .Item(X + 1).SubItems(9) = p(X).procMemory.QuotaPeakNonPagedPoolUsage
+                .Item(X + 1).SubItems(10) = p(X).procMemory.QuotaPagedPoolUsage
+                .Item(X + 1).SubItems(11) = p(X).procMemory.QuotaPeakPagedPoolUsage
+                .Item(X + 1).SubItems(12) = cProc.GetProcessNameFromPID(p(X).th32ParentProcessID) & "[" & p(X).th32ParentProcessID & "]"
+                .Item(X + 1).SubItems(13) = p(X).cntThreads
+                .Item(X + 1).SubItems(14) = PriorityFromLong(p(X).pcPriClassBase) & " [" & p(X).pcPriClassBase & "]"
             End With
-        Next x
+        Next X
         
     Else
         'pas d'icones
     
-        For x = 0 To lCount - 1
+        For X = 0 To lCount - 1
             With LV.ListItems
-                .Add Text:=p(x).szExeFile
-                .Item(x + 1).SubItems(1) = p(x).th32ProcessID
-                .Item(x + 1).SubItems(2) = p(x).szImagePath
-                .Item(x + 1).SubItems(3) = p(x).procMemory.WorkingSetSize
-                .Item(x + 1).SubItems(4) = p(x).procMemory.PeakWorkingSetSize
-                .Item(x + 1).SubItems(5) = p(x).procMemory.PagefileUsage
-                .Item(x + 1).SubItems(6) = p(x).procMemory.PeakPagefileUsage
-                .Item(x + 1).SubItems(7) = p(x).procMemory.PageFaultCount
-                .Item(x + 1).SubItems(8) = p(x).procMemory.QuotaNonPagedPoolUsage
-                .Item(x + 1).SubItems(9) = p(x).procMemory.QuotaPeakNonPagedPoolUsage
-                .Item(x + 1).SubItems(10) = p(x).procMemory.QuotaPagedPoolUsage
-                .Item(x + 1).SubItems(11) = p(x).procMemory.QuotaPeakPagedPoolUsage
-                .Item(x + 1).SubItems(12) = cProc.GetProcessNameFromPID(p(x).th32ParentProcessID) & "[" & p(x).th32ParentProcessID & "]"
-                .Item(x + 1).SubItems(13) = p(x).cntThreads
-                .Item(x + 1).SubItems(14) = PriorityFromLong(p(x).pcPriClassBase) & " [" & p(x).pcPriClassBase & "]"
+                .Add Text:=p(X).szExeFile
+                .Item(X + 1).SubItems(1) = p(X).th32ProcessID
+                .Item(X + 1).SubItems(2) = p(X).szImagePath
+                .Item(X + 1).SubItems(3) = p(X).procMemory.WorkingSetSize
+                .Item(X + 1).SubItems(4) = p(X).procMemory.PeakWorkingSetSize
+                .Item(X + 1).SubItems(5) = p(X).procMemory.PagefileUsage
+                .Item(X + 1).SubItems(6) = p(X).procMemory.PeakPagefileUsage
+                .Item(X + 1).SubItems(7) = p(X).procMemory.PageFaultCount
+                .Item(X + 1).SubItems(8) = p(X).procMemory.QuotaNonPagedPoolUsage
+                .Item(X + 1).SubItems(9) = p(X).procMemory.QuotaPeakNonPagedPoolUsage
+                .Item(X + 1).SubItems(10) = p(X).procMemory.QuotaPagedPoolUsage
+                .Item(X + 1).SubItems(11) = p(X).procMemory.QuotaPeakPagedPoolUsage
+                .Item(X + 1).SubItems(12) = cProc.GetProcessNameFromPID(p(X).th32ParentProcessID) & "[" & p(X).th32ParentProcessID & "]"
+                .Item(X + 1).SubItems(13) = p(X).cntThreads
+                .Item(X + 1).SubItems(14) = PriorityFromLong(p(X).pcPriClassBase) & " [" & p(X).pcPriClassBase & "]"
             End With
-        Next x
+        Next X
     End If
     
     InvalidateRect LV.hWnd, 0&, 0&   'dégèle le display

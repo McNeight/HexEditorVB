@@ -1,7 +1,8 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{276EF1C1-20F1-4D85-BE7B-06C736C9DCE9}#1.1#0"; "ExtendedVScrollbar_OCX.ocx"
-Object = "{4C7ED4AA-BF37-4FCA-80A9-C4E4272ADA0B}#1.2#0"; "HexViewer_OCX.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{67F3B6F5-143C-4724-BF0B-20B81F5D8E04}#1.0#0"; "ExtendedVScrollbar_OCX.ocx"
+Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form Pfm 
    Caption         =   "Ouverture d'un fichier..."
    ClientHeight    =   8115
@@ -538,6 +539,12 @@ Begin VB.Form Pfm
       strTag1         =   "0"
       strTag2         =   "0"
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin ComctlLib.ImageList IMG 
       Left            =   2520
       Top             =   5400
@@ -648,7 +655,7 @@ Dim cFic As clsFile
 End Sub
 
 Private Sub Form_Activate()
-
+    
     cmdMAJ_Click
     If HW.Visible Then HW.SetFocus
     Call VS_Change(VS.Value)
@@ -664,6 +671,29 @@ End Sub
 
 Private Sub Form_Load()
 
+    'instancie la classe Undo
+    Set cUndo = New clsUndoItem
+    
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
     lngFormStyle = GetWindowLong(Me.hWnd, GWL_STYLE)
 
     'subclasse la form pour éviter de resizer trop
@@ -673,9 +703,7 @@ Private Sub Form_Load()
     
     'subclasse également lvIcon pour éviter le drag & drop
     Call HookLVDragAndDrop(lvIcon.hWnd)
-    
-    'instancie la classe Undo
-    Set cUndo = New clsUndoItem
+
     
     'affecte les valeurs générales (type) à l'historique
     cUndo.tEditType = edtFile
@@ -913,19 +941,19 @@ End Sub
 'renvoie si l'offset contient une modification
 '=======================================================
 Public Function IsOffsetModified(ByVal lOffset As Currency, ByRef lPlace As Long) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsOffsetModified = False
     
-    For x = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
+    For X = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
     'dans le cas où il y a eu plusieurs modifs dans le même offset
-        If ChangeListO(x) = lOffset + 1 Then
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            lPlace = x
+            lPlace = X
             IsOffsetModified = True
             Exit Function
         End If
-    Next x
+    Next X
     
 End Function
 
@@ -935,9 +963,9 @@ End Function
 '=======================================================
 Public Sub DeleteZone()
 Dim tempFile As String
-Dim x As Long, s As String
+Dim X As Long, s As String
 Dim tmpText As String
-Dim y As Long
+Dim Y As Long
 Dim a As Long
 Dim lNewPos As Long
 Dim e As Long
@@ -1038,19 +1066,19 @@ End Sub
 'renvoie si la case a été modifiée ou non
 '=======================================================
 Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Currency) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsModified = False
     
-    For x = 2 To ChangeListDim
-        If ChangeListO(x) = lOffset + 1 Then
+    For X = 2 To ChangeListDim
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            If ChangeListC(x) = lCol Then
+            If ChangeListC(X) = lCol Then
                 IsModified = True
                 Exit Function
             End If
         End If
-    Next x
+    Next X
 End Function
 
 '=======================================================
@@ -1287,7 +1315,7 @@ Dim s As String
 Dim sKey As Long
 Dim bytHex As Byte
 Dim Valu As Byte
-Dim x As Byte
+Dim X As Byte
 Dim s2 As String
 
     On Error GoTo ErrGestion
@@ -1323,9 +1351,9 @@ Dim s2 As String
 
             's est la nouvelle string
             s = vbNullString
-            For x = 1 To 16
-                s = s & Hex2Str_(HW.Value(HW.Item.Line, CLng(x)))
-            Next x
+            For X = 1 To 16
+                s = s & Hex2Str_(HW.Value(HW.Item.Line, CLng(X)))
+            Next X
             s2 = s
             
             'calcule la nouvelle string (partie de gauche ancienne + nouveau byte + partie de droite ancienne)
@@ -1347,9 +1375,9 @@ Dim s2 As String
 
             's est la nouvelle string
             s = vbNullString
-            For x = 1 To 16
-                s = s & Hex2Str_(HW.Value(HW.Item.Line, CLng(x)))
-            Next x
+            For X = 1 To 16
+                s = s & Hex2Str_(HW.Value(HW.Item.Line, CLng(X)))
+            Next X
             s2 = s
             
             'calcule la nouvelle string (partie de gauche ancienne + nouveau byte + partie de droite ancienne)
@@ -1369,7 +1397,7 @@ ErrGestion:
     clsERREUR.AddError "Pfm.KeyPress", True
 End Sub
 
-Public Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As HexViewer_OCX.ItemElement)
+Public Sub HW_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single, Item As HexViewer_OCX.ItemElement)
 Dim s As String
 Dim r As Long
 Dim l As Currency
@@ -1466,7 +1494,7 @@ Dim l As Currency
     
 End Sub
 
-Private Sub HW_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub HW_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Me.Sb.Panels(4).Text = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(9) = Me.Sb.Panels(4).Text
 End Sub
@@ -1494,21 +1522,21 @@ Private Sub HW_UserMakeFirstOffsetChangeByMovingMouse()
     VS.Value = HW.FirstOffset / 16
 End Sub
 
-Private Sub lstHisto_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstHisto_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'on supprime l'historique si button=2
 'on va à l'élément si button=4
 Dim Item As ListItem
         
     If Button = 2 Then
         'récupère l'item
-        Set Item = lstHisto.HitTest(x, y)
+        Set Item = lstHisto.HitTest(X, Y)
         If Item Is Nothing Then Exit Sub
         
         'supprime
         DelHisto Val(Item.SubItems(1)), cHisto(), cUndo
     ElseIf Button = 4 Then
         'récupère l'item
-        Set Item = lstHisto.HitTest(x, y)
+        Set Item = lstHisto.HitTest(X, Y)
         If Item Is Nothing Then Exit Sub
         
         'active l'élément
@@ -1553,7 +1581,7 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 Dim tLst As ListItem
 Dim s As String
 Dim r As Long
@@ -1561,7 +1589,7 @@ Dim r As Long
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
         s = InputBox("Ajouter un commentaire pour le signet " & tLst.Text, "Ajout d'un commentaire")
         If StrPtr(s) <> 0 Then
@@ -1572,7 +1600,7 @@ Dim r As Long
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
         
         r = MsgBox("Supprimer le signet " & tLst.Text & " ?", vbInformation + vbYesNo, "Attention")
@@ -1587,12 +1615,12 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub
 
-Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = 2 Then
         Me.PopupMenu frmContent.mnuPopupIcon
     End If
@@ -1664,10 +1692,10 @@ End Sub
 'procède à la sauvegarde du fichier avec changements à l'emplacement sFile2
 '=======================================================
 Public Function GetNewFile(ByVal sFile2 As String) As String
-Dim x As Long, s As String
+Dim X As Long, s As String
 Dim tmpText As String
 Dim dblAdv As Double
-Dim y As Long
+Dim Y As Long
 Dim a As Long
 Dim e As Long
 Dim lLen As Long, lFile2 As Long
@@ -1814,7 +1842,7 @@ End Sub
 '=======================================================
 Private Sub ModifyData()
 Dim s As String
-Dim x As Long
+Dim X As Long
 Dim I_tem As ItemElement
 
     Set I_tem = HW.Item
@@ -1823,9 +1851,9 @@ Dim I_tem As ItemElement
     
     'définit s (nouvelle string)
     s = vbNullString
-    For x = 1 To 16
-        s = s & Hex2Str_(frmContent.ActiveForm.HW.Value(I_tem.Line, x))
-    Next x
+    For X = 1 To 16
+        s = s & Hex2Str_(frmContent.ActiveForm.HW.Value(I_tem.Line, X))
+    Next X
 
     frmContent.ActiveForm.AddChange frmContent.ActiveForm.HW.FirstOffset + 16 * (I_tem.Line - 1), I_tem.Col, s
     

@@ -1,5 +1,6 @@
 VERSION 5.00
-Object = "{6ADE9E73-F694-428F-BF86-06ADD29476A5}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmCreateBackup 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "                                      Attention"
@@ -25,6 +26,12 @@ Begin VB.Form frmCreateBackup
    ScaleWidth      =   4680
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin VB.Frame Frame1 
       Caption         =   "Avancement du backup"
       Height          =   735
@@ -145,6 +152,27 @@ Private Sub cmdOk_Click()
     Unload Me   'la form sera rechargée juste après pour l'affichage de la progression
 End Sub
 
+Private Sub Form_Load()
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+End Sub
 
 '=======================================================
 'obtient le nom du fichier dont on doit faire le backup
@@ -162,3 +190,4 @@ End Sub
 '    tAction = TypeOfAction
     
 'End Sub
+

@@ -17,9 +17,12 @@ Begin VB.UserControl ctrlLanguage
    EndProperty
    HasDC           =   0   'False
    InvisibleAtRuntime=   -1  'True
+   MaskPicture     =   "ctrlLanguage.ctx":0000
    PaletteMode     =   4  'None
+   Picture         =   "ctrlLanguage.ctx":2162
    ScaleHeight     =   3255
    ScaleWidth      =   3765
+   ToolboxBitmap   =   "ctrlLanguage.ctx":42C4
 End
 Attribute VB_Name = "ctrlLanguage"
 Attribute VB_GlobalNameSpace = False
@@ -185,11 +188,11 @@ Dim s As String
 
     On Error Resume Next
     
-    If UserControl.Ambient.UserMode = False Then Exit Sub  'on est dans l'IDE
+    'If UserControl.Ambient.UserMode = False Then Exit Sub  'on est dans l'IDE
     
     'vérifie que le fichier existe bien...
-    If FileLen(Me.LangFolder & "\" & Me.Language & ".ini") = 0 Then Exit Sub    'fichier inexistant, donc on loade rien
-    
+    If FileLen(Me.LangFolder & "\" & Me.Language & ".ini") = 0 Then Exit Sub       'fichier inexistant, donc on loade rien
+
     For Each Obj In mParent.Controls
         'pour chaque controle, on récupère la valeur de son nom et on affecte
         'la string Caption/Texte au controle
@@ -280,7 +283,7 @@ Dim s As String
     
     sFile = Me.LangFolder & "\" & Me.Language & ".ini"  'le fichier à sauvegarder
     
-    If UserControl.Ambient.UserMode = False Then Exit Sub  'on est dans l'IDE
+    'If UserControl.Ambient.UserMode = False Then Exit Sub  'on est dans l'IDE ==> inutile si compilmé en OCX
     
     For Each Obj In mParent.Controls
         'pour chaque control de la form, on écrit la variable
@@ -341,6 +344,7 @@ Dim s As String
 
     'sauvegarde le caption de la form
     LetPref mParent.Name, mParent.Name, mParent.Caption, sFile
+    
 End Sub
 
 

@@ -1,6 +1,7 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.2#0"; "FileView_OCX.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmRecoverFiles 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Récupération de fichiers"
@@ -150,6 +151,12 @@ Begin VB.Form frmRecoverFiles
          Width           =   6735
       End
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
 End
 Attribute VB_Name = "frmRecoverFiles"
 Attribute VB_GlobalNameSpace = False
@@ -201,6 +208,27 @@ Private Sub cmdRestoreValidFile_Click()
 End Sub
 
 Private Sub Form_Load()
+
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
     Me.Width = 7275
     Me.Height = 5715
     
@@ -210,13 +238,13 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Resize()
-Dim x As Long
+Dim X As Long
 
     'positionnement des frames
-    For x = 0 To Frame1.Count - 1
-        Frame1(x).Top = 480
-        Frame1(x).Left = 120
-    Next x
+    For X = 0 To Frame1.Count - 1
+        Frame1(X).Top = 480
+        Frame1(X).Left = 120
+    Next X
 End Sub
 
 Private Sub LV_PathChange(sOldPath As String, sNewPath As String)

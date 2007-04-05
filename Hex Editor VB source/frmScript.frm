@@ -1,7 +1,8 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "Comdlg32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MsComCtl.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmScript 
    Caption         =   "Editeur de script"
    ClientHeight    =   5610
@@ -295,6 +296,12 @@ Begin VB.Form frmScript
          EndProperty
       EndProperty
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin VB.Menu rmnuFile 
       Caption         =   "&Fichier"
       Begin VB.Menu mnuNew 
@@ -386,8 +393,30 @@ Private bIsModified As Boolean  'contient si le fichier est modifié ou non
 
 
 Private Sub Form_Load()
+
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
     Call AddIconsToMenus(Me.hWnd, Me.ImageList2)    'ajoute les icones au menu
     bIsModified = False 'pas de modification actuellement
+
 End Sub
 
 Private Sub Form_Resize()
@@ -467,7 +496,7 @@ End Sub
 Private Sub mnuOpen_Click()
 'ouverture de fichier
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -506,7 +535,7 @@ End Sub
 Private Sub mnuSaveAs_Click()
 'sauvegarde
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -520,8 +549,8 @@ Dim x As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'sauvegarde du fichier

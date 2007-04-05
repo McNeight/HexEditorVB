@@ -1,5 +1,6 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmGestWindows 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Gestion des fenêtres"
@@ -83,6 +84,12 @@ Begin VB.Form frmGestWindows
          Object.Width           =   14111
       EndProperty
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin VB.Menu mnuPopup 
       Caption         =   "mnuPopup"
       Visible         =   0   'False
@@ -140,7 +147,7 @@ Option Explicit
 Private Sub cmdCLoseIt_Click()
 'ferme les fenêtres sélectionnées
 Dim Frm As Form
-Dim x As Long
+Dim X As Long
 
     On Error GoTo ErrGestion
     
@@ -157,15 +164,15 @@ Dim x As Long
     'liste les form et ferme les sélectionnées
     For Each Frm In Forms
         If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Or (TypeOf Frm Is physPfm) Then
-            For x = LV.ListItems.Count To 1 Step -1
-                If LV.ListItems.Item(x).Selected And LV.ListItems.Item(x).SubItems(1) = _
+            For X = LV.ListItems.Count To 1 Step -1
+                If LV.ListItems.Item(X).Selected And LV.ListItems.Item(X).SubItems(1) = _
                 Frm.Caption Then
                     SendMessage Frm.hWnd, WM_CLOSE, 0, 0
                     'Unload frm
                     'lNbChildFrm = lNbChildFrm - 1
-                    LV.ListItems.Remove x
+                    LV.ListItems.Remove X
                 End If
-            Next x
+            Next X
         End If
     Next Frm
     
@@ -209,6 +216,26 @@ End Sub
 
 Private Sub Form_Load()
 Dim Frm As Form
+        
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
     
     LV.ListItems.Clear
     

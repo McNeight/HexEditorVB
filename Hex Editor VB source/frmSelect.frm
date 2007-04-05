@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmSelect 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "     Sélectionner une zone"
@@ -59,6 +60,12 @@ Begin VB.Form frmSelect
       ToolTipText     =   "Offset inférieur"
       Top             =   120
       Width           =   1095
+   End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
    End
    Begin VB.Label Label1 
       Caption         =   "jusqu'au byte"
@@ -127,7 +134,7 @@ Private Sub cmdOk_Click()
 'valide
 Dim lFrom As Currency
 Dim lTo As Currency
-Dim x As Currency
+Dim X As Currency
 
     'On Error GoTo ErrGestion
     
@@ -137,9 +144,9 @@ Dim x As Currency
     
     'fait en sorte que lFrom soit le plus petit
     If lFrom > lTo Then
-        x = lFrom
+        X = lFrom
         lFrom = lTo
-        lTo = x
+        lTo = X
     End If
         
     If byteFunc = 0 Then    'il s'agit d'une sélection paramétrée
@@ -204,6 +211,26 @@ End Sub
 
 Private Sub Form_Load()
 
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+    
     If frmContent.ActiveForm Is Nothing Then Unload Me
     
     'affiche l'élément actuellement sélectionné dans l'activeform

@@ -1,6 +1,7 @@
 VERSION 5.00
-Object = "{2ED9CD5C-C64E-4F0C-B719-F9D0F542DD03}#1.0#0"; "BGraphe_OCX.ocx"
-Object = "{6ADE9E73-F694-428F-BF86-06ADD29476A5}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{EF4A8ABF-4214-4B3F-8F82-ACF6D11FA80D}#1.0#0"; "BGraphe_OCX.ocx"
+Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmCPF 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Comparaison de fichiers"
@@ -24,6 +25,12 @@ Begin VB.Form frmCPF
    ScaleHeight     =   6990
    ScaleWidth      =   8250
    StartUpPosition =   2  'CenterScreen
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin VB.CommandButton cmdExamineDifferences 
       Caption         =   "Examiner les différences"
       Height          =   495
@@ -369,8 +376,8 @@ End Sub
 '=======================================================
 Private Sub LaunchAnalys()
 Dim lLength1 As Long, lLength2 As Long
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 Dim b As Byte
 Dim l As Long
 Dim tOver As OVERLAPPED
@@ -382,14 +389,14 @@ Dim curByteOld As Currency
     On Error GoTo ErrGestion
     
     'vide les listes
-    For x = 0 To 255
-        F1(x) = 0: F2(x) = 0
-    Next x
+    For X = 0 To 255
+        F1(X) = 0: F2(X) = 0
+    Next X
     
     'prépare la progressbar
     lLength1 = cFile.GetFileSize(txtFile1.Text): lLength2 = cFile.GetFileSize(txtFile2.Text)
-    pgb.Min = 0: pgb.Max = lLength1 + lLength2: pgb.Value = 0
-    x = 0
+    PGB.Min = 0: PGB.Max = lLength1 + lLength2: PGB.Value = 0
+    X = 0
     
     'obtient le handle du fichier
     lngFile = CreateFile(txtFile1.Text, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
@@ -403,7 +410,7 @@ Dim curByteOld As Currency
     curByte = 0
     Do Until curByte > lLength1  'tant que le fichier n'est pas fini
     
-        x = x + 1
+        X = X + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
@@ -419,16 +426,16 @@ Dim curByteOld As Currency
             l = lLength1 - curByte
         End If
         
-        For y = 1 To l
-            b = Asc(Mid$(strBuffer, y, 1))
+        For Y = 1 To l
+            b = Asc(Mid$(strBuffer, Y, 1))
             'ajoute une occurence
             F1(b) = F1(b) + 1
-        Next y
+        Next Y
         
-        If (x Mod 10) = 0 Then
+        If (X Mod 10) = 0 Then
             'rend la main
             DoEvents
-            pgb.Value = curByte
+            PGB.Value = curByte
         End If
         
         curByte = curByte + 51200
@@ -440,7 +447,7 @@ Dim curByteOld As Currency
       
 
  
-    x = 0: curByteOld = curByte
+    X = 0: curByteOld = curByte
     
     'obtient le handle du fichier
     lngFile = CreateFile(txtFile2.Text, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
@@ -454,7 +461,7 @@ Dim curByteOld As Currency
     curByte = 0
     Do Until curByte > lLength2  'tant que le fichier n'est pas fini
     
-        x = x + 1
+        X = X + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
@@ -470,16 +477,16 @@ Dim curByteOld As Currency
             l = lLength2 - curByte
         End If
         
-        For y = 1 To l
-            b = Asc(Mid$(strBuffer, y, 1))
+        For Y = 1 To l
+            b = Asc(Mid$(strBuffer, Y, 1))
             'ajoute une occurence
             F2(b) = F2(b) + 1
-        Next y
+        Next Y
         
-        If (x Mod 10) = 0 Then
+        If (X Mod 10) = 0 Then
             'rend la main
             DoEvents
-            pgb.Value = curByte + curByteOld
+            PGB.Value = curByte + curByteOld
         End If
         
         curByte = curByte + 51200
@@ -488,7 +495,7 @@ Dim curByteOld As Currency
     
     CloseHandle lngFile
     
-    pgb.Value = pgb.Max
+    PGB.Value = PGB.Max
     DisplayResults   'affiche les résultats
 
     Exit Sub
@@ -501,7 +508,7 @@ End Sub
 'affiche les résultats (graphes & labels)
 '=======================================================
 Private Sub DisplayResults()
-Dim x As Long
+Dim X As Long
 
     'remplit les graphes
     BG1.ClearGraphe
@@ -509,12 +516,35 @@ Dim x As Long
     BG2.ClearGraphe
     BG2.ClearValues
     
-    For x = 0 To 255
-        BG1.AddValue x, F1(x)
-        BG2.AddValue x, F2(x)
-    Next x
+    For X = 0 To 255
+        BG1.AddValue X, F1(X)
+        BG2.AddValue X, F2(X)
+    Next X
 
     'trace les graphes
     BG1.TraceGraph
     BG2.TraceGraph
+End Sub
+
+Private Sub Form_Load()
+
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
 End Sub

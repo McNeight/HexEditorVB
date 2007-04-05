@@ -1,5 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmTable 
    AutoRedraw      =   -1  'True
    BackColor       =   &H00FFFFFF&
@@ -87,6 +88,12 @@ Begin VB.Form frmTable
          Object.Width           =   2117
       EndProperty
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin VB.Menu mnuVisible 
       Caption         =   "mnuVisible"
       Visible         =   0   'False
@@ -146,8 +153,8 @@ Option Explicit
 'valeurs en base octale, décimale, hexa, ascii et binaire
 '=======================================================
 Public Sub CreateTable(ByVal tType As TableType)
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
     
     If Not (tType = AllTables) Then
         'prépare l'affichage des règles en ordonnée / ascisse
@@ -163,24 +170,24 @@ Dim y As Long
         Me.CurrentY = 0
         Me.ForeColor = 16737380
         Me.BackColor = vbWhite
-        For x = 0 To 15
-            Me.CurrentY = 240 + 240 * x
+        For X = 0 To 15
+            Me.CurrentY = 240 + 240 * X
             Me.CurrentX = 0
-            Me.Print Hex$(x) & "0"
-            Me.CurrentX = 360 + 230 * x
+            Me.Print Hex$(X) & "0"
+            Me.CurrentX = 360 + 230 * X
             Me.CurrentY = 0
-            Me.Print Hex$(x)
-        Next x
+            Me.Print Hex$(X)
+        Next X
         
         'affichage des valeurs
         Me.ForeColor = vbBlack
-        For x = 0 To 15
-            For y = 0 To 15
-                Me.CurrentX = 360 + 230 * x
-                Me.CurrentY = 240 + 240 * y
-                Me.Print Chr$(Val(16 * y + x))
-            Next y
-        Next x
+        For X = 0 To 15
+            For Y = 0 To 15
+                Me.CurrentX = 360 + 230 * X
+                Me.CurrentY = 240 + 240 * Y
+                Me.Print Chr$(Val(16 * Y + X))
+            Next Y
+        Next X
         
     Else
         'alors on remplit et affiche le listview
@@ -194,17 +201,17 @@ Dim y As Long
         LV.Top = 15
         
         With LV
-            For x = 1 To 256
-                .ListItems.Add Text:=IIf(Len(CStr(x - 1)) = 1, "00" & CStr(x - 1), _
-                IIf(Len(CStr(x - 1)) = 2, "0" & CStr(x - 1), CStr(x - 1)))  'décimal
-                .ListItems.Item(x).SubItems(1) = Dec2Bin(x - 1, 8) 'binaire
-                .ListItems.Item(x).SubItems(2) = IIf(Len(Oct$(x - 1)) = 1, _
-                "00" & Oct$(x - 1), IIf(Len(Oct$(x - 1)) = 2, "0" & Oct$(x - 1), _
-                Oct$(x - 1))) 'octal
-                .ListItems.Item(x).SubItems(3) = IIf(Len(Hex$(x - 1)) = 1, "0" & Hex$(x - 1), _
-                Hex$(x - 1)) 'hexa
-                .ListItems.Item(x).SubItems(4) = Chr$(x - 1) 'ANSI ASCII
-            Next x
+            For X = 1 To 256
+                .ListItems.Add Text:=IIf(Len(CStr(X - 1)) = 1, "00" & CStr(X - 1), _
+                IIf(Len(CStr(X - 1)) = 2, "0" & CStr(X - 1), CStr(X - 1)))  'décimal
+                .ListItems.Item(X).SubItems(1) = Dec2Bin(X - 1, 8) 'binaire
+                .ListItems.Item(X).SubItems(2) = IIf(Len(Oct$(X - 1)) = 1, _
+                "00" & Oct$(X - 1), IIf(Len(Oct$(X - 1)) = 2, "0" & Oct$(X - 1), _
+                Oct$(X - 1))) 'octal
+                .ListItems.Item(X).SubItems(3) = IIf(Len(Hex$(X - 1)) = 1, "0" & Hex$(X - 1), _
+                Hex$(X - 1)) 'hexa
+                .ListItems.Item(X).SubItems(4) = Chr$(X - 1) 'ANSI ASCII
+            Next X
         End With
         LV.Visible = True
     End If
@@ -215,18 +222,40 @@ Dim y As Long
 End Sub
 
 Private Sub Form_Activate()
-'mise au premier plan
+    'mise au premier plan
     PremierPlan Me, MettreAuPremierPlan
     Me.Visible = True
 End Sub
 
-Private Sub Form_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Form_Load()
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
+End Sub
+
+Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affichage du popu menu
     Me.SetFocus
     If Button = 2 Then Me.PopupMenu Me.mnuVisible
 End Sub
 
-Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub LV_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affichage du popu menu
     Me.SetFocus
     If Button = 2 Then Me.PopupMenu Me.mnuVisible

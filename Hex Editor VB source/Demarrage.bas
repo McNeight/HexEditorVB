@@ -59,6 +59,7 @@ Public cPref As clsIniPref
 Public lNbChildFrm As Long
 Public bEndSplash As Boolean
 Public lngTimeLoad As Long
+Public MyLang As String
 
 '=======================================================
 '//DEMARRAGE DU PROGRAMME
@@ -81,6 +82,7 @@ Dim s As String
     '//on quitte si déjà une instance
     If App.PrevInstance Then End
     
+    
     '//vérifie la version de Windows
         x = GetWindowsVersion(s, y)
         If x <> [Windows Vista] And x <> [Windows XP] Then
@@ -88,11 +90,13 @@ Dim s As String
             MsgBox "Votre système d'exploitation est [" & s & "] build [" & Trim$(Str$(y)) & "]" & vbNewLine & "Ce logiciel n'est compatible qu'avec Windows XP et Windows Vista." & vbNewLine & "Hex Editor VB va donc se fermer", vbCritical, "Système d'exploitation non compatible"
             End
         End If
+        
     
     '//applique le style XP (création d'un *.manifest si nécessaire)
         Set AfManifest = New AfClsManifest
         AfManifest.Run
         Set AfManifest = Nothing
+        
     
     '//affiche des messages de warning si on n'a pas une version finale
         #If PRE_ALPHA_VERSION Then
@@ -102,12 +106,14 @@ Dim s As String
             'version beta
             MsgBox "This file is a beta version, it means that all principal functions are availables but there is still bugs." & vbNewLine & "This file is avalailable for testing purpose.", vbCritical, "Warning"
         #End If
+        
     
     '//initialisation de la gestion des erreurs
         Set clsERREUR = New clsGetionErreur 'instancie la classe de gestion des erreurs
         'affecte les properties à la classe
         clsERREUR.LogFile = App.Path & "\ErrLog.log"
         clsERREUR.MakeSoundIDE = True
+        
     
     '//instancie les classes
         Set cFile = New clsFileInfos
@@ -117,11 +123,16 @@ Dim s As String
         Set cPref = New clsIniPref
         Set cProc = New clsProcess
         Set clsConv = New clsConvert
+        
     
     '//initialise les tableaux
         ReDim JailedProcess(0)  'contient les process bloqués
         ReDim TempFiles(0)  'contient les fichiers temporaires à supprimer au déchargement du logiciel
 
+    
+    '// récupère la langue
+        MyLang = "French"
+        
     
     '//récupère les préférences
         #If MODE_DEBUG Then

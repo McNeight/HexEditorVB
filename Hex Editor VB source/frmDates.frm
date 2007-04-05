@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmDates 
    BorderStyle     =   1  'Fixed Single
@@ -157,7 +158,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   98435075
+            Format          =   63504387
             CurrentDate     =   39133
          End
       End
@@ -202,7 +203,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   98435075
+            Format          =   63504387
             CurrentDate     =   39133
          End
       End
@@ -226,7 +227,7 @@ Begin VB.Form frmDates
          _ExtentY        =   529
          _Version        =   393216
          CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-         Format          =   98435075
+         Format          =   63504387
          CurrentDate     =   39133.9583333333
       End
       Begin VB.PictureBox Picture1 
@@ -302,6 +303,12 @@ Begin VB.Form frmDates
       ToolTipText     =   "Emplacement du fichier"
       Top             =   240
       Width           =   3615
+   End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
    End
    Begin VB.Label Label1 
       Caption         =   "Fichier :"
@@ -495,4 +502,26 @@ End Sub
 Public Sub GetFile(ByVal tFile As clsFile)
     Set mFile = tFile
     Call ChangeDates
+End Sub
+
+Private Sub Form_Load()
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = MyLang
+    Lang.LoadControlsCaption
 End Sub
