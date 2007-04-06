@@ -237,7 +237,7 @@ Dim r As Long
         'on récupère la position du "="
         l = InStr(1, s2(x), "=", vbBinaryCompare)
         
-        If l < Len(s2(x)) And Left$(s2(x), 1) <> "[" Then
+        If Left$(s2(x), 1) <> "[" Then
             'élément OK
             r = r + 1
             LV.ListItems.Add Text:=vbNullString
@@ -254,7 +254,7 @@ Dim r As Long
     Me.mnuSave.Enabled = True
     Me.mnuOpenFile.Enabled = True
     Me.mnuCopyModel.Enabled = True
-    
+
 CancelPushed:
 
     'libère la classe
@@ -270,8 +270,10 @@ Dim s2 As String
     For x = 1 To LV.ListItems.Count
     
         'formate la string pour Google traduction
-        s = s & Replace$(LV.ListItems.Item(x).SubItems(1), "&", " & ", , _
-            , vbBinaryCompare) & " | "
+        s2 = Replace$(LV.ListItems.Item(x).SubItems(1), "&", "   &   ", , _
+            , vbBinaryCompare)
+        
+        s = s & s2 & "  |  "
 
     Next x
     
@@ -399,7 +401,7 @@ Dim l As Long
 Dim r As Long
 Dim sFile As String
 
-    'On Error GoTo CancelPushed
+    On Error GoTo CancelPushed
     
     
     'vérifie qu'un modèle existe bien
@@ -449,7 +451,7 @@ Dim sFile As String
         'on récupère dans sMod() la string de gauche de l'égalité
         s = Left$(sMod(x), l)
         
-        If l < Len(sMod(x)) And Left$(sMod(x), 1) <> "[" Then
+        If Left$(sMod(x), 1) <> "[" Then
             'élément OK
             r = r + 1
             s = s & LV.ListItems.Item(r).Text
@@ -517,7 +519,7 @@ Dim r As Long
         l = InStr(1, s2(r), "=", vbBinaryCompare)
         LV.ListItems.Item(x).Text = Right$(s2(r), Len(s2(r)) - l)
     Next x
-
+        
 CancelPushed:
 
     'libère la classe
