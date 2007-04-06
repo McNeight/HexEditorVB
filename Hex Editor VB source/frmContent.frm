@@ -95,7 +95,7 @@ Begin VB.MDIForm frmContent
       MaskColor       =   16777215
       _Version        =   393216
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   88
+         NumListImages   =   89
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":5F90
             Key             =   ""
@@ -430,22 +430,26 @@ Begin VB.MDIForm frmContent
          EndProperty
          BeginProperty ListImage84 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":17726
-            Key             =   "Affichage|Tableau"
+            Key             =   "Outils|Editeur de langue..."
          EndProperty
          BeginProperty ListImage85 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":17A78
-            Key             =   "Outils|Options..."
+            Key             =   "Affichage|Tableau"
          EndProperty
          BeginProperty ListImage86 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":17DCA
-            Key             =   ""
+            Key             =   "Outils|Options..."
          EndProperty
          BeginProperty ListImage87 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":1811C
-            Key             =   "Edition|Annuler"
+            Key             =   ""
          EndProperty
          BeginProperty ListImage88 {2C247F27-8591-11D1-B16A-00C0F0283628} 
             Picture         =   "frmContent.frx":1846E
+            Key             =   "Edition|Annuler"
+         EndProperty
+         BeginProperty ListImage89 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmContent.frx":187C0
             Key             =   "Aide|Hex Editor VB sur Internet"
          EndProperty
       EndProperty
@@ -538,7 +542,6 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -546,15 +549,13 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "13:54"
-            Key             =   ""
+            TextSave        =   "15:56"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -562,7 +563,6 @@ Begin VB.MDIForm frmContent
             Object.Width           =   2117
             MinWidth        =   2117
             TextSave        =   "06/04/2007"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -596,92 +596,92 @@ Begin VB.MDIForm frmContent
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   22
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":187C0
+            Picture         =   "frmContent.frx":18B12
             Key             =   "New"
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1A152
+            Picture         =   "frmContent.frx":1A4A4
             Key             =   ""
             Object.Tag             =   "Copy"
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1BAE4
+            Picture         =   "frmContent.frx":1BE36
             Key             =   "Cut"
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1D476
+            Picture         =   "frmContent.frx":1D7C8
             Key             =   "Paste"
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":1EE08
+            Picture         =   "frmContent.frx":1F15A
             Key             =   "Save"
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":2079A
+            Picture         =   "frmContent.frx":20AEC
             Key             =   "Undo"
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":20D34
+            Picture         =   "frmContent.frx":21086
             Key             =   "Redo"
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":212CE
+            Picture         =   "frmContent.frx":21620
             Key             =   "Signet"
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":22C60
+            Picture         =   "frmContent.frx":22FB2
             Key             =   "Left"
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":245F2
+            Picture         =   "frmContent.frx":24944
             Key             =   "Right"
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":25F84
+            Picture         =   "frmContent.frx":262D6
             Key             =   "Up"
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":27916
+            Picture         =   "frmContent.frx":27C68
             Key             =   "Down"
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":292A8
+            Picture         =   "frmContent.frx":295FA
             Key             =   "Add"
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":2AC3A
+            Picture         =   "frmContent.frx":2AF8C
             Key             =   "Trash"
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":2C5CC
+            Picture         =   "frmContent.frx":2C91E
             Key             =   "Print"
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":2DF5E
+            Picture         =   "frmContent.frx":2E2B0
             Key             =   ""
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":2E4F8
+            Picture         =   "frmContent.frx":2E84A
             Key             =   "FileOpen"
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":2FE8A
+            Picture         =   "frmContent.frx":301DC
             Key             =   "Computer"
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":3181C
+            Picture         =   "frmContent.frx":31B6E
             Key             =   ""
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":31DB6
+            Picture         =   "frmContent.frx":32108
             Key             =   ""
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":34208
+            Picture         =   "frmContent.frx":3455A
             Key             =   ""
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmContent.frx":34719
+            Picture         =   "frmContent.frx":34A6B
             Key             =   ""
          EndProperty
       EndProperty
@@ -1225,6 +1225,12 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuToolsTiret41 
          Caption         =   "-"
       End
+      Begin VB.Menu mnuLangEditor 
+         Caption         =   "&Editeur de langue..."
+      End
+      Begin VB.Menu mnuToolsTiret4112 
+         Caption         =   "-"
+      End
       Begin VB.Menu mnuOptions 
          Caption         =   "&Options..."
       End
@@ -1257,6 +1263,16 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuHelp 
          Caption         =   "&Aide..."
          Shortcut        =   {F1}
+      End
+      Begin VB.Menu mnuHelpTiret7 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuLangMenu 
+         Caption         =   "&Langue"
+         Begin VB.Menu mnuLang 
+            Caption         =   "&Français"
+            Index           =   1
+         End
       End
       Begin VB.Menu mnuHelpTiret 
          Caption         =   "-"
@@ -1487,11 +1503,13 @@ Private Sub MDIForm_DblClick()
 End Sub
 
 Private Sub MDIForm_Load()
-    
+Dim x As Long
+
     On Error Resume Next
     
     Set clsPref = New clsIniForm
     
+    frmSplash.lblState.Caption = "Récupération des fichiers de langue..."
     #If MODE_DEBUG Then
         If App.LogMode = 0 Then
             'on créé le fichier de langue français
@@ -1509,10 +1527,25 @@ Private Sub MDIForm_Load()
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
+    'chargement des menus de langue (sLang())
+    For x = 1 To UBound(sLang())
+        'ajoute une entrée au menu
+        Load Me.mnuLang(x)
+        Me.mnuLang(x).Caption = Left$(cFile.GetFileFromPath(sLang(x)), Len(cFile.GetFileFromPath(sLang(x))) - 4)
+    Next x
+    
+    'coche le bon menu
+    For x = 1 To mnuLang.Count
+        If Replace$(Me.mnuLang(x).Caption, "&", vbNullString) = cPref.env_Lang _
+            Then Me.mnuLang(x).Checked = True
+    Next x
+
+    
     'loading des preferences
+    frmSplash.lblState.Caption = "Chargement des préférences..."
     clsPref.GetFormSettings App.Path & "\Preferences\FrmContent.ini", Me
     
     'valeurs par défaut
@@ -1522,6 +1555,7 @@ Private Sub MDIForm_Load()
     txt.Refresh
     
     'lance le subclassing pour le resize des pictureboxes
+    frmSplash.lblState.Caption = "Starting subclassing..."
     Call HookPictureResizement(Me.pctConsole, 1)
     Call HookPictureResizement(Me.pctExplorer)
     
@@ -1533,7 +1567,7 @@ Private Sub MDIForm_Load()
         Call cSub.HookFormMenu(Me, True)
     #End If
     
-    frmSplash.lblState.Caption = "Vérifie la présence de FileRenamer et de Disassembler..."
+    frmSplash.lblState.Caption = "Vérifie la présence de FileRenamer, Disassembler et LangEditor..."
     'vérifie la présence de FileRenamer.exe
     If cFile.FileExists(App.Path & "\FileRenamer.exe") = False Then
         Me.mnuFileRenamer.Enabled = False
@@ -1546,14 +1580,18 @@ Private Sub MDIForm_Load()
     Else
         Me.mnuDisAsm.Enabled = True
     End If
+    'vérifie la présence de LangEditor
+    If cFile.FileExists(App.Path & "\LangEditor.exe") = False Then
+        Me.mnuLangEditor.Enabled = False
+    Else
+        Me.mnuLangEditor.Enabled = True
+    End If
     
     'ajoute les icones aux menus
     frmSplash.lblState.Caption = "Ajout des icones aux menus..."
     Call AddIconsToMenus(Me.hWnd, Me.ImageList2)
         
-    frmSplash.lblState.Caption = "Application de la langue..."
     lNbChildFrm = 0
-    Lang.LangFolder = App.Path & "\Lang"
     
     'Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
     
@@ -1745,6 +1783,53 @@ Private Sub mnuGestSignets_Click()
 'affiche la liste des signets
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     frmSignets.Show vbModal
+End Sub
+
+Private Sub mnuLang_Click(Index As Integer)
+'on change de langue
+Dim s As String
+Dim x As Long
+
+    'détermine le path du dossier
+    If App.LogMode = 0 Then
+        s = LANG_PATH
+    Else
+        s = App.Path & "\Lang"
+    End If
+    
+    s = s & "\" & mnuLang(Index).Caption & ".ini"
+    s = Replace$(s, "&", vbNullString)
+    
+    'vérifie la présence du fichier
+    If cFile.FileExists(s) = False Then MsgBox "Le fichier de langue n'existe pas !", vbCritical, "Erreur": Exit Sub
+    
+    'on décoche tout les menus
+    For x = 1 To UBound(sLang())
+        mnuLang(x).Checked = False
+    Next x
+    
+    'on coche celui sélectionné
+    mnuLang(Index).Checked = True
+    
+    'on affiche un message comme quoi il faut redémarrer
+    MsgBox "Vous devez fermer puis relancer Hex Editor VB pour que les modifications" & vbNewLine & "de la langue prenne complètement effet.", vbInformation, "Attention"
+    
+    'on change les pref
+    cPref.env_Lang = mnuLang(Index).Caption
+    Dim cPRE As clsIniFile
+    Set cPRE = New clsIniFile
+    Call cPRE.SaveIniFile(cPref)
+    Set cPRE = Nothing
+    
+    'Call EndProgram
+End Sub
+
+Private Sub mnuLangEditor_Click()
+'lance Disassembler.exe
+    cFile.ShellOpenFile App.Path & "\LangEditor.exe", Me.hWnd, , App.Path
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole("Outils d'édition de langue lancé")
 End Sub
 
 Private Sub mnuRecoverFiles_Click()

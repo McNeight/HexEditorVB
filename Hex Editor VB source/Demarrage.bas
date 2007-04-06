@@ -59,7 +59,8 @@ Public cPref As clsIniPref
 Public lNbChildFrm As Long
 Public bEndSplash As Boolean
 Public lngTimeLoad As Long
-Public MyLang As String
+Public sLang() As String
+
 
 '=======================================================
 '//DEMARRAGE DU PROGRAMME
@@ -77,7 +78,7 @@ Dim s As String
         lngTimeLoad = GetTickCount
     #End If
     
-    On Error GoTo ErrGestion
+    'On Error GoTo ErrGestion
     
     '//on quitte si déjà une instance
     If App.PrevInstance Then End
@@ -85,7 +86,7 @@ Dim s As String
     
     '//vérifie la version de Windows
         x = GetWindowsVersion(s, y)
-        If x <> [Windows Vista] And x <> [Windows XP] Then
+        If x <> [Windows Vista] And x <> [Windows XP] And x <> [Windows 2000] Then
             'OS non compatible
             MsgBox "Votre système d'exploitation est [" & s & "] build [" & Trim$(Str$(y)) & "]" & vbNewLine & "Ce logiciel n'est compatible qu'avec Windows XP et Windows Vista." & vbNewLine & "Hex Editor VB va donc se fermer", vbCritical, "Système d'exploitation non compatible"
             End
@@ -131,7 +132,25 @@ Dim s As String
 
     
     '// récupère la langue
-        MyLang = "English"
+        'liste les fichiers de langue
+        ReDim sLang(0): ReDim sFile(0)
+        
+        If App.LogMode = 0 Then
+            'IDE
+            s = LANG_PATH
+        Else
+            s = App.Path & "\Lang"
+        End If
+        Call cFile.EnumFilesFromFolder(s, sFile(), False)
+        
+        'vire les fichiers qui ne sont pas *.ini et French.ini
+        For x = 1 To UBound(sFile())
+            If sFile(x) <> "French.ini" And LCase$(Right$(sFile(x), 4)) = ".ini" Then
+                'c'est un fichier de langue
+                ReDim Preserve sLang(UBound(sLang()) + 1)
+                sLang(UBound(sLang())) = sFile(x)
+            End If
+        Next x
         
     
     '//récupère les préférences

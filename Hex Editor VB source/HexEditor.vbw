@@ -1,7 +1,7 @@
 Pfm = 66, 87, 683, 377, C, 88, 116, 661, 546, C
-frmContent = 66, 87, 639, 517, C, 22, 29, 595, 459, C
+frmContent = 66, 87, 639, 517, Z, 22, 29, 595, 459, C
 AfClsManifest = 0, 0, 0, 0, C
-Demarrage = 22, 29, 595, 459, Z
+Demarrage = 22, 29, 595, 459, 
 mdlStrings = 0, 0, 0, 0, C
 mdlFile = 0, 0, 0, 0, C
 frmTable = 22, 29, 639, 319, C, 110, 145, 683, 575, C

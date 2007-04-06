@@ -198,7 +198,7 @@ Dim x As Long
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
     'obtient les infos sur les erreurs

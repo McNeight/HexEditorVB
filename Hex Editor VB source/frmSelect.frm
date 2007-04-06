@@ -134,7 +134,7 @@ Private Sub cmdOk_Click()
 'valide
 Dim lFrom As Currency
 Dim lTo As Currency
-Dim X As Currency
+Dim x As Currency
 
     'On Error GoTo ErrGestion
     
@@ -144,9 +144,9 @@ Dim X As Currency
     
     'fait en sorte que lFrom soit le plus petit
     If lFrom > lTo Then
-        X = lFrom
+        x = lFrom
         lFrom = lTo
-        lTo = X
+        lTo = x
     End If
         
     If byteFunc = 0 Then    'il s'agit d'une sélection paramétrée
@@ -228,7 +228,7 @@ Private Sub Form_Load()
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
     If frmContent.ActiveForm Is Nothing Then Unload Me

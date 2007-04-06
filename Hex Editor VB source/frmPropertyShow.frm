@@ -269,7 +269,7 @@ Dim x As Long
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
     For x = 0 To 2

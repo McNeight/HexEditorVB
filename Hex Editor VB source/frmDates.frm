@@ -158,7 +158,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63504387
+            Format          =   16515075
             CurrentDate     =   39133
          End
       End
@@ -203,7 +203,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63504387
+            Format          =   16515075
             CurrentDate     =   39133
          End
       End
@@ -227,7 +227,7 @@ Begin VB.Form frmDates
          _ExtentY        =   529
          _Version        =   393216
          CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-         Format          =   63504387
+         Format          =   16515075
          CurrentDate     =   39133.9583333333
       End
       Begin VB.PictureBox Picture1 
@@ -522,6 +522,6 @@ Private Sub Form_Load()
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
 End Sub

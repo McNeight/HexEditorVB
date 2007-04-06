@@ -376,8 +376,8 @@ End Sub
 '=======================================================
 Private Sub LaunchAnalys()
 Dim lLength1 As Long, lLength2 As Long
-Dim X As Long
-Dim Y As Long
+Dim x As Long
+Dim y As Long
 Dim b As Byte
 Dim l As Long
 Dim tOver As OVERLAPPED
@@ -389,14 +389,14 @@ Dim curByteOld As Currency
     On Error GoTo ErrGestion
     
     'vide les listes
-    For X = 0 To 255
-        F1(X) = 0: F2(X) = 0
-    Next X
+    For x = 0 To 255
+        F1(x) = 0: F2(x) = 0
+    Next x
     
     'prépare la progressbar
     lLength1 = cFile.GetFileSize(txtFile1.Text): lLength2 = cFile.GetFileSize(txtFile2.Text)
-    PGB.Min = 0: PGB.Max = lLength1 + lLength2: PGB.Value = 0
-    X = 0
+    pgb.Min = 0: pgb.Max = lLength1 + lLength2: pgb.Value = 0
+    x = 0
     
     'obtient le handle du fichier
     lngFile = CreateFile(txtFile1.Text, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
@@ -410,7 +410,7 @@ Dim curByteOld As Currency
     curByte = 0
     Do Until curByte > lLength1  'tant que le fichier n'est pas fini
     
-        X = X + 1
+        x = x + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
@@ -426,16 +426,16 @@ Dim curByteOld As Currency
             l = lLength1 - curByte
         End If
         
-        For Y = 1 To l
-            b = Asc(Mid$(strBuffer, Y, 1))
+        For y = 1 To l
+            b = Asc(Mid$(strBuffer, y, 1))
             'ajoute une occurence
             F1(b) = F1(b) + 1
-        Next Y
+        Next y
         
-        If (X Mod 10) = 0 Then
+        If (x Mod 10) = 0 Then
             'rend la main
             DoEvents
-            PGB.Value = curByte
+            pgb.Value = curByte
         End If
         
         curByte = curByte + 51200
@@ -447,7 +447,7 @@ Dim curByteOld As Currency
       
 
  
-    X = 0: curByteOld = curByte
+    x = 0: curByteOld = curByte
     
     'obtient le handle du fichier
     lngFile = CreateFile(txtFile2.Text, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
@@ -461,7 +461,7 @@ Dim curByteOld As Currency
     curByte = 0
     Do Until curByte > lLength2  'tant que le fichier n'est pas fini
     
-        X = X + 1
+        x = x + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
@@ -477,16 +477,16 @@ Dim curByteOld As Currency
             l = lLength2 - curByte
         End If
         
-        For Y = 1 To l
-            b = Asc(Mid$(strBuffer, Y, 1))
+        For y = 1 To l
+            b = Asc(Mid$(strBuffer, y, 1))
             'ajoute une occurence
             F2(b) = F2(b) + 1
-        Next Y
+        Next y
         
-        If (X Mod 10) = 0 Then
+        If (x Mod 10) = 0 Then
             'rend la main
             DoEvents
-            PGB.Value = curByte + curByteOld
+            pgb.Value = curByte + curByteOld
         End If
         
         curByte = curByte + 51200
@@ -495,7 +495,7 @@ Dim curByteOld As Currency
     
     CloseHandle lngFile
     
-    PGB.Value = PGB.Max
+    pgb.Value = pgb.Max
     DisplayResults   'affiche les résultats
 
     Exit Sub
@@ -508,7 +508,7 @@ End Sub
 'affiche les résultats (graphes & labels)
 '=======================================================
 Private Sub DisplayResults()
-Dim X As Long
+Dim x As Long
 
     'remplit les graphes
     BG1.ClearGraphe
@@ -516,10 +516,10 @@ Dim X As Long
     BG2.ClearGraphe
     BG2.ClearValues
     
-    For X = 0 To 255
-        BG1.AddValue X, F1(X)
-        BG2.AddValue X, F2(X)
-    Next X
+    For x = 0 To 255
+        BG1.AddValue x, F1(x)
+        BG2.AddValue x, F2(x)
+    Next x
 
     'trace les graphes
     BG1.TraceGraph
@@ -545,6 +545,6 @@ Private Sub Form_Load()
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
 End Sub

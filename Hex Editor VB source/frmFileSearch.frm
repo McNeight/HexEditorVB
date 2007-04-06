@@ -318,7 +318,7 @@ Begin VB.Form frmFileSearch
             _Version        =   393216
             Enabled         =   0   'False
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   64356355
+            Format          =   16449539
             CurrentDate     =   39133.9583333333
          End
       End
@@ -627,7 +627,7 @@ Private Sub Form_Load()
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
 End Sub
 
@@ -770,7 +770,7 @@ Dim lC As Long
         'contiendra de 1 à ubound une liste de fichiers
         ReDim s(LV.ListItems.Count)
         
-        With Me.PGB
+        With Me.pgb
             .Min = 0
             .Max = LV.ListItems.Count
             .Value = 0
@@ -779,7 +779,7 @@ Dim lC As Long
         For x = LV.ListItems.Count To 1 Step -1
             Call cFile.EnumFilesFromFolder(LV.ListItems.Item(x).Text, s(x).sF(), _
                 IIf(LV.ListItems.Item(x).SubItems(1) = "Oui", True, False))
-                Me.PGB.Value = LV.ListItems.Count - x + 1
+                Me.pgb.Value = LV.ListItems.Count - x + 1
                 If bStop Then GoTo GStop
             DoEvents
         Next x
@@ -793,7 +793,7 @@ Dim lC As Long
         For x = 1 To UBound(s())
             lC = lC + UBound(s(x).sF())
         Next x
-        With Me.PGB
+        With Me.pgb
             .Max = lC
             .Min = 0
             .Value = 0
@@ -811,12 +811,12 @@ Dim lC As Long
                 lC = lC + 1
                 If (lC Mod 200) = 0 Then
                     DoEvents   'rend la main
-                    PGB.Value = lC
+                    pgb.Value = lC
                 End If
                 If bStop Then GoTo GStop
             Next i
         Next x
-        PGB.Value = PGB.Max
+        pgb.Value = pgb.Max
         Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " résultat(s)"
                 
 
@@ -828,7 +828,7 @@ Dim lC As Long
         'contiendra de 1 à ubound une liste de fichiers
         ReDim s(LV.ListItems.Count)
         
-        With Me.PGB
+        With Me.pgb
             .Min = 0
             .Max = LV.ListItems.Count
             .Value = 0
@@ -837,7 +837,7 @@ Dim lC As Long
         For x = LV.ListItems.Count To 1 Step -1
             Call cFile.EnumFolders(LV.ListItems.Item(x).Text, s(x).sF(), True, _
                 IIf(LV.ListItems.Item(x).SubItems(1) = "Oui", True, False))
-                Me.PGB.Value = LV.ListItems.Count - x + 1
+                Me.pgb.Value = LV.ListItems.Count - x + 1
                 If bStop Then GoTo GStop
             DoEvents
         Next x
@@ -851,7 +851,7 @@ Dim lC As Long
         For x = 1 To UBound(s())
             lC = lC + UBound(s(x).sF())
         Next x
-        With Me.PGB
+        With Me.pgb
             .Max = lC
             .Min = 0
             .Value = 0
@@ -869,12 +869,12 @@ Dim lC As Long
                 lC = lC + 1
                 If (lC Mod 200) = 0 Then
                     DoEvents   'rend la main
-                    PGB.Value = lC
+                    pgb.Value = lC
                 End If
                 If bStop Then GoTo GStop
             Next i
         Next x
-        PGB.Value = PGB.Max
+        pgb.Value = pgb.Max
         Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " résultat(s)"
         
     Else

@@ -593,7 +593,7 @@ End Function
 Public Function LoadFileInString(ByVal sFile As String, Optional ByRef lLoadIsOk As Long) As String
 Dim hFile As Long
 Dim lSize As Long
-Dim ret As Long
+Dim Ret As Long
 Dim s As String
     
     'On Error GoTo ErrGestion
@@ -611,13 +611,13 @@ Dim s As String
     s = String$(lSize, 0)
     
     'charge le fichier
-    ret = ReadFile(hFile, ByVal s, lSize, ret, ByVal 0&)
+    Ret = ReadFile(hFile, ByVal s, lSize, Ret, ByVal 0&)
      
     LoadFileInString = s
     
     If Not (IsMissing(lLoadIsOk)) Then
         'alors on renvoie si la fonction a marché ou pas
-        lLoadIsOk = IIf(ret > 0 And hFile > 0, 1, 0)
+        lLoadIsOk = IIf(Ret > 0 And hFile > 0, 1, 0)
     End If
     
 ErrGestion:

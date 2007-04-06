@@ -110,7 +110,7 @@ Public console_ForeColor As Long
 Public console_BackColor As Long
 Public console_Heigth As Long
 Public console_Load As Byte
- 
+
 
 'RESTE :
 'env_Lang

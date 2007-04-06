@@ -464,7 +464,7 @@ Dim s As String
                 Call AddTextToConsole("Recherche en cours...")
     
                 SearchForStringFile frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
@@ -474,7 +474,7 @@ Dim s As String
                     
                 'lance la recherche de la string
                 SearchForStringFile frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
             Else
                 Exit Sub
             End If
@@ -488,7 +488,7 @@ Dim s As String
                 Call AddTextToConsole("Recherche en cours...")
                 
                 SearchForStringDisk frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
                 
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
@@ -499,7 +499,7 @@ Dim s As String
                 
                 'lance la recherche de la string
                 SearchForStringDisk frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
             Else
                 Exit Sub
             End If
@@ -515,7 +515,7 @@ Dim s As String
                 Call AddTextToConsole("Recherche en cours...")
                 
                 SearchForStringDisk frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.PGB, True
+                tRes(), Me.pgb, True
                 
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
@@ -526,7 +526,7 @@ Dim s As String
                 
                 'lance la recherche de la string
                 SearchForStringDisk frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.PGB, True
+                tRes(), Me.pgb, True
             Else
                 Exit Sub
             End If
@@ -543,7 +543,7 @@ Dim s As String
                 
                 'lance la recherche
                 cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), txtSearch.Text, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
@@ -553,7 +553,7 @@ Dim s As String
                 
                 'lance la recherche de la string
                 cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), s, Check1.Value, _
-                tRes(), Me.PGB
+                tRes(), Me.pgb
             Else
                 Exit Sub
             End If
@@ -600,7 +600,7 @@ Private Sub Form_Load()
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
     'loading des preferences

@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmScript 
    Caption         =   "Editeur de script"
@@ -95,6 +95,7 @@ Begin VB.Form frmScript
       _ExtentY        =   4895
       _Version        =   393217
       BorderStyle     =   0
+      Enabled         =   -1  'True
       ScrollBars      =   3
       Appearance      =   0
       TextRTF         =   $"frmScript.frx":2307
@@ -411,7 +412,7 @@ Private Sub Form_Load()
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
     Call AddIconsToMenus(Me.hWnd, Me.ImageList2)    'ajoute les icones au menu
@@ -496,7 +497,7 @@ End Sub
 Private Sub mnuOpen_Click()
 'ouverture de fichier
 Dim s As String
-Dim X As Long
+Dim x As Long
 
     On Error GoTo CancelPushed
     
@@ -535,7 +536,7 @@ End Sub
 Private Sub mnuSaveAs_Click()
 'sauvegarde
 Dim s As String
-Dim X As Long
+Dim x As Long
 
     On Error GoTo CancelPushed
     
@@ -549,8 +550,8 @@ Dim X As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        X = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
-        If Not (X = vbYes) Then Exit Sub
+        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        If Not (x = vbYes) Then Exit Sub
     End If
     
     'sauvegarde du fichier
