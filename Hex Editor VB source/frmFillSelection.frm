@@ -294,7 +294,7 @@ End Sub
 Private Sub cmdDelete_Click()
 'enlève un élément de la liste
 Dim l As Long
-Dim X As Long
+Dim x As Long
 Dim tPTmp() As PASSE_TYPE
 
     On Error GoTo ErrGestion
@@ -309,19 +309,19 @@ Dim tPTmp() As PASSE_TYPE
     
     If UBound(tPTmp) = 0 Then Exit Sub   'rien à enlever
     
-    For X = 0 To l - 1
-        tPasses(X) = tPTmp(X)
-    Next X
-    For X = l + 1 To UBound(tPTmp) - 1
-        tPasses(X - 1) = tPTmp(X)
-    Next X
+    For x = 0 To l - 1
+        tPasses(x) = tPTmp(x)
+    Next x
+    For x = l + 1 To UBound(tPTmp) - 1
+        tPasses(x - 1) = tPTmp(x)
+    Next x
     
     lstPasses.Clear   'enlève les éléments de la liste
     
     'rajoute n-1 passes
-    For X = 1 To UBound(tPTmp) - 1
-        lstPasses.AddItem "Passe " & CStr(X)
-    Next X
+    For x = 1 To UBound(tPTmp) - 1
+        lstPasses.AddItem "Passe " & CStr(x)
+    Next x
     
     lstPasses.ListIndex = l - 1
     Call lstPasses_Click
@@ -386,7 +386,7 @@ Private Sub Form_Load()
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
     ReDim tPasses(0)   'initialize array

@@ -294,7 +294,7 @@ Dim s As String
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
     'mise à jour de la version et de l'USER

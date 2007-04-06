@@ -235,7 +235,7 @@ Dim Frm As Form
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
     LV.ListItems.Clear

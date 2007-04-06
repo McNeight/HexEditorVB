@@ -300,13 +300,13 @@ Dim bAddSign As Boolean
         'alors c'est un fichier classique
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
         
     ElseIf TypeOfActiveForm = "Mem" Then
         'alors c'est dans la mémoire
         
         'lance la recherche
-        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), lngRes(), strRes(), Me.PGB
+        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), lngRes(), strRes(), Me.pgb
         
         'sauvegarde dans la variable tRes
         ReDim tRes(UBound(lngRes()))
@@ -319,13 +319,13 @@ Dim bAddSign As Boolean
         'alors c'est dans le disque
 
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
         
     Else
         'disque physique
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
         
     End If
     
@@ -441,7 +441,7 @@ Private Sub Form_Load()
     End If
     
     'applique la langue désirée aux controles
-    Lang.Language = MyLang
+    Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
     'loading des preferences
