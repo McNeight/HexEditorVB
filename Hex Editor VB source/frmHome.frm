@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
 Object = "{2245E336-2835-4C1E-B373-2395637023C8}#1.0#0"; "ProcessView_OCX.ocx"
@@ -48,6 +48,7 @@ Begin VB.Form frmHome
       Height          =   375
       Left            =   120
       TabIndex        =   16
+      Tag             =   "lang_ok"
       Top             =   120
       Width           =   6495
       _ExtentX        =   11456
@@ -450,7 +451,7 @@ Begin VB.Form frmHome
             List            =   "frmHome.frx":059A
             Style           =   2  'Dropdown List
             TabIndex        =   15
-            Tag             =   "pref"
+            Tag             =   "pref lang_ok"
             ToolTipText     =   "Unité"
             Top             =   1080
             Width           =   1335
@@ -565,7 +566,7 @@ Private Sub cmdOk_Click()
 'ouvre l'élément sélectionné
 Dim m() As String
 Dim Frm As Form
-Dim X As Long
+Dim x As Long
 Dim sDrive As String
 Dim cDr As clsDiskInfos
 Dim lH As Long
@@ -596,16 +597,16 @@ Dim lLen As Double
             If cFile.EnumFilesFromFolder(txtFolder.Text, m, optFolderSub(0).Value) < 1 Then Exit Sub
             
             'les ouvre un par un
-            For X = 1 To UBound(m)
-                If cFile.FileExists(m(X)) Then
+            For x = 1 To UBound(m)
+                If cFile.FileExists(m(x)) Then
                     Set Frm = New Pfm
-                    Call Frm.GetFile(m(X))
+                    Call Frm.GetFile(m(x))
                     Frm.Show
                     lNbChildFrm = lNbChildFrm + 1
                     frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
                     DoEvents
                 End If
-            Next X
+            Next x
     
         Case 3
         
@@ -853,7 +854,7 @@ End Sub
 'FORM HOME ==> CHOIX DE L'OBJET A OUVRIR
 '=======================================================
 Private Sub Form_Load()
-Dim X As Long
+Dim x As Long
 
     Set clsPref = New clsIniForm
     
@@ -884,12 +885,12 @@ Dim X As Long
     optFolderSub(1).Value = Not (optFolderSub(0).Value)
     
     'réorganise les Frames
-    For X = 0 To Frame1.Count - 1
-        Frame1(X).Left = 120
-        Frame1(X).Top = 480
-        Frame1(X).Width = 6600
-        Frame1(X).Height = 4500
-    Next X
+    For x = 0 To Frame1.Count - 1
+        Frame1(x).Left = 120
+        Frame1(x).Top = 480
+        Frame1(x).Width = 6600
+        Frame1(x).Height = 4500
+    Next x
     
     'affiche un seul frame
     MaskFrames 0
@@ -899,11 +900,11 @@ End Sub
 'masque tous les frames sauf un
 '=======================================================
 Private Sub MaskFrames(ByVal lFrame As Long)
-Dim X As Long
+Dim x As Long
 
-    For X = 0 To Frame1.Count - 1
-        Frame1(X).Visible = False
-    Next X
+    For x = 0 To Frame1.Count - 1
+        Frame1(x).Visible = False
+    Next x
     Frame1(lFrame).Visible = True
     
     If lFrame = 4 Then

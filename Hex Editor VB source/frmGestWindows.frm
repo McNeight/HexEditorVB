@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmGestWindows 
    BorderStyle     =   1  'Fixed Single
@@ -56,6 +56,7 @@ Begin VB.Form frmGestWindows
       Height          =   3255
       Left            =   0
       TabIndex        =   0
+      Tag             =   "lang_ok"
       Top             =   0
       Width           =   7095
       _ExtentX        =   12515
@@ -147,7 +148,7 @@ Option Explicit
 Private Sub cmdCLoseIt_Click()
 'ferme les fenêtres sélectionnées
 Dim Frm As Form
-Dim X As Long
+Dim x As Long
 
     On Error GoTo ErrGestion
     
@@ -164,15 +165,15 @@ Dim X As Long
     'liste les form et ferme les sélectionnées
     For Each Frm In Forms
         If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Or (TypeOf Frm Is physPfm) Then
-            For X = LV.ListItems.Count To 1 Step -1
-                If LV.ListItems.Item(X).Selected And LV.ListItems.Item(X).SubItems(1) = _
+            For x = LV.ListItems.Count To 1 Step -1
+                If LV.ListItems.Item(x).Selected And LV.ListItems.Item(x).SubItems(1) = _
                 Frm.Caption Then
                     SendMessage Frm.hWnd, WM_CLOSE, 0, 0
                     'Unload frm
                     'lNbChildFrm = lNbChildFrm - 1
-                    LV.ListItems.Remove X
+                    LV.ListItems.Remove x
                 End If
-            Next X
+            Next x
         End If
     Next Frm
     

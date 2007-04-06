@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmRecoverFiles 
@@ -105,6 +105,7 @@ Begin VB.Form frmRecoverFiles
       Height          =   375
       Left            =   120
       TabIndex        =   0
+      Tag             =   "lang_ok"
       Top             =   120
       Width           =   6975
       _ExtentX        =   12303
@@ -238,13 +239,13 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Resize()
-Dim X As Long
+Dim x As Long
 
     'positionnement des frames
-    For X = 0 To Frame1.Count - 1
-        Frame1(X).Top = 480
-        Frame1(X).Left = 120
-    Next X
+    For x = 0 To Frame1.Count - 1
+        Frame1(x).Top = 480
+        Frame1(x).Left = 120
+    Next x
 End Sub
 
 Private Sub LV_PathChange(sOldPath As String, sNewPath As String)

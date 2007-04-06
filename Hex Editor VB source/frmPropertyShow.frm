@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmPropertyShow 
    BorderStyle     =   1  'Fixed Single
@@ -29,6 +29,7 @@ Begin VB.Form frmPropertyShow
       Left            =   120
       TabIndex        =   7
       TabStop         =   0   'False
+      Tag             =   "lang_ok"
       Top             =   120
       Width           =   7695
       _ExtentX        =   13573
@@ -249,7 +250,7 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-Dim X As Long
+Dim x As Long
 
     #If MODE_DEBUG Then
         If App.LogMode = 0 Then
@@ -271,11 +272,11 @@ Dim X As Long
     Lang.Language = MyLang
     Lang.LoadControlsCaption
     
-    For X = 0 To 2
-        Frame1(X).Top = 600
-        Frame1(X).Left = 120
-        Frame1(X).Visible = False
-    Next X
+    For x = 0 To 2
+        Frame1(x).Top = 600
+        Frame1(x).Left = 120
+        Frame1(x).Visible = False
+    Next x
     
     If TypeOfForm(frmContent.ActiveForm) = "Disque physique" Then Me.mnuDisplayWindowsProp.Enabled = False
 End Sub

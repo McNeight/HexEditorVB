@@ -215,7 +215,7 @@ Dim s As String
         ElseIf TypeOf Obj Is ComboBox Then
             
             'vérifie que le Tag est OK
-            If Obj.Tag = "lang_ok" Then
+            If InStr(1, Obj.Tag, "lang_ok", vbBinaryCompare) Then
                 'c'est bon, on loade
                 
                 'clear
@@ -241,7 +241,7 @@ Dim s As String
             'alors là faut aussi sauvegarder les Items qu'il y a dedans si tag OK
             
             'vérifie que le Tag est OK
-            If Obj.Tag = "lang_ok" Then
+            If InStr(1, Obj.Tag, "lang_ok", vbBinaryCompare) Then
                 'c'est bon, on loade
                 
                 'clear
@@ -259,6 +259,41 @@ Dim s As String
         ElseIf TypeOf Obj Is Menu Then
             'le menu
             Obj.Caption = Me.GetString(s & "|Caption")
+        ElseIf TypeOf Obj Is ListView Then
+            'on prend les en-têtes de colonne
+            
+            'vérifie que le tag est Ok
+            If InStr(1, Obj.Tag, "lang_ok", vbBinaryCompare) Then
+                'c'est bon, on loade
+                
+                'récupère le nombre d'éléments
+                Y = Val(Me.GetString(s & "|Count"))
+                
+                'ajoute les éléments
+                For X = 1 To Y
+                    Obj.ColumnHeaders.Item(X).Text = Me.GetString(s & "|Item" & _
+                        Trim$(Str$(X)))
+                Next X
+                
+            End If
+            
+        ElseIf TypeOf Obj Is TabStrip Then
+            'on prend les captions des tab
+        
+            'vérifie que le tag est Ok
+            If InStr(1, Obj.Tag, "lang_ok", vbBinaryCompare) Then
+                'c'est bon, ol loade
+                
+                'récupère le nombre d'éléments
+                Y = Val(Me.GetString(s & "|Count"))
+                
+                'ajoute les éléments
+                For X = 1 To Y
+                    Obj.Tabs.Item(X).Caption = Me.GetString(s & "|Item" & _
+                        Trim$(Str$(X)))
+                Next X
+                
+            End If
         End If
             
 
@@ -303,7 +338,7 @@ Dim s As String
         ElseIf TypeOf Obj Is ComboBox Then
             
             'vérifie que le Tag est OK
-            If Obj.Tag = "lang_ok" Then
+            If InStr(1, Obj.Tag, "lang_ok", vbBinaryCompare) Then
                 'c'est bon, on sauvegarde
                 
                 'récupère le nombre d'éléments
@@ -327,7 +362,7 @@ Dim s As String
         ElseIf TypeOf Obj Is ListBox Then
                     
             'vérifie que le Tag est OK
-            If Obj.Tag = "lang_ok" Then
+            If InStr(1, Obj.Tag, "lang_ok", vbBinaryCompare) Then
                 'c'est bon, on sauvegarde
                 
                 'récupère le nombre d'éléments
@@ -337,6 +372,38 @@ Dim s As String
                 'ajoute les éléments
                 For X = 1 To Y
                     LetPref mParent.Name, s & "|Item" & Trim$(Str$(X)), Obj.List(X - 1), sFile
+                Next X
+            End If
+        ElseIf TypeOf Obj Is ListView Then
+            
+            'vérifie que le Tag est OK
+            If InStr(1, Obj.Tag, "lang_ok", vbBinaryCompare) Then
+                'c'est bon, on sauvegarde
+                
+                'récupère le nombre d'éléments
+                LetPref mParent.Name, s & "|Count", Obj.ColumnHeaders.Count, sFile
+                Y = Val(Me.GetString(s & "|Count"))
+                
+                'ajoute les éléments
+                For X = 1 To Y
+                    LetPref mParent.Name, s & "|Item" & Trim$(Str$(X)), _
+                        Obj.ColumnHeaders.Item(X).Text, sFile
+                Next X
+                
+            End If
+        ElseIf TypeOf Obj Is TabStrip Then
+            
+            'vérifie que le Tag est OK
+            If InStr(1, Obj.Tag, "lang_ok", vbBinaryCompare) Then
+                'c'est bon, on sauvegarde
+                
+                'récupère le nombre d'éléments
+                LetPref mParent.Name, s & "|Count", Obj.Tabs.Count, sFile
+                Y = Val(Me.GetString(s & "|Count"))
+                
+                'ajoute les éléments
+                For X = 1 To Y
+                    LetPref mParent.Name, s & "|Item" & Trim$(Str$(X)), Obj.Tabs.Item(X).Caption, sFile
                 Next X
             End If
         End If

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmStringSearch 
@@ -46,6 +46,7 @@ Begin VB.Form frmStringSearch
       Left            =   120
       TabIndex        =   14
       TabStop         =   0   'False
+      Tag             =   "lang_ok"
       Top             =   3000
       Width           =   6375
       _ExtentX        =   11245
@@ -383,7 +384,7 @@ Private Sub cmdSave_Click()
 'sauvegarde les résultats
 Dim lFile As Long
 Dim sFile As String
-Dim X As Long
+Dim x As Long
 
     On Error GoTo CancelPushed
     
@@ -408,10 +409,10 @@ Dim X As Long
     
     Print #lFile, "Recherche de [" & txtSize.Text & "] caractères consécutifs" & vbNewLine & "[fichier]=" & sFile & vbNewLine & "[date]=" & Date$ & "  " & Time$ & vbNewLine & "[match]=" & LV.ListItems.Count
     
-    For X = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
-        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(X)) & "  [string]=" & LV.ListItems.Item(X).SubItems(1)
+    For x = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
+        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(x)) & "  [string]=" & LV.ListItems.Item(x).SubItems(1)
         DoEvents
-    Next X
+    Next x
     
     Close lFile
     

@@ -189,7 +189,7 @@ Begin VB.Form frmAdvancedConversion
          List            =   "frmAdvancedConversion.frx":05A0
          Style           =   2  'Dropdown List
          TabIndex        =   4
-         Tag             =   "pref"
+         Tag             =   "pref lang_ok"
          ToolTipText     =   "Base d'arrivée"
          Top             =   420
          Width           =   1815
@@ -201,7 +201,7 @@ Begin VB.Form frmAdvancedConversion
          List            =   "frmAdvancedConversion.frx":05F6
          Style           =   2  'Dropdown List
          TabIndex        =   2
-         Tag             =   "pref"
+         Tag             =   "pref lang_ok"
          ToolTipText     =   "Base de départ"
          Top             =   60
          Width           =   1815
@@ -512,11 +512,11 @@ Private Sub Form_Unload(Cancel As Integer)
     Set cConv = Nothing
 End Sub
 
-Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
 End Sub
-Private Sub Frame2_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Frame2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp2
 End Sub
@@ -554,11 +554,11 @@ Private Sub optUseSeparator_Click()
     End If
 End Sub
 
-Private Sub Picture1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Picture1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
 End Sub
-Private Sub Picture2_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Picture2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp2
 End Sub
@@ -572,7 +572,7 @@ Dim s As String
 Dim LS As Long
 Dim lmax As Long
 Dim sSep As String
-Dim X As Long
+Dim x As Long
 Dim sA() As String
 
     If cbI.ListIndex < 0 Or cbO.ListIndex < 0 Then Exit Sub 'pas de base sélectionnée
@@ -593,16 +593,16 @@ Dim sA() As String
         Me.Caption = "Conversion..."
         
         lmax = Len(txtI.Text)
-        For X = 1 To lmax Step LS
+        For x = 1 To lmax Step LS
         
-            If (X Mod 1000) = 0 Then DoEvents
+            If (x Mod 1000) = 0 Then DoEvents
             
             'on extrait le(s) caractère(s)
-            s = Mid$(txtI.Text, X, LS)
+            s = Mid$(txtI.Text, x, LS)
             
             'on récupère la valeur formatée et on ajoute au buffer final
             sO = sO & GetCv(s)
-        Next X
+        Next x
         
         'on affiche çà
         txtO.Text = sO
@@ -625,11 +625,11 @@ Dim sA() As String
         'récupère toutes les valeurs séparément
         sA() = Split(txtI.Text, sSep, , vbBinaryCompare)
         
-        For X = 0 To UBound(sA())
+        For x = 0 To UBound(sA())
         
-            If (X Mod 1000) = 0 Then DoEvents
-            sO = sO & GetCv(sA(X)) & sSep
-        Next X
+            If (x Mod 1000) = 0 Then DoEvents
+            sO = sO & GetCv(sA(x)) & sSep
+        Next x
         
         'on affiche en virant le dernier séparateur
         txtO.Text = Left$(sO, Len(sO) - Len(sSep))
