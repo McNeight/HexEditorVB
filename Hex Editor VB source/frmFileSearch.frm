@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
@@ -91,6 +91,7 @@ Begin VB.Form frmFileSearch
             Height          =   2535
             Left            =   0
             TabIndex        =   27
+            Tag             =   "lang_ok"
             Top             =   0
             Width           =   6375
             _ExtentX        =   11245
@@ -135,6 +136,7 @@ Begin VB.Form frmFileSearch
             Height          =   2895
             Left            =   0
             TabIndex        =   7
+            Tag             =   "lang_ok"
             Top             =   480
             Width           =   2655
             _ExtentX        =   4683
@@ -201,7 +203,7 @@ Begin VB.Form frmFileSearch
             List            =   "frmFileSearch.frx":05CF
             Style           =   2  'Dropdown List
             TabIndex        =   18
-            Tag             =   "pref"
+            Tag             =   "pref lang_ok"
             ToolTipText     =   "Type de date"
             Top             =   1080
             Width           =   1935
@@ -214,7 +216,7 @@ Begin VB.Form frmFileSearch
             List            =   "frmFileSearch.frx":0610
             Style           =   2  'Dropdown List
             TabIndex        =   16
-            Tag             =   "pref"
+            Tag             =   "pref lang_ok"
             ToolTipText     =   "Opérateur de recherche"
             Top             =   1080
             Width           =   855
@@ -236,7 +238,7 @@ Begin VB.Form frmFileSearch
             List            =   "frmFileSearch.frx":0638
             Style           =   2  'Dropdown List
             TabIndex        =   12
-            Tag             =   "pref"
+            Tag             =   "pref lang_ok"
             ToolTipText     =   "Opérateur de recherche"
             Top             =   600
             Width           =   855
@@ -262,7 +264,7 @@ Begin VB.Form frmFileSearch
             List            =   "frmFileSearch.frx":065D
             Style           =   2  'Dropdown List
             TabIndex        =   14
-            Tag             =   "pref"
+            Tag             =   "pref lang_ok"
             ToolTipText     =   "Unité"
             Top             =   600
             Width           =   1095
@@ -316,7 +318,7 @@ Begin VB.Form frmFileSearch
             _Version        =   393216
             Enabled         =   0   'False
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63635459
+            Format          =   64356355
             CurrentDate     =   39133.9583333333
          End
       End
@@ -561,7 +563,7 @@ End Sub
 Private Sub cmdSave_Click()
 'sauvegarde les résultats
 Dim sFile As String
-Dim X As Long
+Dim x As Long
 Dim lFile As Long
 
     If LVres.ListItems.Count = 0 Then
@@ -593,10 +595,10 @@ Dim lFile As Long
     'ouvre le fichier
     Open sFile For Append As lFile
     
-    For X = 1 To LVres.ListItems.Count
+    For x = 1 To LVres.ListItems.Count
         'sauvegarde la string
-        Print #lFile, LVres.ListItems.Item(X).Text
-    Next X
+        Print #lFile, LVres.ListItems.Item(x).Text
+    Next x
     
     'referme le fichier
     Close lFile
@@ -647,10 +649,10 @@ Dim r As Long
     Call CheckSearch 'vérifie qu'une recherche est possible
 End Sub
 
-Private Sub LV_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'change l'attribut "sous dossier"
 
-    Set It = LV.HitTest(X, Y)
+    Set It = LV.HitTest(x, y)
     If It Is Nothing Then Exit Sub
 
     If Button = 2 Then
@@ -659,7 +661,7 @@ Private Sub LV_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As 
     End If
 End Sub
 
-Private Sub LVres_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub LVres_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     If Button = 2 Then
         Me.PopupMenu Me.rmnuResPop
     End If
@@ -731,7 +733,7 @@ End Sub
 Private Sub LaunchSearch(ByVal tMet As TYPE_OF_FILE_SEARCH)
 Dim s() As FILE_SEARCH_RESULT
 Dim i As Long
-Dim X As Long
+Dim x As Long
 Dim lC As Long
 
     'efface le lv de resultats
@@ -774,13 +776,13 @@ Dim lC As Long
             .Value = 0
         End With
         'indexation des fichiers
-        For X = LV.ListItems.Count To 1 Step -1
-            Call cFile.EnumFilesFromFolder(LV.ListItems.Item(X).Text, s(X).sF(), _
-                IIf(LV.ListItems.Item(X).SubItems(1) = "Oui", True, False))
-                Me.PGB.Value = LV.ListItems.Count - X + 1
+        For x = LV.ListItems.Count To 1 Step -1
+            Call cFile.EnumFilesFromFolder(LV.ListItems.Item(x).Text, s(x).sF(), _
+                IIf(LV.ListItems.Item(x).SubItems(1) = "Oui", True, False))
+                Me.PGB.Value = LV.ListItems.Count - x + 1
                 If bStop Then GoTo GStop
             DoEvents
-        Next X
+        Next x
         
         
         '//recherche dans les fichiers indexés
@@ -788,9 +790,9 @@ Dim lC As Long
             
         lC = 0
         'compte le nombre de fichiers
-        For X = 1 To UBound(s())
-            lC = lC + UBound(s(X).sF())
-        Next X
+        For x = 1 To UBound(s())
+            lC = lC + UBound(s(x).sF())
+        Next x
         With Me.PGB
             .Max = lC
             .Min = 0
@@ -800,11 +802,11 @@ Dim lC As Long
         'teste chaque élément
         lC = 0
         LVres.Visible = False
-        For X = 1 To UBound(s())
-            For i = 1 To UBound(s(X).sF())
-                If IsOk(s(X).sF(i)) Then
+        For x = 1 To UBound(s())
+            For i = 1 To UBound(s(x).sF())
+                If IsOk(s(x).sF(i)) Then
                     'on ajoute
-                    LVres.ListItems.Add Text:=s(X).sF(i)
+                    LVres.ListItems.Add Text:=s(x).sF(i)
                 End If
                 lC = lC + 1
                 If (lC Mod 200) = 0 Then
@@ -813,7 +815,7 @@ Dim lC As Long
                 End If
                 If bStop Then GoTo GStop
             Next i
-        Next X
+        Next x
         PGB.Value = PGB.Max
         Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " résultat(s)"
                 
@@ -832,13 +834,13 @@ Dim lC As Long
             .Value = 0
         End With
         'indexation des dossiers
-        For X = LV.ListItems.Count To 1 Step -1
-            Call cFile.EnumFolders(LV.ListItems.Item(X).Text, s(X).sF(), True, _
-                IIf(LV.ListItems.Item(X).SubItems(1) = "Oui", True, False))
-                Me.PGB.Value = LV.ListItems.Count - X + 1
+        For x = LV.ListItems.Count To 1 Step -1
+            Call cFile.EnumFolders(LV.ListItems.Item(x).Text, s(x).sF(), True, _
+                IIf(LV.ListItems.Item(x).SubItems(1) = "Oui", True, False))
+                Me.PGB.Value = LV.ListItems.Count - x + 1
                 If bStop Then GoTo GStop
             DoEvents
-        Next X
+        Next x
         
         
         '//recherche dans les dossiers indexés
@@ -846,9 +848,9 @@ Dim lC As Long
         
         lC = 0
         'compte le nombre de dossiers
-        For X = 1 To UBound(s())
-            lC = lC + UBound(s(X).sF())
-        Next X
+        For x = 1 To UBound(s())
+            lC = lC + UBound(s(x).sF())
+        Next x
         With Me.PGB
             .Max = lC
             .Min = 0
@@ -858,11 +860,11 @@ Dim lC As Long
         'teste chaque élément
         lC = 0
         LVres.Visible = False
-        For X = 1 To UBound(s())
-            For i = 1 To UBound(s(X).sF())
-                If IsOk(s(X).sF(i)) Then
+        For x = 1 To UBound(s())
+            For i = 1 To UBound(s(x).sF())
+                If IsOk(s(x).sF(i)) Then
                     'on ajoute
-                    LVres.ListItems.Add Text:=s(X).sF(i)
+                    LVres.ListItems.Add Text:=s(x).sF(i)
                 End If
                 lC = lC + 1
                 If (lC Mod 200) = 0 Then
@@ -871,7 +873,7 @@ Dim lC As Long
                 End If
                 If bStop Then GoTo GStop
             Next i
-        Next X
+        Next x
         PGB.Value = PGB.Max
         Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " résultat(s)"
         

@@ -92,7 +92,7 @@ Begin VB.Form frmConvert
             List            =   "frmConvert.frx":05A0
             Style           =   2  'Dropdown List
             TabIndex        =   4
-            Tag             =   "pref"
+            Tag             =   "pref lang_ok"
             ToolTipText     =   "Base d'arrivée"
             Top             =   120
             Width           =   1575
@@ -157,7 +157,7 @@ Begin VB.Form frmConvert
             List            =   "frmConvert.frx":05F6
             Style           =   2  'Dropdown List
             TabIndex        =   1
-            Tag             =   "pref"
+            Tag             =   "pref lang_ok"
             ToolTipText     =   "Base de départ"
             Top             =   120
             Width           =   1575

@@ -105,7 +105,7 @@ Begin VB.Form frmExport
             List            =   "frmExport.frx":0022
             Style           =   2  'Dropdown List
             TabIndex        =   3
-            Tag             =   "pref"
+            Tag             =   "pref lang_ok"
             ToolTipText     =   "Format d'exportation"
             Top             =   120
             Width           =   3975
@@ -284,7 +284,7 @@ End Sub
 
 Private Sub cmdSave_Click()
 'lance la sauvegarde
-Dim X As Long
+Dim x As Long
 
     'ajoute du texte à la console
     Call AddTextToConsole("Exportation en cours...")
@@ -304,8 +304,8 @@ Dim X As Long
     Select Case cbFormat.Text
         Case "HTML"
             
-            X = Int(Abs(Val(txtOpt.Text)))
-            If X < 1 Or X > 10 Then
+            x = Int(Abs(Val(txtOpt.Text)))
+            If x < 1 Or x > 10 Then
                 MsgBox "Taille non valide", vbCritical, "Attention"
                 GoTo ResumeMe
             End If
@@ -313,11 +313,11 @@ Dim X As Long
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    frmContent.ActiveForm.Caption, -1, , X, CBool(chkClip.Value))
+                    frmContent.ActiveForm.Caption, -1, , x, CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    "az", 1, 1, X, CBool(chkClip.Value))
+                    "az", 1, 1, x, CBool(chkClip.Value))
             End If
             
         Case "RTF"

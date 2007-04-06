@@ -50,7 +50,7 @@ Begin VB.Form frmNew
       List            =   "frmNew.frx":059A
       Style           =   2  'Dropdown List
       TabIndex        =   1
-      Tag             =   "pref"
+      Tag             =   "pref lang_ok"
       ToolTipText     =   "Unité"
       Top             =   720
       Width           =   1335

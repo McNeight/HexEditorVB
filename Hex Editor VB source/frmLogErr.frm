@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmLogErr 
    BorderStyle     =   3  'Fixed Dialog
@@ -49,6 +49,7 @@ Begin VB.Form frmLogErr
       Height          =   2775
       Left            =   120
       TabIndex        =   3
+      Tag             =   "lang_ok"
       Top             =   1320
       Width           =   8295
       _ExtentX        =   14631
@@ -178,7 +179,7 @@ End Sub
 
 Private Sub Form_Load()
 Dim var As Variant
-Dim X As Long
+Dim x As Long
 
     #If MODE_DEBUG Then
         If App.LogMode = 0 Then
@@ -206,14 +207,14 @@ Dim X As Long
     'affiche tout за dans le LV
     LV.ListItems.Clear
     
-    For X = 1 To clsERREUR.NumberOfErrorInLogFile
-        LV.ListItems.Add Text:=var(X).ErrDate
-        LV.ListItems.Item(X).SubItems(1) = var(X).ErrTime
-        LV.ListItems.Item(X).SubItems(2) = var(X).ErrZone
-        LV.ListItems.Item(X).SubItems(3) = var(X).ErrSource
-        LV.ListItems.Item(X).SubItems(4) = var(X).ErrNumber
-        LV.ListItems.Item(X).SubItems(5) = var(X).ErrDescription
-    Next X
+    For x = 1 To clsERREUR.NumberOfErrorInLogFile
+        LV.ListItems.Add Text:=var(x).ErrDate
+        LV.ListItems.Item(x).SubItems(1) = var(x).ErrTime
+        LV.ListItems.Item(x).SubItems(2) = var(x).ErrZone
+        LV.ListItems.Item(x).SubItems(3) = var(x).ErrSource
+        LV.ListItems.Item(x).SubItems(4) = var(x).ErrNumber
+        LV.ListItems.Item(x).SubItems(5) = var(x).ErrDescription
+    Next x
     
     If clsERREUR.NumberOfErrorInLogFile <> 0 Then
         'il y a des erreurs
