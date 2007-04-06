@@ -344,9 +344,9 @@ Dim s As String
         s = s & vbNewLine & "Vous devez :" & vbNewLine & "1) Choisir un modèle, c'est à dire un fichier de langue déjà existant"
         s = s & vbNewLine & "2) Créer votre fichier de langue en traduisant dans la colonne de gauche les textes de droite"
         s = s & vbNewLine & "3) Sauvegarder votre nouveau fichier de langue"
-        s = s & vbNewLine & "4) Vous pouvez 'Copier le modèle dans le presse papier, coller dans google traduction, copier le"
+        s = s & vbNewLine & "4) Vous pouvez 'Copier le modèle dans le presse papier', coller dans google traduction, copier le"
         s = s & vbNewLine & "résultat traduit, et 'Insérer depuis le presse papier'"
-        s = s & vbNewLine & "Il est (très fortement) conseillé de faire une traduction depuis le modèle anglais."
+        s = s & vbNewLine & "Il est (très fortement) conseillé de faire une traduction google depuis le modèle anglais."
         s = s & vbNewLine & vbNewLine & "By violent_ken"
     Else
         s = "Lang Editor Tool for Hex Editor VB" & vbNewLine
@@ -355,7 +355,7 @@ Dim s As String
         s = s & vbNewLine & "3) Save your new lang file"
         s = s & vbNewLine & "4) You can 'Copy model to clipboard', paste it in Google Traduction, copy it"
         s = s & vbNewLine & "to clipboard and 'Insert from clipboard' the translation"
-        s = s & vbNewLine & "It is (very strongly) advised to make a translation from the English model."
+        s = s & vbNewLine & "It is (very strongly) advised to make a google translation from the English model."
         s = s & vbNewLine & vbNewLine & "By violent_ken"
     End If
     
