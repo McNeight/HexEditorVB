@@ -1,8 +1,9 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmInformations 
-   Caption         =   "Informations"
+   Caption         =   "Informations sur le fichier"
    ClientHeight    =   7155
    ClientLeft      =   120
    ClientTop       =   420
@@ -136,10 +137,15 @@ Begin VB.Form frmInformations
          Strikethrough   =   0   'False
       EndProperty
    End
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin VB.Label Label1 
       Alignment       =   2  'Center
       BackColor       =   &H00C0C0C0&
-      Caption         =   "Sections"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   9.75
@@ -199,6 +205,28 @@ Option Explicit
 '=======================================================
 
 Private sStr As String
+
+Private Sub Form_Load()
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang\Disassembler\"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = cPref.env_Lang
+    Lang.LoadControlsCaption
+End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     frmDisAsm.mnuShowInfos.Checked = False

@@ -555,14 +555,14 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "15:56"
+            TextSave        =   "11:46"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "06/04/2007"
+            TextSave        =   "10/04/2007"
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1442,7 +1442,7 @@ Dim Frm As Form
     Call Frm.GetFile(Item.Tag)
     Frm.Show
     lNbChildFrm = lNbChildFrm + 1
-    Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+    Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
     
     Exit Sub
 ErrGestion:
@@ -1484,7 +1484,7 @@ Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As 
 End Sub
 
 Private Sub LV_PathChange(sOldPath As String, sNewPath As String)
-    DisplayPath 'affiche le path dans la "barre d'adresse"
+    Call DisplayPath 'affiche le path dans la "barre d'adresse"
 End Sub
 
 Private Sub MDIForm_Activate()
@@ -1511,7 +1511,7 @@ Dim x As Long
     
     frmSplash.lblState.Caption = "Récupération des fichiers de langue..."
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -1534,7 +1534,8 @@ Dim x As Long
     For x = 1 To UBound(sLang())
         'ajoute une entrée au menu
         Load Me.mnuLang(x)
-        Me.mnuLang(x).Caption = Left$(cFile.GetFileFromPath(sLang(x)), Len(cFile.GetFileFromPath(sLang(x))) - 4)
+        Me.mnuLang(x).Caption = Left$(cFile.GetFileFromPath(sLang(x)), _
+            Len(cFile.GetFileFromPath(sLang(x))) - 4)
     Next x
     
     'coche le bon menu
@@ -1545,7 +1546,7 @@ Dim x As Long
 
     
     'loading des preferences
-    frmSplash.lblState.Caption = "Chargement des préférences..."
+    frmSplash.lblState.Caption = Lang.GetString("_LoadingPref")
     clsPref.GetFormSettings App.Path & "\Preferences\FrmContent.ini", Me
     
     'valeurs par défaut
@@ -1567,7 +1568,7 @@ Dim x As Long
         Call cSub.HookFormMenu(Me, True)
     #End If
     
-    frmSplash.lblState.Caption = "Vérifie la présence de FileRenamer, Disassembler et LangEditor..."
+    frmSplash.lblState.Caption = Lang.GetString("_CheckForEXEs")
     'vérifie la présence de FileRenamer.exe
     If cFile.FileExists(App.Path & "\FileRenamer.exe") = False Then
         Me.mnuFileRenamer.Enabled = False
@@ -1588,14 +1589,14 @@ Dim x As Long
     End If
     
     'ajoute les icones aux menus
-    frmSplash.lblState.Caption = "Ajout des icones aux menus..."
+    frmSplash.lblState.Caption = Lang.GetString("_AddIconsMenus")
     Call AddIconsToMenus(Me.hWnd, Me.ImageList2)
         
     lNbChildFrm = 0
     
     'Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
     
-    frmSplash.lblState.Caption = "Lecture des préférences..."
+    frmSplash.lblState.Caption = Lang.GetString("_ReadPref")
     With cPref
         Me.mnuEditTools.Checked = .general_DisplayData
         Me.mnuInformations.Checked = .general_DisplayInfos
@@ -1617,7 +1618,7 @@ Dim x As Long
     
     
     If cPref.general_DisplayExplore Then
-        frmSplash.lblState.Caption = "Lancement de l'explorateur de fichiers..."
+        frmSplash.lblState.Caption = Lang.GetString("_ExploLau")
         
         'loading de la taille de l'explorer
         Me.pctExplorer.Height = cPref.explo_Height
@@ -1632,7 +1633,7 @@ Dim x As Long
             
             .Height = cPref.explo_Height - 145
             
-            If cPref.explo_DefaultPath = "Dossier du programme" Then
+            If cPref.explo_DefaultPath = Lang.GetString("_ProgramDir!") Then
                 'alors c'est dans app.path
                 .Path = App.Path
             Else
@@ -1679,7 +1680,7 @@ Private Sub MDIForm_QueryUnload(Cancel As Integer, UnloadMode As Integer)
 Dim Frm As Form
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Fermeture du logiciel...")
+    Call AddTextToConsole(Lang.GetString("_Closing"))
     
     Call SaveQuickBackupINIFile     'permet de sauver (si nécessaire) l'état du programme
     
@@ -1690,7 +1691,8 @@ Dim Frm As Form
     
     'ferme toute les fenêtres
     For Each Frm In Forms
-        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Or (TypeOf Frm Is physPfm) Then
+        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) _
+            Or (TypeOf Frm Is physPfm) Then
             SendMessage Frm.hWnd, WM_CLOSE, 0, 0
         End If
     Next Frm
@@ -1723,7 +1725,7 @@ Dim s As String
     Set Me.ActiveForm.pct.Picture = Nothing
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Icone copiée dans le presse-papier")
+    Call AddTextToConsole(Lang.GetString("_IconCopy"))
 End Sub
 
 Public Sub mnuCut_Click()
@@ -1741,7 +1743,7 @@ Private Sub mnuDeleteSelection_Click()
     If bAcceptBackup Then frmContent.ActiveForm.DeleteZone
 
     'ajoute du texte à la console
-    If bAcceptBackup Then Call AddTextToConsole("Sélection supprimée")
+    If bAcceptBackup Then Call AddTextToConsole(Lang.GetString("_SelDeled"))
 End Sub
 
 Private Sub mnuDisAsm_Click()
@@ -1749,7 +1751,7 @@ Private Sub mnuDisAsm_Click()
     cFile.ShellOpenFile App.Path & "\Disassembler.exe", Me.hWnd, , App.Path
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Application de désassemblage lancée")
+    Call AddTextToConsole(Lang.GetString("_DisASMLau"))
 
 End Sub
 
@@ -1761,7 +1763,7 @@ Private Sub mnuDisAsmThisFile_Click()
     On Error Resume Next
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Désassemblage du fichier exécuté")
+    Call AddTextToConsole(Lang.GetString("_DisASMFileOk"))
     
     'lance l'exe de désassemblage avce le fichier en paramètre d'ouverture
     Shell App.Path & "\Disassembler.exe " & Chr$(34) & Me.ActiveForm.Caption & Chr$(34), vbNormalFocus
@@ -1801,7 +1803,7 @@ Dim x As Long
     s = Replace$(s, "&", vbNullString)
     
     'vérifie la présence du fichier
-    If cFile.FileExists(s) = False Then MsgBox "Le fichier de langue n'existe pas !", vbCritical, "Erreur": Exit Sub
+    If cFile.FileExists(s) = False Then MsgBox Lang.GetString("_LangFileNot"), vbCritical, Lang.GetString("_Error"): Exit Sub
     
     'on décoche tout les menus
     For x = 1 To UBound(sLang())
@@ -1812,7 +1814,7 @@ Dim x As Long
     mnuLang(Index).Checked = True
     
     'on affiche un message comme quoi il faut redémarrer
-    MsgBox "Vous devez fermer puis relancer Hex Editor VB pour que les modifications" & vbNewLine & "de la langue prenne complètement effet.", vbInformation, "Attention"
+    MsgBox Lang.GetString("_HaveTo1") & vbNewLine & Lang.GetString("_HaveTo2"), vbInformation, Lang.GetString("_War")
     
     'on change les pref
     cPref.env_Lang = mnuLang(Index).Caption
@@ -1821,7 +1823,8 @@ Dim x As Long
     Call cPRE.SaveIniFile(cPref)
     Set cPRE = Nothing
     
-    'Call EndProgram
+    'on ferme si pas dans l'IDE
+    If App.LogMode <> 0 Then Call EndProgram
 End Sub
 
 Private Sub mnuLangEditor_Click()
@@ -1829,7 +1832,7 @@ Private Sub mnuLangEditor_Click()
     cFile.ShellOpenFile App.Path & "\LangEditor.exe", Me.hWnd, , App.Path
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Outils d'édition de langue lancé")
+    Call AddTextToConsole(Lang.GetString("_LangEditorLau"))
 End Sub
 
 Private Sub mnuRecoverFiles_Click()
@@ -1928,7 +1931,7 @@ Dim Frm As Form
             Call Frm.GetFile(Data.Files.Item(i))
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
-            Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+            Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
 
         ElseIf cFile.FolderExists(Data.Files.Item(i)) Then
             'alors on ajoute le contenu du dossier
@@ -1943,7 +1946,7 @@ Dim Frm As Form
                     Call Frm.GetFile(m(i2))
                     Frm.Show
                     lNbChildFrm = lNbChildFrm + 1
-                    Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+                    Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
                     DoEvents
                 End If
             Next i2
@@ -2067,7 +2070,7 @@ Dim x As Long
     
     If Me.ActiveForm Is Nothing Then Exit Sub
         
-    lRep = MsgBox("Fermer toutes les fenêtres ?", vbYesNo + vbInformation, "Attention")
+    lRep = MsgBox(Lang.GetString("_CloseAllW"), vbYesNo + vbInformation, Lang.GetString("_War"))
     If Not (lRep = vbYes) Then Exit Sub
     
     Do While Not (Me.ActiveForm Is Nothing)
@@ -2422,18 +2425,19 @@ Dim bOver As Boolean
     
     If curSize > 200000000 Then
         'fichier >200Mo, demande de confirmation
-        If MsgBox("Le fichier créé aura une taille supérieure à 200Mo. Continuer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_FileWillBeLARGE"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
     
     'demande le fichier résultat
     With CMD
         .CancelError = True
-        .DialogTitle = "Sauvegarde de la sélection"
-        .Filter = "Tous |*.*|Fichier de donnée|*.dat"
+        .DialogTitle = Lang.GetString("_SavingSel")
+        .Filter = Lang.GetString("_All") & " |*.*|" & Lang.GetString("_DatFile") & "|*.dat"
+        .Filename = vbNullString
         .ShowSave
         If cFile.FileExists(.Filename) Then
             'le fichier existe déjà
-            If MsgBox("Le fichier existe déjà, l'écraser ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+            If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
         End If
         'créé un fichier vide
         cFile.CreateEmptyFile .Filename, True
@@ -2441,7 +2445,7 @@ Dim bOver As Boolean
     
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Création du fichier en cours...")
+    Call AddTextToConsole(Lang.GetString("_CreatingFileCour"))
     
     If TypeOfForm(Me.ActiveForm) = "Fichier" Then
         'alors on sauvegarde en utilisant ReadFile dans un fichier
@@ -2455,7 +2459,7 @@ Dim bOver As Boolean
     End If
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Fichier créé")
+    Call AddTextToConsole(Lang.GetString("_CreaDone"))
     
 CancelPushed:
 End Sub
@@ -2464,7 +2468,7 @@ Private Sub mnuCreateFileFromSelelection_Click()
 Dim x As Long
 
     'créé un fichier depuis la sélection
-    x = MsgBox("Voulez vous créer un nouveau fichier ('non' permet de stocker les données à la suite du fichier) ?", vbQuestion + vbYesNo, "Type de sauvegarde")
+    x = MsgBox(Lang.GetString("_WannaNewFile"), vbQuestion + vbYesNo, Lang.GetString("_SaveType"))
     
     Call CreateFileFromCurrentSelection(x)
 End Sub
@@ -2512,7 +2516,7 @@ Dim x As Long
             Call Frm.GetFile(sFile(x).Tag)
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
-            Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+            Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
         End If
         DoEvents
     Next x
@@ -2562,7 +2566,7 @@ Private Sub mnuExecuteScript_Click()
 
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Script exécuté")
+    Call AddTextToConsole(Lang.GetString("_ScriptEXE"))
 End Sub
 
 Private Sub mnuFileRenamer_Click()
@@ -2571,7 +2575,7 @@ Private Sub mnuFileRenamer_Click()
     cFile.ShellOpenFile App.Path & "\FileRenamer.exe", Me.hWnd, , App.Path
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Application de renommage massif lancée")
+    Call AddTextToConsole(Lang.GetString("_FileRenamerLau"))
     
 End Sub
 
@@ -2604,7 +2608,7 @@ Dim l As Currency
     On Error Resume Next
     
     If Me.ActiveForm Is Nothing Then Exit Sub
-    s = InputBox("Se déplacer de combien d'octets (négatif pour reculer) ?", "Changement d'offset")
+    s = InputBox(Lang.GetString("_HowMove"), Lang.GetString("_OffChange"))
     If StrPtr(s) = 0 Then Exit Sub  'cancel
     
     'alors on va à l'offset
@@ -2699,12 +2703,12 @@ Dim sExt As String
     sExt = cFile.GetFileExtension(Me.ActiveForm.Caption)
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Création d'un fichier temporaire pour l'exécution...")
+    Call AddTextToConsole(Lang.GetString("_CreaTempCour"))
     
     ExecuteTempFile Me.hWnd, Me.ActiveForm, sExt
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Fichier temporaire exécuté")
+    Call AddTextToConsole(Lang.GetString("_CreaTempOk"))
 End Sub
 
 Public Sub mnuExit_Click()
@@ -2742,7 +2746,7 @@ Private Sub mnuExploreDisplay_Click()
             
             .Height = cPref.explo_Height - 370
             
-            If cPref.explo_DefaultPath = "Dossier du programme" Then
+            If cPref.explo_DefaultPath = Lang.GetString("_ProgramDir!") Then
                 'alors c'est dans app.path
                 .Path = App.Path
             Else
@@ -2806,7 +2810,7 @@ Dim l As Currency
     On Error Resume Next
     
     If Me.ActiveForm Is Nothing Then Exit Sub
-    s = InputBox("Aller à quel offset ?", "Changement d'offset")
+    s = InputBox(Lang.GetString("_MoveToWich"), Lang.GetString("_OffChange"))
     If StrPtr(s) = 0 Then Exit Sub  'cancel
     
     'alors on va à l'offset (si possible)
@@ -2826,8 +2830,8 @@ Private Sub mnuHelp_Click()
     'On Error GoTo 5
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Affichage de l'aide")
-    
+    Call AddTextToConsole(Lang.GetString("_HelpDis"))
+
     'ShellExecute Me.hWnd, "open", App.Path & "\aide.chm", vbNullString, vbNullString, 1
     
     ' Dim s() As Byte
@@ -2896,8 +2900,9 @@ Dim x As Long
 Dim Frm As Form
     
     ReDim s(0)
-    s2 = cFile.ShowOpen("Choix des fichiers à ouvrir", Me.hWnd, "Tous|*.*", , , , , _
-        OFN_EXPLORER + OFN_ALLOWMULTISELECT, 4096, s())
+    s2 = cFile.ShowOpen(Lang.GetString("_SelFileToOpen"), Me.hWnd, _
+        Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
+        OFN_ALLOWMULTISELECT, 4096, s())
     
     For x = 1 To UBound(s())
         If cFile.FileExists(s(x)) Then
@@ -2917,7 +2922,7 @@ Dim Frm As Form
         lNbChildFrm = lNbChildFrm + 1
     End If
 
-    Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+    Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
     
 End Sub
 
@@ -2940,7 +2945,7 @@ Dim Frm As Form
 Dim x As Long
 
     'sélectionne un répertoire
-    sDir = cFile.BrowseForFolder("Sélectionner un répertoire", Me.hWnd)
+    sDir = cFile.BrowseForFolder(Lang.GetString("_SelADir"), Me.hWnd)
     
     'teste la validité du répertoire
     If cFile.FolderExists(sDir) = False Then Exit Sub
@@ -2955,7 +2960,7 @@ Dim x As Long
             Call Frm.GetFile(m(x))
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
-            Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+            Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
             DoEvents
         End If
     Next x
@@ -2974,22 +2979,22 @@ On Error Resume Next
     
     If cFile.FileExists(Me.ActiveForm.Caption) = False Then
         'pas de fichier
-        MsgBox "Fichier inexistant", vbInformation, "Impossible d'ouvrir"
+        MsgBox Lang.GetString("_FileAbsent"), vbInformation, Lang.GetString("_CanNotOpen")
     End If
     
     If cFile.GetFileSize(Me.ActiveForm.Caption) > 1000000 Then
         'fichier de plus de 700Ko
-        x = MsgBox("Votre fichier fait plus de 1Mo." & vbNewLine & "Il n'est pas conseillé d'ouvrir un fichier de cette taille" & vbNewLine & "avec le bloc-notes. Continuer ?", vbInformation + vbYesNo, "Attention")
+        x = MsgBox(Lang.GetString("_FileMakeMoreThan") & vbNewLine & Lang.GetString("_ShoudNotBN"), vbInformation + vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
     End If
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Ouverture dans le bloc notes...")
+    Call AddTextToConsole(Lang.GetString("_BNLau"))
     
     Shell "notepad " & Me.ActiveForm.Caption, vbNormalFocus
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Ouverture dans le bloc notes terminée")
+    Call AddTextToConsole(Lang.GetString("_BNOk"))
 End Sub
 
 Private Sub mnuOpenProcess_Click()
@@ -3058,13 +3063,13 @@ Private Sub mnuRemoveAll_Click()
     If Me.ActiveForm Is Nothing Then Exit Sub
     
     'confirmation
-    If MsgBox("Êtes vous sur de vouloir supprimer tous les signets ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+    If MsgBox(Lang.GetString("_SureDelAllSig"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
     
     Me.ActiveForm.HW.RemoveAllSignets
     Me.ActiveForm.lstSignets.ListItems.Clear
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Signets supprimés")
+    Call AddTextToConsole(Lang.GetString("_SigDeled"))
 End Sub
 
 Private Sub mnuRemoveSignet_Click()
@@ -3116,8 +3121,9 @@ Dim s As String
     'affiche la boite de dialogue "sauvegarder"
     With frmContent.CMD
         .CancelError = True
-        .DialogTitle = "Sauvegarder une image bitmap"
+        .DialogTitle = Lang.GetString("_SaveBMP")
         .Filter = "Bitmap Image|*.bmp|"
+        .Filename = vbNullString
         .ShowSave
         s = .Filename
     End With
@@ -3129,7 +3135,7 @@ Dim s As String
     SavePicture Me.ActiveForm.pct.Image, s
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Icone sauvegardée")
+    Call AddTextToConsole(Lang.GetString("_IconSaved"))
     
 Err:
     Set Me.ActiveForm.pct.Picture = Nothing
@@ -3150,16 +3156,17 @@ Dim x As Long
     With CMD
         .CancelError = True
         .Filename = Me.ActiveForm.Caption & ".sig"
-        .DialogTitle = "Enregistrement de la liste des signets"
-        .Filter = "Liste de signets |*.sig|"
+        .DialogTitle = Lang.GetString("_SaveSigList")
+        .Filter = Lang.GetString("_SigList") & " |*.sig|"
         .InitDir = App.Path
+        .Filename = vbNullString
         .ShowSave
         s = .Filename
     End With
 
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
     End If
     
@@ -3175,7 +3182,7 @@ Dim x As Long
     Close lFile
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Signets sauvegarés")
+    Call AddTextToConsole(Lang.GetString("_SigSavedOk"))
     
 ErrGestion:
     
@@ -3305,7 +3312,7 @@ Dim x As Long
             Call Frm.cmdAnalyse_Click   'lance l'analyse
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
-            Me.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+            Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
         End If
         DoEvents
     Next x
@@ -3357,15 +3364,16 @@ Dim x As Long
     
     With CMD
         .CancelError = True
-        .DialogTitle = "Sauvegarder sous..."
-        .Filter = "Tous|*.*"
+        .DialogTitle = Lang.GetString("_SaveAs")
+        .Filter = Lang.GetString("_All") & "|*.*"
+        .Filename = vbNullString
         .ShowSave
         sPath = .Filename
     End With
     
     If cFile.FileExists(sPath) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
     End If
     
@@ -3417,7 +3425,7 @@ End Sub
 
 Private Sub rmnuHelp_Click()
 'affiche le nombre d'erreurs enregistrées dans le menu "Rapport..."
-    Me.mnuErr.Caption = "Rapport d'erreurs (" & Trim$(Str$(clsERREUR.NumberOfErrorInLogFile)) & ")"
+    Me.mnuErr.Caption = Lang.GetString("_ErrorReport") & " (" & Trim$(Str$(clsERREUR.NumberOfErrorInLogFile)) & ")"
 End Sub
 
 Private Sub Timer1_Timer()
@@ -3511,8 +3519,8 @@ Dim l As Long
     'ouverture ==> choix du fichier
     With CMD
         .CancelError = True
-        .DialogTitle = "Ouverture d'une liste de signets"
-        .Filter = "Liste de signets |*.sig|"
+        .DialogTitle = Lang.GetString("_OpenSigList")
+        .Filter = Lang.GetString("_SigList") & " |*.sig|"
         .InitDir = App.Path
         .ShowOpen
         s = .Filename
@@ -3542,7 +3550,7 @@ Dim l As Long
     Close lFile
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Signets ajoutés")
+    Call AddTextToConsole(Lang.GetString("_SigAdded"))
 ErrGestion:
 End Sub
 
@@ -3763,4 +3771,3 @@ Private Sub txtE_KeyPress(KeyAscii As Integer)
 'évite le 'BIP' lors de l'appui sur la touche entrée
     If KeyAscii = 13 Then KeyAscii = 0
 End Sub
-

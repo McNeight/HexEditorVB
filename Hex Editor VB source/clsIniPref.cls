@@ -119,3 +119,4 @@ Public console_Load As Byte
 'general_AllowMultipleInstances
 'general_ResoY/X (fixer bug qui ne change pas la taille)
 
+

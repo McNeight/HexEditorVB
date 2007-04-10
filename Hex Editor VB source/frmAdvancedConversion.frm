@@ -408,11 +408,11 @@ Private clsPref As clsIniForm
 Private cConv As clsConvert
 
 Private Sub cbI_Click()
-    txtBaseI.Enabled = (cbI.Text = "Autre")
+    txtBaseI.Enabled = (cbI.Text = Lang.GetString("_Other!"))
 End Sub
 
 Private Sub cbO_Click()
-    txtBaseO.Enabled = (cbO.Text = "Autre")
+    txtBaseO.Enabled = (cbO.Text = Lang.GetString("_Other!"))
 End Sub
 
 Private Sub cmdCLose_Click()
@@ -431,7 +431,7 @@ Private Sub Form_Load()
     Set cConv = New clsConvert
     
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -586,11 +586,11 @@ Dim sA() As String
         LS = FormatedVal(txtSize.Text)
         If LS = 0 Then
             'taille nulle
-            MsgBox "La taille des paquets n'est pas convenable.", vbCritical, "Attention"
+            MsgBox Lang.GetString("_SizeNoOk"), vbCritical, Lang.GetString("_War")
             Exit Sub
         End If
         
-        Me.Caption = "Conversion..."
+        Me.Caption = Lang.GetString("_ConvCour")
         
         lmax = Len(txtI.Text)
         For x = 1 To lmax Step LS
@@ -607,17 +607,17 @@ Dim sA() As String
         'on affiche çà
         txtO.Text = sO
         
-        Me.Caption = "Conversion avancée"
+        Me.Caption = Lang.GetString("_AdConv")
         
     Else
         'alors on fait une conversion par séparateur
         If (optSep(0).Value And Len(txtSepS.Text) = 0) Or (optSep(1).Value And Len(txtSepH) = 0) Then
             'impossible car pas de spérateur
-            MsgBox "Le séparateur n'est pas convenable.", vbCritical, "Attention"
+            MsgBox Lang.GetString("_NoGoodSep"), vbCritical, Lang.GetString("_War")
             Exit Sub
         End If
         
-        Me.Caption = "Conversion..."
+        Me.Caption = Lang.GetString("_ConvCour")
         
         'définit le caractère séparant
         If optSep(0).Value Then sSep = txtSepS.Text Else sSep = Str2Hex(txtSepH.Text)
@@ -634,7 +634,7 @@ Dim sA() As String
         'on affiche en virant le dernier séparateur
         txtO.Text = Left$(sO, Len(sO) - Len(sSep))
 
-        Me.Caption = "Conversion avancée"
+        Me.Caption = Lang.GetString("_AdConv")
         
     End If
     
@@ -649,30 +649,30 @@ Dim s2 As String
     cConv.CurrentString = sIn
     
     Select Case cbI.Text
-        Case "Décimale"
+        Case Lang.GetString("_Decimal!")
             cConv.CurrentBase = 10
-        Case "Octale"
+        Case Lang.GetString("_Octal!")
             cConv.CurrentBase = 8
-        Case "Héxadécimale"
+        Case Lang.GetString("_Hexa!")
             cConv.CurrentBase = 16
-        Case "Binaire"
+        Case Lang.GetString("_Binary!")
             cConv.CurrentBase = 2
-        Case "Autre"
+        Case Lang.GetString("_Other!")
             cConv.CurrentBase = Val(txtBaseI.Text)
         Case Else
             'ANSI ASCII
     End Select
     
     Select Case cbO.Text
-        Case "Décimale"
+        Case Lang.GetString("_Decimal!")
             s2 = cConv.Convert(10)
-        Case "Octale"
+        Case Lang.GetString("_Octal!")
             s2 = cConv.Convert(8)
-        Case "Héxadécimale"
+        Case Lang.GetString("_Hexa!")
             s2 = cConv.Convert(16)
-        Case "Binaire"
+        Case Lang.GetString("_Binary!")
             s2 = cConv.Convert(2)
-        Case "Autre"
+        Case Lang.GetString("_Other!")
             s2 = cConv.Convert(Val(txtBaseI.Text))
         Case Else
             'ANSI ASCII

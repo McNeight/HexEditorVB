@@ -453,6 +453,7 @@ Dim s As String
     If txtSearch.Text = vbNullString Then Exit Sub
     
     LV.ListItems.Clear
+    txtSearch.Enabled = False
 
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"
@@ -461,20 +462,20 @@ Dim s As String
                 'alors c'est une string en recherche simple
                 
                 'ajoute du texte à la console
-                Call AddTextToConsole("Recherche en cours...")
+                Call AddTextToConsole(Lang.GetString("_SearchCour"))
     
                 SearchForStringFile frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
                 
                 'ajoute du texte à la console
-                Call AddTextToConsole("Recherche en cours...")
+                Call AddTextToConsole(Lang.GetString("_SearchCour"))
                     
                 'lance la recherche de la string
                 SearchForStringFile frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
             Else
                 Exit Sub
             End If
@@ -485,21 +486,21 @@ Dim s As String
                 'alors c'est une string en recherche simple
                 
                 'ajoute du texte à la console
-                Call AddTextToConsole("Recherche en cours...")
+                Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 SearchForStringDisk frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
                 
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
                 
                 'ajoute du texte à la console
-                Call AddTextToConsole("Recherche en cours...")
+                Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 'lance la recherche de la string
                 SearchForStringDisk frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
             Else
                 Exit Sub
             End If
@@ -512,21 +513,21 @@ Dim s As String
                 'alors c'est une string en recherche simple
                 
                 'ajoute du texte à la console
-                Call AddTextToConsole("Recherche en cours...")
+                Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 SearchForStringDisk frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.pgb, True
+                tRes(), Me.PGB, True
                 
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
                 
                 'ajoute du texte à la console
-                Call AddTextToConsole("Recherche en cours...")
+                Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 'lance la recherche de la string
                 SearchForStringDisk frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.pgb, True
+                tRes(), Me.PGB, True
             Else
                 Exit Sub
             End If
@@ -539,21 +540,21 @@ Dim s As String
                 ' ==> le PID avait été stocké dans le Tag
 
                 'ajoute du texte à la console
-                Call AddTextToConsole("Recherche en cours...")
+                Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 'lance la recherche
                 cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), txtSearch.Text, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
 
                 'ajoute du texte à la console
-                Call AddTextToConsole("Recherche en cours...")
+                Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 'lance la recherche de la string
                 cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), s, Check1.Value, _
-                tRes(), Me.pgb
+                tRes(), Me.PGB
             Else
                 Exit Sub
             End If
@@ -561,11 +562,11 @@ Dim s As String
     End Select
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Affichage des résultats...")
+    Call AddTextToConsole(Lang.GetString("_DisplayRes"))
 
     '//affiche les résultats
     For x = 1 To UBound(tRes())
-        LV.ListItems.Add Text:="Trouvé à l'offset " & CStr(By16D(tRes(x)))
+        LV.ListItems.Add Text:=Lang.GetString("_FoundAt") & " " & CStr(By16D(tRes(x)))
         If Check2.Value Then
             frmContent.ActiveForm.HW.AddSignet By16D(tRes(x))
             frmContent.ActiveForm.lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(x))))
@@ -573,10 +574,12 @@ Dim s As String
         End If
     Next x
     
-    Frame1(4).Caption = "Résultats : " & CStr(UBound(tRes()))
-        
+    Frame1(4).Caption = Lang.GetString("_ResAre") & " " & CStr(UBound(tRes()))
+    
     'ajoute du texte à la console
-    Call AddTextToConsole("Recherche terminée")
+    Call AddTextToConsole(Lang.GetString("_SearchComplete"))
+    
+    txtSearch.Enabled = True
 End Sub
 
 Private Sub Form_Load()
@@ -584,7 +587,7 @@ Private Sub Form_Load()
     Set clsPref = New clsIniForm
     
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

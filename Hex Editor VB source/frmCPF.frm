@@ -313,16 +313,16 @@ Private Sub cmdBrowse_Click(Index As Integer)
     
     With frmContent.CMD
         .CancelError = True
-        .Filter = "Tous |*.*"
+        .Filter = Lang.GetString("_All") & "  |*.*"
    
         If Index = 0 Then
             'fichier 1
-            .DialogTitle = "Sélection du fichier 1"
+            .DialogTitle = Lang.GetString("_SelectFile1")
             .ShowOpen
             txtFile1.Text = .Filename
         Else
             'fichier 2
-            .DialogTitle = "Sélection du fichier 2"
+            .DialogTitle = Lang.GetString("_SelectFile2")
             .ShowOpen
             txtFile2.Text = .Filename
         End If
@@ -347,18 +347,18 @@ Private Sub cmdGo_Click()
     
     If cFile.FileExists(txtFile1.Text) = False Or cFile.FileExists(txtFile2.Text) = False Then
         'un des deux fichiers n'existe pas
-        MsgBox "Au moins un des deux fichiers est introuvable.", vbInformation, "Analyse impossible"
+        MsgBox Lang.GetString("_FileMiss"), vbInformation, Lang.GetString("_Failed")
         Exit Sub
     End If
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Analyses en cours...")
+    Call AddTextToConsole(Lang.GetString("_AnalyseProc"))
     
     LaunchAnalys    'lance l'analyse
     DisplayResults  'affiche les résultats
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Analyses terminées")
+    Call AddTextToConsole(Lang.GetString("_AnalyseFin"))
     
 End Sub
 
@@ -368,7 +368,7 @@ Private Sub cmdSaveReport_Click()
 
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Sauvegarde du rapport terminée")
+    Call AddTextToConsole(Lang.GetString("_RapFin"))
 End Sub
 
 '=======================================================
@@ -529,7 +529,7 @@ End Sub
 Private Sub Form_Load()
 
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

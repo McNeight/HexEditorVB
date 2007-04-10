@@ -44,7 +44,11 @@ Option Explicit
 Public cFile As clsFileInfos
 Private AfManifest As AfClsManifest
 Public tmpDir As String
+Public sLang() As String
+Public cPref As clsIniPref
+Public clsPref As clsIniFile
 
+Private Const DEFAULT_INI = "[Environnement]" & vbNewLine & "Lang=French"
 
 '=======================================================
 '//DEMARRAGE DU PROGRAMME
@@ -53,11 +57,12 @@ Sub Main()
 Dim s As String
 Dim x As WINDOWS_VERSION
 Dim y As Long
+Dim sFile() As String
 
     
     '//vérifie la version de Windows
         x = GetWindowsVersion(s, y)
-        If x <> [Windows Vista] And x <> [Windows XP] Then
+        If x <> [Windows Vista] And x <> [Windows XP] And x <> [Windows 2000] Then
             'OS non compatible
             MsgBox "Votre système d'exploitation est [" & s & "] build [" & Trim$(Str$(y)) & "]" & vbNewLine & "Ce logiciel n'est compatible qu'avec Windows XP et Windows Vista." & vbNewLine & "Hex Editor VB va donc se fermer", vbCritical, "Système d'exploitation non compatible"
             End
@@ -79,7 +84,51 @@ Dim y As Long
     
     '//instancie les classes
         Set cFile = New clsFileInfos
+        Set cPref = New clsIniPref
+        Set clsPref = New clsIniFile
     
+    '// récupère la langue
+        'liste les fichiers de langue
+        ReDim sLang(0): ReDim sFile(0)
+        
+        If App.LogMode = 0 Then
+            'IDE
+            s = LANG_PATH
+        Else
+            s = App.Path & "\Lang\Disassembler\"
+        End If
+        Call cFile.EnumFilesFromFolder(s, sFile(), False)
+        
+        'vire les fichiers qui ne sont pas *.ini et French.ini
+        For x = 1 To UBound(sFile())
+            If LCase$(Right$(sFile(x), 4)) = ".ini" Then
+                'c'est un fichier de langue
+                ReDim Preserve sLang(UBound(sLang()) + 1)
+                sLang(UBound(sLang())) = sFile(x)
+            End If
+        Next x
+        
+    '//récupère les préférences
+        #If MODE_DEBUG Then
+            'alors on est dans la phase Debug, donc on a le dossier du source
+            clsPref.sDefaultPath = cFile.GetParentDirectory(cFile.GetParentDirectory(cFile.GetParentDirectory(LANG_PATH))) & "\Executable folder\Preferences\DisAsmconfig.ini"
+        #Else
+            'alors c'est plus la phase debug, donc plus d'IDE possible
+            clsPref.sDefaultPath = App.Path & "\Preferences\DisAsmconfig.ini" 'détermine le fichier de config par défaut
+        #End If
+                
+        If cFile.FileExists(clsPref.sDefaultPath) = False Then
+            'le fichier de configuration est inexistant
+            'il est necesasire de le crér (par défaut)
+            cFile.CreateEmptyFile clsPref.sDefaultPath, True
+            
+            'remplit le fichier
+            cFile.SaveStringInfile clsPref.sDefaultPath, DEFAULT_INI, False
+        End If
+         
+        Set cPref = clsPref.GetIniFile
+        cPref.IniFilePath = clsPref.sDefaultPath
+        
 
     '//affiche la form principale
         frmDisAsm.Show
@@ -125,7 +174,9 @@ DONOTKILL:
 
     'libère les classes
     Set cFile = Nothing
-
+    Set cPref = Nothing
+    Set clsPref = Nothing
+        
     'quitte
     End
 End Sub

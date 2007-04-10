@@ -145,7 +145,7 @@ Dim s As String
         
         'vire les fichiers qui ne sont pas *.ini et French.ini
         For x = 1 To UBound(sFile())
-            If sFile(x) <> "French.ini" And LCase$(Right$(sFile(x), 4)) = ".ini" Then
+            If LCase$(Right$(sFile(x), 4)) = ".ini" Then
                 'c'est un fichier de langue
                 ReDim Preserve sLang(UBound(sLang()) + 1)
                 sLang(UBound(sLang())) = sFile(x)
@@ -395,6 +395,7 @@ Dim x As Long
         Set cPref = Nothing
         Set clsPref = Nothing
         
+    DoEvents
     
     End 'quitte
 End Sub

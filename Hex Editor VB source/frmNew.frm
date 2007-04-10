@@ -147,21 +147,21 @@ Dim s As String
     'calcule la taille du fichier
     If Len(txtSize.Text) = 0 Or Len(cdUnit.Text) = 0 Or Val(txtSize.Text) <= 0 Then
         'rien sélectionné
-        MsgBox "Vous devez sélectionner une taille valide.", vbInformation, "Attention"
+        MsgBox Lang.GetString("_HaveToSelValid"), vbInformation, Lang.GetString("_War")
         Exit Sub
     End If
     
     lLen = Abs(Val(txtSize.Text))
-    If cdUnit.Text = "Ko" Then lLen = lLen * 1024
-    If cdUnit.Text = "Mo" Then lLen = (lLen * 1024) * 1024
-    If cdUnit.Text = "Go" Then lLen = ((lLen * 1024) * 1024) * 1024
+    If cdUnit.Text = Lang.GetString("_Ko") Then lLen = lLen * 1024
+    If cdUnit.Text = Lang.GetString("_Mo") Then lLen = (lLen * 1024) * 1024
+    If cdUnit.Text = Lang.GetString("_Go") Then lLen = ((lLen * 1024) * 1024) * 1024
     
     lLen = Int(lLen)
     
     Unload Me
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Création d'un nouveau fichier...")
+    Call AddTextToConsole(Lang.GetString("_CreateNewFile"))
         
     'obtient un path temporaire
     ObtainTempPathFile "new" & CStr(lNbChildFrm), sFile, vbNullString
@@ -178,7 +178,7 @@ Dim s As String
     Call Frm.GetFile(sFile)
     Frm.Show
     lNbChildFrm = lNbChildFrm + 1
-    frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+    frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
     
     Unload Me
     
@@ -190,7 +190,7 @@ Private Sub Form_Load()
     Set clsPref = New clsIniForm
     
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

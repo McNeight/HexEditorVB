@@ -80,7 +80,111 @@ Begin VB.Form frmProcess
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      NumItems        =   0
+      NumItems        =   15
+      BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Processus"
+         Object.Width           =   2734
+      EndProperty
+      BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   1
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "PID"
+         Object.Width           =   1058
+      EndProperty
+      BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   2
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Path"
+         Object.Width           =   5891
+      EndProperty
+      BeginProperty ColumnHeader(4) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   3
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Mémoire utilisée"
+         Object.Width           =   2646
+      EndProperty
+      BeginProperty ColumnHeader(5) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   4
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Pic de mémoire utilisée"
+         Object.Width           =   2646
+      EndProperty
+      BeginProperty ColumnHeader(6) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   5
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Utilisation du Swap"
+         Object.Width           =   2646
+      EndProperty
+      BeginProperty ColumnHeader(7) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   6
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Pic util. swap"
+         Object.Width           =   2646
+      EndProperty
+      BeginProperty ColumnHeader(8) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   7
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Erreurs de page"
+         Object.Width           =   2646
+      EndProperty
+      BeginProperty ColumnHeader(9) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   8
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Réserve non paginée"
+         Object.Width           =   2646
+      EndProperty
+      BeginProperty ColumnHeader(10) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   9
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Pic de réserve non paginée"
+         Object.Width           =   2646
+      EndProperty
+      BeginProperty ColumnHeader(11) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   10
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Réserve paginée"
+         Object.Width           =   2646
+      EndProperty
+      BeginProperty ColumnHeader(12) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   11
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Pic de réserve paginée"
+         Object.Width           =   2646
+      EndProperty
+      BeginProperty ColumnHeader(13) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   12
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Processus parent"
+         Object.Width           =   2822
+      EndProperty
+      BeginProperty ColumnHeader(14) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   13
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Threads"
+         Object.Width           =   1764
+      EndProperty
+      BeginProperty ColumnHeader(15) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         SubItemIndex    =   14
+         Key             =   ""
+         Object.Tag             =   ""
+         Text            =   "Priorité"
+         Object.Width           =   1764
+      EndProperty
    End
    Begin MSComctlLib.ImageList ImageList2 
       Left            =   360
@@ -312,7 +416,7 @@ Private Sub Form_Load()
 'ajoute les en-têtes de colonne
 
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -331,23 +435,6 @@ Private Sub Form_Load()
     Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
-    With LV
-        .ColumnHeaders.Add , , "Processus", 1550
-        .ColumnHeaders.Add , , "PID", 600
-        .ColumnHeaders.Add , , "Path", 3340
-        .ColumnHeaders.Add , , "Mémoire utilisée", 1500
-        .ColumnHeaders.Add , , "Pic de mémoire utilisée", 1500
-        .ColumnHeaders.Add , , "Utilisation du Swap", 1500
-        .ColumnHeaders.Add , , "Pic util. swap", 1500
-        .ColumnHeaders.Add , , "Erreurs de page", 1500
-        .ColumnHeaders.Add , , "Réserve non paginée", 1500
-        .ColumnHeaders.Add , , "Pic de réserve non paginée", 1500
-        .ColumnHeaders.Add , , "Réserve paginée", 1500
-        .ColumnHeaders.Add , , "Pic de réserve paginée", 1500
-        .ColumnHeaders.Add , , "Processus parent", 1600
-        .ColumnHeaders.Add , , "Threads", 1000
-        .ColumnHeaders.Add , , "Priorité", 1000
-    End With
     
     'ajoute les icones
     Call AddIconsToMenus(Me.hWnd, Me.ImageList2)
@@ -386,17 +473,17 @@ Dim s As String
     Me.mnuNormalP.Checked = False
     
     Select Case s
-        Case "Temps réel"
+        Case Lang.GetString("_RealTime!")
             Me.mnuRealTimeP.Checked = True
-        Case "Haute"
+        Case Lang.GetString("_Sup!")
             Me.mnuHighP.Checked = True
-        Case "Supérieure à la normale"
+        Case Lang.GetString("_Above!")
             Me.mnuAboveP.Checked = True
-        Case "Normale"
+        Case Lang.GetString("_Norm!")
             Me.mnuNormalP.Checked = True
-        Case "Inférieure à la normale"
+        Case Lang.GetString("_Below!")
             Me.mnuBelowP.Checked = True
-        Case "Basse"
+        Case Lang.GetString("_Idle!")
             Me.mnuIdleP.Checked = True
     End Select
     
@@ -493,11 +580,11 @@ Private Sub mnuChangeDisplayType_Click()
         'alors on change
         PV.Visible = False
         LV.Visible = True
-        mnuChangeDisplayType.Caption = "Afficher une arborescence"
+        mnuChangeDisplayType.Caption = Lang.GetString("_DisplayArb")
     Else
         PV.Visible = True
         LV.Visible = False
-        mnuChangeDisplayType.Caption = "Afficher une liste"
+        mnuChangeDisplayType.Caption = Lang.GetString("_DisplayList")
     End If
     Call mnuRefrehNOW_Click
 End Sub
@@ -518,7 +605,7 @@ Dim Frm As Form
     Call Frm.GetFile(LV.SelectedItem.SubItems(2))
     Frm.Show
     lNbChildFrm = lNbChildFrm + 1
-    frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+    frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
 
 End Sub
 
@@ -565,7 +652,7 @@ Dim Frm As Form
     
     If lH = 0 Then
         'pas possible
-        MsgBox "Accès impossible à ce processus", vbInformation, "Erreur"
+        MsgBox Lang.GetString("_AccessDen"), vbInformation, Lang.GetString("_Error")
         Exit Sub
     End If
         
@@ -574,7 +661,7 @@ Dim Frm As Form
     Call Frm.GetFile(Val(LV.SelectedItem.SubItems(1)))
     Frm.Show
     lNbChildFrm = lNbChildFrm + 1
-    frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+    frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
 
 End Sub
 
@@ -774,7 +861,7 @@ Dim sKey As String
     End If
     
     InvalidateRect LV.hWnd, 0&, 0&   'dégèle le display
-    Me.Caption = "Gestionnaire de processus --- " & CStr(lCount) & " processus"
+    Me.Caption = Lang.GetString("_TaskMgr") & " --- " & CStr(lCount) & " " & Lang.GetString("_Processes")
     
     Exit Sub
 ErrGestion:

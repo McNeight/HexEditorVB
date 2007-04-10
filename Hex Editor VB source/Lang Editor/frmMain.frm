@@ -224,6 +224,8 @@ Dim r As Long
         s = .FileName
     End With
 
+    On Error Resume Next
+    
     'récupère le fichier *.ini dans une string
     s = cFile.LoadFileInString(s)
     
@@ -506,17 +508,17 @@ Dim r As Long
         .ShowOpen
         s = .FileName
     End With
-    
+        
     'récupère le fichier *.ini dans une string
     s = cFile.LoadFileInString(s)
     
     'split chaque ligne
     s2() = Split(s, vbNewLine, , vbBinaryCompare)
-
+    
     'ajoute chaque ligne dans le LV
     For x = 1 To LV.ListItems.Count
         r = Val(LV.ListItems.Item(x).Tag)
-        l = InStr(1, s2(r), "=", vbBinaryCompare)
+        l = InStr(1, s2(r), "=", vbTextCompare)
         LV.ListItems.Item(x).Text = Right$(s2(r), Len(s2(r)) - l)
     Next x
         

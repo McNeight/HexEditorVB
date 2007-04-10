@@ -827,19 +827,19 @@ Dim cF As clsFile
     lAttribute = cF.FileAttributes
     
     'affiche tout çà
-    TextBox(0).Text = "Taille=[" & CStr(lSize) & " Octets  -  " & CStr(Round(lSize / 1024, 3)) & " Ko" & "]"
-    TextBox(1).Text = "Attribut=[" & CStr(lAttribute) & "]"
-    TextBox(2).Text = "Création=[" & dCreation & "]"
-    TextBox(3).Text = "Accès=[" & dAccess & "]"
-    TextBox(4).Text = "Modification=[" & dModification & "]"
-    TextBox(5).Text = "Version=[" & sVersion & "]"
-    TextBox(6).Text = "Description=[" & sDescription & "]"
+    TextBox(0).Text = Lang.GetString("_SizeIs") & CStr(lSize) & " Octets  -  " & CStr(Round(lSize / 1024, 3)) & " Ko" & "]"
+    TextBox(1).Text = Lang.GetString("_AttrIs") & CStr(lAttribute) & "]"
+    TextBox(2).Text = Lang.GetString("_CreaIs") & dCreation & "]"
+    TextBox(3).Text = Lang.GetString("_AccessIs") & dAccess & "]"
+    TextBox(4).Text = Lang.GetString("_ModifIs") & dModification & "]"
+    TextBox(5).Text = Lang.GetString("_Version") & sVersion & "]"
+    TextBox(6).Text = Lang.GetString("_DescrIs") & sDescription & "]"
     TextBox(7).Text = "Copyright=[" & sCopyright & "]"
    
     Label2(8).Caption = Me.Sb.Panels(2).Text
-    Label2(9).Caption = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
+    Label2(9).Caption = Lang.GetString("_SelIs") & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(10).Caption = Me.Sb.Panels(3).Text
-    Label2(11).Caption = "Offset maximum=[" & CStr(16 * Int(lLength / 16)) & "]"
+    Label2(11).Caption = Lang.GetString("_MaxOff") & CStr(16 * Int(lLength / 16)) & "]"
     'Label2(12).Caption = "[" & sDescription & "]"
     
     'affiche les informations concernant le processus
@@ -854,11 +854,11 @@ Dim p As ProcessItem
     Set p = clsProc.GetProcess(pProcess.th32ProcessID, True, False, True)   'réobtient les infos
     
     TextBox(8).Text = "PID=[" & p.th32ProcessID & "]"
-    TextBox(9).Text = "Processus parent=[" & p.procParentProcess.szExeFile & " - " & pProcess.procParentProcess.th32ProcessID & "]"
-    TextBox(10).Text = "Mémoire utilisée=[" & p.procMemory.WorkingSetSize & "]"
-    TextBox(11).Text = "SWAP utilisé=[" & p.procMemory.PagefileUsage & "]"
-    TextBox(12).Text = "Priorité=[" & PriorityFromLong(p.pcPriClassBase) & "-" & p.pcPriClassBase & "]"
-    TextBox(13).Text = "Thread=[" & p.cntThreads & "]"
+    TextBox(9).Text = Lang.GetString("_ParentProc") & p.procParentProcess.szExeFile & " - " & pProcess.procParentProcess.th32ProcessID & "]"
+    TextBox(10).Text = Lang.GetString("_UsedMem") & p.procMemory.WorkingSetSize & "]"
+    TextBox(11).Text = Lang.GetString("_SWAP") & p.procMemory.PagefileUsage & "]"
+    TextBox(12).Text = Lang.GetString("_Prior") & PriorityFromLong(p.pcPriClassBase) & "-" & p.pcPriClassBase & "]"
+    TextBox(13).Text = "Threads=[" & p.cntThreads & "]"
 End Sub
 
 '=======================================================
@@ -891,7 +891,7 @@ Private Sub Form_Load()
     Set cUndo = New clsUndoItem
     
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -964,7 +964,7 @@ End Sub
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     'FileContent = vbNullString
     lNbChildFrm = lNbChildFrm - 1
-    frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+    frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
     
     Close lFile 'ferme le fichier
 End Sub
@@ -1125,7 +1125,7 @@ Dim si As SYSTEM_INFO
     On Error GoTo 5
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Ouverture du processus " & Trim$(Str$(lPID)) & " ...")
+    Call AddTextToConsole(Lang.GetString("_OpProc") & " " & Trim$(Str$(lPID)) & " ...")
     
     'obtient les infos sur le processus
     Set clsProc = New clsProcess
@@ -1144,7 +1144,7 @@ Dim si As SYSTEM_INFO
     
     If UBound(lBA) = 0 Then
         'pas de données du processus dans l'espace virtuel
-        MsgBox "Le processus ne possède pas de données dans l'espace virtuel.", vbInformation, "Impossible d'ouvrir"
+        MsgBox Lang.GetString("_NoDataVirtual"), vbInformation, Lang.GetString("_CanNotOpen")
         Unload Me
     End If
     
@@ -1189,7 +1189,7 @@ Dim si As SYSTEM_INFO
     cmdMAJ_Click    'refresh les infos
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Processus ouvert")
+    Call AddTextToConsole(Lang.GetString("_ProcOpened"))
     
     Exit Sub
 ErrGestion:
@@ -1507,7 +1507,7 @@ Dim l As Currency
 End Sub
 
 Private Sub HW_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
-    Me.Sb.Panels(4).Text = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
+    Me.Sb.Panels(4).Text = Lang.GetString("_SelIs") & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(9) = Me.Sb.Panels(4).Text
 End Sub
 
@@ -1553,7 +1553,7 @@ Dim r As Long
         'qui a été sélectionné
         Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
-        s = InputBox("Ajouter un commentaire pour le signet " & tLst.Text, "Ajout d'un commentaire")
+        s = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, Lang.GetString("_AddCom"))
         If StrPtr(s) <> 0 Then
             'ajoute le commentaire
             tLst.SubItems(1) = s
@@ -1565,7 +1565,7 @@ Dim r As Long
         Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         
-        r = MsgBox("Supprimer le signet " & tLst.Text & " ?", vbInformation + vbYesNo, "Attention")
+        r = MsgBox(Lang.GetString("_DelSig") & " " & tLst.Text & " ?", vbInformation + vbYesNo, Lang.GetString("_War"))
         If r <> vbYes Then Exit Sub
         
         'on supprime
@@ -1658,7 +1658,7 @@ Dim r As Long
         'touche suppr
         If lstSignets.SelectedItem.Selected Then
             'alors on supprime quelque chose
-            r = MsgBox("Supprimer les signets ?", vbInformation + vbYesNo, "Attention")
+            r = MsgBox(Lang.GetString("_DelSign"), vbInformation + vbYesNo, Lang.GetString("_War"))
             If r <> vbYes Then Exit Sub
         
             For r = lstSignets.ListItems.Count To 1 Step -1

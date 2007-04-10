@@ -402,23 +402,23 @@ Option Explicit
 
 Private Sub cmdBrowseGroupFile_Click()
 'sélection du dossier (groupeur à sauvegarder)
-    txtFolderResult.Text = cFile.BrowseForFolder("Choix du dossier résultant", Me.hWnd)
+    txtFolderResult.Text = cFile.BrowseForFolder(Lang.GetString("_SelectFolder"), Me.hWnd)
 End Sub
 
 Private Sub cmdBrowseGrupFIle_Click()
 'sélection du fichier groupe
-    txtGrFile.Text = cFile.ShowOpen("Selection du fichier groupeur", Me.hWnd, "Fichier groupeur|*.grp")
+    txtGrFile.Text = cFile.ShowOpen(Lang.GetString("_GrupFileSel"), Me.hWnd, Lang.GetString("_GrupFile") & "|*.grp")
     If txtFolderFus.Text = vbNullString Then txtFolderFus.Text = cFile.GetFolderFromPath(txtGrFile.Text)
 End Sub
 
 Private Sub cmdBrowsePaste_Click()
 'sélection du dossier du fichier fusionné
-    txtFolderFus.Text = cFile.BrowseForFolder("Choix du dossier du fichier fusionné", Me.hWnd)
+    txtFolderFus.Text = cFile.BrowseForFolder(Lang.GetString("_FusionPathSel"), Me.hWnd)
 End Sub
 
 Private Sub cmdBrowseToCut_Click()
 'sélection du fichier à découper
-    txtFileToCut.Text = cFile.ShowOpen("Fichier à découper", Me.hWnd, "Tous|*.*", App.Path)
+    txtFileToCut.Text = cFile.ShowOpen(Lang.GetString("_FileToCutSel"), Me.hWnd, "Tous|*.*", App.Path)
 End Sub
 
 Private Sub cmdProceed_Click()
@@ -429,11 +429,11 @@ Dim lTime As Long
     lBufSize = Abs(Int(Val(txtBufSize.Text))) * 1024 * 1024
     If lBufSize < 1048576 Then
         'alors buffer trop faible
-        MsgBox "La taille du buffer n'est pas suffisante.", vbCritical, "Attention"
+        MsgBox Lang.GetString("_BufferNotSuff"), vbCritical, Lang.GetString("_War")
         Exit Sub
     ElseIf lBufSize > 31457280 Then
         'buffer trop grand (peut etre risques potentiels de dépassement de capacité)
-        MsgBox "la taille du buffer est trop grande.", vbCritical, "Attention"
+        MsgBox Lang.GetString("_BufferTooSuff"), vbCritical, Lang.GetString("_War")
         Exit Sub
     End If
     
@@ -459,18 +459,18 @@ Dim lTime As Long
         'alors on découpe
         
         'ajoute du texte à la console
-        Call AddTextToConsole("Découpage lancé...")
+        Call AddTextToConsole(Lang.GetString("_DecLau"))
         
         If Option1(0).Value Then
             'taille
             tMethod.tMethode = [Taille fixe]
             lLen = Abs(Val(txtSize.Text))
-            If cdUnit.Text = "Ko" Then lLen = lLen * 1024
-            If cdUnit.Text = "Mo" Then lLen = (lLen * 1024) * 1024
-            If cdUnit.Text = "Go" Then lLen = ((lLen * 1024) * 1024) * 1024
+            If cdUnit.Text = Lang.GetString("_Ko") Then lLen = lLen * 1024
+            If cdUnit.Text = Lang.GetString("_Mo") Then lLen = (lLen * 1024) * 1024
+            If cdUnit.Text = Lang.GetString("_Go") Then lLen = ((lLen * 1024) * 1024) * 1024
             If lLen >= 2147483648# Then
                 'alors fichiers trop grands
-                MsgBox "La taille maximale des fichiers résultants ne peut excéder 2Go.", vbCritical, "Attention"
+                MsgBox Lang.GetString("_MoreThanTwo"), vbCritical, Lang.GetString("_War")
                 GoTo CannotCut
             End If
                 
@@ -483,7 +483,7 @@ Dim lTime As Long
             
             If lLen > 2147483648# Then
                 'alors fichiers trop grands
-                MsgBox "La taille maximale des fichiers résultants ne peut excéder 2Go.", vbCritical, "Attention"
+                MsgBox Lang.GetString("_MoreThanTwo"), vbCritical, Lang.GetString("_War")
                 GoTo CannotCut
             End If
             
@@ -497,7 +497,7 @@ Dim lTime As Long
     Else
     
         'ajoute du texte à la console
-        Call AddTextToConsole("Fusion lancée...")
+        Call AddTextToConsole(Lang.GetString("_FusionLau"))
         
         'lance la fusion
         lTime = PasteFile(txtGrFile.Text, txtFolderFus.Text)
@@ -507,7 +507,7 @@ Dim lTime As Long
     Me.Caption = "Effectué en " & Trim$(Str$(lTime / 1000)) & " s"
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Opération terminée")
+    Call AddTextToConsole(Lang.GetString("_OpeFin"))
     
 CannotCut:
     cmdQuit.Enabled = True
@@ -537,7 +537,7 @@ End Sub
 Private Sub Form_Load()
 
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

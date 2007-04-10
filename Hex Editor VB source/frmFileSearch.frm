@@ -318,7 +318,7 @@ Begin VB.Form frmFileSearch
             _Version        =   393216
             Enabled         =   0   'False
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   16449539
+            Format          =   63569923
             CurrentDate     =   39133.9583333333
          End
       End
@@ -491,12 +491,12 @@ End Sub
 
 Private Sub cmdAdd_Click()
 Dim s As String
-    s = cFile.BrowseForFolder("Ajouter un dossier", Me.hWnd)    'browse un dossier
+    s = cFile.BrowseForFolder(Lang.GetString("_AddFolder"), Me.hWnd)    'browse un dossier
     
     If cFile.FolderExists(s) Then
         'alors ajoute le dossier à la liste des emplacements
         LV.ListItems.Add Text:=s
-        LV.ListItems.Item(LV.ListItems.Count).SubItems(1) = "Non"
+        LV.ListItems.Item(LV.ListItems.Count).SubItems(1) = Lang.GetString("_NoSub")
     End If
     Call CheckSearch 'vérifie qu'une recherche est possible
 End Sub
@@ -505,7 +505,7 @@ Private Sub cmdGo_Click()
 'lance la recherche
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Recherche de fichiers en cours...")
+    Call AddTextToConsole(Lang.GetString("_FileSearch"))
     
     If Option1(0).Value Then
         'alors recherche par nom de fichier
@@ -519,11 +519,11 @@ Private Sub cmdGo_Click()
     End If
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Recherche de fichiers terminée")
+    Call AddTextToConsole(Lang.GetString("_SearchOK"))
 End Sub
 
 Private Sub cmdQuit_Click()
-    If cmdQuit.Caption = "Quitter" Then
+    If cmdQuit.Caption = Lang.GetString("_cmdQuitCaption") Then
         Unload Me
     Else
         'annule la recherche
@@ -567,7 +567,7 @@ Dim x As Long
 Dim lFile As Long
 
     If LVres.ListItems.Count = 0 Then
-        MsgBox "Aucun résultat n'a été trouvé", vbInformation, "Enregistrement impossible"
+        MsgBox Lang.GetString("_NoRes"), vbInformation, Lang.GetString("_CanNotSave")
         Exit Sub
     End If
     
@@ -575,19 +575,21 @@ Dim lFile As Long
     
     With frmContent.CMD
         .CancelError = True
-        .DialogTitle = "Sélection du fichier à enregistrer"
-        .Filter = "Fichier texte|*.txt|Tous|*.*"
+        .DialogTitle = Lang.GetString("_SelFile")
+        .Filter = Lang.GetString("_TxtFile") & "|*.txt|" & _
+            Lang.GetString("_All") & "|*.*"
+        .Filename = vbNullString
         .ShowSave
         sFile = .Filename
     End With
     
     If cFile.FileExists(sFile) Then
         'fichier déjà existant
-        If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
         
     'ajoute du texte à la console
-    Call AddTextToConsole("Sauvegarde des résultats")
+    Call AddTextToConsole(Lang.GetString("_SavingRes"))
     
     'récupère un numéro vide
     lFile = FreeFile
@@ -604,14 +606,14 @@ Dim lFile As Long
     Close lFile
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Résultats sauvegardés")
+    Call AddTextToConsole(Lang.GetString("_ResSaved"))
     
 CancelPushed:
 End Sub
 
 Private Sub Form_Load()
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -682,7 +684,8 @@ End Sub
 Private Sub mnuOpenFolder_Click()
 'ouvre le dossier du fichier sélectionné
     If LVres.SelectedItem Is Nothing Then Exit Sub
-    Shell "explorer.exe " & cFile.GetFolderFromPath(LVres.SelectedItem.Text), vbNormalFocus
+    Shell "explorer.exe " & cFile.GetFolderFromPath(LVres.SelectedItem.Text), _
+        vbNormalFocus
 End Sub
 
 Private Sub mnuSub_Click()
@@ -690,7 +693,7 @@ Private Sub mnuSub_Click()
     If It Is Nothing Then Exit Sub
     
     Me.mnuSub.Checked = Not (Me.mnuSub.Checked)
-    It.SubItems(1) = IIf(Me.mnuSub.Checked, "Oui", "Non")
+    It.SubItems(1) = IIf(Me.mnuSub.Checked, Lang.GetString("_YesSub"), Lang.GetString("_NoSub"))
 End Sub
 
 Private Sub Option1_Click(Index As Integer)
@@ -738,14 +741,14 @@ Dim lC As Long
 
     'efface le lv de resultats
     LVres.ListItems.Clear
-    Frame3.Caption = "Résultats"
+    Frame3.Caption = Lang.GetString("_Res")
     
     Frame1(0).Enabled = False
     Frame1(1).Enabled = False
     Frame2.Enabled = False
     cmdSave.Enabled = False
     cmdGo.Enabled = False
-    cmdQuit.Caption = "Annuler"
+    cmdQuit.Caption = Lang.GetString("_Cancel")
     bStop = False
     DoEvents    '/!\DO NOT REMOVE
 
@@ -756,21 +759,21 @@ Dim lC As Long
         'on calcule la taille du fichier à rechercher
         If chkSize.Value Then
             dblSize = Abs(Val(txtSize.Text))
-            If cdUnit.Text = "Ko" Then dblSize = dblSize * 1024
-            If cdUnit.Text = "Mo" Then dblSize = (dblSize * 1024) * 1024
-            If cdUnit.Text = "Go" Then dblSize = ((dblSize * 1024) * 1024) * 1024
+            If cdUnit.Text = Lang.GetString("_Ko") Then dblSize = dblSize * 1024
+            If cdUnit.Text = Lang.GetString("_Mo") Then dblSize = (dblSize * 1024) * 1024
+            If cdUnit.Text = Lang.GetString("_Go") Then dblSize = ((dblSize * 1024) * 1024) * 1024
         End If
         
         'on calcule sa date
         If chkDate.Value Then curDate = DateString2Currency(DT.Value)
                 
-        Me.Caption = "Indexation des fichiers..."
+        Me.Caption = Lang.GetString("_IndexingFiles")
         
         '//indexe les fichiers
         'contiendra de 1 à ubound une liste de fichiers
         ReDim s(LV.ListItems.Count)
         
-        With Me.pgb
+        With Me.PGB
             .Min = 0
             .Max = LV.ListItems.Count
             .Value = 0
@@ -778,22 +781,22 @@ Dim lC As Long
         'indexation des fichiers
         For x = LV.ListItems.Count To 1 Step -1
             Call cFile.EnumFilesFromFolder(LV.ListItems.Item(x).Text, s(x).sF(), _
-                IIf(LV.ListItems.Item(x).SubItems(1) = "Oui", True, False))
-                Me.pgb.Value = LV.ListItems.Count - x + 1
+                IIf(LV.ListItems.Item(x).SubItems(1) = Lang.GetString("_YesSub"), True, False))
+                Me.PGB.Value = LV.ListItems.Count - x + 1
                 If bStop Then GoTo GStop
             DoEvents
         Next x
         
         
         '//recherche dans les fichiers indexés
-        Me.Caption = "Recherche de fichiers"
+        Me.Caption = Lang.GetString("_SearchingFiles")
             
         lC = 0
         'compte le nombre de fichiers
         For x = 1 To UBound(s())
             lC = lC + UBound(s(x).sF())
         Next x
-        With Me.pgb
+        With Me.PGB
             .Max = lC
             .Min = 0
             .Value = 0
@@ -811,24 +814,24 @@ Dim lC As Long
                 lC = lC + 1
                 If (lC Mod 200) = 0 Then
                     DoEvents   'rend la main
-                    pgb.Value = lC
+                    PGB.Value = lC
                 End If
                 If bStop Then GoTo GStop
             Next i
         Next x
-        pgb.Value = pgb.Max
-        Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " résultat(s)"
+        PGB.Value = PGB.Max
+        Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " " & Lang.GetString("_ResS")
                 
 
     ElseIf tMet = [Recherche de dossiers] Then
         'alors recherche par nom de dossier
-        Me.Caption = "Indexation des dossiers..."
+        Me.Caption = Lang.GetString("_IndexingFolders")
         
         '//indexe les dossiers
         'contiendra de 1 à ubound une liste de fichiers
         ReDim s(LV.ListItems.Count)
         
-        With Me.pgb
+        With Me.PGB
             .Min = 0
             .Max = LV.ListItems.Count
             .Value = 0
@@ -836,22 +839,22 @@ Dim lC As Long
         'indexation des dossiers
         For x = LV.ListItems.Count To 1 Step -1
             Call cFile.EnumFolders(LV.ListItems.Item(x).Text, s(x).sF(), True, _
-                IIf(LV.ListItems.Item(x).SubItems(1) = "Oui", True, False))
-                Me.pgb.Value = LV.ListItems.Count - x + 1
+                IIf(LV.ListItems.Item(x).SubItems(1) = Lang.GetString("_YesSub"), True, False))
+                Me.PGB.Value = LV.ListItems.Count - x + 1
                 If bStop Then GoTo GStop
             DoEvents
         Next x
         
         
         '//recherche dans les dossiers indexés
-        Me.Caption = "Recherche de fichiers"
+        Me.Caption = Lang.GetString("_SearchingFiles")
         
         lC = 0
         'compte le nombre de dossiers
         For x = 1 To UBound(s())
             lC = lC + UBound(s(x).sF())
         Next x
-        With Me.pgb
+        With Me.PGB
             .Max = lC
             .Min = 0
             .Value = 0
@@ -869,13 +872,13 @@ Dim lC As Long
                 lC = lC + 1
                 If (lC Mod 200) = 0 Then
                     DoEvents   'rend la main
-                    pgb.Value = lC
+                    PGB.Value = lC
                 End If
                 If bStop Then GoTo GStop
             Next i
         Next x
-        pgb.Value = pgb.Max
-        Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " résultat(s)"
+        PGB.Value = PGB.Max
+        Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " " & Lang.GetString("_ResS")
         
     Else
         'alors recherche dans le contenu des fichiers
@@ -890,7 +893,7 @@ GStop:
     Frame2.Enabled = True
     cmdSave.Enabled = True
     cmdGo.Enabled = True
-    cmdQuit.Caption = "Quitter"
+    cmdQuit.Caption = Lang.GetString("_cmdQuitCaption")
     LVres.Visible = True
 End Sub
 

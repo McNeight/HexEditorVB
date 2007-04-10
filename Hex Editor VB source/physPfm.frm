@@ -793,9 +793,9 @@ Dim lPages As Long
     On Error Resume Next
     
     Label2(8).Caption = Me.Sb.Panels(2).Text
-    Label2(9).Caption = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
+    Label2(9).Caption = Lang.GetString("_Selec") & CStr(HW.NumberOfSelectedItems) & " " & Lang.GetString("_Bytes")
     Label2(10).Caption = Me.Sb.Panels(3).Text
-    Label2(11).Caption = "Offset maximum=[" & CStr(16 * Int(lLength / 16)) & "]"
+    Label2(11).Caption = Lang.GetString("_OffMax") & CStr(16 * Int(lLength / 16)) & "]"
     'Label2(12).Caption = "[" & sDescription & "]"
 
 End Sub
@@ -836,7 +836,7 @@ Dim r As Long
         'touche suppr
         If lstSignets.SelectedItem.Selected Then
             'alors on supprime quelque chose
-            r = MsgBox("Supprimer les signets ?", vbInformation + vbYesNo, "Attention")
+            r = MsgBox(Lang.GetString("_DelSign"), vbInformation + vbYesNo, Lang.GetString("_War"))
             If r <> vbYes Then Exit Sub
         
             For r = lstSignets.ListItems.Count To 1 Step -1
@@ -858,7 +858,7 @@ Private Sub Form_Load()
     Set cUndo = New clsUndoItem
     
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -930,7 +930,7 @@ End Sub
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     'FileContent = vbNullString
     lNbChildFrm = lNbChildFrm - 1
-    frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+    frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
     
     Close lFile 'ferme le fichier
 End Sub
@@ -1034,7 +1034,10 @@ Dim lDecal As Long
     ReDim RD(lDisplayableBytes)     'redimensionne le tableau au nombre de bytes qui vont être affichés
     
     'met les 3 secteurs bout à bout dans une même liste temporaire
-    ReDim RT(lBytesPerSector * (IIf(UBound(RA) > 0, 1, 0) + IIf(UBound(RB) > 0, 1, 0) + 1) - 1) 'nombre de bytes lus dans les 3 secteurs lus ou pas
+    'ReDim RT(lBytesPerSector * (IIf(UBound(RA) > 0, 1, 0) + IIf(UBound(RB) > 0, 1, 0) + 1) - 1) 'nombre de bytes lus dans les 3 secteurs lus ou pas
+    ReDim RT(lBytesPerSector * (IIf(UBound(RA) > 0, 1, 0) + IIf(UBound(RB) > 0, _
+        1, 0) + 2) - 1) 'nombre de bytes lus dans les 3 secteurs lus ou pas
+        'le "+2" n'est pas logique pour moi, mais bon, sans çà çà plante (+1 pour moi)
 
     '//remplit le tableau temporaire contenant la réunion des secteurs lus
         For x = 0 To lBytesPerSector - 1
@@ -1138,7 +1141,7 @@ Public Sub GetDrive(ByVal lDrive As Byte)
 Dim l As Currency
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Ouverture du disque physique N° " & Trim$(Str$(lDrive)) & " ...")
+    Call AddTextToConsole(Lang.GetString("_OpDisk") & " " & Trim$(Str$(lDrive)) & " ...")
     
     Me.Tag = lDrive
     bytDrive = lDrive
@@ -1153,36 +1156,36 @@ Dim l As Currency
     lLength = cDrive.TotalSpace    'taille totale
     HW.MaxOffset = lLength 'offset maximal
     HW.FileSize = lLength
-    Me.Caption = "Disque physique N° " & Trim$(Str$(lDrive))
+    Me.Caption = Lang.GetString("_OpDisk") & " " & Trim$(Str$(lDrive))
     
     'affiche les infos disque dans les textboxes
     With cDrive
-        TextBox(8).Text = "Disque=[" & .VolumeLetter & "]"
-        TextBox(9).Text = "Nom de volume=[" & .VolumeName & "]"
-        TextBox(10).Text = "Type de partition=[" & .FileSystemName & "]"
-        TextBox(11).Text = "N° de série=[" & Hex$(.VolumeSerialNumber) & "]"
-        TextBox(12).Text = "Type de disque=[" & .strDriveType & "]"
-        TextBox(13).Text = "Type de media=[" & .strMediaType & "]"
-        TextBox(14).Text = "Espace total physique=[" & Trim$(Str$(.PartitionLength)) & "]"
-        TextBox(15).Text = "Espace disponible=[" & Trim$(Str$(.FreeSpace)) & "]"
-        TextBox(0).Text = "Espace utilisé=[" & Trim$(Str$(.UsedSpace)) & "]"
-        TextBox(1).Text = "Pourcentage dispo.=[" & Trim$(Str$(Round(.PercentageFree, 4))) & " %]"
-        TextBox(17).Text = "Cylindres=[" & Trim$(Str$(.Cylinders)) & "]"
-        TextBox(16).Text = "Pistes/cylindre=[" & Trim$(Str$(.TracksPerCylinder)) & "]"
-        TextBox(7).Text = "Secteurs par piste=[" & Trim$(Str$(.SectorsPerTrack)) & "]"
-        TextBox(6).Text = "Sect. log.=[" & Trim$(Str$(.TotalLogicalSectors)) & "]"
-        TextBox(5).Text = "Sect. phys.=[" & Trim$(Str$(.TotalPhysicalSectors)) & "]"
-        TextBox(4).Text = "Secteurs/cluster=[" & Trim$(Str$(.SectorPerCluster)) & "]"
-        TextBox(18).Text = "Secteurs cachés=[" & Trim$(Str$(.HiddenSectors)) & "]"
-        TextBox(19).Text = "Clusters=[" & Trim$(Str$(.TotalClusters)) & "]"
-        TextBox(2).Text = "Clust. libres=[" & Trim$(Str$(.FreeClusters)) & "]"
-        TextBox(3).Text = "Clust. utilisés=[" & Trim$(Str$(.UsedClusters)) & "]"
-        TextBox(27).Text = "Octets/secteur=[" & Trim$(Str$(.BytesPerSector)) & "]"
-        TextBox(26).Text = "Octets/cluster=[" & Trim$(Str$(.BytesPerCluster)) & "]"
+        TextBox(8).Text = Lang.GetString("_Disk") & .VolumeLetter & "]"
+        TextBox(9).Text = Lang.GetString("_VolName") & .VolumeName & "]"
+        TextBox(10).Text = Lang.GetString("_PartType") & .FileSystemName & "]"
+        TextBox(11).Text = Lang.GetString("_SN") & Hex$(.VolumeSerialNumber) & "]"
+        TextBox(12).Text = Lang.GetString("_DiskType") & .strDriveType & "]"
+        TextBox(13).Text = Lang.GetString("_MediaT") & .strMediaType & "]"
+        TextBox(14).Text = Lang.GetString("_TotalPhysSpace") & Trim$(Str$(.PartitionLength)) & "]"
+        TextBox(15).Text = Lang.GetString("_FreeSpace") & Trim$(Str$(.FreeSpace)) & "]"
+        TextBox(0).Text = Lang.GetString("_UsedSpace") & Trim$(Str$(.UsedSpace)) & "]"
+        TextBox(1).Text = Lang.GetString("_Percent") & Trim$(Str$(Round(.PercentageFree, 4))) & " %]"
+        TextBox(17).Text = Lang.GetString("_Cyl") & Trim$(Str$(.Cylinders)) & "]"
+        TextBox(16).Text = Lang.GetString("_TrackPerCyl") & Trim$(Str$(.TracksPerCylinder)) & "]"
+        TextBox(7).Text = Lang.GetString("_SecPerT") & Trim$(Str$(.SectorsPerTrack)) & "]"
+        TextBox(6).Text = Lang.GetString("_SecLog") & Trim$(Str$(.TotalLogicalSectors)) & "]"
+        TextBox(5).Text = Lang.GetString("_SecP") & Trim$(Str$(.TotalPhysicalSectors)) & "]"
+        TextBox(4).Text = Lang.GetString("_SecPerC") & Trim$(Str$(.SectorPerCluster)) & "]"
+        TextBox(18).Text = Lang.GetString("_HidSec") & Trim$(Str$(.HiddenSectors)) & "]"
+        TextBox(19).Text = Lang.GetString("_Clust") & Trim$(Str$(.TotalClusters)) & "]"
+        TextBox(2).Text = Lang.GetString("_FClust") & Trim$(Str$(.FreeClusters)) & "]"
+        TextBox(3).Text = Lang.GetString("_UClust") & Trim$(Str$(.UsedClusters)) & "]"
+        TextBox(27).Text = Lang.GetString("_BPerSec") & Trim$(Str$(.BytesPerSector)) & "]"
+        TextBox(26).Text = Lang.GetString("_BPerClust") & Trim$(Str$(.BytesPerCluster)) & "]"
     End With
-    TextBox(20).Text = "Cluster n°=[0]"
-    TextBox(21).Text = "Sect. log. n°=[0]"
-    TextBox(22).Text = "Sect. phys. n°=[0]"
+    TextBox(20).Text = Lang.GetString("_N0Clust") & "0]"
+    TextBox(21).Text = Lang.GetString("_N0LogSec") & "0]"
+    TextBox(22).Text = Lang.GetString("_N0PhysSec") & "0]"
 
     frmContent.Sb.Panels(1).Text = "Status=[Ready]"
 
@@ -1204,7 +1207,7 @@ Dim l As Currency
     OpenDrive
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Disque physique N° " & Trim$(Str$(lDrive)) & " ouvert")
+    Call AddTextToConsole(Lang.GetString("_OpDisk") & " " & Trim$(Str$(lDrive)) & " " & Lang.GetString("_Opened"))
     
 End Sub
 
@@ -1524,7 +1527,7 @@ Dim r As Long
         'qui a été sélectionné
         Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
-        s = InputBox("Ajouter un commentaire pour le signet " & tLst.Text, "Ajout d'un commentaire")
+        s = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, Lang.GetString("_AddCom"))
         If StrPtr(s) <> 0 Then
             'ajoute le commentaire
             tLst.SubItems(1) = s
@@ -1536,7 +1539,7 @@ Dim r As Long
         Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         
-        r = MsgBox("Supprimer le signet " & tLst.Text & " ?", vbInformation + vbYesNo, "Attention")
+        r = MsgBox(Lang.GetString("_DelSig") & " " & tLst.Text & " ?", vbInformation + vbYesNo, Lang.GetString("_War"))
         If r <> vbYes Then Exit Sub
         
         'on supprime

@@ -384,7 +384,7 @@ Private Sub Form_Load()
     Set clsDisk = New clsDiskInfos
     
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -427,7 +427,7 @@ Dim s_t() As String
     On Error GoTo ErrGestion
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Récupération des informations sur les disques...")
+    Call AddTextToConsole(Lang.GetString("_RetDisk"))
     
     LV1.ListItems.Clear: x = 0
 
@@ -495,7 +495,7 @@ Dim s_t() As String
     Next y
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Informations récupérées")
+    Call AddTextToConsole(Lang.GetString("_RetOk"))
     
     Exit Sub
 ErrGestion:
@@ -510,14 +510,15 @@ Dim s As String
     
     With frmContent.CMD
         .CancelError = True
-        .DialogTitle = "Sauvegarder les informations sur les disques"
-        .Filter = "Fichier html|*.html"
+        .DialogTitle = Lang.GetString("_SaveInfos")
+        .Filter = Lang.GetString("_HTMLfile") & "|*.html"
         .InitDir = cFile.GetSpecialFolder(CSIDL_PERSONAL)
+        .Filename = vbNullString
         .ShowSave
         
         'fichier déjà existant ==> prévient
         If cFile.FileExists(.Filename) Then
-            If MsgBox("Voulez vous écraser le fichier déjà existant ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+            If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
         End If
         
         'le recréé

@@ -276,14 +276,14 @@ Dim bAddSign As Boolean
     txtSize.Text = FormatedVal(txtSize.Text)
     If Val(txtSize.Text) = 0 Then
         'pas de longueur ==> pas de recherche ;)
-        MsgBox "Veuillez spécifier une longueur de chaine non nulle", vbInformation, "Pas de recherche possible"
+        MsgBox Lang.GetString("_PleaseNoNull"), vbInformation, Lang.GetString("_NoSPoss")
         Exit Sub
     End If
 
     If frmContent.ActiveForm Is Nothing Then Exit Sub
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Recherche de strings en cours...")
+    Call AddTextToConsole(Lang.GetString("_SearchCour"))
     
     cmdSave.Enabled = False
     chkNumb3r.Enabled = False
@@ -300,13 +300,18 @@ Dim bAddSign As Boolean
         'alors c'est un fichier classique
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), _
+            CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), _
+            CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
         
     ElseIf TypeOfActiveForm = "Mem" Then
         'alors c'est dans la mémoire
         
         'lance la recherche
-        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), lngRes(), strRes(), Me.pgb
+        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), _
+            Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), _
+            CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), _
+            lngRes(), strRes(), Me.PGB
         
         'sauvegarde dans la variable tRes
         ReDim tRes(UBound(lngRes()))
@@ -319,18 +324,22 @@ Dim bAddSign As Boolean
         'alors c'est dans le disque
 
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), _
+            CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), _
+            CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
         
     Else
         'disque physique
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.pgb
+        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), _
+            CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), _
+            CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
         
     End If
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Affichage des résultats...")
+    Call AddTextToConsole(Lang.GetString("_ShowRes"))
     
     LV.ListItems.Clear
     
@@ -354,7 +363,7 @@ Dim bAddSign As Boolean
         End With
     Next i
     
-    Label2.Caption = "Résultats de la recherche " & CStr(UBound(tRes()))
+    Label2.Caption = Lang.GetString("_SearchResult") & " " & CStr(UBound(tRes()))
     
     cmdSave.Enabled = True
     chkNumb3r.Enabled = True
@@ -368,7 +377,7 @@ Dim bAddSign As Boolean
     chkAccent.Enabled = True
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Recherche terminée")
+    Call AddTextToConsole(Lang.GetString("_SearchFin"))
     
     Exit Sub
 ErrGestion:
@@ -391,15 +400,16 @@ Dim x As Long
     'affiche la boite de dialogue Sauvegarder
     With frmContent.CMD
         .CancelError = True
-        .DialogTitle = "Enregistrer les résultats"
-        .Filter = "Tous|*.*"
+        .DialogTitle = Lang.GetString("_SaveRes")
+        .Filter = Lang.GetString("_All") & "|*.*"
+        .Filename = vbNullString
         .ShowSave
         sFile = .Filename
     End With
     
     If cFile.FileExists(sFile) Then
         'fichier déjà existant
-        If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
 
     Label2.Caption = "Saving file..."
@@ -407,17 +417,21 @@ Dim x As Long
     lFile = FreeFile 'obtient un numéro disponible
     Open sFile For Output As lFile  'ouvre le fichier
     
-    Print #lFile, "Recherche de [" & txtSize.Text & "] caractères consécutifs" & vbNewLine & "[fichier]=" & sFile & vbNewLine & "[date]=" & Date$ & "  " & Time$ & vbNewLine & "[match]=" & LV.ListItems.Count
+    Print #lFile, Lang.GetString("_SearchOf") & txtSize.Text & _
+        Lang.GetString("_ConsecChar") & vbNewLine & Lang.GetString("_FileIs") & _
+        sFile & vbNewLine & Lang.GetString("_DateIs") & Date$ & "  " & Time$ & _
+        vbNewLine & "[match]=" & LV.ListItems.Count
     
     For x = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
-        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(x)) & "  [string]=" & LV.ListItems.Item(x).SubItems(1)
+        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(x)) & "  [string]=" & _
+        LV.ListItems.Item(x).SubItems(1)
         DoEvents
     Next x
     
     Close lFile
     
 CancelPushed:
-    Label2.Caption = "Résultats de la recherche"
+    Label2.Caption = Lang.GetString("_SearchResult")
 End Sub
 
 Private Sub Form_Load()
@@ -425,7 +439,7 @@ Private Sub Form_Load()
     Set clsPref = New clsIniForm
     
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

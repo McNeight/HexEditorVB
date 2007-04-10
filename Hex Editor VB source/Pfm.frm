@@ -638,19 +638,22 @@ Dim cFic As clsFile
     Set cFic = cFile.GetFile(Me.Caption)
     
     'affiche tout çà
-    TextBox(0).Text = "Taille=[" & CStr(cFic.FileSize) & " Octets  -  " & CStr(Round(cFic.FileSize / 1024, 3)) & " Ko" & "]"
-    TextBox(1).Text = "Attribut=[" & CStr(cFic.FileAttributes) & "]"
-    TextBox(2).Text = "Création=[" & cFic.CreationDate & "]"
-    TextBox(3).Text = "Accès=[" & cFic.LastAccessDate & "]"
-    TextBox(4).Text = "Modification=[" & cFic.LastModificationDate & "]"
-    TextBox(5).Text = "Version=[" & cFic.EXEFileVersion & "]"
-    TextBox(6).Text = "Description=[" & cFic.EXEFileDescription & "]"
-    TextBox(7).Text = "Copyright=[" & cFic.EXELegalCopyright & "]"
+    With cFic
+        TextBox(0).Text = Lang.GetString("_SizeIs") & CStr(.FileSize) & " Octets  -  " & CStr(Round(.FileSize / 1024, 3)) & " Ko" & "]"
+        TextBox(1).Text = Lang.GetString("_AttrIs") & CStr(.FileAttributes) & "]"
+        TextBox(2).Text = Lang.GetString("_CreaIs") & .CreationDate & "]"
+        TextBox(3).Text = Lang.GetString("_AccessIs") & .LastAccessDate & "]"
+        TextBox(4).Text = Lang.GetString("_ModifIs") & .LastModificationDate & "]"
+        TextBox(5).Text = Lang.GetString("_Version") & .EXEFileVersion & "]"
+        TextBox(6).Text = Lang.GetString("_DescrIs") & .EXEFileDescription & "]"
+        TextBox(7).Text = "Copyright=[" & .EXELegalCopyright & "]"
+    End With
    
     Label2(8).Caption = Me.Sb.Panels(2).Text
-    Label2(9).Caption = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
+    Label2(9).Caption = Lang.GetString("_SelIs") & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(10).Caption = Me.Sb.Panels(3).Text
-    Label2(11).Caption = "Offset maximum=[" & CStr(16 * Int(lLength / 16)) & "]"
+    Label2(11).Caption = Lang.GetString("_MaxOff") & CStr(16 * Int(lLength / 16)) & "]"
+
     'Label2(12).Caption = "[" & sDescription & "]"
     
     Set cFic = Nothing
@@ -678,7 +681,7 @@ Private Sub Form_Load()
     Set cUndo = New clsUndoItem
     
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -757,7 +760,7 @@ End Sub
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     'FileContent = vbNullString
     lNbChildFrm = lNbChildFrm - 1
-    frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+    frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
     
     CloseHandle lFile 'ferme le handle sur le fichier
 End Sub
@@ -1093,7 +1096,7 @@ Dim l As Currency
     On Error GoTo ErrGestion
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Ouverture du fichier " & sFile & " ...")
+    Call AddTextToConsole(Lang.GetString("_OpFileCour") & " " & sFile & " ...")
 
     'récupère les infos fichier
     Set TheFile = cFile.GetFile(sFile)
@@ -1135,7 +1138,7 @@ Dim l As Currency
     LoadIconesToLV sFile, lvIcon, Me.pct, Me.IMG
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Fichier " & sFile & " ouvert")
+    Call AddTextToConsole(Lang.GetString("_File") & " " & sFile & " " & Lang.GetString("_Opened"))
     
     Exit Sub
 ErrGestion:
@@ -1573,7 +1576,7 @@ Dim r As Long
         'touche suppr
         If lstSignets.SelectedItem.Selected Then
             'alors on supprime quelque chose
-            r = MsgBox("Supprimer les signets ?", vbInformation + vbYesNo, "Attention")
+            r = MsgBox(Lang.GetString("_DelSign"), vbInformation + vbYesNo, Lang.GetString("_War"))
             If r <> vbYes Then Exit Sub
         
             For r = lstSignets.ListItems.Count To 1 Step -1
@@ -1594,7 +1597,7 @@ Dim r As Long
         'qui a été sélectionné
         Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
-        s = InputBox("Ajouter un commentaire pour le signet " & tLst.Text, "Ajout d'un commentaire")
+        s = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, Lang.GetString("_AddCom"))
         If StrPtr(s) <> 0 Then
             'ajoute le commentaire
             tLst.SubItems(1) = s
@@ -1606,7 +1609,7 @@ Dim r As Long
         Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         
-        r = MsgBox("Supprimer le signet " & tLst.Text & " ?", vbInformation + vbYesNo, "Attention")
+        r = MsgBox(Lang.GetString("_DelSig") & " " & tLst.Text & " ?", vbInformation + vbYesNo, Lang.GetString("_War"))
         If r <> vbYes Then Exit Sub
         
         'on supprime
@@ -1656,7 +1659,7 @@ Dim lPages As Long
     If NumberPerPage = 0 Then Exit Sub
     
     'réaffiche la Grid
-    OpenFile 16 * Value + 1, VS.Value * 16 + NumberPerPage * 16
+    Call OpenFile(16 * Value + 1, VS.Value * 16 + NumberPerPage * 16)
     
     'calcule le nbre de pages
     lPages = lLength / (NumberPerPage * 16) + 1
@@ -1708,7 +1711,7 @@ Dim Ret As Long
     On Error GoTo ErrGestion
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Sauvegarde du fichier " & sFile2 & " ...")
+    Call AddTextToConsole(Lang.GetString("_SavingFile") & " " & sFile2 & " ...")
 
     'affiche le message d'attente
     frmContent.Sb.Panels(1).Text = "Status=[Saving " & Me.Caption & "]"
@@ -1780,7 +1783,7 @@ Dim Ret As Long
     frmContent.Sb.Panels(1).Text = "Status=[Ready]"
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Fichier sauvegardé")
+    Call AddTextToConsole(Lang.GetString("_FileSaved"))
     
     Exit Function
 ErrGestion:

@@ -43,6 +43,8 @@ Option Explicit
 'DU LOGICIEL ==> A CHANGER QUAND ON CHANGE LES SOURCES DE DOSSIER
 Public Const LANG_PATH                          As String = "C:\HEX EDITOR VB\Executable folder\Lang"
 
+'affecter cette constante à 1 pour demander de recréer le fichier *.ini de traduction
+Public Const CREATE_FRENCH_FILE As Byte = 0
 
 
 '=======================================================

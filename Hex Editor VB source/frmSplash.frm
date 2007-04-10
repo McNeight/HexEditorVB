@@ -250,7 +250,7 @@ Private Sub Form_Load()
 'affiche le contenu des captions
 
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -269,8 +269,8 @@ Private Sub Form_Load()
     Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
-    lblLicenseTo.Caption = "License accordée à " & GetUserName
-    lblVersion.Caption = "Version " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision))
+    lblLicenseTo.Caption = Lang.GetString("_LicenseTo") & " " & GetUserName
+    lblVersion.Caption = Lang.GetString("_Version") & " " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision))
 End Sub
 
 Private Sub Timer1_Timer()

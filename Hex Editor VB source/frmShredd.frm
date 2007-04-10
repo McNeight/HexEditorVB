@@ -137,7 +137,7 @@ Dim s2 As String
 Dim x As Long
 
     ReDim s(0)
-    s2 = cFile.ShowOpen("Choix des fichiers à supprimer", Me.hWnd, "Tous|*.*", , , , , _
+    s2 = cFile.ShowOpen(Lang.GetString("_FilesToKillSel"), Me.hWnd, Lang.GetString("_All") & "|*.*", , , , , _
         OFN_EXPLORER + OFN_ALLOWMULTISELECT, 4096, s())
     
     For x = 1 To UBound(s())
@@ -159,7 +159,7 @@ Private Sub cmdProceed_Click()
 Dim x As Long
 
     'affiche un advertissement
-    x = MsgBox("Les fichiers sélectionnés seront IRRECUPERABLES." & vbNewLine & "Procéder à la suppression ?", vbYesNo + vbInformation, "Attention")
+    x = MsgBox(Lang.GetString("_FilesWillBeLost") & vbNewLine & Lang.GetString("_WannaKill"), vbYesNo + vbInformation, Lang.GetString("_War"))
     
     If Not (x = vbYes) Then Exit Sub
     
@@ -174,14 +174,14 @@ Dim x As Long
     'affichage des résultats
     If LV.ListItems.Count > 0 Then
         'alors il reste au moins un fichier
-        MsgBox "Au moins un des fichiers n'a pas pu être supprimé.", vbInformation, "Attention"
+        MsgBox Lang.GetString("_OneCannot"), vbInformation, Lang.GetString("_War")
     Else
         'OK
-        MsgBox "Fichiers supprimés avec succès", vbOKOnly, "Suppression réussie"
+        MsgBox Lang.GetString("_DelOk"), vbOKOnly, Lang.GetString("_DelIsOk")
     End If
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Opération de suppression terminée")
+    Call AddTextToConsole(Lang.GetString("_DelFin"))
 End Sub
 
 Private Sub cmdQuit_Click()
@@ -190,7 +190,7 @@ End Sub
 
 Private Sub Form_Load()
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

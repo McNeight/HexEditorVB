@@ -174,7 +174,7 @@ Private Sub cmdReset_Click()
     Call Form_Load
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Log supprimé")
+    Call AddTextToConsole(Lang.GetString("_LogDel"))
 End Sub
 
 Private Sub Form_Load()
@@ -182,7 +182,7 @@ Dim var As Variant
 Dim x As Long
 
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -219,10 +219,10 @@ Dim x As Long
     If clsERREUR.NumberOfErrorInLogFile <> 0 Then
         'il y a des erreurs
         Text1.ForeColor = RED_COLOR
-        Text1.Text = "Des erreurs ont été enregistrées dans le rapport d'erreur." & vbNewLine & "Veuillez SVP envoyer le fichier" & vbNewLine & clsERREUR.LogFile & vbNewLine & "à l'adresse : hexeditorvb@gmail.com" & vbNewLine & "Vous contriburez ainsi à l'amélioration de ce programme."
+        Text1.Text = Lang.GetString("_ErrorRap") & vbNewLine & Lang.GetString("_PleaseSend") & vbNewLine & clsERREUR.LogFile & vbNewLine & Lang.GetString("_At") & " hexeditorvb@gmail.com" & vbNewLine & Lang.GetString("_YouCont")
     Else
         'pas d'erreurs
         Text1.ForeColor = GREEN_COLOR
-        Text1.Text = "Pas d'erreur enregistrée !"
+        Text1.Text = Lang.GetString("_NoError")
     End If
 End Sub

@@ -1,5 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.MDIForm frmDisAsm 
    BackColor       =   &H8000000C&
    Caption         =   "Désassembleur d'exécutables"
@@ -10,6 +11,12 @@ Begin VB.MDIForm frmDisAsm
    Icon            =   "frmDisAsm.frx":0000
    LinkTopic       =   "MDIForm1"
    StartUpPosition =   2  'CenterScreen
+   Begin LanguageTranslator.ctrlLanguage Lang 
+      Left            =   0
+      Top             =   0
+      _ExtentX        =   1402
+      _ExtentY        =   1402
+   End
    Begin ComctlLib.StatusBar Sb 
       Align           =   2  'Align Bottom
       Height          =   255
@@ -118,6 +125,16 @@ Begin VB.MDIForm frmDisAsm
          Caption         =   "&Aide..."
          Shortcut        =   {F1}
       End
+      Begin VB.Menu mnuTiret21 
+         Caption         =   "-"
+      End
+      Begin VB.Menu rmnuLang 
+         Caption         =   "&Langue"
+         Begin VB.Menu mnuLang 
+            Caption         =   "&Français"
+            Index           =   1
+         End
+      End
       Begin VB.Menu mnuTiret2 
          Caption         =   "-"
       End
@@ -171,14 +188,94 @@ Option Explicit
 Private sFile As String 'fichier ouvert
 Private sFileW As String
 
+Private Sub mnuLang_Click(Index As Integer)
+'on change de langue
+Dim s As String
+Dim x As Long
+
+    'détermine le path du dossier
+    If App.LogMode = 0 Then
+        s = LANG_PATH
+    Else
+        s = App.Path & "\Lang"
+    End If
+    
+    s = s & "\" & mnuLang(Index).Caption & ".ini"
+    s = Replace$(s, "&", vbNullString)
+    
+    'vérifie la présence du fichier
+    If cFile.FileExists(s) = False Then MsgBox "Le fichier de langue n'existe pas !", vbCritical, "Erreur": Exit Sub
+    
+    'on décoche tout les menus
+    For x = 1 To UBound(sLang())
+        mnuLang(x).Checked = False
+    Next x
+    
+    'on coche celui sélectionné
+    mnuLang(Index).Checked = True
+    
+    'on affiche un message comme quoi il faut redémarrer
+    MsgBox Lang.GetString("_HaveTo1") & vbNewLine & Lang.GetString("_HaveTo2"), vbInformation, Lang.GetString("_War")
+    
+    'on change les pref
+    cPref.env_Lang = mnuLang(Index).Caption
+    Dim cPRE As clsIniFile
+    Set cPRE = New clsIniFile
+    Call cPRE.SaveIniFile(cPref)
+    Set cPRE = Nothing
+    
+    'on ferme si pas dans l'IDE
+    If App.LogMode <> 0 Then Call EndProgram
+End Sub
+
+Private Sub MDIForm_Load()
+Dim x As Long
+
+    On Error Resume Next
+    
+    #If MODE_DEBUG Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+            'on créé le fichier de langue français
+            Lang.Language = "French"
+            Lang.LangFolder = LANG_PATH
+            Lang.WriteIniFileFormIDEform
+        End If
+    #End If
+    
+    If App.LogMode = 0 Then
+        'alors on est dans l'IDE
+        Lang.LangFolder = LANG_PATH
+    Else
+        Lang.LangFolder = App.Path & "\Lang\Disassembler\"
+    End If
+    
+    'applique la langue désirée aux controles
+    Lang.Language = cPref.env_Lang
+    Lang.LoadControlsCaption
+    
+    'chargement des menus de langue (sLang())
+    For x = 1 To UBound(sLang())
+        'ajoute une entrée au menu
+        Load Me.mnuLang(x)
+        Me.mnuLang(x).Caption = Left$(cFile.GetFileFromPath(sLang(x)), Len(cFile.GetFileFromPath(sLang(x))) - 4)
+    Next x
+    
+    'coche le bon menu
+    For x = 1 To mnuLang.Count
+        
+        If Replace$(Me.mnuLang(x).Caption, "&", vbNullString) = cPref.env_Lang _
+            Then Me.mnuLang(x).Checked = True
+    Next x
+End Sub
+
 Private Sub mnuDisAsm_Click()
 'ouvre un fichier
 Dim s As String
 Dim b As Boolean
 
     'choix du fichier
-    s = cFile.ShowOpen("Choix du fichier à désassembler", Me.hWnd, _
-        "Fichiers désassemblables|*.exe;*.dll|Tous|*.*", App.Path, , b)
+    s = cFile.ShowOpen(Lang.GetString("_FileToDis"), Me.hWnd, _
+        Lang.GetString("_FicDes") & "|*.exe;*.dll;*.ocx|" & Lang.GetString("_All") & "|*.*", App.Path, , b)
     If b Then Exit Sub
     If cFile.FileExists(s) = False Then Exit Sub
     
@@ -191,7 +288,7 @@ Dim b As Boolean
     tmpDir = ObtainTempPath & "\" & cFile.GetFileFromPath(s)
     
     'on lance la procédure de désassemblage
-    Sb.Panels(1).Text = "Désassemblage en cours..."
+    Sb.Panels(1).Text = Lang.GetString("_Desassembling")
     
     Call DisassembleWin32Executable(s, tmpDir)
     
@@ -228,7 +325,7 @@ Private Sub mnuDisplayAll_Click()
 End Sub
 
 Private Sub mnuHelp_Click()
-    MsgBox "Aide indisponible", vbCritical, "Attention"
+    MsgBox Lang.GetString("_HelpDoesNot"), vbCritical, Lang.GetString("_War")
 End Sub
 
 Private Sub mnuMH_Click()
@@ -277,7 +374,7 @@ Dim sF As String
 
     On Error Resume Next
     
-    Sb.Panels(1).Text = "Chargement des fichiers créés..."
+    Sb.Panels(1).Text = Lang.GetString("_LoadingFiles")
     
     sF = tmpDir & "\" & sFileW
     
@@ -324,7 +421,7 @@ Dim b As Boolean
     tmpDir = ObtainTempPath & "\" & cFile.GetFileFromPath(sFile)
     
     'on lance la procédure de désassemblage
-    Sb.Panels(1).Text = "Désassemblage en cours..."
+    Sb.Panels(1).Text = Lang.GetString("_Desassembling")
     
     Call DisassembleWin32Executable(sFile, tmpDir)
     

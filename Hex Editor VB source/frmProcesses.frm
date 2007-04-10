@@ -127,7 +127,7 @@ Dim Frm As Form
     
     If lH = 0 Then
         'pas possible
-        MsgBox "Accès impossible à ce processus", vbInformation, "Erreur"
+        MsgBox Lang.GetString("_AccessDen"), vbInformation, Lang.GetString("_Error")
         Exit Sub
     End If
     
@@ -138,7 +138,7 @@ Dim Frm As Form
     Call Frm.GetFile(Val(PV.SelectedItem.Tag))
     Frm.Show
     lNbChildFrm = lNbChildFrm + 1
-    frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+    frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
 
     'Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
 
@@ -175,7 +175,7 @@ End Sub
 Private Sub Form_Load()
 
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

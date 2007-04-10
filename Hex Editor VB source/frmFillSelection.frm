@@ -270,7 +270,7 @@ Private tPasses() As PASSE_TYPE
 Private Sub cmdAdd_Click()
 'ajoute une passe
         
-    lstPasses.AddItem "Passe " & CStr(UBound(tPasses) + 1)
+    lstPasses.AddItem Lang.GetString("_Pass") & " " & CStr(UBound(tPasses) + 1)
 
     'initialise la dernière passe
     With tPasses(UBound(tPasses))
@@ -288,7 +288,7 @@ Private Sub cmdApply_Click()
 
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Remplissage des bytes terminé")
+    Call AddTextToConsole(Lang.GetString("_PassOk"))
 End Sub
 
 Private Sub cmdDelete_Click()
@@ -320,7 +320,7 @@ Dim tPTmp() As PASSE_TYPE
     
     'rajoute n-1 passes
     For x = 1 To UBound(tPTmp) - 1
-        lstPasses.AddItem "Passe " & CStr(x)
+        lstPasses.AddItem Lang.GetString("_Pass") & " " & CStr(x)
     Next x
     
     lstPasses.ListIndex = l - 1
@@ -348,9 +348,9 @@ Private Sub cmdSanitization_Click()
     lstPasses.Clear
     
     'ajout des 3 passes
-    lstPasses.AddItem "Passe 1"
-    lstPasses.AddItem "Passe 2"
-    lstPasses.AddItem "Passe 3"
+    lstPasses.AddItem Lang.GetString("_Pass") & " 1"
+    lstPasses.AddItem Lang.GetString("_Pass") & " 2"
+    lstPasses.AddItem Lang.GetString("_Pass") & " 3"
     
     tPasses(0).sData1 = "55"
     tPasses(0).sData2 = ""
@@ -370,7 +370,7 @@ Private Sub Form_Load()
     clsPref.GetFormSettings App.Path & "\Preferences\FillSelection.ini", Me
     
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
