@@ -209,17 +209,49 @@ Attribute VB_Name = "About_Description"
 '
 ' VERSIONS PRE ALPHA :
 '
-'   v1.6 Optimisations du logiciel (démarrage, ouverture des fichiers...), correction de bugs
-' d'affichage, corrections de bugs divers, support des disques physiques ajouté, ajout de la
-' console, ajout du module de désassemblage
-'   v1.5 Ajout de la recherche de fichiers, des options, des icones, correction de nombreux
-' bugs, support des formats CDFS et UDF, support des fichiers de plus de 900To
-'   v1.4 Ajout des options, de la recherche en mémoire, de la conversion avancée,
-' de la copie dans le presse papier et du fusionneur/découpeur de fichiers
-'   v1.3 Support de l'historique + outils
-'   v1.2 Ajout de la gestion des disques
-'   v1.1 Ajout de la gestion de la modification des processus en mémoire
-'   v1.0 Release initiale
+'   v1.6
+'   -Optimisations diverses du logiciel (démarrage, ouverture des fichiers..)
+'   -Ajout de la gestion de fin de fichier
+'   -Ajout de la console
+'   -Ajout de nouvelles options,
+'   -Nombreux bugs corrigés
+'   -Ajouté le Disassembler avec le support multilingue et les traductions française et anglaise complètes
+'   -Ajout de la sélection et du support des disques physiques
+'   -Bugs d'affichage résolus
+'   -Optimisé la vitesse de démarrage de l'explorateur de fichiers
+'   -Ajout d'un gestionnaire de signets
+'   -Ajout de l'exportation vers le presse papier et vers un fichier pour l'exportation de fichiers complets
+'   -Ajout d'arborescences de processus plutôt que de simples listes
+'   -Ajout du projet "Editeur de langue"
+'   -Ajout du support multi-langue complet pour Hex Editor VB excepté pour la console
+'   -Ajout de la traduction française complète
+'
+'   v1.5
+'   -Ajout de la recherche de fichiers
+'   -Ajout des options
+'   -Ajout des icones
+'   -Correction de nombreux bugs
+'   -Support des formats CDFS et UDF
+'   -Support des fichiers de plus de 900To
+'
+'   v1.4
+'   -Ajout des options
+'   -Ajout de la recherche en mémoire
+'   -Ajout de la conversion avancée
+'   -Ajout de la copie dans le presse papier
+'   -Ajout du fusionneur/découpeur de fichiers
+'
+'   v1.3
+'   -Support de l'historique + outils
+'
+'   v1.2
+'   -Ajout de la gestion des disques
+'
+'   v1.1
+'   -Ajout de la gestion de la modification des processus en mémoire
+'
+'   v1.0
+'   -Release initiale
 
 
 
@@ -239,15 +271,49 @@ Attribute VB_Name = "About_Description"
 '
 ' PRE ALPHA RELEASES :
 '
-'   v1.6 Optimized Hex Editor VB (loading, file opening ...), bugs fixed, added support of
-' physical disks, addde Console, added Disassembler module
-'   v1.5 Added search of files, options, icons, bugs fixed, support of CDFS and UDF format,
-' support of >900 TB files
-'   v1.4 Added options, search in memory, advanced conversion, copy, 'file fusion'
-'   v1.3 Added support of new tools + history
-'   v1.2 Added support of disk edition
-'   v1.1 Added support of process edition
-'   v1.0 Initial release
+'   v1.6
+'   -Various Optimizations of the software (starting, opening of the files...)
+'   -Added the management of end of file
+'   -Added console
+'   -Added new options
+'   -Fixed lots of bugs
+'   -Added Disassembler Tool and French/English complete tanslations
+'   -Added selection and support of physical disks
+'   -Fixed display bugs
+'   -Optimized loading of File Explorer
+'   -Added a bookmark manager
+'   -Added export to the clipboard and a file for the export of complete files
+'   -Added tree structures of process rather than simple lists
+'   -Added "Language Editor Tool" project
+'   -Added support of multi-language for Hex Editor VB (except for console)
+'   -Added complete french translation
+'
+'   v1.5
+'   -Added file search
+'   -Added options
+'   -Added icons
+'   -Fixed many bugs
+'   -Added support of CDFS and UDF formats
+'   -Added support of more than 900TB files
+'
+'   v1.4
+'   -Added options
+'   -Added search in memory
+'   -Added advanced conversion
+'   -Added copy to clipboard
+'   -Added 'file fusion'
+'
+'   v1.3
+'   -Added history + tools
+'
+'   v1.2
+'   -Added disk gestion
+'
+'   v1.1
+'   -Added support of process virtual memory edition
+'
+'   v1.0
+'   -Initial release
 
 
 
