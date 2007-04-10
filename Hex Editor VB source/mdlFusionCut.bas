@@ -64,37 +64,40 @@ Dim k2 As Currency
     lTime = GetTickCount
     
     '//VERIFICATIONS
-    'vérifie que le fichier existe bien
-    If cFile.FileExists(sFile) = False Then
-        'fichier manquant
-        MsgBox "Le fichier ne peut être découpé car il n'existe pas.", vbCritical, "Erreur critique"
-        Exit Function
-    End If
+    With frmContent.Lang
+        'vérifie que le fichier existe bien
+        If cFile.FileExists(sFile) = False Then
+            'fichier manquant
+            MsgBox .GetString("_CannotBeCut"), vbCritical, .GetString("_Error")
+            Exit Function
+        End If
+        
+        'vérifie que le dossier résultat existe bien
+        If cFile.FolderExists(sFolderOut) = False Then
+            'dossier résultat inexistant
+            MsgBox .GetString("_EmplacementNot"), vbCritical, .GetString("_Error")
+            Exit Function
+        End If
+        
+        'récupère le nom du fichier
+        sFileStr = cFile.GetFileFromPath(sFile)
+        
+        'vérifie que le fichier groupeur n'existe pas déjà
+        If cFile.FileExists(sFolderOut & "\" & sFileStr & ".grp") Then
+            'fichier déjà existant
+            If MsgBox(.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, .GetString("_War")) <> vbYes Then Exit Function
+        End If
+        
+        
+        'récupère la taille du fichier
+        curSize = cFile.GetFileSize(sFile)
+        If curSize = 0 Or cFile.IsFileAvailable(sFile) = False Then
+            'fichier vide ou inaccessible
+            MsgBox .GetString("_OperationCutNotOk"), vbCritical, .GetString("_Error")
+            Exit Function
+        End If
+    End With
     
-    'vérifie que le dossier résultat existe bien
-    If cFile.FolderExists(sFolderOut) = False Then
-        'dossier résultat inexistant
-        MsgBox "L'emplacement résultant n'existe pas, vous devez spécifier le fichier groupeur dans un dossier existant.", vbCritical, "Erreur critique"
-        Exit Function
-    End If
-    
-    'récupère le nom du fichier
-    sFileStr = cFile.GetFileFromPath(sFile)
-    
-    'vérifie que le fichier groupeur n'existe pas déjà
-    If cFile.FileExists(sFolderOut & "\" & sFileStr & ".grp") Then
-        'fichier déjà existant
-        If MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Function
-    End If
-    
-    
-    'récupère la taille du fichier
-    curSize = cFile.GetFileSize(sFile)
-    If curSize = 0 Or cFile.IsFileAvailable(sFile) = False Then
-        'fichier vide ou inaccessible
-        MsgBox "Le fichier est vide ou inaccessible, l'opération n'a pas pu être terminée.", vbCritical, "Erreur critique"
-        Exit Function
-    End If
     
     'règle la progressbar
     With frmCut.pgb
@@ -373,7 +376,7 @@ Dim k2 As Currency
     
     
     'terminé
-    MsgBox "Découpage terminé avec succès.", vbInformation + vbOKOnly, "Découpage réussi"
+    MsgBox frmContent.Lang.GetString("_OpCutOk"), vbInformation + vbOKOnly, frmContent.Lang.GetString("_OpCutOkShort")
     CutFile = GetTickCount - lTime
     Exit Function
 
@@ -404,56 +407,59 @@ Dim lTime As Long
     lTime = GetTickCount
     
     '//VERIFICATIONS
-    'vérifie que le fichier existe bien
-    If cFile.FileExists(sFileGroup) = False Then
-        'fichier manquant
-        MsgBox "Le fichier ne peut être créé car le fichier de fusion n'existe pas.", vbCritical, "Erreur critique"
-        Exit Function
-    End If
-    
-    'vérifie que le dossier résultat existe bien
-    If cFile.FolderExists(sFolderOut) = False Then
-        'dossier résultat inexistant
-        MsgBox "L'emplacement résultant n'existe pas, vous devez spécifier le fichier créé dans un dossier existant.", vbCritical, "Erreur critique"
-        Exit Function
-    End If
-    
-    sBuf = cFile.LoadFileInString(sFileGroup)
-    'récupère le nom du fichier
-    sFileStr = Mid$(sBuf, 1, InStr(1, sBuf, "|") - 1)
-    
-    'vérifie que le fichier groupeur n'existe pas déjà
-    If cFile.FileExists(sFolderOut & "\" & sFileStr) Then
-        'fichier déjà existant
-        If MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Function
-    End If
-    
-    If cFile.IsFileAvailable(sFileGroup) = False Then
-        'fichier groupe indisponible ou inexistant
-        MsgBox "Le fichier groupeur est indisponible ou inexistant.", vbCritical, "Erreur critique"
-    End If
-
-    With frmCut.pgb
-        .Min = 0
-        .Value = 0
-    End With
-
-    '//LANCE LA FUSION
-    'récupère le nombre de fichiers concernés
-    lFileCount = Val(Right$(sBuf, Len(sBuf) - InStr(1, sBuf, "|")))
-    
-    'vérifie l'existence de chaque fichier
-    bOk = True
-    For i = 1 To lFileCount
-        If cFile.FileExists(cFile.GetFolderFromPath(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i))) = False Then
-            bOk = False
+    With frmContent.Lang
+        'vérifie que le fichier existe bien
+        If cFile.FileExists(sFileGroup) = False Then
+            'fichier manquant
+            MsgBox .GetString("_MissGrup"), vbCritical, .GetString("_Error")
+            Exit Function
         End If
-    Next i
-    If Not (bOk) Then
-        'alors un fichier est absent
-        MsgBox "Il manque un fichier.", vbCritical, "Opération de fusion impossible"
-        Exit Function
-    End If
+        
+        'vérifie que le dossier résultat existe bien
+        If cFile.FolderExists(sFolderOut) = False Then
+            'dossier résultat inexistant
+            MsgBox .GetString("_EmplacementNot2"), vbCritical, .GetString("_Error")
+            Exit Function
+        End If
+        
+        sBuf = cFile.LoadFileInString(sFileGroup)
+        'récupère le nom du fichier
+        sFileStr = Mid$(sBuf, 1, InStr(1, sBuf, "|") - 1)
+        
+        'vérifie que le fichier groupeur n'existe pas déjà
+        If cFile.FileExists(sFolderOut & "\" & sFileStr) Then
+            'fichier déjà existant
+            If MsgBox(.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, .GetString("_War")) <> vbYes Then Exit Function
+        End If
+        
+        If cFile.IsFileAvailable(sFileGroup) = False Then
+            'fichier groupe indisponible ou inexistant
+            MsgBox .GetString("_GrupFileNot"), vbCritical, .GetString("_Error")
+        End If
+
+        With frmCut.pgb
+            .Min = 0
+            .Value = 0
+        End With
+    
+        '//LANCE LA FUSION
+        'récupère le nombre de fichiers concernés
+        lFileCount = Val(Right$(sBuf, Len(sBuf) - InStr(1, sBuf, "|")))
+        
+        'vérifie l'existence de chaque fichier
+        bOk = True
+        For i = 1 To lFileCount
+            If cFile.FileExists(cFile.GetFolderFromPath(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i))) = False Then
+                bOk = False
+            End If
+        Next i
+        If Not (bOk) Then
+            'alors un fichier est absent
+            MsgBox .GetString("_OneFileMissed"), vbCritical, .GetString("_FusImp")
+            Exit Function
+        End If
+    End With
+    
     
     'créé le fichier résultat
     cFile.CreateEmptyFile sFolderOut & "\" & sFileStr, True
@@ -531,7 +537,7 @@ Dim lTime As Long
     End If
     
     'terminé
-    MsgBox "Fusion terminée avec succès.", vbInformation + vbOKOnly, "Fusion réussie"
+    MsgBox frmContent.Lang.GetString("_FusOk"), vbInformation + vbOKOnly, frmContent.Lang.GetString("_FusOkShort")
     
     PasteFile = GetTickCount - lTime
     Exit Function

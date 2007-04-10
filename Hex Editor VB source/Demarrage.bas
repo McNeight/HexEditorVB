@@ -362,7 +362,7 @@ Dim x As Long
     '//prévient des processus bloqués
         If UBound(JailedProcess()) > 0 Then
             'alors des processus bloqués
-            If MsgBox("Ces processus on été bloqués, voulez vous quitter Hex Editor VB sans les débloquer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then
+            If MsgBox(frmContent.Lang.GetString("_ProcessHaveBeenBlocked"), vbInformation + vbYesNo, frmContent.Lang.GetString("_War")) <> vbYes Then
                 
                 'alors on libère tout
                 For x = 1 To UBound(JailedProcess())
@@ -426,57 +426,59 @@ Dim lTo As Currency
     s2() = Split(s, vbNewLine, , vbBinaryCompare) ' Left$(s, InStr(1, s, vbNewLine) - 1)
     s3 = Right$(s2(0), Len(s2(0)) - InStr(1, s, "|"))   'contient le PID, le disque ou le fichier
     
-    Select Case Left$(s2(0), 2)
-        Case "Pr"
-            'processus
-            If cProc.DoesPIDExist(Val(s3)) = False Then
-                'process inexistant
-                MsgBox "Le processus de PID " & s3 & " est inexistant.", vbCritical, "Erreur"
+    With frmContent.Lang
+        Select Case Left$(s2(0), 2)
+            Case "Pr"
+                'processus
+                If cProc.DoesPIDExist(Val(s3)) = False Then
+                    'process inexistant
+                    MsgBox .GetString("_ProcessWithPID") & " " & s3 & " " & .GetString("_ProcessDoesNotE"), vbCritical, .GetString("_Error")
+                    Exit Sub
+                End If
+                Set Frm = New MemPfm
+                Call Frm.GetFile(Val(s3))   'le PID en paramètre
+            Case "Di"
+                'disque
+                If cFile.FolderExists(s3) = False Or Len(s3) <> 3 Then
+                    'disque inexistant
+                    MsgBox .GetString("_TheDisk") & " " & s3 & " " & .GetString("_DoesNotEx"), vbCritical, .GetString("_Error")
+                    Exit Sub
+                End If
+                If cDisk.IsLogicalDriveAccessible(s3) = False Then
+                    'disque inaccessible
+                    MsgBox .GetString("_TheDisk") & " " & s3 & " " & .GetString("_IsNotAccessibl"), vbCritical, .GetString("_Error")
+                    Exit Sub
+                End If
+                Set Frm = New diskPfm
+                Call Frm.GetDrive(s3)
+            Case "Fi"
+                If cFile.FileExists(s3) = False Then
+                    'fichier invalide
+                    MsgBox .GetString("_TheFile") & " " & s3 & " " & .GetString("_IsNotValid"), vbCritical, .GetString("_Error")
+                    Exit Sub
+                End If
+                'fichier
+                Set Frm = New Pfm
+                Call Frm.GetFile(s3)
+            Case "Ph"
+                'disque physique
+                If cDisk.IsPhysicalDriveAccessible(Val(s3)) = False Then
+                    'disque inaccessible
+                    MsgBox .GetString("_TheDisk") & " " & s3 & " " & .GetString("_NotAccessOrInex"), vbCritical, .GetString("_Error")
+                    Exit Sub
+                End If
+                Set Frm = New physPfm
+                Call Frm.GetDrive(Val(s3))   'le numéro du disque en paramètre
+            Case Else
+                'fichier non valide (trafiqué)
                 Exit Sub
-            End If
-            Set Frm = New MemPfm
-            Call Frm.GetFile(Val(s3))   'le PID en paramètre
-        Case "Di"
-            'disque
-            If cFile.FolderExists(s3) = False Or Len(s3) <> 3 Then
-                'disque inexistant
-                MsgBox "Le disque " & s3 & " n'existe pas.", vbCritical, "Erreur"
-                Exit Sub
-            End If
-            If cDisk.IsLogicalDriveAccessible(s3) = False Then
-                'disque inaccessible
-                MsgBox "Le disque " & s3 & " n'est pas accessibe.", vbCritical, "Erreur"
-                Exit Sub
-            End If
-            Set Frm = New diskPfm
-            Call Frm.GetDrive(s3)
-        Case "Fi"
-            If cFile.FileExists(s3) = False Then
-                'fichier invalide
-                MsgBox "Le fichier " & s3 & " n'est pas valide.", vbCritical, "Erreur"
-                Exit Sub
-            End If
-            'fichier
-            Set Frm = New Pfm
-            Call Frm.GetFile(s3)
-        Case "Ph"
-            'disque physique
-            If cDisk.IsPhysicalDriveAccessible(Val(s3)) = False Then
-                'disque inaccessible
-                MsgBox "Le disque " & s3 & " n'est pas accessibe ou inexistant.", vbCritical, "Erreur"
-                Exit Sub
-            End If
-            Set Frm = New physPfm
-            Call Frm.GetDrive(Val(s3))   'le numéro du disque en paramètre
-        Case Else
-            'fichier non valide (trafiqué)
-            Exit Sub
-    End Select
-    
-    'affiche la form
-    Frm.Show
-    lNbChildFrm = lNbChildFrm + 1
-    frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+        End Select
+        
+        'affiche la form
+        Frm.Show
+        lNbChildFrm = lNbChildFrm + 1
+        frmContent.Sb.Panels(2).Text = .GetString("_Openings") & CStr(lNbChildFrm) & "]"
+    End With
     
     DoEvents    '/!\ IMPORTANT DO NOT REMOVE
     

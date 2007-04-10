@@ -345,8 +345,7 @@ End Function
 '=======================================================
 Public Function ShowRunBox(ByVal hWnd As Long) As Long
     ShowRunBox = SHRunDialog(hWnd, 0, 0, StrConv("Exécuter", vbUnicode), _
-        StrConv("Sélectionnez un élément à lancer (dossier, document, exécutable...) et Process Guardian l'ouvrira pour vous.", _
-        vbUnicode), 0)
+        StrConv(frmContent.Lang.GetString("_ShowRunBoxMsg"), vbUnicode), 0)
 End Function
 
 '=======================================================
@@ -701,23 +700,26 @@ Dim bOverWrite As Boolean
     
     'détermine la position du premier offset
     curPos = frmContent.ActiveForm.HW.FirstSelectionItem.Offset + frmContent.ActiveForm.HW.FirstSelectionItem.Col - 1
-        
+    
     With frmContent.CMD
         .CancelError = True
-        .DialogTitle = "Sélection du fichier à sauvegarder"
-        .Filter = "Tous|*.*"
+        .DialogTitle = frmContent.Lang.GetString("_SelFileToSaveMdl")
+        .Filter = frmContent.Lang.GetString("_All") & "|*.*"
         .Filename = vbNullString
         .ShowSave
         sFile = .Filename
     End With
     
-    If cFile.FileExists(sFile) And bOverWrite Then
-        'fichier déjà existant
-        If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
-    End If
+    With frmContent.Lang
+        If cFile.FileExists(sFile) And bOverWrite Then
+            'fichier déjà existant
+            If MsgBox(.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, .GetString("_War")) <> vbYes Then Exit Sub
+        End If
+        
+        'ajoute du texte à la console
+        Call AddTextToConsole(.GetString("_CreatingFileCour"))
+    End With
     
-    'ajoute du texte à la console
-    Call AddTextToConsole("Création du fichier...")
     
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"
@@ -778,7 +780,7 @@ CreateMyFileFromOneBuffer:
     cFile.SaveDATAinFile sFile, s2, bOverWrite   'lance la sauvegarde
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Le fichier a été créé")
+    Call AddTextToConsole(frmContent.Lang.GetString("_FileCreatedOkMdl"))
     
     GoTo CancelPushed
     
@@ -884,7 +886,7 @@ CreateMyFileFromBuffers:
     End Select
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Le fichier a été créé")
+    Call AddTextToConsole(frmContent.Lang.GetString("_FileCreatedOkMdl"))
     
 CancelPushed:
     

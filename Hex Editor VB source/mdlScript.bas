@@ -147,6 +147,7 @@ Dim l As Long
     sLine = Split(sText, vbNewLine)
     
     '//VERIFICATION de la syntaxe (un espace après chaque commande de début de ligne)
+    With frmContent.Lang
         For x = 0 To UBound(sLine())
             
             'contient la taille de la commande (len)
@@ -155,12 +156,12 @@ Dim l As Long
             If l = 0 Then
                 If Len(sLine(x)) = 0 Then
                     'ligne vierge
-                    MsgBox "La ligne " & CStr(x + 1) & " est vierge.", vbCritical + vbOKOnly, "Erreur détectée"
+                    MsgBox .GetString("_LineMdl") & " " & CStr(x + 1) & " " & .GetString("_IsVierge"), vbCritical + vbOKOnly, .GetString("_Error")
                     IsScriptCorrect = x + 1
                     Exit Function
                 Else
                     'alors ce n'est pas une commande valide
-                    MsgBox "La ligne " & CStr(x + 1) & " n'est pas valide.", vbCritical + vbOKOnly, "Erreur détectée"
+                    MsgBox .GetString("_LineMdl") & " " & CStr(x + 1) & " " & .GetString("_IsNotValidMdl"), vbCritical + vbOKOnly, .GetString("_Error")
                     IsScriptCorrect = x + 1
                     Exit Function
                 End If
@@ -170,12 +171,13 @@ Dim l As Long
                 sLine(x) <> "REM" And sLine(x) <> "SHUTDOWN" Then
                 If Mid$(sLine(x), l + 1, 1) <> " " And Left$(sLine(x), 1) <> "#" Then
                     'manque un espace à la ligne x+1
-                    MsgBox "La commande de la ligne " & CStr(x + 1) & " n'est pas reconnue.", vbCritical + vbOKOnly, "Erreur détectée"
+                    MsgBox .GetString("_CommandOfLine") & " " & CStr(x + 1) & " " & .GetString("_IsNotReco"), vbCritical + vbOKOnly, .GetString("_Error")
                     IsScriptCorrect = x + 1
                     Exit Function
                 End If
             End If
         Next x
+    End With
     
     '//VERIFICATION de la cohérence des types attendus
     
