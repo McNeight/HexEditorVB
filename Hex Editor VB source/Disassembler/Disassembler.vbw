@@ -1,4 +1,4 @@
-frmDisAsm = 0, 0, 576, 430, Z, 220, 220, 745, 660, C
+frmDisAsm = 0, 0, 576, 430, , 220, 220, 745, 660, C
 frmASM = 66, 87, 642, 517, , 22, 22, 547, 462, C
 frmLog = 0, 0, 576, 430, , 44, 44, 569, 484, C
 frmInformations = 132, 174, 708, 604, , 66, 66, 591, 506, C
@@ -14,4 +14,4 @@ mdlDisassemblerDemarrage = 22, 29, 598, 459,
 mdlOther = 110, 145, 686, 575, C
 AfClsManifest = 0, 0, 0, 0, C
 clsIniPref = 88, 116, 664, 546, 
-clsIniFile = 110, 145, 686, 575, 
+clsIniFile = 110, 145, 686, 575, Z
