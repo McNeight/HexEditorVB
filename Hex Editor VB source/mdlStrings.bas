@@ -113,10 +113,12 @@ Dim n As Byte
     
     dS = Round(dS, lRoundNumber)
     
-    If n = 0 Then FormatedSize = Str$(dS) & " Octets"
-    If n = 1 Then FormatedSize = Str$(dS) & " Ko"
-    If n = 2 Then FormatedSize = Str$(dS) & " Mo"
-    If n = 3 Then FormatedSize = Str$(dS) & " Go"
+    With frmContent.Lang
+        If n = 0 Then FormatedSize = Str$(dS) & " " & .GetString("_Bytes")
+        If n = 1 Then FormatedSize = Str$(dS) & " " & .GetString("_Ko")
+        If n = 2 Then FormatedSize = Str$(dS) & " " & .GetString("_Mo")
+        If n = 3 Then FormatedSize = Str$(dS) & " " & .GetString("_Go")
+    End With
     
     FormatedSize = Trim$(FormatedSize)
     
@@ -290,13 +292,14 @@ End Function
 Public Function PriorityFromLong(ByVal lp As Long) As String
 Dim s As String
 
-    s = "Basse"
-    If lp >= 6 Then s = "Inférieure à la normale"
-    If lp >= 8 Then s = "Normale"
-    If lp >= 10 Then s = "Supérieure à la normale"
-    If lp >= 13 Then s = "Haute"
-    If lp >= 24 Then s = "Temps réel"
-    
+    With frmContent.Lang
+        s = .GetString("_IdleMdl")
+        If lp >= 6 Then s = .GetString("_BelowMdl")
+        If lp >= 8 Then s = .GetString("_NormalMdl")
+        If lp >= 10 Then s = .GetString("_AboveMdl")
+        If lp >= 13 Then s = .GetString("_HighMdl")
+        If lp >= 24 Then s = .GetString("_RealMdl")
+    End With
     PriorityFromLong = s
     
 End Function
@@ -316,14 +319,14 @@ Dim x As Long
         For x = 1 To .ListItems.Count
         
             s = s & "<font color=red>" & vbNewLine & "<div align=center>" & "<HR size=3 align=center width=100%>"
-            s = s & "<B>Disque " & Str$(.ListItems.Item(x).Text) & "</B> <BR>" & vbNewLine & "<HR size=3 align=center width=100%>" & vbNewLine & "<P>" & vbNewLine & "</font>" & vbNewLine & "</div>"
+            s = s & "<B>" & frmContent.Lang.GetString("_DiskMdl") & " " & Str$(.ListItems.Item(x).Text) & "</B> <BR>" & vbNewLine & "<HR size=3 align=center width=100%>" & vbNewLine & "<P>" & vbNewLine & "</font>" & vbNewLine & "</div>"
             
-            s = s & vbNewLine & "<B>Taille</B> = [" & .ListItems.Item(x).SubItems(1) & "]<BR>"
-            s = s & vbNewLine & "<B>Cylindres</B> = [" & .ListItems.Item(x).SubItems(2) & "]<BR>"
-            s = s & vbNewLine & "<B>Pistes par cynlindre</B> = [" & .ListItems.Item(x).SubItems(3) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs par pistes</B> = [" & .ListItems.Item(x).SubItems(4) & "]<BR>"
-            s = s & vbNewLine & "<B>Octets par secteur</B> = [" & .ListItems.Item(x).SubItems(5) & "]<BR>"
-            s = s & vbNewLine & "<B>Type</B> = [" & .ListItems.Item(x).SubItems(6) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_SizeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(1) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_CylMdl") & "</B> = [" & .ListItems.Item(x).SubItems(2) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_TrackPerCylMdl") & "</B> = [" & .ListItems.Item(x).SubItems(3) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_SecPerTMdl") & "</B> = [" & .ListItems.Item(x).SubItems(4) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_BytePerSecMdl") & "</B> = [" & .ListItems.Item(x).SubItems(5) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_TypeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(6) & "]<BR>"
 
             s = s & vbNewLine & "<BR> <BR>"
  
@@ -333,7 +336,7 @@ Dim x As Long
     
     
     'disques logiques
-    s = s & vbNewLine & "<H2>Disques logiques</H2>"
+    s = s & vbNewLine & "<H2>" & frmContent.Lang.GetString("_LogicalDiskStr") & "</H2>"
     
     With lvLog
         For x = 1 To .ListItems.Count
@@ -341,27 +344,27 @@ Dim x As Long
             s = s & "<font color=red>" & vbNewLine & "<div align=center>" & vbNewLine & "<HR size=3 align=center width=100%>" & vbNewLine
             s = s & "<B>Disque " & .ListItems.Item(x).Text & "</B> <BR>" & vbNewLine & "<HR size=3 align=center width=100%>" & vbNewLine & "<P>" & vbNewLine & "</font>" & vbNewLine & "</div>"
             
-            s = s & vbNewLine & "<B>Taille</B> = [" & .ListItems.Item(x).SubItems(1) & "]<BR>"
-            s = s & vbNewLine & "<B>Taille physique</B> = [" & .ListItems.Item(x).SubItems(2) & "]<BR>"
-            s = s & vbNewLine & "<B>Espace utilisé</B> = [" & .ListItems.Item(x).SubItems(3) & "]<BR>"
-            s = s & vbNewLine & "<B>Espace libre</B> = [" & .ListItems.Item(x).SubItems(4) & "]<BR>"
-            s = s & vbNewLine & "<B>Pourcentage libre</B> = [" & .ListItems.Item(x).SubItems(5) & "]<BR>"
-            s = s & vbNewLine & "<B>Taille des clusters</B> = [" & .ListItems.Item(x).SubItems(6) & "]<BR>"
-            s = s & vbNewLine & "<B>Clusters utilisés</B> = [" & .ListItems.Item(x).SubItems(7) & "]<BR>"
-            s = s & vbNewLine & "<B>Clusters libres</B> = [" & .ListItems.Item(x).SubItems(8) & "]<BR>"
-                        s = s & vbNewLine & "<B>Clusters</B> = [" & .ListItems.Item(x).SubItems(9) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs cachés</B> = [" & .ListItems.Item(x).SubItems(10) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs logiques</B> = [" & .ListItems.Item(x).SubItems(11) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs physiques</B> = [" & .ListItems.Item(x).SubItems(12) & "]<BR>"
-            s = s & vbNewLine & "<B>Type</B> = [" & .ListItems.Item(x).SubItems(13) & "]<BR>"
-            s = s & vbNewLine & "<B>Numéro de série</B> = [" & .ListItems.Item(x).SubItems(14) & "]<BR>"
-            s = s & vbNewLine & "<B>Octets par secteur</B> = [" & .ListItems.Item(x).SubItems(15) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs par cluster</B> = [" & .ListItems.Item(x).SubItems(16) & "]<BR>"
-            s = s & vbNewLine & "<B>Pistes par cylindre</B> = [" & .ListItems.Item(x).SubItems(17) & "]<BR>"
-            s = s & vbNewLine & "<B>Secteurs par piste</B> = [" & .ListItems.Item(x).SubItems(18) & "]<BR>"
-            s = s & vbNewLine & "<B>Offset de départ</B> = [" & .ListItems.Item(x).SubItems(19) & "]<BR>"
-            s = s & vbNewLine & "<B>Format de fichier</B> = [" & .ListItems.Item(x).SubItems(20) & "]<BR>"
-            s = s & vbNewLine & "<B>Type de lecteur</B> = [" & .ListItems.Item(x).SubItems(21) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_SizeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(1) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_PhysSizeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(2) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_UsedMdl") & "</B> = [" & .ListItems.Item(x).SubItems(3) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_FreeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(4) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_PercentMdl") & "</B> = [" & .ListItems.Item(x).SubItems(5) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_ClustSizeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(6) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_ClustUsedMdl") & "</B> = [" & .ListItems.Item(x).SubItems(7) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_ClustFreeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(8) & "]<BR>"
+                        s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_ClustMdl") & "</B> = [" & .ListItems.Item(x).SubItems(9) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_HidSecMdl") & "</B> = [" & .ListItems.Item(x).SubItems(10) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_LogMdl") & "</B> = [" & .ListItems.Item(x).SubItems(11) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_PhysMdl") & "</B> = [" & .ListItems.Item(x).SubItems(12) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_TypeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(13) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_SerialMdl") & "</B> = [" & .ListItems.Item(x).SubItems(14) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_BytePerSecMdl") & "</B> = [" & .ListItems.Item(x).SubItems(15) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_SecPerClustMdl") & "</B> = [" & .ListItems.Item(x).SubItems(16) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_TrackPerCylMdl") & "</B> = [" & .ListItems.Item(x).SubItems(17) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_SecPerTMdl") & "</B> = [" & .ListItems.Item(x).SubItems(18) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_OffDepMdl") & "</B> = [" & .ListItems.Item(x).SubItems(19) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_FileFormMdl") & "</B> = [" & .ListItems.Item(x).SubItems(20) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_DriveTypeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(21) & "]<BR>"
             
             s = s & vbNewLine & "<BR> <BR>"
             
