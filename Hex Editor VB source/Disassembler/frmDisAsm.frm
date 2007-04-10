@@ -197,7 +197,7 @@ Dim x As Long
     If App.LogMode = 0 Then
         s = LANG_PATH
     Else
-        s = App.Path & "\Lang"
+        s = App.Path & "\Lang\Disassembler"
     End If
     
     s = s & "\" & mnuLang(Index).Caption & ".ini"
