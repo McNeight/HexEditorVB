@@ -278,7 +278,7 @@ Private Sub Form_Load()
 Dim s As String
 
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -298,11 +298,11 @@ Dim s As String
     Lang.LoadControlsCaption
     
     'mise à jour de la version et de l'USER
-    lblLicenseTo.Caption = "License accordée à " & GetUserName
-    lblVersion.Caption = "Version " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision))
+    lblLicenseTo.Caption = Lang.GetString("_LicenseTo") & " " & GetUserName
+    lblVersion.Caption = Lang.GetString("_Version") & " " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision))
     
     'écriture du texte
-    s = "Hex Editor VB" & vbNewLine & "Copyright (c) 2006-2007 Alain Descotes (violent_ken)" & vbNewLine & "Dernière version du 16/02/2007. Il s'agit d'un éditeur héxadécimal complet permettant de modifier vos fichiers, vos disques et vos processus en mémoire très facilement." & vbNewLine & vbNewLine & "Ce logiciel est prévu pour Windows XP/Vista et une résolution minimale de 1024*768." & vbNewLine & vbNewLine & "Ce logiciel est sous license GNU General Public License, veuillez lire le contrat de licence ci dessous."
+    s = "Hex Editor VB" & vbNewLine & "Copyright (c) 2006-2007 Alain Descotes (violent_ken)"
     s = s & vbNewLine & vbNewLine & cFile.LoadFileInString(App.Path & "\License.txt")
     txt.Text = s
     

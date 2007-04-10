@@ -130,7 +130,7 @@ Private Sub cmdYES_Click()
     
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Sauvegarde terminée")
+    Call AddTextToConsole(Lang.GetString("_SaveOk"))
     
     Call cmdNO_Click    'quitte la form en sauvant les pref
 End Sub
@@ -151,7 +151,7 @@ End Sub
 
 Private Sub Form_Load()
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

@@ -154,8 +154,8 @@ Dim x As Long
     
     If Not (LV.SelectedItem Is Nothing) Then
         'alors au moins une sélection ==> demande confirmation
-        If Not (MsgBox("Confirmer la fermeture ?", vbInformation + vbYesNo, _
-        "Attention") = vbYes) Then Exit Sub
+        If Not (MsgBox(Lang.GetString("_Conf"), vbInformation + vbYesNo, _
+            Lang.GetString("_War")) = vbYes) Then Exit Sub
     Else
         Exit Sub    'pas de sélection
     End If
@@ -187,7 +187,7 @@ Dim x As Long
     
     LV.Visible = True
     
-    frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+    frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
     
     Exit Sub
 ErrGestion:
@@ -219,7 +219,7 @@ Private Sub Form_Load()
 Dim Frm As Form
         
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

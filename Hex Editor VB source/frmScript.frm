@@ -95,7 +95,6 @@ Begin VB.Form frmScript
       _ExtentY        =   4895
       _Version        =   393217
       BorderStyle     =   0
-      Enabled         =   -1  'True
       ScrollBars      =   3
       Appearance      =   0
       TextRTF         =   $"frmScript.frx":2307
@@ -396,7 +395,7 @@ Private bIsModified As Boolean  'contient si le fichier est modifié ou non
 Private Sub Form_Load()
 
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -471,10 +470,10 @@ Dim pb As Long
     pb = IsScriptCorrect(RTB.Text)
     If pb = 0 Then
         'correct
-        MsgBox "Le script est cohérent.", vbInformation + vbOKOnly, "Editeur de script"
+        MsgBox Lang.GetString("_ScriptOk"), vbInformation + vbOKOnly, Lang.GetString("_ScriptEd")
     Else
         'problème quelque part
-        MsgBox "Le script N'EST PAS cohérent." & vbNewLine & "Problème à la ligne " & CStr(pb), vbCritical + vbOKOnly, "Editeur de script"
+        MsgBox Lang.GetString("_ScriptNot") & vbNewLine & Lang.GetString("_PbLine") & " " & CStr(pb), vbCritical + vbOKOnly, Lang.GetString("_ScriptEd")
     End If
 End Sub
 
@@ -482,14 +481,14 @@ Private Sub mnuLauch_Click()
 'exécute le script
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Script lancé")
+    Call AddTextToConsole(Lang.GetString("_ScriptLau"))
 End Sub
 
 Private Sub mnuNew_Click()
 'nouveau fichier
     If bIsModified Then
         'alors le fichier est modifié, on demande confirmation
-        If MsgBox("Le script actuel sera perdu. Continuer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_ScriptWillBeLost"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
     
     RTB.Text = vbNullString 'efface le contenu
@@ -503,12 +502,12 @@ Dim x As Long
     
     If bIsModified Then
         'alors le fichier est modifié, on demande confirmation
-        If MsgBox("Le script actuel sera perdu. Continuer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_ScriptWillBeLost"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
     
     With Me.CMD
         .CancelError = True
-        .DialogTitle = "Ouvrir un fichier"
+        .DialogTitle = Lang.GetString("_OpenFile")
         .Filter = "Hex Editor Script|*.hescr|Tous|*.*|"
         .ShowOpen
         s = .Filename
@@ -528,7 +527,7 @@ End Sub
 Private Sub mnuQuit_Click()
     If bIsModified Then
         'alors le fichier est modifié, on demande confirmation
-        If MsgBox("Le script actuel sera perdu. Continuer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_ScriptWillBeLost"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
     
     Unload Me
@@ -542,15 +541,16 @@ Dim x As Long
     
     With Me.CMD
         .CancelError = True
-        .DialogTitle = "Enregistrer le fichier sous"
+        .DialogTitle = Lang.GetString("_SaveAs")
         .Filter = "Hex Editor Script|*.hescr|Tous|*.*|"
+        .Filename = vbNullString
         .ShowSave
         s = .Filename
     End With
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
     End If
     

@@ -246,7 +246,7 @@ Dim s As String
 
     For x = Me.lstSignets.ListItems.Count To 1 Step -1
         If Me.lstSignets.ListItems.Item(x).Selected Then
-            s = InputBox("Nouveau commentaire pour l'offset " & Me.lstSignets.ListItems.Item(x).Text, "Ajout de commentaire")
+            s = InputBox(Lang.GetString("_NewComment") & " " & Me.lstSignets.ListItems.Item(x).Text, Lang.GetString("_AddComment"))
             If StrPtr(s) <> 0 Then Me.lstSignets.ListItems.Item(x).SubItems(1) = s
         End If
     Next x
@@ -271,9 +271,9 @@ Private Sub cmdNew_Click()
 Dim s As String
 Dim s2 As String
 
-    s = InputBox("Offset du nouveau signet (en décimal) ?", "Ajout d'un signet")
+    s = InputBox(Lang.GetString("_OffsetNewSignet"), Lang.GetString("_AddSignet"))
     If StrPtr(s) = 0 Then Exit Sub
-    s2 = InputBox("Commentaire de ce signet ?", "Ajout d'un signet")
+    s2 = InputBox(Lang.GetString("_NewCommentSignet"), Lang.GetString("_AddSignet"))
     If StrPtr(s2) = 0 Then Exit Sub
     
     'on ajoute le signet
@@ -304,16 +304,17 @@ Dim x As Long
     With frmContent.CMD
         .CancelError = True
         .Filename = frmContent.ActiveForm.Caption & ".sig"
-        .DialogTitle = "Enregistrement de la liste des signets"
-        .Filter = "Liste de signets |*.sig|"
+        .DialogTitle = Lang.GetString("_ListSave")
+        .Filter = Lang.GetString("_ListSignet") & "|*.sig|"
         .InitDir = App.Path
+        .Filename = vbNullString
         .ShowSave
         s = .Filename
     End With
 
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_Warning"))
         If Not (x = vbYes) Then Exit Sub
     End If
     
@@ -329,7 +330,7 @@ Dim x As Long
     Close lFile
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Signets sauvegarés")
+    Call AddTextToConsole(Lang.GetString("_SignetSaved"))
     
 ErrGestion:
 End Sub
@@ -362,7 +363,7 @@ Private Sub Form_Load()
 Dim x As Long
 
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -406,8 +407,8 @@ Dim l As Long
     'ouverture ==> choix du fichier
     With frmContent.CMD
         .CancelError = True
-        .DialogTitle = "Ouverture d'une liste de signets"
-        .Filter = "Liste de signets |*.sig|"
+        .DialogTitle = Lang.GetString("_OpenSignet")
+        .Filter = Lang.GetString("_ListSignet") & "|*.sig|"
         .InitDir = App.Path
         .ShowOpen
         s = .Filename
@@ -431,7 +432,7 @@ Dim l As Long
     Close lFile
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Signets ajoutés")
+    Call AddTextToConsole(Lang.GetString("_SignetAdded"))
 ErrGestion:
 End Sub
 
@@ -475,7 +476,7 @@ Dim r As Long
         'qui a été sélectionné
         Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
-        s = InputBox("Ajouter un commentaire pour le signet " & tLst.Text, "Ajout d'un commentaire")
+        s = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, Lang.GetString("_AddComment"))
         If StrPtr(s) <> 0 Then
             'ajoute le commentaire
             tLst.SubItems(1) = s

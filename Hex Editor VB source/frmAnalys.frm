@@ -342,14 +342,14 @@ Dim cF As clsFile
     lAttribute = cF.FileAttributes
     
     'affiche tout çà
-    TextBox(0).Text = "Taille=[" & CStr(lSize) & " Octets  -  " & CStr(Round(lSize / 1024, 3)) & " Ko" & "]"
-    TextBox(1).Text = "Attribut=[" & CStr(lAttribute) & "]"
-    TextBox(2).Text = "Création=[" & dCreation & "]"
-    TextBox(3).Text = "Accès=[" & dAccess & "]"
-    TextBox(4).Text = "Modification=[" & dModification & "]"
-    TextBox(5).Text = "Version=[" & sVersion & "]"
-    TextBox(6).Text = "Description=[" & sDescription & "]"
-    TextBox(7).Text = "Copyright=[" & sCopyright & "]"
+    TextBox(0).Text = Lang.GetString("_Size") & CStr(lSize) & " Octets  -  " & CStr(Round(lSize / 1024, 3)) & " Ko" & "]"
+    TextBox(1).Text = Lang.GetString("_Attr") & CStr(lAttribute) & "]"
+    TextBox(2).Text = Lang.GetString("_Creat") & dCreation & "]"
+    TextBox(3).Text = Lang.GetString("_Acces") & dAccess & "]"
+    TextBox(4).Text = Lang.GetString("_Modif") & dModification & "]"
+    TextBox(5).Text = Lang.GetString("_Version") & sVersion & "]"
+    TextBox(6).Text = Lang.GetString("_Description") & sDescription & "]"
+    TextBox(7).Text = Lang.GetString("_CopyR") & sCopyright & "]"
   
 End Sub
 
@@ -373,14 +373,14 @@ Dim lngFile As Long
     On Error GoTo ErrGestion
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Analyse en cours...")
+    Call AddTextToConsole(Lang.GetString("_AnalCou"))
     
     BG.ClearGraphe
     BG.ClearValues
     
     'prépare la progressbar
     lngLen = cFile.GetFileSize(sFile)
-    pgb.Min = 0: pgb.Max = lngLen: pgb.Value = 0
+    PGB.Min = 0: PGB.Max = lngLen: PGB.Value = 0
     
     'obtient le handle du fichier
     lngFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
@@ -419,7 +419,7 @@ Dim lngFile As Long
         If (x Mod 10) = 0 Then
             'rend la main
             DoEvents
-            pgb.Value = curByte
+            PGB.Value = curByte
         End If
         
         curByte = curByte + 51200
@@ -433,11 +433,11 @@ Dim lngFile As Long
         BG.AddValue x, F(x)
     Next x
         
-    pgb.Value = pgb.Max
+    PGB.Value = PGB.Max
     BG.TraceGraph
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Analyse terminée")
+    Call AddTextToConsole(Lang.GetString("_AnalTer"))
     
     Exit Sub
 ErrGestion:
@@ -458,8 +458,9 @@ Dim x As Long
     'affiche la boite de dialogue "sauvegarder"
     With frmContent.CMD
         .CancelError = True
-        .DialogTitle = "Sauvegarder une image bitmap"
+        .DialogTitle = Lang.GetString("_BitmapImg")
         .Filter = "Bitmap Image|*.bmp|"
+        .Filename = vbNullString
         .ShowSave
         s = .Filename
     End With
@@ -469,7 +470,7 @@ Dim x As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        x = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
     End If
 
@@ -477,7 +478,7 @@ Dim x As Long
     Call BG.SaveBMP(s, cPref.general_ResoX, cPref.general_ResoY)
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Image sauvegardée")
+    Call AddTextToConsole(Lang.GetString("_ImgSaved"))
     
 Err:
 End Sub
@@ -493,8 +494,9 @@ Dim s2 As String
     'affiche la boite de dialogue "sauvegarder"
     With frmContent.CMD
         .CancelError = True
-        .DialogTitle = "Sauvegarder les statistiques"
-        .Filter = "Fichier log|*.log|"
+        .DialogTitle = Lang.GetString("_SaveStat")
+        .Filter = Lang.GetString("_LogFile") & " |*.log|"
+        .Filename = vbNullString
         .ShowSave
         s = .Filename
     End With
@@ -504,7 +506,7 @@ Dim s2 As String
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        x = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
     End If
     
@@ -514,20 +516,20 @@ Dim s2 As String
     s2 = vbNullString
     'créé la string
     For x = 0 To 255
-        s2 = s2 & "Byte=[" & Trim$(Str$(x)) & "] --> occurence=[" & Trim$(Str$(BG.GetValue(x))) & "]" & vbNewLine
+        s2 = s2 & "Byte=[" & Trim$(Str$(x)) & "] --> " & Lang.GetString("_Occ") & Trim$(Str$(BG.GetValue(x))) & "]" & vbNewLine
     Next x
     
     'sauvegarde le fichier
     cFile.SaveDATAinFile s, Left$(s2, Len(s2) - 2), True
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Fichier de statistiques sauvegardé")
+    Call AddTextToConsole(Lang.GetString("_StatSaved"))
 Err:
 End Sub
 
 Private Sub Form_Load()
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

@@ -220,40 +220,40 @@ Private Sub cbFormat_Click()
     chkOffset.Enabled = True
             
     Select Case cbFormat.Text
-        Case "RTF"
+        Case Lang.GetString("_RTF!")
         
-        Case "Texte"
-            Me.Caption = "Exporter en texte (fichier 5 fois plus grand)"
-        Case "Source C"
-            Me.Caption = "Exporter en code C (fichier 6 fois plus grand)"
+        Case Lang.GetString("_Text!")
+            Me.Caption = Lang.GetString("_ExportTxt")
+        Case Lang.GetString("_SourceC!")
+            Me.Caption = Lang.GetString("_ExportC")
             chkString.Enabled = False
             chkOffset.Enabled = False
-        Case "Source VB"
-            Me.Caption = "Exporter en code VB (fichier 2 fois plus grand)"
+        Case Lang.GetString("_VB!")
+            Me.Caption = Lang.GetString("_ExportVB")
             chkString.Enabled = False
             chkOffset.Enabled = False
-            lbl.Caption = "Car. séparateur"
+            lbl.Caption = Lang.GetString("_CarSep")
             txtOpt.Text = vbNullString
             lbl.Visible = True
             lbl.Enabled = True
             txtOpt.Enabled = True
-            txtOpt.ToolTipText = "Caractère de séparation des valeurs hexadécimales"
+            txtOpt.ToolTipText = Lang.GetString("_CarSepTool")
             txtOpt.Visible = True
-        Case "Source JAVA"
-            Me.Caption = "Exporter en code JAVA (fichier 6 fois plus grand)"
+        Case Lang.GetString("_JAVA!")
+            Me.Caption = Lang.GetString("_ExportJAVA")
             chkString.Enabled = False
             chkOffset.Enabled = False
-        Case "HTML"
-            Me.Caption = "Exporter en HTML (fichier 13 fois plus grand)"
-            lbl.Caption = "Taille (1-10)"
+        Case Lang.GetString("_HTML!")
+            Me.Caption = Lang.GetString("_ExportHTML")
+            lbl.Caption = Lang.GetString("_Size")
             txtOpt.Text = "3"
             lbl.Visible = True
             lbl.Enabled = True
             txtOpt.Enabled = True
-            txtOpt.ToolTipText = "Taille du texte"
+            txtOpt.ToolTipText = Lang.GetString("_SizeTool")
             txtOpt.Visible = True
-        Case "Else"
-            Me.Caption = "Exporter"
+        Case Else
+            Me.Caption = Lang.GetString("_ElseExport")
     End Select
 End Sub
 
@@ -267,11 +267,11 @@ Private Sub cmdBrowse_Click()
 'browse for file
 Dim sFile As String
 
-    sFile = cFile.ShowSave("Sélectionner le fichier à créer", Me.hWnd, "Tous|*.*", App.Path)
+    sFile = cFile.ShowSave(Lang.GetString("_FileToCreate"), Me.hWnd, Lang.GetString("_All") & "|*.*", App.Path)
     
     If cFile.FileExists(sFile) Then
         'fichier déjà existant
-        If MsgBox("Le fichier existe déjà. Le remplacer ?", vbInformation + vbYesNo, "Attention") <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
     
     txtFile.Text = sFile
@@ -287,7 +287,7 @@ Private Sub cmdSave_Click()
 Dim x As Long
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Exportation en cours...")
+    Call AddTextToConsole(Lang.GetString("_Exporting"))
     Frame1(0).Enabled = False
     txtFile.Enabled = False
     chkOffset.Enabled = False
@@ -302,11 +302,11 @@ Dim x As Long
     DoEvents
 
     Select Case cbFormat.Text
-        Case "HTML"
+        Case Lang.GetString("_HTML!")
             
             x = Int(Abs(Val(txtOpt.Text)))
             If x < 1 Or x > 10 Then
-                MsgBox "Taille non valide", vbCritical, "Attention"
+                MsgBox Lang.GetString("_SizeNoOk"), vbCritical, Lang.GetString("_War")
                 GoTo ResumeMe
             End If
             
@@ -320,11 +320,11 @@ Dim x As Long
                     "az", 1, 1, x, CBool(chkClip.Value))
             End If
             
-        Case "RTF"
+        Case Lang.GetString("_RTF!")
             
             
             
-        Case "Texte"
+        Case Lang.GetString("_Text!")
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
                 Call SaveAsTEXT(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
@@ -335,7 +335,7 @@ Dim x As Long
                     "az", 1, 1, CBool(chkClip.Value))
             End If
             
-        Case "Source C"
+        Case Lang.GetString("_SourceC!")
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
                 Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, -1, , CBool(chkClip.Value))
@@ -344,7 +344,7 @@ Dim x As Long
                 Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1, CBool(chkClip.Value))
             End If
             
-        Case "Source VB"
+        Case Lang.GetString("_VB!")
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
                 Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, -1, , txtOpt.Text, CBool(chkClip.Value))
@@ -353,7 +353,7 @@ Dim x As Long
                 Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1, txtOpt.Text, CBool(chkClip.Value))
             End If
             
-        Case "Source JAVA"
+        Case Lang.GetString("_JAVA!")
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
                 Call SaveAsJAVA(txtFile.Text, frmContent.ActiveForm.Caption, -1, , CBool(chkClip.Value))
@@ -367,10 +367,10 @@ Dim x As Long
 ResumeMe:
     Frame1(0).Enabled = Not (CBool(chkClip.Value))
     txtFile.Enabled = Not (CBool(chkClip.Value))
-    chkOffset.Enabled = (cbFormat.Text = "HTML" Or cbFormat.Text = "Texte")
-    chkString.Enabled = (cbFormat.Text = "HTML" Or cbFormat.Text = "Texte")
-    lbl.Enabled = (cbFormat.Text = "HTML" Or cbFormat.Text = "Source VB")
-    txtOpt.Enabled = (cbFormat.Text = "HTML" Or cbFormat.Text = "Source VB")
+    chkOffset.Enabled = (cbFormat.Text = Lang.GetString("_HTML!") Or cbFormat.Text = Lang.GetString("_Text!"))
+    chkString.Enabled = (cbFormat.Text = Lang.GetString("_HTML!") Or cbFormat.Text = Lang.GetString("_Text!"))
+    lbl.Enabled = (cbFormat.Text = Lang.GetString("_HTML!") Or cbFormat.Text = Lang.GetString("_VB!"))
+    txtOpt.Enabled = (cbFormat.Text = Lang.GetString("_HTML!") Or cbFormat.Text = Lang.GetString("_VB!"))
     cbFormat.Enabled = True
     cmdBrowse.Enabled = Not (CBool(chkClip.Value))
     Frame1(1).Enabled = True
@@ -378,7 +378,7 @@ ResumeMe:
     cmdQuit.Enabled = True
     DoEvents
     'ajoute du texte à la console
-    Call AddTextToConsole("Exportation terminée")
+    Call AddTextToConsole(Lang.GetString("_ExpOk"))
 End Sub
 
 '=======================================================
@@ -390,7 +390,7 @@ End Sub
 
 Private Sub Form_Load()
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

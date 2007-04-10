@@ -79,7 +79,7 @@ Private Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePr
 
 Private sLanguage As String     'langue utilisée
 Private sLangFolder As String    'path du répertoire de langue
-Private mParent As Form  'form parente
+Private mParent As Object   'form parente
 Attribute mParent.VB_VarHelpID = -1
 
 

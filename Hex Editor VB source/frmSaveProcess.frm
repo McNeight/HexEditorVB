@@ -231,15 +231,16 @@ Dim x As Long
     
     With frmContent.CMD
         .CancelError = True
-        .DialogTitle = "Sélection du fichier à enregistrer"
-        .Filter = "Executable |*.exe|Fichier texte|*.txt|Tous|*.*"
+        .DialogTitle = Lang.GetString("_SelFileToSave")
+        .Filter = Lang.GetString("_ExeFile") & " |*.exe|" & Lang.GetString("_TxtFile") & "|*.txt|Tous|*.*"
+        .Filename = vbNullString
         .ShowSave
         txtPath.Text = .Filename
     End With
     
     If cFile.FileExists(txtPath.Text) Then
         'message de confirmation
-        x = MsgBox("Le fichier existe déjà, le remplacer ?", vbInformation + vbYesNo, "Attention")
+        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
     End If
     
@@ -255,7 +256,7 @@ Private Sub cmdSave_Click()
 
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Sauvegarde terminée")
+    Call AddTextToConsole(Lang.GetString("_SaveOk"))
 End Sub
 
 Private Sub Form_Load()
@@ -263,7 +264,7 @@ Private Sub Form_Load()
     Set clsPref = New clsIniForm
     
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -314,7 +315,7 @@ Dim s As String
             lSize = lSize + Val(s)
         End If
     Next x
-    lblSize.Caption = "Taille du fichier résultant=[" & Trim$(Str$(lSize)) & "]" & vbNewLine & FormatedSize(lSize)
+    lblSize.Caption = Lang.GetString("_SizeRes") & Trim$(Str$(lSize)) & "]" & vbNewLine & FormatedSize(lSize)
 End Sub
 
 Private Sub lstList_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -334,7 +335,7 @@ Dim x As Long
         lstList.Selected(x) = False
     Next x
     
-    lblSize.Caption = "Taille du fichier résultant=[0]"
+    lblSize.Caption = Lang.GetString("_SizeRes") & "0]"
     lstList.Visible = True
 End Sub
 
@@ -374,7 +375,7 @@ Dim x As Long
     
     'les ajoute
     For x = 1 To UBound(LS())
-        lstList.AddItem "Offset=[" & CStr(LB(x)) & "], taille=[" & CStr(LS(x)) & "]"
+        lstList.AddItem "Offset=[" & CStr(LB(x)) & "], " & Lang.GetString("_Size") & "=[" & CStr(LS(x)) & "]"
     Next x
     
     lstList.Visible = True

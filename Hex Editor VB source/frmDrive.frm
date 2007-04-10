@@ -145,7 +145,7 @@ Dim cDr As clsDiskInfos
         
         Frm.Show    'affiche la nouvelle
         lNbChildFrm = lNbChildFrm + 1
-        frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+        frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
         
     Else
     
@@ -166,7 +166,7 @@ Dim cDr As clsDiskInfos
         
         Frm.Show    'affiche la nouvelle
         lNbChildFrm = lNbChildFrm + 1
-        frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
+        frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
         
         
     End If
@@ -198,7 +198,7 @@ End Sub
 
 Private Sub Form_Load()
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -216,4 +216,9 @@ Private Sub Form_Load()
     'applique la langue désirée aux controles
     Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
+    
+    With DV
+        .LogicalDrivesString = Lang.GetString("_LogicalString")
+        .PhysicalDrivesString = Lang.GetString("_PhysicalString")
+    End With
 End Sub

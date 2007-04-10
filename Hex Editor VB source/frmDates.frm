@@ -158,7 +158,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   16515075
+            Format          =   16449539
             CurrentDate     =   39133
          End
       End
@@ -203,7 +203,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   16515075
+            Format          =   16449539
             CurrentDate     =   39133
          End
       End
@@ -227,7 +227,7 @@ Begin VB.Form frmDates
          _ExtentY        =   529
          _Version        =   393216
          CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-         Format          =   16515075
+         Format          =   16449539
          CurrentDate     =   39133.9583333333
       End
       Begin VB.PictureBox Picture1 
@@ -437,13 +437,13 @@ Dim ucaccessSystemTime As SYSTEMTIME
     'ferme le handle
     CloseHandle lngHandle
     
-    MsgBox "Le changement a fonctionné", vbInformation, "Changements des dates"
+    MsgBox Lang.GetString("_ChangeOk"), vbInformation, Lang.GetString("_DateChange")
     
     Exit Sub
 ErrGestion:
     clsERREUR.AddError "frmDates.AttribDates", True
     
-    MsgBox "Une erreur est survenue." & vbNewLine & Err.Description, vbInformation, "Changements des dates"
+    MsgBox Lang.GetString("_ErrorH") & vbNewLine & Err.Description, vbInformation, Lang.GetString("_DateChange")
 End Sub
 
 Private Sub cmdAppliquer_Click()
@@ -454,7 +454,7 @@ End Sub
 Private Sub cmdBrowse_Click()
 'ouvre un fichier
 
-    txtFile.Text = cFile.ShowOpen("Sélection d'un fichier", Me.hWnd, "Tous |*.*")
+    txtFile.Text = cFile.ShowOpen(Lang.GetString("_SelFile"), Me.hWnd, Lang.GetString("_All") & " |*.*")
     
     Call ChangeDates
 End Sub
@@ -506,7 +506,7 @@ End Sub
 
 Private Sub Form_Load()
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

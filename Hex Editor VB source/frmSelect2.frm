@@ -152,7 +152,7 @@ Dim lTo As Currency
     frmContent.ActiveForm.HW.SelectZone 16 - (By16(lFrom) - lFrom), By16(lFrom) - 16, 17 - (By16(lTo) - lTo), By16(lTo) - 16
     
     'refresh le label qui contient la taille de la sélection
-    frmContent.ActiveForm.Sb.Panels(4).Text = "Sélection=[" & CStr(frmContent.ActiveForm.HW.NumberOfSelectedItems) & " bytes]"
+    frmContent.ActiveForm.Sb.Panels(4).Text = Lang.GetString("_Sel") & CStr(frmContent.ActiveForm.HW.NumberOfSelectedItems) & " bytes]"
     frmContent.ActiveForm.Label2(9) = frmContent.ActiveForm.Sb.Panels(4).Text
     frmContent.ActiveForm.HW.Refresh
     Unload Me
@@ -169,7 +169,7 @@ End Sub
 Private Sub Form_Load()
 
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH

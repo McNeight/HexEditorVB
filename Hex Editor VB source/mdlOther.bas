@@ -706,6 +706,7 @@ Dim bOverWrite As Boolean
         .CancelError = True
         .DialogTitle = "Sélection du fichier à sauvegarder"
         .Filter = "Tous|*.*"
+        .Filename = vbNullString
         .ShowSave
         sFile = .Filename
     End With

@@ -412,31 +412,37 @@ Begin VB.Form frmOptions
          NumTabs         =   6
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Apparence du tableau"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Intégration dans Explorer"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Options générales"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Environnement"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Console"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab6 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Explorateur de fichiers"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -1183,7 +1189,7 @@ Dim s As String
     With txt
         .BackColor = pctColor(12).BackColor
         .SelStart = 0
-        .Text = "Exemple de commande dans la console" & vbNewLine & vbNewLine & "Deuxième ligne"
+        .Text = Lang.GetString("_ConsoleExample") & vbNewLine & vbNewLine & Lang.GetString("_SecondLine")
         .SelLength = Len(.Text)
         .SelColor = pctColor(13).BackColor
         .SelStart = Len(.Text)
@@ -1233,7 +1239,7 @@ Dim s As String
     cbExpInitDir.ListIndex = 0
     
     'ajoute du texte à la console
-    Call AddTextToConsole("Options remises par défaut")
+    Call AddTextToConsole(Lang.GetString("_ByDefaut"))
 End Sub
 
 Private Sub cmdQuitter_Click()
@@ -1301,7 +1307,7 @@ Dim s As String
             .explo_Pattern = txtExpPattern.Text
             
             .explo_IconType = cbExpIcon.ListIndex
-            .explo_DefaultPath = IIf(txtExpPath.Enabled, txtExpPath.Text, "Dossier du programme")
+            .explo_DefaultPath = IIf(txtExpPath.Enabled, txtExpPath.Text, Lang.GetString("_ProgPath"))
             
             .console_BackColor = pctColor(12).BackColor
             .console_ForeColor = pctColor(13).BackColor
@@ -1418,7 +1424,7 @@ Dim s As String
     Call frmContent.MDIForm_Resize
 
     'ajoute du texte à la console
-    Call AddTextToConsole("Options sauvegardées")
+    Call AddTextToConsole(Lang.GetString("_OptSaved"))
     Unload Me
 End Sub
 
@@ -1428,7 +1434,7 @@ Dim y As Long
 Dim s As String
 
     #If MODE_DEBUG Then
-        If App.LogMode = 0 Then
+        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
             Lang.Language = "French"
             Lang.LangFolder = LANG_PATH
@@ -1548,7 +1554,7 @@ Dim s As String
         With txt
             .BackColor = cPref.console_BackColor
             .SelStart = 0
-            .Text = "Exemple de commande dans la console" & vbNewLine & vbNewLine & "Deuxième ligne"
+            .Text = Lang.GetString("_ConsoleExample") & vbNewLine & vbNewLine & Lang.GetString("_SecondLine")
             .SelLength = Len(.Text)
             .SelColor = cPref.console_ForeColor
             .SelStart = Len(.Text)
@@ -1614,7 +1620,7 @@ Dim s As String
             
             cbExpIcon.ListIndex = .explo_IconType
             
-            If .explo_DefaultPath = "Dossier du programme" Then
+            If .explo_DefaultPath = Lang.GetString("_ProgPath") Then
                 'alors c'est le dossier du programme
                 txtExpPath.Enabled = False
                 cbExpInitDir.ListIndex = 0
@@ -1656,7 +1662,7 @@ Private Sub pctColor_Click(Index As Integer)
     'affiche la couleur dans la picturebox
     With frmContent.CMD
         .CancelError = True
-        .DialogTitle = "Choisissez une couleur"
+        .DialogTitle = Lang.GetString("_ColorChoice")
         .ShowColor
         pctColor(Index).BackColor = .Color
     End With
@@ -1678,7 +1684,7 @@ Private Sub pctColor_Click(Index As Integer)
         With txt
             .BackColor = pctColor(12).BackColor
             .SelStart = 0
-            .Text = "Exemple de commande dans la console" & vbNewLine & vbNewLine & "Deuxième ligne"
+            .Text = Lang.GetString("_ConsoleExample") & vbNewLine & vbNewLine & Lang.GetString("_SecondLine")
             .SelLength = Len(.Text)
             .SelColor = pctColor(13).BackColor
             .SelStart = Len(.Text)
