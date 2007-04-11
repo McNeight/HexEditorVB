@@ -1,10 +1,11 @@
 VERSION 5.00
 Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
+Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
 Begin VB.Form frmISO 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Création de fichier ISO"
-   ClientHeight    =   1350
+   ClientHeight    =   3255
    ClientLeft      =   45
    ClientTop       =   435
    ClientWidth     =   4350
@@ -21,15 +22,25 @@ Begin VB.Form frmISO
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   1350
+   ScaleHeight     =   3255
    ScaleWidth      =   4350
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin DriveView_OCX.DriveView DV 
+      Height          =   1815
+      Left            =   120
+      TabIndex        =   7
+      Top             =   120
+      Width           =   4095
+      _ExtentX        =   7223
+      _ExtentY        =   3201
+      DisplayPhysicalDrives=   0   'False
+   End
    Begin ProgressBar_OCX.pgrBar PGB 
       Height          =   375
       Left            =   120
       TabIndex        =   6
-      Top             =   840
+      Top             =   2760
       Width           =   3135
       _ExtentX        =   5530
       _ExtentY        =   661
@@ -45,7 +56,7 @@ Begin VB.Form frmISO
       Left            =   3360
       TabIndex        =   5
       ToolTipText     =   "Ferme cette fenêtre"
-      Top             =   840
+      Top             =   2760
       Width           =   855
    End
    Begin VB.Frame Frame1 
@@ -53,7 +64,7 @@ Begin VB.Form frmISO
       Height          =   615
       Left            =   120
       TabIndex        =   1
-      Top             =   120
+      Top             =   2040
       Width           =   3255
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
@@ -86,11 +97,12 @@ Begin VB.Form frmISO
    End
    Begin VB.CommandButton cmdGO 
       Caption         =   "GO"
+      Enabled         =   0   'False
       Height          =   495
       Left            =   3600
       TabIndex        =   0
       ToolTipText     =   "Démarre la création du fichier ISO"
-      Top             =   240
+      Top             =   2160
       Width           =   615
    End
    Begin LanguageTranslator.ctrlLanguage Lang 
@@ -143,7 +155,7 @@ Option Explicit
 'FORM DE CREATION DE FICHIER ISO
 '=======================================================
 
-Private tDrive As clsDrive
+Private tDrive As DriveView_OCX.clsDrive
 Private clsPref As clsIniForm
 Dim sFile As String
 
@@ -250,6 +262,30 @@ Private Sub cmdQuit_Click()
     Unload Me
 End Sub
 
+Private Sub DV_NodeClick(ByVal Node As ComctlLib.INode)
+Dim s As String
+
+    If DV.IsSelectedDriveAccessible Then
+    
+        'récupère le type de fichier du drive
+        s = DV.GetSelectedDrive.FileSystemName
+        
+        If s = "UDF" Or s = "CDFS" Then
+            'on a choisi le drive
+            Set tDrive = DV.GetSelectedDrive
+            cmdGO.Enabled = True
+        Else
+            cmdGO.Enabled = False
+        End If
+    Else
+        cmdGO.Enabled = False
+    End If
+End Sub
+
+Private Sub Form_Activate()
+    Call MarkNonCDDrives(DV)
+End Sub
+
 Private Sub Form_Load()
 'loading des preferences
     Set clsPref = New clsIniForm
@@ -273,11 +309,6 @@ Private Sub Form_Load()
     'applique la langue désirée aux controles
     Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
-End Sub
-
-'=======================================================
-'récupère la description du CD/DVD
-'=======================================================
-Public Sub GetDrive(ByVal tDriveRec As clsDrive)
-    Set tDrive = tDriveRec
+    
+    DV.LogicalDrivesString = Lang.GetString("_LogicalString")
 End Sub
