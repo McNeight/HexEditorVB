@@ -270,3 +270,24 @@ ErrGestion:
 
 End Function
 
+'=======================================================
+'obtient un handle vers un fichier pour ECRITURE
+'=======================================================
+Public Function GetFileHandle(ByVal sFile As String) As Long
+    GetFileHandle = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+End Function
+
+'=======================================================
+'écrire des bytes dans un fichier (à la fin du fichier) avec en entrée un handle
+'=======================================================
+Public Function WriteBytesToFileEndHandle(ByVal lngFile As Long, ByVal sString As String) As String
+Dim tmpText As String
+Dim Ret As Long
+        
+    'bouge le pointeur sur le fichier à la fin du fichier
+    Ret = SetFilePointerEx(lngFile, 0&, 0&, FILE_END) '
+
+    'écriture dans le fichier
+    WriteFile lngFile, ByVal sString, Len(sString), Ret, ByVal 0&
+
+End Function

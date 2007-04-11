@@ -209,6 +209,9 @@ Attribute VB_Name = "About_Description"
 '
 ' VERSIONS PRE ALPHA :
 '
+'   v1.7
+'   -Ajout d'un outil de création de fichiers ISO
+'
 '   v1.6
 '   -Optimisations diverses du logiciel (démarrage, ouverture des fichiers..)
 '   -Ajout de la gestion de fin de fichier
@@ -270,6 +273,9 @@ Attribute VB_Name = "About_Description"
 '
 '
 ' PRE ALPHA RELEASES :
+'
+'   v1.7
+'   -Added ISO Creator Tool
 '
 '   v1.6
 '   -Various Optimizations of the software (starting, opening of the files...)
