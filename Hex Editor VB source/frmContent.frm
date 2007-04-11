@@ -41,6 +41,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -67,6 +68,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -555,7 +557,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "11:46"
+            TextSave        =   "17:52"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -1216,6 +1218,9 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuFileSearch 
          Caption         =   "&Recherche de fichiers..."
       End
+      Begin VB.Menu mnuCreateISOFile 
+         Caption         =   "&Créer un fichier ISO depuis le disque..."
+      End
       Begin VB.Menu mnuToolsTiret4 
          Caption         =   "-"
       End
@@ -1726,6 +1731,24 @@ Dim s As String
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_IconCopy"))
+End Sub
+
+Private Sub mnuCreateISOFile_Click()
+'création d'un fichier ISO depuis le disque ouvert
+
+    If frmContent.ActiveForm Is Nothing Then Exit Sub
+    
+    If TypeOfForm(frmContent.ActiveForm) <> "Disque" Then Exit Sub
+    
+    If frmContent.ActiveForm.GetDriveInfos.FileSystemName = "CDFS" Or _
+        frmContent.ActiveForm.GetDriveInfos.FileSystemName = "UDF" Then
+        
+        'renseigne sur le disque
+        Call frmISO.GetDrive(frmContent.ActiveForm.GetDriveInfos)
+        
+        'montre la form
+        frmISO.Show vbModal
+    End If
 End Sub
 
 Public Sub mnuCut_Click()

@@ -311,11 +311,11 @@ End Function
 Public Sub GetLargeInteger(ByVal curVar As Currency, ByRef lngLowPart As Long, ByRef lngHighPart As Long)
     lngLowPart = 0: lngHighPart = 0
     Do
-        If curVar < 2 ^ 32 Then Exit Do
-        curVar = curVar - 2 ^ 32: lngHighPart = lngHighPart + 1
+        If curVar < DEUX_EXP_32 Then Exit Do
+        curVar = curVar - DEUX_EXP_32: lngHighPart = lngHighPart + 1
         'If lngHighPart >= (2 ^ 31) Then lngHighPart = lngHighPart - (2 ^ 32)
     Loop
-    If curVar >= 2 ^ 31 Then curVar = curVar - 2 ^ 32
+    If curVar >= DEUX_EXP_31 Then curVar = curVar - DEUX_EXP_32
     lngLowPart = CLng(curVar)
 End Sub
 
@@ -323,7 +323,7 @@ End Sub
 'rassemble de long pour former une currency
 '=======================================================
 Public Function GetCurrency(ByVal lngLowPart As Long, ByVal lngHighPart As Long) As Currency
-    GetCurrency = 2 ^ 32 * lngHighPart + lngLowPart
+    GetCurrency = DEUX_EXP_32 * lngHighPart + lngLowPart
 End Function
 
 '=======================================================
