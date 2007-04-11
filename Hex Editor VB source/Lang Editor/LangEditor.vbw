@@ -1,5 +1,5 @@
-frmMain = 44, 58, 617, 488, Z, 22, 29, 595, 459, C
-clsFileInfos = 110, 145, 686, 575, 
+frmMain = 44, 58, 617, 488, , 22, 29, 595, 459, C
+clsFileInfos = 110, 145, 686, 575, Z
 clsFile = 0, 0, 0, 0, C
 clsFolder = 0, 0, 0, 0, C
 AfClsManifest = 0, 0, 0, 0, C

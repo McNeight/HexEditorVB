@@ -41,7 +41,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -68,7 +67,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -544,6 +542,7 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -551,20 +550,23 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "17:52"
+            TextSave        =   "19:41"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "10/04/2007"
+            TextSave        =   "11/04/2007"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1219,7 +1221,7 @@ Begin VB.MDIForm frmContent
          Caption         =   "&Recherche de fichiers..."
       End
       Begin VB.Menu mnuCreateISOFile 
-         Caption         =   "&Créer un fichier ISO depuis le disque..."
+         Caption         =   "&Créer un fichier ISO depuis un disque..."
       End
       Begin VB.Menu mnuToolsTiret4 
          Caption         =   "-"
@@ -1734,21 +1736,8 @@ Dim s As String
 End Sub
 
 Private Sub mnuCreateISOFile_Click()
-'création d'un fichier ISO depuis le disque ouvert
-
-    If frmContent.ActiveForm Is Nothing Then Exit Sub
-    
-    If TypeOfForm(frmContent.ActiveForm) <> "Disque" Then Exit Sub
-    
-    If frmContent.ActiveForm.GetDriveInfos.FileSystemName = "CDFS" Or _
-        frmContent.ActiveForm.GetDriveInfos.FileSystemName = "UDF" Then
-        
-        'renseigne sur le disque
-        Call frmISO.GetDrive(frmContent.ActiveForm.GetDriveInfos)
-        
-        'montre la form
-        frmISO.Show vbModal
-    End If
+'création d'un fichier ISO
+    frmISO.Show vbModal
 End Sub
 
 Public Sub mnuCut_Click()
