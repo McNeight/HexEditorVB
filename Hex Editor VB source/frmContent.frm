@@ -557,7 +557,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "19:41"
+            TextSave        =   "23:43"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -565,7 +565,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "11/04/2007"
+            TextSave        =   "12/04/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -2804,8 +2804,8 @@ Private Sub mnuFillSelection_Click()
 'remplit la sélection du HW
 
     If Me.ActiveForm Is Nothing Then Exit Sub
-
-    frmFillSelection.Show vbModal
+    
+    frmFillSelection.Show
 
 End Sub
 
