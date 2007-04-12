@@ -337,6 +337,7 @@ Begin VB.Form frmOptions
             _Version        =   393217
             BackColor       =   0
             BorderStyle     =   0
+            Enabled         =   -1  'True
             ReadOnly        =   -1  'True
             ScrollBars      =   2
             Appearance      =   0
@@ -412,37 +413,31 @@ Begin VB.Form frmOptions
          NumTabs         =   6
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Apparence du tableau"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Intégration dans Explorer"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Options générales"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Environnement"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Console"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab6 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Explorateur de fichiers"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -1523,9 +1518,6 @@ Dim s As String
             Next y
             HW.AddStringValue x, s
         Next x
-    
-        HW.FillText
-        HW.Refresh
         
         'affiche la bonne valeur de grille dans le combobox
         Select Case cPref.app_Grid
@@ -1543,6 +1535,9 @@ Dim s As String
                 HW.Grid = Horizontal_VerticalHex
         End Select
         cbGrid.ListIndex = cPref.app_Grid
+        
+        HW.FillText
+        HW.Refresh
         
         
         '//APPARENCE DE LA CONSOLE

@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmFillSelection 
-   BorderStyle     =   3  'Fixed Dialog
+   BorderStyle     =   1  'Fixed Single
    Caption         =   "Insertion / remplissage de bytes"
    ClientHeight    =   3540
    ClientLeft      =   45
@@ -19,10 +19,8 @@ Begin VB.Form frmFillSelection
    Icon            =   "frmFillSelection.frx":0000
    LockControls    =   -1  'True
    MaxButton       =   0   'False
-   MinButton       =   0   'False
    ScaleHeight     =   3540
    ScaleWidth      =   4485
-   ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdQuit 
       Caption         =   "Fermer"
@@ -157,7 +155,6 @@ Begin VB.Form frmFillSelection
          End
          Begin VB.TextBox txtByte 
             BorderStyle     =   0  'None
-            Enabled         =   0   'False
             Height          =   285
             Left            =   1680
             TabIndex        =   3
@@ -285,7 +282,61 @@ End Sub
 
 Private Sub cmdApply_Click()
 'applique les différentes passes
-
+Dim cur1 As Currency
+Dim cur2 As Currency
+Dim sFile As String
+    
+    
+    If frmContent.ActiveForm Is Nothing Then Exit Sub
+    
+    'récupère les bornes de la sélection
+    cur1 = frmContent.ActiveForm.HW.FirstSelectionItem.Offset + _
+        frmContent.ActiveForm.HW.FirstSelectionItem.Col - 1
+    cur2 = frmContent.ActiveForm.HW.SecondSelectionItem.Offset + _
+        frmContent.ActiveForm.HW.SecondSelectionItem.Col - 1
+    
+    
+    '//UNIQUEMENT POUR UN FICHIER !!!
+    'affiche la demande de création de backup
+    frmCreateBackup.Show vbModal
+    
+    If bAcceptBackup Then
+        'alors l'user a accepté la création du backup
+        
+        'récupère un nom de fichier temp
+        Call ObtainTempPathFile("temp_file", sFile, "tmp")
+        
+        'créé une copie (lance une sauvegarde)
+        Call frmContent.ActiveForm.GetNewFile(sFile)
+    Else
+        Exit Sub
+    End If
+    
+    'ajoute du texte à la console
+    Call AddTextToConsole(Lang.GetString("_PassCour"))
+    
+    
+    Select Case TypeOfForm(frmContent.ActiveForm)
+        Case "Fichier"
+            
+            'on applique au fichier les différentes passes au fichier
+            'on fait çà en temporaire
+            Call ApplyPass_File(cur1, cur2, frmContent.ActiveForm.HW, tPasses(), _
+                sFile)
+            
+        Case "Processus"
+        
+        
+        Case "Disque"
+        
+        
+        Case "Disque physique"
+        
+        
+        Case Else
+            Exit Sub
+    End Select
+        
 
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_PassOk"))

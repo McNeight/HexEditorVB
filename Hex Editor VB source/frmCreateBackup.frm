@@ -3,8 +3,8 @@ Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmCreateBackup 
    BorderStyle     =   3  'Fixed Dialog
-   Caption         =   "                                      Attention"
-   ClientHeight    =   1875
+   Caption         =   "Attention"
+   ClientHeight    =   1830
    ClientLeft      =   45
    ClientTop       =   360
    ClientWidth     =   4680
@@ -22,7 +22,7 @@ Begin VB.Form frmCreateBackup
    LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   1875
+   ScaleHeight     =   1830
    ScaleWidth      =   4680
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
@@ -143,11 +143,12 @@ Option Explicit
 
     
 Private Sub cmdNO_Click()
+    bAcceptBackup = False 'accepte PAS le backup
     Unload Me
 End Sub
 
 Private Sub cmdOk_Click()
-    Me.Height = 3135
+    'Me.Height = 3135
     bAcceptBackup = True    'on accepte le backup
     Unload Me   'la form sera rechargée juste après pour l'affichage de la progression
 End Sub
