@@ -334,9 +334,13 @@ Attribute VB_Name = "About_Description"
 ' Code entièrement réalisé par Alain Descotes (violent_ken)
 '
 ' Certains morceaux de codes codés par d'autres personnes ont été réutilisés.
-' Merci à eux, à savoir (ordre alphabétique) : Galain, PCPT, Paul Caton, Renfield, ShareVB
+' Merci à eux, à savoir (ordre alphabétique) : Brunews (bnAlloc.dll),
+' Galain (aide pour le support des disques), PCPT (AfClsManifset),
+' Paul Caton (self subclassing pour les usercontrol), Renfield (aide sur plein de
+' choses), ShareVB (source de Disassembler_Dll + GetFileBitmap)
 '
 ' La Dll de désassemblage est directement issue du travail de ShareVB.
+' bnAlloc.dll a été codée en ASM par Brunews.
 
 
 
@@ -348,9 +352,12 @@ Attribute VB_Name = "About_Description"
 ' Coded only by Alain Descotes (violent_ken)
 '
 ' Few parts of code have been coded by other people.
-' Thanks to them (in alphabetic order) : Galain, PCPT, Paul Caton, Renfield, ShareVB
+' Thanks to them (in alphabetic order) : Brunews (bnAlloc.dll), Galain (help to
+' add disk support), PCPT (AfClsManifset), Paul Caton (usercontrol self subclassing)
+' Renfield (help for several things) , ShareVB (Disassembler_DLL + GetFileBitmap)
 '
 ' Disassembler DLL was coded by ShareVB.
+' bnAlloc.dll was coded (ASM) by Brunews.
 
 
 
