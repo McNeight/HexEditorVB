@@ -141,7 +141,7 @@ Public Sub PrintFile(ByVal curStartOffset As Currency, ByVal curEndOffset As Cur
 ByVal bPrintHexa As Boolean, ByVal bPrintASCII As Boolean, ByVal bPrintOffset As Boolean, _
 ByVal bPrintFileInfo As Boolean, ByVal lngTextSize As Long, ByVal tPrinter As Printer, Optional ByVal strTitle As String)
 
-Dim x As Long
+Dim X As Long
 Dim y As Long
 
     Set Printer = tPrinter
@@ -158,19 +158,19 @@ Dim y As Long
         Printer.Print vbNewLine & vbNewLine
         
         'procède à l'impression
-        For x = By16(curStartOffset) To By16(curEndOffset) Step 16
+        For X = By16(curStartOffset) To By16(curEndOffset) Step 16
         
             'offset
             .CurrentX = 300
             .ForeColor = frmContent.ActiveForm.HW.OffsetForeColor
             y = .CurrentY
-            Printer.Print FormatedAdress(x)
+            Printer.Print FormatedAdress(X)
             
             'valeurs hexa
             .CurrentX = 3000: .CurrentY = y
             .ForeColor = frmContent.ActiveForm.HW.HexForeColor
             Printer.Print "0H 45 12 E7 AA 12 35 00 00 FB 4F 7E 81 0D 38 11"
-        Next x
+        Next X
         
         'fin de l'impression
         .EndDoc

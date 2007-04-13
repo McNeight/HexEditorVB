@@ -468,7 +468,7 @@ End Function
 'fonction de recherche de string complètes dans un fichier
 'stocke dans un tableau de 1 à Ubound
 '=======================================================
-Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLength As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef tRes() As SearchResult, Optional pgb As pgrBar)
+Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLength As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef tRes() As SearchResult, Optional PGB As pgrBar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
 Dim strCtemp As String
@@ -486,11 +486,11 @@ Dim i As Long
     'taille du fichier
     lngLen = cFile.GetFileSize(sFile)
     
-    If Not (pgb Is Nothing) Then
+    If Not (PGB Is Nothing) Then
         'on initialise la progressabr
-        pgb.Min = 0
-        pgb.Value = 0
-        pgb.Max = lngLen
+        PGB.Min = 0
+        PGB.Value = 0
+        PGB.Max = lngLen
     End If
 
     'initialise le tableau
@@ -551,14 +551,14 @@ Dim i As Long
         End If
         
         If (x Mod 10) = 0 Then
-            If Not (pgb Is Nothing) Then pgb.Value = curByte    'refresh progressbar
+            If Not (PGB Is Nothing) Then PGB.Value = curByte    'refresh progressbar
             DoEvents    'rend la main
         End If
         
         curByte = curByte + 51200   'incrémente la position
     Loop
     
-    If Not (pgb Is Nothing) Then pgb.Value = lngLen
+    If Not (PGB Is Nothing) Then PGB.Value = lngLen
     
     Let strBuffer = vbNullString
     CloseHandle lngFile 'ferme le handle du fichier
@@ -575,7 +575,7 @@ End Sub
 'fonction de recherche de string dans un fichier
 'de 1 à Ubound
 '=======================================================
-Public Sub SearchForStringFile(ByVal sFile As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional pgb As pgrBar)
+Public Sub SearchForStringFile(ByVal sFile As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrBar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
 Dim x As Long
@@ -594,11 +594,11 @@ Dim i As Long
     'taille du fichier
     lngLen = cFile.GetFileSize(sFile)
     
-    If Not (pgb Is Nothing) Then
+    If Not (PGB Is Nothing) Then
         'on initialise la progressabr
-        pgb.Min = 0
-        pgb.Value = 0
-        pgb.Max = lngLen
+        PGB.Min = 0
+        PGB.Value = 0
+        PGB.Max = lngLen
     End If
 
     'initialise le tableau
@@ -654,14 +654,14 @@ Dim i As Long
         Wend
         
         If (x Mod 10) = 0 Then
-            If Not (pgb Is Nothing) Then pgb.Value = curByte    'refresh progressbar
+            If Not (PGB Is Nothing) Then PGB.Value = curByte    'refresh progressbar
             DoEvents    'rend la main
         End If
         
         curByte = curByte + Len(strBuffer2) + Len(strBuffer) 'incrémente la position
     Loop
     
-    If Not (pgb Is Nothing) Then pgb.Value = lngLen
+    If Not (PGB Is Nothing) Then PGB.Value = lngLen
     
     Let strBufT = vbNullString
     Let strBuffer2 = vbNullString
@@ -681,7 +681,7 @@ End Sub
 'fonction de recherche de string dans un disque
 'de 1 à Ubound
 '=======================================================
-Public Sub SearchForStringDisk(ByVal sDrive As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional pgb As pgrBar, Optional ByVal IsPhys As Boolean = False)
+Public Sub SearchForStringDisk(ByVal sDrive As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrBar, Optional ByVal IsPhys As Boolean = False)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim x As Long
 Dim r() As Byte
@@ -717,11 +717,11 @@ Dim clsDrive As clsDiskInfos
     nbSec = cDrive.TotalLogicalSectors
     btPerSec = cDrive.BytesPerSector
     
-    If Not (pgb Is Nothing) Then
+    If Not (PGB Is Nothing) Then
         'on initialise la progressabr
-        pgb.Min = 0
-        pgb.Value = 0
-        pgb.Max = nbSec
+        PGB.Min = 0
+        PGB.Value = 0
+        PGB.Max = nbSec
     End If
 
     If bCasse = False Then sMatch = LCase$(sMatch)  'cherche que les minuscules
@@ -748,12 +748,12 @@ Dim clsDrive As clsDiskInfos
             strBufT = Right$(strBufT, Len(strBufT) - InStr(1, strBufT, sMatch, vbBinaryCompare) - Len(sMatch) + 1)
         Wend
         
-        If Not (pgb Is Nothing) Then pgb.Value = i    'refresh progressbar
+        If Not (PGB Is Nothing) Then PGB.Value = i    'refresh progressbar
         DoEvents    'rend la main
         
     Next i
     
-    If Not (pgb Is Nothing) Then pgb.Value = nbSec
+    If Not (PGB Is Nothing) Then PGB.Value = nbSec
     
     Let strBufT = vbNullString
 
@@ -860,11 +860,13 @@ End Sub
 '=======================================================
 'efface complètement un fichier du disque dur
 '=======================================================
-Public Function ShreddFile(ByVal sFile As String) As Boolean
+Public Function ShreddFile(ByVal sFile As String, ByVal nPass As Integer, _
+    PGB As ProgressBar_OCX.pgrBar) As Boolean
 Dim hFile As Long
 Dim sFile2 As String
 Dim Ret As Long
 Dim ret2 As Long
+Dim x As Long
 Dim tTime As FILETIME
 Dim tsTime As SYSTEMTIME
     
@@ -884,8 +886,34 @@ Dim tsTime As SYSTEMTIME
     'obtient le handle du fichier
     hFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_WRITE, 0, TRUNCATE_EXISTING, FILE_FLAG_NO_BUFFERING Or FILE_FLAG_WRITE_THROUGH, 0)
     
-    '"efface"
-    Ret = FlushFileBuffers(hFile)
+    'initialise le PGB
+    With PGB
+        .Max = nPass * 3
+        .Min = 0
+        .Value = 0
+    End With
+        
+    '//effectue les différentes passes de la sanitization des fichiers
+    For x = 1 To nPass
+        
+        '&H55
+        Call WriteBytesToFile(sFile, String$(cFile.GetFileSize(sFile), 85), 0)
+        
+        PGB.Value = PGB.Value + 1
+        
+        '&HAA
+        Call WriteBytesToFile(sFile, String$(cFile.GetFileSize(sFile), 170), 0)
+        
+        PGB.Value = PGB.Value + 1
+        
+        'Random
+        
+        
+        PGB.Value = PGB.Value + 1
+        
+        'flush buffers
+        Ret = FlushFileBuffers(hFile)
+    Next x
     
     'ferme le handle ouvert
     CloseHandle hFile
@@ -911,7 +939,7 @@ Dim tsTime As SYSTEMTIME
     'referme définitivement le handle
     CloseHandle hFile
     
-    'on efface le fichier
+    'on efface le fichier (deux suppressions si renommage raté)
     cFile.KillFile sFile2
     cFile.KillFile sFile
     
