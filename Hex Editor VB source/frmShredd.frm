@@ -1,10 +1,11 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmShredd 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Effacement définitif de fichiers"
-   ClientHeight    =   4680
+   ClientHeight    =   5100
    ClientLeft      =   45
    ClientTop       =   360
    ClientWidth     =   4860
@@ -18,17 +19,41 @@ Begin VB.Form frmShredd
       Strikethrough   =   0   'False
    EndProperty
    Icon            =   "frmShredd.frx":0000
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4680
+   ScaleHeight     =   5100
    ScaleWidth      =   4860
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin ProgressBar_OCX.pgrBar PGB 
+      Height          =   375
+      Left            =   120
+      TabIndex        =   6
+      Top             =   4680
+      Width           =   4695
+      _ExtentX        =   8281
+      _ExtentY        =   661
+      BackColorTop    =   13027014
+      BackColorBottom =   15724527
+      Value           =   1
+      BackPicture     =   "frmShredd.frx":058A
+      FrontPicture    =   "frmShredd.frx":05A6
+   End
+   Begin VB.TextBox txtPass 
+      Alignment       =   2  'Center
+      BorderStyle     =   0  'None
+      Height          =   285
+      Left            =   2280
+      TabIndex        =   5
+      Text            =   "3"
+      ToolTipText     =   "Désigne le nombre de sanitizations qui seront effectuées"
+      Top             =   4200
+      Width           =   735
+   End
    Begin VB.CommandButton cmdQuit 
       Caption         =   "Fermer"
       Height          =   375
-      Left            =   1763
+      Left            =   3360
       TabIndex        =   2
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   4200
@@ -86,6 +111,14 @@ Begin VB.Form frmShredd
       Top             =   0
       _ExtentX        =   1402
       _ExtentY        =   1402
+   End
+   Begin VB.Label Label1 
+      Caption         =   "Nombre de sanitizations :"
+      Height          =   255
+      Left            =   120
+      TabIndex        =   4
+      Top             =   4200
+      Width           =   2055
    End
 End
 Attribute VB_Name = "frmShredd"
@@ -163,10 +196,15 @@ Dim x As Long
     
     If Not (x = vbYes) Then Exit Sub
     
+    If Abs(Int(Val(txtPass.Text))) < 1 Or Abs(Int(Val(txtPass.Text))) > 2048 Then
+        'nombre de sanitizations incorrecte
+        MsgBox Lang.GetString("_PassNot")
+        Exit Sub
+    End If
     
     For x = LV.ListItems.Count To 1 Step -1
         DoEvents    'rend quand même la main, si bcp de fichiers, c'est utile
-        If ShreddFile(LV.ListItems.Item(x)) Then    'procède à la suppression
+        If ShreddFile(LV.ListItems.Item(x), Int(Val(txtPass.Text)), Me.PGB) Then   'procède à la suppression
             LV.ListItems.Remove (x) 'enlève l'item si la suppression à échoué
         End If
     Next

@@ -215,7 +215,7 @@ Public Declare Function CompareFileTime Lib "kernel32" (lpFileTime1 As Currency,
 'APIS pour les menus
 Public Declare Function CreatePopupMenu Lib "user32" () As Long
 Public Declare Function InsertMenuItem Lib "user32.dll" Alias "InsertMenuItemA" (ByVal hMenu As Long, ByVal uItem As Long, ByVal fByPosition As Long, lpmii As MENUITEMINFO) As Long
-Public Declare Function TrackPopupMenuEx Lib "user32" (ByVal hMenu As Long, ByVal wFlags As Long, ByVal x As Long, ByVal Y As Long, ByVal hWnd As Long, ByVal lptpm As Any) As Long
+Public Declare Function TrackPopupMenuEx Lib "user32" (ByVal hMenu As Long, ByVal wFlags As Long, ByVal x As Long, ByVal y As Long, ByVal hWnd As Long, ByVal lptpm As Any) As Long
 Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
 Public Declare Function DestroyMenu Lib "user32" (ByVal hMenu As Long) As Long
 Public Declare Function GetMenu Lib "user32" (ByVal hWnd As Long) As Long
@@ -281,14 +281,14 @@ Public Declare Function CLSIDFromString Lib "ole32" (ByVal lpsz As Any, pclsid A
 Public Declare Function ExtractIcon Lib "shell32.dll" Alias "ExtractIconA" (ByVal hInst As Long, ByVal lpszExeFileName As String, ByVal nIconIndex As Long) As Long
 Public Declare Function DrawIconEx Lib "user32" (ByVal hdc As Long, ByVal xLeft As Long, ByVal yTop As Long, ByVal hIcon As Long, ByVal cxWidth As Long, ByVal cyWidth As Long, ByVal istepIfAniCur As Long, ByVal hbrFlickerFreeDraw As Long, ByVal diFlags As Long) As Long
 Public Declare Function DestroyIcon Lib "user32" (ByVal hIcon As Long) As Long
-Public Declare Function DrawIcon Lib "user32" (ByVal hdc As Long, ByVal x As Long, ByVal Y As Long, ByVal hIcon As Long) As Long
+Public Declare Function DrawIcon Lib "user32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, ByVal hIcon As Long) As Long
 Public Declare Function OleCreatePictureIndirect Lib "olepro32.dll" (lpPictDesc As PICTDESC, riid As GUID, ByVal fPictureOwnsHandle As Long, ipic As IPicture) As Long
-Public Declare Function ImageList_Draw Lib "Comctl32.dll" (ByVal himl&, ByVal i&, ByVal hDCDest&, ByVal x&, ByVal Y&, ByVal FLAGS&) As Long
+Public Declare Function ImageList_Draw Lib "Comctl32.dll" (ByVal himl&, ByVal i&, ByVal hDCDest&, ByVal x&, ByVal y&, ByVal FLAGS&) As Long
 
 'APIs pour l'affichage/gestion des fenêtres
 Public Declare Sub InvalidateRect Lib "user32" (ByVal hWnd As Long, ByVal t As Long, ByVal bErase As Long)
 Public Declare Sub ValidateRect Lib "user32" (ByVal hWnd As Long, ByVal t As Long)
-Public Declare Function SetWindowPos Lib "user32" (ByVal hWnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal Y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
+Public Declare Function SetWindowPos Lib "user32" (ByVal hWnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
 Public Declare Function UpdateWindow Lib "user32" (ByVal hWnd As Long) As Long
 Public Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
 Public Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hWnd As Long, ByVal nIndex As Long) As Long
@@ -602,7 +602,7 @@ Public Type MENUITEMINFO
 End Type
 Public Type POINTAPI
     x As Long
-    Y As Long
+    y As Long
 End Type
 
 'utilisé pour subclasser le resize des form

@@ -135,7 +135,7 @@ Begin VB.Form frmFillSelection
             Left            =   2760
             TabIndex        =   6
             Tag             =   "pref"
-            Text            =   "255"
+            Text            =   "FF"
             ToolTipText     =   "Borne supérieure du random (1-255)"
             Top             =   360
             Width           =   615
@@ -295,6 +295,10 @@ Dim sFile As String
     cur2 = frmContent.ActiveForm.HW.SecondSelectionItem.Offset + _
         frmContent.ActiveForm.HW.SecondSelectionItem.Col - 1
     
+    '>10Mo ==> demande confirmation
+    If (cur2 - cur1) > 10000000 Then
+        If MsgBox(Lang.GetString("_SelIsBig"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
+    End If
     
     '//UNIQUEMENT POUR UN FICHIER !!!
     'affiche la demande de création de backup
@@ -340,12 +344,14 @@ Dim sFile As String
 
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_PassOk"))
+    
+    Unload Me
 End Sub
 
 Private Sub cmdDelete_Click()
 'enlève un élément de la liste
 Dim l As Long
-Dim x As Long
+Dim X As Long
 Dim tPTmp() As PASSE_TYPE
 
     On Error GoTo ErrGestion
@@ -360,19 +366,19 @@ Dim tPTmp() As PASSE_TYPE
     
     If UBound(tPTmp) = 0 Then Exit Sub   'rien à enlever
     
-    For x = 0 To l - 1
-        tPasses(x) = tPTmp(x)
-    Next x
-    For x = l + 1 To UBound(tPTmp) - 1
-        tPasses(x - 1) = tPTmp(x)
-    Next x
+    For X = 0 To l - 1
+        tPasses(X) = tPTmp(X)
+    Next X
+    For X = l + 1 To UBound(tPTmp) - 1
+        tPasses(X - 1) = tPTmp(X)
+    Next X
     
     lstPasses.Clear   'enlève les éléments de la liste
     
     'rajoute n-1 passes
-    For x = 1 To UBound(tPTmp) - 1
-        lstPasses.AddItem Lang.GetString("_Pass") & " " & CStr(x)
-    Next x
+    For X = 1 To UBound(tPTmp) - 1
+        lstPasses.AddItem Lang.GetString("_Pass") & " " & CStr(X)
+    Next X
     
     lstPasses.ListIndex = l - 1
     Call lstPasses_Click
@@ -410,7 +416,7 @@ Private Sub cmdSanitization_Click()
     tPasses(1).sData2 = ""
     tPasses(1).tType = FixedByte
     tPasses(2).sData1 = "0"
-    tPasses(2).sData2 = "255"
+    tPasses(2).sData2 = "FF"
     tPasses(2).tType = RandomByte
 End Sub
 
@@ -483,7 +489,7 @@ Private Sub Option1_Click(Index As Integer)
     If Index = 2 Then txtList.Enabled = True
     
     'change le type de passe de la passe sélectionnée
-    If lstPasses.ListIndex > 0 Then tPasses(lstPasses.ListIndex).tType = Index
+    If lstPasses.ListIndex <> -1 Then tPasses(lstPasses.ListIndex).tType = Index
     
 End Sub
 
