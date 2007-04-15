@@ -73,6 +73,13 @@ Dim x As Long
 Dim y As Long
 Dim s As String
 
+    'change le path actuel pour permettre la reconnaissance de bnAlloc.dll
+    #If FINAL_VERSION Then
+        Call SetCurrentDirectoryA(App.Path)
+    #Else
+        Call SetCurrentDirectoryA(EXE_PATH)
+    #End If
+
     'récupère le temps mis pour charger le logiciel
     #If Not (FINAL_VERSION) Then
         lngTimeLoad = GetTickCount

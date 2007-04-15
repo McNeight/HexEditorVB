@@ -45,7 +45,7 @@ Public Sub ApplyPass_File(ByVal curPos1 As Currency, ByVal curPos2 As Currency, 
     
 Dim s1 As String
 Dim y As Long
-Dim X As Long
+Dim x As Long
 Dim z As Long
 Dim s2 As String
 Dim s As String
@@ -79,16 +79,16 @@ Dim Frm2 As Form
     'créé un pseudo hasard
     Randomize
     
-    For X = 0 To UBound(tP()) - 1
+    For x = 0 To UBound(tP()) - 1
         
         '//EFFECTUE LES REMLISSAGES
-        If tP(X).tType = FixedByte Then
+        If tP(x).tType = FixedByte Then
             
             'lance la sauvegarde dans le fichier
-            Call WriteBytesToFile(sFile, String$(curPos2 - curPos1 + 1, Hex2Dec(tP(X).sData1)), curPos1)
+            Call WriteBytesToFile(sFile, String$(curPos2 - curPos1 + 1, Hex2Dec(tP(x).sData1)), curPos1)
             
             'on ouvre ce nouveau fichier
-            If X = UBound(tP()) - 1 Then
+            If x = UBound(tP()) - 1 Then
                 'alors c'était la dernière passe
             
                 Set Frm = New Pfm
@@ -119,10 +119,10 @@ Dim Frm2 As Form
             
             DoEvents
             
-        ElseIf tP(X).tType = ListByte Then
+        ElseIf tP(x).tType = ListByte Then
         
             'récupère une liste des bytes possibles (en string)
-            Sb() = Split(tP(X).sData1, " ", , vbBinaryCompare)
+            Sb() = Split(tP(x).sData1, " ", , vbBinaryCompare)
             
             For y = 0 To UBound(Sb())
                 Sb(y) = Hex2Dec(Sb(y))
@@ -144,7 +144,7 @@ Dim Frm2 As Form
             Call WriteBytesToFile(sFile, s, curPos1)
             
             'on ouvre ce nouveau fichier
-            If X = UBound(tP()) - 1 Then
+            If x = UBound(tP()) - 1 Then
                 'alors c'était la dernière passe
             
                 Set Frm = New Pfm
@@ -175,22 +175,22 @@ Dim Frm2 As Form
             
             DoEvents
             
-        ElseIf tP(X).tType = RandomByte Then
+        ElseIf tP(x).tType = RandomByte Then
         
             'lance la sauvegarde dans le fichier
             
             'fait des calculs une bonne fois pour toutes
-            l1 = 1 + Hex2Dec(tP(X).sData2) - Hex2Dec(tP(X).sData1)
-            l2 = Hex2Dec(tP(X).sData1)
+            l1 = 1 + Hex2Dec(tP(x).sData2) - Hex2Dec(tP(x).sData1)
+            l2 = Hex2Dec(tP(x).sData1)
             
             'créé une string aléatoire (valeurs comprises entre deux bornes)
-            s = CreateRandomString(Hex2Dec(tP(X).sData1), Hex2Dec(tP(X).sData2), _
+            s = CreateRandomString(Hex2Dec(tP(x).sData1), Hex2Dec(tP(x).sData2), _
                 curPos2 - curPos1 + 1)
             
             Call WriteBytesToFile(sFile, s, curPos1)
             
             'on ouvre ce nouveau fichier
-            If X = UBound(tP()) - 1 Then
+            If x = UBound(tP()) - 1 Then
                 'alors c'était la dernière passe
             
                 Set Frm = New Pfm
@@ -223,20 +223,54 @@ Dim Frm2 As Form
             
         End If
     
-    Next X
+    Next x
     
 End Sub
+
+'=======================================================
+'récupère un pointeur sur une string aléatoire de 2Mo
+'(2*1024^2 octets) générée par la dll bnAlloc
+'/!\ ne pas oublier de libérer la mémoire une fois la string
+'utilisée et plus utile
+'=======================================================
+Public Function GetPtRandomString() As Long
+    GetPtRandomString = bnAlloc2MoAlea
+End Function
+Public Sub FreePtRandomString(pt As Long)
+    Call bnFreeAlloc(pt)
+End Sub
+'=======================================================
+'récupère une string aléatoire de 2 Mo de long
+'=======================================================
+Public Function GetRandom2MoString() As String
+Dim pt As Long
+Dim s As String
+
+    'récupère le pointeur sur la string
+    pt = bnAlloc2MoAlea
+    
+    'créé un buffer
+    s = Space$(2097152)
+    
+    'copie la mémoire sur la stirng
+    CopyMemory ByVal StrPtr(s), ByVal pt, 2097152
+
+    'libère les 2Mo alloué au pointeur pt
+    Call bnFreeAlloc(pt)
+    
+    GetRandom2MoString = s
+End Function
 
 '=======================================================
 'renvoie une string aléatoire
 'contenant des bytes allant de lBG à lBD compris
 'string de longueur lSize en résultat
 '=======================================================
-Public Function CreateRandomString(ByVal lBG As Long, ByVal lBD As Long, _
+Public Function CreateRandomString(ByVal lBg As Long, ByVal lBD As Long, _
     ByVal lSize As Long) As String
 
 Dim cString As clsString
-Dim X As Long
+Dim x As Long
 Dim lByte As Long
 Dim l1 As Long
 
@@ -250,18 +284,18 @@ Dim l1 As Long
     cString.Value = vbNullString
     
     'pré-calcule cette addition
-    l1 = 1 + lBD - lBG
+    l1 = 1 + lBD - lBg
     
     'pour chaque caractère
-    For X = 1 To lSize
+    For x = 1 To lSize
     
         'tire une valeur au hasard dans l'intervalle
-        lByte = Int(Rnd * l1) + lBG
+        lByte = Int(Rnd * l1) + lBg
         
         'concatère avec la string
         Call cString.Append(Chr$(lByte))
     
-    Next X
+    Next x
     
     'renvoie le résultat
     CreateRandomString = cString.Value

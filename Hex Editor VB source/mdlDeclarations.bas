@@ -42,9 +42,11 @@ Option Explicit
 'emplacement du dossier de langue utilisé LORS DE LA PHASE DE CREATION
 'DU LOGICIEL ==> A CHANGER QUAND ON CHANGE LES SOURCES DE DOSSIER
 Public Const LANG_PATH                          As String = "C:\HEX EDITOR VB\Executable folder\Lang"
+Public Const EXE_PATH                           As String = "C:\Hex Editor VB\Executable folder\"
 
 'affecter cette constante à 1 pour demander de recréer le fichier *.ini de traduction
 Public Const CREATE_FRENCH_FILE As Byte = 0
+
 
 
 '=======================================================
@@ -204,6 +206,12 @@ Public Const DEUX_EXP_32                        As Double = 4294967296#
 '=======================================================
 '//APIs
 '=======================================================
+
+'dll bnAlloc pour générer des strings aléatoire
+Public Declare Sub bnFreeAlloc Lib "bnAlloc.dll" (ByVal pmem As Long)
+Public Declare Function bnAlloc2MoAlea Lib "bnAlloc.dll" () As Long
+'pour permettre de reconnaitre la dll
+Public Declare Sub SetCurrentDirectoryA Lib "kernel32.dll" (ByVal pdir As String)
 
 'systèmes de temps
 Public Declare Function FileTimeToSystemTime Lib "kernel32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
