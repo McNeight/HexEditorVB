@@ -141,7 +141,7 @@ Public Sub PrintFile(ByVal curStartOffset As Currency, ByVal curEndOffset As Cur
 ByVal bPrintHexa As Boolean, ByVal bPrintASCII As Boolean, ByVal bPrintOffset As Boolean, _
 ByVal bPrintFileInfo As Boolean, ByVal lngTextSize As Long, ByVal tPrinter As Printer, Optional ByVal strTitle As String)
 
-Dim X As Long
+Dim x As Long
 Dim y As Long
 
     Set Printer = tPrinter
@@ -158,19 +158,19 @@ Dim y As Long
         Printer.Print vbNewLine & vbNewLine
         
         'procède à l'impression
-        For X = By16(curStartOffset) To By16(curEndOffset) Step 16
+        For x = By16(curStartOffset) To By16(curEndOffset) Step 16
         
             'offset
             .CurrentX = 300
             .ForeColor = frmContent.ActiveForm.HW.OffsetForeColor
             y = .CurrentY
-            Printer.Print FormatedAdress(X)
+            Printer.Print FormatedAdress(x)
             
             'valeurs hexa
             .CurrentX = 3000: .CurrentY = y
             .ForeColor = frmContent.ActiveForm.HW.HexForeColor
             Printer.Print "0H 45 12 E7 AA 12 35 00 00 FB 4F 7E 81 0D 38 11"
-        Next X
+        Next x
         
         'fin de l'impression
         .EndDoc
@@ -242,6 +242,29 @@ ErrGestion:
     CloseHandle lFile
     
 End Function
+
+'=======================================================
+'récupère un handle d'écriture vers un fichier
+'=======================================================
+Public Function GetFileHandleWrite(ByVal sFile As String) As Long
+    GetFileHandleWrite = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+End Function
+
+'=======================================================
+'écrire des bytes dans un fichier
+'=======================================================
+Public Sub WriteBytesToFileHandle(ByVal hFile As Long, ByVal pt As Long, _
+    ByVal curOffset As Currency, ByVal lLen As Long)
+Dim tmpText As String
+Dim Ret As Long
+    
+    'bouge le pointeur sur le fichier au bon emplacement
+    Ret = SetFilePointerEx(hFile, curOffset / 10000, 0&, FILE_BEGIN)
+
+    'écriture dans le fichier
+    WriteFile hFile, ByVal pt, lLen, Ret, ByVal 0&
+    
+End Sub
 
 '=======================================================
 'écrire des bytes dans un fichier (à la fin du fichier)
