@@ -689,6 +689,41 @@ Dim s As String
 End Sub
 
 '=======================================================
+'permet de marquer les drives non disques dur (DD = FAT ou NTFS)
+'=======================================================
+Public Sub MarkNonDiskDrives(DV As DriveView)
+Dim x As Long
+Dim tNode As Node
+Dim s As String
+    
+    With DV
+        For x = 1 To .Nodes.Count
+            If .Nodes.Item(x).Children = 0 Then
+                'alors c'est un noeud fils (disque et pas titre)
+                
+                s = .Drives.GetLogicalDrive(.Nodes.Item(x).Text).FileSystemName
+                
+                If InStr(1, LCase$(s), "fat") = 0 And InStr(1, LCase$(s), "ntfs") _
+                    = 0 Then
+                    'on place l'image ayant la key "inaccessible_drive"
+                    '/!\ A TOUJOURS UTILISER LA MEME CLE
+                    .Nodes.Item(x).Image = "inaccessible_drive"
+                End If
+            End If
+        Next x
+    
+        'expande tous les noeuds
+        For Each tNode In .Nodes
+            tNode.Expanded = True
+        Next tNode
+    
+        'met en surbrillance le premier node
+        .Nodes.Item(1).Selected = True
+    End With
+    
+End Sub
+
+'=======================================================
 'enable ou non les fleches Signet suivant/précédent
 '=======================================================
 Public Sub RefreshBookMarkEnabled()
