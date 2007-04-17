@@ -211,6 +211,7 @@ Attribute VB_Name = "About_Description"
 '
 '   v1.7
 '   -Ajout d'un outil de création de fichiers ISO
+'   -Ajout d'un outil de sanitization des disques/fichiers
 '
 '   v1.6
 '   -Optimisations diverses du logiciel (démarrage, ouverture des fichiers..)
@@ -276,6 +277,7 @@ Attribute VB_Name = "About_Description"
 '
 '   v1.7
 '   -Added ISO Creator Tool
+'   -Added a sanitization tool for disks/files
 '
 '   v1.6
 '   -Various Optimizations of the software (starting, opening of the files...)
