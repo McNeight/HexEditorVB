@@ -239,8 +239,6 @@ Dim Pointeur As Currency
 Dim Ret As Long
 Dim lLowPart As Long
 Dim lHighPart As Long
-
-    'On Error GoTo dskerror
    
     'détermine le byte de départ du secteur
     Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
@@ -313,13 +311,13 @@ End Sub
 '=======================================================
 'récupère un handle de disque valide pour la lecture
 '=======================================================
-Public Function GetDiskHandle(ByVal sDrive As String) As Long
+Public Function GetDiskHandleRead(ByVal sDrive As String) As Long
 
     'obtient un path valide pour l'API CreateFIle si nécessaire
     If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
 
     'ouvre le drive
-    GetDiskHandle = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    GetDiskHandleRead = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
 End Function
 
 '=======================================================

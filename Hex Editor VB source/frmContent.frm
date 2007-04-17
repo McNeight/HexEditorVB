@@ -41,7 +41,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -68,7 +67,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -559,7 +557,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "14:52"
+            TextSave        =   "17:11"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -567,7 +565,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "15/04/2007"
+            TextSave        =   "17/04/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1199,7 +1197,7 @@ Begin VB.MDIForm frmContent
          Caption         =   "&Suppression de fichiers..."
       End
       Begin VB.Menu mnuSanitDisk 
-         Caption         =   "&Sanitization de disque..."
+         Caption         =   "&Sanitization..."
       End
       Begin VB.Menu mnuRecoverFiles 
          Caption         =   "&Récupération de fichiers..."

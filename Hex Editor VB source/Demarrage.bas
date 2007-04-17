@@ -61,6 +61,12 @@ Public bEndSplash As Boolean
 Public lngTimeLoad As Long
 Public sLang() As String
 
+'pour la sanitization
+Public sH55() As Byte
+Public sHAA() As Byte
+Public pAA As Long
+Public p55 As Long
+
 
 '=======================================================
 '//DEMARRAGE DU PROGRAMME
