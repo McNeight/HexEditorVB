@@ -225,6 +225,46 @@ dskerror:
 End Sub
 
 '=======================================================
+'permet de d'écrire de manière directe dans le disque
+'avec en entrée un pointeur et un handle de disque
+'=======================================================
+Public Sub DirectWritePtHandle(ByVal hDevice As Long, ByVal iStartSec As Currency, _
+    ByVal nBytes As Long, ByVal lBytesPerSector As Long, _
+    ByRef pt As Long)
+
+'/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
+
+Dim BytesRead As Long
+Dim Pointeur As Currency
+Dim Ret As Long
+Dim lLowPart As Long
+Dim lHighPart As Long
+
+    'On Error GoTo dskerror
+   
+    'détermine le byte de départ du secteur
+    Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
+    
+    'transforme un currency en 2 long pour une structure LARGE_INTEGER
+    GetLargeInteger Pointeur, lLowPart, lHighPart
+
+    'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
+    'byte que l'on veut lire (donné par deux long)
+    Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
+    
+    'verrouilage de la zone du disque à écrire
+    Call LockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
+    
+    'écriture disque
+    Ret = WriteFile(hDevice, ByVal pt, nBytes, Ret, ByVal 0&)
+    
+    'on vide les buffers internes et on dévérouille la zone
+    Call FlushFileBuffers(hDevice)
+    Call UnlockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
+    
+End Sub
+
+'=======================================================
 'permet de lire des bytes directement dans le disque
 'sortie en String
 '=======================================================
@@ -280,6 +320,18 @@ Public Function GetDiskHandle(ByVal sDrive As String) As Long
 
     'ouvre le drive
     GetDiskHandle = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+End Function
+
+'=======================================================
+'récupère un handle de disque valide pour l'écriture
+'=======================================================
+Public Function GetDiskHandleWrite(ByVal sDrive As String) As Long
+
+    'obtient un path valide pour l'API CreateFIle si nécessaire
+    If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
+
+    'ouvre le drive
+    GetDiskHandleWrite = CreateFile(sDrive, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
 End Function
 
 '=======================================================
