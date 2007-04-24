@@ -308,15 +308,18 @@ End Function
 '=======================================================
 'divise une currency en 2 long ==> créé une LARGE_INTEGER
 '=======================================================
-Public Sub GetLargeInteger(ByVal curVar As Currency, ByRef lngLowPart As Long, ByRef lngHighPart As Long)
-    lngLowPart = 0: lngHighPart = 0
-    Do
-        If curVar < DEUX_EXP_32 Then Exit Do
-        curVar = curVar - DEUX_EXP_32: lngHighPart = lngHighPart + 1
-        'If lngHighPart >= (2 ^ 31) Then lngHighPart = lngHighPart - (2 ^ 32)
-    Loop
-    If curVar >= DEUX_EXP_31 Then curVar = curVar - DEUX_EXP_32
-    lngLowPart = CLng(curVar)
+Private Sub GetLargeInteger(ByVal curVar As Currency, ByRef lngLowPart As Long, _
+    ByRef lngHighPart As Long)
+    
+Dim tblbyte(0 To 7) As Byte
+Dim pt10000 As Currency
+
+    pt10000 = curVar / 10000
+    
+    Call CopyMemory(tblbyte(0), pt10000, 8)
+    Call CopyMemory(lngHighPart, tblbyte(4), 4)
+    Call CopyMemory(lngLowPart, tblbyte(0), 4)
+        
 End Sub
 
 '=======================================================

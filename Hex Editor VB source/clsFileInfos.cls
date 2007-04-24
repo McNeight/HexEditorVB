@@ -996,7 +996,7 @@ Dim sFileToDelete As Fichier
         .fFlags = FOF_ALLOWUNDO And FOF_SIMPLEPROGRESS
     End With
     
-    'procède à la suppression
+    'procède au déplacement
     MoveFileOrFolder = SHFileOperation(sFileToDelete)
 End Function
 
@@ -1031,7 +1031,7 @@ Dim sFileToDelete As Fichier
         .fFlags = FOF_ALLOWUNDO And FOF_SIMPLEPROGRESS
     End With
     
-    'procède à la suppression
+    'procède à la copie
     CopyFileOrFolder = SHFileOperation(sFileToDelete)
 End Function
 
