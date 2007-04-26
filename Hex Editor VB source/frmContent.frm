@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.MDIForm frmContent 
@@ -41,6 +41,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -67,6 +68,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -557,7 +559,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "17:16"
+            TextSave        =   "16:05"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -565,7 +567,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "17/04/2007"
+            TextSave        =   "26/04/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1476,7 +1478,7 @@ Dim l As Long
     End If
     
     'affiche la string dans la picturebox
-    pctPath.Text = cFile.GetFolderFromPath(s)
+    pctPath.Text = cFile.getfoldername(s)
 End Sub
 
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -1544,8 +1546,8 @@ Dim x As Long
     For x = 1 To UBound(sLang())
         'ajoute une entrée au menu
         Load Me.mnuLang(x)
-        Me.mnuLang(x).Caption = Left$(cFile.GetFileFromPath(sLang(x)), _
-            Len(cFile.GetFileFromPath(sLang(x))) - 4)
+        Me.mnuLang(x).Caption = Left$(cFile.getfilename(sLang(x)), _
+            Len(cFile.getfilename(sLang(x))) - 4)
     Next x
     
     'coche le bon menu
@@ -1908,7 +1910,7 @@ Private Sub pctExplorer_Resize()
 End Sub
 
 Private Sub pctPath_Change()
-    If cFile.FolderExists(cFile.GetFolderFromPath(pctPath.Text & "\")) = False Then
+    If cFile.FolderExists(cFile.getfoldername(pctPath.Text & "\")) = False Then
         'couleur rouge
         pctPath.ForeColor = RED_COLOR
     Else
@@ -1957,7 +1959,8 @@ Dim Frm As Form
             'alors on ajoute le contenu du dossier
             
             'liste les fichiers
-            If cFile.EnumFilesFromFolder(Data.Files.Item(i), m, CBool(cPref.general_OpenSubFiles)) < 1 Then Exit Sub
+            m() = cFile.EnumFilesStr(Data.Files.Item(i), CBool(cPref.general_OpenSubFiles))
+            If UBound(m()) < 1 Then Exit Sub
             
             'les ouvre un par un
             For i2 = 1 To UBound(m)
@@ -2932,7 +2935,7 @@ Dim Frm As Form
     ReDim s(0)
     s2 = cFile.ShowOpen(Lang.GetString("_SelFileToOpen"), Me.hWnd, _
         Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
-        OFN_ALLOWMULTISELECT, 4096, s())
+        OFN_ALLOWMULTISELECT, s())
     
     For x = 1 To UBound(s())
         If cFile.FileExists(s(x)) Then
@@ -2981,8 +2984,9 @@ Dim x As Long
     If cFile.FolderExists(sDir) = False Then Exit Sub
     
     'liste les fichiers
-    If cFile.EnumFilesFromFolder(sDir, m, CBool(cPref.general_OpenSubFiles)) < 1 Then Exit Sub
-    
+    m() = cFile.EnumFilesStr(sDir, CBool(cPref.general_OpenSubFiles))
+    If UBound(m()) < 1 Then Exit Sub
+
     'les ouvre un par un
     For x = 1 To UBound(m)
         If cFile.FileExists(m(x)) Then
@@ -3012,7 +3016,7 @@ On Error Resume Next
         MsgBox Lang.GetString("_FileAbsent"), vbInformation, Lang.GetString("_CanNotOpen")
     End If
     
-    If cFile.GetFileSize(Me.ActiveForm.Caption) > 1000000 Then
+    If cFile.GetFileSizes(Me.ActiveForm.Caption).FileSize > 1000000 Then
         'fichier de plus de 700Ko
         x = MsgBox(Lang.GetString("_FileMakeMoreThan") & vbNewLine & Lang.GetString("_ShoudNotBN"), vbInformation + vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
@@ -3408,7 +3412,7 @@ Dim x As Long
     End If
     
     'efface le précédent fichier
-    cFile.KillFile sPath
+    cFile.deletefile sPath
     
     'créé le fichier
     Call Me.ActiveForm.GetNewFile(sPath)

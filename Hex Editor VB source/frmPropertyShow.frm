@@ -365,7 +365,7 @@ End Sub
 'affiche les propriétés d'un fichier
 '=======================================================
 Private Sub ShowFileProp()
-Dim cFic As clsFile
+Dim cFic As filesystemlibrary.File
 Dim s As String
 
     On Error Resume Next
@@ -380,24 +380,24 @@ Dim s As String
     
     'affiche tout çà
     With cFic
-        s = Lang.GetString("_File") & .File & "]"
+        s = Lang.GetString("_File") & .Path & "]"
         s = s & vbNewLine & Lang.GetString("_Size") & CStr(.FileSize) & " " & Lang.GetString("_Bytes") & "  -  " & CStr(Round(.FileSize / 1024, 3)) & " " & Lang.GetString("_Ko") & "]"
-        s = s & vbNewLine & Lang.GetString("_Attr") & CStr(.FileAttributes) & "]"
-        s = s & vbNewLine & Lang.GetString("_Crea") & .CreationDate & "]"
-        s = s & vbNewLine & Lang.GetString("_Access") & .LastAccessDate & "]"
-        s = s & vbNewLine & Lang.GetString("_Modif") & .LastModificationDate & "]"
-        s = s & vbNewLine & Lang.GetString("_Version") & .EXEFileVersion & "]"
-        s = s & vbNewLine & Lang.GetString("_Descr") & .EXEFileDescription & "]"
-        s = s & vbNewLine & "Copyright=[" & .EXELegalCopyright & "]"
-        s = s & vbNewLine & "CompanyName=[" & .EXECompanyName & "]"
-        s = s & vbNewLine & "InternalName=[" & .EXEInternalName & "]"
-        s = s & vbNewLine & "OriginalFileName=[" & .EXEOriginalFileName & "]"
-        s = s & vbNewLine & "ProductName=[" & .EXEProductName & "]"
-        s = s & vbNewLine & "ProductVersion=[" & .EXEProductVersion & "]"
+        s = s & vbNewLine & Lang.GetString("_Attr") & CStr(.Attributes) & "]"
+        s = s & vbNewLine & Lang.GetString("_Crea") & .DateCreated & "]"
+        s = s & vbNewLine & Lang.GetString("_Access") & .DateLastAccessed & "]"
+        s = s & vbNewLine & Lang.GetString("_Modif") & .DateLastModified & "]"
+        s = s & vbNewLine & Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
+        s = s & vbNewLine & Lang.GetString("_Descr") & .FileVersionInfos.FileDescription & "]"
+        s = s & vbNewLine & "Copyright=[" & .FileVersionInfos.Copyright & "]"
+        s = s & vbNewLine & "CompanyName=[" & .FileVersionInfos.CompanyName & "]"
+        s = s & vbNewLine & "InternalName=[" & .FileVersionInfos.InternalName & "]"
+        s = s & vbNewLine & "OriginalFileName=[" & .FileVersionInfos.OriginalFileName & "]"
+        s = s & vbNewLine & "ProductName=[" & .FileVersionInfos.ProductName & "]"
+        s = s & vbNewLine & "ProductVersion=[" & .FileVersionInfos.ProductVersion & "]"
         s = s & vbNewLine & Lang.GetString("_CompS") & .FileCompressedSize & "]"
         s = s & vbNewLine & Lang.GetString("_AssocP") & .AssociatedExecutableProgram & "]"
-        s = s & vbNewLine & Lang.GetString("_Fold") & .FileDirectory & "]"
-        s = s & vbNewLine & Lang.GetString("_DriveC") & .FileDrive & "]"
+        s = s & vbNewLine & Lang.GetString("_Fold") & .FolderName & "]"
+        s = s & vbNewLine & Lang.GetString("_DriveC") & .DriveName & "]"
         s = s & vbNewLine & Lang.GetString("_FileType") & .FileType & "]"
         s = s & vbNewLine & Lang.GetString("_FileExt") & .FileExtension & "]"
         s = s & vbNewLine & Lang.GetString("_ShortN") & .ShortName & "]"
@@ -421,7 +421,7 @@ End Sub
 '=======================================================
 Private Sub ShowProcessProp()
 Dim pProcess As ProcessItem
-Dim cFic As clsFile
+Dim cFic As filesystemlibrary.File
 Dim s As String
 
     On Error Resume Next
@@ -442,24 +442,24 @@ Dim s As String
         s = "-------------------------------------------"
         s = s & vbNewLine & "-------------- " & Lang.GetString("_Cible") & "  -------------"
         s = s & vbNewLine & "-------------------------------------------"
-        s = s & vbNewLine & Lang.GetString("_File") & .File & "]"
+        s = s & vbNewLine & Lang.GetString("_File") & .Path & "]"
         s = s & vbNewLine & Lang.GetString("_Size") & CStr(.FileSize) & " " & Lang.GetString("_Bytes") & "  -  " & CStr(Round(.FileSize / 1024, 3)) & " " & Lang.GetString("_Ko") & "]"
-        s = s & vbNewLine & Lang.GetString("_Attr") & CStr(.FileAttributes) & "]"
-        s = s & vbNewLine & Lang.GetString("_Crea") & .CreationDate & "]"
-        s = s & vbNewLine & Lang.GetString("_Access") & .LastAccessDate & "]"
-        s = s & vbNewLine & Lang.GetString("_Modif") & .LastModificationDate & "]"
-        s = s & vbNewLine & Lang.GetString("_Version") & .EXEFileVersion & "]"
-        s = s & vbNewLine & Lang.GetString("_Descr") & .EXEFileDescription & "]"
-        s = s & vbNewLine & "Copyright=[" & .EXELegalCopyright & "]"
-        s = s & vbNewLine & "CompanyName=[" & .EXECompanyName & "]"
-        s = s & vbNewLine & "InternalName=[" & .EXEInternalName & "]"
-        s = s & vbNewLine & "OriginalFileName=[" & .EXEOriginalFileName & "]"
-        s = s & vbNewLine & "ProductName=[" & .EXEProductName & "]"
-        s = s & vbNewLine & "ProductVersion=[" & .EXEProductVersion & "]"
+        s = s & vbNewLine & Lang.GetString("_Attr") & CStr(.Attributes) & "]"
+        s = s & vbNewLine & Lang.GetString("_Crea") & .DateCreated & "]"
+        s = s & vbNewLine & Lang.GetString("_Access") & .DateLastAccessed & "]"
+        s = s & vbNewLine & Lang.GetString("_Modif") & .DateLastModified & "]"
+        s = s & vbNewLine & Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
+        s = s & vbNewLine & Lang.GetString("_Descr") & .FileVersionInfos.FileDescription & "]"
+        s = s & vbNewLine & "Copyright=[" & .FileVersionInfos.Copyright & "]"
+        s = s & vbNewLine & "CompanyName=[" & .FileVersionInfos.CompanyName & "]"
+        s = s & vbNewLine & "InternalName=[" & .FileVersionInfos.InternalName & "]"
+        s = s & vbNewLine & "OriginalFileName=[" & .FileVersionInfos.OriginalFileName & "]"
+        s = s & vbNewLine & "ProductName=[" & .FileVersionInfos.ProductName & "]"
+        s = s & vbNewLine & "ProductVersion=[" & .FileVersionInfos.ProductVersion & "]"
         s = s & vbNewLine & Lang.GetString("_CompS") & .FileCompressedSize & "]"
         s = s & vbNewLine & Lang.GetString("_AssocP") & .AssociatedExecutableProgram & "]"
-        s = s & vbNewLine & Lang.GetString("_Fold") & .FileDirectory & "]"
-        s = s & vbNewLine & Lang.GetString("_DriveC") & .FileDrive & "]"
+        s = s & vbNewLine & Lang.GetString("_Fold") & .FolderName & "]"
+        s = s & vbNewLine & Lang.GetString("_DriveC") & .DriveName & "]"
         s = s & vbNewLine & Lang.GetString("_FileType") & .FileType & "]"
         s = s & vbNewLine & Lang.GetString("_FileExt") & .FileExtension & "]"
         s = s & vbNewLine & Lang.GetString("_ShortN") & .ShortName & "]"

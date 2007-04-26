@@ -198,7 +198,7 @@ Dim hDisk As Long
     End If
     
     'vérifie que le dossier existe bien
-    If cFile.FolderExists(cFile.GetParentDirectory(sFile)) = False Then
+    If cFile.FolderExists(cFile.GetParentFolderName(sFile)) = False Then
         'inexistant
         MsgBox Lang.GetString("_DirDoesNot"), vbCritical, Lang.GetString("_Error")
         Exit Sub
@@ -206,7 +206,7 @@ Dim hDisk As Long
     
     txtFile.Enabled = False
     cmdBrowse.Enabled = False
-    cmdGo.Enabled = False
+    cmdGO.Enabled = False
     cmdQuit.Enabled = False
     
     PGB.Max = tDrive.TotalPhysicalSectors - 1
@@ -246,7 +246,7 @@ Dim hDisk As Long
     
     txtFile.Enabled = True
     cmdBrowse.Enabled = True
-    cmdGo.Enabled = True
+    cmdGO.Enabled = True
     cmdQuit.Enabled = True
 
     'ajoute du texte à la console
@@ -273,12 +273,12 @@ Dim s As String
         If s = "UDF" Or s = "CDFS" Then
             'on a choisi le drive
             Set tDrive = DV.GetSelectedDrive
-            cmdGo.Enabled = True
+            cmdGO.Enabled = True
         Else
-            cmdGo.Enabled = False
+            cmdGO.Enabled = False
         End If
     Else
-        cmdGo.Enabled = False
+        cmdGO.Enabled = False
     End If
 End Sub
 

@@ -206,14 +206,14 @@ Private Sub mnuChooseModel_Click()
 Dim s As String
 Dim s2() As String
 Dim x As Long
-Dim cFile As clsFileInfos
+Dim cFile As FileSystemLibrary.FileSystem
 Dim l As Long
 Dim r As Long
 
     On Error GoTo CancelPushed
     
     'on charge le fichier que l'on vient de sélectionner
-    Set cFile = New clsFileInfos
+    Set cFile = New FileSystemLibrary.FileSystem
     
     With Me.CMD
         .CancelError = True
@@ -398,13 +398,12 @@ Dim s As String
 Dim s2() As String
 Dim sNew() As String
 Dim x As Long
-Dim cFile As clsFileInfos
+Dim cFile As FileSystemLibrary.FileSystem
 Dim l As Long
 Dim r As Long
 Dim sFile As String
 
     On Error GoTo CancelPushed
-    
     
     'vérifie qu'un modèle existe bien
     If bModelChosen = False Then
@@ -418,7 +417,7 @@ Dim sFile As String
     End If
     
     'on charge le fichier que l'on vient de sélectionner
-    Set cFile = New clsFileInfos
+    Set cFile = New FileSystemLibrary.FileSystem
     
     With Me.CMD
         .CancelError = True
@@ -491,14 +490,14 @@ Private Sub mnuOpenFile_Click()
 Dim s As String
 Dim s2() As String
 Dim x As Long
-Dim cFile As clsFileInfos
+Dim cFile As FileSystemLibrary.FileSystem
 Dim l As Long
 Dim r As Long
 
     On Error GoTo CancelPushed
     
     'on charge le fichier que l'on vient de sélectionner
-    Set cFile = New clsFileInfos
+    Set cFile = New FileSystemLibrary.FileSystem
     
     With Me.CMD
         .CancelError = True

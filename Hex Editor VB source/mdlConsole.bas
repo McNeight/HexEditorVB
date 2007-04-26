@@ -189,7 +189,7 @@ Dim sPref As String
             If cFile.FileExists(Right$(s, Len(s) - 5)) = False Then
                 s2 = "Fichier inexistant"
             Else
-                cFile.KillFile Right$(s, Len(s) - 5)
+                cFile.DeleteFile Right$(s, Len(s) - 5)
                 s2 = IIf(cFile.FileExists(Right$(s, Len(s) - 5)), "Fichier encore existant", "Fichier effacé")
             End If
         ElseIf Left$(s, 5) = "close" Then
@@ -255,7 +255,7 @@ Dim sPref As String
                 'reset les options
                             
                 'récréé le fichier
-                cFile.SaveDATAinFile sPref & "Config.ini", DEFAULT_INI, True
+                cFile.SaveDataInFile sPref & "Config.ini", DEFAULT_INI, True
                 
                 'reloade les options
                 Set cPref = clsPref.GetIniFile(sPref & "Config.ini")
@@ -267,12 +267,12 @@ Dim sPref As String
                 'reset les *.ini des forms
                 
                 'énumère tous les fichiers *.ini
-                cFile.EnumFilesFromFolder sPref, sF(), False
+                sF() = cFile.EnumFilesStr(sPref, False)
                 
                 'vire tous les fichiers
                 For x = 1 To UBound(sF())
                     If LCase$(sF(x)) <> "config.ini" Then
-                        cFile.KillFile sF(x)
+                        cFile.DeleteFile sF(x)
                     End If
                 Next x
                 

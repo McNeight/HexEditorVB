@@ -529,7 +529,7 @@ Dim s As String
         s = CreateMeHtmlString(Me.LV1, Me.LV2)
         
         'colle la string dedans
-        cFile.SaveStringInfile .Filename, s, True
+        cFile.SaveDataInFile .Filename, s, True
         
     End With
     

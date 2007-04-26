@@ -204,6 +204,14 @@ Public Type FileDates
     DateLastModified As String
 End Type
 '=======================================================
+'Dates d'un fichier
+'=======================================================
+Public Enum FileDatesEnum
+    DateCreated
+    DateLastAccessed
+    DateLastModified
+End Enum
+'=======================================================
 'Tailles d'un fichier
 '=======================================================
 Public Type FileSizes
@@ -1963,6 +1971,53 @@ Dim FileInfo As BY_HANDLE_FILE_INFORMATION
 End Function
 
 '=======================================================
+'Renvoie une date de fichier sous forme de currency
+'=======================================================
+Public Function GetFileDateAsCurrency(ByVal Source As String, TypeOfDate As _
+    FileDatesEnum) As Currency
+    
+Dim lFile As Long
+Dim FileInfo As BY_HANDLE_FILE_INFORMATION
+Dim MyTime As FILETIME
+
+    'handle vers le fichier désiré
+    lFile = CreateFile(Source, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, _
+        ByVal 0&, OPEN_EXISTING, ByVal 0&, ByVal 0&)
+    
+    If lFile = INVALID_HANDLE_VALUE Then Exit Function
+    
+    'obtient les infos sur le fichier
+    Call GetFileInformationByHandle(lFile, FileInfo)
+    
+    'referme immédiatement le handle
+    Call CloseHandle(lFile)
+    
+    'ne pas oublier de convertir en local
+    Select Case TypeOfDate
+    
+        Case DateCreated
+            Call FileTimeToLocalFileTime(FileInfo.ftCreationTime, _
+                FileInfo.ftCreationTime)
+            MyTime = FileInfo.ftCreationTime
+            
+        Case DateLastAccessed
+            Call FileTimeToLocalFileTime(FileInfo.ftLastAccessTime, _
+                FileInfo.ftLastAccessTime)
+            MyTime = FileInfo.ftLastAccessTime
+            
+        Case DateLastModified
+            Call FileTimeToLocalFileTime(FileInfo.ftLastWriteTime, _
+                FileInfo.ftLastWriteTime)
+            MyTime = FileInfo.ftLastWriteTime
+            
+    End Select
+    
+    'convertit MyTime en Currency
+    Call CopyMemory(GetFileDateAsCurrency, MyTime, LenB(MyTime))
+
+End Function
+
+'=======================================================
 'Renvoie les dates d'un fichier
 '=======================================================
 Public Function GetFolderDates(ByVal Source As String) As FileDates
@@ -2752,6 +2807,45 @@ End Function
 Public Function DecryptFolder(ByVal Source As String) As Long
     DecryptFolder = DecryptFileAPI(Source, 0)
 End Function
+
+'=======================================================
+'Récupère le contenu d'un fichier dans une string
+'=======================================================
+Public Function LoadFileInString(ByVal Source As String, Optional ByRef IsOk As Long) As String
+Dim hFile As Long
+Dim lSize As Long
+Dim Ret As Long
+Dim s As String
+    
+    'obtient le handle du fichier
+    hFile = CreateFile(Source, GENERIC_READ, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+    
+    'obtient sa taille pour créer un buffer
+    lSize = Me.GetFileSizes(Source).FileSize
+ 
+    'initialise le pointeur sur le fichier (au début)
+    Call SetFilePointer(hFile, 0, 0, FILE_BEGIN)
+    
+    'créé le buffer
+    s = String$(lSize, 0)
+    
+    'charge le fichier
+    Ret = ReadFile(hFile, ByVal s, lSize, Ret, ByVal 0&)
+     
+    LoadFileInString = s
+    
+    If Not (IsMissing(IsOk)) Then
+        'alors on renvoie si la fonction a marché ou pas
+        IsOk = IIf(Ret > 0 And hFile > 0, 1, 0)
+    End If
+    
+    'ferme le handle
+    CloseHandle hFile
+End Function
+
+
+
 
 
 

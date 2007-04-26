@@ -170,8 +170,9 @@ Dim s2 As String
 Dim x As Long
 
     ReDim s(0)
-    s2 = cFile.ShowOpen(Lang.GetString("_FilesToKillSel"), Me.hWnd, Lang.GetString("_All") & "|*.*", , , , , _
-        OFN_EXPLORER + OFN_ALLOWMULTISELECT, 4096, s())
+    s2 = cFile.ShowOpen(Lang.GetString("_FilesToKillSel"), Me.hWnd, _
+        Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
+        OFN_ALLOWMULTISELECT, s())
     
     For x = 1 To UBound(s())
         If cFile.FileExists(s(x)) Then

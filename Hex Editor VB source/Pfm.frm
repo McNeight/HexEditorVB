@@ -622,12 +622,12 @@ Private lngFormStyle As Long
 Public cUndo As clsUndoItem 'infos générales sur 'historique
 Private cHisto() As clsUndoSubItem  'historique pour le Undo/Redo
 
-Public TheFile As clsFile
+Public TheFile As filesystemlibrary.File
 
 Public Sub cmdMAJ_Click()
 'MAJ des infos
 Dim lPages As Long
-Dim cFic As clsFile
+Dim cFic As filesystemlibrary.File
 
     On Error Resume Next
     
@@ -640,13 +640,13 @@ Dim cFic As clsFile
     'affiche tout çà
     With cFic
         TextBox(0).Text = Lang.GetString("_SizeIs") & CStr(.FileSize) & " Octets  -  " & CStr(Round(.FileSize / 1024, 3)) & " Ko" & "]"
-        TextBox(1).Text = Lang.GetString("_AttrIs") & CStr(.FileAttributes) & "]"
-        TextBox(2).Text = Lang.GetString("_CreaIs") & .CreationDate & "]"
-        TextBox(3).Text = Lang.GetString("_AccessIs") & .LastAccessDate & "]"
-        TextBox(4).Text = Lang.GetString("_ModifIs") & .LastModificationDate & "]"
-        TextBox(5).Text = Lang.GetString("_Version") & .EXEFileVersion & "]"
-        TextBox(6).Text = Lang.GetString("_DescrIs") & .EXEFileDescription & "]"
-        TextBox(7).Text = "Copyright=[" & .EXELegalCopyright & "]"
+        TextBox(1).Text = Lang.GetString("_AttrIs") & CStr(.Attributes) & "]"
+        TextBox(2).Text = Lang.GetString("_CreaIs") & .DateCreated & "]"
+        TextBox(3).Text = Lang.GetString("_AccessIs") & .DateLastAccessed & "]"
+        TextBox(4).Text = Lang.GetString("_ModifIs") & .DateLastModified & "]"
+        TextBox(5).Text = Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
+        TextBox(6).Text = Lang.GetString("_DescrIs") & .FileVersionInfos.FileDescription & "]"
+        TextBox(7).Text = "Copyright=[" & .FileVersionInfos.Copyright & "]"
     End With
    
     Label2(8).Caption = Me.Sb.Panels(2).Text

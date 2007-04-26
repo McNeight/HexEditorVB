@@ -80,7 +80,7 @@ Dim k2 As Currency
         End If
         
         'récupère le nom du fichier
-        sFileStr = cFile.GetFileFromPath(sFile)
+        sFileStr = cFile.GetFileName(sFile)
         
         'vérifie que le fichier groupeur n'existe pas déjà
         If cFile.FileExists(sFolderOut & "\" & sFileStr & ".grp") Then
@@ -90,7 +90,7 @@ Dim k2 As Currency
         
         
         'récupère la taille du fichier
-        curSize = cFile.GetFileSize(sFile)
+        curSize = cFile.GetFileSizes(sFile).FileSize
         If curSize = 0 Or cFile.IsFileAvailable(sFile) = False Then
             'fichier vide ou inaccessible
             MsgBox .GetString("_OperationCutNotOk"), vbCritical, .GetString("_Error")
@@ -237,7 +237,7 @@ Dim k2 As Currency
         
         'on créé le fichier groupeur
         cFile.CreateEmptyFile sFolderOut & "\" & sFileStr & ".grp", True
-        cFile.SaveStringInfile sFolderOut & "\" & sFileStr & ".grp", sFileStr & "|" & Str$(lFileCount)
+        cFile.SaveDataInFile sFolderOut & "\" & sFileStr & ".grp", sFileStr & "|" & Str$(lFileCount)
        
     Else
         'alors nombre de fichiers fixé
@@ -370,7 +370,7 @@ Dim k2 As Currency
         
         'on créé le fichier groupeur
         cFile.CreateEmptyFile sFolderOut & "\" & sFileStr & ".grp", True
-        cFile.SaveStringInfile sFolderOut & "\" & sFileStr & ".grp", sFileStr & "|" & Str$(lFileCount)
+        cFile.SaveDataInFile sFolderOut & "\" & sFileStr & ".grp", sFileStr & "|" & Str$(lFileCount)
  
     End If
     
@@ -421,7 +421,6 @@ Dim lTime As Long
             MsgBox .GetString("_EmplacementNot2"), vbCritical, .GetString("_Error")
             Exit Function
         End If
-        
         sBuf = cFile.LoadFileInString(sFileGroup)
         'récupère le nom du fichier
         sFileStr = Mid$(sBuf, 1, InStr(1, sBuf, "|") - 1)
@@ -449,7 +448,7 @@ Dim lTime As Long
         'vérifie l'existence de chaque fichier
         bOk = True
         For i = 1 To lFileCount
-            If cFile.FileExists(cFile.GetFolderFromPath(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i))) = False Then
+            If cFile.FileExists(cFile.getfoldername(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i))) = False Then
                 bOk = False
             End If
         Next i
@@ -465,14 +464,14 @@ Dim lTime As Long
     cFile.CreateEmptyFile sFolderOut & "\" & sFileStr, True
     
     'alors tout est OK, on peut commencer à coller les données par buffer de 5Mo
-    If cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1") <= lBufSize Then
+    If cFile.GetFileSizes(sFolderOut & "\" & sFileStr & ".1").FileSize <= lBufSize Then
         'alors tout rentre dans un buffer de 5Mo
     
         frmCut.pgb.Max = lFileCount
         frmCut.pgb.Value = 0
         For i = 1 To lFileCount
             'écrit les bytes lus
-            WriteBytesToFileEnd sFolderOut & "\" & sFileStr, cFile.LoadFileInString(cFile.GetFolderFromPath(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i)))
+            WriteBytesToFileEnd sFolderOut & "\" & sFileStr, cFile.LoadFileInString(cFile.getfoldername(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i)))
             DoEvents: frmCut.pgb.Value = frmCut.pgb.Value + 1
         Next i
         frmCut.pgb.Value = frmCut.pgb.Max
@@ -482,7 +481,7 @@ Dim lTime As Long
         'alors il faut plusieurs buffers de 5Mo par fichier
         
         'détermine le nombre de buffers nécessaire
-        lBuf2 = Int(cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1") / lBufSize) + IIf(Mod2(cFile.GetFileSize(sFolderOut & "\" & sFileStr & ".1"), lBufSize) = 0, 0, 1)
+        lBuf2 = Int(cFile.GetFileSizes(sFolderOut & "\" & sFileStr & ".1").FileSize / lBufSize) + IIf(Mod2(cFile.GetFileSizes(sFolderOut & "\" & sFileStr & ".1").FileSize, lBufSize) = 0, 0, 1)
         
         frmCut.pgb.Max = lFileCount * lBuf2
         
@@ -502,7 +501,7 @@ Dim lTime As Long
             Next j
             
             'le dernier buffer
-            a = cFile.GetFileSize(sFic) - (lBuf2 - 1) * lBufSize     'taille du dernier buffer
+            a = cFile.GetFileSizes(sFic).FileSize - (lBuf2 - 1) * lBufSize      'taille du dernier buffer
             sBuf = GetBytesFromFile(sFic, a, lBufSize * (lBuf2 - 1))
             
             'écrit les bytes dans le fichier résultat
@@ -514,7 +513,7 @@ Dim lTime As Long
         
         'fait le dernier fichier
         sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(lFileCount))
-        lBuf2 = Int(cFile.GetFileSize(sFic) / lBufSize) + IIf(Mod2(cFile.GetFileSize(sFic), lBufSize) = 0, 0, 1)    'nouveau buffer
+        lBuf2 = Int(cFile.GetFileSizes(sFic).FileSize / lBufSize) + IIf(Mod2(cFile.GetFileSizes(sFic).FileSize, lBufSize) = 0, 0, 1)      'nouveau buffer
             
         For j = 1 To lBuf2 - 1
             'sbuf contient 5Mo lus
@@ -525,7 +524,7 @@ Dim lTime As Long
         Next j
         
         'le dernier buffer
-        a = cFile.GetFileSize(sFic) - (lBuf2 - 1) * lBufSize
+        a = cFile.GetFileSizes(sFic).FileSize - (lBuf2 - 1) * lBufSize
         sBuf = GetBytesFromFile(sFic, a, lBufSize * (lBuf2 - 1))
         
         'écrit les bytes dans le fichier résultat

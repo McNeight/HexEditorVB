@@ -408,7 +408,7 @@ End Sub
 Private Sub cmdBrowseGrupFIle_Click()
 'sélection du fichier groupe
     txtGrFile.Text = cFile.ShowOpen(Lang.GetString("_GrupFileSel"), Me.hWnd, Lang.GetString("_GrupFile") & "|*.grp")
-    If txtFolderFus.Text = vbNullString Then txtFolderFus.Text = cFile.GetFolderFromPath(txtGrFile.Text)
+    If txtFolderFus.Text = vbNullString Then txtFolderFus.Text = cFile.getfoldername(txtGrFile.Text)
 End Sub
 
 Private Sub cmdBrowsePaste_Click()
@@ -479,7 +479,7 @@ Dim lTime As Long
             'nombre
         
             'calcule la taille de chaque fichier
-            lLen = Int(cFile.GetFileSize(txtFileToCut.Text) / Val(txtNumberOfFiles.Text))
+            lLen = Int(cFile.GetFileSizes(txtFileToCut.Text).FileSize / Val(txtNumberOfFiles.Text))
             
             If lLen > 2147483648# Then
                 'alors fichiers trop grands

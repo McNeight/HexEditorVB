@@ -88,6 +88,8 @@ Private Type ClassFile
     ShortName As String
     ShortPath As String
     FileVersionInfos As FileVersionInfos
+    FolderName As String
+    DriveName As String
 End Type
 
 '=======================================================
@@ -127,6 +129,8 @@ Public Property Get ShortPath() As String: ShortPath = MyFile.ShortPath: End Pro
 Public Property Get FileVersionInfos() As FileVersionInfos: FileVersionInfos = MyFile.FileVersionInfos: End Property
 Public Property Get IsCompressed() As Boolean: IsCompressed = MyFile.IsCompressed: End Property
 Public Property Get IsArchive() As Boolean: IsArchive = MyFile.IsArchive: End Property
+Public Property Get FolderName() As String: FolderName = MyFile.FolderName: End Property
+Public Property Get DriveName() As String: DriveName = MyFile.DriveName: End Property
 
 
 
@@ -174,6 +178,8 @@ Dim hFile As Long
         .ShortName = clsFile.GetShortName(Me.Path)
         .ShortPath = clsFile.GetShortPath(Me.Path)
         .FileVersionInfos = clsFile.GetFileVersionInfos(Me.Path)
+        .FolderName = clsFile.GetFolderName(Me.Path)
+        If Len(Me.Path) >= 3 Then .DriveName = Left$(Me.Path, 3)
     End With
     
     'referme le handle

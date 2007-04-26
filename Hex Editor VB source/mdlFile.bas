@@ -80,7 +80,7 @@ Dim lFile As Long
     On Error GoTo GestionErr
     
     'sauvegarde le fichier
-    cFile.KillFile sPath
+    cFile.deletefile sPath
     
     'créé ke fichier
     Call Frm.GetNewFile(sPath)
@@ -129,7 +129,7 @@ Dim sPath As String
         'le supprime
         sPath = cFile.GetSpecialFolder(CSIDL_SENDTO) 'contient le nom du path du shortcut
         
-        cFile.KillFile sPath & "\HexEditor.lnk"
+        cFile.deletefile sPath & "\HexEditor.lnk"
     End If
 
 End Sub

@@ -253,7 +253,7 @@ Private Sub LV_PathChange(sOldPath As String, sNewPath As String)
 End Sub
 
 Private Sub pctPath_Change()
-    If cFile.FolderExists(cFile.GetFolderFromPath(pctPath.Text & "\")) = False Then
+    If cFile.FolderExists(cFile.getfoldername(pctPath.Text & "\")) = False Then
         'couleur rouge
         pctPath.ForeColor = RED_COLOR
     Else

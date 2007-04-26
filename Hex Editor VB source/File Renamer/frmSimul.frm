@@ -174,7 +174,7 @@ Dim x As Long
     For x = 1 To UBound(sOld())
         LV.ListItems.Add Text:=sOld(x), SmallIcon:=IIf(sOld(x) = sNew(x), "Failed", "Success")
         LV.ListItems.Item(x).SubItems(1) = sNew(x)
-        LV.ListItems.Item(x).SubItems(2) = cFile.GetFolderFromPath(frmMain.FileR.ListItems.Item(x).Tag)  'le path
+        LV.ListItems.Item(x).SubItems(2) = cFile.GetFolderName(frmMain.FileR.ListItems.Item(x).Tag)   'le path
     Next x
     LV.Visible = True
 End Sub

@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{9B9A881F-DBDC-4334-BC23-5679E5AB0DC6}#1.3#0"; "FileView_OCX.ocx"
+Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
 Begin VB.Form frmMain 
    Caption         =   "File Renamer VB"
    ClientHeight    =   10380
@@ -1115,7 +1115,7 @@ Dim x As Long
             s = s & Folder1.Path & "\" & Folder1.ListItems.Item(x).Text & vbNullChar
     Next x
     
-    Call cFile.CopyFileOrFolder(s, sTo): DoEvents    'copy files
+    Call cFile.CopyFolder(s, sTo): DoEvents     'copy folders
     Call Folder1.Refresh
 End Sub
 
@@ -1135,7 +1135,7 @@ Dim x As Long
             s = s & Folder1.Path & "\" & File1.ListItems.Item(x).Text & vbNullChar
     Next x
     
-    Call cFile.CopyFileOrFolder(s, sTo): DoEvents    'copy files
+    Call cFile.CopyFile(s, sTo): DoEvents     'copy files
     Call File1.Refresh
 End Sub
 
@@ -1193,7 +1193,7 @@ Dim x As Long
 
     For x = 1 To File1.ListCount
         If File1.ListItems.Item(x).Selected Then _
-            Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_HIDDEN)
+            Call cFile.ChangeFileAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, Hidden)
     Next x
 End Sub
 
@@ -1213,7 +1213,7 @@ Dim x As Long
             s = s & Folder1.Path & "\" & Folder1.ListItems.Item(x).Text & vbNullChar
     Next x
     
-    Call cFile.MoveFileOrFolder(s, sTo): DoEvents  'move files
+    Call cFile.MoveFolder(s, sTo): DoEvents  'move folders
     Call Folder1.Refresh
 End Sub
 
@@ -1233,7 +1233,7 @@ Dim x As Long
             s = s & Folder1.Path & "\" & File1.ListItems.Item(x).Text & vbNullChar
     Next x
     
-    Call cFile.MoveFileOrFolder(s, sTo): DoEvents  'move files
+    Call cFile.MoveFile(s, sTo): DoEvents  'move files
     Call File1.Refresh
 End Sub
 
@@ -1243,7 +1243,7 @@ Dim x As Long
 
     For x = 1 To File1.ListCount
         If File1.ListItems.Item(x).Selected Then _
-            Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_NORMAL)
+            Call cFile.ChangeFileAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, Normal)
     Next x
 End Sub
 
@@ -1258,7 +1258,7 @@ Dim x As Long
 
     For x = 1 To File1.ListCount
         If File1.ListItems.Item(x).Selected Then _
-            Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_READONLY)
+            Call cFile.ChangeFileAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, ReadOnly)
     Next x
 End Sub
 
@@ -1268,7 +1268,7 @@ Dim x As Long
 
     For x = 1 To File1.ListCount
         If File1.ListItems.Item(x).Selected Then _
-            Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_SYSTEM)
+            Call cFile.ChangeFileAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, System)
     Next x
 End Sub
 
@@ -1278,7 +1278,8 @@ Dim x As Long
 
     For x = 1 To File1.ListCount
         If File1.ListItems.Item(x).Selected Then _
-            Call cFile.ChangeAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, FILE_ATTRIBUTE_INVISIBLE_SYSTEM)
+            Call cFile.ChangeFileAttributes(Folder1.Path & "\" & File1.ListItems.Item(x).Text, 39)
+            '/!\ NOT SURE ABOUT 39
     Next x
 End Sub
 
@@ -1295,7 +1296,7 @@ Dim s() As String
         If Folder1.ListItems.Item(x).Selected Then
             
             'énumère les fichiers
-            Call cFile.EnumFilesFromFolder(Folder1.Path & "\" & Folder1.ListItems.Item(x).Text, s(), False)
+            s() = cFile.EnumFilesStr(Folder1.Path & "\" & Folder1.ListItems.Item(x).Text, False)
             
             'ajoute tout çà à la liste
             For y = 1 To UBound(s())
@@ -1325,7 +1326,7 @@ Dim s() As String
         If Folder1.ListItems.Item(x).Selected Then
             
             'énumère les fichiers
-            Call cFile.EnumFilesFromFolder(Folder1.Path & "\" & Folder1.ListItems.Item(x).Text, s(), True)
+            s() = cFile.EnumFilesStr(Folder1.Path & "\" & Folder1.ListItems.Item(x).Text, True)
             
             'ajoute tout çà à la liste
             For y = 1 To UBound(s())
@@ -1342,7 +1343,7 @@ Dim s() As String
 End Sub
 
 Private Sub pctPath_Change()
-    If cFile.FolderExists(cFile.GetFolderFromPath(pctPath.Text & "\")) = False Then
+    If cFile.FolderExists(cFile.GetFolderName(pctPath.Text & "\")) = False Then
         'couleur rouge
         pctPath.ForeColor = RED_COLOR
     Else

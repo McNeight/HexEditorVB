@@ -257,7 +257,7 @@ Dim x As Long
     For x = 1 To UBound(sLang())
         'ajoute une entrée au menu
         Load Me.mnuLang(x)
-        Me.mnuLang(x).Caption = Left$(cFile.GetFileFromPath(sLang(x)), Len(cFile.GetFileFromPath(sLang(x))) - 4)
+        Me.mnuLang(x).Caption = Left$(cFile.GetFileName(sLang(x)), Len(cFile.GetFileName(sLang(x))) - 4)
     Next x
     
     'coche le bon menu
@@ -282,10 +282,10 @@ Dim b As Boolean
     Me.Caption = s
     
     'récupère le nom du fichier sans l'extension
-    sFileW = Left$(cFile.GetFileFromPath(s), Len(cFile.GetFileFromPath(s)) - Len(cFile.GetFileExtension(s)))
+    sFileW = Left$(cFile.GetFileName(s), Len(cFile.GetFileName(s)) - Len(cFile.GetFileExtension(s)))
     
     'récupère le path temporaire et créé un nom de dossier
-    tmpDir = ObtainTempPath & "\" & cFile.GetFileFromPath(s)
+    tmpDir = ObtainTempPath & "\" & cFile.GetFileName(s)
     
     'on lance la procédure de désassemblage
     Sb.Panels(1).Text = Lang.GetString("_Desassembling")
@@ -415,10 +415,10 @@ Dim b As Boolean
     Me.Caption = sFile
     
     'récupère le nom du fichier sans l'extension
-    sFileW = Left$(cFile.GetFileFromPath(sFile), Len(cFile.GetFileFromPath(sFile)) - Len(cFile.GetFileExtension(sFile)))
+    sFileW = Left$(cFile.GetFileName(sFile), Len(cFile.GetFileName(sFile)) - Len(cFile.GetFileExtension(sFile)))
     
     'récupère le path temporaire et créé un nom de dossier
-    tmpDir = ObtainTempPath & "\" & cFile.GetFileFromPath(sFile)
+    tmpDir = ObtainTempPath & "\" & cFile.GetFileName(sFile)
     
     'on lance la procédure de désassemblage
     Sb.Panels(1).Text = Lang.GetString("_Desassembling")

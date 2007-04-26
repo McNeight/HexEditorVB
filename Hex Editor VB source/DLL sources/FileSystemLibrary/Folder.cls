@@ -82,6 +82,7 @@ Private Type ClassFolder
     IsSystem As Boolean
     IsNormal As Boolean
     ShortPath As String
+    DriveName As String
     ParentFolderName As String
 End Type
 
@@ -116,6 +117,7 @@ Public Property Get ParentFolderName() As String: ParentFolderName = MyFolder.Pa
 Public Property Get ShortPath() As String: ShortPath = MyFolder.ShortPath: End Property
 Public Property Get IsCompressed() As Boolean: IsCompressed = MyFolder.IsCompressed: End Property
 Public Property Get IsArchive() As Boolean: IsArchive = MyFolder.IsArchive: End Property
+Public Property Get DriveName() As String: DriveName = MyFolder.DriveName: End Property
 
 
 
@@ -154,6 +156,7 @@ Dim hFolder As Long
         .IsNormal = Not (.IsHidden Or .IsReadOnly Or .IsSystem)
         .ShortPath = clsFile.GetShortPath(Me.Path & "\")
         .ParentFolderName = clsFile.GetParentFolderName(Me.Path)
+        If Len(Me.ParentFolderName) >= 3 Then .DriveName = Left$(Me.Path, 3)
     End With
     
     'referme le handle

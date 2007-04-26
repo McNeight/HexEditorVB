@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Object = "{2245E336-2835-4C1E-B373-2395637023C8}#1.0#0"; "ProcessView_OCX.ocx"
 Begin VB.Form frmProcess 
@@ -683,7 +683,7 @@ End Sub
 
 Private Sub mnuOpenExplorer_Click()
 'ouvre explorer à l'endroit du *.exe
-    Shell "explorer.exe " & cFile.GetFolderFromPath(LV.SelectedItem.SubItems(2)), vbNormalFocus
+    Shell "explorer.exe " & cFile.getfoldername(LV.SelectedItem.SubItems(2)), vbNormalFocus
 End Sub
 
 Private Sub mnuPremierPlan_Click()
