@@ -308,7 +308,7 @@ Dim dAccess As String
 Dim dCreation As String
 Dim dModification As String
 Dim lPages As Long
-Dim cF As clsFile
+Dim cF As filesystemlibrary.File
 
     sFile = sFil
     Me.Caption = sFil
@@ -322,24 +322,24 @@ Dim cF As clsFile
     Set cF = cFile.GetFile(sFil)
     
     'récupère les infos sur les fichiers *.exe, *.dll...
-    sDescription = cF.EXEFileDescription
-    sVersion = cF.EXEFileVersion
-    sCopyright = cF.EXELegalCopyright
+    sDescription = cF.FileVersionInfos.FileDescription
+    sVersion = cF.FileVersionInfos.FileVersion
+    sCopyright = cF.FileVersionInfos.Copyright
     
     sVersion = IIf(sVersion = vbNullString, "--", sVersion)
     sCopyright = IIf(sCopyright = vbNullString, "--", sCopyright)
     sDescription = IIf(sDescription = vbNullString, "--", sDescription)
     
     'récupère les dates
-    dCreation = cF.CreationDate
-    dAccess = cF.LastAccessDate
-    dModification = cF.LastModificationDate
+    dCreation = cF.DateCreated
+    dAccess = cF.DateLastAccessed
+    dModification = cF.DateLastModified
     
     'la taille
     lSize = cF.FileSize
     
     'attribut
-    lAttribute = cF.FileAttributes
+    lAttribute = cF.Attributes
     
     'affiche tout çà
     TextBox(0).Text = Lang.GetString("_Size") & CStr(lSize) & " Octets  -  " & CStr(Round(lSize / 1024, 3)) & " Ko" & "]"
@@ -379,7 +379,7 @@ Dim lngFile As Long
     BG.ClearValues
     
     'prépare la progressbar
-    lngLen = cFile.GetFileSize(sFile)
+    lngLen = cFile.GetFileSizes(sFile).FileSize
     PGB.Min = 0: PGB.Max = lngLen: PGB.Value = 0
     
     'obtient le handle du fichier

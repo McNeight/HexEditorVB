@@ -158,7 +158,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   16449539
+            Format          =   63569923
             CurrentDate     =   39133
          End
       End
@@ -203,7 +203,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   16449539
+            Format          =   63569923
             CurrentDate     =   39133
          End
       End
@@ -227,7 +227,7 @@ Begin VB.Form frmDates
          _ExtentY        =   529
          _Version        =   393216
          CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-         Format          =   16449539
+         Format          =   63569923
          CurrentDate     =   39133.9583333333
       End
       Begin VB.PictureBox Picture1 
@@ -362,7 +362,7 @@ Option Explicit
 'FORM PERMETTANT DE CHANGER LES DATES D'UN FICHIER
 '=======================================================
 
-Private mFile As clsFile
+Private mFile As filesystemlibrary.File
 
 '=======================================================
 'attribution des dates spécifiées au Fichier (text1.text)
@@ -483,14 +483,14 @@ Private Sub ChangeDates()
     Set mFile = cFile.GetFile(txtFile.Text) 'récupère le fichier
     
     'affichage des infos de dates
-    lblDate(0).Caption = Left$(mFile.CreationDate, 10)
-    lblDate(1).Caption = Left$(mFile.LastAccessDate, 10)
-    lblDate(2).Caption = Left$(mFile.LastModificationDate, 10)
+    lblDate(0).Caption = Left$(mFile.DateCreated, 10)
+    lblDate(1).Caption = Left$(mFile.DateLastAccessed, 10)
+    lblDate(2).Caption = Left$(mFile.DateLastModified, 10)
     
     'affichage des infos d'heures
-    lblHour(0).Caption = Right$(mFile.CreationDate, 8)
-    lblHour(1).Caption = Right$(mFile.LastAccessDate, 8)
-    lblHour(2).Caption = Right$(mFile.LastModificationDate, 8)
+    lblHour(0).Caption = Right$(mFile.DateCreated, 8)
+    lblHour(1).Caption = Right$(mFile.DateLastAccessed, 8)
+    lblHour(2).Caption = Right$(mFile.DateLastModified, 8)
     
     'heures par défaut
     cmdDefaut_Click (0): cmdDefaut_Click (1): cmdDefaut_Click (2)
@@ -499,7 +499,7 @@ End Sub
 '=======================================================
 'récupère le fichier
 '=======================================================
-Public Sub GetFile(ByVal tFile As clsFile)
+Public Sub GetFile(ByVal tFile As filesystemlibrary.File)
     Set mFile = tFile
     Call ChangeDates
 End Sub

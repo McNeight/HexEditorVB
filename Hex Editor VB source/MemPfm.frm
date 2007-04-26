@@ -782,7 +782,7 @@ Private Sub cmdGoTaskMgr_Click()
     frmProcess.Show
     
     'permet au curseur de se mettre directement sur le processus édité
-    SendKeys cFile.GetFileFromPath(Me.Caption)
+    SendKeys cFile.getfilename(Me.Caption)
     
 End Sub
 
@@ -799,7 +799,7 @@ Dim dAccess As String
 Dim dCreation As String
 Dim dModification As String
 Dim lPages As Long
-Dim cF As clsFile
+Dim cF As filesystemlibrary.File
     
     txtFile.Text = pProcess.szImagePath
     
@@ -807,24 +807,24 @@ Dim cF As clsFile
     Set cF = cFile.GetFile(pProcess.szImagePath)
     
     'récupère les infos sur les fichiers *.exe, *.dll...
-    sVersion = cF.EXEFileVersion
-    sCopyright = cF.EXELegalCopyright
-    sDescription = cF.EXEFileDescription
+    sVersion = cF.FileVersionInfos.FileVersion
+    sCopyright = cF.FileVersionInfos.Copyright
+    sDescription = cF.FileVersionInfos.FileDescription
 
     sVersion = IIf(sVersion = vbNullString, "--", sVersion)
     sCopyright = IIf(sCopyright = vbNullString, "--", sCopyright)
     sDescription = IIf(sDescription = vbNullString, "--", sDescription)
     
     'récupère les dates
-    dCreation = cF.CreationDate
-    dAccess = cF.LastAccessDate
-    dModification = cF.LastModificationDate
+    dCreation = cF.DateCreated
+    dAccess = cF.DateLastAccessed
+    dModification = cF.DateLastModified
     
     'la taille
     lSize = cF.FileSize
     
     'attribut
-    lAttribute = cF.FileAttributes
+    lAttribute = cF.Attributes
     
     'affiche tout çà
     TextBox(0).Text = Lang.GetString("_SizeIs") & CStr(lSize) & " Octets  -  " & CStr(Round(lSize / 1024, 3)) & " Ko" & "]"

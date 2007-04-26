@@ -49,7 +49,7 @@ Public TempFiles() As String    'contient tout les fichiers temporaires
 Public JailedProcess() As ProcessItem   'contient la liste de tous les processus bloqués
 Public bAcceptBackup As Boolean 'variable qui détermine si la création d'un backup a été acceptée
 Public clsERREUR As clsGetionErreur
-Public cFile As clsFileInfos
+Public cFile As filesystemlibrary.FileSystem
 Public cMem As clsMemoryRW
 Public clsConv As clsConvert
 Public cProc As clsProcess
@@ -130,7 +130,7 @@ Dim s As String
         
     
     '//instancie les classes
-        Set cFile = New clsFileInfos
+        Set cFile = New filesystemlibrary.FileSystem
         Set cMem = New clsMemoryRW
         Set cDisk = New clsDiskInfos
         Set clsPref = New clsIniFile
@@ -154,7 +154,7 @@ Dim s As String
         Else
             s = App.Path & "\Lang"
         End If
-        Call cFile.EnumFilesFromFolder(s, sFile(), False)
+        sFile() = cFile.EnumFilesStr(s, False)
         
         'vire les fichiers qui ne sont pas *.ini et French.ini
         For x = 1 To UBound(sFile())
@@ -169,7 +169,7 @@ Dim s As String
     '//récupère les préférences
         #If MODE_DEBUG Then
             'alors on est dans la phase Debug, donc on a le dossier du source
-            clsPref.sDefaultPath = cFile.GetParentDirectory(App.Path) & "\Executable folder\Preferences\config.ini"
+            clsPref.sDefaultPath = cFile.GetParentFolderName(App.Path) & "\Executable folder\Preferences\config.ini"
         #Else
             'alors c'est plus la phase debug, donc plus d'IDE possible
             clsPref.sDefaultPath = App.Path & "\Preferences\config.ini" 'détermine le fichier de config par défaut
@@ -181,7 +181,7 @@ Dim s As String
             cFile.CreateEmptyFile clsPref.sDefaultPath, True
             
             'remplit le fichier
-            cFile.SaveStringInfile clsPref.sDefaultPath, DEFAULT_INI, False
+            cFile.SaveDataInFile clsPref.sDefaultPath, DEFAULT_INI, False
         End If
          
         Set cPref = clsPref.GetIniFile
@@ -250,7 +250,8 @@ Dim s As String
                             frmShredd.LV.ListItems.Add Text:=sFile(x)
                         ElseIf cFile.FolderExists(sFile(x)) Then
                             'ouvre un dossier - liste les fichiers
-                            If cFile.EnumFilesFromFolder(sFile(x), m) <> 0 Then
+                            m() = cFile.EnumFilesStr(sFile(x))
+                            If UBound(m()) <> 0 Then
                                 'les ouvre un par un
                                 For y = 1 To UBound(m)
                                     If cFile.FileExists(m(y)) Then
@@ -289,7 +290,8 @@ Dim s As String
                             Frm.Show
                         ElseIf cFile.FolderExists(sFile(x)) Then
                             'ouvre un dossier - liste les fichiers
-                            If cFile.EnumFilesFromFolder(sFile(x), m) <> 0 Then
+                            m() = cFile.EnumFilesStr(sFile(x))
+                            If UBound(m()) <> 0 Then
                                 'les ouvre un par un
                                 For y = 1 To UBound(m)
                                     If cFile.FileExists(m(y)) Then
@@ -323,9 +325,9 @@ Dim s As String
                          Call Frm.GetFile(sFile(x))
                          Frm.Show
                      ElseIf cFile.FolderExists(sFile(x)) Then
-                         'ouvre un dossier - liste les fichiers
-                         If cFile.EnumFilesFromFolder(sFile(x), m) <> 0 Then
-                             'les ouvre un par un
+                        'ouvre un dossier - liste les fichiers
+                        m() = cFile.EnumFilesStr(sFile(x))
+                        If UBound(m()) <> 0 Then                             'les ouvre un par un
                              For y = 1 To UBound(m)
                                  If cFile.FileExists(m(y)) Then
                                      Set Frm = New Pfm
@@ -387,7 +389,7 @@ Dim x As Long
 
     '//supprime les fichiers temporaires de TempFiles
         For x = 1 To UBound(TempFiles())
-            cFile.KillFile TempFiles(x)
+            cFile.DeleteFile TempFiles(x)
         Next x
     
     '//libère les classes
@@ -574,10 +576,10 @@ Dim x As Long
             End With
             
             'lance la sauvegarde
-            cFile.SaveStringInfile App.Path & "\Preferences\QuickBackup.ini", s, True
+            cFile.SaveDataInFile App.Path & "\Preferences\QuickBackup.ini", s, True
         Else
             'on delete le fichier
-            cFile.KillFile App.Path & "\Preferences\QuickBackup.ini"
+            cFile.DeleteFile App.Path & "\Preferences\QuickBackup.ini"
         End If
     End If
 End Sub

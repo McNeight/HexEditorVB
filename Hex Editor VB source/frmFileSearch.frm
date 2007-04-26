@@ -318,7 +318,7 @@ Begin VB.Form frmFileSearch
             _Version        =   393216
             Enabled         =   0   'False
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63569923
+            Format          =   63504387
             CurrentDate     =   39133.9583333333
          End
       End
@@ -684,7 +684,7 @@ End Sub
 Private Sub mnuOpenFolder_Click()
 'ouvre le dossier du fichier sélectionné
     If LVres.SelectedItem Is Nothing Then Exit Sub
-    Shell "explorer.exe " & cFile.GetFolderFromPath(LVres.SelectedItem.Text), _
+    Shell "explorer.exe " & cFile.getfoldername(LVres.SelectedItem.Text), _
         vbNormalFocus
 End Sub
 
@@ -773,16 +773,15 @@ Dim lC As Long
         'contiendra de 1 à ubound une liste de fichiers
         ReDim s(LV.ListItems.Count)
         
-        With Me.PGB
+        With Me.pgb
             .Min = 0
             .Max = LV.ListItems.Count
             .Value = 0
         End With
         'indexation des fichiers
         For x = LV.ListItems.Count To 1 Step -1
-            Call cFile.EnumFilesFromFolder(LV.ListItems.Item(x).Text, s(x).sF(), _
-                IIf(LV.ListItems.Item(x).SubItems(1) = Lang.GetString("_YesSub"), True, False))
-                Me.PGB.Value = LV.ListItems.Count - x + 1
+            s(x).sF() = cFile.EnumFilesStr(LV.ListItems.Item(x).Text, IIf(LV.ListItems.Item(x).SubItems(1) = Lang.GetString("_YesSub"), True, False))
+                Me.pgb.Value = LV.ListItems.Count - x + 1
                 If bStop Then GoTo GStop
             DoEvents
         Next x
@@ -796,7 +795,7 @@ Dim lC As Long
         For x = 1 To UBound(s())
             lC = lC + UBound(s(x).sF())
         Next x
-        With Me.PGB
+        With Me.pgb
             .Max = lC
             .Min = 0
             .Value = 0
@@ -814,12 +813,12 @@ Dim lC As Long
                 lC = lC + 1
                 If (lC Mod 200) = 0 Then
                     DoEvents   'rend la main
-                    PGB.Value = lC
+                    pgb.Value = lC
                 End If
                 If bStop Then GoTo GStop
             Next i
         Next x
-        PGB.Value = PGB.Max
+        pgb.Value = pgb.Max
         Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " " & Lang.GetString("_ResS")
                 
 
@@ -831,16 +830,18 @@ Dim lC As Long
         'contiendra de 1 à ubound une liste de fichiers
         ReDim s(LV.ListItems.Count)
         
-        With Me.PGB
+        With Me.pgb
             .Min = 0
             .Max = LV.ListItems.Count
             .Value = 0
         End With
         'indexation des dossiers
         For x = LV.ListItems.Count To 1 Step -1
-            Call cFile.EnumFolders(LV.ListItems.Item(x).Text, s(x).sF(), True, _
-                IIf(LV.ListItems.Item(x).SubItems(1) = Lang.GetString("_YesSub"), True, False))
-                Me.PGB.Value = LV.ListItems.Count - x + 1
+            s(x).sF() = cFile.EnumFoldersStr(LV.ListItems.Item(x).Text, _
+                IIf(LV.ListItems.Item(x).SubItems(1) = _
+                Lang.GetString("_YesSub"), True, False))
+                
+                Me.pgb.Value = LV.ListItems.Count - x + 1
                 If bStop Then GoTo GStop
             DoEvents
         Next x
@@ -854,7 +855,7 @@ Dim lC As Long
         For x = 1 To UBound(s())
             lC = lC + UBound(s(x).sF())
         Next x
-        With Me.PGB
+        With Me.pgb
             .Max = lC
             .Min = 0
             .Value = 0
@@ -872,12 +873,12 @@ Dim lC As Long
                 lC = lC + 1
                 If (lC Mod 200) = 0 Then
                     DoEvents   'rend la main
-                    PGB.Value = lC
+                    pgb.Value = lC
                 End If
                 If bStop Then GoTo GStop
             Next i
         Next x
-        PGB.Value = PGB.Max
+        pgb.Value = pgb.Max
         Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " " & Lang.GetString("_ResS")
         
     Else
@@ -917,7 +918,7 @@ Dim curDateReal As Currency
         
         If chkCasse.Value Then l = vbBinaryCompare Else l = vbTextCompare
         
-        If InStr(1, cFile.GetFileFromPath(sFile), txtName.Text, l) = 0 Then
+        If InStr(1, cFile.GetFileName(sFile), txtName.Text, l) = 0 Then
             IsOk = False
             Exit Function
         End If
@@ -927,7 +928,7 @@ NoNameToS:
     'on continue la recherche
     If chkSize.Value Then
         'alors on doit récupérer la taille du fichier
-        curSize = cFile.GetFileSize(sFile)
+        curSize = cFile.GetFileSizes(sFile).FileSize
         
         If cbOpSize.ListIndex = 2 Then
             '<
@@ -968,7 +969,14 @@ NoNameToS:
         l2 = cbOpDate.ListIndex
         
         'récupère la date en Currency
-        curDateReal = cFile.GetFileDate(sFile, cbDateType.ListIndex, True)
+        Select Case cbDateType.ListIndex
+            Case 0
+                curDateReal = cFile.GetFileDateAsCurrency(sFile, DateCreated)
+            Case 1
+                curDateReal = cFile.GetFileDateAsCurrency(sFile, DateLastAccessed)
+            Case 2
+                curDateReal = cFile.GetFileDateAsCurrency(sFile, DateLastModified)
+        End Select
         
         If curDateReal = 0 Then
             'date inaccessible

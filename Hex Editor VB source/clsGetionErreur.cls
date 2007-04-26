@@ -83,7 +83,7 @@ Private Declare Function FindFirstFile Lib "kernel32" Alias "FindFirstFileA" (By
 Private Declare Function FindClose Lib "kernel32" (ByVal hFindFile As Long) As Long
 Private Declare Function GetLogicalDriveStrings Lib "kernel32.dll" Alias "GetLogicalDriveStringsA" (ByVal nBufferLength As Long, ByVal lpBuffer As String) As Long
 Private Declare Function Beep Lib "kernel32" (ByVal dwFreq As Long, ByVal dwDuration As Long) As Long
-Private Declare Function DeleteFile Lib "kernel32" Alias "DeleteFileA" (ByVal lpFileName As String) As Long
+Private Declare Function deletefile Lib "kernel32" Alias "DeleteFileA" (ByVal lpFileName As String) As Long
 Private Declare Function PathIsDirectory Lib "shlwapi.dll" Alias "PathIsDirectoryA" (ByVal pszPath As String) As Long
 Private Declare Function PathFileExists Lib "shlwapi.dll" Alias "PathFileExistsA" (ByVal pszPath As String) As Long
 
@@ -129,7 +129,7 @@ Dim sTemp As String
     
     'vérifie que le fichier de log existe, le créé le cas échéant
     If Not (FileExists(sLogFile)) Then
-        If FolderExists(GetFolderFromPath(sLogFile)) = False Then
+        If FolderExists(getfoldername(sLogFile)) = False Then
             'alors il faut créé les dossiers précédant le path du fichier
             sTemp = sLogFile
             While FolderExists(sTemp) = False
@@ -140,7 +140,7 @@ Dim sTemp As String
             
             sTemp = GetFolderAfter(sLogFile, sTemp)
             
-            While sTemp <> GetFolderFromPath(sLogFile)
+            While sTemp <> getfoldername(sLogFile)
                 'on créé désormais les dossiers inexistants
                 MkDir GetFolderAfter(sLogFile, sTemp)
                 sTemp = GetFolderAfter(sLogFile, sTemp)
@@ -181,7 +181,7 @@ End Sub
 'efface le fichier log
 '=======================================================
 Public Function DeleteLogFile() As Long
-    DeleteLogFile = DeleteFile(sLogFile)
+    DeleteLogFile = deletefile(sLogFile)
 End Function
 
 
@@ -335,18 +335,18 @@ End Function
 '=======================================================
 'obtient un dossier depuis un path
 '=======================================================
-Private Function GetFolderFromPath(ByVal sPath As String) As String
+Private Function getfoldername(ByVal sPath As String) As String
 Dim l As Long
 
     l = InStrRev(sPath, "\", , vbBinaryCompare)
     
     If l = 0 Then
         'pas de path
-        GetFolderFromPath = sPath
+        getfoldername = sPath
         Exit Function
     End If
     
-    GetFolderFromPath = Left$(sPath, l)
+    getfoldername = Left$(sPath, l)
     
 End Function
 

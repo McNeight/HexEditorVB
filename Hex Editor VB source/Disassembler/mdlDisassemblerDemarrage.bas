@@ -41,7 +41,7 @@ Option Explicit
 '=======================================================
 'VARIABLES PUBLIQUES
 '=======================================================
-Public cFile As clsFileInfos
+Public cFile As FileSystemLibrary.FileSystem
 Private AfManifest As AfClsManifest
 Public tmpDir As String
 Public sLang() As String
@@ -83,7 +83,7 @@ Dim sFile() As String
         #End If
     
     '//instancie les classes
-        Set cFile = New clsFileInfos
+        Set cFile = New FileSystemLibrary.FileSystem
         Set cPref = New clsIniPref
         Set clsPref = New clsIniFile
     
@@ -97,7 +97,7 @@ Dim sFile() As String
         Else
             s = App.Path & "\Lang\Disassembler\"
         End If
-        Call cFile.EnumFilesFromFolder(s, sFile(), False)
+        sFile() = cFile.EnumFilesStr(s, False)
         
         'vire les fichiers qui ne sont pas *.ini et French.ini
         For x = 1 To UBound(sFile())
@@ -111,7 +111,7 @@ Dim sFile() As String
     '//récupère les préférences
         #If MODE_DEBUG Then
             'alors on est dans la phase Debug, donc on a le dossier du source
-            clsPref.sDefaultPath = cFile.GetParentDirectory(cFile.GetParentDirectory(cFile.GetParentDirectory(LANG_PATH))) & "\Executable folder\Preferences\DisAsmconfig.ini"
+            clsPref.sDefaultPath = cFile.GetParentFolderName(cFile.GetParentFolderName(cFile.GetParentFolderName(LANG_PATH))) & "\Executable folder\Preferences\DisAsmconfig.ini"
         #Else
             'alors c'est plus la phase debug, donc plus d'IDE possible
             clsPref.sDefaultPath = App.Path & "\Preferences\DisAsmconfig.ini" 'détermine le fichier de config par défaut
@@ -123,7 +123,7 @@ Dim sFile() As String
             cFile.CreateEmptyFile clsPref.sDefaultPath, True
             
             'remplit le fichier
-            cFile.SaveStringInfile clsPref.sDefaultPath, DEFAULT_INI, False
+            cFile.SaveDATAinFile clsPref.sDefaultPath, DEFAULT_INI, False
         End If
          
         Set cPref = clsPref.GetIniFile
@@ -157,15 +157,15 @@ Dim cp As String
     
     'vire tous les fichiers temp et le dossier temp
     ReDim sF(0)
-    cp = cFile.GetParentDirectory(tmpDir)
+    cp = cFile.GetParentFolderName(tmpDir)
     
     '//VERIFIE QUE L'ON KILL BIEN DES FICHIERS D'UN SOUS DOSSIER DU DOSSIER TEMP
     If Left$(cp, Len(cp) - 1) <> ObtainTempPath Then GoTo DONOTKILL
     
     'liste
-    Call cFile.EnumFilesFromFolder(tmpDir, sF(), True)
+    sF() = cFile.EnumFilesStr(tmpDir, False)
     For x = 1 To UBound(sF())
-        Call cFile.KillFile(sF(x))  'delete
+        Call cFile.DeleteFile(sF(x))  'delete
     Next x
     Call RmDir(tmpDir)
     

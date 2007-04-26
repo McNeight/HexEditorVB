@@ -534,7 +534,7 @@ Dim i As Long
     On Error GoTo ErrGestion
     
     'taille du fichier
-    lngLen = cFile.GetFileSize(sFile)
+    lngLen = cFile.GetFileSizes(sFile).FileSize
     
     If Not (PGB Is Nothing) Then
         'on initialise la progressabr
@@ -642,7 +642,7 @@ Dim i As Long
     On Error GoTo ErrGestion
 
     'taille du fichier
-    lngLen = cFile.GetFileSize(sFile)
+    lngLen = cFile.GetFileSizes(sFile).FileSize
     
     If Not (PGB Is Nothing) Then
         'on initialise la progressabr
@@ -947,12 +947,12 @@ Dim tsTime As SYSTEMTIME
     For x = 1 To nPass
         
         '&H55
-        Call WriteBytesToFile(sFile, String$(cFile.GetFileSize(sFile), 85), 0)
+        Call WriteBytesToFile(sFile, String$(cFile.GetFileSizes(sFile).FileSize, 85), 0)
         
         PGB.Value = PGB.Value + 1
         
         '&HAA
-        Call WriteBytesToFile(sFile, String$(cFile.GetFileSize(sFile), 170), 0)
+        Call WriteBytesToFile(sFile, String$(cFile.GetFileSizes(sFile).FileSize, 170), 0)
         
         PGB.Value = PGB.Value + 1
         
@@ -990,8 +990,8 @@ Dim tsTime As SYSTEMTIME
     CloseHandle hFile
     
     'on efface le fichier (deux suppressions si renommage raté)
-    cFile.KillFile sFile2
-    cFile.KillFile sFile
+    cFile.deletefile sFile2
+    cFile.deletefile sFile
     
     'vérifie que toutes les étapes sont OK
     If cFile.FileExists(sFile) Or cFile.FileExists(sFile2) Then Exit Function   'raté

@@ -1248,7 +1248,7 @@ Dim l As Long
     End If
     
     'affiche la string dans la picturebox
-    pctPath.Text = cFile.GetFolderFromPath(s)
+    pctPath.Text = cFile.getfoldername(s)
 End Sub
 
 '=======================================================
@@ -1821,7 +1821,7 @@ Dim r As Long
 End Sub
 
 Private Sub pctPath_Change()
-    If cFile.FolderExists(cFile.GetFolderFromPath(pctPath.Text & "\")) = False Then
+    If cFile.FolderExists(cFile.getfoldername(pctPath.Text & "\")) = False Then
         'couleur rouge
         pctPath.ForeColor = RED_COLOR
     Else

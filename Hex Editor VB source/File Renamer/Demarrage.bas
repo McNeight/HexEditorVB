@@ -36,7 +36,7 @@ Option Explicit
 '=======================================================
 
 Public AfManifest As New AfClsManifest  'classe appliquant le style XP
-Public cFile As clsFileInfos
+Public cFile As FileSystemLibrary.FileSystem
 
 
 '=======================================================
@@ -46,7 +46,7 @@ Sub Main()
 
     '//on instancie les classes
     Set AfManifest = New AfClsManifest
-    Set cFile = New clsFileInfos
+    Set cFile = New FileSystemLibrary.FileSystem
     
     '//application du style XP
     AfManifest.Run

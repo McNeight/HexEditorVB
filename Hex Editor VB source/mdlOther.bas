@@ -308,7 +308,7 @@ End Function
 '=======================================================
 'divise une currency en 2 long ==> créé une LARGE_INTEGER
 '=======================================================
-Private Sub GetLargeInteger(ByVal curVar As Currency, ByRef lngLowPart As Long, _
+Public Sub GetLargeInteger(ByVal curVar As Currency, ByRef lngLowPart As Long, _
     ByRef lngHighPart As Long)
     
 Dim tblbyte(0 To 7) As Byte

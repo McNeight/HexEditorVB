@@ -83,7 +83,7 @@ Dim sRes As String
                 'lecture de 16kB en 16kB
                                
                 'récupère la taille du fichier
-                curS = cFile.GetFileSize(sStringHex)
+                curS = cFile.GetFileSizes(sStringHex).FileSize
                 Call cFile.CreateEmptyFile(sOutputFile, True)
                 
                 
@@ -240,7 +240,7 @@ Dim sRes As String
                 'lecture de 16kB en 16kB
                                
                 'récupère la taille du fichier
-                curS = cFile.GetFileSize(sStringHex)
+                curS = cFile.GetFileSizes(sStringHex).FileSize
                 Call cFile.CreateEmptyFile(sOutputFile, True)
                 
                 
@@ -398,11 +398,11 @@ Dim sRes As String
                 'lecture de 16kB en 16kB
                                
                 'récupère la taille du fichier
-                curS = cFile.GetFileSize(sStringHex)
+                curS = cFile.GetFileSizes(sStringHex).FileSize
                 Call cFile.CreateEmptyFile(sOutputFile, True)
                 
                 'pose le header
-                s = "/* Source File: " & cFile.GetFileFromPath(sStringHex)
+                s = "/* Source File: " & cFile.GetFileName(sStringHex)
                 s = s & vbNewLine & "Length: " & Trim$(Str$(curS)) & "*/" & vbNewLine
                 s = s & "unsigned char rawData[" & Trim$(Str$(curS)) & "] =" & vbNewLine & "{" & vbNewLine
                 Call WriteBytesToFileEnd(sOutputFile, s)
@@ -544,11 +544,11 @@ Dim sRes As String
                 'lecture de 16kB en 16kB
                                
                 'récupère la taille du fichier
-                curS = cFile.GetFileSize(sStringHex)
+                curS = cFile.GetFileSizes(sStringHex).FileSize
                 Call cFile.CreateEmptyFile(sOutputFile, True)
                 
                 'pose le header
-                s = "/* Source File: " & cFile.GetFileFromPath(sStringHex)
+                s = "/* Source File: " & cFile.GetFileName(sStringHex)
                 s = s & vbNewLine & "Length: " & Trim$(Str$(curS)) & "*/" & vbNewLine
                 s = s & "byte rawData[] =" & vbNewLine & "{" & vbNewLine
                 Call WriteBytesToFileEnd(sOutputFile, s)
@@ -685,11 +685,11 @@ Dim sRes As String
                 'lecture de 16kB en 16kB
                                
                 'récupère la taille du fichier
-                curS = cFile.GetFileSize(sStringHex)
+                curS = cFile.GetFileSizes(sStringHex).FileSize
                 Call cFile.CreateEmptyFile(sOutputFile, True)
                 
                 'pose le header
-                s = "'==========================================" & vbNewLine & "'Source File: " & cFile.GetFileFromPath(sStringHex)
+                s = "'==========================================" & vbNewLine & "'Source File: " & cFile.GetFileName(sStringHex)
                 s = s & vbNewLine & "'Length: " & Trim$(Str$(curS)) & vbNewLine & "'==========================================" & vbNewLine
                 s = s & "Private Const HEX_VALUES = " & Chr$(34)
                 Call WriteBytesToFileEnd(sOutputFile, s)
