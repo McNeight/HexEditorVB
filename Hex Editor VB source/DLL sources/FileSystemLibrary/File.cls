@@ -108,6 +108,7 @@ Public Property Get Drive() As Drive
     Set Drive = clsFile.GetDrive(Left$(Me.Path, 1))
 End Property
 Public Property Get Path() As String: Path = MyFile.Path: End Property
+Attribute Path.VB_UserMemId = 0
 Public Property Get Attributes() As FileAttributes: Attributes = MyFile.Attributes: End Property
 Public Property Get FileExtension() As String: FileExtension = MyFile.FileExtension: End Property
 Public Property Get Folder() As Folder
@@ -317,6 +318,31 @@ End Function
 '=======================================================
 Public Function Decrypt() As Long
     Decrypt = clsFile.DecryptFile(Me.Path)
+End Function
+
+'=======================================================
+'Lance la sanitization... my god...
+'=======================================================
+Public Function Sanitize() As Long
+    Sanitize = clsFile.SanitizeFile(Me.Path)
+End Function
+
+'=======================================================
+'Affecte des dates au fichier
+'=======================================================
+Public Function SetDates(Optional ByVal DateCreated As _
+    String = vbNullString, Optional ByVal DateLastAccess As String = vbNullString, _
+    Optional ByVal DateLastModification As String = vbNullString) As Long
+    
+    SetDates = clsFile.SetFileDates(Me.Path, DateCreated, DateLastAccess, _
+        DateLastModification)
+End Function
+
+'=======================================================
+'Lance un découpage
+'=======================================================
+Public Function CutFile(DestinationFolder As String, Method As CutMethod) As Long
+    CutFile = clsFile.CutFileFriend(Me.Path, DestinationFolder, Method)
 End Function
 
 

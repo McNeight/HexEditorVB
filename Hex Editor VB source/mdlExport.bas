@@ -83,7 +83,7 @@ Dim sRes As String
                 'lecture de 16kB en 16kB
                                
                 'récupère la taille du fichier
-                curS = cFile.GetFileSizes(sStringHex).FileSize
+                curS = cFile.GetFileSize(sStringHex)
                 Call cFile.CreateEmptyFile(sOutputFile, True)
                 
                 
@@ -240,7 +240,7 @@ Dim sRes As String
                 'lecture de 16kB en 16kB
                                
                 'récupère la taille du fichier
-                curS = cFile.GetFileSizes(sStringHex).FileSize
+                curS = cFile.GetFileSize(sStringHex)
                 Call cFile.CreateEmptyFile(sOutputFile, True)
                 
                 
@@ -398,7 +398,7 @@ Dim sRes As String
                 'lecture de 16kB en 16kB
                                
                 'récupère la taille du fichier
-                curS = cFile.GetFileSizes(sStringHex).FileSize
+                curS = cFile.GetFileSize(sStringHex)
                 Call cFile.CreateEmptyFile(sOutputFile, True)
                 
                 'pose le header
@@ -544,7 +544,7 @@ Dim sRes As String
                 'lecture de 16kB en 16kB
                                
                 'récupère la taille du fichier
-                curS = cFile.GetFileSizes(sStringHex).FileSize
+                curS = cFile.GetFileSize(sStringHex)
                 Call cFile.CreateEmptyFile(sOutputFile, True)
                 
                 'pose le header
@@ -685,7 +685,7 @@ Dim sRes As String
                 'lecture de 16kB en 16kB
                                
                 'récupère la taille du fichier
-                curS = cFile.GetFileSizes(sStringHex).FileSize
+                curS = cFile.GetFileSize(sStringHex)
                 Call cFile.CreateEmptyFile(sOutputFile, True)
                 
                 'pose le header

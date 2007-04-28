@@ -45,7 +45,6 @@ Attribute VB_Exposed = True
 Option Explicit
 
 
-
 '=======================================================
 'CONSTANTES
 '=======================================================
@@ -84,6 +83,7 @@ Private Const FILE_TYPE_CHAR                As Long = &H2
 Private Const FILE_TYPE_DISK                As Long = &H1
 Private Const FILE_TYPE_PIPE                As Long = &H3
 Private Const FILE_TYPE_UNKNOWN             As Long = &H0
+Private Const LBUFSIZE                      As Long = 5000000
 
 
 '=======================================================
@@ -251,12 +251,55 @@ Public Type DriveSizes
     UsedSpace As Currency
 End Type
 '=======================================================
+'Type de découpe
+'=======================================================
+Public Type CutMethod
+    tMethode As CutMethodEnum
+    lParam As Long
+End Type
+Public Enum CutMethodEnum
+    [Fixed Size]
+    [Fixed Number Of Files]
+End Enum
+'=======================================================
 'Infos sur la partition
 '=======================================================
 Public Type PartitionInfo
     PartitionLength As Currency
     HiddenSectors As Long
     StartingOffset As Currency
+End Type
+'=======================================================
+'Type et enums sur la recherche par critère
+'=======================================================
+Public Enum SearchCriteria
+    [SearchSize] = 2
+    [SearchName] = 4
+    [SearchDateCreated] = 8
+    [SearchDateLastAccessed] = 16
+    [SearchDateLastModified] = 32
+End Enum
+Public Enum Operator
+    [ > ]
+    [ >= ]
+    [ < ]
+    [ <= ]
+    [ = ]
+End Enum
+Public Type SearchDefinition
+    FolderName As String
+    SearchName As String
+    RespectCase As Boolean
+    Criteria As SearchCriteria
+    SizeOperator As Operator
+    SizeValue As Currency
+    DateCreatedOperator As Operator
+    DateCreatedValue As String
+    DateLastAccessedOperator As Operator
+    DateLastAccessedValue As String
+    DateLastModifiedOperator As Operator
+    DateLastModifiedValue As String
+    SubFolder As Boolean
 End Type
 '=======================================================
 'Infos sur le volume
@@ -300,6 +343,13 @@ Public Enum FILE_ATTRIBUTE
     FILE_ATTRIBUTE_SYSTEM = &H4
     FILE_ATTRIBUTE_TEMPORARY = &H100
     FILE_ATTRIBUTE_INVISIBLE_SYSTEM = 39
+End Enum
+'=======================================================
+'Résultat d'une comparaison de fichiers
+'=======================================================
+Public Enum FileComparisonResult
+    [Files are identical]
+    [Files are different]
 End Enum
 '=======================================================
 'Flags pour les boites de dialogue
@@ -381,8 +431,8 @@ End Type
 Private Type BrowseInfo
     hwndOwner As Long
     pIDLRoot As Long
-    pszDisplayName As Long
-    lpszTitle As Long
+    pszDisplayName As String
+    lpszTitle As String
     ulFlags As Long
     lpfnCallback As Long
     lParam As Long
@@ -557,6 +607,10 @@ End Type
 '=======================================================
 'APIS
 '=======================================================
+Private Declare Function CompareFileTime Lib "kernel32" (lpFileTime1 As Currency, lpFileTime2 As Currency) As Long
+Private Declare Function SystemTimeToFileTime Lib "kernel32" (lpSystemTime As SYSTEMTIME, lpFileTime As FILETIME) As Long
+Private Declare Function LocalFileTimeToFileTime Lib "kernel32" (lpLocalFileTime As FILETIME, lpFileTime As FILETIME) As Long
+Private Declare Function SetVolumeLabelAPI Lib "kernel32" Alias "SetVolumeLabelA" (ByVal lpRootPathName As String, ByVal lpVolumeName As String) As Long
 Private Declare Function EncryptFileAPI Lib "ADVAPI32" Alias "EncryptFileA" (ByVal lpFileName As String) As Long
 Private Declare Function DecryptFileAPI Lib "ADVAPI32" Alias "DecryptFileA" (ByVal lpFileName As String, ByVal dwReserved As Long) As Long
 Private Declare Function URLDownloadToFile Lib "urlmon" Alias "URLDownloadToFileA" (ByVal pCaller As Long, ByVal szURL As String, ByVal szFileName As String, ByVal dwReserved As Long, ByVal lpfnCB As Long) As Long
@@ -594,6 +648,7 @@ Private Declare Function SetFileAttributes Lib "kernel32" Alias "SetFileAttribut
 Private Declare Function SHBrowseForFolder Lib "shell32" (lpbi As BrowseInfo) As Long
 Private Declare Function lstrcat Lib "kernel32" Alias "lstrcatA" (ByVal lpString1 As String, ByVal lpString2 As String) As Long
 Private Declare Function FileTimeToSystemTime Lib "kernel32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
+Private Declare Function SetFileTime Lib "kernel32" (ByVal hFile As Long, lpCreationTime As FILETIME, lpLastAccessTime As FILETIME, lpLastWriteTime As FILETIME) As Long
 Private Declare Function FileTimeToLocalFileTime Lib "kernel32" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
 Private Declare Function CreateDirectory Lib "kernel32" Alias "CreateDirectoryA" (ByVal lpPathName As String, lpSecurityAttributes As SECURITY_ATTRIBUTES) As Long
 Private Declare Function PathFileExists Lib "shlwapi.dll" Alias "PathFileExistsA" (ByVal pszPath As String) As Long
@@ -604,11 +659,11 @@ Private Declare Function ReadFile Lib "kernel32" (ByVal hFile As Long, lpBuffer 
 Private Declare Function GetFileInformationByHandle Lib "kernel32" (ByVal hFile As Long, lpFileInformation As BY_HANDLE_FILE_INFORMATION) As Long
 Private Declare Function GetShortPathName Lib "kernel32" Alias "GetShortPathNameA" (ByVal lpszLongPath As String, ByVal lpszShortPath As String, ByVal lBuffer As Long) As Long
 Private Declare Function FindExecutable Lib "Shell32.dll" Alias "FindExecutableA" (ByVal lpFile As String, ByVal lpDirectory As String, ByVal lpResult As String) As Long
-Private Declare Function GetCompressedFileSize Lib "kernel32" Alias "GetCompressedFileSizeA" (ByVal lpFileName As String, lpFileSizeHigh As Long) As Long
+Private Declare Function GetCompressedFileSizeAPI Lib "kernel32" Alias "GetCompressedFileSizeA" (ByVal lpFileName As String, lpFileSizeHigh As Long) As Long
 Private Declare Function FindNextFile Lib "kernel32.dll" Alias "FindNextFileA" (ByVal hFindFile As Long, lpFindFileData As WIN32_FIND_DATA) As Long
 Private Declare Function PathFindExtension Lib "shlwapi" Alias "PathFindExtensionA" (ByVal pPath As String) As Long
-Private Declare Function lstrcpyA Lib "kernel32" (ByVal RetVal As String, ByVal Ptr As Long) As Long
-Private Declare Function lstrlenA Lib "kernel32" (ByVal Ptr As Any) As Long
+Private Declare Function lstrcpyA Lib "kernel32" (ByVal RetVal As String, ByVal ptr As Long) As Long
+Private Declare Function lstrlenA Lib "kernel32" (ByVal ptr As Any) As Long
 Private Declare Sub PathStripPath Lib "shlwapi.dll" Alias "PathStripPathA" (ByVal pszPath As String)
 Private Declare Function PathRemoveFileSpec Lib "shlwapi" Alias "PathRemoveFileSpecA" (ByVal pPath As String) As Long
 Private Declare Function PathRemoveBackslash Lib "shlwapi.dll" Alias "PathRemoveBackslashA" (ByVal pszPath As String) As Long
@@ -625,6 +680,9 @@ Private Declare Sub CoTaskMemFree Lib "ole32.dll" (ByVal hMem As Long)
 Private Declare Function ShellExecute Lib "Shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 Private Declare Function MoveFileAPI Lib "kernel32" Alias "MoveFileA" (ByVal lpExistingFileName As String, ByVal lpNewFileName As String) As Long
 
+
+Private IEvent As New ISearchEvent  'pour libérer l'event de l'interface
+Private varDates(2) As Currency     'pour les dates pour la recherche
 
 
 '=======================================================
@@ -962,7 +1020,7 @@ Dim tBrowseInfo As BrowseInfo
     'affectation des propriétés définies par les arguments de la fonction
     With tBrowseInfo
         .hwndOwner = hWnd
-        .lpszTitle = lstrcat(Title, vbNullString)
+        .lpszTitle = Title
         .ulFlags = BIF_RETURNONLYFSDIRS + BIF_DONTGOBELOWDOMAIN
     End With
     
@@ -1756,9 +1814,8 @@ Dim sBufferOut As String
 
     'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
     'byte que l'on veut lire (donné par deux long)
-    Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
+    Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)   'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
     If Ret = INVALID_HANDLE_VALUE Then
-        
         'ferme le handle
         CloseHandle hDevice
         Exit Function
@@ -2018,6 +2075,53 @@ Dim MyTime As FILETIME
 End Function
 
 '=======================================================
+'Renvoie une date de dossier sous forme de currency
+'=======================================================
+Public Function GetFolderDateAsCurrency(ByVal Source As String, TypeOfDate As _
+    FileDatesEnum) As Currency
+    
+Dim lFolder As Long
+Dim FileInfo As BY_HANDLE_FILE_INFORMATION
+Dim MyTime As FILETIME
+
+    'handle vers le dossier désiré
+    lFolder = CreateFile(Source, GENERIC_READ Or GENERIC_WRITE, FILE_SHARE_READ Or _
+        FILE_SHARE_DELETE, 0&, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, 0&)
+    
+    If lFolder = INVALID_HANDLE_VALUE Then Exit Function
+    
+    'obtient les infos sur le dossier
+    Call GetFileInformationByHandle(lFolder, FileInfo)
+    
+    'referme immédiatement le handle
+    Call CloseHandle(lFolder)
+    
+    'ne pas oublier de convertir en local
+    Select Case TypeOfDate
+    
+        Case DateCreated
+            Call FileTimeToLocalFileTime(FileInfo.ftCreationTime, _
+                FileInfo.ftCreationTime)
+            MyTime = FileInfo.ftCreationTime
+            
+        Case DateLastAccessed
+            Call FileTimeToLocalFileTime(FileInfo.ftLastAccessTime, _
+                FileInfo.ftLastAccessTime)
+            MyTime = FileInfo.ftLastAccessTime
+            
+        Case DateLastModified
+            Call FileTimeToLocalFileTime(FileInfo.ftLastWriteTime, _
+                FileInfo.ftLastWriteTime)
+            MyTime = FileInfo.ftLastWriteTime
+            
+    End Select
+    
+    'convertit MyTime en Currency
+    Call CopyMemory(GetFolderDateAsCurrency, MyTime, LenB(MyTime))
+
+End Function
+
+'=======================================================
 'Renvoie les dates d'un fichier
 '=======================================================
 Public Function GetFolderDates(ByVal Source As String) As FileDates
@@ -2045,9 +2149,9 @@ Dim FileInfo As BY_HANDLE_FILE_INFORMATION
 End Function
 
 '=======================================================
-'Renvoie les tailles
+'Renvoie la taille normale
 '=======================================================
-Public Function GetFileSizes(ByVal Source As String) As FileSizes
+Public Function GetFileSize(ByVal Source As String) As Currency
 Dim lngFile As Long
 Dim curSize As Currency
 
@@ -2058,16 +2162,20 @@ Dim curSize As Currency
     If lngFile = INVALID_HANDLE_VALUE Then Exit Function
     
     'obtient la taille normale par API
-    GetFileSizeEx lngFile, curSize
+    Call GetFileSizeEx(lngFile, curSize)
     
     'ferme le handle ouvert
-    CloseHandle lngFile
+    Call CloseHandle(lngFile)
         
-    With GetFileSizes
-        .FileSize = curSize * 10000  'multiplie par 10^4 pour obtenir un nombre entier
-        .CompressedFileSize = GetCompressedFileSize(Source, ByVal 0&)
-    End With
+    GetFileSize = curSize * 10000  'multiplie par 10^4 pour obtenir un nombre entier
 
+End Function
+
+'=======================================================
+'Récupère la taille compressée
+'=======================================================
+Public Function GetCompressedFileSize(Source As String) As Currency
+    GetCompressedFileSize = GetCompressedFileSizeAPI(Source, ByVal 0&)
 End Function
 
 '=======================================================
@@ -2298,9 +2406,9 @@ Dim hDrive As Long
         hDrive = CreateFile("\\.\PHYSICALDRIVE" & CStr(bytVar), GENERIC_READ, _
             FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
         
-        If hDrive <> INVALID_HANDLE_VALUE Then
-            Call EnumPhysicalDisks.AddItem(CInt(bytVar), RefreshInfos)
-        End If
+        If hDrive = INVALID_HANDLE_VALUE Then Exit Do
+        
+        Call EnumPhysicalDisks.AddItem(CInt(bytVar), RefreshInfos)
             
         Call CloseHandle(hDrive)
         bytVar = bytVar + 1
@@ -2356,10 +2464,10 @@ Dim bt() As Byte
         hDrive = CreateFile("\\.\PHYSICALDRIVE" & CStr(bytVar), GENERIC_READ, _
             FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
         
-        If hDrive <> INVALID_HANDLE_VALUE Then
-            ReDim Preserve bt(bytVar)
-            bt(UBound(bt())) = bytVar
-        End If
+        If hDrive = INVALID_HANDLE_VALUE Then Exit Do
+        
+        ReDim Preserve bt(bytVar)
+        bt(UBound(bt())) = bytVar
             
         Call CloseHandle(hDrive)
         bytVar = bytVar + 1
@@ -2822,7 +2930,7 @@ Dim s As String
         FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
     
     'obtient sa taille pour créer un buffer
-    lSize = Me.GetFileSizes(Source).FileSize
+    lSize = Me.GetFileSize(Source)
  
     'initialise le pointeur sur le fichier (au début)
     Call SetFilePointer(hFile, 0, 0, FILE_BEGIN)
@@ -2843,6 +2951,873 @@ Dim s As String
     'ferme le handle
     CloseHandle hFile
 End Function
+
+'=======================================================
+'Lance la sanitization d'un fichier... le pauvre...
+'=======================================================
+Public Function SanitizeFile(Source As String) As Long
+Dim s As String
+Dim hFile As Long
+Dim curSize As Currency
+Dim nbBuf As Long
+Dim lLastSize As Long
+Dim y As Long
+Dim Tbl(2097151) As Byte
+Dim cASM As CAsmProc
+Dim sH55() As Byte
+Dim sHAA() As Byte
+Dim pAA As Long
+Dim x As Long
+Dim p55 As Long
+
+    '//génère les tableaux
+    
+    'les redimensionne
+    ReDim sH55(2097151)
+    ReDim sHAA(2097151)
+    
+    'les remplit
+    For x = 0 To 2097151
+        sH55(x) = 85
+        sHAA(x) = 170
+    Next x
+    
+    'récupère les pointeurs
+    pAA = VarPtr(sHAA(0))
+    p55 = VarPtr(sH55(0))
+    
+    'instancie la classe
+    Set cASM = New CAsmProc
+    
+    'on fait çà par buffer de 2Mo
+    curSize = Me.GetFileSize(Source)
+    
+    If curSize < 2097152 Then
+    
+        'un seul buffer, on génère une string aléatoire unique
+        Call cASM.bnAlloc2MoAlea(Tbl(0))
+        
+        'on récupère le handle du fichier
+        hFile = CreateFile(Source, GENERIC_WRITE, FILE_SHARE_READ Or _
+            FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+        
+        If hFile = INVALID_HANDLE_VALUE Then
+            SanitizeFile = -1
+            Exit Function
+        End If
+
+        'on écrit dans le fichier
+        '// &H55
+        Call WriteBytesToFileHandle(hFile, p55, 0, curSize)
+
+        '// &HAA
+        Call WriteBytesToFileHandle(hFile, pAA, 0, curSize)
+
+        '//random string
+        Call WriteBytesToFileHandle(hFile, VarPtr(Tbl(0)), 0, curSize)
+
+        'rend la main
+        DoEvents
+                        
+        'referme le handle
+        Call CloseHandle(hFile)
+        
+    Else
+    
+        'plusieurs buffers
+        
+        'calcule le nombre de buffers et la taille du dernier buffer
+        nbBuf = Int(curSize / 2097152)
+        lLastSize = curSize - 2097152 * nbBuf
+        
+        'on récupère le handle du fichier
+        hFile = CreateFile(Source, GENERIC_WRITE, FILE_SHARE_READ Or _
+            FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+            
+        If hFile = INVALID_HANDLE_VALUE Then
+            SanitizeFile = -1
+            Exit Function
+        End If
+        
+        For y = 1 To nbBuf
+
+            'on récupère un pointeur sur une string de 2Mo
+            Call cASM.bnAlloc2MoAlea(Tbl(0))
+    
+            'on écrit dans le fichier
+            '// &H55
+             Call WriteBytesToFileHandle(hFile, p55, (y - 1) * 2097152, _
+                2097152)
+    
+            '// &HAA
+            Call WriteBytesToFileHandle(hFile, pAA, (y - 1) * 2097152, _
+                2097152)
+    
+            '//random string
+            Call WriteBytesToFileHandle(hFile, VarPtr(Tbl(0)), (y - 1) * 2097152, 2097152)
+    
+            'rend la main de tps en tps
+            DoEvents
+        Next y
+        
+        's'occupe du dernier buffer (plus petit)
+        Call cASM.bnAlloc2MoAlea(Tbl(0))
+
+        '// &H55
+        Call WriteBytesToFileHandle(hFile, p55, (nbBuf) * 2097152, _
+            lLastSize)
+
+        '// &HAA
+        Call WriteBytesToFileHandle(hFile, pAA, (nbBuf) * 2097152, _
+            lLastSize)
+
+        '//random string
+        Call WriteBytesToFileHandle(hFile, VarPtr(Tbl(0)), (nbBuf) * 2097152, lLastSize)
+        
+        'referme le handle
+        Call CloseHandle(hFile)
+        
+        DoEvents
+
+    End If
+
+    Set cASM = Nothing
+    
+    SanitizeFile = 1
+    
+End Function
+
+'=======================================================
+'Lance la sanitization d'un drive... le pauvre...
+'=======================================================
+Public Function SanitizeDrive(DriveLetter As String) As Long
+Dim cDriv As Drive
+Dim x As Long
+Dim secPerString As Long
+Dim s As String
+Dim pt As Long
+Dim hDevice As Long
+Dim bPerSec As Long
+Dim curOp As Currency
+Dim bMax As Long
+Dim Tbl(2097151) As Byte
+Dim cASM As CAsmProc
+Dim sH55() As Byte
+Dim sHAA() As Byte
+Dim pAA As Long
+Dim p55 As Long
+
+    'vérifie que le disque est accessible
+    If Me.IsDriveAvailable(DriveLetter) = False Then
+        SanitizeDrive = -1
+        Exit Function
+    End If
+    
+    '//génère les tableaux
+    
+    'les redimensionne
+    ReDim sH55(2097151)
+    ReDim sHAA(2097151)
+    
+    'les remplit
+    For x = 0 To 2097151
+        sH55(x) = 85
+        sHAA(x) = 170
+    Next x
+    
+    'récupère les pointeurs
+    pAA = VarPtr(sHAA(0))
+    p55 = VarPtr(sH55(0))
+    
+    'instancie la classe
+    Set cASM = New CAsmProc
+
+    'récupère les infos sue le disque
+    Set cDriv = Me.GetDrive(DriveLetter)
+
+    'nombre de secteurs pour une string de 2Mo
+    secPerString = 2097152 / cDriv.BytesPerSector
+
+    'handle du disque
+    hDevice = CreateFile("\\.\" & UCase$(DriveLetter) & ":", GENERIC_WRITE, _
+        FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+
+    bPerSec = cDriv.BytesPerSector
+    bMax = Int(cDriv.TotalPhysicalSectors / secPerString) + 1 '+1
+
+    'pour chaque secteur
+    For x = 1 To bMax
+
+        'on récupère un pointeur sur une string de 2Mo
+        Call cASM.bnAlloc2MoAlea(Tbl(0))
+
+        'calcul unique
+        curOp = CCur(x * secPerString)
+
+        'on écrit dans le disque
+        '// &H55
+        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, p55)
+
+        '// &HAA
+        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, pAA)
+
+        '//random string
+        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, VarPtr(Tbl(0)))
+
+        'rend la main de tps en tps
+        If (x Mod 5) = 0 Then DoEvents
+
+    Next x
+
+    '//s'occupe de l'entête du disque
+        Call cASM.bnAlloc2MoAlea(Tbl(0))
+
+        'on écrit dans le disque
+        '// &H55
+        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, p55)
+
+        '// &HAA
+        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, pAA)
+
+        '//random string
+        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, VarPtr(Tbl(0)))
+
+    'referme le handle
+    Call CloseHandle(hDevice)
+
+    'libère classe
+    Set cDriv = Nothing
+
+    SanitizeDrive = 1
+End Function
+
+
+'=======================================================
+'Lance la sanitization d'un disque physical... OMFG !
+'=======================================================
+Public Function SanitizePhysicalDisk(DiskNumber As Byte) As Long
+Dim cDriv As PhysicalDisk
+Dim x As Long
+Dim secPerString As Long
+Dim s As String
+Dim pt As Long
+Dim hDevice As Long
+Dim bPerSec As Long
+Dim curOp As Currency
+Dim bMax As Long
+Dim Tbl(2097151) As Byte
+Dim cASM As CAsmProc
+Dim sH55() As Byte
+Dim sHAA() As Byte
+Dim pAA As Long
+Dim p55 As Long
+
+    'vérifie que le disque est accessible
+    If Me.IsPhysicalDiskAvailable(DiskNumber) = False Then
+        SanitizePhysicalDisk = -1
+        Exit Function
+    End If
+    
+    '//génère les tableaux
+    
+    'les redimensionne
+    ReDim sH55(2097151)
+    ReDim sHAA(2097151)
+    
+    'les remplit
+    For x = 0 To 2097151
+        sH55(x) = 85
+        sHAA(x) = 170
+    Next x
+    
+    'récupère les pointeurs
+    pAA = VarPtr(sHAA(0))
+    p55 = VarPtr(sH55(0))
+    
+    'instancie la classe
+    Set cASM = New CAsmProc
+
+    'récupère les infos sue le disque
+    Set cDriv = Me.GetPhysicalDisk(DiskNumber)
+
+    'nombre de secteurs pour une string de 2Mo
+    secPerString = 2097152 / cDriv.BytesPerSector
+
+    'handle du disque
+    hDevice = CreateFile("\\.\PHYSICALDRIVE" & CStr(DiskNumber), GENERIC_WRITE, _
+        FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+
+    bPerSec = cDriv.BytesPerSector
+    bMax = Int(cDriv.TotalPhysicalSectors / secPerString) + 1  '+1
+
+    'pour chaque secteur
+    For x = 1 To bMax
+
+        'on récupère un pointeur sur une string de 2Mo
+        Call cASM.bnAlloc2MoAlea(Tbl(0))
+
+        'calcul unique
+        curOp = CCur(x * secPerString)
+
+        'on écrit dans le disque
+        '// &H55
+       ' Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, p55)
+
+        '// &HAA
+       ' Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, pAA)
+
+        '//random string
+       ' Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, VarPtr(Tbl(0)))
+
+        'rend la main de tps en tps
+        If (x Mod 5) = 0 Then DoEvents
+
+    Next x
+
+    '//s'occupe de l'entête du disque
+        Call cASM.bnAlloc2MoAlea(Tbl(0))
+
+        'on écrit dans le disque
+        '// &H55
+       ' Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, p55)
+
+        '// &HAA
+       ' Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, pAA)
+
+        '//random string
+      '  Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, VarPtr(Tbl(0)))
+
+    'referme le handle
+    Call CloseHandle(hDevice)
+
+    'libère classe
+    Set cDriv = Nothing
+
+    SanitizePhysicalDisk = 1
+End Function
+
+'=======================================================
+'Recherche multicritères de fichiers
+'=======================================================
+Public Function SearchForFiles(Search As SearchDefinition, Optional _
+    RefreshInfos As Boolean = False, Optional FormEvent As Object) As Files
+    
+Dim s() As String
+Dim cFiles As Files
+Dim x As Long
+    
+    'FormEvent implémente l'interface
+    If Not IsMissing(FormEvent) Then Set IEvent = FormEvent
+    Set cFiles = New Files
+    
+    ReDim s(0)
+    'on recherche tous les fichiers dans le dossier désigné
+    s() = Me.EnumFilesStr(Search.FolderName, Search.SubFolder)
+    
+    'on récupère une bonne fois pour toutes les dates des critères sous forme
+    'de currency
+    varDates(0) = DateString2Currency(Search.DateCreatedValue)
+    varDates(1) = DateString2Currency(Search.DateLastAccessedValue)
+    varDates(2) = DateString2Currency(Search.DateLastModifiedValue)
+    
+    'maintenant pour chaque fichier, on vérifie qu'il correspond aux critères
+    For x = 1 To UBound(s())
+        If IsFileOk(s(x), Search) Then
+            
+            'ajoute l'item
+            Call cFiles.AddItem(s(x), RefreshInfos)
+            
+            'lance un event dans la classe implémentant l'interface
+            If Not IsMissing(FormEvent) Then Call IEvent.ItemFound(s(x))
+        End If
+            
+        If (x Mod 1000) = 0 Then DoEvents
+    Next x
+    
+    Set SearchForFiles = cFiles
+    
+End Function
+
+'=======================================================
+'Recherche multicritères de dossiers
+'=======================================================
+Public Function SearchForFolders(Search As SearchDefinition, Optional _
+    RefreshInfos As Boolean = False, Optional FormEvent As Object) As Folders
+    
+Dim s() As String
+Dim cFolders As Folders
+Dim x As Long
+    
+    'FormEvent implémente l'interface
+    If Not IsMissing(FormEvent) Then Set IEvent = FormEvent
+    Set cFolders = New Folders
+    
+    ReDim s(0)
+    'on recherche tous les fichiers dans le dossier désigné
+    s() = Me.EnumFoldersStr(Search.FolderName, Search.SubFolder)
+    
+    'on récupère une bonne fois pour toutes les dates des critères sous forme
+    'de currency
+    varDates(0) = DateString2Currency(Search.DateCreatedValue)
+    varDates(1) = DateString2Currency(Search.DateLastAccessedValue)
+    varDates(2) = DateString2Currency(Search.DateLastModifiedValue)
+    
+    'maintenant pour chaque fichier, on vérifie qu'il correspond aux critères
+    For x = 1 To UBound(s())
+        If IsFolderOk(s(x), Search) Then
+            
+            'ajoute l'item
+            Call cFolders.AddItem(s(x), RefreshInfos)
+            
+            'lance un event dans la classe implémentant l'interface
+            If Not IsMissing(FormEvent) Then Call IEvent.ItemFound(s(x))
+        End If
+            
+        If (x Mod 1000) = 0 Then DoEvents
+    Next x
+    
+    Set SearchForFolders = cFolders
+    
+End Function
+
+'=======================================================
+'Recherche multicritères de fichiers (sortie string)
+'=======================================================
+Public Function SearchForFilesStr(Search As SearchDefinition, Optional _
+    FormEvent As Object) As String()
+
+Dim s() As String
+Dim n As Long
+Dim s2() As String
+Dim x As Long
+    
+    'FormEvent implémente l'interface
+    If Not IsMissing(FormEvent) Then Set IEvent = FormEvent
+    
+    ReDim s(0)
+    ReDim s2(0)
+    n = 0
+    'on recherche tous les fichiers dans le dossier désigné
+    s() = Me.EnumFilesStr(Search.FolderName, Search.SubFolder)
+    
+    'on récupère une bonne fois pour toutes les dates des critères sous forme
+    'de currency
+    varDates(0) = DateString2Currency(Search.DateCreatedValue)
+    varDates(1) = DateString2Currency(Search.DateLastAccessedValue)
+    varDates(2) = DateString2Currency(Search.DateLastModifiedValue)
+    
+    'maintenant pour chaque fichier, on vérifie qu'il correspond aux critères
+    For x = 1 To UBound(s())
+        If IsFileOk(s(x), Search) Then
+            
+            'ajoute l'item
+            n = n + 1
+            ReDim Preserve s2(n)
+            s2(n) = s(x)
+            
+            'lance un event dans la classe implémentant l'interface
+            If Not IsMissing(FormEvent) Then Call IEvent.ItemFound(s(x))
+        End If
+            
+        If (x Mod 10) = 0 Then DoEvents
+    Next x
+    
+    SearchForFilesStr = s2
+    
+    'recherche terminée
+    Call IEvent.SearchIsFinished
+    
+End Function
+
+'=======================================================
+'Recherche multicritères de dossiers (sortie string)
+'=======================================================
+Public Function SearchForFoldersStr(Search As SearchDefinition, Optional _
+    FormEvent As Object) As String()
+
+Dim s() As String
+Dim n As Long
+Dim s2() As String
+Dim x As Long
+    
+    'FormEvent implémente l'interface
+    If Not IsMissing(FormEvent) Then Set IEvent = FormEvent
+    
+    ReDim s(0)
+    ReDim s2(0)
+    n = 0
+    'on recherche tous les fichiers dans le dossier désigné
+    s() = Me.EnumFoldersStr(Search.FolderName, Search.SubFolder)
+    
+    'on récupère une bonne fois pour toutes les dates des critères sous forme
+    'de currency
+    varDates(0) = DateString2Currency(Search.DateCreatedValue)
+    varDates(1) = DateString2Currency(Search.DateLastAccessedValue)
+    varDates(2) = DateString2Currency(Search.DateLastModifiedValue)
+    
+    'maintenant pour chaque fichier, on vérifie qu'il correspond aux critères
+    For x = 1 To UBound(s())
+        If IsFolderOk(s(x), Search) Then
+            
+            'ajoute l'item
+            n = n + 1
+            ReDim Preserve s2(n)
+            s2(n) = s(x)
+            
+            'lance un event dans la classe implémentant l'interface
+            If Not IsMissing(FormEvent) Then Call IEvent.ItemFound(s(x))
+        End If
+            
+        If (x Mod 10) = 0 Then DoEvents
+    Next x
+    
+    SearchForFoldersStr = s2
+    
+    'recherche terminée
+    Call IEvent.SearchIsFinished
+    
+End Function
+
+'=======================================================
+'Change le label d'un disque
+'=======================================================
+Public Function SetVolumeLabel(DiskLetter As String, NewLabel As String) As Long
+    SetVolumeLabel = SetVolumeLabelAPI(DiskLetter & ":\", NewLabel)
+End Function
+
+'=======================================================
+'Affecte des dates à un fichier
+'=======================================================
+Public Function SetFileDates(Source As String, Optional ByVal DateCreated As _
+    String = vbNullString, Optional ByVal DateLastAccess As String = vbNullString, _
+    Optional ByVal DateLastModification As String = vbNullString) As Long
+    
+Dim hFile As Long
+Dim bModif As Boolean
+Dim ftCreated As FILETIME
+Dim ftAccess As FILETIME
+Dim ftModified As FILETIME
+Dim stCreated As SYSTEMTIME
+Dim stAccess As SYSTEMTIME
+Dim stModified As SYSTEMTIME
+
+    bModif = False
+    
+    If DateCreated <> vbNullString Then
+        'on change la date de création
+        
+        bModif = True
+        
+        With stCreated
+            .wDay = Day(DateCreated)
+            .wHour = Hour(DateCreated)
+            .wMinute = Minute(DateCreated)
+            .wMonth = Month(DateCreated)
+            .wSecond = Second(DateCreated)
+            .wYear = Year(DateCreated)
+        End With
+        
+        'convertit en FILETIME
+        Call SystemTimeToFileTime(stCreated, ftCreated)
+        'convertit en temps local
+        Call LocalFileTimeToFileTime(ftCreated, ftCreated)
+    End If
+
+    If DateLastAccess <> vbNullString Then
+        'on change la date de dernier access
+        
+        bModif = True
+        
+        With stAccess
+            .wDay = Day(DateLastAccess)
+            .wHour = Hour(DateLastAccess)
+            .wMinute = Minute(DateLastAccess)
+            .wMonth = Month(DateLastAccess)
+            .wSecond = Second(DateLastAccess)
+            .wYear = Year(DateLastAccess)
+        End With
+        
+        'convertit en FILETIME
+        Call SystemTimeToFileTime(stAccess, ftAccess)
+        'convertit en temps local
+        Call LocalFileTimeToFileTime(ftAccess, ftAccess)
+    End If
+    
+    If DateLastModification <> vbNullString Then
+        'on change la date de création
+        
+        bModif = True
+        
+        With stModified
+            .wDay = Day(DateLastModification)
+            .wHour = Hour(DateLastModification)
+            .wMinute = Minute(DateLastModification)
+            .wMonth = Month(DateLastModification)
+            .wSecond = Second(DateLastModification)
+            .wYear = Year(DateLastModification)
+        End With
+        
+        'convertit en FILETIME
+        Call SystemTimeToFileTime(stModified, ftModified)
+        'convertit en temps local
+        Call LocalFileTimeToFileTime(ftModified, ftModified)
+    End If
+    
+    'si pas de modifs à faire
+    If bModif = False Then Exit Function
+        
+    'récupère le handle
+    hFile = CreateFile(Source, GENERIC_WRITE, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+
+    If hFile <> INVALID_HANDLE_VALUE Then
+    
+        'change les dates
+        SetFileDates = SetFileTime(hFile, ftCreated, ftAccess, ftModified)
+        
+        'referme le handle
+        Call CloseHandle(hFile)
+    End If
+
+End Function
+    
+'=======================================================
+'Affecte des dates à un dossier
+'=======================================================
+Public Function SetFolderDates(Source As String, Optional ByVal DateCreated As _
+    String = vbNullString, Optional ByVal DateLastAccess As String = vbNullString, _
+    Optional ByVal DateLastModification As String = vbNullString) As Long
+    
+Dim hFolder As Long
+Dim bModif As Boolean
+Dim ftCreated As FILETIME
+Dim ftAccess As FILETIME
+Dim ftModified As FILETIME
+Dim stCreated As SYSTEMTIME
+Dim stAccess As SYSTEMTIME
+Dim stModified As SYSTEMTIME
+
+    bModif = False
+    
+    If DateCreated <> vbNullString Then
+        'on change la date de création
+        
+        bModif = True
+        
+        With stCreated
+            .wDay = Day(DateCreated)
+            .wHour = Hour(DateCreated)
+            .wMinute = Minute(DateCreated)
+            .wMonth = Month(DateCreated)
+            .wSecond = Second(DateCreated)
+            .wYear = Year(DateCreated)
+        End With
+        
+        'convertit en FILETIME
+        Call SystemTimeToFileTime(stCreated, ftCreated)
+        'convertit en temps local
+        Call LocalFileTimeToFileTime(ftCreated, ftCreated)
+    End If
+
+    If DateLastAccess <> vbNullString Then
+        'on change la date de dernier access
+        
+        bModif = True
+        
+        With stAccess
+            .wDay = Day(DateLastAccess)
+            .wHour = Hour(DateLastAccess)
+            .wMinute = Minute(DateLastAccess)
+            .wMonth = Month(DateLastAccess)
+            .wSecond = Second(DateLastAccess)
+            .wYear = Year(DateLastAccess)
+        End With
+        
+        'convertit en FILETIME
+        Call SystemTimeToFileTime(stAccess, ftAccess)
+        'convertit en temps local
+        Call LocalFileTimeToFileTime(ftAccess, ftAccess)
+    End If
+    
+    If DateLastModification <> vbNullString Then
+        'on change la date de création
+        
+        bModif = True
+        
+        With stModified
+            .wDay = Day(DateLastModification)
+            .wHour = Hour(DateLastModification)
+            .wMinute = Minute(DateLastModification)
+            .wMonth = Month(DateLastModification)
+            .wSecond = Second(DateLastModification)
+            .wYear = Year(DateLastModification)
+        End With
+        
+        'convertit en FILETIME
+        Call SystemTimeToFileTime(stModified, ftModified)
+        'convertit en temps local
+        Call LocalFileTimeToFileTime(ftModified, ftModified)
+    End If
+    
+    'si pas de modifs à faire
+    If bModif = False Then Exit Function
+        
+    'récupère le handle
+    hFolder = CreateFile(Source, GENERIC_READ Or GENERIC_WRITE, FILE_SHARE_READ Or _
+        FILE_SHARE_DELETE, 0&, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, 0&)
+
+    If hFolder <> INVALID_HANDLE_VALUE Then
+    
+        'change les dates
+        SetFolderDates = SetFileTime(hFolder, ftCreated, ftAccess, ftModified)
+        
+        'referme le handle
+        Call CloseHandle(hFolder)
+    End If
+
+End Function
+
+'=======================================================
+'Compare deux fichiers
+'=======================================================
+Public Function CompareFiles(File1 As String, File2 As String) As FileComparisonResult
+Dim curSize As Currency
+Dim hFile1 As Long
+Dim hFile2 As Long
+Dim nbBuffer As Long
+Dim lastBufferSize As Currency
+Dim x As Long
+Dim curLastPt As Currency
+
+    CompareFiles = [Files are different]
+
+    'on vérifie d'abord les tailles
+    curSize = Me.GetFileSize(File1)
+    If curSize <> Me.GetFileSize(File2) Then Exit Function
+    
+    'récupère un handle du fichier 1 et 2
+    hFile1 = CreateFile(File1, GENERIC_READ, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+    hFile2 = CreateFile(File2, GENERIC_READ, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+    
+    If hFile1 = INVALID_HANDLE_VALUE Or hFile2 = INVALID_HANDLE_VALUE Then _
+        Exit Function
+    
+    'détermine le nombre de buffers de 5Mo et la taille du dernier buffer
+    nbBuffer = Int(curSize / 5242880)
+    lastBufferSize = CCur(-5242.88 * nbBuffer) * 1000
+    lastBufferSize = CCur(lastBufferSize + curSize)
+    
+    For x = 1 To nbBuffer
+        
+        curLastPt = 5242.88 * (x - 1)
+        curLastPt = curLastPt * 1000
+        
+        If GetBytesFromFileHandle(hFile1, 5242880, curLastPt) <> _
+            GetBytesFromFileHandle(hFile2, 5242880, curLastPt) Then
+            
+            'alors fichier différents
+            
+            'referme les handles
+            Call CloseHandle(hFile1)
+            Call CloseHandle(hFile2)
+            
+            Exit Function
+        End If
+        
+        If (x Mod 20) = 0 Then DoEvents
+
+    Next x
+    
+    'le dernier buffer
+    curLastPt = 5242880
+    curLastPt = CCur(curLastPt * (nbBuffer - 1))
+    
+    If GetBytesFromFileHandle(hFile1, lastBufferSize, curLastPt) = _
+        GetBytesFromFileHandle(hFile2, lastBufferSize, curLastPt) Then
+        
+        'fichiers identiques
+        CompareFiles = [Files are identical]
+    End If
+    
+    'referme les handles
+    Call CloseHandle(hFile1)
+    Call CloseHandle(hFile2)
+    
+End Function
+
+'=======================================================
+'Découpe un fichier
+'=======================================================
+Public Function CutFile(Source As String, DestinationFolder As String, _
+    Method As CutMethod) As Long
+    
+    CutFile = Me.CutFileFriend(Source, DestinationFolder, Method)
+End Function
+
+'=======================================================
+'Fusionne des fichiers
+'=======================================================
+Public Function FusionFiles(GrupFile As String, FolderDestination As String) _
+    As Long
+    
+    FusionFiles = Me.PasteFile(GrupFile, FolderDestination)
+End Function
+
+'=======================================================
+'Créé un ISO depuis un disque
+'=======================================================
+Public Function CreateIsoFromDrive(DriveLetter As String, IsoDestination As _
+    String) As Long
+
+Dim lngSec As Long
+Dim s As String
+Dim x As Long
+Dim hFile As Long
+Dim hDrive As Long
+Dim lBPC As Long
+Dim lTLS As Long
+Dim hDisk As Long
+    
+    If Me.FileExists(IsoDestination) Then Exit Function
+    
+    'créé un fichier vide
+    Call Me.CreateEmptyFile(IsoDestination, True)
+    
+    'récupère les handles
+    hFile = CreateFile(IsoDestination, GENERIC_WRITE, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+    hDrive = CreateFile("\\.\" & UCase$(DriveLetter) & ":", GENERIC_READ, _
+        FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    
+    If hFile = INVALID_HANDLE_VALUE Or hDrive = INVALID_HANDLE_VALUE Then _
+        Exit Function
+    
+    lBPC = Me.GetDriveGeometry_HANDLE(hDrive).BytesPerSector
+    lTLS = Me.GetDrive(DriveLetter).TotalPhysicalSectors - 1
+    
+    'pour chaque secteur
+    For lngSec = 0 To lTLS
+        
+        'sauve dans le fichier la string lue dans le disque
+        s = DirectReadSHandle(hDrive, _
+            lngSec, lBPC, lBPC)
+        Call WriteBytesToFileEndHandle(hFile, s)
+        
+        If (lngSec Mod 500) = 0 Then DoEvents 'rend la main de tps en tps
+             
+    Next lngSec
+
+    'referme les handles
+    Call CloseHandle(hFile)
+    Call CloseHandle(hDrive)
+    
+    CreateIsoFromDrive = hFile
+    
+End Function
+
+
 
 
 
@@ -3039,7 +4014,7 @@ Dim curSize As Currency
         
     With GetFileSizes_HANDLE
         .FileSize = curSize * 10000  'multiplie par 10^4 pour obtenir un nombre entier
-        .CompressedFileSize = GetCompressedFileSize(Source, ByVal 0&)
+        .CompressedFileSize = GetCompressedFileSizeAPI(Source, ByVal 0&)
     End With
 
 End Function
@@ -3070,3 +4045,1025 @@ Dim FileInfo As BY_HANDLE_FILE_INFORMATION
     
 End Function
 
+'=======================================================
+'Récupère des bytes dans un fichier
+'=======================================================
+Friend Function GetBytesFromFileHandle(ByVal hFile As Long, ByVal curSize As _
+    Currency, ByVal curOffset As Currency) As String
+    
+Dim tmpText As String
+Dim Ret As Long
+        
+    'créé un buffer qui contiendra les valeurs
+    tmpText = String$(curSize, 0)
+
+    'bouge le pointeur sur lr fichier au bon emplacement
+    Ret = SetFilePointerEx(hFile, curOffset / 10000, 0&, FILE_BEGIN)  'divise par 10000 pour
+    'pouvoir renvoyer une currency DECIMALE (cad du genre 1.4567 pour l'offset 14567)
+    
+    'prend un morceau du fichier
+    Ret = ReadFile(hFile, ByVal tmpText, Len(tmpText), Ret, ByVal 0&)
+    
+    'affecte à la fonction
+    GetBytesFromFileHandle = tmpText
+
+End Function
+
+'=======================================================
+'Permet de lire des bytes directement dans le disque
+'Sortie en String
+'Demande un handle
+'=======================================================
+Friend Function DirectReadSHandle(ByVal hDevice As Long, ByVal iStartSec As _
+    Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long) As String
+
+'/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
+Dim BytesRead As Long
+Dim Pointeur As Currency
+Dim Ret As Long
+Dim lLowPart As Long, lHighPart As Long
+   
+    'détermine le byte de départ du secteur
+    Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
+    
+    'transforme un currency en 2 long pour une structure LARGE_INTEGER
+    Call GetLargeInteger(Pointeur, lLowPart, lHighPart)
+
+    'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
+    'byte que l'on veut lire (donné par deux long)
+    Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
+    
+    'création d'un buffer
+    DirectReadSHandle = Space$(nBytes)
+
+    'obtention de la string
+    Ret = ReadFile(hDevice, ByVal DirectReadSHandle, nBytes, BytesRead, 0&)
+
+End Function
+
+'=======================================================
+'Ecrit des bytes dans un fichier (à la fin du fichier) avec en entrée un handle
+'=======================================================
+Friend Function WriteBytesToFileEndHandle(ByVal lngFile As Long, ByVal _
+    sString As String) As String
+    
+Dim tmpText As String
+Dim Ret As Long
+        
+    'bouge le pointeur sur le fichier à la fin du fichier
+    Ret = SetFilePointerEx(lngFile, 0&, 0&, FILE_END) '
+
+    'écriture dans le fichier
+    Call WriteFile(lngFile, ByVal sString, Len(sString), Ret, ByVal 0&)
+
+End Function
+
+'=======================================================
+'Fonction de découpe de fichier
+'=======================================================
+Friend Function CutFileFriend(ByVal sFile As String, ByVal sFolderOut As _
+    String, tMethode As CutMethod) As Long
+    
+Dim lFileCount As Long
+Dim lLastFileSize As Currency
+Dim curSize As Currency
+Dim x As Long
+Dim i As Long
+Dim j As Long
+Dim a As Long
+Dim lBuf As Long
+Dim sFileStr As String
+Dim sBuf As String
+Dim lBuf2 As Long
+Dim sFic As String
+Dim lTime As Long
+Dim lNormalSize As Currency
+Dim k As Currency
+Dim k2 As Currency
+    
+    '//VERIFICATIONS
+    'vérifie que le fichier existe bien
+    If Me.FileExists(sFile) = False Then
+        'fichier manquant
+        CutFileFriend = -1
+        Exit Function
+    End If
+    
+    'vérifie que le dossier résultat existe bien
+    If Me.FolderExists(sFolderOut) = False Then
+        'dossier résultat inexistant
+        CutFileFriend = -1
+        Exit Function
+    End If
+    
+    'récupère le nom du fichier
+    sFileStr = Me.GetFileName(sFile)
+    
+    'récupère la taille du fichier
+    curSize = Me.GetFileSize(sFile)
+    If curSize = 0 Or Me.IsFileAvailable(sFile) = False Then
+        'fichier vide ou inaccessible
+        CutFileFriend = -1
+        Exit Function
+    End If
+    
+    '//LANCE LE DECOUPAGE
+    If tMethode.tMethode = [Fixed Size] Then
+        'alors on découpe en fixant la taille
+        
+        'calcule le nombre de fichiers nécessaire et la taille du dernier
+        lFileCount = Int(curSize / tMethode.lParam) + IIf(Mod2(curSize, tMethode.lParam) = 0, 0, 1)
+        lLastFileSize = curSize     'taille du dernier fichier
+        k = (lFileCount - 1)
+        k = k * tMethode.lParam
+        lLastFileSize = lLastFileSize - k 'évite les dépassement de capacité
+        
+        
+        'lance la découpe
+        'utilisation de l'API ReadFile pour plus d'efficacité
+        'prend des buffers de 5Mo maximum
+        If tMethode.lParam <= LBUFSIZE Then
+            'alors tout rentre dans un seul buffer
+                        
+            k2 = lFileCount - 1
+            k2 = k2 * tMethode.lParam
+            
+            For i = 1 To lFileCount - 1 'pas le dernier qui est fait à part
+                
+                'fichier résultat i
+                sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(i))
+                
+                'créé le fichier résultat
+                Call Me.CreateEmptyFile(sFic, True)
+                
+                'récupère le buffer
+                k = i - 1
+                k = k * tMethode.lParam
+                sBuf = GetBytesFromFile(sFile, CCur(tMethode.lParam), _
+                    CCur(k))
+                
+                'on écrit dans le fichier résultat
+                Call WriteBytesToFile(sFic, sBuf, 0)
+                
+                DoEvents
+            Next i
+            
+            'maintenant le dernier fichier
+            sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(lFileCount))
+            
+            'créé le fichier résultat
+            Call Me.CreateEmptyFile(sFic, True)
+            
+            'récupère le buffer
+            sBuf = GetBytesFromFile(sFile, lLastFileSize, CCur(k2))
+            
+            'on écrit dans le fichier résultat
+            Call WriteBytesToFile(sFic, sBuf, 0)
+            
+        Else
+            'alors plusieurs buffer
+            
+            'calcule le nombre de buffers nécessaires pour chaque fichier
+            lBuf2 = Int(tMethode.lParam / LBUFSIZE) + IIf(Mod2(tMethode.lParam, LBUFSIZE) = 0, 0, 1)
+            
+            k2 = lFileCount - 1
+            k2 = k2 * tMethode.lParam
+            
+            For i = 1 To lFileCount - 1 'pas le dernier qui est fait à part
+                
+                'fichier résultat i
+                sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(i))
+                
+                'créé le fichier résultat
+                Call Me.CreateEmptyFile(sFic, True)
+                
+                k = i - 1
+                k = k * tMethode.lParam
+                
+                For j = 1 To lBuf2 - 1
+ 
+                    'récupère le buffer
+                    sBuf = GetBytesFromFile(sFile, LBUFSIZE, CCur((j - 1) * LBUFSIZE) + k)
+                    
+                    'on écrit dans le fichier résultat
+                    Call WriteBytesToFileEnd(sFic, sBuf)   ', 5242880 * (j - 1)
+                    
+                    DoEvents
+
+                Next j
+                
+                'le dernier buffer
+                sBuf = GetBytesFromFile(sFile, tMethode.lParam - (lBuf2 - 1) * LBUFSIZE, CCur((lBuf2 - 1) * LBUFSIZE) + k)
+
+                'on écrit dans le fichier résultat
+                Call WriteBytesToFileEnd(sFic, sBuf)  ', 5242880 * (lBuf2 - 1)
+                
+                DoEvents
+            
+            Next i
+
+            'recalcule le nombre de buffers dans le dernier fichier
+            lBuf2 = Int(lLastFileSize / LBUFSIZE) + IIf(Mod2(lLastFileSize, LBUFSIZE) = 0, 0, 1)
+
+            'maintenant le dernier fichier
+            sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(lFileCount))
+            
+            'créé le fichier résultat
+            Call Me.CreateEmptyFile(sFic, True)
+            
+            For j = 1 To lBuf2 - 1
+                    
+                'récupère le buffer
+                sBuf = GetBytesFromFile(sFile, LBUFSIZE, CCur(k2 + (j - 1) * LBUFSIZE))
+                
+                'on écrit dans le fichier résultat
+                Call WriteBytesToFileEnd(sFic, sBuf)  ', 5242880 * (j - 1)
+            
+            Next j
+                
+            'récupère le dernier buffer
+            sBuf = GetBytesFromFile(sFile, lLastFileSize - (lBuf2 - 1) * LBUFSIZE, CCur(k2 + (lBuf2 - 1) * LBUFSIZE))
+            
+            'on écrit dans le fichier résultat
+            Call WriteBytesToFileEnd(sFic, sBuf)  ', 0
+  
+        End If
+        
+        
+        'on créé le fichier groupeur
+        Call Me.CreateEmptyFile(sFolderOut & "\" & sFileStr & ".grp", True)
+        Call Me.SaveDataInFile(sFolderOut & "\" & sFileStr & ".grp", _
+            sFileStr & "|" & Str$(lFileCount))
+       
+    Else
+        'alors nombre de fichiers fixé
+
+        'nombre de fichiers
+        lFileCount = tMethode.lParam
+        
+        'calcule la taille de chaque fichier
+        lNormalSize = Int(curSize / lFileCount)
+        lLastFileSize = lNormalSize + curSize
+        k = lNormalSize
+        k = k * lFileCount 'taille du dernier fichier (plus quelques octets, au maximum 1 par fichier)
+        lLastFileSize = lLastFileSize - k       'évite le dépassement de capacité
+        
+        
+        'lance la découpe
+        'utilisation de l'API ReadFile pour plus d'efficacité
+        'prend des buffers de 5Mo maximum
+        If lNormalSize <= LBUFSIZE Then
+            'alors tout rentre dans un seul buffer
+            
+            k2 = lFileCount - 1
+            k2 = k2 * lNormalSize
+            
+            For i = 1 To lFileCount - 1 'pas le dernier qui est fait à part
+                
+                'fichier résultat i
+                sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(i))
+                
+                'créé le fichier résultat
+                Call Me.CreateEmptyFile(sFic, True)
+                
+                'récupère le buffer
+                k = i - 1
+                k = k * lNormalSize
+                sBuf = GetBytesFromFile(sFile, lNormalSize, CCur(k))
+                
+                'on écrit dans le fichier résultat
+                Call WriteBytesToFile(sFic, sBuf, 0)
+                
+                DoEvents
+            Next i
+            
+            'maintenant le dernier fichier
+            sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(lFileCount))
+            
+            'créé le fichier résultat
+            Call Me.CreateEmptyFile(sFic, True)
+            
+            'récupère le buffer
+            sBuf = GetBytesFromFile(sFile, lLastFileSize, CCur(k2))
+            
+            'on écrit dans le fichier résultat
+            Call WriteBytesToFile(sFic, sBuf, 0)
+            
+        Else
+            'alors plusieurs buffer
+            
+            'calcule le nombre de buffers nécessaires pour chaque fichier
+            lBuf2 = Int(lNormalSize / LBUFSIZE) + IIf(Mod2(lNormalSize, LBUFSIZE) = 0, 0, 1)
+            
+            k2 = lFileCount - 1
+            k2 = k2 * lNormalSize
+            
+            For i = 1 To lFileCount - 1 'pas le dernier qui est fait à part
+                
+                'fichier résultat i
+                sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(i))
+                
+                'créé le fichier résultat
+                Call Me.CreateEmptyFile(sFic, True)
+                
+                DoEvents
+                
+                k = i - 1
+                k = k * lNormalSize
+                
+                For j = 1 To lBuf2 - 1
+                
+                    'récupère le buffer
+                    sBuf = GetBytesFromFile(sFile, LBUFSIZE, CCur((j - 1) * LBUFSIZE) + k)
+                    
+                    'on écrit dans le fichier résultat
+                    Call WriteBytesToFileEnd(sFic, sBuf)  ', 5242880 * (j - 1)
+                    
+                    DoEvents
+                Next j
+
+                'le dernier buffer
+                sBuf = GetBytesFromFile(sFile, lNormalSize - (lBuf2 - 1) * LBUFSIZE, CCur((lBuf2 - 1) * LBUFSIZE) + k)
+
+                'on écrit dans le fichier résultat
+                Call WriteBytesToFileEnd(sFic, sBuf)  ', 5242880 * (lBuf2 - 1)
+                
+                DoEvents
+            Next i
+
+            'recalcule le nombre de buffers dans le dernier fichier
+            lBuf2 = Int(lLastFileSize / LBUFSIZE) + IIf(Mod2(lLastFileSize, LBUFSIZE) = 0, 0, 1)
+
+            'maintenant le dernier fichier
+            sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(lFileCount))
+            
+            'créé le fichier résultat
+            Call Me.CreateEmptyFile(sFic, True)
+            
+            For j = 1 To lBuf2 - 1
+            
+                'récupère le buffer
+                sBuf = GetBytesFromFile(sFile, LBUFSIZE, CCur(k2 + (j - 1) * LBUFSIZE))
+                
+                'on écrit dans le fichier résultat
+                Call WriteBytesToFileEnd(sFic, sBuf)  ', 5242880 * (j - 1)
+            
+            Next j
+            
+            'récupère le dernier buffer
+            sBuf = GetBytesFromFile(sFile, lLastFileSize - (lBuf2 - 1) * LBUFSIZE, CCur(k2 + (lBuf2 - 1) * LBUFSIZE))
+            
+            'on écrit dans le fichier résultat
+            Call WriteBytesToFileEnd(sFic, sBuf)  ', 0
+            
+        End If
+        
+        
+        'on créé le fichier groupeur
+        Call Me.CreateEmptyFile(sFolderOut & "\" & sFileStr & ".grp", True)
+        Call Me.SaveDataInFile(sFolderOut & "\" & sFileStr & ".grp", _
+            sFileStr & "|" & Str$(lFileCount))
+ 
+    End If
+    
+    'terminé
+    CutFileFriend = 1
+
+End Function
+
+
+'=======================================================
+'fonction de fusion de fichier
+'=======================================================
+Friend Function PasteFile(ByVal sFileGroup As String, ByVal sFolderOut As _
+    String) As Long
+    
+Dim lFileCount As Long
+Dim x As Long
+Dim i As Long
+Dim j As Long
+Dim lBuf As Long
+Dim sFileStr As String
+Dim sBuf As String
+Dim lBuf2 As Long
+Dim sFic As String
+Dim bOk As Boolean
+Dim curSize As Currency
+Dim a As Long
+Dim lTime As Long
+    
+    '//VERIFICATIONS
+        'vérifie que le fichier existe bien
+        If Me.FileExists(sFileGroup) = False Then
+            'fichier manquant
+            PasteFile = -1
+            Exit Function
+        End If
+        
+        'vérifie que le dossier résultat existe bien
+        If Me.FolderExists(sFolderOut) = False Then
+            'dossier résultat inexistant
+            PasteFile = -1
+            Exit Function
+        End If
+        sBuf = Me.LoadFileInString(sFileGroup)
+        'récupère le nom du fichier
+        sFileStr = Mid$(sBuf, 1, InStr(1, sBuf, "|") - 1)
+    
+        '//LANCE LA FUSION
+        'récupère le nombre de fichiers concernés
+        lFileCount = Val(Right$(sBuf, Len(sBuf) - InStr(1, sBuf, "|")))
+        
+        'vérifie l'existence de chaque fichier
+        bOk = True
+        For i = 1 To lFileCount
+            If Me.FileExists(Me.GetFolderName(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i))) = False Then
+                bOk = False
+            End If
+        Next i
+        If Not (bOk) Then
+            'alors un fichier est absent
+            PasteFile = -1
+            Exit Function
+        End If
+    
+    
+    'créé le fichier résultat
+    Call Me.CreateEmptyFile(sFolderOut & "\" & sFileStr, True)
+    
+    'alors tout est OK, on peut commencer à coller les données par buffer de 5Mo
+    If Me.GetFileSize(sFolderOut & "\" & sFileStr & ".1") <= LBUFSIZE Then
+        'alors tout rentre dans un buffer de 5Mo
+    
+        For i = 1 To lFileCount
+            'écrit les bytes lus
+            Call WriteBytesToFileEnd(sFolderOut & "\" & sFileStr, Me.LoadFileInString(Me.GetFolderName(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i))))
+            DoEvents
+        Next i
+        
+    Else
+    
+        'alors il faut plusieurs buffers de 5Mo par fichier
+        
+        'détermine le nombre de buffers nécessaire
+        lBuf2 = Int(Me.GetFileSize(sFolderOut & "\" & sFileStr & ".1") / LBUFSIZE) + IIf(Mod2(Me.GetFileSize(sFolderOut & "\" & sFileStr & ".1"), LBUFSIZE) = 0, 0, 1)
+                
+        For i = 1 To lFileCount - 1
+        
+            'le fichier que l'on lit
+            sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(i))
+            
+            For j = 1 To lBuf2 - 1
+                'sbuf contient 5Mo lus
+                sBuf = GetBytesFromFile(sFic, LBUFSIZE, LBUFSIZE * (j - 1))
+                
+                'écrit les bytes dans le fichier résultat
+                Call WriteBytesToFileEnd(sFolderOut & "\" & sFileStr, sBuf)
+                
+                DoEvents
+            Next j
+            
+            'le dernier buffer
+            a = Me.GetFileSize(sFic) - (lBuf2 - 1) * LBUFSIZE      'taille du dernier buffer
+            sBuf = GetBytesFromFile(sFic, a, LBUFSIZE * (lBuf2 - 1))
+            
+            'écrit les bytes dans le fichier résultat
+            Call WriteBytesToFileEnd(sFolderOut & "\" & sFileStr, sBuf)
+            
+            DoEvents
+        Next i
+        
+        'fait le dernier fichier
+        sFic = sFolderOut & "\" & sFileStr & "." & Trim$(Str$(lFileCount))
+        lBuf2 = Int(Me.GetFileSize(sFic) / LBUFSIZE) + IIf(Mod2(Me.GetFileSize(sFic), LBUFSIZE) = 0, 0, 1)      'nouveau buffer
+            
+        For j = 1 To lBuf2 - 1
+            'sbuf contient 5Mo lus
+            sBuf = GetBytesFromFile(sFic, LBUFSIZE, LBUFSIZE * (j - 1))
+            
+            'écrit les bytes dans le fichier résultat
+            Call WriteBytesToFileEnd(sFolderOut & "\" & sFileStr, sBuf)
+        Next j
+        
+        'le dernier buffer
+        a = Me.GetFileSize(sFic) - (lBuf2 - 1) * LBUFSIZE
+        sBuf = GetBytesFromFile(sFic, a, LBUFSIZE * (lBuf2 - 1))
+        
+        'écrit les bytes dans le fichier résultat
+        Call WriteBytesToFileEnd(sFolderOut & "\" & sFileStr, sBuf)
+        
+        DoEvents
+        
+    End If
+
+    PasteFile = 1
+
+End Function
+
+'=======================================================
+'Effectue un modulo sans dépassement de capacité
+'assez peu optimisé, mais utile pour les grandes valeurs de cur
+'=======================================================
+Friend Function Mod2(ByVal cur As Currency, lng As Long) As Currency
+    Mod2 = cur - Int(cur / lng) * lng
+End Function
+
+'=======================================================
+'Récupère des bytes dans un fichier
+'=======================================================
+Friend Function GetBytesFromFile(ByVal sFile As String, ByVal curSize As _
+    Currency, ByVal curOffset As Currency) As String
+    
+Dim tmpText As String
+Dim Ret As Long
+Dim lFile As Long
+    
+    'obtient un handle vers le fichier à ouvrir
+    lFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+    
+    If lFile = INVALID_HANDLE_VALUE Then
+        'fichier inexistant, ou en tout cas inaccessible
+        Exit Function
+    End If
+        
+    'créé un buffer qui contiendra les valeurs
+    tmpText = String$(curSize, 0)
+
+    'bouge le pointeur sur lr fichier au bon emplacement
+    Ret = SetFilePointerEx(lFile, curOffset / 10000, 0&, FILE_BEGIN)  'divise par 10000 pour
+    'pouvoir renvoyer une currency DECIMALE (cad du genre 1.4567 pour l'offset 14567)
+    
+    'prend un morceau du fichier
+    Ret = ReadFile(lFile, ByVal tmpText, Len(tmpText), Ret, ByVal 0&)
+    
+    'affecte à la fonction
+    GetBytesFromFile = tmpText
+
+    'referme le handle
+    CloseHandle lFile
+    
+End Function
+
+'=======================================================
+'Ecrit des bytes dans un fichier
+'=======================================================
+Friend Function WriteBytesToFile(ByVal sFile As String, ByVal sString As String, ByVal curOffset As Currency) As String
+Dim tmpText As String
+Dim Ret As Long
+Dim lFile As Long
+       
+    'obtient un handle vers le fichier à écrire
+    'ouverture en ECRITURE, avec overwrite si déjà existant (car déjà demandé confirmation avant)
+    lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+
+    If lFile = INVALID_HANDLE_VALUE Then Exit Function 'fichier indisponible
+    
+    'bouge le pointeur sur le fichier au bon emplacement
+    Ret = SetFilePointerEx(lFile, curOffset / 10000, 0&, FILE_BEGIN)
+    'a divisé par 10^4 pour obtenir un nombre décimal de Currency
+
+    'écriture dans le fichier
+    Call WriteFile(lFile, ByVal sString, Len(sString), Ret, ByVal 0&)
+
+    'ferme le handle du fichier écrit
+    CloseHandle lFile
+    
+End Function
+
+'=======================================================
+'Ecrit des bytes dans un fichier (à la fin du fichier)
+'=======================================================
+Friend Function WriteBytesToFileEnd(ByVal sFile As String, ByVal sString As _
+    String) As String
+    
+Dim tmpText As String
+Dim Ret As Long
+Dim lFile As Long
+       
+    'obtient un handle vers le fichier à écrire
+    'ouverture en ECRITURE, avec overwrite si déjà existant (car déjà demandé confirmation avant)
+    lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+
+    If lFile = INVALID_HANDLE_VALUE Then Exit Function 'fichier non dispo
+    
+    'bouge le pointeur sur le fichier à la fin du fichier
+    Ret = SetFilePointerEx(lFile, 0&, 0&, FILE_END) '
+
+    'écriture dans le fichier
+    Call WriteFile(lFile, ByVal sString, Len(sString), Ret, ByVal 0&)
+
+    'ferme le handle du fichier écrit
+    CloseHandle lFile
+
+End Function
+
+'=======================================================
+'écrire des bytes dans un fichier
+'=======================================================
+Friend Sub WriteBytesToFileHandle(ByVal hFile As Long, ByVal pt As Long, _
+    ByVal curOffset As Currency, ByVal lLen As Long)
+    
+Dim tmpText As String
+Dim Ret As Long
+    
+    'bouge le pointeur sur le fichier au bon emplacement
+    Ret = SetFilePointerEx(hFile, curOffset / 10000, 0&, FILE_BEGIN)
+
+    'écriture dans le fichier
+    Call WriteFile(hFile, ByVal pt, lLen, Ret, ByVal 0&)
+    
+End Sub
+
+'=======================================================
+'Permet de d'écrire de manière directe dans le disque
+'avec en entrée un pointeur et un handle de disque
+'=======================================================
+Friend Sub DirectWritePtHandle(ByVal hDevice As Long, ByVal iStartSec As _
+    Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, _
+    ByRef pt As Long)
+
+'/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
+
+Dim BytesRead As Long
+Dim Pointeur As Currency
+Dim Ret As Long
+Dim lLowPart As Long
+Dim lHighPart As Long
+   
+    'détermine le byte de départ du secteur
+    Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
+    
+    'transforme un currency en 2 long pour une structure LARGE_INTEGER
+    Call GetLargeInteger(Pointeur, lLowPart, lHighPart)
+
+    'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
+    'byte que l'on veut lire (donné par deux long)
+    Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
+    
+    'verrouilage de la zone du disque à écrire
+    Call LockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
+    
+    'écriture disque
+    Ret = WriteFile(hDevice, ByVal pt, nBytes, Ret, ByVal 0&)
+    
+    'on vide les buffers internes et on dévérouille la zone
+    Call FlushFileBuffers(hDevice)
+    Call UnlockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
+    
+End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+'=======================================================
+'PRIVATE FUNCTIONS
+'=======================================================
+
+'=======================================================
+'Renvoie True si le fichier correspond aux critères de recherche
+'=======================================================
+Private Function IsFileOk(sFile As String, tS As SearchDefinition) As Boolean
+Dim curSize As Currency
+Dim curV As Currency
+Dim dblSize As Long
+Dim tSOp As Operator
+Dim Ret As Long
+Dim sStr As String
+
+    'recherche par nom
+    If (tS.Criteria And SearchName) = SearchName Then
+        sStr = Me.GetFileName(sFile)    'récupère le nom
+        If tS.RespectCase Then
+            If InStr(1, sStr, tS.SearchName) = 0 Then
+                'raté
+                IsFileOk = False
+                Exit Function
+            End If
+        Else
+            If InStr(1, LCase$(sStr), LCase$(tS.SearchName)) = 0 Then
+                'raté
+                IsFileOk = False
+                Exit Function
+            End If
+        End If
+    End If
+    
+    'recherche par taille
+    If (tS.Criteria And SearchSize) = SearchSize Then
+        
+        dblSize = tS.SizeValue
+        tSOp = tS.SizeOperator
+        
+        'recupère la taille du fichier
+        curSize = Me.GetFileSize(sFile)
+        
+        If tSOp = [ < ] Then
+            '<
+            If curSize >= dblSize Then
+                IsFileOk = False
+                Exit Function
+            End If
+        ElseIf tSOp = [ > ] Then
+            '>
+            If curSize <= dblSize Then
+                IsFileOk = False
+                Exit Function
+            End If
+        ElseIf tSOp = [ = ] Then
+            '=
+            If curSize <> dblSize Then
+                IsFileOk = False
+                Exit Function
+            End If
+        ElseIf tSOp = [ <= ] Then
+            '<=
+            If curSize > dblSize Then
+                IsFileOk = False
+                Exit Function
+            End If
+        ElseIf tSOp = [ >= ] Then
+            '>=
+            If curSize < dblSize Then
+                IsFileOk = False
+                Exit Function
+            End If
+        End If
+    End If
+    
+    
+    'recherche par date de création
+    If (tS.Criteria And SearchDateCreated) = SearchDateCreated Then
+        
+        'recupère la date en currency
+        curV = Me.GetFileDateAsCurrency(sFile, DateCreated)
+        
+        tSOp = tS.DateCreatedOperator
+        
+        If curV Then
+            'compare avec la date à rechercher
+            '-1==> curDate < curDateReal
+            '0 ==> curDate = curDateReal
+            '1 ==> curDate > curDateReal
+            Ret = CompareFileTime(varDates(0), curV)
+            
+            If Ret = 0 Then
+                If (tSOp = [ = ]) Or (tSOp = [ <= ]) Or (tSOp = [ >= ]) Then _
+                    GoTo DateCreatedIsOk
+            ElseIf Ret = 1 Then
+                If (tSOp = [ < ]) Or (tSOp = [ <= ]) Then GoTo DateCreatedIsOk
+            Else
+                If (tSOp = [ > ]) Or (tSOp = [ >= ]) Then GoTo DateCreatedIsOk
+            End If
+        End If
+        
+        'si on est là, c'est que la comparaison n'est pas bonne
+        IsFileOk = False
+        Exit Function
+    End If
+    
+DateCreatedIsOk:
+
+    If (tS.Criteria And SearchDateLastAccessed) = SearchDateLastAccessed Then
+        
+        'recupère la date en currency
+        curV = Me.GetFileDateAsCurrency(sFile, DateLastAccessed)
+        
+        tSOp = tS.DateLastAccessedOperator
+        
+        If curV Then
+            'compare avec la date à rechercher
+            '-1==> curDate < curDateReal
+            '0 ==> curDate = curDateReal
+            '1 ==> curDate > curDateReal
+            Ret = CompareFileTime(varDates(1), curV)
+            
+            If Ret = 0 Then
+                If (tSOp = [ = ]) Or (tSOp = [ <= ]) Or (tSOp = [ >= ]) Then _
+                    GoTo DateLastAccessedIsOk
+            ElseIf Ret = 1 Then
+                If (tSOp = [ < ]) Or (tSOp = [ <= ]) Then _
+                    GoTo DateLastAccessedIsOk
+            Else
+                If (tSOp = [ > ]) Or (tSOp = [ >= ]) Then _
+                    GoTo DateLastAccessedIsOk
+            End If
+        End If
+        
+        'si on est là, c'est que la comparaison n'est pas bonne
+        IsFileOk = False
+        Exit Function
+    End If
+    
+DateLastAccessedIsOk:
+    
+    If (tS.Criteria And SearchDateLastModified) = SearchDateLastModified Then
+        
+        'recupère la date en currency
+        curV = Me.GetFileDateAsCurrency(sFile, DateLastModified)
+        
+        tSOp = tS.DateLastModifiedOperator
+        
+        If curV Then
+            'compare avec la date à rechercher
+            '-1==> curDate < curDateReal
+            '0 ==> curDate = curDateReal
+            '1 ==> curDate > curDateReal
+            Ret = CompareFileTime(varDates(2), curV)
+            
+            If Ret = 0 Then
+                If (tSOp = [ = ]) Or (tSOp = [ <= ]) Or (tSOp = [ >= ]) Then _
+                    GoTo DateLastModifiedIsOk
+            ElseIf Ret = 1 Then
+                If (tSOp = [ < ]) Or (tSOp = [ <= ]) Then _
+                    GoTo DateLastModifiedIsOk
+            Else
+                If (tSOp = [ > ]) Or (tSOp = [ >= ]) Then _
+                    GoTo DateLastModifiedIsOk
+            End If
+        End If
+        
+        'si on est là, c'est que la comparaison n'est pas bonne
+        IsFileOk = False
+        Exit Function
+    End If
+
+DateLastModifiedIsOk:
+    
+    IsFileOk = True     'parcours du combattant terminé !
+    
+End Function
+
+'=======================================================
+'Renvoie True si le dossier correspond aux critères de recherche
+'=======================================================
+Private Function IsFolderOk(sFolder As String, tS As SearchDefinition) As Boolean
+Dim curSize As Currency
+Dim curV As Currency
+Dim dblSize As Long
+Dim tSOp As Operator
+Dim Ret As Long
+Dim sStr As String
+
+    'recherche par nom
+    If (tS.Criteria And SearchName) = SearchName Then
+        sStr = Me.GetFileName(sFolder)      'récupère le nom
+        If tS.RespectCase Then
+            If InStr(1, sStr, tS.SearchName) = 0 Then
+                'raté
+                IsFolderOk = False
+                Exit Function
+            End If
+        Else
+            If InStr(1, LCase$(sStr), LCase$(tS.SearchName)) = 0 Then
+                'raté
+                IsFolderOk = False
+                Exit Function
+            End If
+        End If
+    End If
+    
+    
+    'recherche par date de création
+    If (tS.Criteria And SearchDateCreated) = SearchDateCreated Then
+        
+        'recupère la date en currency
+        curV = Me.GetFolderDateAsCurrency(sFolder, DateCreated)
+        
+        tSOp = tS.DateCreatedOperator
+        
+        If curV Then
+            'compare avec la date à rechercher
+            '-1==> curDate < curDateReal
+            '0 ==> curDate = curDateReal
+            '1 ==> curDate > curDateReal
+            Ret = CompareFileTime(varDates(0), curV)
+            
+            If Ret = 0 Then
+                If (tSOp = [ = ]) Or (tSOp = [ <= ]) Or (tSOp = [ >= ]) Then _
+                    GoTo DateCreatedIsOk
+            ElseIf Ret = 1 Then
+                If (tSOp = [ < ]) Or (tSOp = [ <= ]) Then GoTo DateCreatedIsOk
+            Else
+                If (tSOp = [ > ]) Or (tSOp = [ >= ]) Then GoTo DateCreatedIsOk
+            End If
+        End If
+        
+        'si on est là, c'est que la comparaison n'est pas bonne
+        IsFolderOk = False
+        Exit Function
+    End If
+    
+DateCreatedIsOk:
+
+    If (tS.Criteria And SearchDateLastAccessed) = SearchDateLastAccessed Then
+        
+        'recupère la date en currency
+        curV = Me.GetFolderDateAsCurrency(sFolder, DateLastAccessed)
+        
+        tSOp = tS.DateCreatedOperator
+        
+        If curV Then
+            'compare avec la date à rechercher
+            '-1==> curDate < curDateReal
+            '0 ==> curDate = curDateReal
+            '1 ==> curDate > curDateReal
+            Ret = CompareFileTime(varDates(0), curV)
+            
+            If Ret = 0 Then
+                If (tSOp = [ = ]) Or (tSOp = [ <= ]) Or (tSOp = [ >= ]) Then _
+                    GoTo DateLastAccessedIsOk
+            ElseIf Ret = 1 Then
+                If (tSOp = [ < ]) Or (tSOp = [ <= ]) Then _
+                    GoTo DateLastAccessedIsOk
+            Else
+                If (tSOp = [ > ]) Or (tSOp = [ >= ]) Then _
+                    GoTo DateLastAccessedIsOk
+            End If
+        End If
+        
+        'si on est là, c'est que la comparaison n'est pas bonne
+        IsFolderOk = False
+        Exit Function
+    End If
+    
+DateLastAccessedIsOk:
+    
+    If (tS.Criteria And SearchDateLastModified) = SearchDateLastModified Then
+        
+        'recupère la date en currency
+        curV = Me.GetFolderDateAsCurrency(sFolder, DateLastModified)
+        
+        tSOp = tS.DateCreatedOperator
+        
+        If curV Then
+            'compare avec la date à rechercher
+            '-1==> curDate < curDateReal
+            '0 ==> curDate = curDateReal
+            '1 ==> curDate > curDateReal
+            Ret = CompareFileTime(varDates(0), curV)
+            
+            If Ret = 0 Then
+                If (tSOp = [ = ]) Or (tSOp = [ <= ]) Or (tSOp = [ >= ]) Then _
+                    GoTo DateLastModifiedIsOk
+            ElseIf Ret = 1 Then
+                If (tSOp = [ < ]) Or (tSOp = [ <= ]) Then _
+                    GoTo DateLastModifiedIsOk
+            Else
+                If (tSOp = [ > ]) Or (tSOp = [ >= ]) Then _
+                    GoTo DateLastModifiedIsOk
+            End If
+        End If
+        
+        'si on est là, c'est que la comparaison n'est pas bonne
+        IsFolderOk = False
+        Exit Function
+    End If
+
+DateLastModifiedIsOk:
+    
+    IsFolderOk = True     'parcours du combattant terminé !
+    
+End Function
+
+'=======================================================
+'Transforme une string (date) en currency
+'=======================================================
+Private Function DateString2Currency(ByVal sDate As String) As Currency
+Dim FT As FILETIME
+Dim d As Date
+Dim t As Date
+Dim ST As SYSTEMTIME
+    
+    If sDate = vbNullString Then Exit Function
+    
+    d = DateValue(sDate)
+    t = TimeValue(sDate)
+
+    'transfome déjà en systemtime
+    With ST
+        .wDay = Day(d)
+        .wMonth = Month(d)
+        .wYear = Year(d)
+        .wMinute = Minute(t)
+        .wHour = Hour(t)
+        .wSecond = Second(t)
+    End With
+    
+    'passe en filetime
+    Call SystemTimeToFileTime(ST, FT)
+    
+    'passe en heure locale
+    'Call FileTimeToLocalFileTime(FT, FT)
+    
+    'passe en currency
+    Call CopyMemory(DateString2Currency, FT, LenB(FT))
+        
+End Function

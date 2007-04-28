@@ -101,6 +101,7 @@ Public Property Get BytesPerSector() As Long: BytesPerSector = MyDisk.BytesPerSe
 Public Property Get TotalPhysicalSectors() As Currency: TotalPhysicalSectors = MyDisk.TotalPhysicalSectors: End Property
 Public Property Get strMediaType() As String: strMediaType = MyDisk.strMediaType: End Property
 Public Property Get DiskNumber() As Byte: DiskNumber = MyDisk.DiskNumber: End Property
+Attribute DiskNumber.VB_UserMemId = 0
 Public Property Get DiskName() As String: DiskName = Trim$(MyDisk.DiskName): End Property
 
 
@@ -121,7 +122,7 @@ Dim hDrive As Long
         GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0, 0)
 
     'récupère la géométrie du disque
-    tGeom = clsFile.GetPhysicalDiskGeometry_HANDLE(DiskNumber)
+    tGeom = clsFile.GetPhysicalDiskGeometry_HANDLE(hDrive)
 
     'récupère le nom du disque
     MyDisk.DiskName = clsFile.GetPhysicalDiskName_HANDLE(DiskNumber, Me.DiskNumber)
@@ -181,6 +182,16 @@ Dim bpsec As Long
         StartingSector, nBytes, bpsec, StringToWrite)
     
 End Function
+
+'=======================================================
+'Lance la sanitization... my god...
+'=======================================================
+Public Function Sanitize() As Long
+    Sanitize = clsFile.SanitizePhysicalDisk(Me.DiskNumber)
+End Function
+
+
+
 
 
 '=======================================================

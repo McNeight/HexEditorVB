@@ -318,7 +318,7 @@ Begin VB.Form frmFileSearch
             _Version        =   393216
             Enabled         =   0   'False
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63504387
+            Format          =   63569923
             CurrentDate     =   39133.9583333333
          End
       End
@@ -491,7 +491,7 @@ End Sub
 
 Private Sub cmdAdd_Click()
 Dim s As String
-    s = cFile.BrowseForFolder(Lang.GetString("_AddFolder"), Me.hWnd)    'browse un dossier
+    s = cFile.BrowseForFolder(Lang.GetString("_AddFolder"), Me.hwnd)    'browse un dossier
     
     If cFile.FolderExists(s) Then
         'alors ajoute le dossier à la liste des emplacements
@@ -672,13 +672,13 @@ End Sub
 Private Sub mnuFileProp_Click()
 'affiche les propriétés du fichier sélectionné
     If LVres.SelectedItem Is Nothing Then Exit Sub
-    cFile.ShowFileProperty LVres.SelectedItem.Text, Me.hWnd
+    cFile.ShowFileProperty LVres.SelectedItem.Text, Me.hwnd
 End Sub
 
 Private Sub mnuOpenFile_Click()
 'ouvre le fichier sélectionné
     If LVres.SelectedItem Is Nothing Then Exit Sub
-    cFile.ShellOpenFile LVres.SelectedItem.Text, Me.hWnd
+    cFile.ShellOpenFile LVres.SelectedItem.Text, Me.hwnd
 End Sub
 
 Private Sub mnuOpenFolder_Click()
@@ -928,7 +928,7 @@ NoNameToS:
     'on continue la recherche
     If chkSize.Value Then
         'alors on doit récupérer la taille du fichier
-        curSize = cFile.GetFileSizes(sFile).FileSize
+        curSize = cFile.GetFileSize(sFile)
         
         If cbOpSize.ListIndex = 2 Then
             '<

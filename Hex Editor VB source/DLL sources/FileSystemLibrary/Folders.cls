@@ -75,6 +75,7 @@ End Function
 '=======================================================
 Public Property Get Count() As Long: Count = colFiles.Count: End Property
 Public Property Get Item(Index As Long) As Folder: Set Item = colFiles(Index): End Property
+Attribute Item.VB_UserMemId = 0
 
 
 '=======================================================

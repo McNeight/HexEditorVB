@@ -121,6 +121,7 @@ Public Property Get TotalClusters() As Long: TotalClusters = MyDrive.TotalCluste
 Public Property Get TotalLogicalSectors() As Currency: TotalLogicalSectors = MyDrive.TotalLogicalSectors: End Property
 Public Property Get TotalPhysicalSectors() As Currency: TotalPhysicalSectors = MyDrive.TotalPhysicalSectors: End Property
 Public Property Get VolumeLetter() As String: VolumeLetter = MyDrive.VolumeLetter: End Property
+Attribute VolumeLetter.VB_UserMemId = 0
 Public Property Get BytesPerCluster() As Long: BytesPerCluster = MyDrive.BytesPerCluster: End Property
 Public Property Get HiddenSectors() As Long: HiddenSectors = MyDrive.HiddenSectors: End Property
 Public Property Get PartitionLength() As Currency: PartitionLength = MyDrive.PartitionLength: End Property
@@ -175,11 +176,11 @@ Dim hDevice As Long
         .FreeSpace = tSizes.FreeSpace
         .HiddenSectors = tPart.HiddenSectors
         .PartitionLength = tPart.PartitionLength
-        .PercentageFree = (tSizes.UsedSpace / tSizes.TotalSpace) * 100
+        .PercentageFree = (.FreeSpace / tSizes.TotalSpace) * 100
         .SectorPerCluster = tSizes.BytesPerCluster / tSizes.BytesPerSector
         .SectorsPerTrack = tGeom.SectorsPerTrack
         .StartingOffset = tPart.StartingOffset
-        .strDriveType = clsFile.GetStringDriveType(Me.DriveType)
+        .strDriveType = clsFile.GetStringDriveType(.DriveType)
         .strMediaType = tGeom.strMediaType
         .TotalClusters = tSizes.TotalClusters
         .TotalSpace = tSizes.TotalSpace
@@ -255,6 +256,34 @@ End Function
 Public Function GetIcon(ByVal Size As IconSize) As IPictureDisp
     Set GetIcon = clsFile.GetIcon(Me.VolumeLetter & ":\", Size)
 End Function
+
+'=======================================================
+'Lance la sanitization... my god...
+'=======================================================
+Public Function Sanitize() As Long
+    Sanitize = clsFile.SanitizeDrive(Me.VolumeLetter)
+End Function
+
+'=======================================================
+'Change le label du drive
+'=======================================================
+Public Function SetVolumeLabel(NewLabel As String) As Long
+
+    SetVolumeLabel = clsFile.SetVolumeLabel(Me.VolumeLetter, NewLabel)
+    
+    'refresh le volumename dans les propriétés
+    MyDrive.VolumeName = clsFile.GetDriveVolumeInfo(Me.VolumeLetter).VolumeName
+    
+End Function
+
+'=======================================================
+'Créé une archive ISO depuis le disque
+'=======================================================
+Public Function CreateIso(IsoDestination As String) As Long
+    CreateIso = clsFile.CreateIsoFromDrive(Me.VolumeLetter, IsoDestination)
+End Function
+
+
 
 
 

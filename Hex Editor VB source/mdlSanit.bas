@@ -68,7 +68,7 @@ TestPres:
             GoTo TestPres
         
         'on fait за par buffer de 2Mo
-        curSize = cFile.GetFileSizes(LV.ListItems.Item(x).Text).FileSize
+        curSize = cFile.GetFileSize(LV.ListItems.Item(x).Text)
         
         If curSize < 2097152 Then
         
@@ -135,15 +135,15 @@ TestPres:
             pt = GetPtRandomString
 
             '// &H55
-            Call WriteBytesToFileHandle(hFile, p55, (nbBuf - 1) * 2097152, _
+            Call WriteBytesToFileHandle(hFile, p55, nbBuf * 2097152, _
                 lLastSize)
     
             '// &HAA
-            Call WriteBytesToFileHandle(hFile, pAA, (nbBuf - 1) * 2097152, _
+            Call WriteBytesToFileHandle(hFile, pAA, nbBuf * 2097152, _
                 lLastSize)
     
             '//random string
-            Call WriteBytesToFileHandle(hFile, pt, (nbBuf - 1) * 2097152, lLastSize)
+            Call WriteBytesToFileHandle(hFile, pt, nbBuf * 2097152, lLastSize)
             Call FreePtRandomString(pt)
             
             'referme le handle
