@@ -105,6 +105,7 @@ Public Property Get Drive() As Drive
     Set Drive = clsFile.GetDrive(Left$(Me.Path, 1))
 End Property
 Public Property Get Path() As String: Path = MyFolder.Path: End Property
+Attribute Path.VB_UserMemId = 0
 Public Property Get Attributes() As FileAttributes: Attributes = MyFolder.Attributes: End Property
 Public Property Get DateCreated() As String: DateCreated = MyFolder.DateCreated: End Property
 Public Property Get DateLastModified() As String: DateLastModified = MyFolder.DateLastModified: End Property
@@ -280,6 +281,16 @@ Public Function Decrypt() As Long
     Decrypt = clsFile.DecryptFolder(Me.Path)
 End Function
 
+'=======================================================
+'Affecte des dates au dossier
+'=======================================================
+Public Function SetDates(Optional ByVal DateCreated As _
+    String = vbNullString, Optional ByVal DateLastAccess As String = vbNullString, _
+    Optional ByVal DateLastModification As String = vbNullString) As Long
+    
+    SetDates = clsFile.SetFolderDates(Me.Path, DateCreated, DateLastAccess, _
+        DateLastModification)
+End Function
 
 
 
@@ -296,5 +307,3 @@ Private Sub Class_Terminate()
     'libère la classe clsFile
     Set clsFile = Nothing
 End Sub
-
-

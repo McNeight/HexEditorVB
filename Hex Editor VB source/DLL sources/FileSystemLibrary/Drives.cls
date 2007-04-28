@@ -75,6 +75,7 @@ End Function
 '=======================================================
 Public Property Get Count() As Long: Count = colDrives.Count: End Property
 Public Property Get Item(Index As Long) As Drive: Set Item = colDrives(Index): End Property
+Attribute Item.VB_UserMemId = 0
 
 
 '=======================================================

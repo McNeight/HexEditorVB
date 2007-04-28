@@ -379,7 +379,7 @@ Dim lngFile As Long
     BG.ClearValues
     
     'prépare la progressbar
-    lngLen = cFile.GetFileSizes(sFile).FileSize
+    lngLen = cFile.GetFileSize(sFile)
     PGB.Min = 0: PGB.Max = lngLen: PGB.Value = 0
     
     'obtient le handle du fichier
@@ -520,7 +520,7 @@ Dim s2 As String
     Next x
     
     'sauvegarde le fichier
-    cFile.SaveDATAinFile s, Left$(s2, Len(s2) - 2), True
+    cFile.SaveDataInFile s, Left$(s2, Len(s2) - 2), True
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_StatSaved"))

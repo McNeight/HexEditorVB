@@ -402,23 +402,23 @@ Option Explicit
 
 Private Sub cmdBrowseGroupFile_Click()
 'sélection du dossier (groupeur à sauvegarder)
-    txtFolderResult.Text = cFile.BrowseForFolder(Lang.GetString("_SelectFolder"), Me.hWnd)
+    txtFolderResult.Text = cFile.BrowseForFolder(Lang.GetString("_SelectFolder"), Me.hwnd)
 End Sub
 
 Private Sub cmdBrowseGrupFIle_Click()
 'sélection du fichier groupe
-    txtGrFile.Text = cFile.ShowOpen(Lang.GetString("_GrupFileSel"), Me.hWnd, Lang.GetString("_GrupFile") & "|*.grp")
+    txtGrFile.Text = cFile.ShowOpen(Lang.GetString("_GrupFileSel"), Me.hwnd, Lang.GetString("_GrupFile") & "|*.grp")
     If txtFolderFus.Text = vbNullString Then txtFolderFus.Text = cFile.getfoldername(txtGrFile.Text)
 End Sub
 
 Private Sub cmdBrowsePaste_Click()
 'sélection du dossier du fichier fusionné
-    txtFolderFus.Text = cFile.BrowseForFolder(Lang.GetString("_FusionPathSel"), Me.hWnd)
+    txtFolderFus.Text = cFile.BrowseForFolder(Lang.GetString("_FusionPathSel"), Me.hwnd)
 End Sub
 
 Private Sub cmdBrowseToCut_Click()
 'sélection du fichier à découper
-    txtFileToCut.Text = cFile.ShowOpen(Lang.GetString("_FileToCutSel"), Me.hWnd, "Tous|*.*", App.Path)
+    txtFileToCut.Text = cFile.ShowOpen(Lang.GetString("_FileToCutSel"), Me.hwnd, "Tous|*.*", App.Path)
 End Sub
 
 Private Sub cmdProceed_Click()
@@ -479,7 +479,7 @@ Dim lTime As Long
             'nombre
         
             'calcule la taille de chaque fichier
-            lLen = Int(cFile.GetFileSizes(txtFileToCut.Text).FileSize / Val(txtNumberOfFiles.Text))
+            lLen = Int(cFile.GetFileSize(txtFileToCut.Text) / Val(txtNumberOfFiles.Text))
             
             If lLen > 2147483648# Then
                 'alors fichiers trop grands

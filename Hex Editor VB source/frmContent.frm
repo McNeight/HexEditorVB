@@ -41,7 +41,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -68,7 +67,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -559,7 +557,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "16:05"
+            TextSave        =   "00:24"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -567,7 +565,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "26/04/2007"
+            TextSave        =   "29/04/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1546,8 +1544,8 @@ Dim x As Long
     For x = 1 To UBound(sLang())
         'ajoute une entrée au menu
         Load Me.mnuLang(x)
-        Me.mnuLang(x).Caption = Left$(cFile.getfilename(sLang(x)), _
-            Len(cFile.getfilename(sLang(x))) - 4)
+        Me.mnuLang(x).Caption = Left$(cFile.GetFileName(sLang(x)), _
+            Len(cFile.GetFileName(sLang(x))) - 4)
     Next x
     
     'coche le bon menu
@@ -1602,7 +1600,7 @@ Dim x As Long
     
     'ajoute les icones aux menus
     frmSplash.lblState.Caption = Lang.GetString("_AddIconsMenus")
-    Call AddIconsToMenus(Me.hWnd, Me.ImageList2)
+    Call AddIconsToMenus(Me.hwnd, Me.ImageList2)
         
     lNbChildFrm = 0
     
@@ -1705,7 +1703,7 @@ Dim Frm As Form
     For Each Frm In Forms
         If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) _
             Or (TypeOf Frm Is physPfm) Then
-            SendMessage Frm.hWnd, WM_CLOSE, 0, 0
+            SendMessage Frm.hwnd, WM_CLOSE, 0, 0
         End If
     Next Frm
     
@@ -1765,7 +1763,7 @@ End Sub
 
 Private Sub mnuDisAsm_Click()
 'lance Disassembler.exe
-    cFile.ShellOpenFile App.Path & "\Disassembler.exe", Me.hWnd, , App.Path
+    cFile.ShellOpenFile App.Path & "\Disassembler.exe", Me.hwnd, , App.Path
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_DisASMLau"))
@@ -1846,7 +1844,7 @@ End Sub
 
 Private Sub mnuLangEditor_Click()
 'lance Disassembler.exe
-    cFile.ShellOpenFile App.Path & "\LangEditor.exe", Me.hWnd, , App.Path
+    cFile.ShellOpenFile App.Path & "\LangEditor.exe", Me.hwnd, , App.Path
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_LangEditorLau"))
@@ -2000,12 +1998,12 @@ Private Sub MDIForm_Unload(Cancel As Integer)
     
     Set clsPref = Nothing
     
-    Call UnHookPictureResizement(Me.pctConsole.hWnd, 1)
-    Call UnHookPictureResizement(Me.pctExplorer.hWnd)
+    Call UnHookPictureResizement(Me.pctConsole.hwnd, 1)
+    Call UnHookPictureResizement(Me.pctExplorer.hwnd)
     
     #If USE_FRMC_SUBCLASSING Then
         'enlève le hook de la form
-        Call cSub.UnHookFormMenu(Me.hWnd)
+        Call cSub.UnHookFormMenu(Me.hwnd)
         Set cSub = Nothing
     #End If
         
@@ -2595,7 +2593,7 @@ End Sub
 Private Sub mnuFileRenamer_Click()
 
     'lance FileRenamer.exe
-    cFile.ShellOpenFile App.Path & "\FileRenamer.exe", Me.hWnd, , App.Path
+    cFile.ShellOpenFile App.Path & "\FileRenamer.exe", Me.hwnd, , App.Path
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_FileRenamerLau"))
@@ -2609,12 +2607,12 @@ End Sub
 
 Private Sub mnuFreeForum_Click()
 'forum de discussion
-    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654034", Me.hWnd, , App.Path
+    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654034", Me.hwnd, , App.Path
 End Sub
 
 Private Sub mnuHelpForum_Click()
 'forum de demande d'aide
-    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654035", Me.hWnd, , App.Path
+    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654035", Me.hwnd, , App.Path
 End Sub
 
 Private Sub mnuHome_Click()
@@ -2728,7 +2726,7 @@ Dim sExt As String
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_CreaTempCour"))
     
-    ExecuteTempFile Me.hWnd, Me.ActiveForm, sExt
+    ExecuteTempFile Me.hwnd, Me.ActiveForm, sExt
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_CreaTempOk"))
@@ -2922,7 +2920,7 @@ End Sub
 
 Private Sub mnuNewProcess_Click()
 'invite à demarrer un nouveau processus
-    ShowRunBox Me.hWnd
+    ShowRunBox Me.hwnd
 End Sub
 
 Private Sub mnuOpen_Click()
@@ -2933,7 +2931,7 @@ Dim x As Long
 Dim Frm As Form
     
     ReDim s(0)
-    s2 = cFile.ShowOpen(Lang.GetString("_SelFileToOpen"), Me.hWnd, _
+    s2 = cFile.ShowOpen(Lang.GetString("_SelFileToOpen"), Me.hwnd, _
         Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
         OFN_ALLOWMULTISELECT, s())
     
@@ -2978,7 +2976,7 @@ Dim Frm As Form
 Dim x As Long
 
     'sélectionne un répertoire
-    sDir = cFile.BrowseForFolder(Lang.GetString("_SelADir"), Me.hWnd)
+    sDir = cFile.BrowseForFolder(Lang.GetString("_SelADir"), Me.hwnd)
     
     'teste la validité du répertoire
     If cFile.FolderExists(sDir) = False Then Exit Sub
@@ -3016,7 +3014,7 @@ On Error Resume Next
         MsgBox Lang.GetString("_FileAbsent"), vbInformation, Lang.GetString("_CanNotOpen")
     End If
     
-    If cFile.GetFileSizes(Me.ActiveForm.Caption).FileSize > 1000000 Then
+    If cFile.GetFileSize(Me.ActiveForm.Caption) > 1000000 Then
         'fichier de plus de 700Ko
         x = MsgBox(Lang.GetString("_FileMakeMoreThan") & vbNewLine & Lang.GetString("_ShoudNotBN"), vbInformation + vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
@@ -3048,7 +3046,7 @@ Dim x As Long
     LV.GetSelectedItems sFile
     
     For x = 1 To UBound(sFile)
-        cFile.ShellOpenFile sFile(x).Tag, Me.hWnd
+        cFile.ShellOpenFile sFile(x).Tag, Me.hwnd
     Next x
     
 End Sub
@@ -3312,7 +3310,7 @@ End Sub
 
 Public Sub mnuSourceForge_Click()
 'page source forge
-    cFile.ShellOpenFile "http://sourceforge.net/projects/hexeditorvb/", Me.hWnd, , App.Path
+    cFile.ShellOpenFile "http://sourceforge.net/projects/hexeditorvb/", Me.hwnd, , App.Path
 End Sub
 
 Public Sub mnuStats_Click()
@@ -3412,7 +3410,7 @@ Dim x As Long
     End If
     
     'efface le précédent fichier
-    cFile.deletefile sPath
+    cFile.DeleteFile sPath
     
     'créé le fichier
     Call Me.ActiveForm.GetNewFile(sPath)
@@ -3442,7 +3440,7 @@ End Sub
 
 Public Sub mnuVbfrance_Click()
 'vbfrance.com
-    cFile.ShellOpenFile "http://www.vbfrance.com/auteurdetail.aspx?ID=523601&print=1", Me.hWnd, , App.Path
+    cFile.ShellOpenFile "http://www.vbfrance.com/auteurdetail.aspx?ID=523601&print=1", Me.hwnd, , App.Path
 End Sub
 
 Private Sub muUp_Click()

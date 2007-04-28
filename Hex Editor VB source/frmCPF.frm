@@ -394,8 +394,8 @@ Dim curByteOld As Currency
     Next x
     
     'prépare la progressbar
-    lLength1 = cFile.GetFileSizes(txtFile1.Text).FileSize: lLength2 = cFile.GetFileSizes(txtFile2.Text).FileSize
-    PGB.Min = 0: PGB.Max = lLength1 + lLength2: PGB.Value = 0
+    lLength1 = cFile.GetFileSize(txtFile1.Text): lLength2 = cFile.GetFileSize(txtFile2.Text)
+    pgb.Min = 0: pgb.Max = lLength1 + lLength2: pgb.Value = 0
     x = 0
     
     'obtient le handle du fichier
@@ -435,7 +435,7 @@ Dim curByteOld As Currency
         If (x Mod 10) = 0 Then
             'rend la main
             DoEvents
-            PGB.Value = curByte
+            pgb.Value = curByte
         End If
         
         curByte = curByte + 51200
@@ -486,7 +486,7 @@ Dim curByteOld As Currency
         If (x Mod 10) = 0 Then
             'rend la main
             DoEvents
-            PGB.Value = curByte + curByteOld
+            pgb.Value = curByte + curByteOld
         End If
         
         curByte = curByte + 51200
@@ -495,7 +495,7 @@ Dim curByteOld As Currency
     
     CloseHandle lngFile
     
-    PGB.Value = PGB.Max
+    pgb.Value = pgb.Max
     DisplayResults   'affiche les résultats
 
     Exit Sub

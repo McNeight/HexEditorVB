@@ -75,6 +75,7 @@ End Function
 '=======================================================
 Public Property Get Count() As Long: Count = colDisks.Count: End Property
 Public Property Get Item(Index As Integer) As PhysicalDisk: Set Item = colDisks(Index): End Property
+Attribute Item.VB_UserMemId = 0
 
 
 '=======================================================

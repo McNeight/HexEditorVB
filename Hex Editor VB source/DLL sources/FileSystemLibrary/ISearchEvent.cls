@@ -6,9 +6,9 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "clsDef"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
+Attribute VB_Name = "ISearchEvent"
+Attribute VB_GlobalNameSpace = True
+Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 ' =======================================================
@@ -45,8 +45,13 @@ Attribute VB_Exposed = True
 Option Explicit
 
 
-
 '=======================================================
-'ENUMS PUBLICS
+'Méthodes de l'interface
 '=======================================================
+Public Sub ItemFound(Item As String)
+'
+End Sub
 
+Public Sub SearchIsFinished()
+'
+End Sub
