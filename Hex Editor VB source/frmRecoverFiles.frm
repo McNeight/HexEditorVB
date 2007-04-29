@@ -44,7 +44,6 @@ Begin VB.Form frmRecoverFiles
          Top             =   120
          Width           =   6735
          Begin VB.CommandButton cmdRestoreValidFile 
-            Caption         =   "Restaurer le fichier sélectionné..."
             Height          =   375
             Left            =   1320
             TabIndex        =   8
@@ -210,28 +209,32 @@ End Sub
 
 Private Sub Form_Load()
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
-    
-    Me.Width = 7275
-    Me.Height = 5715
+    With Me
+        .Width = 7275
+        .Height = 5715
+    End With
     
     'path par défaut
     LV.Path = Left$(App.Path, 3)
@@ -253,7 +256,7 @@ Private Sub LV_PathChange(sOldPath As String, sNewPath As String)
 End Sub
 
 Private Sub pctPath_Change()
-    If cFile.FolderExists(cFile.getfoldername(pctPath.Text & "\")) = False Then
+    If cFile.FolderExists(cFile.GetFolderName(pctPath.Text & "\")) = False Then
         'couleur rouge
         pctPath.ForeColor = RED_COLOR
     Else

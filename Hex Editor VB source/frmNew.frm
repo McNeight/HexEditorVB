@@ -26,20 +26,16 @@ Begin VB.Form frmNew
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdNo 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   1470
       TabIndex        =   3
-      ToolTipText     =   "Fermer cette fenêtre"
       Top             =   1200
       Width           =   975
    End
    Begin VB.CommandButton cmdOK 
-      Caption         =   "Créer"
       Height          =   375
       Left            =   270
       TabIndex        =   2
-      ToolTipText     =   "Créer le fichier (emplacement dans les fichiers temporaires)"
       Top             =   1200
       Width           =   975
    End
@@ -47,11 +43,10 @@ Begin VB.Form frmNew
       Height          =   315
       ItemData        =   "frmNew.frx":058A
       Left            =   1200
-      List            =   "frmNew.frx":059A
+      List            =   "frmNew.frx":058C
       Style           =   2  'Dropdown List
       TabIndex        =   1
       Tag             =   "pref lang_ok"
-      ToolTipText     =   "Unité"
       Top             =   720
       Width           =   1335
    End
@@ -62,8 +57,6 @@ Begin VB.Form frmNew
       Left            =   120
       TabIndex        =   0
       Tag             =   "pref"
-      Text            =   "100"
-      ToolTipText     =   "Taille"
       Top             =   720
       Width           =   975
    End
@@ -152,9 +145,11 @@ Dim s As String
     End If
     
     lLen = Abs(Val(txtSize.Text))
-    If cdUnit.Text = Lang.GetString("_Ko") Then lLen = lLen * 1024
-    If cdUnit.Text = Lang.GetString("_Mo") Then lLen = (lLen * 1024) * 1024
-    If cdUnit.Text = Lang.GetString("_Go") Then lLen = ((lLen * 1024) * 1024) * 1024
+    With Lang
+        If cdUnit.Text = .GetString("_Ko") Then lLen = lLen * 1024
+        If cdUnit.Text = .GetString("_Mo") Then lLen = (lLen * 1024) * 1024
+        If cdUnit.Text = .GetString("_Go") Then lLen = ((lLen * 1024) * 1024) * 1024
+    End With
     
     lLen = Int(lLen)
     
@@ -164,7 +159,7 @@ Dim s As String
     Call AddTextToConsole(Lang.GetString("_CreateNewFile"))
         
     'obtient un path temporaire
-    ObtainTempPathFile "new" & CStr(lNbChildFrm), sFile, vbNullString
+    Call ObtainTempPathFile("new" & CStr(lNbChildFrm), sFile, vbNullString)
     
     'créé le fichier
     
@@ -189,34 +184,36 @@ Private Sub Form_Load()
 
     Set clsPref = New clsIniForm
     
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     'loading des preferences
-    clsPref.GetFormSettings App.Path & "\Preferences\NewFile.ini", Me
+    Call clsPref.GetFormSettings(App.Path & "\Preferences\NewFile.ini", Me)
 
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
-    clsPref.SaveFormSettings App.Path & "\Preferences\NewFile.ini", Me
+    Call clsPref.SaveFormSettings(App.Path & "\Preferences\NewFile.ini", Me)
     Set clsPref = Nothing
 End Sub
 

@@ -153,7 +153,7 @@ Dim sPref As String
             s2 = GetHelp(s)
             If s2 = vbNullString Then s2 = "Aide non supportée"
         ElseIf s = "about" Then frmAbout.Show vbModal: s2 = "Fenêtre d'A propos affichée"
-        ElseIf s = "start" Then frmHome.Show: PremierPlan frmHome, MettreAuPremierPlan: s2 = "Fenêtre de démarrage de tâche affichée"
+        ElseIf s = "start" Then frmHome.Show: Call SetFormForeBackGround(frmHome, SetFormForeGround): s2 = "Fenêtre de démarrage de tâche affichée"
         ElseIf s = "quit" Then frmContent.mnuExit_Click: s2 = "Quitte le programme..."
         ElseIf s = "property" Then frmPropertyShow.Show: s2 = "Fenêtre de propriétés affichée"
         ElseIf s = "print" Then frmPrint.Show vbModal: s2 = "Fenêtre d'impression affichée"

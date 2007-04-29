@@ -51,16 +51,13 @@ Begin VB.Form frmISO
       FrontPicture    =   "frmISO.frx":0028
    End
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   3360
       TabIndex        =   5
-      ToolTipText     =   "Ferme cette fenêtre"
       Top             =   2760
       Width           =   855
    End
    Begin VB.Frame Frame1 
-      Caption         =   "Fichier ISO résultant"
       Height          =   615
       Left            =   120
       TabIndex        =   1
@@ -85,23 +82,19 @@ Begin VB.Form frmISO
             Width           =   2295
          End
          Begin VB.CommandButton cmdBrowse 
-            Caption         =   "..."
             Height          =   255
             Left            =   2520
             TabIndex        =   3
-            ToolTipText     =   "Sélectionne un fichier résultant"
             Top             =   0
             Width           =   375
          End
       End
    End
    Begin VB.CommandButton cmdGO 
-      Caption         =   "GO"
       Enabled         =   0   'False
       Height          =   495
       Left            =   3600
       TabIndex        =   0
-      ToolTipText     =   "Démarre la création du fichier ISO"
       Top             =   2160
       Width           =   615
    End
@@ -209,9 +202,11 @@ Dim hDisk As Long
     cmdGO.Enabled = False
     cmdQuit.Enabled = False
     
-    PGB.Max = tDrive.TotalPhysicalSectors - 1
-    PGB.Min = 0
-    PGB.Value = 0
+    With PGB
+        .Max = tDrive.TotalPhysicalSectors - 1
+        .Min = 0
+        .Value = 0
+    End With
     
     'créé un fichier vide
     Call cFile.CreateEmptyFile(sFile, True)
@@ -253,8 +248,8 @@ Dim hDisk As Long
     Call AddTextToConsole(Lang.GetString("_ISOEnd"))
 
     'referme les handles
-    CloseHandle lFile
-    CloseHandle hDisk
+    Call CloseHandle(lFile)
+    Call CloseHandle(hDisk)
 
 End Sub
 
@@ -290,25 +285,28 @@ Private Sub Form_Load()
 'loading des preferences
     Set clsPref = New clsIniForm
         
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+        
+        DV.LogicalDrivesString = .GetString("_LogicalString")
     
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
-    
-    DV.LogicalDrivesString = Lang.GetString("_LogicalString")
+    End With
 End Sub

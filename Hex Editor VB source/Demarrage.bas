@@ -49,11 +49,10 @@ Public TempFiles() As String    'contient tout les fichiers temporaires
 Public JailedProcess() As ProcessItem   'contient la liste de tous les processus bloqués
 Public bAcceptBackup As Boolean 'variable qui détermine si la création d'un backup a été acceptée
 Public clsERREUR As clsGetionErreur
-Public cFile As filesystemlibrary.FileSystem
+Public cFile As FileSystemLibrary.FileSystem
 Public cMem As clsMemoryRW
 Public clsConv As clsConvert
 Public cProc As clsProcess
-Public cDisk As clsDiskInfos
 Public clsPref As clsIniFile
 Public cPref As clsIniPref
 Public lNbChildFrm As Long
@@ -130,9 +129,8 @@ Dim s As String
         
     
     '//instancie les classes
-        Set cFile = New filesystemlibrary.FileSystem
+        Set cFile = New FileSystemLibrary.FileSystem
         Set cMem = New clsMemoryRW
-        Set cDisk = New clsDiskInfos
         Set clsPref = New clsIniFile
         Set cPref = New clsIniPref
         Set cProc = New clsProcess
@@ -396,7 +394,6 @@ Dim x As Long
         Set clsERREUR = Nothing
         Set cFile = Nothing
         Set cMem = Nothing
-        Set cDisk = Nothing
         Set cProc = Nothing
         Set clsConv = Nothing
     
@@ -459,7 +456,7 @@ Dim lTo As Currency
                     MsgBox .GetString("_TheDisk") & " " & s3 & " " & .GetString("_DoesNotEx"), vbCritical, .GetString("_Error")
                     Exit Sub
                 End If
-                If cDisk.IsLogicalDriveAccessible(s3) = False Then
+                If cFile.IsDriveAvailable(Left$(s3, 1)) = False Then
                     'disque inaccessible
                     MsgBox .GetString("_TheDisk") & " " & s3 & " " & .GetString("_IsNotAccessibl"), vbCritical, .GetString("_Error")
                     Exit Sub
@@ -477,7 +474,7 @@ Dim lTo As Currency
                 Call Frm.GetFile(s3)
             Case "Ph"
                 'disque physique
-                If cDisk.IsPhysicalDriveAccessible(Val(s3)) = False Then
+                If cFile.IsPhysicalDiskAvailable(Val(s3)) = False Then
                     'disque inaccessible
                     MsgBox .GetString("_TheDisk") & " " & s3 & " " & .GetString("_NotAccessOrInex"), vbCritical, .GetString("_Error")
                     Exit Sub

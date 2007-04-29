@@ -5,7 +5,6 @@ Begin VB.Form frmTable
    AutoRedraw      =   -1  'True
    BackColor       =   &H00FFFFFF&
    BorderStyle     =   1  'Fixed Single
-   Caption         =   "Table"
    ClientHeight    =   4125
    ClientLeft      =   -72960
    ClientTop       =   360
@@ -159,47 +158,54 @@ Dim y As Long
     
     If Not (tType = AllTables) Then
         'prépare l'affichage des règles en ordonnée / ascisse
-        Me.Width = 4140
-        Me.Height = 4500
-        LV.Width = 4100
-        LV.Height = 4500
-        LV.Left = 20
-        LV.Visible = False
-        LV.Top = 25
+        With LV
+            .Width = 4100
+            .Height = 4500
+            .Left = 20
+            .Visible = False
+            .Top = 25
+        End With
+        With Me
+            .Width = 4140
+            .Height = 4500
+            .CurrentX = 0
+            .CurrentY = 0
+            .ForeColor = 16737380
+            .BackColor = vbWhite
+            For x = 0 To 15
+                .CurrentY = 240 + 240 * x
+                .CurrentX = 0
+                Me.Print Hex$(x) & "0"
+                .CurrentX = 360 + 230 * x
+                .CurrentY = 0
+                Me.Print Hex$(x)
+            Next x
         
-        Me.CurrentX = 0
-        Me.CurrentY = 0
-        Me.ForeColor = 16737380
-        Me.BackColor = vbWhite
-        For x = 0 To 15
-            Me.CurrentY = 240 + 240 * x
-            Me.CurrentX = 0
-            Me.Print Hex$(x) & "0"
-            Me.CurrentX = 360 + 230 * x
-            Me.CurrentY = 0
-            Me.Print Hex$(x)
-        Next x
-        
-        'affichage des valeurs
-        Me.ForeColor = vbBlack
-        For x = 0 To 15
-            For y = 0 To 15
-                Me.CurrentX = 360 + 230 * x
-                Me.CurrentY = 240 + 240 * y
-                Me.Print Chr$(Val(16 * y + x))
-            Next y
-        Next x
+            'affichage des valeurs
+            .ForeColor = vbBlack
+            For x = 0 To 15
+                For y = 0 To 15
+                    .CurrentX = 360 + 230 * x
+                    .CurrentY = 240 + 240 * y
+                    Me.Print Chr$(Val(16 * y + x))
+                Next y
+            Next x
+        End With
         
     Else
         'alors on remplit et affiche le listview
         
-        Me.Cls
-        Me.Width = 7050
-        Me.Height = 7000
-        LV.Width = 6900
-        LV.Height = 6600
-        LV.Left = 38
-        LV.Top = 15
+        With Me
+            .Cls
+            .Width = 7050
+            .Height = 7000
+        End With
+        With LV
+            .Width = 6900
+            .Height = 6600
+            .Left = 38
+            .Top = 15
+        End With
         
         With LV
             For x = 1 To 256
@@ -224,30 +230,33 @@ End Sub
 
 Private Sub Form_Activate()
     'mise au premier plan
-    PremierPlan Me, MettreAuPremierPlan
+    Call SetFormForeBackGround(Me, SetFormForeGround)
     Me.Visible = True
 End Sub
 
 Private Sub Form_Load()
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
+
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                Lang.Language = "French"
+                Lang.LangFolder = LANG_PATH
+                Lang.WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
             Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+        Else
+            Lang.LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        Lang.Language = cPref.env_Lang
+        Lang.LoadControlsCaption
+    End With
 End Sub
 
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -266,9 +275,9 @@ Private Sub mnuZOrder_Click()
     Me.mnuZOrder.Checked = Not (Me.mnuZOrder.Checked)
     If Me.mnuZOrder.Checked Then
         'affichage au premier plan
-        PremierPlan Me, MettreAuPremierPlan
+        Call SetFormForeBackGround(Me, SetFormForeGround)
     Else
         'pas au premier plan
-        PremierPlan Me, MettreNormal
+        Call SetFormForeBackGround(Me, SetFormBackGround)
     End If
 End Sub

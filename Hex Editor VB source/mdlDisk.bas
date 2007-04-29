@@ -132,6 +132,41 @@ dskerror:
 End Sub
 
 '=======================================================
+'permet de lire des bytes directement dans le disque
+'=======================================================
+Public Sub DirectReadHandle(ByVal hDevice As Long, ByVal iStartSec As Currency, _
+    ByVal nBytes As Long, ByVal lBytesPerSector As Long, _
+    ByRef ReadOctet() As Byte)
+    
+' Attention le nombre d'octets lus ou écrits ainsi que l'offset du premier octet lu ou écrit
+' doivent impérativement être un multiple de la taille d'un secteur de disque
+' Istartsec et nbytes doivent être des multiples de 512 ( taille standard des secteurs des disques)
+Dim BytesRead As Long
+Dim Pointeur As Currency
+Dim Ret As Long
+Dim lLowPart As Long
+Dim lHighPart As Long
+   
+    'détermine le byte de départ du secteur
+    Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
+    
+    'transforme un currency en 2 long pour une structure LARGE_INTEGER
+    Call GetLargeInteger(Pointeur, lLowPart, lHighPart)
+
+    'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
+    'byte que l'on veut lire (donné par deux long)
+    Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
+    If Ret = INVALID_HANDLE_VALUE Then Exit Sub
+           
+    'redimensionne le tableaux résultant
+    ReDim ReadOctet(0 To nBytes - 1) 'contient les nBytes lus, de 0 à Ubound-1
+    
+    'appelle l'API de lecture
+    Ret = ReadFile(hDevice, ReadOctet(0), nBytes, BytesRead, 0&)
+
+End Sub
+
+'=======================================================
 'permet de lire des bytes directement dans le disque PHYSIQUE
 '=======================================================
 Public Sub DirectReadPhys(ByVal bytDrive As Byte, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef ReadOctet() As Byte)
@@ -330,6 +365,17 @@ Public Function GetDiskHandleWrite(ByVal sDrive As String) As Long
 
     'ouvre le drive
     GetDiskHandleWrite = CreateFile(sDrive, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+End Function
+
+'=======================================================
+'récupère un handle de disque valide pour l'écriture
+'=======================================================
+Public Function GetPhysicalDiskHandleWrite(ByVal DiskNumber As Byte) As Long
+
+    'ouvre le drive
+    GetPhysicalDiskHandleWrite = CreateFile("\\.\PHYSICALDRIVE" & _
+        CStr(DiskNumber), GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, _
+        0&, OPEN_EXISTING, 0&, 0&)
 End Function
 
 '=======================================================

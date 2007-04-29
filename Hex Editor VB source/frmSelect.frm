@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmSelect 
    BorderStyle     =   3  'Fixed Dialog
-   Caption         =   "     Sélectionner une zone"
+   Caption         =   "Sélectionner une zone"
    ClientHeight    =   1425
    ClientLeft      =   45
    ClientTop       =   360
@@ -26,20 +26,16 @@ Begin VB.Form frmSelect
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   1485
       TabIndex        =   3
-      ToolTipText     =   "Fermer cette fenêtre"
       Top             =   960
       Width           =   1095
    End
    Begin VB.CommandButton cmdOK 
-      Caption         =   "Sélectionner"
       Height          =   375
       Left            =   165
       TabIndex        =   2
-      ToolTipText     =   "Procéder à la restriction"
       Top             =   960
       Width           =   1095
    End
@@ -48,7 +44,6 @@ Begin VB.Form frmSelect
       Height          =   285
       Left            =   1560
       TabIndex        =   1
-      ToolTipText     =   "Offset supérieur"
       Top             =   480
       Width           =   1095
    End
@@ -57,7 +52,6 @@ Begin VB.Form frmSelect
       Height          =   285
       Left            =   1560
       TabIndex        =   0
-      ToolTipText     =   "Offset inférieur"
       Top             =   120
       Width           =   1095
    End
@@ -152,21 +146,27 @@ Dim x As Currency
     If byteFunc = 0 Then    'il s'agit d'une sélection paramétrée
 
         'vérifie que la plage est OK
-        If lFrom < frmContent.ActiveForm.HW.FirstOffset Or lTo > frmContent.ActiveForm.HW.MaxOffset Then
+        If lFrom < frmContent.ActiveForm.HW.FirstOffset Or lTo > _
+            frmContent.ActiveForm.HW.MaxOffset Then
             Unload Me
             Exit Sub
         End If
-        If lFrom > frmContent.ActiveForm.HW.MaxOffset Or lTo < frmContent.ActiveForm.HW.FirstOffset Then
+        If lFrom > frmContent.ActiveForm.HW.MaxOffset Or lTo < _
+            frmContent.ActiveForm.HW.FirstOffset Then
             Unload Me
             Exit Sub
         End If
         
         'fait la sélection désirée
-        frmContent.ActiveForm.HW.SelectZone 16 - (By16(lFrom) - lFrom), By16(lFrom) - 16, 17 - (By16(lTo) - lTo), By16(lTo) - 16
-        
-        'refresh le label qui contient la taille de la sélection
-        frmContent.ActiveForm.Sb.Panels(4).Text = Lang.GetString("_Sel") & CStr(frmContent.ActiveForm.HW.NumberOfSelectedItems) & " bytes]"
-        frmContent.ActiveForm.Label2(9) = frmContent.ActiveForm.Sb.Panels(4).Text
+        With frmContent.ActiveForm
+            .HW.SelectZone 16 - (By16(lFrom) - lFrom), _
+                By16(lFrom) - 16, 17 - (By16(lTo) - lTo), By16(lTo) - 16
+            
+            'refresh le label qui contient la taille de la sélection
+            .Sb.Panels(4).Text = Lang.GetString("_Sel") & _
+                CStr(.HW.NumberOfSelectedItems) & " bytes]"
+            .Label2(9) = .Sb.Panels(4).Text
+        End With
         
     ElseIf byteFunc = 1 Then 'il s'agit d'une restriction d'affichage
     
@@ -175,28 +175,32 @@ Dim x As Currency
         
         'vérifie que la plage est OK
         '/!\ vérifie la plage à l'aide des TAGS CURRENCY du HW (valeurs maximales autorisées)
-        If lFrom < frmContent.ActiveForm.HW.curTag1 Or lTo > frmContent.ActiveForm.HW.curTag2 Then
+        If lFrom < frmContent.ActiveForm.HW.curTag1 Or lTo > _
+            frmContent.ActiveForm.HW.curTag2 Then
             Unload Me
             Exit Sub
         End If
-        If lFrom > frmContent.ActiveForm.HW.curTag2 Or lTo < frmContent.ActiveForm.HW.curTag1 Then
+        If lFrom > frmContent.ActiveForm.HW.curTag2 Or lTo < _
+            frmContent.ActiveForm.HW.curTag1 Then
             Unload Me
             Exit Sub
         End If
         
-        'ajoute une entrée à l'historique
-        frmContent.ActiveForm.AddHistoFrm actRestArea, , , frmContent.ActiveForm.HW.FirstOffset, frmContent.ActiveForm.HW.MaxOffset
-        
-        'change les valeurs dans la ActiveForm
-        frmContent.ActiveForm.HW.FirstOffset = lFrom
-        frmContent.ActiveForm.HW.MaxOffset = lTo
-        frmContent.ActiveForm.VS.Min = lFrom / 16
-        frmContent.ActiveForm.VS.Max = By16(lTo / 16)
-        Call frmContent.ActiveForm.VS_Change(frmContent.ActiveForm.VS.Min)
+        With frmContent.ActiveForm
+            'ajoute une entrée à l'historique
+            .AddHistoFrm actRestArea, , , .HW.FirstOffset, .HW.MaxOffset
+            
+            'change les valeurs dans la ActiveForm
+            .HW.FirstOffset = lFrom
+            .HW.MaxOffset = lTo
+            .VS.Min = lFrom / 16
+            .VS.Max = By16(lTo / 16)
+            Call .VS_Change(.VS.Min)
+        End With
 
     End If
     
-    frmContent.ActiveForm.HW.Refresh
+    Call frmContent.ActiveForm.HW.Refresh
     
     Unload Me
     
@@ -211,25 +215,27 @@ End Sub
 
 Private Sub Form_Load()
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     If frmContent.ActiveForm Is Nothing Then Unload Me
     

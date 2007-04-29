@@ -31,7 +31,6 @@ Begin VB.Form frmFileSearch
       Left            =   120
       TabIndex        =   28
       TabStop         =   0   'False
-      ToolTipText     =   "Avancement de la recherche"
       Top             =   5520
       Width           =   9615
       _ExtentX        =   16960
@@ -43,35 +42,28 @@ Begin VB.Form frmFileSearch
       FrontPicture    =   "frmFileSearch.frx":05A6
    End
    Begin VB.CommandButton cmdSave 
-      Caption         =   "Sauvegarder les résultats..."
       Height          =   375
       Left            =   5400
       TabIndex        =   1
-      ToolTipText     =   "Sauvegarde les résultats de la recherche"
       Top             =   2040
       Width           =   2775
    End
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Quitter"
       Height          =   375
       Left            =   8400
       TabIndex        =   2
-      ToolTipText     =   "Ferme la fenêtre de recherche"
       Top             =   2040
       Width           =   1335
    End
    Begin VB.CommandButton cmdGo 
-      Caption         =   "Lancer la recherche"
       Enabled         =   0   'False
       Height          =   375
       Left            =   3120
       TabIndex        =   0
-      ToolTipText     =   "Lance la recherche"
       Top             =   2040
       Width           =   2055
    End
    Begin VB.Frame Frame3 
-      Caption         =   "Résultats"
       Height          =   2895
       Left            =   3120
       TabIndex        =   25
@@ -116,7 +108,6 @@ Begin VB.Form frmFileSearch
       End
    End
    Begin VB.Frame Frame2 
-      Caption         =   "Emplacements"
       Height          =   3735
       Left            =   120
       TabIndex        =   23
@@ -166,11 +157,9 @@ Begin VB.Form frmFileSearch
             EndProperty
          End
          Begin VB.CommandButton cmdAdd 
-            Caption         =   "Ajouter un dossier..."
             Height          =   375
             Left            =   0
             TabIndex        =   6
-            ToolTipText     =   "Ajouter un dossier à la liste des emplacements où il faut rechercher"
             Top             =   0
             Width           =   2535
          End
@@ -200,46 +189,41 @@ Begin VB.Form frmFileSearch
             Height          =   315
             ItemData        =   "frmFileSearch.frx":05C2
             Left            =   4440
-            List            =   "frmFileSearch.frx":05CF
+            List            =   "frmFileSearch.frx":05C4
             Style           =   2  'Dropdown List
             TabIndex        =   18
             Tag             =   "pref lang_ok"
-            ToolTipText     =   "Type de date"
             Top             =   1080
             Width           =   1935
          End
          Begin VB.ComboBox cbOpDate 
             Enabled         =   0   'False
             Height          =   315
-            ItemData        =   "frmFileSearch.frx":05FD
+            ItemData        =   "frmFileSearch.frx":05C6
             Left            =   1200
-            List            =   "frmFileSearch.frx":0610
+            List            =   "frmFileSearch.frx":05C8
             Style           =   2  'Dropdown List
             TabIndex        =   16
             Tag             =   "pref lang_ok"
-            ToolTipText     =   "Opérateur de recherche"
             Top             =   1080
             Width           =   855
          End
          Begin VB.CheckBox chkDate 
-            Caption         =   "Par date"
             Height          =   195
             Left            =   0
             TabIndex        =   15
-            ToolTipText     =   "Ajoute le critère 'date' à la recherche"
             Top             =   1080
             Width           =   975
          End
          Begin VB.ComboBox cbOpSize 
             Enabled         =   0   'False
             Height          =   315
-            ItemData        =   "frmFileSearch.frx":0625
+            ItemData        =   "frmFileSearch.frx":05CA
             Left            =   1200
-            List            =   "frmFileSearch.frx":0638
+            List            =   "frmFileSearch.frx":05CC
             Style           =   2  'Dropdown List
             TabIndex        =   12
             Tag             =   "pref lang_ok"
-            ToolTipText     =   "Opérateur de recherche"
             Top             =   600
             Width           =   855
          End
@@ -251,39 +235,32 @@ Begin VB.Form frmFileSearch
             Left            =   2280
             TabIndex        =   13
             Tag             =   "pref"
-            Text            =   "100"
-            ToolTipText     =   "Taille"
             Top             =   600
             Width           =   1335
          End
          Begin VB.ComboBox cdUnit 
             Enabled         =   0   'False
             Height          =   315
-            ItemData        =   "frmFileSearch.frx":064D
+            ItemData        =   "frmFileSearch.frx":05CE
             Left            =   3840
-            List            =   "frmFileSearch.frx":065D
+            List            =   "frmFileSearch.frx":05D0
             Style           =   2  'Dropdown List
             TabIndex        =   14
             Tag             =   "pref lang_ok"
-            ToolTipText     =   "Unité"
             Top             =   600
             Width           =   1095
          End
          Begin VB.CheckBox chkSize 
-            Caption         =   "Par taille"
             Height          =   255
             Left            =   0
             TabIndex        =   11
-            ToolTipText     =   "Ajoute le critère 'taille' à la recherche"
             Top             =   600
             Width           =   1095
          End
          Begin VB.CheckBox chkCasse 
-            Caption         =   "Casse"
             Height          =   195
             Left            =   3840
             TabIndex        =   10
-            ToolTipText     =   "Respecte ou non la casse"
             Top             =   120
             Width           =   975
          End
@@ -293,16 +270,13 @@ Begin VB.Form frmFileSearch
             Height          =   285
             Left            =   1200
             TabIndex        =   9
-            ToolTipText     =   "Nom à rechercher"
             Top             =   120
             Width           =   2415
          End
          Begin VB.CheckBox chkName 
-            Caption         =   "Par nom"
             Height          =   195
             Left            =   0
             TabIndex        =   8
-            ToolTipText     =   "Ajoute le critère 'nom' à la recherche"
             Top             =   120
             Value           =   1  'Checked
             Width           =   1215
@@ -318,7 +292,7 @@ Begin VB.Form frmFileSearch
             _Version        =   393216
             Enabled         =   0   'False
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63569923
+            Format          =   63504387
             CurrentDate     =   39133.9583333333
          End
       End
@@ -491,7 +465,7 @@ End Sub
 
 Private Sub cmdAdd_Click()
 Dim s As String
-    s = cFile.BrowseForFolder(Lang.GetString("_AddFolder"), Me.hwnd)    'browse un dossier
+    s = cFile.BrowseForFolder(Lang.GetString("_AddFolder"), Me.hWnd)    'browse un dossier
     
     If cFile.FolderExists(s) Then
         'alors ajoute le dossier à la liste des emplacements
@@ -612,25 +586,29 @@ CancelPushed:
 End Sub
 
 Private Sub Form_Load()
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
+
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                Call .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
             Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+        Else
+            Lang.LangFolder = App.Path & "\Lang"
         End If
-    #End If
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        Call .LoadControlsCaption
+    End With
     
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
@@ -672,19 +650,19 @@ End Sub
 Private Sub mnuFileProp_Click()
 'affiche les propriétés du fichier sélectionné
     If LVres.SelectedItem Is Nothing Then Exit Sub
-    cFile.ShowFileProperty LVres.SelectedItem.Text, Me.hwnd
+    Call cFile.ShowFileProperty(LVres.SelectedItem.Text, Me.hWnd)
 End Sub
 
 Private Sub mnuOpenFile_Click()
 'ouvre le fichier sélectionné
     If LVres.SelectedItem Is Nothing Then Exit Sub
-    cFile.ShellOpenFile LVres.SelectedItem.Text, Me.hwnd
+    Call cFile.ShellOpenFile(LVres.SelectedItem.Text, Me.hWnd)
 End Sub
 
 Private Sub mnuOpenFolder_Click()
 'ouvre le dossier du fichier sélectionné
     If LVres.SelectedItem Is Nothing Then Exit Sub
-    Shell "explorer.exe " & cFile.getfoldername(LVres.SelectedItem.Text), _
+    Shell "explorer.exe " & cFile.GetFolderName(LVres.SelectedItem.Text), _
         vbNormalFocus
 End Sub
 
@@ -759,9 +737,11 @@ Dim lC As Long
         'on calcule la taille du fichier à rechercher
         If chkSize.Value Then
             dblSize = Abs(Val(txtSize.Text))
-            If cdUnit.Text = Lang.GetString("_Ko") Then dblSize = dblSize * 1024
-            If cdUnit.Text = Lang.GetString("_Mo") Then dblSize = (dblSize * 1024) * 1024
-            If cdUnit.Text = Lang.GetString("_Go") Then dblSize = ((dblSize * 1024) * 1024) * 1024
+            With Lang
+                If cdUnit.Text = .GetString("_Ko") Then dblSize = dblSize * 1024
+                If cdUnit.Text = .GetString("_Mo") Then dblSize = (dblSize * 1024) * 1024
+                If cdUnit.Text = .GetString("_Go") Then dblSize = ((dblSize * 1024) * 1024) * 1024
+            End With
         End If
         
         'on calcule sa date
@@ -780,9 +760,13 @@ Dim lC As Long
         End With
         'indexation des fichiers
         For x = LV.ListItems.Count To 1 Step -1
-            s(x).sF() = cFile.EnumFilesStr(LV.ListItems.Item(x).Text, IIf(LV.ListItems.Item(x).SubItems(1) = Lang.GetString("_YesSub"), True, False))
-                Me.pgb.Value = LV.ListItems.Count - x + 1
-                If bStop Then GoTo GStop
+            s(x).sF() = cFile.EnumFilesStr(LV.ListItems.Item(x).Text, _
+                IIf(LV.ListItems.Item(x).SubItems(1) = _
+                Lang.GetString("_YesSub"), True, False))
+                
+            Me.pgb.Value = LV.ListItems.Count - x + 1
+            If bStop Then GoTo GStop
+            
             DoEvents
         Next x
         
@@ -819,7 +803,8 @@ Dim lC As Long
             Next i
         Next x
         pgb.Value = pgb.Max
-        Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " " & Lang.GetString("_ResS")
+        Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " " & _
+            Lang.GetString("_ResS")
                 
 
     ElseIf tMet = [Recherche de dossiers] Then

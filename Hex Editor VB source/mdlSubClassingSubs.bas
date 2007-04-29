@@ -136,8 +136,8 @@ Dim id2 As String
     End If
     
     'affecte la bitmap
-    SetMenuItemBitmaps hSubMenu, lPos, MF_BYPOSITION, IMG.ListImages(id).Picture, _
-        IMG.ListImages(id2).Picture
+    Call SetMenuItemBitmaps(hSubMenu, lPos, MF_BYPOSITION, IMG.ListImages(id).Picture, _
+        IMG.ListImages(id2).Picture)
         
 End Sub
 

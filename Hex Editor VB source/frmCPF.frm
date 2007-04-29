@@ -338,7 +338,6 @@ Private Sub cmdCLose_Click()
 End Sub
 
 Private Sub cmdExamineDifferences_Click()
-    
     frmMerge.Show vbModal
 End Sub
 
@@ -354,8 +353,16 @@ Private Sub cmdGo_Click()
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_AnalyseProc"))
     
-    LaunchAnalys    'lance l'analyse
-    DisplayResults  'affiche les résultats
+    Call LaunchAnalys    'lance l'analyse
+    Call DisplayResults  'affiche les résultats
+    
+    'détermine si les fichiers sont identiques ou pas
+    If cFile.CompareFiles(txtFile1.Text, txtFile2.Text) Then
+        'non identiques
+        Me.Caption = Lang.GetString("_FileDifferent")
+    Else
+        Me.Caption = Lang.GetString("_FileIdentical")
+    End If
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_AnalyseFin"))
@@ -364,7 +371,6 @@ End Sub
 
 Private Sub cmdSaveReport_Click()
 'sauvegarde le rapport
-
 
 
     'ajoute du texte à la console
@@ -394,12 +400,14 @@ Dim curByteOld As Currency
     Next x
     
     'prépare la progressbar
-    lLength1 = cFile.GetFileSize(txtFile1.Text): lLength2 = cFile.GetFileSize(txtFile2.Text)
-    pgb.Min = 0: pgb.Max = lLength1 + lLength2: pgb.Value = 0
+    lLength1 = cFile.GetFileSize(txtFile1.Text)
+    lLength2 = cFile.GetFileSize(txtFile2.Text)
+    PGB.Min = 0: PGB.Max = lLength1 + lLength2: PGB.Value = 0
     x = 0
     
     'obtient le handle du fichier
-    lngFile = CreateFile(txtFile1.Text, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
+    lngFile = CreateFile(txtFile1.Text, GENERIC_READ, FILE_SHARE_READ, 0&, _
+        OPEN_EXISTING, 0&, 0&)
     
     'vérifie que le handle est valide
     If lngFile = INVALID_HANDLE_VALUE Then Exit Sub
@@ -413,10 +421,11 @@ Dim curByteOld As Currency
         x = x + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
-        GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
+        Call GetLargeInteger(curByte, tOver.Offset, tOver.OffsetHigh)
         
         'obtient la string sur le buffer
-        ReadFileEx lngFile, ByVal strBuffer, 51200, tOver, AddressOf CallBackFunction
+        Call ReadFileEx(lngFile, ByVal strBuffer, 51200, tOver, _
+            AddressOf CallBackFunction)
         
         If curByte + 51200 <= lLength1 Then
             'alors on prend bien 51200 car
@@ -435,7 +444,7 @@ Dim curByteOld As Currency
         If (x Mod 10) = 0 Then
             'rend la main
             DoEvents
-            pgb.Value = curByte
+            PGB.Value = curByte
         End If
         
         curByte = curByte + 51200
@@ -443,14 +452,15 @@ Dim curByteOld As Currency
     Loop
     
     'Close lFile
-    CloseHandle lngFile
+    Call CloseHandle(lngFile)
       
 
- 
-    x = 0: curByteOld = curByte
+    x = 0
+    curByteOld = curByte
     
     'obtient le handle du fichier
-    lngFile = CreateFile(txtFile2.Text, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
+    lngFile = CreateFile(txtFile2.Text, GENERIC_READ, FILE_SHARE_READ, 0&, _
+        OPEN_EXISTING, 0&, 0&)
     
     'vérifie que le handle est valide
     If lngFile = INVALID_HANDLE_VALUE Then Exit Sub
@@ -464,10 +474,11 @@ Dim curByteOld As Currency
         x = x + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
-        GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
+        Call GetLargeInteger(curByte, tOver.Offset, tOver.OffsetHigh)
         
         'obtient la string sur le buffer
-        ReadFileEx lngFile, ByVal strBuffer, 51200, tOver, AddressOf CallBackFunction
+        Call ReadFileEx(lngFile, ByVal strBuffer, 51200, tOver, _
+            AddressOf CallBackFunction)
         
         If curByte + 51200 <= lLength2 Then
             'alors on prend bien 51200 car
@@ -486,17 +497,17 @@ Dim curByteOld As Currency
         If (x Mod 10) = 0 Then
             'rend la main
             DoEvents
-            pgb.Value = curByte + curByteOld
+            PGB.Value = curByte + curByteOld
         End If
         
         curByte = curByte + 51200
     
     Loop
     
-    CloseHandle lngFile
+    Call CloseHandle(lngFile)
     
-    pgb.Value = pgb.Max
-    DisplayResults   'affiche les résultats
+    PGB.Value = PGB.Max
+    Call DisplayResults   'affiche les résultats
 
     Exit Sub
 ErrGestion:
@@ -511,40 +522,46 @@ Private Sub DisplayResults()
 Dim x As Long
 
     'remplit les graphes
-    BG1.ClearGraphe
-    BG1.ClearValues
-    BG2.ClearGraphe
-    BG2.ClearValues
+    With BG1
+        Call .ClearGraphe
+        Call .ClearValues
+    End With
+    With BG2
+        Call .ClearGraphe
+        Call .ClearValues
+    End With
     
     For x = 0 To 255
-        BG1.AddValue x, F1(x)
-        BG2.AddValue x, F2(x)
+        Call BG1.AddValue(x, F1(x))
+        Call BG2.AddValue(x, F2(x))
     Next x
 
     'trace les graphes
-    BG1.TraceGraph
-    BG2.TraceGraph
+    Call BG1.TraceGraph
+    Call BG2.TraceGraph
 End Sub
 
 Private Sub Form_Load()
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        Call .LoadControlsCaption
+    End With
 End Sub

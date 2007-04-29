@@ -27,11 +27,9 @@ Begin VB.Form frmLogErr
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdReset 
-      Caption         =   "Reset..."
       Height          =   375
       Left            =   7320
       TabIndex        =   2
-      ToolTipText     =   "Supprimer toutes les entrées du rapport d'erreur"
       Top             =   840
       Width           =   1095
    End
@@ -107,11 +105,9 @@ Begin VB.Form frmLogErr
       EndProperty
    End
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   7320
       TabIndex        =   1
-      ToolTipText     =   "Fermer la fenêtre"
       Top             =   240
       Width           =   1095
    End
@@ -181,25 +177,27 @@ Private Sub Form_Load()
 Dim var As Variant
 Dim x As Long
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     'obtient les infos sur les erreurs
     var = clsERREUR.GetErrors
@@ -207,22 +205,29 @@ Dim x As Long
     'affiche tout çà dans le LV
     LV.ListItems.Clear
     
-    For x = 1 To clsERREUR.NumberOfErrorInLogFile
-        LV.ListItems.Add Text:=var(x).ErrDate
-        LV.ListItems.Item(x).SubItems(1) = var(x).ErrTime
-        LV.ListItems.Item(x).SubItems(2) = var(x).ErrZone
-        LV.ListItems.Item(x).SubItems(3) = var(x).ErrSource
-        LV.ListItems.Item(x).SubItems(4) = var(x).ErrNumber
-        LV.ListItems.Item(x).SubItems(5) = var(x).ErrDescription
-    Next x
+    With LV.ListItems
+        For x = 1 To clsERREUR.NumberOfErrorInLogFile
+            .Add Text:=var(x).ErrDate
+            .Item(x).SubItems(1) = var(x).ErrTime
+            .Item(x).SubItems(2) = var(x).ErrZone
+            .Item(x).SubItems(3) = var(x).ErrSource
+            .Item(x).SubItems(4) = var(x).ErrNumber
+            .Item(x).SubItems(5) = var(x).ErrDescription
+        Next x
+    End With
     
-    If clsERREUR.NumberOfErrorInLogFile <> 0 Then
-        'il y a des erreurs
-        Text1.ForeColor = RED_COLOR
-        Text1.Text = Lang.GetString("_ErrorRap") & vbNewLine & Lang.GetString("_PleaseSend") & vbNewLine & clsERREUR.LogFile & vbNewLine & Lang.GetString("_At") & " hexeditorvb@gmail.com" & vbNewLine & Lang.GetString("_YouCont")
-    Else
-        'pas d'erreurs
-        Text1.ForeColor = GREEN_COLOR
-        Text1.Text = Lang.GetString("_NoError")
-    End If
+    With Text1
+        If clsERREUR.NumberOfErrorInLogFile <> 0 Then
+            'il y a des erreurs
+            .ForeColor = RED_COLOR
+            .Text = Lang.GetString("_ErrorRap") & vbNewLine & _
+                Lang.GetString("_PleaseSend") & vbNewLine & _
+                clsERREUR.LogFile & vbNewLine & Lang.GetString("_At") & _
+                " hexeditorvb@gmail.com" & vbNewLine & Lang.GetString("_YouCont")
+        Else
+            'pas d'erreurs
+            .ForeColor = GREEN_COLOR
+            .Text = Lang.GetString("_NoError")
+        End If
+    End With
 End Sub

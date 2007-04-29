@@ -45,36 +45,28 @@ Begin VB.Form frmShredd
       Height          =   285
       Left            =   2280
       TabIndex        =   5
-      Text            =   "3"
-      ToolTipText     =   "Désigne le nombre de sanitizations qui seront effectuées"
       Top             =   4200
       Width           =   735
    End
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   3360
       TabIndex        =   2
-      ToolTipText     =   "Fermer cette fenêtre"
       Top             =   4200
       Width           =   1335
    End
    Begin VB.CommandButton cmdProceed 
-      Caption         =   "Supprimer définitivement"
       Enabled         =   0   'False
       Height          =   375
       Left            =   2543
       TabIndex        =   1
-      ToolTipText     =   "Détruit les fichiers (/!\ suppression IRRECUPERABLE)"
       Top             =   3600
       Width           =   2175
    End
    Begin VB.CommandButton cmdAddFile 
-      Caption         =   "Ajouter des fichiers..."
       Height          =   375
       Left            =   143
       TabIndex        =   0
-      ToolTipText     =   "Permet l'ajout de fichiers à détruire"
       Top             =   3600
       Width           =   2175
    End
@@ -183,7 +175,7 @@ Dim x As Long
     'dans le cas d'un fichier simple
     If cFile.FileExists(s2) Then LV.ListItems.Add Text:=s2
     
-    CheckBtn    'enable ou non le cmdProceed
+    Call CheckBtn    'enable ou non le cmdProceed
 
 ErrCancel:
 End Sub
@@ -193,7 +185,9 @@ Private Sub cmdProceed_Click()
 Dim x As Long
 
     'affiche un advertissement
-    x = MsgBox(Lang.GetString("_FilesWillBeLost") & vbNewLine & Lang.GetString("_WannaKill"), vbYesNo + vbInformation, Lang.GetString("_War"))
+    x = MsgBox(Lang.GetString("_FilesWillBeLost") & vbNewLine & _
+        Lang.GetString("_WannaKill"), vbYesNo + vbInformation, _
+        Lang.GetString("_War"))
     
     If Not (x = vbYes) Then Exit Sub
     
@@ -213,7 +207,8 @@ Dim x As Long
     'affichage des résultats
     If LV.ListItems.Count > 0 Then
         'alors il reste au moins un fichier
-        MsgBox Lang.GetString("_OneCannot"), vbInformation, Lang.GetString("_War")
+        MsgBox Lang.GetString("_OneCannot"), vbInformation, _
+            Lang.GetString("_War")
     Else
         'OK
         MsgBox Lang.GetString("_DelOk"), vbOKOnly, Lang.GetString("_DelIsOk")
@@ -228,25 +223,28 @@ Private Sub cmdQuit_Click()
 End Sub
 
 Private Sub Form_Load()
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
 End Sub
 
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -258,7 +256,7 @@ Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
         LV.ListItems.Remove LV.SelectedItem.Index
     End If
     
-    CheckBtn    'enable ou non le cmdProceed
+    Call CheckBtn    'enable ou non le cmdProceed
 
 End Sub
 
@@ -269,7 +267,9 @@ Private Sub CheckBtn()
     Me.cmdProceed.Enabled = (LV.ListItems.Count > 0)
 End Sub
 
-Private Sub LV_OLEDragDrop(Data As ComctlLib.DataObject, Effect As Long, Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub LV_OLEDragDrop(Data As ComctlLib.DataObject, Effect As Long, _
+    Button As Integer, Shift As Integer, x As Single, y As Single)
+    
 Dim i As Long
 
     'gestion de la dépose des fichiers sur le listview
@@ -278,7 +278,8 @@ Dim i As Long
     
     'ajoute les fichers du drag and drop à la liste
     For i = 1 To Data.Files.Count
-        If cFile.FileExists(Data.Files.Item(i)) Then LV.ListItems.Add Text:=Data.Files.Item(i)
+        If cFile.FileExists(Data.Files.Item(i)) Then _
+            LV.ListItems.Add Text:=Data.Files.Item(i)
     Next i
     
 BadFormat:

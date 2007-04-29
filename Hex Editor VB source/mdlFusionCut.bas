@@ -448,7 +448,7 @@ Dim lTime As Long
         'vérifie l'existence de chaque fichier
         bOk = True
         For i = 1 To lFileCount
-            If cFile.FileExists(cFile.getfoldername(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i))) = False Then
+            If cFile.FileExists(cFile.GetFolderName(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i))) = False Then
                 bOk = False
             End If
         Next i
@@ -471,7 +471,7 @@ Dim lTime As Long
         frmCut.PGB.Value = 0
         For i = 1 To lFileCount
             'écrit les bytes lus
-            WriteBytesToFileEnd sFolderOut & "\" & sFileStr, cFile.LoadFileInString(cFile.getfoldername(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i)))
+            WriteBytesToFileEnd sFolderOut & "\" & sFileStr, cFile.LoadFileInString(cFile.GetFolderName(sFileGroup) & "\" & sFileStr & "." & Trim$(Str$(i)))
             DoEvents: frmCut.PGB.Value = frmCut.PGB.Value + 1
         Next i
         frmCut.PGB.Value = frmCut.PGB.Max

@@ -302,13 +302,8 @@ Public Sub GetFile(ByVal sFil As String)
 Dim sDescription As String
 Dim sCopyright As String
 Dim sVersion As String
-Dim lSize As Long
-Dim lAttribute As Long
-Dim dAccess As String
-Dim dCreation As String
-Dim dModification As String
 Dim lPages As Long
-Dim cF As filesystemlibrary.File
+Dim cF As FileSystemLibrary.File
 
     sFile = sFil
     Me.Caption = sFil
@@ -322,39 +317,35 @@ Dim cF As filesystemlibrary.File
     Set cF = cFile.GetFile(sFil)
     
     'récupère les infos sur les fichiers *.exe, *.dll...
-    sDescription = cF.FileVersionInfos.FileDescription
-    sVersion = cF.FileVersionInfos.FileVersion
-    sCopyright = cF.FileVersionInfos.Copyright
-    
-    sVersion = IIf(sVersion = vbNullString, "--", sVersion)
-    sCopyright = IIf(sCopyright = vbNullString, "--", sCopyright)
-    sDescription = IIf(sDescription = vbNullString, "--", sDescription)
-    
-    'récupère les dates
-    dCreation = cF.DateCreated
-    dAccess = cF.DateLastAccessed
-    dModification = cF.DateLastModified
-    
-    'la taille
-    lSize = cF.FileSize
-    
-    'attribut
-    lAttribute = cF.Attributes
-    
-    'affiche tout çà
-    TextBox(0).Text = Lang.GetString("_Size") & CStr(lSize) & " Octets  -  " & CStr(Round(lSize / 1024, 3)) & " Ko" & "]"
-    TextBox(1).Text = Lang.GetString("_Attr") & CStr(lAttribute) & "]"
-    TextBox(2).Text = Lang.GetString("_Creat") & dCreation & "]"
-    TextBox(3).Text = Lang.GetString("_Acces") & dAccess & "]"
-    TextBox(4).Text = Lang.GetString("_Modif") & dModification & "]"
-    TextBox(5).Text = Lang.GetString("_Version") & sVersion & "]"
-    TextBox(6).Text = Lang.GetString("_Description") & sDescription & "]"
-    TextBox(7).Text = Lang.GetString("_CopyR") & sCopyright & "]"
+    With cF
+        sDescription = .FileVersionInfos.FileDescription
+        sVersion = .FileVersionInfos.FileVersion
+        sCopyright = .FileVersionInfos.Copyright
+        
+        sVersion = IIf(sVersion = vbNullString, "--", sVersion)
+        sCopyright = IIf(sCopyright = vbNullString, "--", sCopyright)
+        sDescription = IIf(sDescription = vbNullString, "--", sDescription)
+        
+        'affiche tout çà
+        TextBox(0).Text = Lang.GetString("_Size") & CStr(.FileSize) & _
+            " Octets  -  " & CStr(Round(.FileSize / 1024, 3)) & " Ko" & "]"
+        TextBox(1).Text = Lang.GetString("_Attr") & CStr(.Attributes) & "]"
+        TextBox(2).Text = Lang.GetString("_Creat") & .DateCreated & "]"
+        TextBox(3).Text = Lang.GetString("_Acces") & .DateLastAccessed & "]"
+        TextBox(4).Text = Lang.GetString("_Modif") & .DateLastModified & "]"
+        TextBox(5).Text = Lang.GetString("_Version") & sVersion & "]"
+        TextBox(6).Text = Lang.GetString("_Description") & sDescription & "]"
+        TextBox(7).Text = Lang.GetString("_CopyR") & sCopyright & "]"
+    End With
   
 End Sub
 
-Private Sub BG_MouseMove(bByteX As Byte, lOccurence As Long, Button As Integer, Shift As Integer, x As Single, y As Single)
-    Label1.Caption = "Byte=[" & CStr(bByteX) & "] = [" & Byte2FormatedString(bByteX) & "]  :   " & CStr(lOccurence)
+Private Sub BG_MouseMove(bByteX As Byte, lOccurence As Long, Button As Integer, _
+    Shift As Integer, x As Single, y As Single)
+    
+    Label1.Caption = "Byte=[" & CStr(bByteX) & "] = [" & _
+        Byte2FormatedString(bByteX) & "]  :   " & CStr(lOccurence)
+        
 End Sub
 
 Public Sub cmdAnalyse_Click()
@@ -375,15 +366,18 @@ Dim lngFile As Long
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_AnalCou"))
     
-    BG.ClearGraphe
-    BG.ClearValues
+    Call BG.ClearGraphe
+    Call BG.ClearValues
     
     'prépare la progressbar
     lngLen = cFile.GetFileSize(sFile)
-    PGB.Min = 0: PGB.Max = lngLen: PGB.Value = 0
+    With PGB
+        .Min = 0: .Max = lngLen: .Value = 0
+    End With
     
     'obtient le handle du fichier
-    lngFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
+    lngFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ, 0&, _
+        OPEN_EXISTING, 0&, 0&)
     
     'vérifie que le handle est valide
     If lngFile = INVALID_HANDLE_VALUE Then Exit Sub
@@ -397,10 +391,11 @@ Dim lngFile As Long
         x = x + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
-        GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
+        Call GetLargeInteger(curByte, tOver.Offset, tOver.OffsetHigh)
         
         'obtient la string sur le buffer
-        ReadFileEx lngFile, ByVal strBuffer, 51200, tOver, AddressOf CallBackFunction
+        Call ReadFileEx(lngFile, ByVal strBuffer, 51200, tOver, _
+            AddressOf CallBackFunction)
         
         If curByte + 51200 <= lngLen Then
             'alors on prend bien 51200 car
@@ -426,15 +421,15 @@ Dim lngFile As Long
     
     Loop
 
-    CloseHandle lngFile
+    Call CloseHandle(lngFile)
     
     'remplit le BG
     For x = 0 To 255
-        BG.AddValue x, F(x)
+        Call BG.AddValue(x, F(x))
     Next x
         
     PGB.Value = PGB.Max
-    BG.TraceGraph
+    Call BG.TraceGraph
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_AnalTer"))
@@ -470,7 +465,8 @@ Dim x As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, Lang.GetString("_War"))
+        x = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, _
+            Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
     End If
 
@@ -506,21 +502,23 @@ Dim s2 As String
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, Lang.GetString("_War"))
+        x = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, _
+            Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
     End If
     
     'créé le fichier
-    cFile.CreateEmptyFile s
+    Call cFile.CreateEmptyFile(s)
     
     s2 = vbNullString
     'créé la string
     For x = 0 To 255
-        s2 = s2 & "Byte=[" & Trim$(Str$(x)) & "] --> " & Lang.GetString("_Occ") & Trim$(Str$(BG.GetValue(x))) & "]" & vbNewLine
+        s2 = s2 & "Byte=[" & Trim$(Str$(x)) & "] --> " & Lang.GetString("_Occ") _
+            & Trim$(Str$(BG.GetValue(x))) & "]" & vbNewLine
     Next x
     
     'sauvegarde le fichier
-    cFile.SaveDataInFile s, Left$(s2, Len(s2) - 2), True
+    Call cFile.SaveDataInFile(s, Left$(s2, Len(s2) - 2), True)
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_StatSaved"))
@@ -528,23 +526,27 @@ Err:
 End Sub
 
 Private Sub Form_Load()
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
 End Sub

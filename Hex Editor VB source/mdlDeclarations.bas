@@ -340,8 +340,8 @@ End Enum
 
 'type d'affichage de la form (AlwaysOntop ou pas)
 Public Enum ModePlan
-    MettreAuPremierPlan = True
-    MettreNormal = False
+    SetFormForeGround = True
+    SetFormBackGround = False
 End Enum
 
 'liste des versions de Windows

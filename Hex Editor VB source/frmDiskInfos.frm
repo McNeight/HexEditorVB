@@ -258,7 +258,7 @@ Begin VB.Form frmDiskInfos
             ForeColor       =   -2147483640
             BackColor       =   -2147483643
             Appearance      =   0
-            NumItems        =   7
+            NumItems        =   9
             BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
                Key             =   ""
                Object.Tag             =   ""
@@ -269,42 +269,56 @@ Begin VB.Form frmDiskInfos
                SubItemIndex    =   1
                Key             =   ""
                Object.Tag             =   ""
-               Text            =   "Taille"
+               Text            =   "Nom"
                Object.Width           =   2540
             EndProperty
             BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
                SubItemIndex    =   2
                Key             =   ""
                Object.Tag             =   ""
-               Text            =   "Cylindres"
-               Object.Width           =   1764
+               Text            =   "Taille"
+               Object.Width           =   2540
             EndProperty
             BeginProperty ColumnHeader(4) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
                SubItemIndex    =   3
                Key             =   ""
                Object.Tag             =   ""
-               Text            =   "Pistes par cylindre"
-               Object.Width           =   2540
+               Text            =   "Cylindres"
+               Object.Width           =   1764
             EndProperty
             BeginProperty ColumnHeader(5) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
                SubItemIndex    =   4
                Key             =   ""
                Object.Tag             =   ""
-               Text            =   "Secteurs par piste"
+               Text            =   "Pistes par cylindre"
                Object.Width           =   2540
             EndProperty
             BeginProperty ColumnHeader(6) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
                SubItemIndex    =   5
                Key             =   ""
                Object.Tag             =   ""
-               Text            =   "Octets par secteurs"
+               Text            =   "Secteurs par piste"
                Object.Width           =   2540
             EndProperty
             BeginProperty ColumnHeader(7) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
                SubItemIndex    =   6
                Key             =   ""
                Object.Tag             =   ""
+               Text            =   "Octets par secteur"
+               Object.Width           =   2540
+            EndProperty
+            BeginProperty ColumnHeader(8) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+               SubItemIndex    =   7
+               Key             =   ""
+               Object.Tag             =   ""
                Text            =   "Type"
+               Object.Width           =   2540
+            EndProperty
+            BeginProperty ColumnHeader(9) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+               SubItemIndex    =   8
+               Key             =   ""
+               Object.Tag             =   ""
+               Text            =   "Secteurs physiques"
                Object.Width           =   2540
             EndProperty
          End
@@ -377,39 +391,32 @@ Option Explicit
 'FORM POUR AFFICHER DES INFOS SUR LES DISQUES
 '=======================================================
 
-Private clsDisk As clsDiskInfos
-
 Private Sub Form_Load()
-
-    Set clsDisk = New clsDiskInfos
-    
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+        
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
-    
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        Call .LoadControlsCaption
+    End With
 
-    mnuRefresh_Click
+    Call mnuRefresh_Click
     
-End Sub
-
-Private Sub Form_Unload(Cancel As Integer)
-    Set clsDisk = Nothing
 End Sub
 
 Private Sub mnuQuit_Click()
@@ -420,49 +427,43 @@ Private Sub mnuRefresh_Click()
 'refresh infos
 Dim strDisk As String
 Dim s As String
-Dim cDrive As clsDrive
-Dim x As Byte, y As Byte
-Dim s_t() As String
-
-    On Error GoTo ErrGestion
+Dim cDrive As FileSystemLibrary.Drive
+Dim cDisk As FileSystemLibrary.PhysicalDisk
+Dim x As Byte
+Dim y As Byte
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_RetDisk"))
     
-    LV1.ListItems.Clear: x = 0
+    LV1.ListItems.Clear: x = 0: y = 0
 
     'obtient les infos sur les drives physiques
-    For y = 0 To clsDisk.NumberOfPhysicalDrives - 1
+    For Each cDisk In cFile.PhysicalDisks
+        
+        y = y + 1
         
         'obtient les infos sur le drive
-        Set cDrive = clsDisk.GetPhysicalDrive(y)
-        
-        If clsDisk.IsPhysicalDriveAccessible(y) Then
+        If cDisk.IsDiskAvailable Then
             x = x + 1
             With LV1.ListItems
                 .Add Text:=CStr(y)
-                .Item(x).SubItems(1) = cDrive.TotalSpace
-                .Item(x).SubItems(2) = cDrive.Cylinders
-                .Item(x).SubItems(3) = cDrive.TracksPerCylinder
-                .Item(x).SubItems(4) = cDrive.SectorsPerTrack
-                .Item(x).SubItems(5) = cDrive.BytesPerSector
-                .Item(x).SubItems(6) = cDrive.strMediaType
+                .Item(x).SubItems(1) = cDisk.DiskName
+                .Item(x).SubItems(2) = cDisk.TotalSpace
+                .Item(x).SubItems(3) = cDisk.Cylinders
+                .Item(x).SubItems(4) = cDisk.TracksPerCylinder
+                .Item(x).SubItems(5) = cDisk.SectorsPerTrack
+                .Item(x).SubItems(6) = cDisk.BytesPerSector
+                .Item(x).SubItems(7) = cDisk.strMediaType
+                .Item(x).SubItems(8) = cDisk.TotalPhysicalSectors
             End With
         End If
-    Next y
-
-    
-    'obtient la liste des drives physiques
-    clsDisk.GetLogicalDrivesList s_t()
-
+    Next cDisk
         
     LV2.ListItems.Clear: x = 0
     
-    For y = 0 To UBound(s_t()) - 1
-    
-        Set cDrive = clsDisk.GetLogicalDrive(s_t(y))
+    For Each cDrive In cFile.Drives
         
-        If clsDisk.IsLogicalDriveAccessible(s_t(y)) Then
+        If cDrive.IsDriveAvailable Then
             'le drive est accessible
             x = x + 1
             With LV2.ListItems
@@ -492,14 +493,11 @@ Dim s_t() As String
             End With
         End If
    
-    Next y
+    Next cDrive
 
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_RetOk"))
     
-    Exit Sub
-ErrGestion:
-    clsERREUR.AddError "frmDiskInfos.mnuRefreshClick", True
 End Sub
 
 Private Sub mnuSaveInfos_Click()
@@ -518,18 +516,19 @@ Dim s As String
         
         'fichier déjà existant ==> prévient
         If cFile.FileExists(.Filename) Then
-            If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
+            If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
+                vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
         End If
         
         'le recréé
-        cFile.CreateEmptyFile .Filename, True
+        Call cFile.CreateEmptyFile(.Filename, True)
         
         'créé une string à enregistrer
         'format HTML
         s = CreateMeHtmlString(Me.LV1, Me.LV2)
         
         'colle la string dedans
-        cFile.SaveDataInFile .Filename, s, True
+        Call cFile.SaveDataInFile(.Filename, s, True)
         
     End With
     

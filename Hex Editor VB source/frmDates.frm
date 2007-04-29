@@ -26,11 +26,9 @@ Begin VB.Form frmDates
    ScaleWidth      =   6720
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdRefresh 
-      Caption         =   "Rafraichir"
       Height          =   255
       Left            =   5280
       TabIndex        =   2
-      ToolTipText     =   "Rafraichir les dates"
       Top             =   240
       Width           =   1215
    End
@@ -101,20 +99,16 @@ Begin VB.Form frmDates
       End
    End
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   1560
       TabIndex        =   10
-      ToolTipText     =   "Fermer la fenêtre"
       Top             =   4200
       Width           =   1215
    End
    Begin VB.CommandButton cmdAppliquer 
-      Caption         =   "Appliquer"
       Height          =   375
       Left            =   120
       TabIndex        =   9
-      ToolTipText     =   "Appliquer les changements"
       Top             =   4200
       Width           =   1215
    End
@@ -158,7 +152,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63569923
+            Format          =   63700995
             CurrentDate     =   39133
          End
       End
@@ -203,7 +197,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63569923
+            Format          =   63700995
             CurrentDate     =   39133
          End
       End
@@ -227,7 +221,7 @@ Begin VB.Form frmDates
          _ExtentY        =   529
          _Version        =   393216
          CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-         Format          =   63569923
+         Format          =   63700995
          CurrentDate     =   39133.9583333333
       End
       Begin VB.PictureBox Picture1 
@@ -287,11 +281,9 @@ Begin VB.Form frmDates
       End
    End
    Begin VB.CommandButton cmdBrowse 
-      Caption         =   "..."
       Height          =   255
       Left            =   4680
       TabIndex        =   1
-      ToolTipText     =   "Sélection du fichier"
       Top             =   240
       Width           =   375
    End
@@ -300,7 +292,6 @@ Begin VB.Form frmDates
       Height          =   285
       Left            =   840
       TabIndex        =   0
-      ToolTipText     =   "Emplacement du fichier"
       Top             =   240
       Width           =   3615
    End
@@ -362,99 +353,30 @@ Option Explicit
 'FORM PERMETTANT DE CHANGER LES DATES D'UN FICHIER
 '=======================================================
 
-Private mFile As filesystemlibrary.File
+Private mFile As FileSystemLibrary.File
 
 '=======================================================
-'attribution des dates spécifiées au Fichier (text1.text)
+'attribution des dates spécifiées au Fichier (txtFile.text)
 '=======================================================
 Private Sub AttribDates()
-Dim lngHandle As Long
-Dim udtFileTime As FILETIME
-Dim ucreationFileTime As FILETIME
-Dim ucaccessFileTime As FILETIME
-Dim udtLocalTime As FILETIME
-Dim ucreationFileTimelocal As FILETIME
-Dim ucaccessFileTimelocal As FILETIME
-Dim udtSystemTime As SYSTEMTIME
-Dim ucreationSystemTime As SYSTEMTIME
-Dim ucaccessSystemTime As SYSTEMTIME
 
-    On Error GoTo ErrGestion
-
+    Call cFile.SetFileDates(txtFile.Text, DT(0).Value, DT(1).Value, DT(2).Value)
     
-    'stocke les données de date & d'heure à la nouvelle heure (last modification)
-    With udtSystemTime
-        .wYear = DT(2).Year
-        .wMonth = DT(2).Month
-        .wDay = DT(2).Day
-        '.wDayOfWeek = Weekday(Left$(DT(2).Value, 10)) - 1
-        .wHour = DT(2).Hour
-        .wMinute = DT(2).Minute
-        .wSecond = DT(2).Second
-        .wMilliseconds = 0
-    End With
+    MsgBox Lang.GetString("_ChangeOk"), vbInformation, _
+        Lang.GetString("_DateChange")
     
-    'idem pour la date & heure de création
-    With ucreationSystemTime
-        .wYear = DT(0).Year
-        .wMonth = DT(0).Month
-        .wDay = DT(0).Day
-        '.wDayOfWeek = Weekday(Left$(DT(0).Value, 10)) - 1
-        .wHour = DT(0).Hour
-        .wMinute = DT(0).Minute
-        .wSecond = DT(0).Second
-        .wMilliseconds = 0
-    End With
-        
-    'idem pour la date et heure de dernier accès
-    With ucaccessSystemTime
-        .wYear = DT(1).Year
-        .wMonth = DT(1).Month
-        .wDay = DT(1).Day
-        '.wDayOfWeek = Weekday(Left$(DT(1).Value, 10)) - 1
-        .wHour = DT(1).Hour
-        .wMinute = DT(1).Minute
-        .wSecond = DT(1).Second
-        .wMilliseconds = 0
-    End With
-    
-    'convertir SystemTime ==> FileTime pour les 3 heures/dates
-    SystemTimeToFileTime udtSystemTime, udtLocalTime
-    SystemTimeToFileTime ucreationSystemTime, ucreationFileTimelocal
-    SystemTimeToFileTime ucaccessSystemTime, ucaccessFileTimelocal
-    
-    'convertir l'heure locale vers l'heure universelle
-    LocalFileTimeToFileTime udtLocalTime, udtFileTime
-    LocalFileTimeToFileTime ucreationFileTimelocal, ucreationFileTime
-    LocalFileTimeToFileTime ucaccessFileTimelocal, ucaccessFileTime
-    
-    'obtient le handle du fichier
-    lngHandle = CreateFile(txtFile.Text, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
-    
-    'applique les changements
-    SetFileTime lngHandle, ucreationFileTime, ucaccessFileTime, udtFileTime
-    
-    'ferme le handle
-    CloseHandle lngHandle
-    
-    MsgBox Lang.GetString("_ChangeOk"), vbInformation, Lang.GetString("_DateChange")
-    
-    Exit Sub
-ErrGestion:
-    clsERREUR.AddError "frmDates.AttribDates", True
-    
-    MsgBox Lang.GetString("_ErrorH") & vbNewLine & Err.Description, vbInformation, Lang.GetString("_DateChange")
 End Sub
 
 Private Sub cmdAppliquer_Click()
-    AttribDates
+    Call AttribDates
     Call ChangeDates
 End Sub
 
 Private Sub cmdBrowse_Click()
 'ouvre un fichier
 
-    txtFile.Text = cFile.ShowOpen(Lang.GetString("_SelFile"), Me.hWnd, Lang.GetString("_All") & " |*.*")
+    txtFile.Text = cFile.ShowOpen(Lang.GetString("_SelFile"), Me.hWnd, _
+        Lang.GetString("_All") & " |*.*")
     
     Call ChangeDates
 End Sub
@@ -465,7 +387,7 @@ Private Sub cmdDefaut_Click(Index As Integer)
     On Error Resume Next
     
     DT(Index).Value = lblDate(Index).Caption & " " & lblHour(Index).Caption
-        
+    
 End Sub
 
 Private Sub cmdQuit_Click()
@@ -483,14 +405,16 @@ Private Sub ChangeDates()
     Set mFile = cFile.GetFile(txtFile.Text) 'récupère le fichier
     
     'affichage des infos de dates
-    lblDate(0).Caption = Left$(mFile.DateCreated, 10)
-    lblDate(1).Caption = Left$(mFile.DateLastAccessed, 10)
-    lblDate(2).Caption = Left$(mFile.DateLastModified, 10)
-    
-    'affichage des infos d'heures
-    lblHour(0).Caption = Right$(mFile.DateCreated, 8)
-    lblHour(1).Caption = Right$(mFile.DateLastAccessed, 8)
-    lblHour(2).Caption = Right$(mFile.DateLastModified, 8)
+    With mFile
+        lblDate(0).Caption = Left$(.DateCreated, 10)
+        lblDate(1).Caption = Left$(.DateLastAccessed, 10)
+        lblDate(2).Caption = Left$(.DateLastModified, 10)
+        
+        'affichage des infos d'heures
+        lblHour(0).Caption = Right$(.DateCreated, 8)
+        lblHour(1).Caption = Right$(.DateLastAccessed, 8)
+        lblHour(2).Caption = Right$(.DateLastModified, 8)
+    End With
     
     'heures par défaut
     cmdDefaut_Click (0): cmdDefaut_Click (1): cmdDefaut_Click (2)
@@ -499,29 +423,33 @@ End Sub
 '=======================================================
 'récupère le fichier
 '=======================================================
-Public Sub GetFile(ByVal tFile As filesystemlibrary.File)
+Public Sub GetFile(ByVal tFile As FileSystemLibrary.File)
     Set mFile = tFile
     Call ChangeDates
 End Sub
 
 Private Sub Form_Load()
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
 End Sub

@@ -23,20 +23,16 @@ Begin VB.Form frmFillSelection
    ScaleWidth      =   4485
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   3240
       TabIndex        =   1
-      ToolTipText     =   "Fermer cette fenêtre"
       Top             =   2880
       Width           =   1095
    End
    Begin VB.CommandButton cmdApply 
-      Caption         =   "Appliquer"
       Height          =   375
       Left            =   3240
       TabIndex        =   0
-      ToolTipText     =   "Appliquer les passes"
       Top             =   2280
       Width           =   1095
    End
@@ -60,29 +56,23 @@ Begin VB.Form frmFillSelection
          Top             =   240
          Width           =   2775
          Begin VB.CommandButton cmdSanitization 
-            Caption         =   "Sanitization"
             Height          =   375
             Left            =   1680
             TabIndex        =   11
-            ToolTipText     =   "Ajouter les 3 passes de sanitization"
             Top             =   960
             Width           =   975
          End
          Begin VB.CommandButton cmdDelete 
-            Caption         =   "Enlever"
             Height          =   375
             Left            =   1680
             TabIndex        =   10
-            ToolTipText     =   "Supprimer la passe sélectionnée"
             Top             =   480
             Width           =   975
          End
          Begin VB.CommandButton cmdAdd 
-            Caption         =   "Ajouter"
             Height          =   375
             Left            =   1680
             TabIndex        =   9
-            ToolTipText     =   "Ajouter la passe en cours"
             Top             =   0
             Width           =   975
          End
@@ -90,7 +80,6 @@ Begin VB.Form frmFillSelection
             Height          =   1425
             Left            =   0
             TabIndex        =   12
-            ToolTipText     =   "Liste des passes à appliquer"
             Top             =   0
             Width           =   1575
          End
@@ -122,8 +111,6 @@ Begin VB.Form frmFillSelection
             Left            =   1680
             TabIndex        =   8
             Tag             =   "pref"
-            Text            =   "00 55 AA FF"
-            ToolTipText     =   "Liste des bytes (séparer par un espace les paquets de 2)"
             Top             =   720
             Width           =   975
          End
@@ -135,8 +122,6 @@ Begin VB.Form frmFillSelection
             Left            =   2760
             TabIndex        =   6
             Tag             =   "pref"
-            Text            =   "FF"
-            ToolTipText     =   "Borne supérieure du random (1-255)"
             Top             =   360
             Width           =   615
          End
@@ -148,8 +133,6 @@ Begin VB.Form frmFillSelection
             Left            =   1680
             TabIndex        =   5
             Tag             =   "pref"
-            Text            =   "0"
-            ToolTipText     =   "Borne inférieure du random (0-254)"
             Top             =   360
             Width           =   615
          End
@@ -159,8 +142,6 @@ Begin VB.Form frmFillSelection
             Left            =   1680
             TabIndex        =   3
             Tag             =   "pref"
-            Text            =   "55"
-            ToolTipText     =   "Valeur hexa de remplissement"
             Top             =   0
             Width           =   975
          End
@@ -176,7 +157,7 @@ Begin VB.Form frmFillSelection
             Width           =   1575
          End
          Begin VB.OptionButton Option1 
-            Caption         =   "Random entre "
+            Caption         =   "Random entre"
             Height          =   255
             Index           =   1
             Left            =   0
@@ -199,7 +180,6 @@ Begin VB.Form frmFillSelection
             Width           =   1455
          End
          Begin VB.Label Label1 
-            Caption         =   "et"
             Height          =   255
             Left            =   2400
             TabIndex        =   15
@@ -286,18 +266,18 @@ Dim cur1 As Currency
 Dim cur2 As Currency
 Dim sFile As String
     
-    
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     
-    'récupère les bornes de la sélection
-    cur1 = frmContent.ActiveForm.HW.FirstSelectionItem.Offset + _
-        frmContent.ActiveForm.HW.FirstSelectionItem.Col - 1
-    cur2 = frmContent.ActiveForm.HW.SecondSelectionItem.Offset + _
-        frmContent.ActiveForm.HW.SecondSelectionItem.Col - 1
+    With frmContent.ActiveForm.HW
+        'récupère les bornes de la sélection
+        cur1 = .FirstSelectionItem.Offset + .FirstSelectionItem.Col - 1
+        cur2 = .SecondSelectionItem.Offset + .SecondSelectionItem.Col - 1
+    End With
     
     '>10Mo ==> demande confirmation
     If (cur2 - cur1) > 10000000 Then
-        If MsgBox(Lang.GetString("_SelIsBig"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_SelIsBig"), vbInformation + vbYesNo, _
+            Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
     
     '//UNIQUEMENT POUR UN FICHIER !!!
@@ -351,7 +331,7 @@ End Sub
 Private Sub cmdDelete_Click()
 'enlève un élément de la liste
 Dim l As Long
-Dim X As Long
+Dim x As Long
 Dim tPTmp() As PASSE_TYPE
 
     On Error GoTo ErrGestion
@@ -366,19 +346,19 @@ Dim tPTmp() As PASSE_TYPE
     
     If UBound(tPTmp) = 0 Then Exit Sub   'rien à enlever
     
-    For X = 0 To l - 1
-        tPasses(X) = tPTmp(X)
-    Next X
-    For X = l + 1 To UBound(tPTmp) - 1
-        tPasses(X - 1) = tPTmp(X)
-    Next X
+    For x = 0 To l - 1
+        tPasses(x) = tPTmp(x)
+    Next x
+    For x = l + 1 To UBound(tPTmp) - 1
+        tPasses(x - 1) = tPTmp(x)
+    Next x
     
-    lstPasses.Clear   'enlève les éléments de la liste
+    Call lstPasses.Clear   'enlève les éléments de la liste
     
     'rajoute n-1 passes
-    For X = 1 To UBound(tPTmp) - 1
-        lstPasses.AddItem Lang.GetString("_Pass") & " " & CStr(X)
-    Next X
+    For x = 1 To UBound(tPTmp) - 1
+        lstPasses.AddItem Lang.GetString("_Pass") & " " & CStr(x)
+    Next x
     
     lstPasses.ListIndex = l - 1
     Call lstPasses_Click
@@ -386,7 +366,6 @@ Dim tPTmp() As PASSE_TYPE
     Exit Sub
 ErrGestion:
     clsERREUR.AddError "disfrmFillSelection.cmdDeleteClick", True
-    
 End Sub
 
 Private Sub cmdQuit_Click()
@@ -405,9 +384,11 @@ Private Sub cmdSanitization_Click()
     lstPasses.Clear
     
     'ajout des 3 passes
-    lstPasses.AddItem Lang.GetString("_Pass") & " 1"
-    lstPasses.AddItem Lang.GetString("_Pass") & " 2"
-    lstPasses.AddItem Lang.GetString("_Pass") & " 3"
+    With lstPasses
+        .AddItem Lang.GetString("_Pass") & " 1"
+        .AddItem Lang.GetString("_Pass") & " 2"
+        .AddItem Lang.GetString("_Pass") & " 3"
+    End With
     
     tPasses(0).sData1 = "55"
     tPasses(0).sData2 = ""
@@ -426,25 +407,27 @@ Private Sub Form_Load()
     Set clsPref = New clsIniForm
     clsPref.GetFormSettings App.Path & "\Preferences\FillSelection.ini", Me
     
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        Call .LoadControlsCaption
+    End With
     
     ReDim tPasses(0)   'initialize array
 
@@ -464,15 +447,17 @@ Private Sub lstPasses_Click()
     Option1(tPasses(lstPasses.ListIndex).tType).Value = True    'sélection du type de passe
     
     'remplit les champs
-    Select Case tPasses(lstPasses.ListIndex).tType
-        Case FixedByte
-            txtByte.Text = tPasses(lstPasses.ListIndex).sData1
-        Case RandomByte
-            txtBorneInf.Text = tPasses(lstPasses.ListIndex).sData1
-            txtBorneSup.Text = tPasses(lstPasses.ListIndex).sData2
-        Case Else
-            txtList.Text = tPasses(lstPasses.ListIndex).sData1
-    End Select
+    With tPasses(lstPasses.ListIndex)
+        Select Case .tType
+            Case FixedByte
+                txtByte.Text = .sData1
+            Case RandomByte
+                txtBorneInf.Text = .sData1
+                txtBorneSup.Text = .sData2
+            Case Else
+                txtList.Text = .sData1
+        End Select
+    End With
     
 End Sub
 

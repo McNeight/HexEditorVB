@@ -25,29 +25,23 @@ Begin VB.Form frmExport
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.CheckBox chkClip 
-      Caption         =   "Copier dans le clipboard"
       Height          =   195
       Left            =   120
       TabIndex        =   2
-      ToolTipText     =   "Permet de copier dans le clipboard plutôt que de créer un fichier"
       Top             =   1080
       Width           =   2535
    End
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   2880
       TabIndex        =   8
-      ToolTipText     =   "Ne pas sauvegarder"
       Top             =   3120
       Width           =   1455
    End
    Begin VB.CommandButton cmdSave 
-      Caption         =   "Lancer la sauvegarde"
       Height          =   375
       Left            =   120
       TabIndex        =   7
-      ToolTipText     =   "Lancer la sauvegarde"
       Top             =   3120
       Width           =   2175
    End
@@ -60,11 +54,9 @@ Begin VB.Form frmExport
       Top             =   1440
       Width           =   4215
       Begin VB.CheckBox chkOffset 
-         Caption         =   "Ajouter les offsets"
          Height          =   195
          Left            =   120
          TabIndex        =   4
-         ToolTipText     =   "Permer d'ajouter les offsets au fichier (en hexa ou décimal, selon les préférences)"
          Top             =   840
          Width           =   1695
       End
@@ -84,17 +76,14 @@ Begin VB.Form frmExport
             Height          =   285
             Left            =   2400
             TabIndex        =   6
-            Text            =   "texte de l'option"
             Top             =   720
             Visible         =   0   'False
             Width           =   1455
          End
          Begin VB.CheckBox chkString 
-            Caption         =   "Ajouter les valeurs ASCII"
             Height          =   195
             Left            =   0
             TabIndex        =   5
-            ToolTipText     =   "Permet l'ajout des valeurs ASCII au fichier"
             Top             =   840
             Width           =   2175
          End
@@ -102,16 +91,14 @@ Begin VB.Form frmExport
             Height          =   315
             ItemData        =   "frmExport.frx":000C
             Left            =   0
-            List            =   "frmExport.frx":0022
+            List            =   "frmExport.frx":000E
             Style           =   2  'Dropdown List
             TabIndex        =   3
             Tag             =   "pref lang_ok"
-            ToolTipText     =   "Format d'exportation"
             Top             =   120
             Width           =   3975
          End
          Begin VB.Label lbl 
-            Caption         =   "option"
             Height          =   255
             Left            =   2400
             TabIndex        =   13
@@ -141,11 +128,9 @@ Begin VB.Form frmExport
          Top             =   240
          Width           =   3975
          Begin VB.CommandButton cmdBrowse 
-            Caption         =   "..."
             Height          =   315
             Left            =   3480
             TabIndex        =   1
-            ToolTipText     =   "Choix du fichier à sauvegarder"
             Top             =   120
             Width           =   375
          End
@@ -154,7 +139,6 @@ Begin VB.Form frmExport
             Height          =   285
             Left            =   0
             TabIndex        =   0
-            ToolTipText     =   "Emplacement du fichier à sauvegarder"
             Top             =   120
             Width           =   3255
          End
@@ -218,56 +202,61 @@ Private Sub cbFormat_Click()
     txtOpt.Visible = False
     chkString.Enabled = True
     chkOffset.Enabled = True
+    
+    With Lang
+        Select Case cbFormat.Text
+            Case .GetString("_RTF!")
             
-    Select Case cbFormat.Text
-        Case Lang.GetString("_RTF!")
-        
-        Case Lang.GetString("_Text!")
-            Me.Caption = Lang.GetString("_ExportTxt")
-        Case Lang.GetString("_SourceC!")
-            Me.Caption = Lang.GetString("_ExportC")
-            chkString.Enabled = False
-            chkOffset.Enabled = False
-        Case Lang.GetString("_VB!")
-            Me.Caption = Lang.GetString("_ExportVB")
-            chkString.Enabled = False
-            chkOffset.Enabled = False
-            lbl.Caption = Lang.GetString("_CarSep")
-            txtOpt.Text = vbNullString
-            lbl.Visible = True
-            lbl.Enabled = True
-            txtOpt.Enabled = True
-            txtOpt.ToolTipText = Lang.GetString("_CarSepTool")
-            txtOpt.Visible = True
-        Case Lang.GetString("_JAVA!")
-            Me.Caption = Lang.GetString("_ExportJAVA")
-            chkString.Enabled = False
-            chkOffset.Enabled = False
-        Case Lang.GetString("_HTML!")
-            Me.Caption = Lang.GetString("_ExportHTML")
-            lbl.Caption = Lang.GetString("_Size")
-            txtOpt.Text = "3"
-            lbl.Visible = True
-            lbl.Enabled = True
-            txtOpt.Enabled = True
-            txtOpt.ToolTipText = Lang.GetString("_SizeTool")
-            txtOpt.Visible = True
-        Case Else
-            Me.Caption = Lang.GetString("_ElseExport")
-    End Select
+            Case .GetString("_Text!")
+                Me.Caption = .GetString("_ExportTxt")
+            Case .GetString("_SourceC!")
+                Me.Caption = .GetString("_ExportC")
+                chkString.Enabled = False
+                chkOffset.Enabled = False
+            Case .GetString("_VB!")
+                Me.Caption = .GetString("_ExportVB")
+                chkString.Enabled = False
+                chkOffset.Enabled = False
+                lbl.Caption = .GetString("_CarSep")
+                txtOpt.Text = vbNullString
+                lbl.Visible = True
+                lbl.Enabled = True
+                txtOpt.Enabled = True
+                txtOpt.ToolTipText = .GetString("_CarSepTool")
+                txtOpt.Visible = True
+            Case .GetString("_JAVA!")
+                Me.Caption = .GetString("_ExportJAVA")
+                chkString.Enabled = False
+                chkOffset.Enabled = False
+            Case .GetString("_HTML!")
+                Me.Caption = .GetString("_ExportHTML")
+                lbl.Caption = .GetString("_Size")
+                txtOpt.Text = "3"
+                lbl.Visible = True
+                lbl.Enabled = True
+                txtOpt.Enabled = True
+                txtOpt.ToolTipText = .GetString("_SizeTool")
+                txtOpt.Visible = True
+            Case Else
+                Me.Caption = .GetString("_ElseExport")
+        End Select
+    End With
 End Sub
 
 Private Sub chkClip_Click()
-    txtFile.Enabled = Not (CBool(chkClip.Value))
-    cmdBrowse.Enabled = Not (CBool(chkClip.Value))
-    Frame1(0).Enabled = Not (CBool(chkClip.Value))
+    With chkClip
+        txtFile.Enabled = Not (CBool(.Value))
+        cmdBrowse.Enabled = Not (CBool(.Value))
+        Frame1(0).Enabled = Not (CBool(.Value))
+    End With
 End Sub
 
 Private Sub cmdBrowse_Click()
 'browse for file
 Dim sFile As String
 
-    sFile = cFile.ShowSave(Lang.GetString("_FileToCreate"), Me.hWnd, Lang.GetString("_All") & "|*.*", App.Path)
+    sFile = cFile.ShowSave(Lang.GetString("_FileToCreate"), Me.hWnd, _
+        Lang.GetString("_All") & "|*.*", App.Path)
     
     If cFile.FileExists(sFile) Then
         'fichier déjà existant
@@ -275,7 +264,6 @@ Dim sFile As String
     End If
     
     txtFile.Text = sFile
-        
 End Sub
 
 Private Sub cmdQuit_Click()
@@ -288,6 +276,7 @@ Dim x As Long
 
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_Exporting"))
+    
     Frame1(0).Enabled = False
     txtFile.Enabled = False
     chkOffset.Enabled = False
@@ -306,18 +295,20 @@ Dim x As Long
             
             x = Int(Abs(Val(txtOpt.Text)))
             If x < 1 Or x > 10 Then
-                MsgBox Lang.GetString("_SizeNoOk"), vbCritical, Lang.GetString("_War")
+                MsgBox Lang.GetString("_SizeNoOk"), vbCritical, _
+                    Lang.GetString("_War")
                 GoTo ResumeMe
             End If
             
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
-                Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    frmContent.ActiveForm.Caption, -1, , x, CBool(chkClip.Value))
+                Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), _
+                    CBool(chkString.Value), frmContent.ActiveForm.Caption, _
+                    -1, , x, CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
-                Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    "az", 1, 1, x, CBool(chkClip.Value))
+                Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), _
+                    CBool(chkString.Value), "az", 1, 1, x, CBool(chkClip.Value))
             End If
             
         Case Lang.GetString("_RTF!")
@@ -327,39 +318,46 @@ Dim x As Long
         Case Lang.GetString("_Text!")
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
-                Call SaveAsTEXT(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    frmContent.ActiveForm.Caption, -1, , CBool(chkClip.Value))
+                Call SaveAsTEXT(txtFile.Text, CBool(chkOffset.Value), _
+                    CBool(chkString.Value), frmContent.ActiveForm.Caption, _
+                    -1, , CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
-                Call SaveAsTEXT(txtFile.Text, CBool(chkOffset.Value), CBool(chkString.Value), _
-                    "az", 1, 1, CBool(chkClip.Value))
+                Call SaveAsTEXT(txtFile.Text, CBool(chkOffset.Value), _
+                CBool(chkString.Value), "az", 1, 1, CBool(chkClip.Value))
             End If
             
         Case Lang.GetString("_SourceC!")
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
-                Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, -1, , CBool(chkClip.Value))
+                Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, -1, _
+                    , CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
-                Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1, CBool(chkClip.Value))
+                Call SaveAsC(txtFile.Text, frmContent.ActiveForm.Caption, 1, _
+                    1, CBool(chkClip.Value))
             End If
             
         Case Lang.GetString("_VB!")
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
-                Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, -1, , txtOpt.Text, CBool(chkClip.Value))
+                Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, _
+                    -1, , txtOpt.Text, CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
-                Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1, txtOpt.Text, CBool(chkClip.Value))
+                Call SaveAsVB(txtFile.Text, frmContent.ActiveForm.Caption, _
+                    1, 1, txtOpt.Text, CBool(chkClip.Value))
             End If
             
         Case Lang.GetString("_JAVA!")
             If bEntireFile Then
                 'sauvegarde d'un fichier entier
-                Call SaveAsJAVA(txtFile.Text, frmContent.ActiveForm.Caption, -1, , CBool(chkClip.Value))
+                Call SaveAsJAVA(txtFile.Text, frmContent.ActiveForm.Caption, _
+                    -1, , CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
-                Call SaveAsJAVA(txtFile.Text, frmContent.ActiveForm.Caption, 1, 1, CBool(chkClip.Value))
+                Call SaveAsJAVA(txtFile.Text, frmContent.ActiveForm.Caption, _
+                    1, 1, CBool(chkClip.Value))
             End If
             
     End Select
@@ -367,16 +365,20 @@ Dim x As Long
 ResumeMe:
     Frame1(0).Enabled = Not (CBool(chkClip.Value))
     txtFile.Enabled = Not (CBool(chkClip.Value))
-    chkOffset.Enabled = (cbFormat.Text = Lang.GetString("_HTML!") Or cbFormat.Text = Lang.GetString("_Text!"))
-    chkString.Enabled = (cbFormat.Text = Lang.GetString("_HTML!") Or cbFormat.Text = Lang.GetString("_Text!"))
-    lbl.Enabled = (cbFormat.Text = Lang.GetString("_HTML!") Or cbFormat.Text = Lang.GetString("_VB!"))
-    txtOpt.Enabled = (cbFormat.Text = Lang.GetString("_HTML!") Or cbFormat.Text = Lang.GetString("_VB!"))
+    With Lang
+        chkOffset.Enabled = (cbFormat.Text = .GetString("_HTML!") Or cbFormat.Text = .GetString("_Text!"))
+        chkString.Enabled = (cbFormat.Text = .GetString("_HTML!") Or cbFormat.Text = .GetString("_Text!"))
+        lbl.Enabled = (cbFormat.Text = .GetString("_HTML!") Or cbFormat.Text = .GetString("_VB!"))
+        txtOpt.Enabled = (cbFormat.Text = .GetString("_HTML!") Or cbFormat.Text = .GetString("_VB!"))
+    End With
     cbFormat.Enabled = True
     cmdBrowse.Enabled = Not (CBool(chkClip.Value))
     Frame1(1).Enabled = True
     cmdSave.Enabled = True
     cmdQuit.Enabled = True
+    
     DoEvents
+    
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_ExpOk"))
 End Sub
@@ -389,23 +391,26 @@ Public Sub IsEntireFile()
 End Sub
 
 Private Sub Form_Load()
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
+
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                Call .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
             Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+        Else
+            Lang.LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        Call .LoadControlsCaption
+    End With
 End Sub

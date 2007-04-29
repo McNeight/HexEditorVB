@@ -31,7 +31,6 @@ Begin VB.Form frmCut
       Left            =   120
       TabIndex        =   30
       TabStop         =   0   'False
-      ToolTipText     =   "Etat d'avancement"
       Top             =   4560
       Width           =   4815
       _ExtentX        =   8493
@@ -48,13 +47,10 @@ Begin VB.Form frmCut
       Height          =   285
       Left            =   3000
       TabIndex        =   15
-      Text            =   "5"
-      ToolTipText     =   "Taille du buffer"
       Top             =   4200
       Width           =   1935
    End
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
       Height          =   495
       Left            =   3060
       TabIndex        =   1
@@ -62,7 +58,6 @@ Begin VB.Form frmCut
       Width           =   1215
    End
    Begin VB.CommandButton cmdProceed 
-      Caption         =   "Lancer"
       Height          =   495
       Left            =   780
       TabIndex        =   0
@@ -141,7 +136,6 @@ Begin VB.Form frmCut
                   Left            =   1920
                   TabIndex        =   10
                   Tag             =   "pref"
-                  ToolTipText     =   "Nombre"
                   Top             =   1320
                   Width           =   975
                End
@@ -152,7 +146,6 @@ Begin VB.Form frmCut
                   Left            =   1920
                   TabIndex        =   7
                   Tag             =   "pref"
-                  ToolTipText     =   "Taille"
                   Top             =   960
                   Width           =   975
                End
@@ -160,11 +153,10 @@ Begin VB.Form frmCut
                   Height          =   315
                   ItemData        =   "frmCut.frx":05C2
                   Left            =   3000
-                  List            =   "frmCut.frx":05D2
+                  List            =   "frmCut.frx":05C4
                   Style           =   2  'Dropdown List
                   TabIndex        =   8
                   Tag             =   "pref lang_ok"
-                  ToolTipText     =   "Unité"
                   Top             =   960
                   Width           =   1335
                End
@@ -190,11 +182,9 @@ Begin VB.Form frmCut
                   Width           =   2055
                End
                Begin VB.CommandButton cmdBrowseGroupFile 
-                  Caption         =   "..."
                   Height          =   255
                   Left            =   3840
                   TabIndex        =   5
-                  ToolTipText     =   "Sélectionner le dossier du fichier groupeur"
                   Top             =   360
                   Width           =   615
                End
@@ -203,7 +193,6 @@ Begin VB.Form frmCut
                   Height          =   285
                   Left            =   0
                   TabIndex        =   4
-                  ToolTipText     =   "Dossier du fichier groupeur"
                   Top             =   360
                   Width           =   3615
                End
@@ -219,11 +208,9 @@ Begin VB.Form frmCut
             End
          End
          Begin VB.CommandButton cmdBrowseToCut 
-            Caption         =   "..."
             Height          =   255
             Left            =   3840
             TabIndex        =   3
-            ToolTipText     =   "Sélectionner le fichier à couper"
             Top             =   360
             Width           =   615
          End
@@ -232,7 +219,6 @@ Begin VB.Form frmCut
             Height          =   285
             Left            =   0
             TabIndex        =   2
-            ToolTipText     =   "Fichier à découper"
             Top             =   360
             Width           =   3615
          End
@@ -402,23 +388,27 @@ Option Explicit
 
 Private Sub cmdBrowseGroupFile_Click()
 'sélection du dossier (groupeur à sauvegarder)
-    txtFolderResult.Text = cFile.BrowseForFolder(Lang.GetString("_SelectFolder"), Me.hwnd)
+    txtFolderResult.Text = cFile.BrowseForFolder(Lang.GetString("_SelectFolder"), Me.hWnd)
 End Sub
 
 Private Sub cmdBrowseGrupFIle_Click()
 'sélection du fichier groupe
-    txtGrFile.Text = cFile.ShowOpen(Lang.GetString("_GrupFileSel"), Me.hwnd, Lang.GetString("_GrupFile") & "|*.grp")
-    If txtFolderFus.Text = vbNullString Then txtFolderFus.Text = cFile.getfoldername(txtGrFile.Text)
+    txtGrFile.Text = cFile.ShowOpen(Lang.GetString("_GrupFileSel"), Me.hWnd, _
+        Lang.GetString("_GrupFile") & "|*.grp")
+    If txtFolderFus.Text = vbNullString Then txtFolderFus.Text = _
+        cFile.GetFolderName(txtGrFile.Text)
 End Sub
 
 Private Sub cmdBrowsePaste_Click()
 'sélection du dossier du fichier fusionné
-    txtFolderFus.Text = cFile.BrowseForFolder(Lang.GetString("_FusionPathSel"), Me.hwnd)
+    txtFolderFus.Text = cFile.BrowseForFolder(Lang.GetString("_FusionPathSel"), _
+        Me.hWnd)
 End Sub
 
 Private Sub cmdBrowseToCut_Click()
 'sélection du fichier à découper
-    txtFileToCut.Text = cFile.ShowOpen(Lang.GetString("_FileToCutSel"), Me.hwnd, "Tous|*.*", App.Path)
+    txtFileToCut.Text = cFile.ShowOpen(Lang.GetString("_FileToCutSel"), _
+        Me.hWnd, "Tous|*.*", App.Path)
 End Sub
 
 Private Sub cmdProceed_Click()
@@ -427,13 +417,16 @@ Dim lLen As Double
 Dim lTime As Long
     
     lBufSize = Abs(Int(Val(txtBufSize.Text))) * 1024 * 1024
+    
     If lBufSize < 1048576 Then
         'alors buffer trop faible
-        MsgBox Lang.GetString("_BufferNotSuff"), vbCritical, Lang.GetString("_War")
+        MsgBox Lang.GetString("_BufferNotSuff"), vbCritical, _
+            Lang.GetString("_War")
         Exit Sub
     ElseIf lBufSize > 31457280 Then
         'buffer trop grand (peut etre risques potentiels de dépassement de capacité)
-        MsgBox Lang.GetString("_BufferTooSuff"), vbCritical, Lang.GetString("_War")
+        MsgBox Lang.GetString("_BufferTooSuff"), vbCritical, _
+            Lang.GetString("_War")
         Exit Sub
     End If
     
@@ -465,9 +458,11 @@ Dim lTime As Long
             'taille
             tMethod.tMethode = [Taille fixe]
             lLen = Abs(Val(txtSize.Text))
-            If cdUnit.Text = Lang.GetString("_Ko") Then lLen = lLen * 1024
-            If cdUnit.Text = Lang.GetString("_Mo") Then lLen = (lLen * 1024) * 1024
-            If cdUnit.Text = Lang.GetString("_Go") Then lLen = ((lLen * 1024) * 1024) * 1024
+            With Lang
+                If cdUnit.Text = .GetString("_Ko") Then lLen = lLen * 1024
+                If cdUnit.Text = .GetString("_Mo") Then lLen = (lLen * 1024) * 1024
+                If cdUnit.Text = .GetString("_Go") Then lLen = ((lLen * 1024) * 1024) * 1024
+            End With
             If lLen >= 2147483648# Then
                 'alors fichiers trop grands
                 MsgBox Lang.GetString("_MoreThanTwo"), vbCritical, Lang.GetString("_War")
@@ -487,8 +482,10 @@ Dim lTime As Long
                 GoTo CannotCut
             End If
             
-            tMethod.tMethode = [Nombre fichiers fixe]
-            tMethod.lParam = Abs(Int(Val(txtNumberOfFiles.Text)))
+            With tMethod
+                .tMethode = [Nombre fichiers fixe]
+                .lParam = Abs(Int(Val(txtNumberOfFiles.Text)))
+            End With
         End If
         
         'lance la découpe
@@ -536,25 +533,27 @@ End Sub
 
 Private Sub Form_Load()
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        Call .LoadControlsCaption
+    End With
     
     'redimensionne et place les frames
     With Frame1(0)

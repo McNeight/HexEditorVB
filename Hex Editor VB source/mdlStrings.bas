@@ -321,12 +321,14 @@ Dim x As Long
             s = s & "<font color=red>" & vbNewLine & "<div align=center>" & "<HR size=3 align=center width=100%>"
             s = s & "<B>" & frmContent.Lang.GetString("_DiskMdl") & " " & Str$(.ListItems.Item(x).Text) & "</B> <BR>" & vbNewLine & "<HR size=3 align=center width=100%>" & vbNewLine & "<P>" & vbNewLine & "</font>" & vbNewLine & "</div>"
             
-            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_SizeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(1) & "]<BR>"
-            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_CylMdl") & "</B> = [" & .ListItems.Item(x).SubItems(2) & "]<BR>"
-            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_TrackPerCylMdl") & "</B> = [" & .ListItems.Item(x).SubItems(3) & "]<BR>"
-            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_SecPerTMdl") & "</B> = [" & .ListItems.Item(x).SubItems(4) & "]<BR>"
-            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_BytePerSecMdl") & "</B> = [" & .ListItems.Item(x).SubItems(5) & "]<BR>"
-            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_TypeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(6) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_NameDiskMdl") & "</B> = [" & .ListItems.Item(x).SubItems(1) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_SizeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(2) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_CylMdl") & "</B> = [" & .ListItems.Item(x).SubItems(3) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_TrackPerCylMdl") & "</B> = [" & .ListItems.Item(x).SubItems(4) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_SecPerTMdl") & "</B> = [" & .ListItems.Item(x).SubItems(5) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_BytePerSecMdl") & "</B> = [" & .ListItems.Item(x).SubItems(6) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_TypeMdl") & "</B> = [" & .ListItems.Item(x).SubItems(7) & "]<BR>"
+            s = s & vbNewLine & "<B>" & frmContent.Lang.GetString("_TotalPSecMdl") & "</B> = [" & .ListItems.Item(x).SubItems(8) & "]<BR>"
 
             s = s & vbNewLine & "<BR> <BR>"
  

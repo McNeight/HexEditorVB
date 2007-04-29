@@ -2,7 +2,6 @@ VERSION 5.00
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmSave 
    BorderStyle     =   3  'Fixed Dialog
-   Caption         =   "Sauvegarder le fichier"
    ClientHeight    =   2130
    ClientLeft      =   45
    ClientTop       =   345
@@ -26,29 +25,23 @@ Begin VB.Form frmSave
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.CheckBox chkDoNotShowAlert 
-      Caption         =   "Ne plus afficher à l'avenir"
       Height          =   195
       Left            =   248
       TabIndex        =   3
-      ToolTipText     =   $"frmSave.frx":058A
       Top             =   1800
       Width           =   3015
    End
    Begin VB.CommandButton cmdNO 
-      Caption         =   "Non"
       Height          =   495
       Left            =   2048
       TabIndex        =   2
-      ToolTipText     =   "Ne procède pas à la sauvegarde"
       Top             =   1080
       Width           =   1215
    End
    Begin VB.CommandButton cmdYES 
-      Caption         =   "Oui"
       Height          =   495
       Left            =   248
       TabIndex        =   1
-      ToolTipText     =   "Procède à la sauvegarde et écrase le fichier"
       Top             =   1080
       Width           =   1215
    End
@@ -120,7 +113,7 @@ Option Explicit
 '=======================================================
 
 Private Sub cmdNO_Click()
-    SavePrefShowAlert   'sauvegarde (ou pas) les pref
+    Call SavePrefShowAlert   'sauvegarde (ou pas) les pref
     Unload Me
 End Sub
 
@@ -150,23 +143,26 @@ Private Sub SavePrefShowAlert()
 End Sub
 
 Private Sub Form_Load()
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
 End Sub

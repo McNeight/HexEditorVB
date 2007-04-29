@@ -3261,13 +3261,13 @@ Dim p55 As Long
 
         'on écrit dans le disque
         '// &H55
-       ' Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, p55)
+        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, p55)
 
         '// &HAA
-       ' Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, pAA)
+        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, pAA)
 
         '//random string
-       ' Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, VarPtr(Tbl(0)))
+        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, VarPtr(Tbl(0)))
 
         'rend la main de tps en tps
         If (x Mod 5) = 0 Then DoEvents
@@ -3279,13 +3279,13 @@ Dim p55 As Long
 
         'on écrit dans le disque
         '// &H55
-       ' Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, p55)
+        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, p55)
 
         '// &HAA
-       ' Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, pAA)
+        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, pAA)
 
         '//random string
-      '  Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, VarPtr(Tbl(0)))
+        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, VarPtr(Tbl(0)))
 
     'referme le handle
     Call CloseHandle(hDevice)
@@ -3860,7 +3860,9 @@ End Function
 '=======================================================
 'Renvoie diverses infos sur les tailles d'un disque par le handle en param
 '=======================================================
-Friend Function GetDriveSizes_HANDLE(ByVal hDrive As String) As DriveSizes
+Friend Function GetDriveSizes_HANDLE(ByVal hDrive As String, _
+    sDiskLetter As String) As DriveSizes
+    
 Dim strDrive As String
 Dim tGeom As DiskGeometry
 Dim a As Long, b As Long, c As Long, e As Long
@@ -3869,7 +3871,7 @@ Dim a As Long, b As Long, c As Long, e As Long
     tGeom = Me.GetDriveGeometry_HANDLE(hDrive)
     
     'calcule les tailles
-    Call GetDiskFreeSpace(Right$(strDrive, 2) & "\", a, e, b, c)
+    Call GetDiskFreeSpace(sDiskLetter & ":\", a, e, b, c)
     
     With GetDriveSizes_HANDLE
         .SectorPerCluster = a

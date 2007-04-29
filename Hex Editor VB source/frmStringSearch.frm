@@ -30,7 +30,6 @@ Begin VB.Form frmStringSearch
       Left            =   120
       TabIndex        =   15
       TabStop         =   0   'False
-      ToolTipText     =   "Progression de la recherche"
       Top             =   2280
       Width           =   4335
       _ExtentX        =   7646
@@ -75,34 +74,27 @@ Begin VB.Form frmStringSearch
       EndProperty
    End
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   4800
       TabIndex        =   10
-      ToolTipText     =   "Fermer cette fenêtre"
       Top             =   1800
       Width           =   1575
    End
    Begin VB.CommandButton cmdSave 
-      Caption         =   "Sauvegarder les résultats"
       Height          =   495
       Left            =   4800
       TabIndex        =   9
-      ToolTipText     =   "Sauvegarder les résultats (format texte)"
       Top             =   960
       Width           =   1575
    End
    Begin VB.CommandButton cmdGo 
-      Caption         =   "Lancer la recherche"
       Height          =   375
       Left            =   4800
       TabIndex        =   0
-      ToolTipText     =   "Lancer la recherche"
       Top             =   240
       Width           =   1575
    End
    Begin VB.Frame Frame1 
-      Caption         =   "Options de recherche"
       Height          =   2055
       Left            =   120
       TabIndex        =   11
@@ -119,53 +111,43 @@ Begin VB.Form frmStringSearch
          Top             =   240
          Width           =   4095
          Begin VB.CheckBox chkAccent 
-            Caption         =   "Rechercher des caractères accentués"
             Height          =   255
             Left            =   0
             TabIndex        =   5
             Tag             =   "pref"
-            ToolTipText     =   "Rechercher des caractères avec des accents ("
             Top             =   960
             Width           =   3735
          End
          Begin VB.CheckBox chkAddSignet 
-            Caption         =   "Ajouter un signet pour les chaines trouvées"
             Height          =   255
             Left            =   0
             TabIndex        =   6
             Tag             =   "pref"
-            ToolTipText     =   "Ajouter un signet à chaque offset où une string est trouvée"
             Top             =   1200
             Width           =   3975
          End
          Begin VB.CheckBox chkSigns 
-            Caption         =   "Rechercher des signes"
             Height          =   255
             Left            =   0
             TabIndex        =   4
             Tag             =   "pref"
-            ToolTipText     =   "Inclure les signes dans la recherche"
             Top             =   720
             Width           =   2895
          End
          Begin VB.CheckBox chkMaj 
-            Caption         =   "Rechercher des majuscules"
             Height          =   255
             Left            =   0
             TabIndex        =   3
             Tag             =   "pref"
-            ToolTipText     =   "Inclure les majuscules dans la recherche"
             Top             =   480
             Value           =   1  'Checked
             Width           =   2895
          End
          Begin VB.CheckBox chkMin 
-            Caption         =   "Rechercher des minuscules"
             Height          =   255
             Left            =   0
             TabIndex        =   2
             Tag             =   "pref"
-            ToolTipText     =   "Inclure les minuscules dans la recherche"
             Top             =   240
             Value           =   1  'Checked
             Width           =   2895
@@ -177,23 +159,18 @@ Begin VB.Form frmStringSearch
             Left            =   3240
             TabIndex        =   8
             Tag             =   "pref"
-            Text            =   "5"
-            ToolTipText     =   "Taille minimale (au dessous de cette taille, les suites de caractères ne sont pas considérées comme des strings)"
             Top             =   1460
             Width           =   735
          End
          Begin VB.CheckBox chkNumb3r 
-            Caption         =   "Rechercher des chiffres"
             Height          =   255
             Left            =   0
             TabIndex        =   1
             Tag             =   "pref"
-            ToolTipText     =   "Inclure les chiffres dans la recherche"
             Top             =   0
             Width           =   2895
          End
          Begin VB.Label Label1 
-            Caption         =   "Taille minimale de la chaîne de caractères :"
             Height          =   255
             Left            =   0
             TabIndex        =   7
@@ -300,18 +277,18 @@ Dim bAddSign As Boolean
         'alors c'est un fichier classique
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), _
+        Call SearchStringInFile(frmContent.ActiveForm.Caption, Val(txtSize.Text), _
             CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), _
-            CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
+            CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB)
         
     ElseIf TypeOfActiveForm = "Mem" Then
         'alors c'est dans la mémoire
         
         'lance la recherche
-        cMem.SearchEntireStringMemory Val(frmContent.ActiveForm.Tag), _
+        Call cMem.SearchEntireStringMemory(Val(frmContent.ActiveForm.Tag), _
             Val(txtSize.Text), CBool(chkSigns.Value), CBool(chkMaj.Value), _
             CBool(chkMin.Value), CBool(chkNumb3r.Value), CBool(chkAccent.Value), _
-            lngRes(), strRes(), Me.PGB
+            lngRes(), strRes(), Me.PGB)
         
         'sauvegarde dans la variable tRes
         ReDim tRes(UBound(lngRes()))
@@ -324,24 +301,24 @@ Dim bAddSign As Boolean
         'alors c'est dans le disque
 
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), _
+        Call SearchStringInFile(frmContent.ActiveForm.Caption, Val(txtSize.Text), _
             CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), _
-            CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
+            CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB)
         
     Else
         'disque physique
         
         'lance la recherche
-        SearchStringInFile frmContent.ActiveForm.Caption, Val(txtSize.Text), _
+        Call SearchStringInFile(frmContent.ActiveForm.Caption, Val(txtSize.Text), _
             CBool(chkSigns.Value), CBool(chkMaj.Value), CBool(chkMin.Value), _
-            CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB
+            CBool(chkNumb3r.Value), CBool(chkAccent.Value), tRes(), Me.PGB)
         
     End If
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_ShowRes"))
     
-    LV.ListItems.Clear
+    Call LV.ListItems.Clear
     
     bAddSign = chkAddSignet.Value
     
@@ -350,7 +327,7 @@ Dim bAddSign As Boolean
         With LV
             If bAddSign Then
                 'ajoute un signet
-
+                
                 frmContent.ActiveForm.HW.AddSignet By16(tRes(i).curOffset)
                 frmContent.ActiveForm.HW.TraceSignets
                 
@@ -409,7 +386,8 @@ Dim x As Long
     
     If cFile.FileExists(sFile) Then
         'fichier déjà existant
-        If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
+            vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
 
     Label2.Caption = "Saving file..."
@@ -438,33 +416,35 @@ Private Sub Form_Load()
 
     Set clsPref = New clsIniForm
     
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     'loading des preferences
-    clsPref.GetFormSettings App.Path & "\Preferences\StringSearch.ini", Me
+    Call clsPref.GetFormSettings(App.Path & "\Preferences\StringSearch.ini", Me)
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
-    clsPref.SaveFormSettings App.Path & "\Preferences\StringSearch.ini", Me
+    Call clsPref.SaveFormSettings(App.Path & "\Preferences\StringSearch.ini", Me)
     Set clsPref = Nothing
 End Sub
 
@@ -473,8 +453,10 @@ Private Sub LV_ItemClick(ByVal Item As ComctlLib.ListItem)
 
     If (frmContent.ActiveForm Is Nothing) Then Exit Sub
     
-    frmContent.ActiveForm.HW.FirstOffset = By16(Val(Item.Text))
-    frmContent.ActiveForm.VS.Value = By16(Val(Item.Text)) / 16 - 1
-    Call frmContent.ActiveForm.VS_Change(frmContent.ActiveForm.VS.Value)
+    With frmContent.ActiveForm
+        .HW.FirstOffset = By16(Val(Item.Text))
+        .VS.Value = By16(Val(Item.Text)) / 16 - 1
+        Call .VS_Change(.VS.Value)
+    End With
 
 End Sub

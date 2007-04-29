@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmOptions 
@@ -60,8 +60,6 @@ Begin VB.Form frmOptions
             Height          =   285
             Left            =   5280
             TabIndex        =   42
-            Text            =   "C:\"
-            ToolTipText     =   $"frmOptions.frx":058A
             Top             =   4680
             Width           =   2535
          End
@@ -70,8 +68,6 @@ Begin VB.Form frmOptions
             Height          =   285
             Left            =   2520
             TabIndex        =   39
-            Text            =   "2200"
-            ToolTipText     =   "Hauteur de l'explorateur de fichiers"
             Top             =   5160
             Width           =   2655
          End
@@ -80,20 +76,17 @@ Begin VB.Form frmOptions
             Height          =   285
             Left            =   2520
             TabIndex        =   38
-            Text            =   "*.*"
-            ToolTipText     =   "Filtre de l'explorateur de fichiers"
             Top             =   5520
             Width           =   2535
          End
          Begin VB.ComboBox cbExpInitDir 
             Height          =   315
-            ItemData        =   "frmOptions.frx":0628
+            ItemData        =   "frmOptions.frx":058A
             Left            =   2520
-            List            =   "frmOptions.frx":0632
+            List            =   "frmOptions.frx":058C
             Style           =   2  'Dropdown List
             TabIndex        =   37
             Tag             =   "lang_ok"
-            ToolTipText     =   "Type de chemin par défaut de l'explorateur de fichiers"
             Top             =   4680
             Width           =   2535
          End
@@ -110,13 +103,12 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbExpIcon 
             Height          =   315
-            ItemData        =   "frmOptions.frx":0656
+            ItemData        =   "frmOptions.frx":058E
             Left            =   2520
-            List            =   "frmOptions.frx":0663
+            List            =   "frmOptions.frx":0590
             Style           =   2  'Dropdown List
             TabIndex        =   35
             Tag             =   "lang_ok"
-            ToolTipText     =   "Type d'icones à afficher dans l'explorateur de fichiers"
             Top             =   4320
             Width           =   2535
          End
@@ -284,11 +276,9 @@ Begin VB.Form frmOptions
          Top             =   240
          Width           =   7455
          Begin VB.CheckBox Check12 
-            Caption         =   "Afficher la console par défaut"
             Height          =   255
             Left            =   240
             TabIndex        =   94
-            ToolTipText     =   "Affiche la console par défaut"
             Top             =   4080
             Width           =   4575
          End
@@ -297,8 +287,6 @@ Begin VB.Form frmOptions
             Height          =   285
             Left            =   2400
             TabIndex        =   92
-            Text            =   "2000"
-            ToolTipText     =   "Hauteur de la console"
             Top             =   3720
             Width           =   2655
          End
@@ -343,7 +331,7 @@ Begin VB.Form frmOptions
             Appearance      =   0
             OLEDragMode     =   0
             OLEDropMode     =   1
-            TextRTF         =   $"frmOptions.frx":069A
+            TextRTF         =   $"frmOptions.frx":0592
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "Lucida Console"
                Size            =   8.25
@@ -384,7 +372,6 @@ Begin VB.Form frmOptions
       End
    End
    Begin VB.CommandButton cmdSauvegarder 
-      Caption         =   "OK"
       Height          =   495
       Left            =   1320
       TabIndex        =   80
@@ -392,7 +379,6 @@ Begin VB.Form frmOptions
       Width           =   1335
    End
    Begin VB.CommandButton cmdDefault 
-      Caption         =   "Par défaut"
       Height          =   495
       Left            =   0
       TabIndex        =   79
@@ -413,38 +399,43 @@ Begin VB.Form frmOptions
          NumTabs         =   6
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Apparence du tableau"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Intégration dans Explorer"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Options générales"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Environnement"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Console"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab6 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Explorateur de fichiers"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
       EndProperty
    End
    Begin VB.CommandButton cmdQuitter 
-      Caption         =   "Annuler"
       Height          =   495
       Left            =   3000
       TabIndex        =   81
@@ -470,56 +461,44 @@ Begin VB.Form frmOptions
          Top             =   240
          Width           =   9435
          Begin VB.CheckBox Check11 
-            Caption         =   "Afficher les messages de confirmation"
             Height          =   255
             Left            =   120
             TabIndex        =   86
-            ToolTipText     =   "Si cette case est cochée, les messages de confirmation seront affichés (recommandé)"
             Top             =   3720
             Width           =   4455
          End
          Begin VB.CheckBox Check10 
-            Caption         =   "Ouvrir Hex Editor VB dans le même état qu'en partant"
             Height          =   255
             Left            =   120
             TabIndex        =   85
-            ToolTipText     =   $"frmOptions.frx":071D
             Top             =   3360
             Width           =   4455
          End
          Begin VB.CheckBox Check9 
-            Caption         =   "Afficher le splash screen"
             Height          =   255
             Left            =   120
             TabIndex        =   82
-            ToolTipText     =   "Autorise l'affichage du splash screen au démarrage du logiciel"
             Top             =   3000
             Width           =   6615
          End
          Begin VB.CheckBox Check1 
-            Caption         =   "Maximiser les fenêtres à leur ouverture"
             Height          =   255
             Left            =   120
             TabIndex        =   78
-            ToolTipText     =   "Lance les fenêtres d'édition en grand lors de leur ouverture"
             Top             =   120
             Width           =   6615
          End
          Begin VB.CheckBox Check8 
-            Caption         =   "Fermer la fenêtre de démarrage après le choix d'un objet à ouvrir"
             Height          =   255
             Left            =   120
             TabIndex        =   77
-            ToolTipText     =   "Referme la fenêtre de démarrage rapide après le choix d'une action"
             Top             =   2640
             Width           =   6615
          End
          Begin VB.CheckBox Check7 
-            Caption         =   "Ouvrir également les fichiers des sous-dossiers lors de l'ouverture d'un dossier"
             Height          =   255
             Left            =   120
             TabIndex        =   76
-            ToolTipText     =   "Liste et ouvre tous les fichiers des sous dossiers lors de l'ouverture d'un dossier (lent - déconseillé)"
             Top             =   2280
             Width           =   6615
          End
@@ -529,8 +508,6 @@ Begin VB.Form frmOptions
             Height          =   200
             Left            =   5520
             TabIndex        =   19
-            Text            =   "480"
-            ToolTipText     =   "Hauteur"
             Top             =   4200
             Width           =   495
          End
@@ -540,58 +517,45 @@ Begin VB.Form frmOptions
             Height          =   200
             Left            =   4680
             TabIndex        =   18
-            Text            =   "640"
-            ToolTipText     =   "Largeur"
             Top             =   4200
             Width           =   495
          End
          Begin VB.CheckBox Check6 
-            Caption         =   "Ne pas changer les dates des fichiers modifiés"
             Height          =   255
             Left            =   120
             TabIndex        =   16
-            ToolTipText     =   "Conserve les dates originelles du fichiers après sa modification et sa sauvegarde"
             Top             =   1920
             Width           =   6615
          End
          Begin VB.CheckBox Check5 
-            Caption         =   "Permettre plusieurs instances du programme"
             Height          =   255
             Left            =   120
             TabIndex        =   15
-            ToolTipText     =   "Permet au logiciel de se lancer plusieurs fois en même temps"
             Top             =   1560
             Width           =   6615
          End
          Begin VB.CheckBox Check4 
-            Caption         =   "Afficher les informations fichier par défaut"
             Height          =   255
             Left            =   120
             TabIndex        =   14
-            ToolTipText     =   "Affiche les informations sur les fichiers dans les fenêtres d'édition"
             Top             =   1200
             Width           =   6615
          End
          Begin VB.CheckBox Check3 
-            Caption         =   "Afficher les données par défaut"
             Height          =   255
             Left            =   120
             TabIndex        =   13
-            ToolTipText     =   "Afficher la zone de changement rapide de donnée lors de l'ouverture des fenêtres d'édition"
             Top             =   840
             Width           =   6615
          End
          Begin VB.CheckBox Check2 
-            Caption         =   "Afficher la liste des icones par défaut"
             Height          =   255
             Left            =   120
             TabIndex        =   12
-            ToolTipText     =   "Affiche la liste des icones par défaut (fichier et processus)"
             Top             =   480
             Width           =   6615
          End
          Begin VB.Label Label5 
-            Caption         =   "X"
             Height          =   255
             Left            =   5280
             TabIndex        =   20
@@ -599,7 +563,6 @@ Begin VB.Form frmOptions
             Width           =   135
          End
          Begin VB.Label Label4 
-            Caption         =   "Résolution de sauvegarde des images d'analyse des fichiers :"
             Height          =   255
             Left            =   120
             TabIndex        =   17
@@ -627,23 +590,21 @@ Begin VB.Form frmOptions
          Width           =   7455
          Begin VB.ComboBox cbLang 
             Height          =   315
-            ItemData        =   "frmOptions.frx":07AF
+            ItemData        =   "frmOptions.frx":0615
             Left            =   2040
-            List            =   "frmOptions.frx":07B6
+            List            =   "frmOptions.frx":061C
             Style           =   2  'Dropdown List
             TabIndex        =   74
-            ToolTipText     =   "Langue par défaut"
             Top             =   1080
             Width           =   4215
          End
          Begin VB.ComboBox cbOS 
             Height          =   315
-            ItemData        =   "frmOptions.frx":07C2
+            ItemData        =   "frmOptions.frx":0628
             Left            =   2040
-            List            =   "frmOptions.frx":07CC
+            List            =   "frmOptions.frx":0632
             Style           =   2  'Dropdown List
             TabIndex        =   72
-            ToolTipText     =   "Système d'exploitation utilisant le logiciel"
             Top             =   240
             Width           =   4215
          End
@@ -696,11 +657,9 @@ Begin VB.Form frmOptions
             Width           =   6855
          End
          Begin VB.CheckBox chkSendTo 
-            Caption         =   "Mettre une entrée dans le menu ""Envoyer vers"" de Windows"
             Height          =   255
             Left            =   120
             TabIndex        =   9
-            ToolTipText     =   "Ajoute une entrée 'Envoyer vers --> Hex Editor VB'"
             Top             =   1080
             Width           =   5175
          End
@@ -746,20 +705,16 @@ Begin VB.Form frmOptions
          Top             =   4080
          Width           =   9500
          Begin VB.OptionButton optDec 
-            Caption         =   "Offsets en décimal"
             Height          =   255
             Left            =   4800
             TabIndex        =   84
-            ToolTipText     =   "Affiche les offsets en base décimale"
             Top             =   1800
             Width           =   3495
          End
          Begin VB.OptionButton optHex 
-            Caption         =   "Offsets en hexadécimal"
             Height          =   195
             Left            =   4800
             TabIndex        =   83
-            ToolTipText     =   "Affiche les offsets en base hexadécimale"
             Top             =   1440
             Width           =   3135
          End
@@ -897,13 +852,12 @@ Begin VB.Form frmOptions
          End
          Begin VB.ComboBox cbGrid 
             Height          =   315
-            ItemData        =   "frmOptions.frx":07FF
+            ItemData        =   "frmOptions.frx":0665
             Left            =   5640
-            List            =   "frmOptions.frx":0815
+            List            =   "frmOptions.frx":0667
             Style           =   2  'Dropdown List
             TabIndex        =   46
             Tag             =   "lang_ok"
-            ToolTipText     =   "Type de grille à afficher"
             Top             =   960
             Width           =   3855
          End
@@ -1104,10 +1058,10 @@ Private Sub chkContextMenu_Click(Index As Integer)
     
     If chkContextMenu(Index).Value Then
         'ajoute
-        AddContextMenu (Index + 1)
+        Call AddContextMenu(Index + 1)
     Else
         'retire
-        RemoveContextMenu (Index + 1)
+        Call RemoveContextMenu(Index + 1)
     End If
     
 End Sub
@@ -1117,10 +1071,10 @@ Private Sub chkSendTo_Click()
     
     If chkSendTo.Value Then
         'créé
-        Shortcut True
+        Call Shortcut(True)
     Else
         'supprime
-        Shortcut False
+        Call Shortcut(False)
     End If
     
 End Sub
@@ -1131,38 +1085,40 @@ Dim x As Long
 Dim y As Long
 Dim s As String
 
-    HW.BackColor = vbWhite
-    HW.OffsetForeColor = 16737380
-    HW.HexForeColor = &H6F6F6F
-    HW.StringForeColor = &H6F6F6F
-    HW.TitleBackGround = &H8000000F
-    HW.OffsetTitleForeColor = 16737380
-    HW.BaseTitleForeColor = 16737380
-    HW.LineColor = &H8000000C
-    HW.FirstOffset = 0
-    HW.NumberPerPage = 20
-    HW.SelectionColor = &HE0E0E0
-    HW.Grid = None
-    HW.SignetColor = &H8080FF
-    HW.ModifiedItemColor = &HFF&
-    HW.ModifiedSelectedItemColor = &HFF&
-    HW.Refresh
-    HW.UseHexOffset = True
-
-    pctColor(0).BackColor = HW.BackColor
-    pctColor(1).BackColor = HW.OffsetForeColor
-    pctColor(2).BackColor = HW.HexForeColor
-    pctColor(3).BackColor = HW.StringForeColor
-    pctColor(4).BackColor = HW.OffsetTitleForeColor
-    pctColor(5).BackColor = HW.BaseTitleForeColor
-    pctColor(6).BackColor = HW.BackColor
-    pctColor(7).BackColor = HW.LineColor
-    pctColor(8).BackColor = HW.SelectionColor
-    pctColor(9).BackColor = HW.ModifiedItemColor
-    pctColor(10).BackColor = HW.ModifiedSelectedItemColor
-    pctColor(11).BackColor = HW.SignetColor
-    pctColor(12).BackColor = vbBlack
-    pctColor(13).BackColor = 12632256
+    With HW
+        .BackColor = vbWhite
+        .OffsetForeColor = 16737380
+        .HexForeColor = &H6F6F6F
+        .StringForeColor = &H6F6F6F
+        .TitleBackGround = &H8000000F
+        .OffsetTitleForeColor = 16737380
+        .BaseTitleForeColor = 16737380
+        .LineColor = &H8000000C
+        .FirstOffset = 0
+        .NumberPerPage = 20
+        .SelectionColor = &HE0E0E0
+        .Grid = None
+        .SignetColor = &H8080FF
+        .ModifiedItemColor = &HFF&
+        .ModifiedSelectedItemColor = &HFF&
+        .Refresh
+        .UseHexOffset = True
+        pctColor(0).BackColor = .BackColor
+        pctColor(1).BackColor = .OffsetForeColor
+        pctColor(2).BackColor = .HexForeColor
+        pctColor(3).BackColor = .StringForeColor
+        pctColor(4).BackColor = .OffsetTitleForeColor
+        pctColor(5).BackColor = .BaseTitleForeColor
+        pctColor(6).BackColor = .BackColor
+        pctColor(7).BackColor = .LineColor
+        pctColor(8).BackColor = .SelectionColor
+        pctColor(9).BackColor = .ModifiedItemColor
+        pctColor(10).BackColor = .ModifiedSelectedItemColor
+        pctColor(11).BackColor = .SignetColor
+        pctColor(12).BackColor = vbBlack
+        pctColor(13).BackColor = 12632256
+    End With
+    
     txtC.Text = "2000"
     optHex.Value = True
         
@@ -1177,9 +1133,11 @@ Dim s As String
         Next y
         HW.AddStringValue x, s
     Next x
-
-    HW.FillText
-    HW.Refresh
+    
+    With HW
+        .FillText
+        .Refresh
+    End With
     
     With txt
         .BackColor = pctColor(12).BackColor
@@ -1312,13 +1270,14 @@ Dim s As String
         End With
     
     'lance la sauvegarde
-    clsPref.SaveIniFile cPref
+    Call clsPref.SaveIniFile(cPref)
     
     
     'On Error Resume Next
     'on change l'apparence de tous les HW de toutes les forms
     For Each x In Forms
-        If (TypeOf x Is Pfm) Or (TypeOf x Is diskPfm) Or (TypeOf x Is MemPfm) Or (TypeOf x Is physPfm) Then
+        If (TypeOf x Is Pfm) Or (TypeOf x Is diskPfm) Or (TypeOf x Is MemPfm) _
+            Or (TypeOf x Is physPfm) Then
 
                 With x.HW
                     'on applique ces couleurs au HW de CETTE form
@@ -1350,47 +1309,45 @@ Dim s As String
     On Error Resume Next
     
     'on change la taille du Explorer
-    frmContent.pctExplorer.Height = cPref.explo_Height
-    frmContent.LV.Height = cPref.explo_Height - 145
-    
-    'apparence de la console
-    frmContent.pctConsole.BackColor = cPref.console_BackColor
-    frmContent.txt.BackColor = cPref.console_BackColor
-    frmContent.txtE.BackColor = cPref.console_BackColor
-    frmContent.pctConsole.Height = cPref.console_Heigth
-    With frmContent.txt
-        .BackColor = pctColor(12).BackColor
-        .SelStart = 0
-        .SelLength = Len(.Text)
-        .SelColor = pctColor(13).BackColor
-        .SelStart = Len(.Text)
-    End With
-    With frmContent.txtE
-        .BackColor = pctColor(12).BackColor
-        .SelStart = 0
-        .SelLength = Len(.Text)
-        .SelColor = pctColor(13).BackColor
-        .SelStart = Len(.Text)
+    With frmContent
+        .pctExplorer.Height = cPref.explo_Height
+        .LV.Height = cPref.explo_Height - 145
+        
+        'apparence de la console
+        .pctConsole.BackColor = cPref.console_BackColor
+        .txt.BackColor = cPref.console_BackColor
+        .txtE.BackColor = cPref.console_BackColor
+        .pctConsole.Height = cPref.console_Heigth
+        .txt.BackColor = pctColor(12).BackColor
+        .txt.SelStart = 0
+        .txt.SelLength = Len(.txt.Text)
+        .txt.SelColor = pctColor(13).BackColor
+        .txt.SelStart = Len(.txt.Text)
+        .txtE.BackColor = pctColor(12).BackColor
+        .txtE.SelStart = 0
+        .txtE.SelLength = Len(.txtE.Text)
+        .txtE.SelColor = pctColor(13).BackColor
+        .txtE.SelStart = Len(.txtE.Text)
     End With
 
     'créé ou supprime les menus contextuels de Windows en fonction des nouvelles prefs.
     If CBool(cPref.integ_FileContextual) = False Then
         'enlève
-        RemoveContextMenu 1
+        Call RemoveContextMenu(1)
     Else
         'ajoute
-        AddContextMenu 1
+        Call AddContextMenu(1)
     End If
     If CBool(cPref.integ_FolderContextual) = False Then
         'enlève
-        RemoveContextMenu 0
+        Call RemoveContextMenu(0)
     Else
         'ajoute
-        AddContextMenu 0
+        Call AddContextMenu(0)
     End If
     
     'créé ou pas le raccourci
-    Shortcut CBool(cPref.integ_SendTo)
+    Call Shortcut(CBool(cPref.integ_SendTo))
 
 
     'change les settings du Explorer
@@ -1420,7 +1377,9 @@ Dim s As String
 
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_OptSaved"))
+    
     Unload Me
+    
 End Sub
 
 Private Sub Form_Load()
@@ -1428,25 +1387,27 @@ Dim x As Long
 Dim y As Long
 Dim s As String
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     TB.ZOrder vbSendToBack  'dernier plan
     
@@ -1457,15 +1418,17 @@ Dim s As String
         Frame1(x).Height = 6375
         Frame1(x).Left = 50
     Next x
-    Me.Width = 10065
-    Me.Height = 7900
-    Me.cmdDefault.Left = 1000
-    Me.cmdQuitter.Left = 7800
-    Me.cmdSauvegarder.Left = 6300
-    Me.cmdDefault.Top = 6900
-    Me.cmdQuitter.Top = 6900
-    Me.cmdSauvegarder.Top = 6900
     
+    With Me
+        Me.Width = 10065
+        .Height = 7900
+        .cmdDefault.Left = 1000
+        .cmdQuitter.Left = 7800
+        .cmdSauvegarder.Left = 6300
+        .cmdDefault.Top = 6900
+        .cmdQuitter.Top = 6900
+        .cmdSauvegarder.Top = 6900
+    End With
     
     
     '//LECTURE DES PREFERENCES
@@ -1636,14 +1599,14 @@ Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As 
     
         If HW.IsSignet(Item.Offset) = False Then
             'on l'ajoute
-            HW.AddSignet Item.Offset
-            HW.TraceSignets
+            Call HW.AddSignet(Item.Offset)
+            Call HW.TraceSignets
         ElseIf HW.IsSignet(Item.Offset) Then
         
             'alors on l'enlève
             While HW.IsSignet(HW.Item.Offset)
                 'on supprime
-                HW.RemoveSignet Val(HW.Item.Offset)
+                Call HW.RemoveSignet(Val(HW.Item.Offset))
             Wend
         End If
     End If
@@ -1663,18 +1626,20 @@ Private Sub pctColor_Click(Index As Integer)
     End With
     
     If Index < 12 Then
-        'maintenant, change la couleur dans le HW
-        HW.BackColor = pctColor(0).BackColor
-        HW.OffsetForeColor = pctColor(1).BackColor
-        HW.HexForeColor = pctColor(2).BackColor
-        HW.StringForeColor = pctColor(3).BackColor
-        HW.OffsetTitleForeColor = pctColor(4).BackColor
-        HW.BaseTitleForeColor = pctColor(5).BackColor
-        HW.TitleBackGround = pctColor(6).BackColor
-        HW.LineColor = pctColor(7).BackColor
-        HW.SelectionColor = pctColor(8).BackColor
-        'HW.ModifiedItemColor = pctColor(9).BackColor
-        'HW.ModifiedSelectedItemColor = pctColor(10).BackColor
+        With HW
+            'maintenant, change la couleur dans le HW
+            .BackColor = pctColor(0).BackColor
+            .OffsetForeColor = pctColor(1).BackColor
+            .HexForeColor = pctColor(2).BackColor
+            .StringForeColor = pctColor(3).BackColor
+            .OffsetTitleForeColor = pctColor(4).BackColor
+            .BaseTitleForeColor = pctColor(5).BackColor
+            .TitleBackGround = pctColor(6).BackColor
+            .LineColor = pctColor(7).BackColor
+            .SelectionColor = pctColor(8).BackColor
+            '.ModifiedItemColor = pctColor(9).BackColor
+            '.ModifiedSelectedItemColor = pctColor(10).BackColor
+        End With
     Else
         With txt
             .BackColor = pctColor(12).BackColor

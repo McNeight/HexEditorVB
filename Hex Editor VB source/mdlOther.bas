@@ -48,12 +48,12 @@ Private AdressWinProc As Long
 '=======================================================
 'met au premier plan ou non une form
 '=======================================================
-Public Function PremierPlan(Frm As Form, IsPremierPlan As ModePlan) As Long
+Public Function SetFormForeBackGround(Frm As Form, IsPremierPlan As ModePlan) As Long
     Select Case IsPremierPlan
         Case True
-            PremierPlan = SetWindowPos(Frm.hWnd, -1, 0, 0, 0, 0, VISIBLEFLAGS)
+            SetFormForeBackGround = SetWindowPos(Frm.hWnd, -1, 0, 0, 0, 0, VISIBLEFLAGS)
         Case False
-            PremierPlan = SetWindowPos(Frm.hWnd, -2, 0, 0, 0, 0, VISIBLEFLAGS)
+            SetFormForeBackGround = SetWindowPos(Frm.hWnd, -2, 0, 0, 0, 0, VISIBLEFLAGS)
         End Select
 End Function
 
@@ -849,7 +849,7 @@ Dim bOverWrite As Boolean
 
 CreateMyFileFromOneBuffer:
     'sauvegarde le fichier (un seul buffer)
-    cFile.SaveDATAinFile sFile, s2, bOverWrite   'lance la sauvegarde
+    cFile.SaveDataInFile sFile, s2, bOverWrite   'lance la sauvegarde
 
     'ajoute du texte à la console
     Call AddTextToConsole(frmContent.Lang.GetString("_FileCreatedOkMdl"))
