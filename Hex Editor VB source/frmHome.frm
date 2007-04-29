@@ -29,7 +29,6 @@ Begin VB.Form frmHome
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Annuler"
       Height          =   435
       Left            =   4125
       TabIndex        =   1
@@ -37,7 +36,6 @@ Begin VB.Form frmHome
       Width           =   1575
    End
    Begin VB.CommandButton cmdOk 
-      Caption         =   "Ouvrir"
       Height          =   435
       Left            =   1125
       TabIndex        =   0
@@ -237,11 +235,9 @@ Begin VB.Form frmHome
             Width           =   5775
          End
          Begin VB.CommandButton cmdBrowseFolder 
-            Caption         =   "..."
             Height          =   255
             Left            =   5640
             TabIndex        =   6
-            ToolTipText     =   "Choix du dossier à ouvrir"
             Top             =   360
             Width           =   615
          End
@@ -250,7 +246,6 @@ Begin VB.Form frmHome
             Height          =   285
             Left            =   120
             TabIndex        =   5
-            ToolTipText     =   "Dossier choisi pour l'ouverture"
             Top             =   360
             Width           =   5415
          End
@@ -386,11 +381,9 @@ Begin VB.Form frmHome
             End
          End
          Begin VB.CommandButton cmdBrowseFile 
-            Caption         =   "..."
             Height          =   255
             Left            =   5640
             TabIndex        =   3
-            ToolTipText     =   "Choix du fichier à ouvrir"
             Top             =   360
             Width           =   615
          End
@@ -399,7 +392,6 @@ Begin VB.Form frmHome
             Height          =   285
             Left            =   120
             TabIndex        =   2
-            ToolTipText     =   "Fichier choisi pour l'ouverture"
             Top             =   360
             Width           =   5415
          End
@@ -439,8 +431,6 @@ Begin VB.Form frmHome
             Left            =   2160
             TabIndex        =   14
             Tag             =   "pref"
-            Text            =   "100"
-            ToolTipText     =   "Taille"
             Top             =   1080
             Width           =   975
          End
@@ -448,11 +438,10 @@ Begin VB.Form frmHome
             Height          =   315
             ItemData        =   "frmHome.frx":058A
             Left            =   3360
-            List            =   "frmHome.frx":059A
+            List            =   "frmHome.frx":058C
             Style           =   2  'Dropdown List
             TabIndex        =   15
             Tag             =   "pref lang_ok"
-            ToolTipText     =   "Unité"
             Top             =   1080
             Width           =   1335
          End
@@ -461,16 +450,13 @@ Begin VB.Form frmHome
             Height          =   285
             Left            =   120
             TabIndex        =   12
-            ToolTipText     =   "Nouveau fichier à créer"
             Top             =   480
             Width           =   5415
          End
          Begin VB.CommandButton cmdBrowseNew 
-            Caption         =   "..."
             Height          =   255
             Left            =   5640
             TabIndex        =   13
-            ToolTipText     =   "Choix du fichier à créer"
             Top             =   480
             Width           =   615
          End
@@ -549,7 +535,8 @@ Private bFirst As Boolean
 
 Private Sub cmdBrowseFile_Click()
 'browse un fichier
-    txtFile.Text = cFile.ShowOpen(Lang.GetString("_FileToOpen"), Me.hWnd, Lang.GetString("_All") & "|*.*")
+    txtFile.Text = cFile.ShowOpen(Lang.GetString("_FileToOpen"), Me.hWnd, _
+        Lang.GetString("_All") & "|*.*")
 End Sub
 
 Private Sub cmdBrowseFolder_Click()
@@ -559,7 +546,8 @@ End Sub
 
 Private Sub cmdBrowseNew_Click()
 'browse un dossier
-    txtNewFile.Text = cFile.ShowSave(Lang.GetString("_FileToCreate"), Me.hWnd, Lang.GetString("_All") & "|*.*", App.Path)
+    txtNewFile.Text = cFile.ShowSave(Lang.GetString("_FileToCreate"), _
+        Me.hWnd, Lang.GetString("_All") & "|*.*", App.Path)
 End Sub
 
 Private Sub cmdOk_Click()
@@ -568,7 +556,6 @@ Dim m() As String
 Dim Frm As Form
 Dim x As Long
 Dim sDrive As String
-Dim cDr As clsDiskInfos
 Dim lH As Long
 Dim lFile As Long
 Dim lLen As Double
@@ -612,19 +599,14 @@ Dim lLen As Double
         Case 3
         
             If DV.SelectedItem Is Nothing Then Exit Sub
-    
-            Set cDr = New clsDiskInfos
-            
+                
             'on check si c'est un disque logique ou un disque physique
             If Left$(DV.SelectedItem.Key, 3) = "log" Then
             
                 'disque logique
             
                 'vérifie que le drive est accessible
-                If DV.IsSelectedDriveAccessible = False Then
-                    Set cDr = Nothing   'inaccessible, alors on sort de cette procédure
-                    Exit Sub
-                End If
+                If DV.IsSelectedDriveAccessible = False Then Exit Sub
                 
                 'affiche une nouvelle fenêtre
                 Set Frm = New diskPfm
@@ -642,15 +624,12 @@ Dim lLen As Double
                 'disque physique
                 
                 'vérifie que le drive est accessible
-                If DV.IsSelectedDriveAccessible = False Then
-                    Set cDr = Nothing   'inaccessible, alors on sort de cette procédure
-                    Exit Sub
-                End If
+                If DV.IsSelectedDriveAccessible = False Then Exit Sub
                 
                 'affiche une nouvelle fenêtre
                 Set Frm = New physPfm
                 
-                Call Frm.GetDrive(Val(Mid$(DV.SelectedItem.Text, 3, 1))) 'renseigne sur le path sélectionné
+                Call Frm.GetDrive(Val(Mid$(DV.SelectedItem.Text, 3, 1)))   'renseigne sur le path sélectionné
                 
                 Unload Me   'quitte cette form
                 
@@ -658,18 +637,14 @@ Dim lLen As Double
                 lNbChildFrm = lNbChildFrm + 1
                 frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
                 
-                
             End If
-    
-            'libère la classe
-            Set cDr = Nothing
-            
+
         Case 4
             'processus
 
             'vérfie que le processus est ouvrable
             lH = OpenProcess(PROCESS_ALL_ACCESS, False, Val(PV.SelectedItem.Tag))
-            CloseHandle lH
+            Call CloseHandle(lH)
             
             If lH = 0 Then
                 'pas possible
@@ -691,13 +666,16 @@ Dim lLen As Double
                 'fichier déjà existant
                 If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
             End If
-            cFile.CreateEmptyFile txtNewFile.Text, True
+            
+            Call cFile.CreateEmptyFile(txtNewFile.Text, True)
             
             'création du fichier
             lLen = Abs(Val(txtSize.Text))
-            If cdUnit.Text = Lang.GetString("_Ko") Then lLen = lLen * 1024
-            If cdUnit.Text = Lang.GetString("_Mo") Then lLen = (lLen * 1024) * 1024
-            If cdUnit.Text = Lang.GetString("_Go") Then lLen = ((lLen * 1024) * 1024) * 1024
+            With Lang
+                If cdUnit.Text = .GetString("_Ko") Then lLen = lLen * 1024
+                If cdUnit.Text = .GetString("_Mo") Then lLen = (lLen * 1024) * 1024
+                If cdUnit.Text = .GetString("_Go") Then lLen = ((lLen * 1024) * 1024) * 1024
+            End With
             
             'ajoute du texte à la console
             Call AddTextToConsole(Lang.GetString("_CreatingFile"))
@@ -736,11 +714,11 @@ Private Sub DV_DblClick()
 End Sub
 
 Private Sub DV_NodeClick(ByVal Node As ComctlLib.Node)
-Dim cDrive As clsDrive
+Dim cDrive As FileSystemLibrary.Drive
+Dim cDisk As FileSystemLibrary.PhysicalDisk
 Dim s As String
     
     If DV.SelectedItem Is Nothing Then Exit Sub
-    
     
     'on check si c'est un disque logique ou un disque physique
     If Left$(DV.SelectedItem.Key, 3) = "log" Then
@@ -748,62 +726,73 @@ Dim s As String
         'disque logique
         
         'vérifie la disponibilité du disque
-        If cDisk.IsLogicalDriveAccessible(Node.Text) = False Then
+        If cFile.IsDriveAvailable(Left$(Node.Text, 1)) = False Then
             'inaccessible
             txtDiskInfos.Text = Lang.GetString("_DiskNon")
             Exit Sub
         End If
         
         'affichage des infos disque
-        Set cDrive = cDisk.GetLogicalDrive(Node.Text)
+        Set cDrive = cFile.GetDrive(Left$(Node.Text, 1))
         
+        With cDrive
+            s = Lang.GetString("_Drive") & .VolumeLetter & "]"
+            s = s & vbNewLine & Lang.GetString("_VolName") & CStr(.VolumeName) & "]"
+            s = s & vbNewLine & Lang.GetString("_Serial") & Hex$(.VolumeSerialNumber) & "]"
+            s = s & vbNewLine & Lang.GetString("_FileS") & CStr(.FileSystemName) & "]"
+            s = s & vbNewLine & Lang.GetString("_DriveT") & CStr(.strDriveType) & "]"
+            s = s & vbNewLine & Lang.GetString("_MedT") & CStr(.strMediaType) & "]"
+            s = s & vbNewLine & Lang.GetString("_PartSize") & CStr(.PartitionLength) & "]"
+            s = s & vbNewLine & Lang.GetString("_TotalSize") & CStr(.TotalSpace) & "  <--> " & FormatedSize(.TotalSpace, 10) & " ]"
+            s = s & vbNewLine & Lang.GetString("_FreeSize") & CStr(.FreeSpace) & "  <--> " & FormatedSize(.FreeSpace, 10) & " ]"
+            s = s & vbNewLine & Lang.GetString("_UsedSize") & CStr(.UsedSpace) & "  <--> " & FormatedSize(.UsedSpace, 10) & " ]"
+            s = s & vbNewLine & Lang.GetString("_Percent") & CStr(.PercentageFree) & " %]"
+            s = s & vbNewLine & Lang.GetString("_LogCount") & CStr(.TotalLogicalSectors) & "]"
+            s = s & vbNewLine & Lang.GetString("_PhysCount") & CStr(.TotalPhysicalSectors) & "]"
+            s = s & vbNewLine & Lang.GetString("_Hid") & CStr(.HiddenSectors) & "]"
+            s = s & vbNewLine & Lang.GetString("_BPerSec") & CStr(.BytesPerSector) & "]"
+            s = s & vbNewLine & Lang.GetString("_SPerClust") & CStr(.SectorPerCluster) & "]"
+            s = s & vbNewLine & Lang.GetString("_Clust") & CStr(.TotalClusters) & "]"
+            s = s & vbNewLine & Lang.GetString("_FreeClust") & CStr(.FreeClusters) & "]"
+            s = s & vbNewLine & Lang.GetString("_UsedClust") & CStr(.UsedClusters) & "]"
+            s = s & vbNewLine & Lang.GetString("_BPerClust") & CStr(.BytesPerCluster) & "]"
+            s = s & vbNewLine & Lang.GetString("_Cyl") & CStr(.Cylinders) & "]"
+            s = s & vbNewLine & Lang.GetString("_TPerCyl") & CStr(.TracksPerCylinder) & "]"
+            s = s & vbNewLine & Lang.GetString("_SPerT") & CStr(.SectorsPerTrack) & "]"
+            s = s & vbNewLine & Lang.GetString("_OffDep") & CStr(.StartingOffset) & "]"
+        End With
+        
+        Set cDrive = Nothing
     Else
         
         'disque physique
         
         'vérifie la disponibilité du disque
-        If cDisk.IsPhysicalDriveAccessible(Val(Mid$(Node.Text, 3, 1))) = False Then
+        If cFile.IsPhysicalDiskAvailable(Val(Mid$(Node.Text, 3, 1))) = False Then
             'inaccessible
             txtDiskInfos.Text = Lang.GetString("_DiskPNon")
             Exit Sub
         End If
         
         'affichage des infos disque
-        Set cDrive = cDisk.GetPhysicalDrive(Val(Mid$(Node.Text, 3, 1)))
+        Set cDisk = cFile.GetPhysicalDisk(Val(Mid$(Node.Text, 3, 1)))
+    
+        With cDisk
+            s = Lang.GetString("_Drive") & .DiskNumber & "]"
+            s = s & vbNewLine & Lang.GetString("_VolName") & CStr(.DiskName) & "]"
+            s = s & vbNewLine & Lang.GetString("_MedT") & CStr(.strMediaType) & "]"
+            s = s & vbNewLine & Lang.GetString("_TotalSize") & CStr(.TotalSpace) & "  <--> " & FormatedSize(.TotalSpace, 10) & " ]"
+            s = s & vbNewLine & Lang.GetString("_PhysCount") & CStr(.TotalPhysicalSectors) & "]"
+            s = s & vbNewLine & Lang.GetString("_BPerSec") & CStr(.BytesPerSector) & "]"
+            s = s & vbNewLine & Lang.GetString("_Cyl") & CStr(.Cylinders) & "]"
+            s = s & vbNewLine & Lang.GetString("_TPerCyl") & CStr(.TracksPerCylinder) & "]"
+            s = s & vbNewLine & Lang.GetString("_SPerT") & CStr(.SectorsPerTrack) & "]"
+        End With
+        
+        Set cDisk = Nothing
     End If
     
-    
-    With cDrive
-        s = Lang.GetString("_Drive") & .VolumeLetter & "]"
-        s = s & vbNewLine & Lang.GetString("_VolName") & CStr(.VolumeName) & "]"
-        s = s & vbNewLine & Lang.GetString("_Serial") & Hex$(.VolumeSerialNumber) & "]"
-        s = s & vbNewLine & Lang.GetString("_FileS") & CStr(.FileSystemName) & "]"
-        s = s & vbNewLine & Lang.GetString("_DriveT") & CStr(.strDriveType) & "]"
-        s = s & vbNewLine & Lang.GetString("_MedT") & CStr(.strMediaType) & "]"
-        s = s & vbNewLine & Lang.GetString("_PartSize") & CStr(.PartitionLength) & "]"
-        s = s & vbNewLine & Lang.GetString("_TotalSize") & CStr(.TotalSpace) & "  <--> " & FormatedSize(.TotalSpace, 10) & " ]"
-        s = s & vbNewLine & Lang.GetString("_FreeSize") & CStr(.FreeSpace) & "  <--> " & FormatedSize(.FreeSpace, 10) & " ]"
-        s = s & vbNewLine & Lang.GetString("_UsedSize") & CStr(.UsedSpace) & "  <--> " & FormatedSize(.UsedSpace, 10) & " ]"
-        s = s & vbNewLine & Lang.GetString("_Percent") & CStr(.PercentageFree) & " %]"
-        s = s & vbNewLine & Lang.GetString("_LogCount") & CStr(.TotalLogicalSectors) & "]"
-        s = s & vbNewLine & Lang.GetString("_PhysCount") & CStr(.TotalPhysicalSectors) & "]"
-        s = s & vbNewLine & Lang.GetString("_Hid") & CStr(.HiddenSectors) & "]"
-        s = s & vbNewLine & Lang.GetString("_BPerSec") & CStr(.BytesPerSector) & "]"
-        s = s & vbNewLine & Lang.GetString("_SPerClust") & CStr(.SectorPerCluster) & "]"
-        s = s & vbNewLine & Lang.GetString("_Clust") & CStr(.TotalClusters) & "]"
-        s = s & vbNewLine & Lang.GetString("_FreeClust") & CStr(.FreeClusters) & "]"
-        s = s & vbNewLine & Lang.GetString("_UsedClust") & CStr(.UsedClusters) & "]"
-        s = s & vbNewLine & Lang.GetString("_BPerClust") & CStr(.BytesPerCluster) & "]"
-        s = s & vbNewLine & Lang.GetString("_Cyl") & CStr(.Cylinders) & "]"
-        s = s & vbNewLine & Lang.GetString("_TPerCyl") & CStr(.TracksPerCylinder) & "]"
-        s = s & vbNewLine & Lang.GetString("_SPerT") & CStr(.SectorsPerTrack) & "]"
-        s = s & vbNewLine & Lang.GetString("_OffDep") & CStr(.StartingOffset) & "]"
-    End With
-    
     txtDiskInfos.Text = s
-    
-    'libère la mémoire
-    Set cDrive = Nothing
 End Sub
 
 Private Sub Form_Activate()
@@ -842,7 +831,7 @@ End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
-    clsPref.SaveFormSettings App.Path & "\Preferences\HomeWindow.ini", Me
+    Call clsPref.SaveFormSettings(App.Path & "\Preferences\HomeWindow.ini", Me)
     Set clsPref = Nothing
 End Sub
 
@@ -859,44 +848,49 @@ Dim x As Long
 
     Set clsPref = New clsIniForm
     
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
-    DV.PhysicalDrivesString = Lang.GetString("_PhysStr")
-    DV.LogicalDrivesString = Lang.GetString("_LogStr")
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+        
+        DV.PhysicalDrivesString = .GetString("_PhysStr")
+        DV.LogicalDrivesString = .GetString("_LogStr")
+    End With
     
     bFirst = False
     
     'loading des preferences
-    clsPref.GetFormSettings App.Path & "\Preferences\HomeWindow.ini", Me
+    Call clsPref.GetFormSettings(App.Path & "\Preferences\HomeWindow.ini", Me)
     optFolderSub(1).Value = Not (optFolderSub(0).Value)
     
     'réorganise les Frames
     For x = 0 To Frame1.Count - 1
-        Frame1(x).Left = 120
-        Frame1(x).Top = 480
-        Frame1(x).Width = 6600
-        Frame1(x).Height = 4500
+        With Frame1(x)
+            .Left = 120
+            .Top = 480
+            .Width = 6600
+            .Height = 4500
+        End With
     Next x
     
     'affiche un seul frame
-    MaskFrames 0
+    Call MaskFrames(0)
 End Sub
 
 '=======================================================
@@ -912,9 +906,9 @@ Dim x As Long
     
     If lFrame = 4 Then
         'création de fichier
-        cmdOk.Caption = Lang.GetString("_CreateAndOpen!")
+        cmdOK.Caption = Lang.GetString("_CreateAndOpen!")
     Else
-        cmdOk.Caption = Lang.GetString("_Open!")
+        cmdOK.Caption = Lang.GetString("_Open!")
     End If
 
 End Sub
@@ -922,7 +916,7 @@ End Sub
 Private Sub PV_NodeClick(ByVal Node As ComctlLib.Node)
 'met à jour les infos
 Dim pProcess As ProcessItem
-Dim cFic As filesystemlibrary.File
+Dim cFic As FileSystemLibrary.File
 Dim s As String
 
     On Error Resume Next
@@ -996,11 +990,11 @@ End Sub
 
 Private Sub TB_Click()
 'change le frame visible
-    MaskFrames TB.SelectedItem.Index - 1
+    Call MaskFrames(TB.SelectedItem.Index - 1)
 End Sub
 
 Private Sub txtFile_Change()
-Dim cFil As filesystemlibrary.File
+Dim cFil As FileSystemLibrary.File
 Dim s As String
 
     'met à jour les infos du fichier si ce dernier existe
@@ -1045,7 +1039,7 @@ Dim s As String
 End Sub
 
 Private Sub txtFolder_Change()
-Dim cFol As filesystemlibrary.Folder
+Dim cFol As FileSystemLibrary.Folder
 Dim s As String
 
     'met à jour les infos du dossier si ce dernier existe

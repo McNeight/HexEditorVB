@@ -44,7 +44,7 @@ Dim x As Long
 Dim s As String
 Dim pt As Long
 Dim hFile As Long
-Dim cFile As filesystemlibrary.FileSystem
+Dim cFile As FileSystemLibrary.FileSystem
 Dim curSize As Currency
 Dim nbBuf As Long
 Dim lLastSize As Long
@@ -52,7 +52,7 @@ Dim y As Long
 
     Call SetCurrentDirectoryA(App.Path)
     
-    Set cFile = New filesystemlibrary.FileSystem
+    Set cFile = New FileSystemLibrary.FileSystem
 
     With PGB
         .Max = LV.ListItems.Count
@@ -164,7 +164,107 @@ TestPres:
 End Sub
 
 '=======================================================
-'lance la sanitization du disque
+'lance la sanitization du disque physique
+'=======================================================
+Public Sub SanitPhysDiskNow(ByVal DiskNumber As Byte, PGB As pgrBar)
+Dim cDisk As FileSystemLibrary.PhysicalDisk
+Dim x As Long
+Dim secPerString As Long
+Dim s As String
+Dim pt As Long
+Dim hDevice As Long
+Dim bPerSec As Long
+Dim curOp As Currency
+Dim bMax As Long
+
+    Call SetCurrentDirectoryA(App.Path)
+
+    'vérifie que le disque est accessible
+    With frmSanitization.Lang
+        If cFile.IsPhysicalDiskAvailable(DiskNumber) = False Then
+            MsgBox .GetString("_DiskNotR"), vbCritical, .GetString("_War")
+            Exit Sub
+        End If
+    End With
+    
+    'récupère les infos sue le disque
+    Set cDisk = cFile.GetPhysicalDisk(DiskNumber)
+    
+    'nombre de secteurs pour une string de 2Mo
+    secPerString = 2097152 / cDisk.BytesPerSector
+    
+    'handle du disque
+    hDevice = GetPhysicalDiskHandleWrite(DiskNumber)
+    
+    With PGB
+        .Max = cDisk.TotalPhysicalSectors / secPerString
+        .Min = 0
+        .Value = 0
+    End With
+    
+    bPerSec = cDisk.BytesPerSector
+    bMax = Int(cDisk.TotalPhysicalSectors / secPerString) + 1 '+1
+    
+    'pour chaque secteur
+    For x = 1 To bMax
+    
+        'on récupère un pointeur sur une string de 2Mo
+        pt = GetPtRandomString
+        
+        'calcul unique
+        curOp = CCur(x * secPerString)
+        
+        'on écrit dans le disque
+        '// &H55
+        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, p55)
+        
+        '// &HAA
+        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, pAA)
+            
+        '//random string
+        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, pt)
+        
+        'on libère les 2Mo
+        Call FreePtRandomString(pt)
+        
+        'rend la main de tps en tps
+        If (x Mod 5) = 0 Then
+            PGB.Value = x
+            DoEvents
+        End If
+        
+    Next x
+    
+    '//s'occupe de l'entête du disque
+        pt = GetPtRandomString
+        
+        'on écrit dans le disque
+        '// &H55
+        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, p55)
+        
+        '// &HAA
+        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, pAA)
+            
+        '//random string
+        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, pt)
+        
+        'on libère les 2Mo
+        Call FreePtRandomString(pt)
+    
+    
+    PGB.Value = PGB.Max
+    
+    'referme le handle
+    CloseHandle hDevice
+    
+    'libère classe + affiche message
+    Set cDisk = Nothing
+    MsgBox frmSanitization.Lang.GetString("_SanitOk"), vbInformation, frmSanitization.Lang.GetString("_SanitOk")
+
+End Sub
+
+'=======================================================
+'lance la sanitization du disque logique
 '=======================================================
 Public Sub SanitDiskNow(ByVal sDisk As String, PGB As pgrBar)
 Dim cDriv As clsDrive
@@ -261,6 +361,7 @@ Dim bMax As Long
     
     'libère classe + affiche message
     Set clsDriv = Nothing
+    Set cDriv = Nothing
     MsgBox frmSanitization.Lang.GetString("_SanitOk"), vbInformation, frmSanitization.Lang.GetString("_SanitOk")
 
 End Sub

@@ -36,29 +36,23 @@ Begin VB.Form frmProcesses
       Sorted          =   0   'False
    End
    Begin VB.CommandButton cmdRefresh 
-      Caption         =   "Rafraichir"
       Height          =   375
       Left            =   1080
       TabIndex        =   2
-      ToolTipText     =   "Ouvrir de processus"
       Top             =   3600
       Width           =   1215
    End
    Begin VB.CommandButton cmdFermer 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   2520
       TabIndex        =   1
-      ToolTipText     =   "Fermer cette fenêtre"
       Top             =   3600
       Width           =   1095
    End
    Begin VB.CommandButton cmdOK 
-      Caption         =   "OK"
       Height          =   375
       Left            =   120
       TabIndex        =   0
-      ToolTipText     =   "Ouvrir de processus"
       Top             =   3600
       Width           =   735
    End
@@ -123,7 +117,7 @@ Dim Frm As Form
 
     'vérfie que le processus est ouvrable
     lH = OpenProcess(PROCESS_ALL_ACCESS, False, Val(PV.SelectedItem.Tag))
-    CloseHandle lH
+    Call CloseHandle(lH)
     
     If lH = 0 Then
         'pas possible
@@ -174,25 +168,27 @@ End Sub
 
 Private Sub Form_Load()
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     bFirst = False
 End Sub

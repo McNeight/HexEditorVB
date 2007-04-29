@@ -557,7 +557,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "00:24"
+            TextSave        =   "00:51"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -565,7 +565,7 @@ Begin VB.MDIForm frmContent
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "29/04/2007"
+            TextSave        =   "30/04/2007"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1047,6 +1047,7 @@ Begin VB.MDIForm frmContent
       End
       Begin VB.Menu mnuFileViewMode 
          Caption         =   "&Mode ""Lecture de fichier"""
+         Enabled         =   0   'False
       End
       Begin VB.Menu mnuDisplayTiret1 
          Caption         =   "-"
@@ -1160,9 +1161,11 @@ Begin VB.MDIForm frmContent
       End
       Begin VB.Menu mnuEditScript 
          Caption         =   "&Editeur de script"
+         Enabled         =   0   'False
       End
       Begin VB.Menu mnuExecuteScript 
          Caption         =   "&Exécuter le script"
+         Enabled         =   0   'False
          Shortcut        =   {F9}
       End
       Begin VB.Menu mnuToolsTiret0 
@@ -1439,6 +1442,7 @@ End Sub
 
 Private Sub LV_ItemDblSelection(Item As ComctlLib.ListItem)
 Dim Frm As Form
+
     'ouvre un fichier
 
     On Error GoTo ErrGestion
@@ -1476,13 +1480,13 @@ Dim l As Long
     End If
     
     'affiche la string dans la picturebox
-    pctPath.Text = cFile.getfoldername(s)
+    pctPath.Text = cFile.GetFolderName(s)
 End Sub
 
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
 'suppression des fichiers
     If KeyCode = vbKeyDelete Then
-        LV.DeleteSelectedItemsFromDisk False, , , True, True
+        Call LV.DeleteSelectedItemsFromDisk(False, , , True, True)
     End If
 End Sub
 
@@ -1509,7 +1513,7 @@ End Sub
 Private Sub MDIForm_DblClick()
 'montre la form de démarrage rapide
     frmHome.Show
-    PremierPlan frmHome, MettreAuPremierPlan
+    Call SetFormForeBackGround(frmHome, SetFormForeGround)
 End Sub
 
 Private Sub MDIForm_Load()
@@ -1520,25 +1524,28 @@ Dim x As Long
     Set clsPref = New clsIniForm
     
     frmSplash.lblState.Caption = "Récupération des fichiers de langue..."
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     'chargement des menus de langue (sLang())
     For x = 1 To UBound(sLang())
@@ -1557,7 +1564,7 @@ Dim x As Long
     
     'loading des preferences
     frmSplash.lblState.Caption = Lang.GetString("_LoadingPref")
-    clsPref.GetFormSettings App.Path & "\Preferences\FrmContent.ini", Me
+    Call clsPref.GetFormSettings(App.Path & "\Preferences\FrmContent.ini", Me)
     
     'valeurs par défaut
     ReDim strConsoleText(0)
@@ -1600,7 +1607,7 @@ Dim x As Long
     
     'ajoute les icones aux menus
     frmSplash.lblState.Caption = Lang.GetString("_AddIconsMenus")
-    Call AddIconsToMenus(Me.hwnd, Me.ImageList2)
+    Call AddIconsToMenus(Me.hWnd, Me.ImageList2)
         
     lNbChildFrm = 0
     
@@ -1639,7 +1646,6 @@ Dim x As Long
         With LV
             .BlockDisplay = True    'empeche de refresh plusieurs fois
             .Visible = False
-            
             
             .Height = cPref.explo_Height - 145
             
@@ -1703,12 +1709,13 @@ Dim Frm As Form
     For Each Frm In Forms
         If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) _
             Or (TypeOf Frm Is physPfm) Then
-            SendMessage Frm.hwnd, WM_CLOSE, 0, 0
+            Call SendMessage(Frm.hWnd, WM_CLOSE, 0, 0)
         End If
     Next Frm
     
     'sauvegarde des preferences
-    clsPref.SaveFormSettings App.Path & "\Preferences\FrmContent.ini", frmContent
+    Call clsPref.SaveFormSettings(App.Path & "\Preferences\FrmContent.ini", _
+        frmContent)
 
 End Sub
 
@@ -1717,7 +1724,8 @@ Private Sub mnuCopyBitmapToClipBoard_Click()
 Dim s As String
 
     If Me.ActiveForm Is Nothing Then Exit Sub
-    If TypeOfForm(Me.ActiveForm) <> "Fichier" And TypeOfForm(Me.ActiveForm) <> "Processus" Then Exit Sub
+    If TypeOfForm(Me.ActiveForm) <> "Fichier" And TypeOfForm(Me.ActiveForm) <> _
+        "Processus" Then Exit Sub
     
     'sauvegarder l'icone sélectionnée en bitmap
     If Me.ActiveForm.lvIcon.SelectedItem Is Nothing Then Exit Sub
@@ -1729,8 +1737,8 @@ Dim s As String
     If Me.ActiveForm.pct.Picture Is Nothing Then Exit Sub
     
     'copie dans le presse papier
-    Clipboard.Clear
-    Clipboard.SetData Me.ActiveForm.pct.Image
+    Call Clipboard.Clear
+    Call Clipboard.SetData(Me.ActiveForm.pct.Image)
     
     Set Me.ActiveForm.pct.Picture = Nothing
     
@@ -1763,7 +1771,7 @@ End Sub
 
 Private Sub mnuDisAsm_Click()
 'lance Disassembler.exe
-    cFile.ShellOpenFile App.Path & "\Disassembler.exe", Me.hwnd, , App.Path
+    Call cFile.ShellOpenFile(App.Path & "\Disassembler.exe", Me.hWnd, , App.Path)
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_DisASMLau"))
@@ -1806,6 +1814,7 @@ Private Sub mnuLang_Click(Index As Integer)
 'on change de langue
 Dim s As String
 Dim x As Long
+Dim cPRE As clsIniFile
 
     'détermine le path du dossier
     If App.LogMode = 0 Then
@@ -1818,7 +1827,8 @@ Dim x As Long
     s = Replace$(s, "&", vbNullString)
     
     'vérifie la présence du fichier
-    If cFile.FileExists(s) = False Then MsgBox Lang.GetString("_LangFileNot"), vbCritical, Lang.GetString("_Error"): Exit Sub
+    If cFile.FileExists(s) = False Then MsgBox Lang.GetString("_LangFileNot"), _
+        vbCritical, Lang.GetString("_Error"): Exit Sub
     
     'on décoche tout les menus
     For x = 1 To UBound(sLang())
@@ -1829,11 +1839,11 @@ Dim x As Long
     mnuLang(Index).Checked = True
     
     'on affiche un message comme quoi il faut redémarrer
-    MsgBox Lang.GetString("_HaveTo1") & vbNewLine & Lang.GetString("_HaveTo2"), vbInformation, Lang.GetString("_War")
+    MsgBox Lang.GetString("_HaveTo1") & vbNewLine & Lang.GetString("_HaveTo2"), _
+        vbInformation, Lang.GetString("_War")
     
     'on change les pref
     cPref.env_Lang = mnuLang(Index).Caption
-    Dim cPRE As clsIniFile
     Set cPRE = New clsIniFile
     Call cPRE.SaveIniFile(cPref)
     Set cPRE = Nothing
@@ -1844,7 +1854,7 @@ End Sub
 
 Private Sub mnuLangEditor_Click()
 'lance Disassembler.exe
-    cFile.ShellOpenFile App.Path & "\LangEditor.exe", Me.hwnd, , App.Path
+    Call cFile.ShellOpenFile(App.Path & "\LangEditor.exe", Me.hWnd, , App.Path)
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_LangEditorLau"))
@@ -1908,7 +1918,7 @@ Private Sub pctExplorer_Resize()
 End Sub
 
 Private Sub pctPath_Change()
-    If cFile.FolderExists(cFile.getfoldername(pctPath.Text & "\")) = False Then
+    If cFile.FolderExists(cFile.GetFolderName(pctPath.Text & "\")) = False Then
         'couleur rouge
         pctPath.ForeColor = RED_COLOR
     Else
@@ -1951,7 +1961,9 @@ Dim Frm As Form
             Call Frm.GetFile(Data.Files.Item(i))
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
-            Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
+            
+            Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & _
+                CStr(lNbChildFrm) & "]"
 
         ElseIf cFile.FolderExists(Data.Files.Item(i)) Then
             'alors on ajoute le contenu du dossier
@@ -1967,7 +1979,8 @@ Dim Frm As Form
                     Call Frm.GetFile(m(i2))
                     Frm.Show
                     lNbChildFrm = lNbChildFrm + 1
-                    Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
+                    Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & _
+                        CStr(lNbChildFrm) & "]"
                     DoEvents
                 End If
             Next i2
@@ -1983,14 +1996,18 @@ Public Sub MDIForm_Resize()
     
     'If Me.WindowState = vbMinimized Then frmData.Hide Else If Me.mnuEditTools.Checked Then frmData.Show
     
-    LV.Width = Me.Width - 400
-    LV.Height = Me.pctExplorer.Height - 370
+    With LV
+        .Width = Me.Width - 400
+        .Height = Me.pctExplorer.Height - 370
+    End With
     
     'positionne le pctPath
-    pctPath.Height = 200
-    pctPath.Top = LV.Height + 100
-    pctPath.Left = 50
-    pctPath.Width = LV.Width - 300
+    With pctPath
+        .Height = 200
+        .Top = LV.Height + 100
+        .Left = 50
+        .Width = LV.Width - 300
+    End With
     
 End Sub
 
@@ -1998,19 +2015,19 @@ Private Sub MDIForm_Unload(Cancel As Integer)
     
     Set clsPref = Nothing
     
-    Call UnHookPictureResizement(Me.pctConsole.hwnd, 1)
-    Call UnHookPictureResizement(Me.pctExplorer.hwnd)
+    Call UnHookPictureResizement(Me.pctConsole.hWnd, 1)
+    Call UnHookPictureResizement(Me.pctExplorer.hWnd)
     
     #If USE_FRMC_SUBCLASSING Then
         'enlève le hook de la form
-        Call cSub.UnHookFormMenu(Me.hwnd)
+        Call cSub.UnHookFormMenu(Me.hWnd)
         Set cSub = Nothing
     #End If
         
     Unload Me
     
     'lance la procédure d'arrêt
-    EndProgram
+    Call EndProgram
 End Sub
 
 Private Sub mnuAbout_Click()
@@ -2021,35 +2038,37 @@ Private Sub mnuAddSignet_Click()
 Dim r As Long
 
     'on ajoute (ou enlève) un signet
-
-    If Me.ActiveForm.HW.IsSignet(Me.ActiveForm.HW.Item.Offset) = False Then
-        'on l'ajoute
-        Me.ActiveForm.HW.AddSignet Me.ActiveForm.HW.Item.Offset
-        Me.ActiveForm.lstSignets.ListItems.Add Text:=CStr(Me.ActiveForm.HW.Item.Offset)
-        Me.ActiveForm.HW.TraceSignets
-    Else
+    If Me.ActiveForm Is Nothing Then Exit Sub
     
-        'alors on l'enlève
-        While Me.ActiveForm.HW.IsSignet(Me.ActiveForm.HW.Item.Offset)
-            'on supprime
-            Me.ActiveForm.HW.RemoveSignet Val(Me.ActiveForm.HW.Item.Offset)
-        Wend
+    With Me.ActiveForm
+        If .HW.IsSignet(.HW.Item.Offset) = False Then
+            'on l'ajoute
+            Call .HW.AddSignet(.HW.Item.Offset)
+            .lstSignets.ListItems.Add Text:=CStr(.HW.Item.Offset)
+            .HW.TraceSignets
+        Else
         
-        'enlève du listview
-        For r = Me.ActiveForm.lstSignets.ListItems.Count To 1 Step -1
-            If Me.ActiveForm.lstSignets.ListItems.Item(r).Text = CStr(Me.ActiveForm.HW.Item.Offset) Then
-                Me.ActiveForm.lstSignets.ListItems.Remove r
-            End If
-        Next r
-        
-        Me.ActiveForm.HW.TraceSignets
-    End If
+            'alors on l'enlève
+            While .HW.IsSignet(.HW.Item.Offset)
+                'on supprime
+                .HW.RemoveSignet Val(.HW.Item.Offset)
+            Wend
+            
+            'enlève du listview
+            For r = .lstSignets.ListItems.Count To 1 Step -1
+                If .lstSignets.ListItems.Item(r).Text = CStr(.HW.Item.Offset) _
+                    Then .lstSignets.ListItems.Remove r
+            Next r
+            
+            .HW.TraceSignets
+        End If
+    End With
                 
 End Sub
 
 Private Sub mnuAddSignetIn_Click()
 'ajoute une liste de signets
-    AddSignetIn False
+    Call AddSignetIn(False)
 End Sub
 
 Private Sub mnuBeginning_Click()
@@ -2073,7 +2092,6 @@ End Sub
 
 Private Sub mnuChangeDates_Click()
 'changer les dates
-
 
     If TypeOfForm(Me.ActiveForm) = "Fichier" Then
         frmDates.txtFile.Text = Me.ActiveForm.Caption
@@ -2125,62 +2143,67 @@ Dim curPos As Currency
     Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
         
     'vide le clipboard
-    Clipboard.Clear
+    Call Clipboard.Clear
     
-    'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    With Me.ActiveForm
     
-    'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
-    
-    Select Case TypeOfForm(frmContent.ActiveForm)
-        Case "Fichier"
-            'édition d'un fichier ==> va piocher avec ReadFile
-
-            'récupère la string
-            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
-            
-        Case "Processus"
+        'détermine la taille
+        curSize = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+            .HW.FirstSelectionItem.Offset - .HW.FirstSelectionItem.Col + 1
         
-            'récupère la string
-            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
-
-        Case "Disque"
+        'détermine la position du premier offset
+        curPos = .HW.FirstSelectionItem.Offset + .HW.FirstSelectionItem.Col - 1
         
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+        Select Case TypeOfForm(frmContent.ActiveForm)
+            Case "Fichier"
+                'édition d'un fichier ==> va piocher avec ReadFile
+    
+                'récupère la string
+                s = GetBytesFromFile(.Caption, curSize, curPos)
                 
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
-        
-        Case "Disque physique"
-        
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadSPhys Val(Me.ActiveForm.Tag), _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
-                
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
+            Case "Processus"
             
-    End Select
+                'récupère la string
+                s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), _
+                    CLng(curPos), CLng(curSize))
+    
+            Case "Disque"
+            
+                'redéfinit correctement la position et la taille (doivent être multiple du nombre
+                'de bytes par secteur)
+                curPos2 = ByND(curPos, .GetDriveInfos.BytesPerSector)
+                curSize2 = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+                    curPos2  'recalcule la taille en partant du début du secteur
+                curSize2 = ByN(curSize2, .GetDriveInfos.BytesPerSector)
+    
+                'récupère la string
+                Call DirectReadS(.GetDriveInfos.VolumeLetter & ":\", _
+                    curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                    .GetDriveInfos.BytesPerSector, s)
+                    
+                'recoupe la string pour récupérer ce qui intéresse vraiment
+                s = Mid$(s, curPos - curPos2 + 1, curSize)
+            
+            Case "Disque physique"
+            
+                'redéfinit correctement la position et la taille (doivent être multiple du nombre
+                'de bytes par secteur)
+                curPos2 = ByND(curPos, .GetDriveInfos.BytesPerSector)
+                curSize2 = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+                    curPos2  'recalcule la taille en partant du début du secteur
+                curSize2 = ByN(curSize2, .GetDriveInfos.BytesPerSector)
+    
+                'récupère la string
+                Call DirectReadSPhys(Val(.Tag), _
+                    curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                    .GetDriveInfos.BytesPerSector, s)
+                    
+                'recoupe la string pour récupérer ce qui intéresse vraiment
+                s = Mid$(s, curPos - curPos2 + 1, curSize)
+                
+        End Select
+    
+    End With
 
     'formate la string
     s = FormatednString(s)
@@ -2205,62 +2228,65 @@ Dim curPos As Currency
     Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
         
     'vide le clipboard
-    Clipboard.Clear
+    Call Clipboard.Clear
 
-    'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    With Me.ActiveForm
     
-    'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+        'détermine la taille
+        curSize = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+            .HW.FirstSelectionItem.Offset - .HW.FirstSelectionItem.Col + 1
+        
+        'détermine la position du premier offset
+        curPos = .HW.FirstSelectionItem.Offset + .HW.FirstSelectionItem.Col - 1
+        
+        Select Case TypeOfForm(frmContent.ActiveForm)
+            Case "Fichier"
+                'édition d'un fichier ==> va piocher avec ReadFile
+                            
+                'récupère la string
+                s = GetBytesFromFile(.Caption, curSize, curPos)
+                
+            Case "Processus"
+            
+                'récupère la string
+                s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+              
+            Case "Disque"
+            
+                'redéfinit correctement la position et la taille (doivent être multiple du nombre
+                'de bytes par secteur)
+                curPos2 = ByND(curPos, .GetDriveInfos.BytesPerSector)
+                curSize2 = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+                    curPos2  'recalcule la taille en partant du début du secteur
+                curSize2 = ByN(curSize2, .GetDriveInfos.BytesPerSector)
     
-    Select Case TypeOfForm(frmContent.ActiveForm)
-        Case "Fichier"
-            'édition d'un fichier ==> va piocher avec ReadFile
-                        
-            'récupère la string
-            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
+                'récupère la string
+                Call DirectReadS(.GetDriveInfos.VolumeLetter & ":\", _
+                    curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                    .GetDriveInfos.BytesPerSector, s)
+                    
+                'recoupe la string pour récupérer ce qui intéresse vraiment
+                s = Mid$(s, curPos - curPos2 + 1, curSize)
+    
+            Case "Disque physique"
             
-        Case "Processus"
-        
-            'récupère la string
-            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
-          
-        Case "Disque"
-        
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                'redéfinit correctement la position et la taille (doivent être multiple du nombre
+                'de bytes par secteur)
+                curPos2 = ByND(curPos, .GetDriveInfos.BytesPerSector)
+                curSize2 = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+                    curPos2  'recalcule la taille en partant du début du secteur
+                curSize2 = ByN(curSize2, .GetDriveInfos.BytesPerSector)
+    
+                'récupère la string
+                Call DirectReadSPhys(Val(.Tag), _
+                    curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                    .GetDriveInfos.BytesPerSector, s)
+                    
+                'recoupe la string pour récupérer ce qui intéresse vraiment
+                s = Mid$(s, curPos - curPos2 + 1, curSize)
                 
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
-
-        Case "Disque physique"
-        
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadSPhys Val(Me.ActiveForm.Tag), _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
-                
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
-            
-    End Select
+        End Select
+    End With
 
     'formate la string
     s = Replace$(s, vbNullChar, Chr$(32), , , vbBinaryCompare)
@@ -2286,62 +2312,65 @@ Dim curPos As Currency
     Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
     
     'vide le clipboard
-    Clipboard.Clear
+    Call Clipboard.Clear
     
-    'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    With Me.ActiveForm
     
-    'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
-            
-    Select Case TypeOfForm(frmContent.ActiveForm)
-        Case "Fichier"
-            'édition d'un fichier ==> va piocher avec ReadFile
-            
-            'récupère la string
-            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
+        'détermine la taille
+        curSize = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+            .HW.FirstSelectionItem.Offset - .HW.FirstSelectionItem.Col + 1
         
-        Case "Processus"
-            
-            'récupère la string
-            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
-        
-        Case "Disque"
-        
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+        'détermine la position du premier offset
+        curPos = .HW.FirstSelectionItem.Offset + .HW.FirstSelectionItem.Col - 1
                 
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
-
-        Case "Disque physique"
-        
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadSPhys Val(Me.ActiveForm.Tag), _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+        Select Case TypeOfForm(frmContent.ActiveForm)
+            Case "Fichier"
+                'édition d'un fichier ==> va piocher avec ReadFile
                 
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
+                'récupère la string
+                s = GetBytesFromFile(.Caption, curSize, curPos)
             
-    End Select
+            Case "Processus"
+                
+                'récupère la string
+                s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+            
+            Case "Disque"
+            
+                'redéfinit correctement la position et la taille (doivent être multiple du nombre
+                'de bytes par secteur)
+                curPos2 = ByND(curPos, .GetDriveInfos.BytesPerSector)
+                curSize2 = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+                    curPos2  'recalcule la taille en partant du début du secteur
+                curSize2 = ByN(curSize2, .GetDriveInfos.BytesPerSector)
+    
+                'récupère la string
+                Call DirectReadS(.GetDriveInfos.VolumeLetter & ":\", _
+                    curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                    .GetDriveInfos.BytesPerSector, s)
+                    
+                'recoupe la string pour récupérer ce qui intéresse vraiment
+                s = Mid$(s, curPos - curPos2 + 1, curSize)
+    
+            Case "Disque physique"
+            
+                'redéfinit correctement la position et la taille (doivent être multiple du nombre
+                'de bytes par secteur)
+                curPos2 = ByND(curPos, .GetDriveInfos.BytesPerSector)
+                curSize2 = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+                    curPos2  'recalcule la taille en partant du début du secteur
+                curSize2 = ByN(curSize2, .GetDriveInfos.BytesPerSector)
+    
+                'récupère la string
+                Call DirectReadSPhys(Val(.Tag), _
+                    curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                    .GetDriveInfos.BytesPerSector, s)
+                    
+                'recoupe la string pour récupérer ce qui intéresse vraiment
+                s = Mid$(s, curPos - curPos2 + 1, curSize)
+                
+        End Select
+    End With
 
     Clipboard.SetText s, vbCFText   'format fichier texte
     Me.Sb.Panels(1).Text = "Status=[Ready]"
@@ -2362,64 +2391,67 @@ Dim curPos As Currency
     s = vbNullString    'contiendra la string à copier
     
     'vide le clipboard
-    Clipboard.Clear
+    Call Clipboard.Clear
     
     Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
 
-    'détermine la taille
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-        Me.ActiveForm.HW.FirstSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Col + 1
+    With Me.ActiveForm
     
-    'détermine la position du premier offset
-    curPos = Me.ActiveForm.HW.FirstSelectionItem.Offset + Me.ActiveForm.HW.FirstSelectionItem.Col - 1
+        'détermine la taille
+        curSize = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+            .HW.FirstSelectionItem.Offset - .HW.FirstSelectionItem.Col + 1
+        
+        'détermine la position du premier offset
+        curPos = .HW.FirstSelectionItem.Offset + .HW.FirstSelectionItem.Col - 1
+        
+        Select Case TypeOfForm(frmContent.ActiveForm)
+            Case "Fichier"
+                'édition d'un fichier ==> va piocher avec ReadFile
+                            
+                'récupère la string
+                s = GetBytesFromFile(.Caption, curSize, curPos)
+                
+            Case "Processus"
+            
+                'récupère la string
+                s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
     
-    Select Case TypeOfForm(frmContent.ActiveForm)
-        Case "Fichier"
-            'édition d'un fichier ==> va piocher avec ReadFile
-                        
-            'récupère la string
-            s = GetBytesFromFile(Me.ActiveForm.Caption, curSize, curPos)
+            Case "Disque"
             
-        Case "Processus"
-        
-            'récupère la string
-            s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
-
-        Case "Disque"
-        
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadS Me.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                'redéfinit correctement la position et la taille (doivent être multiple du nombre
+                'de bytes par secteur)
+                curPos2 = ByND(curPos, .GetDriveInfos.BytesPerSector)
+                curSize2 = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+                    curPos2  'recalcule la taille en partant du début du secteur
+                curSize2 = ByN(curSize2, .GetDriveInfos.BytesPerSector)
+    
+                'récupère la string
+                Call DirectReadS(.GetDriveInfos.VolumeLetter & ":\", _
+                    curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                    .GetDriveInfos.BytesPerSector, s)
+                    
+                'recoupe la string pour récupérer ce qui intéresse vraiment
+                s = Mid$(s, curPos - curPos2 + 1, curSize)
                 
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
+            Case "Disque physique"
             
-        Case "Disque physique"
-        
-            'redéfinit correctement la position et la taille (doivent être multiple du nombre
-            'de bytes par secteur)
-            curPos2 = ByND(curPos, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = Me.ActiveForm.HW.SecondSelectionItem.Offset + Me.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, Me.ActiveForm.GetDriveInfos.BytesPerSector)
-
-            'récupère la string
-            DirectReadSPhys Val(Me.ActiveForm.Tag), _
-                curPos2 / Me.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                Me.ActiveForm.GetDriveInfos.BytesPerSector, s
+                'redéfinit correctement la position et la taille (doivent être multiple du nombre
+                'de bytes par secteur)
+                curPos2 = ByND(curPos, .GetDriveInfos.BytesPerSector)
+                curSize2 = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+                    curPos2  'recalcule la taille en partant du début du secteur
+                curSize2 = ByN(curSize2, .GetDriveInfos.BytesPerSector)
+    
+                'récupère la string
+                Call DirectReadSPhys(Val(.Tag), _
+                    curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                    .GetDriveInfos.BytesPerSector, s)
+                    
+                'recoupe la string pour récupérer ce qui intéresse vraiment
+                s = Mid$(s, curPos - curPos2 + 1, curSize)
                 
-            'recoupe la string pour récupérer ce qui intéresse vraiment
-            s = Mid$(s, curPos - curPos2 + 1, curSize)
-            
-    End Select
+        End Select
+    End With
 
     'formate la string
     s2 = vbNullString
@@ -2442,11 +2474,13 @@ Dim bOver As Boolean
     If Me.ActiveForm Is Nothing Then Exit Sub
     
     'calcule la taille du fichier résultat
-    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset - Me.ActiveForm.HW.FirstSelectionItem.Offset
+    curSize = Me.ActiveForm.HW.SecondSelectionItem.Offset - _
+        Me.ActiveForm.HW.FirstSelectionItem.Offset
     
     If curSize > 200000000 Then
         'fichier >200Mo, demande de confirmation
-        If MsgBox(Lang.GetString("_FileWillBeLARGE"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_FileWillBeLARGE"), vbInformation + vbYesNo, _
+            Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
     
     'demande le fichier résultat
@@ -2458,10 +2492,11 @@ Dim bOver As Boolean
         .ShowSave
         If cFile.FileExists(.Filename) Then
             'le fichier existe déjà
-            If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
+            If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
+                vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
         End If
         'créé un fichier vide
-        cFile.CreateEmptyFile .Filename, True
+        Call cFile.CreateEmptyFile(.Filename, True)
     End With
     
 
@@ -2489,7 +2524,8 @@ Private Sub mnuCreateFileFromSelelection_Click()
 Dim x As Long
 
     'créé un fichier depuis la sélection
-    x = MsgBox(Lang.GetString("_WannaNewFile"), vbQuestion + vbYesNo, Lang.GetString("_SaveType"))
+    x = MsgBox(Lang.GetString("_WannaNewFile"), vbQuestion + vbYesNo, _
+        Lang.GetString("_SaveType"))
     
     Call CreateFileFromCurrentSelection(x)
 End Sub
@@ -2512,7 +2548,8 @@ Dim l As Long
     
     l = Me.ActiveForm.HW.NumberPerPage
     
-    Me.ActiveForm.VS.Value = IIf((Me.ActiveForm.VS.Value + l) < Me.ActiveForm.VS.Max, Me.ActiveForm.VS.Value + l, Me.ActiveForm.VS.Max)
+    Me.ActiveForm.VS.Value = IIf((Me.ActiveForm.VS.Value + l) < _
+        Me.ActiveForm.VS.Max, Me.ActiveForm.VS.Value + l, Me.ActiveForm.VS.Max)
     Call Me.ActiveForm.VS_Change(Me.ActiveForm.VS.Value)
 End Sub
 
@@ -2528,7 +2565,7 @@ Dim sFile() As ComctlLib.ListItem
 Dim x As Long
 
     'On Error GoTo ErrGestion
-    LV.GetSelectedItems sFile
+    Call LV.GetSelectedItems(sFile)
     
     For x = 1 To UBound(sFile)
         If cFile.FileExists(sFile(x).Tag) Then
@@ -2593,7 +2630,7 @@ End Sub
 Private Sub mnuFileRenamer_Click()
 
     'lance FileRenamer.exe
-    cFile.ShellOpenFile App.Path & "\FileRenamer.exe", Me.hwnd, , App.Path
+    Call cFile.ShellOpenFile(App.Path & "\FileRenamer.exe", Me.hWnd, , App.Path)
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_FileRenamerLau"))
@@ -2607,18 +2644,18 @@ End Sub
 
 Private Sub mnuFreeForum_Click()
 'forum de discussion
-    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654034", Me.hwnd, , App.Path
+    Call cFile.ShellOpenFile("http://sourceforge.net/forum/forum.php?forum_id=654034", Me.hWnd, , App.Path)
 End Sub
 
 Private Sub mnuHelpForum_Click()
 'forum de demande d'aide
-    cFile.ShellOpenFile "http://sourceforge.net/forum/forum.php?forum_id=654035", Me.hwnd, , App.Path
+    Call cFile.ShellOpenFile("http://sourceforge.net/forum/forum.php?forum_id=654035", Me.hWnd, , App.Path)
 End Sub
 
 Private Sub mnuHome_Click()
 'lance frmHome
     frmHome.Show
-    PremierPlan frmHome, MettreAuPremierPlan
+    Call SetFormForeBackGround(frmHome, SetFormForeGround)
 End Sub
 
 Private Sub mnuMoveOffset_Click()
@@ -2633,7 +2670,8 @@ Dim l As Currency
     If StrPtr(s) = 0 Then Exit Sub  'cancel
     
     'alors on va à l'offset
-    l = By16(Me.ActiveForm.HW.Item.Offset + Me.ActiveForm.HW.Item.Col + Int(Val(s)))
+    l = By16(Me.ActiveForm.HW.Item.Offset + Me.ActiveForm.HW.Item.Col + _
+        Int(Val(s)))
     
     If l <= By16(Me.ActiveForm.HW.MaxOffset) And l >= 0 Then
         'alors c'est ok
@@ -2650,13 +2688,15 @@ Dim ActualClust As Long
     If Me.ActiveForm Is Nothing Then Exit Sub
 
     'détermine le cluster actuel
-    ActualClust = Int((Me.ActiveForm.VS.Value / Me.ActiveForm.GetDriveInfos.BytesPerCluster) * 16)
-    ActualClust = ActualClust + 1
-    
-    Me.ActiveForm.VS.Value = Int((ActualClust / 16) * Me.ActiveForm.GetDriveInfos.BytesPerCluster)
-    If Me.ActiveForm.VS.Value > Me.ActiveForm.VS.Max Then Me.ActiveForm.VS.Value = Me.ActiveForm.VS.Max
-    
-    Call Me.ActiveForm.VS_Change(Me.ActiveForm.VS.Value)
+    With Me.ActiveForm
+        ActualClust = Int((.VS.Value / .GetDriveInfos.BytesPerCluster) * 16)
+        ActualClust = ActualClust + 1
+        
+        .VS.Value = Int((ActualClust / 16) * .GetDriveInfos.BytesPerCluster)
+        If .VS.Value > .VS.Max Then .VS.Value = .VS.Max
+        
+        Call .VS_Change(.VS.Value)
+    End With
     
 End Sub
 
@@ -2667,13 +2707,15 @@ Dim ActualSect As Long
     If Me.ActiveForm Is Nothing Then Exit Sub
 
     'détermine le cluster actuel
-    ActualSect = Int((Me.ActiveForm.VS.Value / Me.ActiveForm.GetDriveInfos.BytesPerSector) * 16)
-    ActualSect = ActualSect + 1
-    
-    Me.ActiveForm.VS.Value = Int((ActualSect / 16) * Me.ActiveForm.GetDriveInfos.BytesPerSector)
-    If Me.ActiveForm.VS.Value > Me.ActiveForm.VS.Max Then Me.ActiveForm.VS.Value = Me.ActiveForm.VS.Max
-    
-    Call Me.ActiveForm.VS_Change(Me.ActiveForm.VS.Value)
+    With Me.ActiveForm
+        ActualSect = Int((.VS.Value / .GetDriveInfos.BytesPerSector) * 16)
+        ActualSect = ActualSect + 1
+        
+        .VS.Value = Int((ActualSect / 16) * .GetDriveInfos.BytesPerSector)
+        If .VS.Value > .VS.Max Then .VS.Value = .VS.Max
+        
+        Call .VS_Change(.VS.Value)
+    End With
 End Sub
 
 Private Sub mnuPrevClust_Click()
@@ -2683,13 +2725,15 @@ Dim ActualClust As Long
     If Me.ActiveForm Is Nothing Then Exit Sub
 
     'détermine le cluster actuel
-    ActualClust = Int((Me.ActiveForm.VS.Value / Me.ActiveForm.GetDriveInfos.BytesPerCluster) * 16)
-    ActualClust = ActualClust - 1
-    
-    Me.ActiveForm.VS.Value = Int((ActualClust / 16) * Me.ActiveForm.GetDriveInfos.BytesPerCluster)
-    If Me.ActiveForm.VS.Value < Me.ActiveForm.VS.Min Then Me.ActiveForm.VS.Value = Me.ActiveForm.VS.Min
-    
-    Call Me.ActiveForm.VS_Change(Me.ActiveForm.VS.Value)
+    With Me.ActiveForm
+        ActualClust = Int((.VS.Value / .GetDriveInfos.BytesPerCluster) * 16)
+        ActualClust = ActualClust - 1
+        
+        .VS.Value = Int((ActualClust / 16) * .GetDriveInfos.BytesPerCluster)
+        If .VS.Value < .VS.Min Then .VS.Value = .VS.Min
+        
+        Call .VS_Change(.VS.Value)
+    End With
     
 End Sub
 
@@ -2699,14 +2743,16 @@ Dim ActualSect As Long
 
     If Me.ActiveForm Is Nothing Then Exit Sub
     
-    'détermine le cluster actuel
-    ActualSect = Int((Me.ActiveForm.VS.Value / Me.ActiveForm.GetDriveInfos.BytesPerSector) * 16)
-    ActualSect = ActualSect - 1
-    
-    Me.ActiveForm.VS.Value = Int((ActualSect / 16) * Me.ActiveForm.GetDriveInfos.BytesPerSector)
-    If Me.ActiveForm.VS.Value < Me.ActiveForm.VS.Min Then Me.ActiveForm.VS.Value = Me.ActiveForm.VS.Min
-    
-    Call Me.ActiveForm.VS_Change(Me.ActiveForm.VS.Value)
+    With Me.ActiveForm
+        'détermine le cluster actuel
+        ActualSect = Int((.VS.Value / .GetDriveInfos.BytesPerSector) * 16)
+        ActualSect = ActualSect - 1
+        
+        .VS.Value = Int((ActualSect / 16) * .GetDriveInfos.BytesPerSector)
+        If .VS.Value < .VS.Min Then .VS.Value = .VS.Min
+        
+        Call .VS_Change(.VS.Value)
+    End With
 End Sub
 
 Private Sub mnuErr_Click()
@@ -2726,7 +2772,7 @@ Dim sExt As String
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_CreaTempCour"))
     
-    ExecuteTempFile Me.hwnd, Me.ActiveForm, sExt
+    Call ExecuteTempFile(Me.hWnd, Me.ActiveForm, sExt)
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_CreaTempOk"))
@@ -2741,17 +2787,20 @@ Private Sub mnuExploreDisk_Click()
 'affiche ou pas l'explorer de disque
 
     If TypeOfForm(Me.ActiveForm) = "Disque" Then
-        mnuExploreDisk.Checked = Not (mnuExploreDisk.Checked)
-        Me.ActiveForm.FV.Visible = mnuExploreDisk.Checked
-        Me.ActiveForm.FV2.Visible = mnuExploreDisk.Checked
-        Me.ActiveForm.pctPath.Visible = mnuExploreDisk.Checked
-        Me.ActiveForm.FrameFrag.Visible = mnuExploreDisk.Checked
+        With Me.ActiveForm
+            mnuExploreDisk.Checked = Not (mnuExploreDisk.Checked)
+            .FV.Visible = mnuExploreDisk.Checked
+            .FV2.Visible = mnuExploreDisk.Checked
+            .pctPath.Visible = mnuExploreDisk.Checked
+            .FrameFrag.Visible = mnuExploreDisk.Checked
+        End With
     End If
     Call frmContent.ActiveForm.ResizeMe
        
 End Sub
 
 Private Sub mnuExploreDisplay_Click()
+
     mnuExploreDisplay.Checked = Not (mnuExploreDisplay.Checked)
     pctExplorer.Visible = mnuExploreDisplay.Checked
     
@@ -2847,46 +2896,11 @@ End Sub
 
 Private Sub mnuHelp_Click()
 'affiche l'aide
-
-    'On Error GoTo 5
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_HelpDis"))
 
-    'ShellExecute Me.hWnd, "open", App.Path & "\aide.chm", vbNullString, vbNullString, 1
-    'Dim pt As Long
-    'Dim s As String
-    'pt = GetPtRandomString
-    
-    's = Space$(2097152)
-    'CopyMemory ByVal StrPtr(s), ByVal pt, 2097152
-    'MsgBox s, , pt
-    'Call FreePtRandomString(pt)
-    'MsgBox s
-    
-    MsgBox GetRandom2MoString, vbSystemModal
-    ' Dim s() As Byte
-    
-    ' DirectRead "l:\", 0, 512, s()
-    ' Dim x As Byte
-    'For x = 0 To 15
-    '     MsgBox s(10), , s(5)
-    'Next x
-    ' frmSaveProcess.Show vbModal
-    'Randomize
-    'Lang.WriteIniFileFormIDEform
-    
-    'switch basique de langue
-    'If Lang.Language = "French" Then
-    '    Lang.Language = "English"
-    'Else
-    '    Lang.Language = "French"
-    'End If
-    
-    
-    'Err.Raise Int(Rnd * 50)
-5
-    'clsERREUR.AddError "mnuHelp_Click"
+
 End Sub
 
 Private Sub mnuInformations_Click()
@@ -2920,7 +2934,8 @@ End Sub
 
 Private Sub mnuNewProcess_Click()
 'invite à demarrer un nouveau processus
-    ShowRunBox Me.hwnd
+    Call cFile.ShowRunBox(Me.hWnd, Lang.GetString("_StartProcessTitle"), _
+        Lang.GetString("_StartProcessMsg"))
 End Sub
 
 Private Sub mnuOpen_Click()
@@ -2931,7 +2946,8 @@ Dim x As Long
 Dim Frm As Form
     
     ReDim s(0)
-    s2 = cFile.ShowOpen(Lang.GetString("_SelFileToOpen"), Me.hwnd, _
+    
+    s2 = cFile.ShowOpen(Lang.GetString("_SelFileToOpen"), Me.hWnd, _
         Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
         OFN_ALLOWMULTISELECT, s())
     
@@ -2976,7 +2992,7 @@ Dim Frm As Form
 Dim x As Long
 
     'sélectionne un répertoire
-    sDir = cFile.BrowseForFolder(Lang.GetString("_SelADir"), Me.hwnd)
+    sDir = cFile.BrowseForFolder(Lang.GetString("_SelADir"), Me.hWnd)
     
     'teste la validité du répertoire
     If cFile.FolderExists(sDir) = False Then Exit Sub
@@ -3004,8 +3020,6 @@ End Sub
 Private Sub mnuOpenInBN_Click()
 'ouvre le fichier dans le bloc notes
 Dim x As Long
-
-On Error Resume Next
 
     If ActiveForm Is Nothing Then Exit Sub
     
@@ -3043,17 +3057,17 @@ Dim sFile() As ListItem
 Dim x As Long
 
     'obtient la liste des sélections
-    LV.GetSelectedItems sFile
+    Call LV.GetSelectedItems(sFile)
     
     For x = 1 To UBound(sFile)
-        cFile.ShellOpenFile sFile(x).Tag, Me.hwnd
+        Call cFile.ShellOpenFile(sFile(x).Tag, Me.hWnd)
     Next x
     
 End Sub
 
 Private Sub mnuOpenSignetsList_Click()
 'ouvre une liste de signet
-    AddSignetIn True
+    Call AddSignetIn(True)
 End Sub
 
 Private Sub mnuOptions_Click()
@@ -3095,10 +3109,13 @@ Private Sub mnuRemoveAll_Click()
     If Me.ActiveForm Is Nothing Then Exit Sub
     
     'confirmation
-    If MsgBox(Lang.GetString("_SureDelAllSig"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
+    If MsgBox(Lang.GetString("_SureDelAllSig"), vbInformation + vbYesNo, _
+        Lang.GetString("_War")) <> vbYes Then Exit Sub
     
-    Me.ActiveForm.HW.RemoveAllSignets
-    Me.ActiveForm.lstSignets.ListItems.Clear
+    With Me.ActiveForm
+        .HW.RemoveAllSignets
+        .lstSignets.ListItems.Clear
+    End With
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_SigDeled"))
@@ -3108,22 +3125,25 @@ Private Sub mnuRemoveSignet_Click()
 'supprime un signet, si existant
 Dim x As Long
 
+    
     If Me.ActiveForm Is Nothing Then Exit Sub
 
-    If Me.ActiveForm.HW.IsSignet(Me.ActiveForm.HW.Item.Offset) Then
-    
-        While Me.ActiveForm.HW.IsSignet(Me.ActiveForm.HW.Item.Offset)
-            'on supprime
-            Me.ActiveForm.HW.RemoveSignet Val(Me.ActiveForm.HW.Item.Offset)
-        Wend
+    With Me.ActiveForm
+        If .HW.IsSignet(.HW.Item.Offset) Then
         
-        'enlève du listview
-        For x = Me.ActiveForm.lstSignets.ListItems.Count To 1 Step -1
-            If Me.ActiveForm.lstSignets.ListItems.Item(x).Text = CStr(Me.ActiveForm.HW.Item.Offset) Then
-                Me.ActiveForm.lstSignets.ListItems.Remove x
-            End If
-        Next x
-    End If
+            While .HW.IsSignet(.HW.Item.Offset)
+                'on supprime
+                .HW.RemoveSignet Val(.HW.Item.Offset)
+            Wend
+            
+            'enlève du listview
+            For x = .lstSignets.ListItems.Count To 1 Step -1
+                If .lstSignets.ListItems.Item(x).Text = CStr(.HW.Item.Offset) Then
+                    .lstSignets.ListItems.Remove x
+                End If
+            Next x
+        End If
+    End With
     
 End Sub
 
@@ -3138,14 +3158,16 @@ Dim s As String
     If Me.ActiveForm Is Nothing Then Exit Sub
     If TypeOfForm(Me.ActiveForm) <> "Fichier" And TypeOfForm(Me.ActiveForm) <> "Processus" Then Exit Sub
     
-    'sauvegarder l'icone sélectionnée en bitmap
-    If Me.ActiveForm.lvIcon.SelectedItem Is Nothing Then Exit Sub
-    
-    'pose l'image sur le picturebox
-    ImageList_Draw Me.ActiveForm.IMG.hImageList, Me.ActiveForm.lvIcon.SelectedItem.Index - 1, _
-        Me.ActiveForm.pct.hdc, 2, 2, ILD_TRANSPARENT    'tente de recentrer l'image avec 2,2
-   
-    If Me.ActiveForm.pct.Picture Is Nothing Then Exit Sub
+    With Me.ActiveForm
+        'sauvegarder l'icone sélectionnée en bitmap
+        If .lvIcon.SelectedItem Is Nothing Then Exit Sub
+        
+        'pose l'image sur le picturebox
+        Call ImageList_Draw(.IMG.hImageList, .lvIcon.SelectedItem.Index - 1, _
+            .pct.hdc, 2, 2, ILD_TRANSPARENT) 'tente de recentrer l'image avec 2,2
+        
+        If .pct.Picture Is Nothing Then Exit Sub
+    End With
    
     'demande la sauvegarde du fichier
     On Error GoTo Err
@@ -3164,7 +3186,7 @@ Dim s As String
     If LCase$(Right$(s, 4)) <> ".bmp" Then s = s & ".bmp"
     
     'lance la sauvegarde
-    SavePicture Me.ActiveForm.pct.Image, s
+    Call SavePicture(Me.ActiveForm.pct.Image, s)
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_IconSaved"))
@@ -3246,13 +3268,16 @@ Private Sub mnuSelectAll_Click()
     
     If Me.ActiveForm Is Nothing Then Exit Sub
 
-    Me.ActiveForm.HW.SelectZone 0, 0, 16 - (By16(Me.ActiveForm.HW.MaxOffset) _
-    - Me.ActiveForm.HW.MaxOffset) - 1, By16(Me.ActiveForm.HW.MaxOffset) - 16
-    Me.ActiveForm.HW.Refresh
-    
-    'refresh le label qui contient la taille de la sélection
-    Me.ActiveForm.Sb.Panels(4).Text = "Sélection=[" & CStr(Me.ActiveForm.HW.NumberOfSelectedItems) & " bytes]"
-    Me.ActiveForm.Label2(9) = Me.ActiveForm.Sb.Panels(4).Text
+    With Me.ActiveForm
+        .HW.SelectZone 0, 0, 16 - (By16(.HW.MaxOffset) - .HW.MaxOffset) - 1, _
+            By16(.HW.MaxOffset) - 16
+        .HW.Refresh
+        
+        'refresh le label qui contient la taille de la sélection
+        .Sb.Panels(4).Text = "Sélection=[" & CStr(.HW.NumberOfSelectedItems) & _
+            " bytes]"
+        .Label2(9) = .Sb.Panels(4).Text
+    End With
 End Sub
 
 Private Sub mnuSelectFromByte_Click()
@@ -3310,7 +3335,7 @@ End Sub
 
 Public Sub mnuSourceForge_Click()
 'page source forge
-    cFile.ShellOpenFile "http://sourceforge.net/projects/hexeditorvb/", Me.hwnd, , App.Path
+    Call cFile.ShellOpenFile("http://sourceforge.net/projects/hexeditorvb/", Me.hWnd, , App.Path)
 End Sub
 
 Public Sub mnuStats_Click()
@@ -3372,13 +3397,13 @@ End Sub
 Private Sub mnuTableMulti_Click()
 'affiche la table
     frmTable.Show
-    frmTable.CreateTable AllTables
+    Call frmTable.CreateTable(AllTables)
 End Sub
 
 Private Sub mnuTdec2Ascii_Click()
 'affiche la table
     frmTable.Show
-    frmTable.CreateTable HEX_ASCII
+    Call frmTable.CreateTable(HEX_ASCII)
 End Sub
 
 Private Sub mnuSaveAs_Click()
@@ -3410,7 +3435,7 @@ Dim x As Long
     End If
     
     'efface le précédent fichier
-    cFile.DeleteFile sPath
+    Call cFile.DeleteFile(sPath)
     
     'créé le fichier
     Call Me.ActiveForm.GetNewFile(sPath)
@@ -3440,7 +3465,7 @@ End Sub
 
 Public Sub mnuVbfrance_Click()
 'vbfrance.com
-    cFile.ShellOpenFile "http://www.vbfrance.com/auteurdetail.aspx?ID=523601&print=1", Me.hwnd, , App.Path
+    Call cFile.ShellOpenFile("http://www.vbfrance.com/auteurdetail.aspx?ID=523601&print=1", Me.hWnd, , App.Path)
 End Sub
 
 Private Sub muUp_Click()
@@ -3475,10 +3500,12 @@ Private Sub Timer1_Timer()
         'pas de fichier ouvert ==> enabled=false
         Me.mnuRedo.Enabled = False
         Me.mnuUndo.Enabled = False
-        Me.Toolbar1.Buttons.Item(12).Enabled = False
-        Me.Toolbar1.Buttons.Item(13).Enabled = False
-        Me.Toolbar1.Buttons.Item(16).Enabled = False
-        Me.Toolbar1.Buttons.Item(17).Enabled = False
+        With Me.Toolbar1.Buttons
+            .Item(12).Enabled = False
+            .Item(13).Enabled = False
+            .Item(16).Enabled = False
+            .Item(17).Enabled = False
+        End With
     End If
 End Sub
 
@@ -3492,7 +3519,7 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
         Case "HomeOpen"
             'affiche la boite de dialogue Home (choix des différentes actions à faire)
             frmHome.Show
-            PremierPlan frmHome, MettreAuPremierPlan
+            Call SetFormForeBackGround(frmHome, SetFormForeGround)
         Case "New"
             mnuNew_Click
         Case "Signet"
@@ -3750,34 +3777,38 @@ End Function
 '=======================================================
 Private Sub RefreshToolbarEnableState()
 
-    If Me.ActiveForm Is Nothing Then
-        'alors pas de Copier/coller/rechercher/couper/signets
-        Me.Toolbar1.Buttons.Item(4).Enabled = False
-        Me.Toolbar1.Buttons.Item(5).Enabled = False
-        Me.Toolbar1.Buttons.Item(7).Enabled = False
-        Me.Toolbar1.Buttons.Item(8).Enabled = False
-        Me.Toolbar1.Buttons.Item(9).Enabled = False
-        Me.Toolbar1.Buttons.Item(10).Enabled = False
-        Me.Toolbar1.Buttons.Item(15).Enabled = False
-    Else
-        'on active
-        If TypeOfForm(Me.ActiveForm) = "Fichier" Then Me.Toolbar1.Buttons.Item(4).Enabled = True
-        Me.Toolbar1.Buttons.Item(5).Enabled = True
-        Me.Toolbar1.Buttons.Item(7).Enabled = True
-        Me.Toolbar1.Buttons.Item(8).Enabled = True
-        Me.Toolbar1.Buttons.Item(9).Enabled = True
-        Me.Toolbar1.Buttons.Item(10).Enabled = True
-        Me.Toolbar1.Buttons.Item(15).Enabled = True
-    End If
+    With Me.Toolbar1.Buttons
+        If Me.ActiveForm Is Nothing Then
+            'alors pas de Copier/coller/rechercher/couper/signets
+            .Item(4).Enabled = False
+            .Item(5).Enabled = False
+            .Item(7).Enabled = False
+            .Item(8).Enabled = False
+            .Item(9).Enabled = False
+            .Item(10).Enabled = False
+            .Item(15).Enabled = False
+        Else
+            'on active
+            If TypeOfForm(Me.ActiveForm) = "Fichier" Then .Item(4).Enabled = True
+            .Item(5).Enabled = True
+            .Item(7).Enabled = True
+            .Item(8).Enabled = True
+            .Item(9).Enabled = True
+            .Item(10).Enabled = True
+            .Item(15).Enabled = True
+        End If
+    End With
         
 End Sub
 
 Private Sub txtE_Change()
 'on applique la couleur RGB(192,192,192)
-    txtE.SelStart = 0
-    txtE.SelLength = Len(txtE.Text)
-    txtE.SelColor = cPref.console_ForeColor
-    txtE.SelStart = Len(txtE.Text)
+    With txtE
+        .SelStart = 0
+        .SelLength = Len(txtE.Text)
+        .SelColor = cPref.console_ForeColor
+        .SelStart = Len(txtE.Text)
+    End With
 End Sub
 
 Private Sub txtE_KeyDown(KeyCode As Integer, Shift As Integer)

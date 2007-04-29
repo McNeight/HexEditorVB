@@ -26,29 +26,23 @@ Begin VB.Form frmGestWindows
    ScaleWidth      =   7140
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdCLoseIt 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   1800
       TabIndex        =   2
-      ToolTipText     =   "Fermer la fenêtre sélectionnée"
       Top             =   3360
       Width           =   1455
    End
    Begin VB.CommandButton cmdShowIt 
-      Caption         =   "Afficher"
       Height          =   375
       Left            =   120
       TabIndex        =   1
-      ToolTipText     =   "Afficher la fenêtre au premier plan"
       Top             =   3360
       Width           =   1455
    End
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Quitter"
       Height          =   375
       Left            =   5160
       TabIndex        =   3
-      ToolTipText     =   "Quitter"
       Top             =   3360
       Width           =   1815
    End
@@ -168,7 +162,7 @@ Dim x As Long
             For x = LV.ListItems.Count To 1 Step -1
                 If LV.ListItems.Item(x).Selected And LV.ListItems.Item(x).SubItems(1) = _
                 Frm.Caption Then
-                    SendMessage Frm.hWnd, WM_CLOSE, 0, 0
+                    Call SendMessage(Frm.hWnd, WM_CLOSE, 0, 0)
                     'Unload frm
                     'lNbChildFrm = lNbChildFrm - 1
                     LV.ListItems.Remove x
@@ -182,7 +176,7 @@ Dim x As Long
     '/!\ Après déchargement des form (juste en haut), des form nommées "Form1" (caption par
     'défaut) subsistent
     For Each Frm In Forms
-        If Frm.Caption = "Form1" Then SendMessage Frm.hWnd, WM_CLOSE, 0, 0
+        If Frm.Caption = "Form1" Then Call SendMessage(Frm.hWnd, WM_CLOSE, 0, 0)
     Next Frm
     
     LV.Visible = True
@@ -218,31 +212,35 @@ End Sub
 Private Sub Form_Load()
 Dim Frm As Form
         
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     LV.ListItems.Clear
     
     'liste les forms et les ajoute au LV
     For Each Frm In Forms
-        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Or (TypeOf Frm Is physPfm) Then
+        If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is _
+            MemPfm) Or (TypeOf Frm Is physPfm) Then
+            
             LV.ListItems.Add Text:=TypeOfForm(Frm)
             LV.ListItems.Item(LV.ListItems.Count).SubItems(1) = Frm.Caption
         End If
@@ -251,5 +249,5 @@ Dim Frm As Form
 End Sub
 
 Private Sub LV_DblClick()
-    cmdShowIt_Click
+    Call cmdShowIt_Click
 End Sub

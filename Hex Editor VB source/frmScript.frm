@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmScript 
    Caption         =   "Editeur de script"
@@ -95,6 +95,7 @@ Begin VB.Form frmScript
       _ExtentY        =   4895
       _Version        =   393217
       BorderStyle     =   0
+      Enabled         =   -1  'True
       ScrollBars      =   3
       Appearance      =   0
       TextRTF         =   $"frmScript.frx":2307
@@ -394,25 +395,27 @@ Private bIsModified As Boolean  'contient si le fichier est modifié ou non
 
 Private Sub Form_Load()
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     Call AddIconsToMenus(Me.hWnd, Me.ImageList2)    'ajoute les icones au menu
     bIsModified = False 'pas de modification actuellement
@@ -470,10 +473,13 @@ Dim pb As Long
     pb = IsScriptCorrect(RTB.Text)
     If pb = 0 Then
         'correct
-        MsgBox Lang.GetString("_ScriptOk"), vbInformation + vbOKOnly, Lang.GetString("_ScriptEd")
+        MsgBox Lang.GetString("_ScriptOk"), vbInformation + vbOKOnly, _
+            Lang.GetString("_ScriptEd")
     Else
         'problème quelque part
-        MsgBox Lang.GetString("_ScriptNot") & vbNewLine & Lang.GetString("_PbLine") & " " & CStr(pb), vbCritical + vbOKOnly, Lang.GetString("_ScriptEd")
+        MsgBox Lang.GetString("_ScriptNot") & vbNewLine & _
+            Lang.GetString("_PbLine") & " " & CStr(pb), vbCritical + vbOKOnly, _
+            Lang.GetString("_ScriptEd")
     End If
 End Sub
 
@@ -502,7 +508,8 @@ Dim x As Long
     
     If bIsModified Then
         'alors le fichier est modifié, on demande confirmation
-        If MsgBox(Lang.GetString("_ScriptWillBeLost"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_ScriptWillBeLost"), vbInformation + _
+            vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
     
     With Me.CMD
@@ -514,7 +521,7 @@ Dim x As Long
     End With
     
     'sauvegarde du fichier
-    RTB.LoadFile s
+    Call RTB.LoadFile(s)
     
     bIsModified = False 'le fichier a été sauvegardé
     
@@ -525,9 +532,11 @@ Private Sub mnuPrint_Click()
 
 End Sub
 Private Sub mnuQuit_Click()
+
     If bIsModified Then
         'alors le fichier est modifié, on demande confirmation
-        If MsgBox(Lang.GetString("_ScriptWillBeLost"), vbInformation + vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
+        If MsgBox(Lang.GetString("_ScriptWillBeLost"), vbInformation + _
+            vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
     End If
     
     Unload Me
@@ -550,12 +559,13 @@ Dim x As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
+        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
+            vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
     End If
     
     'sauvegarde du fichier
-    RTB.SaveFile s
+    Call RTB.SaveFile(s)
     
     bIsModified = False 'le fichier a été sauvegardé
     
@@ -572,23 +582,23 @@ Private Sub Toolbar1_ButtonClick(ByVal Button As MSComctlLib.Button)
     Select Case Button.Key
     
         Case "OpenFile"
-            mnuOpen_Click
+            Call mnuOpen_Click
         Case "New"
-            mnuNew_Click
+            Call mnuNew_Click
         Case "Copy"
             
         Case "Save"
-            mnuSaveAs_Click
+            Call mnuSaveAs_Click
         Case "Print"
-            mnuPrint_Click
+            Call mnuPrint_Click
         Case "Search"
             
         Case "Undo"
             RTB.SetFocus
-            SendKeys "^Z"
+            Call SendKeys("^Z")
         Case "Redo"
             RTB.SetFocus
-            SendKeys "^Y"
+            Call SendKeys("^Y")
     End Select
 
 End Sub

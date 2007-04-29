@@ -286,11 +286,12 @@ Dim pt As Printer
     
     If pt Is Nothing Then Exit Sub
     
-    If TypeOfActiveForm = "Pfm" Then PrintFile CCur(Val(txtFrom.Text)), CCur(Val(txtTo.Text)), _
-    CBool(Check1(1).Value), CBool(Check1(0).Value), CBool(Check1(2).Value), _
-    CBool(Check1(3).Value), CLng(Val(txtFontSize.Text)), pt, IIf(Check1(4).Value, _
-    txtTitle.Text, vbNullString)   'lance l'impression du fichier en cours de visualisation
-
+    If TypeOfActiveForm = "Pfm" Then Call PrintFile(CCur(Val(txtFrom.Text)), _
+        CCur(Val(txtTo.Text)), CBool(Check1(1).Value), CBool(Check1(0).Value), _
+        CBool(Check1(2).Value), CBool(Check1(3).Value), _
+        CLng(Val(txtFontSize.Text)), pt, IIf(Check1(4).Value, txtTitle.Text, _
+        vbNullString))
+        'lance l'impression du fichier en cours de visualisation
     
 End Sub
 
@@ -304,34 +305,37 @@ Private Sub Command1_Click()
 End Sub
 
 Private Sub Form_Load()
+
     Set clsPref = New clsIniForm
     
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     'loading des preferences
-    clsPref.GetFormSettings App.Path & "\Preferences\PrintFile.ini", Me
+    Call clsPref.GetFormSettings(App.Path & "\Preferences\PrintFile.ini", Me)
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
-    clsPref.SaveFormSettings App.Path & "\Preferences\PrintFile.ini", Me
+    Call clsPref.SaveFormSettings(App.Path & "\Preferences\PrintFile.ini", Me)
     Set clsPref = Nothing
 End Sub

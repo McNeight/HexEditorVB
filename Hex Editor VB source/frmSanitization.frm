@@ -5,11 +5,11 @@ Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
 Begin VB.Form frmSanitization 
    BorderStyle     =   3  'Fixed Dialog
-   Caption         =   "Sanitization de disque"
+   Caption         =   "Sanitization"
    ClientHeight    =   3675
    ClientLeft      =   45
    ClientTop       =   435
-   ClientWidth     =   3465
+   ClientWidth     =   3720
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -24,12 +24,64 @@ Begin VB.Form frmSanitization
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   3675
-   ScaleWidth      =   3465
+   ScaleWidth      =   3720
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Frame Frame1 
+      Height          =   3135
+      Index           =   2
+      Left            =   120
+      TabIndex        =   12
+      Top             =   480
+      Visible         =   0   'False
+      Width           =   3495
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   2895
+         Index           =   2
+         Left            =   120
+         ScaleHeight     =   2895
+         ScaleWidth      =   3255
+         TabIndex        =   13
+         Top             =   120
+         Width           =   3255
+         Begin VB.CommandButton cmdGoPhys 
+            Height          =   375
+            Left            =   960
+            TabIndex        =   15
+            Top             =   2520
+            Width           =   1215
+         End
+         Begin DriveView_OCX.DriveView DV2 
+            Height          =   1935
+            Left            =   0
+            TabIndex        =   14
+            Top             =   120
+            Width           =   3255
+            _ExtentX        =   5741
+            _ExtentY        =   3413
+            DisplayLogicalDrives=   0   'False
+            LogicalDrivesString=   ""
+         End
+         Begin ProgressBar_OCX.pgrBar PGB3 
+            Height          =   255
+            Left            =   0
+            TabIndex        =   16
+            Top             =   2160
+            Width           =   3255
+            _ExtentX        =   5741
+            _ExtentY        =   450
+            BackColorTop    =   13027014
+            BackColorBottom =   15724527
+            Value           =   1
+            BackPicture     =   "frmSanitization.frx":000C
+            FrontPicture    =   "frmSanitization.frx":0028
+         End
+      End
+   End
    Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
+      Left            =   240
+      Top             =   360
       _ExtentX        =   1402
       _ExtentY        =   1402
    End
@@ -38,12 +90,12 @@ Begin VB.Form frmSanitization
       Left            =   120
       TabIndex        =   0
       Top             =   60
-      Width           =   3255
-      _ExtentX        =   5741
+      Width           =   3495
+      _ExtentX        =   6165
       _ExtentY        =   661
       _Version        =   327682
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-         NumTabs         =   2
+         NumTabs         =   3
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Disque logique"
             Key             =   ""
@@ -52,6 +104,12 @@ Begin VB.Form frmSanitization
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fichiers"
+            Key             =   ""
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Disque physique"
             Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
@@ -73,24 +131,24 @@ Begin VB.Form frmSanitization
       Left            =   120
       TabIndex        =   1
       Top             =   480
-      Width           =   3255
+      Width           =   3495
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
          Height          =   2895
          Index           =   0
          Left            =   120
          ScaleHeight     =   2895
-         ScaleWidth      =   3015
+         ScaleWidth      =   3255
          TabIndex        =   2
          Top             =   120
-         Width           =   3015
+         Width           =   3255
          Begin DriveView_OCX.DriveView DV 
             Height          =   1935
             Left            =   0
             TabIndex        =   11
             Top             =   120
-            Width           =   3015
-            _ExtentX        =   5318
+            Width           =   3255
+            _ExtentX        =   5741
             _ExtentY        =   3413
             DisplayPhysicalDrives=   0   'False
             PhysicalDrivesString=   ""
@@ -98,7 +156,7 @@ Begin VB.Form frmSanitization
          Begin VB.CommandButton cmdGo 
             Caption         =   "GO"
             Height          =   375
-            Left            =   840
+            Left            =   960
             TabIndex        =   3
             Top             =   2520
             Width           =   1215
@@ -108,14 +166,14 @@ Begin VB.Form frmSanitization
             Left            =   0
             TabIndex        =   10
             Top             =   2160
-            Width           =   3015
-            _ExtentX        =   5318
+            Width           =   3255
+            _ExtentX        =   5741
             _ExtentY        =   450
             BackColorTop    =   13027014
             BackColorBottom =   15724527
             Value           =   1
-            BackPicture     =   "frmSanitization.frx":000C
-            FrontPicture    =   "frmSanitization.frx":0028
+            BackPicture     =   "frmSanitization.frx":0044
+            FrontPicture    =   "frmSanitization.frx":0060
          End
       End
    End
@@ -148,8 +206,8 @@ Begin VB.Form frmSanitization
             BackColorTop    =   13027014
             BackColorBottom =   15724527
             Value           =   1
-            BackPicture     =   "frmSanitization.frx":0044
-            FrontPicture    =   "frmSanitization.frx":0060
+            BackPicture     =   "frmSanitization.frx":007C
+            FrontPicture    =   "frmSanitization.frx":0098
          End
          Begin VB.CommandButton cmdSelFile 
             Caption         =   "Sélection de fichiers..."
@@ -241,6 +299,24 @@ Option Explicit
 
 Private tDrive As DriveView_OCX.clsDrive
 
+Private Sub cmdGoPhys_Click()
+'lance la sanitization d'un disque physique
+
+    'messages d'alerte
+    With Lang
+        If MsgBox(.GetString("_SanitWar"), vbCritical + vbYesNo, _
+            .GetString("_War") & "  " & .GetString("_Disk") & " " & _
+            Mid$(DV2.SelectedItem.Text, 3, 1)) <> vbYes Then Exit Sub
+        If MsgBox(.GetString("_SanitWar2"), vbCritical + vbYesNo, _
+            .GetString("_War") & "  " & .GetString("_Disk") & " " & _
+            Mid$(DV2.SelectedItem.Text, 3, 1)) <> vbYes Then Exit Sub
+        MsgBox .GetString("_SanitWarLau"), vbInformation, .GetString("_War")
+    End With
+    
+    'on lance le processus de sanitization
+    Call SanitPhysDiskNow(Val(Mid$(DV2.SelectedItem.Text, 3, 1)), Me.PGB2)
+End Sub
+
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
 'supprime si touche Delete
 Dim x As Long
@@ -259,6 +335,7 @@ Private Sub TB_Click()
 
     Frame1(0).Visible = False
     Frame1(1).Visible = False
+    Frame1(2).Visible = False
     
     Frame1(TB.SelectedItem.Index - 1).Visible = True
 End Sub
@@ -267,15 +344,17 @@ Private Sub cmdGo_Click()
 'lance la sanitization d'un disque
     
     'messages d'alerte
-    If MsgBox(Lang.GetString("_SanitWar"), vbCritical + vbYesNo, _
-        Lang.GetString("_War") & "  " & Lang.GetString("_Disk") & " " & _
-        tDrive.VolumeLetter) <> vbYes Then Exit Sub
-    If MsgBox(Lang.GetString("_SanitWar2"), vbCritical + vbYesNo, _
-        Lang.GetString("_War") & "  " & Lang.GetString("_Disk") & " " & _
-        tDrive.VolumeLetter) <> vbYes Then Exit Sub
-    MsgBox Lang.GetString("_SanitWarLau"), vbInformation, Lang.GetString("_War")
+    With Lang
+        If MsgBox(.GetString("_SanitWar"), vbCritical + vbYesNo, _
+            .GetString("_War") & "  " & .GetString("_Disk") & " " & _
+            tDrive.VolumeLetter) <> vbYes Then Exit Sub
+        If MsgBox(.GetString("_SanitWar2"), vbCritical + vbYesNo, _
+            .GetString("_War") & "  " & .GetString("_Disk") & " " & _
+            tDrive.VolumeLetter) <> vbYes Then Exit Sub
+        MsgBox .GetString("_SanitWarLau"), vbInformation, .GetString("_War")
+    End With
     
-    cmdGO.Enabled = False
+    cmdGo.Enabled = False
     
     'on lance le processus de sanitization
     Call SanitDiskNow(tDrive.VolumeLetter & ":\", Me.PGB)
@@ -286,13 +365,15 @@ Private Sub cmdGo2_Click()
 'lance la sanitization
     
     'messages d'alerte
-    If MsgBox(Lang.GetString("_SanitWarF"), vbCritical + vbYesNo, _
-        Lang.GetString("_War") & "  " & Lang.GetString("_Disk") & " " & _
-        tDrive.VolumeLetter) <> vbYes Then Exit Sub
-    If MsgBox(Lang.GetString("_SanitWarF2"), vbCritical + vbYesNo, _
-        Lang.GetString("_War") & "  " & Lang.GetString("_Disk") & " " & _
-        tDrive.VolumeLetter) <> vbYes Then Exit Sub
-    MsgBox Lang.GetString("_SanitWarLau"), vbInformation, Lang.GetString("_War")
+    With Lang
+        If MsgBox(.GetString("_SanitWarF"), vbCritical + vbYesNo, _
+            .GetString("_War") & "  " & .GetString("_Disk") & " " & _
+            tDrive.VolumeLetter) <> vbYes Then Exit Sub
+        If MsgBox(.GetString("_SanitWarF2"), vbCritical + vbYesNo, _
+            .GetString("_War") & "  " & .GetString("_Disk") & " " & _
+            tDrive.VolumeLetter) <> vbYes Then Exit Sub
+        MsgBox .GetString("_SanitWarLau"), vbInformation, .GetString("_War")
+    End With
     
     cmdSelFile.Enabled = False
     cmdGo2.Enabled = False
@@ -305,14 +386,14 @@ Private Sub cmdGo2_Click()
 End Sub
 
 Private Sub cmdSelFile_Click()
-Dim cFile As filesystemlibrary.FileSystem
+Dim cFile As FileSystemLibrary.FileSystem
 Dim s() As String
 Dim s2 As String
 Dim x As Long
 
     'sélection d'un ou plusieurs fichiers
  
-    Set cFile = New filesystemlibrary.FileSystem
+    Set cFile = New FileSystemLibrary.FileSystem
     
     ReDim s(0)
     s2 = cFile.ShowOpen(Lang.GetString("_SelFile"), Me.hWnd, _
@@ -341,38 +422,41 @@ Dim s As String
         If InStr(1, LCase$(s), "fat") Or InStr(1, LCase$(s), "ntfs") Then
             'on a choisi le drive
             Set tDrive = DV.GetSelectedDrive
-            cmdGO.Enabled = True
+            cmdGo.Enabled = True
         Else
-            cmdGO.Enabled = False
+            cmdGo.Enabled = False
         End If
     Else
-        cmdGO.Enabled = False
+        cmdGo.Enabled = False
     End If
 End Sub
 
 Private Sub Form_Activate()
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
-    
-    DV.LogicalDrivesString = Lang.GetString("_LogString")
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+        
+        DV.LogicalDrivesString = .GetString("_LogString")
+        DV.PhysicalDrivesString = .GetString("_PhysString")
+    End With
     
     Call MarkNonDiskDrives(DV)  'marque les disques non NTFS ou FAT comme non accessibles
 End Sub
@@ -382,12 +466,10 @@ Dim x As Long
     
     Set tDrive = New DriveView_OCX.clsDrive
     
-    'génère les tableaux
-    
+    '//génère les tableaux
     'les redimensionne
     ReDim sH55(2097151)
     ReDim sHAA(2097151)
-    
     'remplit
     For x = 0 To 2097151
         sH55(x) = 85

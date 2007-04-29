@@ -416,7 +416,7 @@ Private Sub cbO_Click()
 End Sub
 
 Private Sub cmdCLose_Click()
-    Unload Me
+    Call Unload(Me)
 End Sub
 
 Private Sub cmdTrad_Click()
@@ -430,28 +430,30 @@ Private Sub Form_Load()
     Set clsPref = New clsIniForm
     Set cConv = New clsConvert
     
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                Call .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        Call .LoadControlsCaption
+    End With
 
     
-    clsPref.GetFormSettings App.Path & "\Preferences\AdvancedConversion.ini", Me
+    Call clsPref.GetFormSettings(App.Path & "\Preferences\AdvancedConversion.ini", Me)
     optSep(1).Value = Not (optSep(0).Value)
 End Sub
 
@@ -507,7 +509,8 @@ End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde les prefs
-    clsPref.SaveFormSettings App.Path & "\Preferences\AdvancedConversion.ini", Me
+    Call clsPref.SaveFormSettings(App.Path & "\Preferences\AdvancedConversion.ini", Me)
+    
     Set clsPref = Nothing
     Set cConv = Nothing
 End Sub
@@ -516,6 +519,7 @@ Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, x As Single, y
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
 End Sub
+
 Private Sub Frame2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp2
@@ -576,7 +580,8 @@ Dim x As Long
 Dim sA() As String
 
     If cbI.ListIndex < 0 Or cbO.ListIndex < 0 Then Exit Sub 'pas de base sélectionnée
-    If (cbI.ListIndex = 5 And FormatedVal(txtBaseI.Text) = 0) Or (cbO.ListIndex = 5 And FormatedVal(txtBaseO.Text) = 0) Then Exit Sub 'pas de base perso définie
+    If (cbI.ListIndex = 5 And FormatedVal(txtBaseI.Text) = 0) Or _
+        (cbO.ListIndex = 5 And FormatedVal(txtBaseO.Text) = 0) Then Exit Sub 'pas de base perso définie
     
     txtO.Text = vbNullString
     sO = vbNullString
@@ -611,22 +616,25 @@ Dim sA() As String
         
     Else
         'alors on fait une conversion par séparateur
-        If (optSep(0).Value And Len(txtSepS.Text) = 0) Or (optSep(1).Value And Len(txtSepH) = 0) Then
+        If (optSep(0).Value And Len(txtSepS.Text) = 0) Or (optSep(1).Value And _
+            Len(txtSepH) = 0) Then
+            
             'impossible car pas de spérateur
             MsgBox Lang.GetString("_NoGoodSep"), vbCritical, Lang.GetString("_War")
+            
             Exit Sub
         End If
         
         Me.Caption = Lang.GetString("_ConvCour")
         
         'définit le caractère séparant
-        If optSep(0).Value Then sSep = txtSepS.Text Else sSep = Str2Hex(txtSepH.Text)
+        If optSep(0).Value Then sSep = txtSepS.Text Else sSep = _
+            Str2Hex(txtSepH.Text)
         
         'récupère toutes les valeurs séparément
         sA() = Split(txtI.Text, sSep, , vbBinaryCompare)
         
         For x = 0 To UBound(sA())
-        
             If (x Mod 1000) = 0 Then DoEvents
             sO = sO & GetCv(sA(x)) & sSep
         Next x
@@ -648,35 +656,38 @@ Dim s2 As String
 
     cConv.CurrentString = sIn
     
-    Select Case cbI.Text
-        Case Lang.GetString("_Decimal!")
-            cConv.CurrentBase = 10
-        Case Lang.GetString("_Octal!")
-            cConv.CurrentBase = 8
-        Case Lang.GetString("_Hexa!")
-            cConv.CurrentBase = 16
-        Case Lang.GetString("_Binary!")
-            cConv.CurrentBase = 2
-        Case Lang.GetString("_Other!")
-            cConv.CurrentBase = Val(txtBaseI.Text)
-        Case Else
-            'ANSI ASCII
-    End Select
+    With Lang
+        Select Case cbI.Text
+            Case .GetString("_Decimal!")
+                cConv.CurrentBase = 10
+            Case .GetString("_Octal!")
+                cConv.CurrentBase = 8
+            Case .GetString("_Hexa!")
+                cConv.CurrentBase = 16
+            Case .GetString("_Binary!")
+                cConv.CurrentBase = 2
+            Case .GetString("_Other!")
+                cConv.CurrentBase = Val(txtBaseI.Text)
+            Case Else
+                'ANSI ASCII
+        End Select
+        
+        Select Case cbO.Text
+            Case .GetString("_Decimal!")
+                s2 = cConv.Convert(10)
+            Case .GetString("_Octal!")
+                s2 = cConv.Convert(8)
+            Case .GetString("_Hexa!")
+                s2 = cConv.Convert(16)
+            Case .GetString("_Binary!")
+                s2 = cConv.Convert(2)
+            Case .GetString("_Other!")
+                s2 = cConv.Convert(Val(txtBaseI.Text))
+            Case Else
+                'ANSI ASCII
+        End Select
+    End With
     
-    Select Case cbO.Text
-        Case Lang.GetString("_Decimal!")
-            s2 = cConv.Convert(10)
-        Case Lang.GetString("_Octal!")
-            s2 = cConv.Convert(8)
-        Case Lang.GetString("_Hexa!")
-            s2 = cConv.Convert(16)
-        Case Lang.GetString("_Binary!")
-            s2 = cConv.Convert(2)
-        Case Lang.GetString("_Other!")
-            s2 = cConv.Convert(Val(txtBaseI.Text))
-        Case Else
-            'ANSI ASCII
-    End Select
     'Byte2FormatedString
     
     GetCv = s2

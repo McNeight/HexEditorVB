@@ -88,23 +88,19 @@ Begin VB.Form frmSearch
          Top             =   240
          Width           =   2775
          Begin VB.CheckBox Check3 
-            Caption         =   "Mot entier"
             Enabled         =   0   'False
             Height          =   255
             Left            =   0
             TabIndex        =   14
             Tag             =   "pref"
-            ToolTipText     =   "Rechercher un mot entier"
             Top             =   840
             Width           =   2295
          End
          Begin VB.CheckBox Check2 
-            Caption         =   "Ajouter des signets"
             Height          =   255
             Left            =   0
             TabIndex        =   13
             Tag             =   "pref"
-            ToolTipText     =   "Ajoute un signet pour chaque résultat trouvé"
             Top             =   480
             Width           =   2295
          End
@@ -132,12 +128,10 @@ Begin VB.Form frmSearch
             Width           =   1935
          End
          Begin VB.CheckBox Check1 
-            Caption         =   "Respecter la casse"
             Height          =   255
             Left            =   0
             TabIndex        =   12
             Tag             =   "pref"
-            ToolTipText     =   "Le respect de la casse est aussi valable pour des valeurs hexa"
             Top             =   120
             Width           =   2295
          End
@@ -208,20 +202,16 @@ Begin VB.Form frmSearch
          Top             =   240
          Width           =   5175
          Begin VB.CommandButton cmdQuit 
-            Caption         =   "Fermer"
             Height          =   375
             Left            =   3720
             TabIndex        =   2
-            ToolTipText     =   "Fermer cette fenêtre"
             Top             =   480
             Width           =   1335
          End
          Begin VB.CommandButton cmdSearch 
-            Caption         =   "Rechercher"
             Height          =   375
             Left            =   3720
             TabIndex        =   1
-            ToolTipText     =   "lancer la recherche"
             Top             =   0
             Width           =   1335
          End
@@ -230,7 +220,6 @@ Begin VB.Form frmSearch
             Height          =   615
             Left            =   120
             TabIndex        =   0
-            ToolTipText     =   $"frmSearch.frx":058A
             Top             =   240
             Width           =   3255
          End
@@ -246,11 +235,10 @@ Begin VB.Form frmSearch
             BackColorBottom =   15724527
             Min             =   0
             Value           =   0
-            BackPicture     =   "frmSearch.frx":062D
-            FrontPicture    =   "frmSearch.frx":0649
+            BackPicture     =   "frmSearch.frx":058A
+            FrontPicture    =   "frmSearch.frx":05A6
          End
          Begin VB.Label Label2 
-            Caption         =   "Expression à rechercher :"
             Height          =   255
             Left            =   120
             TabIndex        =   27
@@ -285,7 +273,6 @@ Begin VB.Form frmSearch
             Left            =   1560
             TabIndex        =   9
             Tag             =   "pref"
-            ToolTipText     =   "Offset supérieur"
             Top             =   400
             Width           =   1095
          End
@@ -296,7 +283,6 @@ Begin VB.Form frmSearch
             Left            =   120
             TabIndex        =   8
             Tag             =   "pref"
-            ToolTipText     =   "Offset inférieur"
             Top             =   400
             Width           =   1095
          End
@@ -335,7 +321,6 @@ Begin VB.Form frmSearch
             Width           =   855
          End
          Begin VB.Label Label1 
-            Caption         =   "à"
             Height          =   255
             Left            =   1320
             TabIndex        =   24
@@ -452,7 +437,7 @@ Dim s As String
 
     If txtSearch.Text = vbNullString Then Exit Sub
     
-    LV.ListItems.Clear
+    Call LV.ListItems.Clear
     txtSearch.Enabled = False
 
     Select Case TypeOfForm(frmContent.ActiveForm)
@@ -464,8 +449,9 @@ Dim s As String
                 'ajoute du texte à la console
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
     
-                SearchForStringFile frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.PGB
+                Call SearchForStringFile(frmContent.ActiveForm.Caption, txtSearch.Text, _
+                    Check1.Value, tRes(), Me.PGB)
+                    
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
@@ -474,8 +460,8 @@ Dim s As String
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
                     
                 'lance la recherche de la string
-                SearchForStringFile frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.PGB
+                Call SearchForStringFile(frmContent.ActiveForm.Caption, s, Check1.Value, _
+                    tRes(), Me.PGB)
             Else
                 Exit Sub
             End If
@@ -488,8 +474,8 @@ Dim s As String
                 'ajoute du texte à la console
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
-                SearchForStringDisk frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.PGB
+                Call SearchForStringDisk(frmContent.ActiveForm.Caption, txtSearch.Text, _
+                    Check1.Value, tRes(), Me.PGB)
                 
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
@@ -499,8 +485,8 @@ Dim s As String
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 'lance la recherche de la string
-                SearchForStringDisk frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.PGB
+                Call SearchForStringDisk(frmContent.ActiveForm.Caption, s, Check1.Value, _
+                    tRes(), Me.PGB)
             Else
                 Exit Sub
             End If
@@ -515,8 +501,8 @@ Dim s As String
                 'ajoute du texte à la console
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
-                SearchForStringDisk frmContent.ActiveForm.Caption, txtSearch.Text, Check1.Value, _
-                tRes(), Me.PGB, True
+                Call SearchForStringDisk(frmContent.ActiveForm.Caption, _
+                    txtSearch.Text, Check1.Value, tRes(), Me.PGB, True)
                 
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
@@ -526,8 +512,8 @@ Dim s As String
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 'lance la recherche de la string
-                SearchForStringDisk frmContent.ActiveForm.Caption, s, Check1.Value, _
-                tRes(), Me.PGB, True
+                Call SearchForStringDisk(frmContent.ActiveForm.Caption, s, _
+                    Check1.Value, tRes(), Me.PGB, True)
             Else
                 Exit Sub
             End If
@@ -543,8 +529,8 @@ Dim s As String
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 'lance la recherche
-                cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), txtSearch.Text, Check1.Value, _
-                tRes(), Me.PGB
+                Call cMem.SearchForStringMemory(CLng(frmContent.ActiveForm.Tag), _
+                    txtSearch.Text, Check1.Value, tRes(), Me.PGB)
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
                 s = HexValues2String(txtSearch.Text)
@@ -553,8 +539,8 @@ Dim s As String
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 'lance la recherche de la string
-                cMem.SearchForStringMemory CLng(frmContent.ActiveForm.Tag), s, Check1.Value, _
-                tRes(), Me.PGB
+                Call cMem.SearchForStringMemory(CLng(frmContent.ActiveForm.Tag), _
+                    s, Check1.Value, tRes(), Me.PGB)
             Else
                 Exit Sub
             End If
@@ -568,9 +554,11 @@ Dim s As String
     For x = 1 To UBound(tRes())
         LV.ListItems.Add Text:=Lang.GetString("_FoundAt") & " " & CStr(By16D(tRes(x)))
         If Check2.Value Then
-            frmContent.ActiveForm.HW.AddSignet By16D(tRes(x))
-            frmContent.ActiveForm.lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(x))))
-            frmContent.ActiveForm.lstSignets.ListItems.Item(frmContent.ActiveForm.lstSignets.ListItems.Count).SubItems(1) = "Found [" & Trim$(txtSearch.Text) & "]"
+            With frmContent.ActiveForm
+                .HW.AddSignet By16D(tRes(x))
+                .lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(x))))
+                .lstSignets.ListItems.Item(.lstSignets.ListItems.Count).SubItems(1) = "Found [" & Trim$(txtSearch.Text) & "]"
+            End With
         End If
     Next x
     
@@ -586,33 +574,35 @@ Private Sub Form_Load()
 
     Set clsPref = New clsIniForm
     
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
-    
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
+        
     'loading des preferences
-    clsPref.GetFormSettings App.Path & "\Preferences\Search.ini", Me
+    Call clsPref.GetFormSettings(App.Path & "\Preferences\Search.ini", Me)
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
-    clsPref.SaveFormSettings App.Path & "\Preferences\Search.ini", Me
+    Call clsPref.SaveFormSettings(App.Path & "\Preferences\Search.ini", Me)
     Set clsPref = Nothing
 End Sub
 
@@ -623,5 +613,4 @@ Private Sub LV_ItemClick(ByVal Item As ComctlLib.ListItem)
     
     frmContent.ActiveForm.VS.Value = Val(Right$(Item.Text, Len(Item.Text) - 18)) / 16
     Call frmContent.ActiveForm.VS_Change(frmContent.ActiveForm.VS.Value)
-    
 End Sub

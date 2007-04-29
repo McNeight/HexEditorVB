@@ -26,29 +26,23 @@ Begin VB.Form frmSaveProcess
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   5880
       TabIndex        =   1
-      ToolTipText     =   "Fermer cette fenêtre"
       Top             =   3600
       Width           =   1575
    End
    Begin VB.CommandButton cmdSave 
-      Caption         =   "Sauvegarder"
       Height          =   375
       Left            =   4200
       TabIndex        =   0
-      ToolTipText     =   "Sauvegarder dans le fichier sélectionné"
       Top             =   3600
       Width           =   1575
    End
    Begin VB.CommandButton cmdBrowse 
-      Caption         =   "..."
       Height          =   255
       Left            =   7080
       TabIndex        =   7
-      ToolTipText     =   "Sélectionner l'emplacement du fichier à sauvegarder"
       Top             =   3000
       Width           =   375
    End
@@ -57,12 +51,10 @@ Begin VB.Form frmSaveProcess
       Height          =   285
       Left            =   4200
       TabIndex        =   6
-      ToolTipText     =   "Chemin du fichier résultat"
       Top             =   3000
       Width           =   2775
    End
    Begin VB.Frame Frame1 
-      Caption         =   "Contenu de l'enregistrement"
       Height          =   1575
       Left            =   4200
       TabIndex        =   10
@@ -79,44 +71,36 @@ Begin VB.Form frmSaveProcess
          Top             =   240
          Width           =   3015
          Begin VB.CheckBox chkOffset 
-            Caption         =   "Sauvegarder les offsets"
             Height          =   255
             Left            =   0
             TabIndex        =   5
             Tag             =   "pref"
-            ToolTipText     =   "La sauvegarde des offsets nécessite la sauvegarde de strings formatées"
             Top             =   840
             Width           =   2895
          End
          Begin VB.CheckBox chkASCII 
-            Caption         =   "Sauvegarder les valeurs ASCII"
             Height          =   255
             Left            =   0
             TabIndex        =   4
             Tag             =   "pref"
-            ToolTipText     =   "Sauvegarder les valeurs ASCII réelles uniquement si coché seul"
             Top             =   480
             Width           =   2895
          End
          Begin VB.CheckBox chkHexa 
-            Caption         =   "Sauvegarder les valeurs hexa"
             Height          =   255
             Left            =   0
             TabIndex        =   3
             Tag             =   "pref"
-            ToolTipText     =   "Sauvegarder les valeurs hexa"
             Top             =   120
             Width           =   2895
          End
       End
    End
    Begin VB.CheckBox chkAll 
-      Caption         =   "Tout enregistrer (au minimum 2Go sont requis)"
       Height          =   375
       Left            =   120
       TabIndex        =   8
       Tag             =   "pref"
-      ToolTipText     =   "Enregistre toute la mémoire (/!\ 2Go sont requis)"
       Top             =   3600
       Width           =   3855
    End
@@ -240,7 +224,8 @@ Dim x As Long
     
     If cFile.FileExists(txtPath.Text) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
+        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
+            vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
     End If
     
@@ -263,34 +248,36 @@ Private Sub Form_Load()
     
     Set clsPref = New clsIniForm
     
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     'loading des preferences
-    clsPref.GetFormSettings App.Path & "\Preferences\SaveProcess.ini", Me
+    Call clsPref.GetFormSettings(App.Path & "\Preferences\SaveProcess.ini", Me)
 
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
-    clsPref.SaveFormSettings App.Path & "\Preferences\SaveProcess.ini", Me
+    Call clsPref.SaveFormSettings(App.Path & "\Preferences\SaveProcess.ini", Me)
     Set clsPref = Nothing
 End Sub
 
@@ -315,14 +302,16 @@ Dim s As String
             lSize = lSize + Val(s)
         End If
     Next x
-    lblSize.Caption = Lang.GetString("_SizeRes") & Trim$(Str$(lSize)) & "]" & vbNewLine & FormatedSize(lSize)
+    
+    lblSize.Caption = Lang.GetString("_SizeRes") & Trim$(Str$(lSize)) & "]" & _
+        vbNewLine & FormatedSize(lSize)
 End Sub
 
 Private Sub lstList_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche le popup menu sur le listbox
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
     
-    RecalcSize  'recalcule la taille
+    Call RecalcSize  'recalcule la taille
 End Sub
 
 Private Sub mnuDeselectAll_Click()
@@ -352,7 +341,7 @@ Dim x As Long
     
     lstList.Visible = True
     
-    RecalcSize  'recalcule la taille
+    Call RecalcSize  'recalcule la taille
 End Sub
 
 '=======================================================
@@ -368,9 +357,9 @@ Dim x As Long
     '//ajoute au listbox toutes les zones mémoire
     'liste les zones
     Set clsProc = New clsMemoryRW
-    clsProc.RetrieveMemRegions lPID, LB(), LS()
+    Call clsProc.RetrieveMemRegions(lPID, LB(), LS())
     
-    lstList.Clear
+    Call lstList.Clear
     lstList.Visible = False
     
     'les ajoute

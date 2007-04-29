@@ -24,27 +24,22 @@ Begin VB.Form frmConvert
    ScaleWidth      =   5265
    StartUpPosition =   2  'CenterScreen
    Begin VB.CheckBox chkPlan 
-      Caption         =   "Mettre au premier plan"
       Height          =   255
       Left            =   360
       TabIndex        =   6
       Tag             =   "pref"
-      ToolTipText     =   "Active ou non la mise au premier plan de la fenêtre"
       Top             =   1920
       Value           =   1  'Checked
       Width           =   2415
    End
    Begin VB.CommandButton cmdQuitter 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   3120
       TabIndex        =   7
-      ToolTipText     =   "Fermer cette feuille"
       Top             =   1920
       Width           =   1575
    End
    Begin VB.Frame Frame2 
-      Caption         =   "Sortie"
       Height          =   855
       Left            =   120
       TabIndex        =   9
@@ -89,11 +84,10 @@ Begin VB.Form frmConvert
             Height          =   315
             ItemData        =   "frmConvert.frx":058A
             Left            =   2520
-            List            =   "frmConvert.frx":05A0
+            List            =   "frmConvert.frx":058C
             Style           =   2  'Dropdown List
             TabIndex        =   4
             Tag             =   "pref lang_ok"
-            ToolTipText     =   "Base d'arrivée"
             Top             =   120
             Width           =   1575
          End
@@ -109,7 +103,6 @@ Begin VB.Form frmConvert
       End
    End
    Begin VB.Frame Frame1 
-      Caption         =   "Entrée"
       Height          =   855
       Left            =   120
       TabIndex        =   8
@@ -152,13 +145,12 @@ Begin VB.Form frmConvert
          End
          Begin VB.ComboBox cbI 
             Height          =   315
-            ItemData        =   "frmConvert.frx":05E0
+            ItemData        =   "frmConvert.frx":058E
             Left            =   2520
-            List            =   "frmConvert.frx":05F6
+            List            =   "frmConvert.frx":0590
             Style           =   2  'Dropdown List
             TabIndex        =   1
             Tag             =   "pref lang_ok"
-            ToolTipText     =   "Base de départ"
             Top             =   120
             Width           =   1575
          End
@@ -227,17 +219,17 @@ Private clsPref As clsIniForm
 Private cConv As clsConvert
 
 Private Sub cbI_Click()
-    DisplayResult
+    Call DisplayResult
     txtBase(0).Enabled = cbI.Text = "Autre"
 End Sub
 
 Private Sub cbO_Click()
-    DisplayResult
+    Call DisplayResult
     txtBase(1).Enabled = cbO.Text = "Autre"
 End Sub
 
 Private Sub chkPlan_Click()
-    If chkPlan.Value = 1 Then PremierPlan Me, MettreAuPremierPlan Else PremierPlan Me, MettreNormal
+    If chkPlan.Value = 1 Then Call SetFormForeBackGround(Me, SetFormForeGround) Else Call SetFormForeBackGround(Me, SetFormBackGround)
 End Sub
 
 Private Sub cmdQuitter_Click()
@@ -245,8 +237,8 @@ Private Sub cmdQuitter_Click()
 End Sub
 
 Private Sub Form_Activate()
-    If chkPlan.Value Then PremierPlan Me, MettreAuPremierPlan Else _
-    PremierPlan Me, MettreNormal
+    If chkPlan.Value Then Call SetFormForeBackGround(Me, SetFormForeGround) Else _
+        Call SetFormForeBackGround(Me, SetFormBackGround)
 End Sub
 
 '=======================================================
@@ -255,45 +247,48 @@ End Sub
 Private Sub DisplayResult()
 Dim s2 As String
 
-    cConv.CurrentString = txtI(0).Text
+    With cConv
+        .CurrentString = txtI(0).Text
+        
+        Select Case cbI.Text
+            Case "Décimale"
+                .CurrentBase = 10
+            Case "Octale"
+                .CurrentBase = 8
+            Case "Héxadécimale"
+                .CurrentBase = 16
+            Case "Binaire"
+                .CurrentBase = 2
+            Case "Autre"
+                .CurrentBase = Val(txtBase(0).Text)
+            Case Else
+                'ANSI ASCII
+        End Select
+        
+        Select Case cbO.Text
+            Case "Décimale"
+                s2 = .Convert(10)
+            Case "Octale"
+                s2 = .Convert(8)
+            Case "Héxadécimale"
+                s2 = .Convert(16)
+            Case "Binaire"
+                s2 = .Convert(2)
+            Case "Autre"
+                s2 = .Convert(Val(txtBase(1).Text))
+            Case Else
+                'ANSI ASCII
+        End Select
+        
+        If .ConversionFailed Then
+            txtI(1).ForeColor = RED_COLOR
+            txtI(1).Text = "Echec"
+        Else
+            txtI(1).ForeColor = vbBlack
+            txtI(1).Text = s2
+        End If
+    End With
     
-    Select Case cbI.Text
-        Case "Décimale"
-            cConv.CurrentBase = 10
-        Case "Octale"
-            cConv.CurrentBase = 8
-        Case "Héxadécimale"
-            cConv.CurrentBase = 16
-        Case "Binaire"
-            cConv.CurrentBase = 2
-        Case "Autre"
-            cConv.CurrentBase = Val(txtBase(0).Text)
-        Case Else
-            'ANSI ASCII
-    End Select
-    
-    Select Case cbO.Text
-        Case "Décimale"
-            s2 = cConv.Convert(10)
-        Case "Octale"
-            s2 = cConv.Convert(8)
-        Case "Héxadécimale"
-            s2 = cConv.Convert(16)
-        Case "Binaire"
-            s2 = cConv.Convert(2)
-        Case "Autre"
-            s2 = cConv.Convert(Val(txtBase(1).Text))
-        Case Else
-            'ANSI ASCII
-    End Select
-    
-    If cConv.ConversionFailed Then
-        txtI(1).ForeColor = RED_COLOR
-        txtI(1).Text = "Echec"
-    Else
-        txtI(1).ForeColor = vbBlack
-        txtI(1).Text = s2
-    End If
 End Sub
 
 Private Sub Form_Load()
@@ -302,40 +297,42 @@ Private Sub Form_Load()
     Set clsPref = New clsIniForm
     Set cConv = New clsConvert
     
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                Call .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        Call .LoadControlsCaption
+    End With
 
-    clsPref.GetFormSettings App.Path & "\Preferences\Conversion.ini", Me
+    Call clsPref.GetFormSettings(App.Path & "\Preferences\Conversion.ini", Me)
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
-    clsPref.SaveFormSettings App.Path & "\Preferences\Conversion.ini", Me
+    Call clsPref.SaveFormSettings(App.Path & "\Preferences\Conversion.ini", Me)
     Set clsPref = Nothing
     Set cConv = Nothing
 End Sub
 
 Private Sub txtBase_Change(Index As Integer)
-    DisplayResult
+    Call DisplayResult
 End Sub
 
 Private Sub txtI_Change(Index As Integer)
-    DisplayResult
+    Call DisplayResult
 End Sub

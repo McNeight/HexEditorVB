@@ -27,11 +27,9 @@ Begin VB.Form frmDrive
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdRefresh 
-      Caption         =   "Actualiser"
       Height          =   375
       Left            =   1238
       TabIndex        =   3
-      ToolTipText     =   "Fermer cette fenêtre"
       Top             =   3240
       Width           =   975
    End
@@ -45,20 +43,16 @@ Begin VB.Form frmDrive
       _ExtentY        =   5106
    End
    Begin VB.CommandButton cmdNo 
-      Caption         =   "Fermer"
       Height          =   375
       Left            =   2400
       TabIndex        =   1
-      ToolTipText     =   "Fermer cette fenêtre"
       Top             =   3240
       Width           =   975
    End
    Begin VB.CommandButton cmdOK 
-      Caption         =   "Ouvrir..."
       Height          =   375
       Left            =   120
       TabIndex        =   0
-      ToolTipText     =   "Ouvrir ce lecteur"
       Top             =   3240
       Width           =   975
    End
@@ -119,22 +113,16 @@ Option Explicit
 Private Sub cmdOk_Click()
 Dim Frm As Form
 Dim sDrive As String
-Dim cDr As clsDiskInfos
 
     If DV.SelectedItem Is Nothing Then Exit Sub
-    
-    Set cDr = New clsDiskInfos
-    
+        
     'on check si c'est un disque logique ou un disque physique
     If Left$(DV.SelectedItem.Key, 3) = "log" Then
     
         'disque logique
     
         'vérifie que le drive est accessible
-        If DV.IsSelectedDriveAccessible = False Then
-            Set cDr = Nothing   'inaccessible, alors on sort de cette procédure
-            Exit Sub
-        End If
+        If DV.IsSelectedDriveAccessible = False Then Exit Sub
         
         'affiche une nouvelle fenêtre
         Set Frm = New diskPfm
@@ -152,10 +140,7 @@ Dim cDr As clsDiskInfos
         'disque physique
         
         'vérifie que le drive est accessible
-        If DV.IsSelectedDriveAccessible = False Then
-            Set cDr = Nothing   'inaccessible, alors on sort de cette procédure
-            Exit Sub
-        End If
+        If DV.IsSelectedDriveAccessible = False Then Exit Sub
         
         'affiche une nouvelle fenêtre
         Set Frm = New physPfm
@@ -168,12 +153,8 @@ Dim cDr As clsDiskInfos
         lNbChildFrm = lNbChildFrm + 1
         frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
         
-        
     End If
     
- 
-    'libère la classe
-    Set cDr = Nothing
 End Sub
 
 Private Sub cmdNO_Click()
@@ -197,25 +178,28 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     With DV
         .LogicalDrivesString = Lang.GetString("_LogicalString")

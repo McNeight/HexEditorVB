@@ -158,7 +158,7 @@ Dim hDevice As Long
     With clsFile
         tGeom = .GetDriveGeometry_HANDLE(hDevice)
         If tGeom.BytesPerSector = 0 Then Exit Sub
-        tSizes = .GetDriveSizes_HANDLE(hDevice)
+        tSizes = .GetDriveSizes_HANDLE(hDevice, Me.VolumeLetter)
         tPart = .GetDrivePartitionInfo_HANDLE(hDevice)
         tVol = .GetDriveVolumeInfo(Me.VolumeLetter)
     End With

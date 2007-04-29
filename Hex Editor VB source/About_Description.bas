@@ -342,7 +342,6 @@ Attribute VB_Name = "About_Description"
 ' choses), ShareVB (source de Disassembler_Dll + GetFileBitmap)
 '
 ' La Dll de désassemblage est directement issue du travail de ShareVB.
-' bnAlloc.dll a été codée en ASM par Brunews.
 
 
 
@@ -359,7 +358,6 @@ Attribute VB_Name = "About_Description"
 ' Renfield (help for several things) , ShareVB (Disassembler_DLL + GetFileBitmap)
 '
 ' Disassembler DLL was coded by ShareVB.
-' bnAlloc.dll was coded (ASM) by Brunews.
 
 
 

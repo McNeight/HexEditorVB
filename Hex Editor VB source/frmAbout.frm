@@ -267,43 +267,49 @@ Private Sub cmdLicense_Click()
 'affiche le ReadMe
 
     If cFile.FileExists(App.Path & "\License.txt") = False Then Exit Sub
-    cFile.ShellOpenFile App.Path & "\License.txt", Me.hWnd
+    Call cFile.ShellOpenFile(App.Path & "\License.txt", Me.hWnd)
 End Sub
 
 Private Sub cmdUnload_Click()
-    Unload Me
+    Call Unload(Me)
 End Sub
 
 Private Sub Form_Load()
 Dim s As String
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                Call .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
-    
-    'mise à jour de la version et de l'USER
-    lblLicenseTo.Caption = Lang.GetString("_LicenseTo") & " " & GetUserName
-    lblVersion.Caption = Lang.GetString("_Version") & " " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision))
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        Call .LoadControlsCaption
+        
+        'mise à jour de la version et de l'USER
+        lblLicenseTo.Caption = .GetString("_LicenseTo") & " " & GetUserName
+        lblVersion.Caption = .GetString("_Version") & " " & _
+            Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & _
+            Trim$(Str$(App.Revision))
+    End With
     
     'écriture du texte
-    s = "Hex Editor VB" & vbNewLine & "Copyright (c) 2006-2007 Alain Descotes (violent_ken)"
-    s = s & vbNewLine & vbNewLine & cFile.LoadFileInString(App.Path & "\License.txt")
+    s = "Hex Editor VB" & vbNewLine & _
+        "Copyright (c) 2006-2007 Alain Descotes (violent_ken)"
+    s = s & vbNewLine & vbNewLine & _
+        cFile.LoadFileInString(App.Path & "\License.txt")
     txt.Text = s
     
 End Sub

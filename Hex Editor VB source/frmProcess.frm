@@ -415,32 +415,34 @@ Option Explicit
 Private Sub Form_Load()
 'ajoute les en-têtes de colonne
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     
     'ajoute les icones
     Call AddIconsToMenus(Me.hWnd, Me.ImageList2)
     
     'refresh
-    RefreshProcList
+    Call RefreshProcList
 End Sub
 
 Private Sub Form_Resize()
@@ -465,12 +467,14 @@ Dim s As String
     'obtient la string contenant la priorité
     s = Left$(LV.SelectedItem.SubItems(14), InStr(1, LV.SelectedItem.SubItems(14), "[") - 2)
     
-    Me.mnuHighP.Checked = False
-    Me.mnuRealTimeP.Checked = False
-    Me.mnuAboveP.Checked = False
-    Me.mnuBelowP.Checked = False
-    Me.mnuIdleP.Checked = False
-    Me.mnuNormalP.Checked = False
+    With Me
+        .mnuHighP.Checked = False
+        .mnuRealTimeP.Checked = False
+        .mnuAboveP.Checked = False
+        .mnuBelowP.Checked = False
+        .mnuIdleP.Checked = False
+        .mnuNormalP.Checked = False
+    End With
     
     Select Case s
         Case Lang.GetString("_RealTime!")
@@ -502,19 +506,19 @@ Dim s As String
         Set It = LV.HitTest(x, y)
         If Not (It Is Nothing) Then It.Selected = True
         
-        LV_Click
+        Call LV_Click
         
         'affiche le popup menu
-        Me.PopupMenu Me.mnuPopUp
+        Me.PopupMenu Me.mnuPopup
     End If
         
 End Sub
 
 Private Sub mnuAboveP_Click()
 'change la priorité
-    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), ABOVE_NORMAL_PRIORITY
-    RefreshPriority
-    LV_Click
+    Call cProc.ChangePriority(Val(LV.SelectedItem.SubItems(1)), ABOVE_NORMAL_PRIORITY)
+    Call RefreshPriority
+    Call LV_Click
 End Sub
 
 Private Sub mnuAutorizeProc_Click()
@@ -523,7 +527,7 @@ Dim tmp As ProcessItem
 Dim x As Long
 
     'autorise le process
-    cProc.ResumeProcess Val(LV.SelectedItem.SubItems(1))
+    Call cProc.ResumeProcess(Val(LV.SelectedItem.SubItems(1)))
     
     'supprime le process de la liste des process bloqués si il est présent
     'ajoute dans pr tous les processus bloqués différents de celui qu'on débloque
@@ -559,15 +563,15 @@ End Sub
 
 Private Sub mnuBelowP_Click()
 'change la priorité
-    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), BELOW_NORMAL_PRIORITY
-    RefreshPriority
-    LV_Click
+    Call cProc.ChangePriority(Val(LV.SelectedItem.SubItems(1)), BELOW_NORMAL_PRIORITY)
+    Call RefreshPriority
+    Call LV_Click
 End Sub
 
 Private Sub mnuBlockProcess_Click()
 
     'bloque le processus
-    cProc.SuspendProcess Val(LV.SelectedItem.SubItems(1))
+    Call cProc.SuspendProcess(Val(LV.SelectedItem.SubItems(1)))
     
     'sauvegarde ce processus bloqué dans la liste des process bloqués
     ReDim Preserve JailedProcess(UBound(JailedProcess()) + 1)
@@ -610,26 +614,26 @@ Dim Frm As Form
 End Sub
 
 Private Sub mnuExecute_Click()
-    ShowRunBox Me.hWnd  'affiche la boite de dialogue Executer...
+    Call ShowRunBox(Me.hWnd)   'affiche la boite de dialogue Executer...
 End Sub
 
 Private Sub mnuHighP_Click()
 'change la priorité
-    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), HIGH_PRIORITY
-    RefreshPriority
-    LV_Click
+    Call cProc.ChangePriority(Val(LV.SelectedItem.SubItems(1)), HIGH_PRIORITY)
+    Call RefreshPriority
+    Call LV_Click
 End Sub
 
 Private Sub mnuIconesDisplay_Click()
     mnuIconesDisplay.Checked = Not (mnuIconesDisplay.Checked)
-    RefreshProcList 'refresh list
+    Call RefreshProcList 'refresh list
 End Sub
 
 Private Sub mnuIdleP_Click()
 'change la priorité
-    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), IDLE_PRIORITY
-    RefreshPriority
-    LV_Click
+    Call cProc.ChangePriority(Val(LV.SelectedItem.SubItems(1)), IDLE_PRIORITY)
+    Call RefreshPriority
+    Call LV_Click
 End Sub
 
 Private Sub mnuLent_Click()
@@ -648,7 +652,7 @@ Dim Frm As Form
 
     'vérfie que le processus est ouvrable
     lH = OpenProcess(PROCESS_ALL_ACCESS, False, Val(LV.SelectedItem.SubItems(1)))
-    CloseHandle lH
+    Call CloseHandle(lH)
     
     If lH = 0 Then
         'pas possible
@@ -676,26 +680,26 @@ End Sub
 
 Private Sub mnuNormalP_Click()
 'change la priorité
-    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), NORMAL_PRIORITY
-    RefreshPriority
-    LV_Click
+    Call cProc.ChangePriority(Val(LV.SelectedItem.SubItems(1)), NORMAL_PRIORITY)
+    Call RefreshPriority
+    Call LV_Click
 End Sub
 
 Private Sub mnuOpenExplorer_Click()
 'ouvre explorer à l'endroit du *.exe
-    Shell "explorer.exe " & cFile.getfoldername(LV.SelectedItem.SubItems(2)), vbNormalFocus
+    Shell "explorer.exe " & cFile.GetFolderName(LV.SelectedItem.SubItems(2)), vbNormalFocus
 End Sub
 
 Private Sub mnuPremierPlan_Click()
 'mettre (ou non) au premier plan
     Me.mnuPremierPlan.Checked = Not (Me.mnuPremierPlan.Checked)
-    If Me.mnuPremierPlan.Checked Then PremierPlan Me, MettreAuPremierPlan Else _
-        PremierPlan Me, MettreNormal
+    If Me.mnuPremierPlan.Checked Then Call SetFormForeBackGround(Me, SetFormForeGround) Else _
+        Call SetFormForeBackGround(Me, SetFormBackGround)
 End Sub
 
 Private Sub mnuProperties_Click()
 'affiche les propriétés du fichier
-    cFile.ShowFileProperty LV.SelectedItem.SubItems(2), Me.hWnd
+    Call cFile.ShowFileProperty(LV.SelectedItem.SubItems(2), Me.hWnd)
 End Sub
 
 Private Sub mnuQuit_Click()
@@ -704,9 +708,9 @@ End Sub
 
 Private Sub mnuRealTimeP_Click()
 'change la priorité
-    cProc.ChangePriority Val(LV.SelectedItem.SubItems(1)), REALTIME_PRIORITY
-    RefreshPriority
-    LV_Click
+    Call cProc.ChangePriority(Val(LV.SelectedItem.SubItems(1)), REALTIME_PRIORITY)
+    Call RefreshPriority
+    Call LV_Click
 End Sub
 
 Private Sub mnuRefrehNOW_Click()
@@ -734,7 +738,7 @@ Dim sSearch As String
     'formate la string pour la recherche
     sURL = "http://www.google.com/search?hl=en&q=%22" & sSearch & "%22"
 
-    cFile.ShellOpenFile sURL, Me.hWnd
+    Call cFile.ShellOpenFile(sURL, Me.hWnd)
     
 End Sub
 
@@ -767,11 +771,11 @@ Dim p As ProcessItem
     
     'affichage dans le LV
     '/!\ on GELE l'affichage pour éviter le clignotement
-    ValidateRect LV.hWnd, 0&
+    Call ValidateRect(LV.hWnd, 0&)
 
     LV.SelectedItem.SubItems(14) = PriorityFromLong(p.pcPriClassBase) & " [" & p.pcPriClassBase & "]"
     
-    InvalidateRect LV.hWnd, 0&, 0&   'dégèle le display
+    Call InvalidateRect(LV.hWnd, 0&, 0&)    'dégèle le display
     
     Set p = Nothing
 
@@ -793,7 +797,7 @@ Dim sKey As String
     
     'affichage dans le LV
     '/!\ on GELE l'affichage pour éviter le clignotement
-    ValidateRect LV.hWnd, 0&
+    Call ValidateRect(LV.hWnd, 0&)
     
     LV.ListItems.Clear
     
@@ -866,7 +870,6 @@ Dim sKey As String
     Exit Sub
 ErrGestion:
     clsERREUR.AddError "frmProcess.RefreshProcList", True
-    
 End Sub
 
 '=======================================================
@@ -907,13 +910,14 @@ Dim pct As IPictureDisp
     If DoesKeyExist(sKey) Then Exit Function 'clé existe déjà
     
     'obtient le handle de l'icone
-    hIcon = SHGetFileInfo(sFile, 0&, ShInfo, Len(ShInfo), BASIC_SHGFI_FLAGS Or SHGFI_SMALLICON)
+    hIcon = SHGetFileInfo(sFile, 0&, ShInfo, Len(ShInfo), BASIC_SHGFI_FLAGS Or _
+        SHGFI_SMALLICON)
         
     'prépare la picturebox
     pctIcon.Picture = Nothing
     
     'trace l'image
-    ImageList_Draw hIcon, ShInfo.iIcon, pctIcon.hdc, 0, 0, ILD_TRANSPARENT
+    Call ImageList_Draw(hIcon, ShInfo.iIcon, pctIcon.hdc, 0, 0, ILD_TRANSPARENT)
     
     'ajout de l'icone à l'imagelist
     IMG.ListImages.Add Key:=sKey, Picture:=pctIcon.Image

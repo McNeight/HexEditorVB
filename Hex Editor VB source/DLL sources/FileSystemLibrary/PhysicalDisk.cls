@@ -125,7 +125,7 @@ Dim hDrive As Long
     tGeom = clsFile.GetPhysicalDiskGeometry_HANDLE(hDrive)
 
     'récupère le nom du disque
-    MyDisk.DiskName = clsFile.GetPhysicalDiskName_HANDLE(DiskNumber, Me.DiskNumber)
+    MyDisk.DiskName = clsFile.GetPhysicalDiskName_HANDLE(hDrive, Me.DiskNumber)
     
     'referme le handle
     Call CloseHandle(hDrive)
@@ -189,6 +189,14 @@ End Function
 Public Function Sanitize() As Long
     Sanitize = clsFile.SanitizePhysicalDisk(Me.DiskNumber)
 End Function
+
+'=======================================================
+'Renvoie True si le disk est disponible
+'=======================================================
+Public Function IsDiskAvailable() As Boolean
+    IsDiskAvailable = clsFile.IsPhysicalDiskAvailable(Me.DiskNumber)
+End Function
+
 
 
 

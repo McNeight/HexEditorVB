@@ -246,31 +246,33 @@ Option Explicit
 '=======================================================
 
 Private Sub Form_Activate()
-    RefreshProp
+    Call RefreshProp
 End Sub
 
 Private Sub Form_Load()
 Dim x As Long
 
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     For x = 0 To 2
         Frame1(x).Top = 600
@@ -278,7 +280,8 @@ Dim x As Long
         Frame1(x).Visible = False
     Next x
     
-    If TypeOfForm(frmContent.ActiveForm) = "Disque physique" Then Me.mnuDisplayWindowsProp.Enabled = False
+    If TypeOfForm(frmContent.ActiveForm) = "Disque physique" Then _
+        Me.mnuDisplayWindowsProp.Enabled = False
 End Sub
 
 '=======================================================
@@ -290,19 +293,19 @@ Private Sub RefreshProp()
     If TypeOfForm(frmContent.ActiveForm) = "Fichier" Then
         TabStrip1.Tabs(1).Selected = True
         Frame1(0).Visible = True
-        ShowFileProp    'affiche les infos sur le fichier
+        Call ShowFileProp    'affiche les infos sur le fichier
     ElseIf TypeOfForm(frmContent.ActiveForm) = "Disque" Then
         TabStrip1.Tabs(2).Selected = True
         Frame1(1).Visible = True
-        ShowDiskProp    'affiche les infos sur le disque
+        Call ShowDiskProp    'affiche les infos sur le disque
     ElseIf TypeOfForm(frmContent.ActiveForm) = "Disque physique" Then
         TabStrip1.Tabs(2).Selected = True
         Frame1(1).Visible = True
-        ShowDiskProp    'affiche les infos sur le disque
+        Call ShowDiskProp    'affiche les infos sur le disque
     ElseIf TypeOfForm(frmContent.ActiveForm) = "Processus" Then
         Frame1(2).Visible = True
         TabStrip1.Tabs(3).Selected = True
-        ShowProcessProp 'affiche les infos sur le processus
+        Call ShowProcessProp 'affiche les infos sur le processus
     End If
 
     TabStrip1.Enabled = False
@@ -313,18 +316,19 @@ End Sub
 'affiche les propriétés d'un disque
 '=======================================================
 Private Sub ShowDiskProp()
-Dim cDrive As clsDrive
+Dim cDrive As FileSystemLibrary.Drive
 Dim s As String
 
     On Error Resume Next
     
     If Not (frmContent.ActiveForm Is Nothing) Then
         'nom du disque
-        txtDisk.Text = "[" & Trim$(Left$(Right$(frmContent.ActiveForm.Caption, 4), 3)) & "]"
+        txtDisk.Text = Trim$(Left$(Right$(frmContent.ActiveForm.Caption, 4), 3))
     End If
     
     'récupère les infos sur le disque
-    Set cDrive = cDisk.GetLogicalDrive(Mid$(txtDisk.Text, 2, Len(txtDisk.Text) - 2) & "\")
+    'TODO
+    Set cDrive = cFile.GetDrive(Left$(txtDisk.Text, 1))
     
     'affiche tout çà
     With cDrive
@@ -365,7 +369,7 @@ End Sub
 'affiche les propriétés d'un fichier
 '=======================================================
 Private Sub ShowFileProp()
-Dim cFic As filesystemlibrary.File
+Dim cFic As FileSystemLibrary.File
 Dim s As String
 
     On Error Resume Next
@@ -421,7 +425,7 @@ End Sub
 '=======================================================
 Private Sub ShowProcessProp()
 Dim pProcess As ProcessItem
-Dim cFic As filesystemlibrary.File
+Dim cFic As FileSystemLibrary.File
 Dim s As String
 
     On Error Resume Next
@@ -434,7 +438,8 @@ Dim s As String
     End If
     
     'récupère les infos sur le processus
-    Set pProcess = cProc.GetProcess(Val(frmContent.ActiveForm.Tag), False, False, True)
+    Set pProcess = cProc.GetProcess(Val(frmContent.ActiveForm.Tag), False, _
+        False, True)
     Set cFic = cFile.GetFile(pProcess.szImagePath)
     
     'infos fichier cible
@@ -502,11 +507,11 @@ Dim clsP As clsProcess
     
     If TypeOfForm(frmContent.ActiveForm) = "Processus" Then
         'le PID est stocké dans le Tag
-        cFile.ShowFileProperty clsP.GetProcessPathFromPID(Val(frmContent.ActiveForm.Tag)), Me.hWnd
+        Call cFile.ShowFileProperty(clsP.GetProcessPathFromPID(Val(frmContent.ActiveForm.Tag)), Me.hWnd)
     ElseIf TypeOfForm(frmContent.ActiveForm) = "Disque" Then
-        cFile.ShowFileProperty Right$(frmContent.ActiveForm.Caption, 3), Me.hWnd
+        Call cFile.ShowFileProperty(Right$(frmContent.ActiveForm.Caption, 3), Me.hWnd)
     ElseIf TypeOfForm(frmContent.ActiveForm) = "Fichier" Then
-        cFile.ShowFileProperty frmContent.ActiveForm.Caption, Me.hWnd
+        Call cFile.ShowFileProperty(frmContent.ActiveForm.Caption, Me.hWnd)
     End If
     
     Set clsP = Nothing
