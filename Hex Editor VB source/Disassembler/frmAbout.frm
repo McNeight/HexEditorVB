@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmAbout 
    BackColor       =   &H00760401&
    BorderStyle     =   0  'None
@@ -24,12 +23,6 @@ Begin VB.Form frmAbout
    ScaleWidth      =   7065
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
    Begin VB.CommandButton cmdUnload 
       Caption         =   "Fermer"
       Height          =   375
@@ -285,6 +278,8 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Private Lang As New clsLang
+
 Private Sub cmdLicense_Click()
 'affiche le ReadMe
 
@@ -307,6 +302,9 @@ Dim s As String
             Lang.WriteIniFileFormIDEform
         End If
     #End If
+    
+    'active la gestion des langues
+    Call Lang.ActiveLang(Me)
     
     If App.LogMode = 0 Then
         'alors on est dans l'IDE

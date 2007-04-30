@@ -1,7 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Begin VB.Form frmInformations 
    Caption         =   "Informations sur le fichier"
    ClientHeight    =   7155
@@ -112,15 +111,14 @@ Begin VB.Form frmInformations
    End
    Begin RichTextLib.RichTextBox RTB 
       Height          =   975
-      Left            =   0
+      Left            =   960
       TabIndex        =   0
-      Top             =   0
+      Top             =   1320
       Width           =   1095
       _ExtentX        =   1931
       _ExtentY        =   1720
       _Version        =   393217
       BorderStyle     =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       Appearance      =   0
@@ -136,12 +134,6 @@ Begin VB.Form frmInformations
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
    End
    Begin VB.Label Label1 
       Alignment       =   2  'Center
@@ -204,9 +196,11 @@ Option Explicit
 'AFFICHAGE DES INFORMATIONS SUR LA STRCTURE DU FICHIER
 '=======================================================
 
+Private Lang As New clsLang
 Private sStr As String
 
 Private Sub Form_Load()
+    
     #If MODE_DEBUG Then
         If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
@@ -215,6 +209,9 @@ Private Sub Form_Load()
             Lang.WriteIniFileFormIDEform
         End If
     #End If
+    
+    'active la gestion des langues
+    Call Lang.ActiveLang(Me)
     
     If App.LogMode = 0 Then
         'alors on est dans l'IDE
@@ -240,7 +237,7 @@ End Sub
 Public Sub GetFileInfos(ByVal sFile As String)
 Dim l As Long
 Dim s() As String
-Dim x As Long
+Dim X As Long
 Dim s2 As String
 
     On Error Resume Next
@@ -278,34 +275,34 @@ Dim s2 As String
         
     With LV
         .ListItems.Clear
-        For x = 3 To UBound(s()) Step 11
+        For X = 3 To UBound(s()) Step 11
         
-            l = x - 3 + 11
+            l = X - 3 + 11
             
             '/!\ IMPORTANT : DO NOT REMOVE !
-            If x + 9 > UBound(s()) Then Exit Sub
+            If X + 9 > UBound(s()) Then Exit Sub
             
             'Name
-            .ListItems.Add Text:=Right$(s(x), Len(s(x)) - 28)
+            .ListItems.Add Text:=Right$(s(X), Len(s(X)) - 28)
             'Characteristics
-            .ListItems.Item(.ListItems.Count).SubItems(1) = Right$(s(x + 1), Len(s(x + 1)) - 28)
+            .ListItems.Item(.ListItems.Count).SubItems(1) = Right$(s(X + 1), Len(s(X + 1)) - 28)
             'PointerToRawData
-            .ListItems.Item(.ListItems.Count).SubItems(2) = Right$(s(x + 2), Len(s(x + 2)) - 28)
+            .ListItems.Item(.ListItems.Count).SubItems(2) = Right$(s(X + 2), Len(s(X + 2)) - 28)
             'SizeOfRawData
-            .ListItems.Item(.ListItems.Count).SubItems(3) = Right$(s(x + 3), Len(s(x + 3)) - 28)
+            .ListItems.Item(.ListItems.Count).SubItems(3) = Right$(s(X + 3), Len(s(X + 3)) - 28)
             'VirtualAddress
-            .ListItems.Item(.ListItems.Count).SubItems(4) = Right$(s(x + 4), Len(s(x + 4)) - 28)
+            .ListItems.Item(.ListItems.Count).SubItems(4) = Right$(s(X + 4), Len(s(X + 4)) - 28)
             'VirtualSize
-            .ListItems.Item(.ListItems.Count).SubItems(5) = Right$(s(x + 5), Len(s(x + 5)) - 28)
+            .ListItems.Item(.ListItems.Count).SubItems(5) = Right$(s(X + 5), Len(s(X + 5)) - 28)
             'PointerToLinenumbers
-            .ListItems.Item(.ListItems.Count).SubItems(6) = Right$(s(x + 6), Len(s(x + 6)) - 28)
+            .ListItems.Item(.ListItems.Count).SubItems(6) = Right$(s(X + 6), Len(s(X + 6)) - 28)
             'NumberOfLinenumbers
-            .ListItems.Item(.ListItems.Count).SubItems(7) = Right$(s(x + 7), Len(s(x + 7)) - 28)
+            .ListItems.Item(.ListItems.Count).SubItems(7) = Right$(s(X + 7), Len(s(X + 7)) - 28)
             'PointerToRelocations
-            .ListItems.Item(.ListItems.Count).SubItems(8) = Right$(s(x + 8), Len(s(x + 8)) - 28)
+            .ListItems.Item(.ListItems.Count).SubItems(8) = Right$(s(X + 8), Len(s(X + 8)) - 28)
             'NumberOfRelocations
-            .ListItems.Item(.ListItems.Count).SubItems(9) = Right$(s(x + 9), Len(s(x + 9)) - 28)
-        Next x
+            .ListItems.Item(.ListItems.Count).SubItems(9) = Right$(s(X + 9), Len(s(X + 9)) - 28)
+        Next X
     End With
     
 End Sub

@@ -1,6 +1,5 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmImport 
    Caption         =   "Importer"
    ClientHeight    =   6870
@@ -79,12 +78,6 @@ Begin VB.Form frmImport
       Top             =   960
       Width           =   2535
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
 End
 Attribute VB_Name = "frmImport"
 Attribute VB_GlobalNameSpace = False
@@ -128,11 +121,13 @@ Option Explicit
 'AFFICHAGE DES IMPORT
 '=======================================================
 
+Private Lang As New clsLang
 Private nbDll As Long
 Private sD() As String
 Private sF() As String
 
 Private Sub Form_Load()
+
     #If MODE_DEBUG Then
         If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
@@ -170,13 +165,17 @@ End Sub
 Public Sub GetFileInfosImp(ByVal sFile As String)
 Dim l As Long
 Dim s() As String
-Dim x As Long
+Dim X As Long
 Dim s2 As String
 Dim dep As Long
 Dim sStr As String
 Dim sDll As String
 
     On Error Resume Next
+    
+    'active la gestion des langues
+    Call Lang.ActiveLang(Me)
+    Call Lang.LoadControlsCaption
     
     'récupère le fichier en mémoire
     sStr = cFile.LoadFileInString(sFile)
@@ -191,21 +190,21 @@ Dim sDll As String
         '//récupère le nom de la dll
         'récupère la position de la partie "Import from"
         l = InStr(dep, sStr, ";Import From ")
-        x = InStr(l + 1, sStr, vbNewLine, vbBinaryCompare)
-        sDll = Mid$(sStr, l + 13, x - l - 13)
+        X = InStr(l + 1, sStr, vbNewLine, vbBinaryCompare)
+        sDll = Mid$(sStr, l + 13, X - l - 13)
         lstDll.AddItem sDll 'ajoute la dll à la liste
         
         '//on récupère maintenant le texte pour chaque dll
         ReDim Preserve sD(UBound(sD()) + 1)
-        l = InStr(x + 20, sStr, vbNewLine)
-        x = InStr(x + 109, sStr, vbNewLine, vbBinaryCompare)
-        sD(UBound(sD())) = Replace$(Mid$(sStr, l + 2, x - l - 2), ";", vbNullString)
+        l = InStr(X + 20, sStr, vbNewLine)
+        X = InStr(X + 109, sStr, vbNewLine, vbBinaryCompare)
+        sD(UBound(sD())) = Replace$(Mid$(sStr, l + 2, X - l - 2), ";", vbNullString)
         
         '//on récupère maintenant la string avec le nom de toutes les fonctions importées
         ReDim Preserve sF(UBound(sD))
-        l = InStr(x + 60, sStr, vbNewLine)
-        x = InStr(x + 60, sStr, ";=", vbBinaryCompare)
-        sF(UBound(sF())) = Mid$(sStr, l + 2, x - l - 2)
+        l = InStr(X + 60, sStr, vbNewLine)
+        X = InStr(X + 60, sStr, ";=", vbBinaryCompare)
+        sF(UBound(sF())) = Mid$(sStr, l + 2, X - l - 2)
         'vire tous les caractères inutiles
         sF(UBound(sF())) = Replace$(sF(UBound(sF())), ";Imported ", vbNullString, , , vbBinaryCompare)
         sF(UBound(sF())) = Replace$(sF(UBound(sF())), " (", "|", , , vbBinaryCompare)
@@ -246,7 +245,7 @@ End Sub
 '=======================================================
 Private Sub DllDisplay()
 Dim l As Long
-Dim x As Long
+Dim X As Long
 Dim l2 As Long
 Dim s As String
 Dim s2() As String
@@ -272,12 +271,12 @@ Dim s2() As String
         'sépare chaque ligne
         s2() = Split(sF(lstDll.ListIndex + 1), vbNewLine, , vbBinaryCompare)
         
-        For x = 0 To UBound(s2()) - 1
+        For X = 0 To UBound(s2()) - 1
                    
             'récupère les positions des "|" pour en extraire chaque function, son hint
             'et son adresse
             
-            s = s2(x) & "|"
+            s = s2(X) & "|"
             
             l = InStr(1, s, "|", vbBinaryCompare)
             .Add Text:=Mid$(s, 1, l - 1)
@@ -288,7 +287,7 @@ Dim s2() As String
             l = InStr(l2 + 1, s, "|", vbBinaryCompare)
             .Item(.Count).SubItems(2) = Mid$(s, l2 + 1, l - l2 - 1)
             
-        Next x
+        Next X
     End With
     LV.Visible = True
     

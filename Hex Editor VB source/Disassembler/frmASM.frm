@@ -1,6 +1,5 @@
 VERSION 5.00
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Begin VB.Form frmASM 
    Caption         =   "Code assembleur"
    ClientHeight    =   3060
@@ -32,7 +31,6 @@ Begin VB.Form frmASM
       _ExtentY        =   1720
       _Version        =   393217
       BorderStyle     =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       Appearance      =   0
@@ -48,12 +46,6 @@ Begin VB.Form frmASM
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
    End
 End
 Attribute VB_Name = "frmASM"
@@ -94,7 +86,10 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Private Lang As New clsLang
+
 Private Sub Form_Load()
+
     #If MODE_DEBUG Then
         If App.LogMode = 0 And CREATE_FRENCH_FILE Then
             'on créé le fichier de langue français
@@ -103,6 +98,9 @@ Private Sub Form_Load()
             Lang.WriteIniFileFormIDEform
         End If
     #End If
+    
+    'active la gestion des langues
+    Call Lang.ActiveLang(Me)
     
     If App.LogMode = 0 Then
         'alors on est dans l'IDE
