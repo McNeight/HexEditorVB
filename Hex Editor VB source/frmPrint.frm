@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmPrint 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Impression"
@@ -18,46 +17,18 @@ Begin VB.Form frmPrint
    EndProperty
    Icon            =   "frmPrint.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   4800
    ScaleWidth      =   4335
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton Command1 
-      Height          =   375
-      Left            =   360
-      TabIndex        =   14
-      Top             =   4320
-      Width           =   2415
-   End
-   Begin VB.CommandButton cmdQuit 
-      Height          =   375
-      Left            =   3120
-      TabIndex        =   15
-      Top             =   4320
-      Width           =   975
-   End
-   Begin VB.CommandButton cmdPrintOpt 
-      Height          =   375
-      Left            =   1680
-      TabIndex        =   13
-      Top             =   3840
-      Width           =   1935
-   End
-   Begin VB.CommandButton cmdPrint 
-      Height          =   375
-      Left            =   360
-      TabIndex        =   12
-      Top             =   3840
-      Width           =   975
-   End
    Begin VB.Frame Frame1 
+      Caption         =   "Options d'impression"
       Height          =   3615
       Left            =   120
-      TabIndex        =   16
-      Top             =   120
+      TabIndex        =   4
+      Top             =   113
       Width           =   4095
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
@@ -65,122 +36,28 @@ Begin VB.Form frmPrint
          Left            =   120
          ScaleHeight     =   3255
          ScaleWidth      =   3855
-         TabIndex        =   17
+         TabIndex        =   5
          TabStop         =   0   'False
          Top             =   240
          Width           =   3855
-         Begin VB.TextBox txtFontSize 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   1560
-            TabIndex        =   11
-            Tag             =   "pref"
-            Top             =   2880
-            Width           =   375
-         End
-         Begin VB.TextBox txtTo 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   2760
-            TabIndex        =   10
-            Tag             =   "pref"
-            Top             =   2520
-            Width           =   975
-         End
-         Begin VB.TextBox txtFrom 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   1440
-            TabIndex        =   9
-            Tag             =   "pref"
-            Top             =   2520
-            Width           =   975
-         End
-         Begin VB.OptionButton Option1 
-            Caption         =   "Imprimer de"
-            Height          =   255
-            Index           =   2
-            Left            =   120
-            TabIndex        =   8
-            Tag             =   "pref2"
-            ToolTipText     =   "Imprimer une plage d'offsets"
-            Top             =   2520
-            Width           =   1215
-         End
-         Begin VB.OptionButton Option1 
-            Caption         =   "Imprimer sélection"
-            Height          =   255
-            Index           =   1
-            Left            =   120
-            TabIndex        =   7
-            Tag             =   "pref1"
-            ToolTipText     =   "Imprimer uniquement la sélection"
-            Top             =   2280
-            Width           =   1695
-         End
-         Begin VB.OptionButton Option1 
-            Caption         =   "Imprimer tout"
+         Begin VB.CheckBox Check1 
+            Caption         =   "Valeurs ASCII"
             Height          =   255
             Index           =   0
-            Left            =   120
-            TabIndex        =   6
+            Left            =   0
+            TabIndex        =   17
             Tag             =   "pref0"
-            ToolTipText     =   "Tout imprimer"
-            Top             =   2040
-            Value           =   -1  'True
-            Width           =   1335
-         End
-         Begin VB.TextBox txtTitle 
-            Enabled         =   0   'False
-            Height          =   285
-            Left            =   840
-            TabIndex        =   5
-            Tag             =   "pref"
-            Top             =   1560
-            Width           =   2895
-         End
-         Begin VB.CheckBox Check1 
-            Caption         =   "Titre"
-            Height          =   255
-            Index           =   4
-            Left            =   0
-            TabIndex        =   4
-            Tag             =   "pref4"
-            ToolTipText     =   "Ajouter un titre"
-            Top             =   1560
-            Width           =   735
-         End
-         Begin VB.CheckBox Check1 
-            Caption         =   "Informations sur le fichier"
-            Height          =   255
-            Index           =   3
-            Left            =   0
-            TabIndex        =   3
-            Tag             =   "pref3"
-            ToolTipText     =   "Afficher les informations sur le fichier en première page"
-            Top             =   1200
+            ToolTipText     =   "Ajouter les valeurs ASCII"
+            Top             =   120
             Value           =   1  'Checked
-            Width           =   2295
-         End
-         Begin VB.CheckBox Check1 
-            Caption         =   "Offsets"
-            Height          =   255
-            Index           =   2
-            Left            =   0
-            TabIndex        =   2
-            Tag             =   "pref2"
-            ToolTipText     =   "Afficher les offsets"
-            Top             =   840
-            Value           =   1  'Checked
-            Width           =   975
+            Width           =   1815
          End
          Begin VB.CheckBox Check1 
             Caption         =   "Valeurs hexa"
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   1
+            TabIndex        =   16
             Tag             =   "pref1"
             ToolTipText     =   "Ajouter les valeurs hexa"
             Top             =   480
@@ -188,38 +65,172 @@ Begin VB.Form frmPrint
             Width           =   1335
          End
          Begin VB.CheckBox Check1 
-            Caption         =   "Valeurs ASCII"
+            Caption         =   "Offsets"
+            Height          =   255
+            Index           =   2
+            Left            =   0
+            TabIndex        =   15
+            Tag             =   "pref2"
+            ToolTipText     =   "Afficher les offsets"
+            Top             =   840
+            Value           =   1  'Checked
+            Width           =   975
+         End
+         Begin VB.CheckBox Check1 
+            Caption         =   "Informations sur le fichier"
+            Height          =   255
+            Index           =   3
+            Left            =   0
+            TabIndex        =   14
+            Tag             =   "pref3"
+            ToolTipText     =   "Afficher les informations sur le fichier en première page"
+            Top             =   1200
+            Value           =   1  'Checked
+            Width           =   2295
+         End
+         Begin VB.CheckBox Check1 
+            Caption         =   "Titre"
+            Height          =   255
+            Index           =   4
+            Left            =   0
+            TabIndex        =   13
+            Tag             =   "pref4"
+            ToolTipText     =   "Ajouter un titre"
+            Top             =   1560
+            Width           =   735
+         End
+         Begin VB.TextBox txtTitle 
+            Enabled         =   0   'False
+            Height          =   285
+            Left            =   840
+            TabIndex        =   12
+            Tag             =   "pref"
+            Text            =   "Titre du document"
+            ToolTipText     =   "Titre du document"
+            Top             =   1560
+            Width           =   2895
+         End
+         Begin VB.OptionButton Option1 
+            Caption         =   "Imprimer tout"
             Height          =   255
             Index           =   0
-            Left            =   0
-            TabIndex        =   0
-            Tag             =   "pref0"
-            ToolTipText     =   "Ajouter les valeurs ASCII"
-            Top             =   120
-            Value           =   1  'Checked
-            Width           =   1815
-         End
-         Begin VB.Label Label2 
-            Height          =   255
             Left            =   120
-            TabIndex        =   19
+            TabIndex        =   11
+            Tag             =   "pref0"
+            ToolTipText     =   "Tout imprimer"
+            Top             =   2040
+            Value           =   -1  'True
+            Width           =   1335
+         End
+         Begin VB.OptionButton Option1 
+            Caption         =   "Imprimer sélection"
+            Height          =   255
+            Index           =   1
+            Left            =   120
+            TabIndex        =   10
+            Tag             =   "pref1"
+            ToolTipText     =   "Imprimer uniquement la sélection"
+            Top             =   2280
+            Width           =   1695
+         End
+         Begin VB.OptionButton Option1 
+            Caption         =   "Imprimer de "
+            Height          =   255
+            Index           =   2
+            Left            =   120
+            TabIndex        =   9
+            Tag             =   "pref2"
+            ToolTipText     =   "Imprimer une plage d'offsets"
+            Top             =   2520
+            Width           =   1215
+         End
+         Begin VB.TextBox txtFrom 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   1440
+            TabIndex        =   8
+            Tag             =   "pref"
+            Text            =   "00000000"
+            ToolTipText     =   "Offset inférieur"
+            Top             =   2520
+            Width           =   975
+         End
+         Begin VB.TextBox txtTo 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   2760
+            TabIndex        =   7
+            Tag             =   "pref"
+            Text            =   "10000000"
+            ToolTipText     =   "Offset supérieur"
+            Top             =   2520
+            Width           =   975
+         End
+         Begin VB.TextBox txtFontSize 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   1560
+            TabIndex        =   6
+            Tag             =   "pref"
+            Text            =   "10"
+            ToolTipText     =   "Taille de la police d'impression (Courier New)"
             Top             =   2880
-            Width           =   1455
+            Width           =   375
          End
          Begin VB.Label Label1 
+            Caption         =   "à"
             Height          =   255
             Left            =   2520
-            TabIndex        =   18
+            TabIndex        =   19
             Top             =   2520
             Width           =   255
          End
+         Begin VB.Label Label2 
+            Caption         =   "Taille de la police :"
+            Height          =   255
+            Left            =   120
+            TabIndex        =   18
+            Top             =   2880
+            Width           =   1455
+         End
       End
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
+   Begin VB.CommandButton cmdPrint 
+      Caption         =   "Imprimer"
+      Height          =   375
+      Left            =   360
+      TabIndex        =   3
+      ToolTipText     =   "Lancer l'impression"
+      Top             =   3833
+      Width           =   975
+   End
+   Begin VB.CommandButton cmdPrintOpt 
+      Caption         =   "Options de l'imprimante"
+      Height          =   375
+      Left            =   1680
+      TabIndex        =   2
+      ToolTipText     =   "Configurer l'imprimante/impression"
+      Top             =   3833
+      Width           =   1935
+   End
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   3120
+      TabIndex        =   1
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   4313
+      Width           =   975
+   End
+   Begin VB.CommandButton Command1 
+      Caption         =   "Aperçu avant impression..."
+      Height          =   375
+      Left            =   360
+      TabIndex        =   0
+      ToolTipText     =   "Visualiser un aperçu avant d'imprimer"
+      Top             =   4313
+      Width           =   2415
    End
 End
 Attribute VB_Name = "frmPrint"
@@ -264,6 +275,7 @@ Option Explicit
 'FORM D'IMPRESSION
 '=======================================================
 
+Private Lang As New clsLang
 Private clsPref As clsIniForm
 
 Private Sub cmdPrint_Click()
@@ -326,7 +338,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     

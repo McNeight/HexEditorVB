@@ -1,6 +1,5 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmLogErr 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Rapport d'erreurs"
@@ -19,36 +18,46 @@ Begin VB.Form frmLogErr
    EndProperty
    Icon            =   "frmLogErr.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   4170
    ScaleWidth      =   8475
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdReset 
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Fermer"
       Height          =   375
-      Left            =   7320
-      TabIndex        =   2
-      Top             =   840
+      Left            =   7290
+      TabIndex        =   3
+      ToolTipText     =   "Fermer la fenêtre"
+      Top             =   218
       Width           =   1095
    End
    Begin VB.TextBox Text1 
       BorderStyle     =   0  'None
       Height          =   1125
-      Left            =   120
+      Left            =   90
       Locked          =   -1  'True
       MultiLine       =   -1  'True
-      TabIndex        =   0
-      Top             =   120
+      TabIndex        =   1
+      Top             =   98
       Width           =   6975
+   End
+   Begin VB.CommandButton cmdReset 
+      Caption         =   "Reset..."
+      Height          =   375
+      Left            =   7290
+      TabIndex        =   0
+      ToolTipText     =   "Supprimer toutes les entrées du rapport d'erreur"
+      Top             =   818
+      Width           =   1095
    End
    Begin ComctlLib.ListView LV 
       Height          =   2775
-      Left            =   120
-      TabIndex        =   3
+      Left            =   90
+      TabIndex        =   2
       Tag             =   "lang_ok"
-      Top             =   1320
+      Top             =   1298
       Width           =   8295
       _ExtentX        =   14631
       _ExtentY        =   4895
@@ -104,19 +113,6 @@ Begin VB.Form frmLogErr
          Object.Width           =   7056
       EndProperty
    End
-   Begin VB.CommandButton cmdQuit 
-      Height          =   375
-      Left            =   7320
-      TabIndex        =   1
-      Top             =   240
-      Width           =   1095
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
 End
 Attribute VB_Name = "frmLogErr"
 Attribute VB_GlobalNameSpace = False
@@ -159,6 +155,7 @@ Option Explicit
 '=======================================================
 'FORM D'AFFICHAGE DU RAPPORT D'ERREUR
 '=======================================================
+Private Lang As New clsLang
 
 Private Sub cmdQuit_Click()
     Unload Me
@@ -175,7 +172,7 @@ End Sub
 
 Private Sub Form_Load()
 Dim var As Variant
-Dim x As Long
+Dim X As Long
 
     With Lang
         #If MODE_DEBUG Then
@@ -195,7 +192,7 @@ Dim x As Long
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     
@@ -206,14 +203,14 @@ Dim x As Long
     LV.ListItems.Clear
     
     With LV.ListItems
-        For x = 1 To clsERREUR.NumberOfErrorInLogFile
-            .Add Text:=var(x).ErrDate
-            .Item(x).SubItems(1) = var(x).ErrTime
-            .Item(x).SubItems(2) = var(x).ErrZone
-            .Item(x).SubItems(3) = var(x).ErrSource
-            .Item(x).SubItems(4) = var(x).ErrNumber
-            .Item(x).SubItems(5) = var(x).ErrDescription
-        Next x
+        For X = 1 To clsERREUR.NumberOfErrorInLogFile
+            .Add Text:=var(X).ErrDate
+            .Item(X).SubItems(1) = var(X).ErrTime
+            .Item(X).SubItems(2) = var(X).ErrZone
+            .Item(X).SubItems(3) = var(X).ErrSource
+            .Item(X).SubItems(4) = var(X).ErrNumber
+            .Item(X).SubItems(5) = var(X).ErrDescription
+        Next X
     End With
     
     With Text1

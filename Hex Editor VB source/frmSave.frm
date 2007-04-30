@@ -1,7 +1,7 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmSave 
    BorderStyle     =   3  'Fixed Dialog
+   Caption         =   "Sauvegarder le fichier"
    ClientHeight    =   2130
    ClientLeft      =   45
    ClientTop       =   345
@@ -17,39 +17,38 @@ Begin VB.Form frmSave
    EndProperty
    Icon            =   "frmSave.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   2130
    ScaleWidth      =   3510
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CheckBox chkDoNotShowAlert 
-      Height          =   195
+   Begin VB.CommandButton cmdYES 
+      Caption         =   "Oui"
+      Height          =   495
       Left            =   248
-      TabIndex        =   3
-      Top             =   1800
-      Width           =   3015
+      TabIndex        =   2
+      ToolTipText     =   "Procède à la sauvegarde et écrase le fichier"
+      Top             =   1028
+      Width           =   1215
    End
    Begin VB.CommandButton cmdNO 
+      Caption         =   "Non"
       Height          =   495
       Left            =   2048
-      TabIndex        =   2
-      Top             =   1080
-      Width           =   1215
-   End
-   Begin VB.CommandButton cmdYES 
-      Height          =   495
-      Left            =   248
       TabIndex        =   1
-      Top             =   1080
+      ToolTipText     =   "Ne procède pas à la sauvegarde"
+      Top             =   1028
       Width           =   1215
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
+   Begin VB.CheckBox chkDoNotShowAlert 
+      Caption         =   "Ne plus afficher à l'avenir"
+      Height          =   195
+      Left            =   248
+      TabIndex        =   0
+      ToolTipText     =   $"frmSave.frx":058A
+      Top             =   1748
+      Width           =   3015
    End
    Begin VB.Label Label1 
       Caption         =   "Voulez vous réellement sauvegarder ? (le fichier actuel sera écrasé)"
@@ -64,8 +63,8 @@ Begin VB.Form frmSave
       EndProperty
       Height          =   495
       Left            =   128
-      TabIndex        =   0
-      Top             =   240
+      TabIndex        =   3
+      Top             =   188
       Width           =   3255
    End
 End
@@ -111,6 +110,7 @@ Option Explicit
 '=======================================================
 'FORM QUI PROPOSE D'ECRASER UN FICHIER (SAUVEGARDE)
 '=======================================================
+Private Lang As New clsLang
 
 Private Sub cmdNO_Click()
     Call SavePrefShowAlert   'sauvegarde (ou pas) les pref
@@ -162,7 +162,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
 End Sub

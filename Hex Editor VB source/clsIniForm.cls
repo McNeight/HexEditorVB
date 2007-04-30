@@ -88,8 +88,9 @@ Dim Obj As Control
 
     On Error Resume Next
     
-    With Obj
         For Each Obj In Frm.Controls
+        
+            With Obj
             
             'mettre "pref..." en tag pour autoriser la sauvegarde
             'ajouter une string différente après "pref" pour différencier deux controles indexés
@@ -134,8 +135,8 @@ Dim Obj As Control
                 End If
             End If
                         
-        Next Obj
-    End With
+        End With
+    Next Obj
     
     If Left$(LCase$(Obj.Tag), 4) = "pref" Then
         'ici, il faut aussi gérer les propriété de la form en elle même
@@ -159,8 +160,9 @@ Dim Obj As Control
 
     On Error Resume Next
 
-    With Obj
         For Each Obj In Frm.Controls
+        
+            With Obj
         
             'mettre "pref..." en tag pour autoriser la sauvegarde
             'ajouter une string différente après "pref" pour différencier deux controles indexés
@@ -205,8 +207,8 @@ Dim Obj As Control
                 End If
             End If
                         
-        Next Obj
-    End With
+        End With
+    Next Obj
     
     If Left$(LCase$(Obj.Tag), 4) = "pref" Then
         'pareil avec la form en elle même

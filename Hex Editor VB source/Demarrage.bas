@@ -75,8 +75,8 @@ Sub Main()
 Dim Frm As Form
 Dim sFile() As String
 Dim m() As String
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 Dim s As String
 
     'change le path actuel pour permettre la reconnaissance de bnAlloc.dll
@@ -98,10 +98,10 @@ Dim s As String
     
     
     '//vérifie la version de Windows
-        x = GetWindowsVersion(s, y)
-        If x <> [Windows Vista] And x <> [Windows XP] And x <> [Windows 2000] Then
+        X = GetWindowsVersion(s, Y)
+        If X <> [Windows Vista] And X <> [Windows XP] And X <> [Windows 2000] Then
             'OS non compatible
-            MsgBox "Votre système d'exploitation est [" & s & "] build [" & Trim$(Str$(y)) & "]" & vbNewLine & "Ce logiciel n'est compatible qu'avec Windows XP et Windows Vista." & vbNewLine & "Hex Editor VB va donc se fermer", vbCritical, "Système d'exploitation non compatible"
+            MsgBox "Votre système d'exploitation est [" & s & "] build [" & Trim$(Str$(Y)) & "]" & vbNewLine & "Ce logiciel n'est compatible qu'avec Windows XP et Windows Vista." & vbNewLine & "Hex Editor VB va donc se fermer", vbCritical, "Système d'exploitation non compatible"
             End
         End If
         
@@ -143,9 +143,9 @@ Dim s As String
         ReDim TempFiles(0)  'contient les fichiers temporaires à supprimer au déchargement du logiciel
         
         'on remplit le tableau Chr_()
-        For x = 0 To 255
-            Chr_(x) = Chr$(x)
-        Next x
+        For X = 0 To 255
+            Chr_(X) = Chr$(X)
+        Next X
     
     '// récupère la langue
         'liste les fichiers de langue
@@ -160,13 +160,13 @@ Dim s As String
         sFile() = cFile.EnumFilesStr(s, False)
         
         'vire les fichiers qui ne sont pas *.ini et French.ini
-        For x = 1 To UBound(sFile())
-            If LCase$(Right$(sFile(x), 4)) = ".ini" Then
+        For X = 1 To UBound(sFile())
+            If LCase$(Right$(sFile(X), 4)) = ".ini" Then
                 'c'est un fichier de langue
                 ReDim Preserve sLang(UBound(sLang()) + 1)
-                sLang(UBound(sLang())) = sFile(x)
+                sLang(UBound(sLang())) = sFile(X)
             End If
-        Next x
+        Next X
         
     
     '//récupère les préférences
@@ -245,26 +245,26 @@ Dim s As String
                     'affiche la form
                     frmShredd.Show
                     
-                    For x = 1 To UBound(sFile())
+                    For X = 1 To UBound(sFile())
                         'teste l'existence de chaque path
                     
-                        If cFile.FileExists(sFile(x)) Then
+                        If cFile.FileExists(sFile(X)) Then
                             'ouvre un fichier
-                            frmShredd.LV.ListItems.Add Text:=sFile(x)
-                        ElseIf cFile.FolderExists(sFile(x)) Then
+                            frmShredd.LV.ListItems.Add Text:=sFile(X)
+                        ElseIf cFile.FolderExists(sFile(X)) Then
                             'ouvre un dossier - liste les fichiers
-                            m() = cFile.EnumFilesStr(sFile(x))
+                            m() = cFile.EnumFilesStr(sFile(X))
                             If UBound(m()) <> 0 Then
                                 'les ouvre un par un
-                                For y = 1 To UBound(m)
-                                    If cFile.FileExists(m(y)) Then
-                                        frmShredd.LV.ListItems.Add sFile(m(y))
+                                For Y = 1 To UBound(m)
+                                    If cFile.FileExists(m(Y)) Then
+                                        frmShredd.LV.ListItems.Add sFile(m(Y))
                                         DoEvents
                                     End If
-                                Next y
+                                Next Y
                             End If
                         End If
-                    Next x
+                    Next X
                 End If
             ElseIf InStrRev(Command, "date", , vbBinaryCompare) Then
                 If Right$(Command, 6) = Chr_(34) & "date" & Chr_(34) Then
@@ -283,33 +283,33 @@ Dim s As String
                     'sépare Command en plusieurs path
                     Call SplitString(Chr_(34), Command, sFile())
                     
-                    For x = 1 To UBound(sFile())
+                    For X = 1 To UBound(sFile())
                         'teste l'existence de chaque path
                     
-                        If cFile.FileExists(sFile(x)) Then
+                        If cFile.FileExists(sFile(X)) Then
                             'ouvre un fichier
                             Set Frm = New Pfm
-                            Call Frm.GetFile(sFile(x))
+                            Call Frm.GetFile(sFile(X))
                             Frm.Show
-                        ElseIf cFile.FolderExists(sFile(x)) Then
+                        ElseIf cFile.FolderExists(sFile(X)) Then
                             'ouvre un dossier - liste les fichiers
-                            m() = cFile.EnumFilesStr(sFile(x))
+                            m() = cFile.EnumFilesStr(sFile(X))
                             If UBound(m()) <> 0 Then
                                 'les ouvre un par un
-                                For y = 1 To UBound(m)
-                                    If cFile.FileExists(m(y)) Then
+                                For Y = 1 To UBound(m)
+                                    If cFile.FileExists(m(Y)) Then
                                         Set Frm = New Pfm
-                                        Call Frm.GetFile(m(x))
+                                        Call Frm.GetFile(m(X))
                                         Frm.Show
                                         lNbChildFrm = lNbChildFrm + 1
                                         frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
                                         Set Frm = Nothing
                                         DoEvents
                                     End If
-                                Next y
+                                Next Y
                              End If
                         End If
-                    Next x
+                    Next X
             
                 End If
             Else
@@ -320,31 +320,31 @@ Dim s As String
                  'sépare Command en plusieurs path
                  Call SplitString(Chr_(34), Command, sFile())
                  
-                 For x = 1 To UBound(sFile())
+                 For X = 1 To UBound(sFile())
                      'teste l'existence de chaque path
-                     If cFile.FileExists(sFile(x)) Then
+                     If cFile.FileExists(sFile(X)) Then
                          'ouvre un fichier
                          Set Frm = New Pfm
-                         Call Frm.GetFile(sFile(x))
+                         Call Frm.GetFile(sFile(X))
                          Frm.Show
-                     ElseIf cFile.FolderExists(sFile(x)) Then
+                     ElseIf cFile.FolderExists(sFile(X)) Then
                         'ouvre un dossier - liste les fichiers
-                        m() = cFile.EnumFilesStr(sFile(x))
+                        m() = cFile.EnumFilesStr(sFile(X))
                         If UBound(m()) <> 0 Then                             'les ouvre un par un
-                             For y = 1 To UBound(m)
-                                 If cFile.FileExists(m(y)) Then
+                             For Y = 1 To UBound(m)
+                                 If cFile.FileExists(m(Y)) Then
                                      Set Frm = New Pfm
-                                     Call Frm.GetFile(m(x))
+                                     Call Frm.GetFile(m(X))
                                      Frm.Show
                                      lNbChildFrm = lNbChildFrm + 1
                                      frmContent.Sb.Panels(2).Text = "Ouvertures=[" & CStr(lNbChildFrm) & "]"
                                      Set Frm = Nothing
                                      DoEvents
                                  End If
-                             Next y
+                             Next Y
                         End If
                      End If
-                 Next x
+                 Next X
             End If
                 
             
@@ -375,7 +375,7 @@ End Sub
 'termine le programme
 '=======================================================
 Public Sub EndProgram()
-Dim x As Long
+Dim X As Long
 
     '//prévient des processus bloqués
         If UBound(JailedProcess()) > 0 Then
@@ -383,17 +383,17 @@ Dim x As Long
             If MsgBox(frmContent.Lang.GetString("_ProcessHaveBeenBlocked"), vbInformation + vbYesNo, frmContent.Lang.GetString("_War")) <> vbYes Then
                 
                 'alors on libère tout
-                For x = 1 To UBound(JailedProcess())
-                    cProc.ResumeProcess (JailedProcess(x).th32ProcessID)
-                Next x
+                For X = 1 To UBound(JailedProcess())
+                    cProc.ResumeProcess (JailedProcess(X).th32ProcessID)
+                Next X
             End If
         End If
         
 
     '//supprime les fichiers temporaires de TempFiles
-        For x = 1 To UBound(TempFiles())
-            Call cFile.DeleteFile(TempFiles(x))
-        Next x
+        For X = 1 To UBound(TempFiles())
+            Call cFile.DeleteFile(TempFiles(X))
+        Next X
     
     '//libère les classes
         Set clsERREUR = Nothing
@@ -421,7 +421,7 @@ End Sub
 'charge les données qui permettent de rendre le logiciel dans l'état dans lequel on a quitté
 '=======================================================
 Private Sub LoadQuickBackupINIFile()
-Dim x As Long
+Dim X As Long
 Dim s2() As String
 Dim s3 As String
 Dim s As String
@@ -540,7 +540,7 @@ End Sub
 '=======================================================
 Public Sub SaveQuickBackupINIFile()
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     If cPref.general_QuickBackup Then
         'on lance la sauvegarde de plusieurs choses : type de form, fichier/disque/processus
@@ -572,9 +572,9 @@ Dim x As Long
                     Trim$(Str$(.HW.Item.tType))
                 
                 'maintenant on sauvegarde tous les signets
-                For x = 1 To .lstSignets.ListItems.Count
-                    s = s & vbNewLine & .lstSignets.ListItems.Item(x) & "|" & .lstSignets.ListItems.Item(x).SubItems(1)
-                Next x
+                For X = 1 To .lstSignets.ListItems.Count
+                    s = s & vbNewLine & .lstSignets.ListItems.Item(X) & "|" & .lstSignets.ListItems.Item(X).SubItems(1)
+                Next X
             End With
             
             'lance la sauvegarde

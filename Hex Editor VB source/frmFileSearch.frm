@@ -1,7 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmFileSearch 
    BorderStyle     =   1  'Fixed Single
@@ -26,92 +25,214 @@ Begin VB.Form frmFileSearch
    ScaleHeight     =   5820
    ScaleWidth      =   9780
    StartUpPosition =   2  'CenterScreen
-   Begin ProgressBar_OCX.pgrBar pgb 
-      Height          =   255
-      Left            =   120
-      TabIndex        =   28
-      TabStop         =   0   'False
-      Top             =   5520
-      Width           =   9615
-      _ExtentX        =   16960
-      _ExtentY        =   450
-      BackColorTop    =   13027014
-      BackColorBottom =   15724527
-      Value           =   1
-      BackPicture     =   "frmFileSearch.frx":058A
-      FrontPicture    =   "frmFileSearch.frx":05A6
-   End
-   Begin VB.CommandButton cmdSave 
-      Height          =   375
-      Left            =   5400
-      TabIndex        =   1
-      Top             =   2040
-      Width           =   2775
-   End
-   Begin VB.CommandButton cmdQuit 
-      Height          =   375
-      Left            =   8400
-      TabIndex        =   2
-      Top             =   2040
-      Width           =   1335
-   End
-   Begin VB.CommandButton cmdGo 
-      Enabled         =   0   'False
-      Height          =   375
-      Left            =   3120
-      TabIndex        =   0
-      Top             =   2040
-      Width           =   2055
-   End
-   Begin VB.Frame Frame3 
-      Height          =   2895
-      Left            =   3120
-      TabIndex        =   25
-      Top             =   2520
-      Width           =   6615
-      Begin VB.PictureBox Picture3 
+   Begin VB.Frame Frame1 
+      Caption         =   "Type de recherche"
+      Height          =   1455
+      Index           =   0
+      Left            =   83
+      TabIndex        =   24
+      Top             =   83
+      Width           =   2895
+      Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
-         Height          =   2535
+         Height          =   1095
+         Index           =   0
          Left            =   120
-         ScaleHeight     =   2535
+         ScaleHeight     =   1095
+         ScaleWidth      =   2655
+         TabIndex        =   25
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   2655
+         Begin VB.OptionButton Option1 
+            Caption         =   "Rechercher des fichiers"
+            Height          =   255
+            Index           =   0
+            Left            =   0
+            TabIndex        =   28
+            Tag             =   "pref"
+            ToolTipText     =   "Ne recherche que des fichiers"
+            Top             =   120
+            Value           =   -1  'True
+            Width           =   2535
+         End
+         Begin VB.OptionButton Option1 
+            Caption         =   "Rechercher des dossiers"
+            Height          =   255
+            Index           =   1
+            Left            =   0
+            TabIndex        =   27
+            Tag             =   "pref"
+            ToolTipText     =   "Ne recherche que des dossiers"
+            Top             =   480
+            Width           =   2535
+         End
+         Begin VB.OptionButton Option1 
+            Caption         =   "Rechercher dans des fichiers"
+            Height          =   255
+            Index           =   2
+            Left            =   0
+            TabIndex        =   26
+            Tag             =   "pref"
+            ToolTipText     =   "Ne recherche que dans les fichiers (lent)"
+            Top             =   840
+            Width           =   2535
+         End
+      End
+   End
+   Begin VB.Frame Frame1 
+      Caption         =   "Critères de recherche"
+      Height          =   1815
+      Index           =   1
+      Left            =   3083
+      TabIndex        =   11
+      Top             =   83
+      Width           =   6615
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   1455
+         Index           =   1
+         Left            =   120
+         ScaleHeight     =   1455
          ScaleWidth      =   6375
-         TabIndex        =   26
+         TabIndex        =   12
          TabStop         =   0   'False
          Top             =   240
          Width           =   6375
-         Begin ComctlLib.ListView LVres 
-            Height          =   2535
+         Begin VB.CheckBox chkName 
+            Caption         =   "Par nom"
+            Height          =   195
             Left            =   0
-            TabIndex        =   27
-            Tag             =   "lang_ok"
-            Top             =   0
-            Width           =   6375
-            _ExtentX        =   11245
-            _ExtentY        =   4471
-            View            =   3
-            LabelEdit       =   1
-            MultiSelect     =   -1  'True
-            LabelWrap       =   -1  'True
-            HideSelection   =   -1  'True
-            _Version        =   327682
-            ForeColor       =   -2147483640
-            BackColor       =   -2147483643
-            Appearance      =   0
-            NumItems        =   1
-            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Objet"
-               Object.Width           =   12347
-            EndProperty
+            TabIndex        =   22
+            ToolTipText     =   "Ajoute le critère 'nom' à la recherche"
+            Top             =   120
+            Value           =   1  'Checked
+            Width           =   1215
+         End
+         Begin VB.TextBox txtName 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   1200
+            TabIndex        =   21
+            ToolTipText     =   "Nom à rechercher"
+            Top             =   120
+            Width           =   2415
+         End
+         Begin VB.CheckBox chkCasse 
+            Caption         =   "Casse"
+            Height          =   195
+            Left            =   3840
+            TabIndex        =   20
+            ToolTipText     =   "Respecte ou non la casse"
+            Top             =   120
+            Width           =   975
+         End
+         Begin VB.CheckBox chkSize 
+            Caption         =   "Par taille"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   19
+            ToolTipText     =   "Ajoute le critère 'taille' à la recherche"
+            Top             =   600
+            Width           =   1095
+         End
+         Begin VB.ComboBox cdUnit 
+            Enabled         =   0   'False
+            Height          =   315
+            ItemData        =   "frmFileSearch.frx":058A
+            Left            =   3840
+            List            =   "frmFileSearch.frx":059A
+            Style           =   2  'Dropdown List
+            TabIndex        =   18
+            Tag             =   "pref lang_ok"
+            ToolTipText     =   "Unité"
+            Top             =   600
+            Width           =   1095
+         End
+         Begin VB.TextBox txtSize 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Enabled         =   0   'False
+            Height          =   285
+            Left            =   2280
+            TabIndex        =   17
+            Tag             =   "pref"
+            Text            =   "100"
+            ToolTipText     =   "Taille"
+            Top             =   600
+            Width           =   1335
+         End
+         Begin VB.ComboBox cbOpSize 
+            Enabled         =   0   'False
+            Height          =   315
+            ItemData        =   "frmFileSearch.frx":05B2
+            Left            =   1200
+            List            =   "frmFileSearch.frx":05C5
+            Style           =   2  'Dropdown List
+            TabIndex        =   16
+            Tag             =   "pref lang_ok"
+            ToolTipText     =   "Opérateur de recherche"
+            Top             =   600
+            Width           =   855
+         End
+         Begin VB.CheckBox chkDate 
+            Caption         =   "Par date"
+            Height          =   195
+            Left            =   0
+            TabIndex        =   15
+            ToolTipText     =   "Ajoute le critère 'date' à la recherche"
+            Top             =   1080
+            Width           =   975
+         End
+         Begin VB.ComboBox cbOpDate 
+            Enabled         =   0   'False
+            Height          =   315
+            ItemData        =   "frmFileSearch.frx":05DA
+            Left            =   1200
+            List            =   "frmFileSearch.frx":05ED
+            Style           =   2  'Dropdown List
+            TabIndex        =   14
+            Tag             =   "pref lang_ok"
+            ToolTipText     =   "Opérateur de recherche"
+            Top             =   1080
+            Width           =   855
+         End
+         Begin VB.ComboBox cbDateType 
+            Enabled         =   0   'False
+            Height          =   315
+            ItemData        =   "frmFileSearch.frx":0602
+            Left            =   4440
+            List            =   "frmFileSearch.frx":060F
+            Style           =   2  'Dropdown List
+            TabIndex        =   13
+            Tag             =   "pref lang_ok"
+            ToolTipText     =   "Type de date"
+            Top             =   1080
+            Width           =   1935
+         End
+         Begin MSComCtl2.DTPicker DT 
+            Height          =   300
+            Left            =   2280
+            TabIndex        =   23
+            Top             =   1080
+            Width           =   1935
+            _ExtentX        =   3413
+            _ExtentY        =   529
+            _Version        =   393216
+            Enabled         =   0   'False
+            CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
+            Format          =   63504387
+            CurrentDate     =   39133.9583333333
          End
       End
    End
    Begin VB.Frame Frame2 
+      Caption         =   "Emplacements"
       Height          =   3735
-      Left            =   120
-      TabIndex        =   23
-      Top             =   1680
+      Left            =   83
+      TabIndex        =   7
+      Top             =   1643
       Width           =   2895
       Begin VB.PictureBox Picture2 
          BorderStyle     =   0  'None
@@ -119,14 +240,23 @@ Begin VB.Form frmFileSearch
          Left            =   120
          ScaleHeight     =   3375
          ScaleWidth      =   2655
-         TabIndex        =   24
+         TabIndex        =   8
          TabStop         =   0   'False
          Top             =   240
          Width           =   2655
+         Begin VB.CommandButton cmdAdd 
+            Caption         =   "Ajouter un dossier..."
+            Height          =   375
+            Left            =   0
+            TabIndex        =   10
+            ToolTipText     =   "Ajouter un dossier à la liste des emplacements où il faut rechercher"
+            Top             =   0
+            Width           =   2535
+         End
          Begin ComctlLib.ListView LV 
             Height          =   2895
             Left            =   0
-            TabIndex        =   7
+            TabIndex        =   9
             Tag             =   "lang_ok"
             Top             =   480
             Width           =   2655
@@ -156,207 +286,96 @@ Begin VB.Form frmFileSearch
                Object.Width           =   1764
             EndProperty
          End
-         Begin VB.CommandButton cmdAdd 
-            Height          =   375
-            Left            =   0
-            TabIndex        =   6
-            Top             =   0
-            Width           =   2535
-         End
       End
    End
-   Begin VB.Frame Frame1 
-      Caption         =   "Critères de recherche"
-      Height          =   1815
-      Index           =   1
-      Left            =   3120
-      TabIndex        =   22
-      Top             =   120
+   Begin VB.Frame Frame3 
+      Caption         =   "Résultats"
+      Height          =   2895
+      Left            =   3083
+      TabIndex        =   4
+      Top             =   2483
       Width           =   6615
-      Begin VB.PictureBox Picture1 
+      Begin VB.PictureBox Picture3 
          BorderStyle     =   0  'None
-         Height          =   1455
-         Index           =   1
+         Height          =   2535
          Left            =   120
-         ScaleHeight     =   1455
+         ScaleHeight     =   2535
          ScaleWidth      =   6375
-         TabIndex        =   19
+         TabIndex        =   5
          TabStop         =   0   'False
          Top             =   240
          Width           =   6375
-         Begin VB.ComboBox cbDateType 
-            Enabled         =   0   'False
-            Height          =   315
-            ItemData        =   "frmFileSearch.frx":05C2
-            Left            =   4440
-            List            =   "frmFileSearch.frx":05C4
-            Style           =   2  'Dropdown List
-            TabIndex        =   18
-            Tag             =   "pref lang_ok"
-            Top             =   1080
-            Width           =   1935
-         End
-         Begin VB.ComboBox cbOpDate 
-            Enabled         =   0   'False
-            Height          =   315
-            ItemData        =   "frmFileSearch.frx":05C6
-            Left            =   1200
-            List            =   "frmFileSearch.frx":05C8
-            Style           =   2  'Dropdown List
-            TabIndex        =   16
-            Tag             =   "pref lang_ok"
-            Top             =   1080
-            Width           =   855
-         End
-         Begin VB.CheckBox chkDate 
-            Height          =   195
+         Begin ComctlLib.ListView LVres 
+            Height          =   2535
             Left            =   0
-            TabIndex        =   15
-            Top             =   1080
-            Width           =   975
-         End
-         Begin VB.ComboBox cbOpSize 
-            Enabled         =   0   'False
-            Height          =   315
-            ItemData        =   "frmFileSearch.frx":05CA
-            Left            =   1200
-            List            =   "frmFileSearch.frx":05CC
-            Style           =   2  'Dropdown List
-            TabIndex        =   12
-            Tag             =   "pref lang_ok"
-            Top             =   600
-            Width           =   855
-         End
-         Begin VB.TextBox txtSize 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Enabled         =   0   'False
-            Height          =   285
-            Left            =   2280
-            TabIndex        =   13
-            Tag             =   "pref"
-            Top             =   600
-            Width           =   1335
-         End
-         Begin VB.ComboBox cdUnit 
-            Enabled         =   0   'False
-            Height          =   315
-            ItemData        =   "frmFileSearch.frx":05CE
-            Left            =   3840
-            List            =   "frmFileSearch.frx":05D0
-            Style           =   2  'Dropdown List
-            TabIndex        =   14
-            Tag             =   "pref lang_ok"
-            Top             =   600
-            Width           =   1095
-         End
-         Begin VB.CheckBox chkSize 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   11
-            Top             =   600
-            Width           =   1095
-         End
-         Begin VB.CheckBox chkCasse 
-            Height          =   195
-            Left            =   3840
-            TabIndex        =   10
-            Top             =   120
-            Width           =   975
-         End
-         Begin VB.TextBox txtName 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   1200
-            TabIndex        =   9
-            Top             =   120
-            Width           =   2415
-         End
-         Begin VB.CheckBox chkName 
-            Height          =   195
-            Left            =   0
-            TabIndex        =   8
-            Top             =   120
-            Value           =   1  'Checked
-            Width           =   1215
-         End
-         Begin MSComCtl2.DTPicker DT 
-            Height          =   300
-            Left            =   2280
-            TabIndex        =   17
-            Top             =   1080
-            Width           =   1935
-            _ExtentX        =   3413
-            _ExtentY        =   529
-            _Version        =   393216
-            Enabled         =   0   'False
-            CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63504387
-            CurrentDate     =   39133.9583333333
+            TabIndex        =   6
+            Tag             =   "lang_ok"
+            Top             =   0
+            Width           =   6375
+            _ExtentX        =   11245
+            _ExtentY        =   4471
+            View            =   3
+            LabelEdit       =   1
+            MultiSelect     =   -1  'True
+            LabelWrap       =   -1  'True
+            HideSelection   =   -1  'True
+            _Version        =   327682
+            ForeColor       =   -2147483640
+            BackColor       =   -2147483643
+            Appearance      =   0
+            NumItems        =   1
+            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+               Key             =   ""
+               Object.Tag             =   ""
+               Text            =   "Objet"
+               Object.Width           =   12347
+            EndProperty
          End
       End
    End
-   Begin VB.Frame Frame1 
-      Caption         =   "Type de recherche"
-      Height          =   1455
-      Index           =   0
-      Left            =   120
-      TabIndex        =   20
-      Top             =   120
-      Width           =   2895
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   1095
-         Index           =   0
-         Left            =   120
-         ScaleHeight     =   1095
-         ScaleWidth      =   2655
-         TabIndex        =   21
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   2655
-         Begin VB.OptionButton Option1 
-            Caption         =   "Rechercher dans des fichiers"
-            Height          =   255
-            Index           =   2
-            Left            =   0
-            TabIndex        =   5
-            Tag             =   "pref"
-            ToolTipText     =   "Ne recherche que dans les fichiers (lent)"
-            Top             =   840
-            Width           =   2535
-         End
-         Begin VB.OptionButton Option1 
-            Caption         =   "Rechercher des dossiers"
-            Height          =   255
-            Index           =   1
-            Left            =   0
-            TabIndex        =   4
-            Tag             =   "pref"
-            ToolTipText     =   "Ne recherche que des dossiers"
-            Top             =   480
-            Width           =   2535
-         End
-         Begin VB.OptionButton Option1 
-            Caption         =   "Rechercher des fichiers"
-            Height          =   255
-            Index           =   0
-            Left            =   0
-            TabIndex        =   3
-            Tag             =   "pref"
-            ToolTipText     =   "Ne recherche que des fichiers"
-            Top             =   120
-            Value           =   -1  'True
-            Width           =   2535
-         End
-      End
+   Begin VB.CommandButton cmdGo 
+      Caption         =   "Lancer la recherche"
+      Enabled         =   0   'False
+      Height          =   375
+      Left            =   3083
+      TabIndex        =   3
+      ToolTipText     =   "Lance la recherche"
+      Top             =   2003
+      Width           =   2055
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Quitter"
+      Height          =   375
+      Left            =   8363
+      TabIndex        =   2
+      ToolTipText     =   "Ferme la fenêtre de recherche"
+      Top             =   2003
+      Width           =   1335
+   End
+   Begin VB.CommandButton cmdSave 
+      Caption         =   "Sauvegarder les résultats..."
+      Height          =   375
+      Left            =   5363
+      TabIndex        =   1
+      ToolTipText     =   "Sauvegarde les résultats de la recherche"
+      Top             =   2003
+      Width           =   2775
+   End
+   Begin ProgressBar_OCX.pgrBar pgb 
+      Height          =   255
+      Left            =   83
+      TabIndex        =   0
+      TabStop         =   0   'False
+      ToolTipText     =   "Avancement de la recherche"
+      Top             =   5483
+      Width           =   9615
+      _ExtentX        =   16960
+      _ExtentY        =   450
+      BackColorTop    =   13027014
+      BackColorBottom =   15724527
+      Value           =   1
+      BackPicture     =   "frmFileSearch.frx":063D
+      FrontPicture    =   "frmFileSearch.frx":0659
    End
    Begin VB.Menu mnuPopUp 
       Caption         =   "mnuPopUp"
@@ -423,6 +442,7 @@ Option Explicit
 'FORM DE RECHERCHE DE FICHIERS DANS LES DISQUES DURS
 '=======================================================
 
+Private Lang As New clsLang
 Private It As ListItem
 Private dblSize As Double    'taille à rechercher
 Private curDate As Currency 'date à rechercher
@@ -537,7 +557,7 @@ End Sub
 Private Sub cmdSave_Click()
 'sauvegarde les résultats
 Dim sFile As String
-Dim x As Long
+Dim X As Long
 Dim lFile As Long
 
     If LVres.ListItems.Count = 0 Then
@@ -571,10 +591,10 @@ Dim lFile As Long
     'ouvre le fichier
     Open sFile For Append As lFile
     
-    For x = 1 To LVres.ListItems.Count
+    For X = 1 To LVres.ListItems.Count
         'sauvegarde la string
-        Print #lFile, LVres.ListItems.Item(x).Text
-    Next x
+        Print #lFile, LVres.ListItems.Item(X).Text
+    Next X
     
     'referme le fichier
     Close lFile
@@ -605,7 +625,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         Call .LoadControlsCaption
     End With
     
@@ -629,10 +649,10 @@ Dim r As Long
     Call CheckSearch 'vérifie qu'une recherche est possible
 End Sub
 
-Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub LV_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'change l'attribut "sous dossier"
 
-    Set It = LV.HitTest(x, y)
+    Set It = LV.HitTest(X, Y)
     If It Is Nothing Then Exit Sub
 
     If Button = 2 Then
@@ -641,7 +661,7 @@ Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As 
     End If
 End Sub
 
-Private Sub LVres_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub LVres_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = 2 Then
         Me.PopupMenu Me.rmnuResPop
     End If
@@ -714,7 +734,7 @@ End Sub
 Private Sub LaunchSearch(ByVal tMet As TYPE_OF_FILE_SEARCH)
 Dim s() As FILE_SEARCH_RESULT
 Dim i As Long
-Dim x As Long
+Dim X As Long
 Dim lC As Long
 
     'efface le lv de resultats
@@ -753,22 +773,22 @@ Dim lC As Long
         'contiendra de 1 à ubound une liste de fichiers
         ReDim s(LV.ListItems.Count)
         
-        With Me.pgb
+        With Me.PGB
             .Min = 0
             .Max = LV.ListItems.Count
             .Value = 0
         End With
         'indexation des fichiers
-        For x = LV.ListItems.Count To 1 Step -1
-            s(x).sF() = cFile.EnumFilesStr(LV.ListItems.Item(x).Text, _
-                IIf(LV.ListItems.Item(x).SubItems(1) = _
+        For X = LV.ListItems.Count To 1 Step -1
+            s(X).sF() = cFile.EnumFilesStr(LV.ListItems.Item(X).Text, _
+                IIf(LV.ListItems.Item(X).SubItems(1) = _
                 Lang.GetString("_YesSub"), True, False))
                 
-            Me.pgb.Value = LV.ListItems.Count - x + 1
+            Me.PGB.Value = LV.ListItems.Count - X + 1
             If bStop Then GoTo GStop
             
             DoEvents
-        Next x
+        Next X
         
         
         '//recherche dans les fichiers indexés
@@ -776,10 +796,10 @@ Dim lC As Long
             
         lC = 0
         'compte le nombre de fichiers
-        For x = 1 To UBound(s())
-            lC = lC + UBound(s(x).sF())
-        Next x
-        With Me.pgb
+        For X = 1 To UBound(s())
+            lC = lC + UBound(s(X).sF())
+        Next X
+        With Me.PGB
             .Max = lC
             .Min = 0
             .Value = 0
@@ -788,21 +808,21 @@ Dim lC As Long
         'teste chaque élément
         lC = 0
         LVres.Visible = False
-        For x = 1 To UBound(s())
-            For i = 1 To UBound(s(x).sF())
-                If IsOk(s(x).sF(i)) Then
+        For X = 1 To UBound(s())
+            For i = 1 To UBound(s(X).sF())
+                If IsOk(s(X).sF(i)) Then
                     'on ajoute
-                    LVres.ListItems.Add Text:=s(x).sF(i)
+                    LVres.ListItems.Add Text:=s(X).sF(i)
                 End If
                 lC = lC + 1
                 If (lC Mod 200) = 0 Then
                     DoEvents   'rend la main
-                    pgb.Value = lC
+                    PGB.Value = lC
                 End If
                 If bStop Then GoTo GStop
             Next i
-        Next x
-        pgb.Value = pgb.Max
+        Next X
+        PGB.Value = PGB.Max
         Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " " & _
             Lang.GetString("_ResS")
                 
@@ -815,21 +835,21 @@ Dim lC As Long
         'contiendra de 1 à ubound une liste de fichiers
         ReDim s(LV.ListItems.Count)
         
-        With Me.pgb
+        With Me.PGB
             .Min = 0
             .Max = LV.ListItems.Count
             .Value = 0
         End With
         'indexation des dossiers
-        For x = LV.ListItems.Count To 1 Step -1
-            s(x).sF() = cFile.EnumFoldersStr(LV.ListItems.Item(x).Text, _
-                IIf(LV.ListItems.Item(x).SubItems(1) = _
+        For X = LV.ListItems.Count To 1 Step -1
+            s(X).sF() = cFile.EnumFoldersStr(LV.ListItems.Item(X).Text, _
+                IIf(LV.ListItems.Item(X).SubItems(1) = _
                 Lang.GetString("_YesSub"), True, False))
                 
-                Me.pgb.Value = LV.ListItems.Count - x + 1
+                Me.PGB.Value = LV.ListItems.Count - X + 1
                 If bStop Then GoTo GStop
             DoEvents
-        Next x
+        Next X
         
         
         '//recherche dans les dossiers indexés
@@ -837,10 +857,10 @@ Dim lC As Long
         
         lC = 0
         'compte le nombre de dossiers
-        For x = 1 To UBound(s())
-            lC = lC + UBound(s(x).sF())
-        Next x
-        With Me.pgb
+        For X = 1 To UBound(s())
+            lC = lC + UBound(s(X).sF())
+        Next X
+        With Me.PGB
             .Max = lC
             .Min = 0
             .Value = 0
@@ -849,21 +869,21 @@ Dim lC As Long
         'teste chaque élément
         lC = 0
         LVres.Visible = False
-        For x = 1 To UBound(s())
-            For i = 1 To UBound(s(x).sF())
-                If IsOk(s(x).sF(i)) Then
+        For X = 1 To UBound(s())
+            For i = 1 To UBound(s(X).sF())
+                If IsOk(s(X).sF(i)) Then
                     'on ajoute
-                    LVres.ListItems.Add Text:=s(x).sF(i)
+                    LVres.ListItems.Add Text:=s(X).sF(i)
                 End If
                 lC = lC + 1
                 If (lC Mod 200) = 0 Then
                     DoEvents   'rend la main
-                    pgb.Value = lC
+                    PGB.Value = lC
                 End If
                 If bStop Then GoTo GStop
             Next i
-        Next x
-        pgb.Value = pgb.Max
+        Next X
+        PGB.Value = PGB.Max
         Frame3.Caption = Trim$(Str$(LVres.ListItems.Count)) & " " & Lang.GetString("_ResS")
         
     Else

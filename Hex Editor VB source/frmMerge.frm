@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmMerge 
    BorderStyle     =   1  'Fixed Single
    ClientHeight    =   7665
@@ -22,12 +21,6 @@ Begin VB.Form frmMerge
    ScaleHeight     =   7665
    ScaleWidth      =   9315
    StartUpPosition =   2  'CenterScreen
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
 End
 Attribute VB_Name = "frmMerge"
 Attribute VB_GlobalNameSpace = False
@@ -70,6 +63,7 @@ Option Explicit
 '=======================================================
 'FORM DE COMPARAISON AVANCEE
 '=======================================================
+Private Lang As New clsLang
 
 '=======================================================
 'récupère les 2 fichiers à visualiser
@@ -98,7 +92,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
 End Sub

@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmSplash 
    BorderStyle     =   0  'None
    ClientHeight    =   3945
@@ -30,12 +29,6 @@ Begin VB.Form frmSplash
       Interval        =   100
       Left            =   683
       Top             =   413
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
    End
    Begin VB.Label lblVersionWarning 
       BackStyle       =   0  'Transparent
@@ -245,6 +238,7 @@ Option Explicit
 '=======================================================
 '//SPLASH FORM
 '=======================================================
+Private Lang As New clsLang
 
 Private Sub Form_Load()
 'affiche le contenu des captions
@@ -267,7 +261,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     

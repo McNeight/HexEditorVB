@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmExport 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Exporter"
@@ -24,97 +23,13 @@ Begin VB.Form frmExport
    ScaleWidth      =   4440
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CheckBox chkClip 
-      Height          =   195
-      Left            =   120
-      TabIndex        =   2
-      Top             =   1080
-      Width           =   2535
-   End
-   Begin VB.CommandButton cmdQuit 
-      Height          =   375
-      Left            =   2880
-      TabIndex        =   8
-      Top             =   3120
-      Width           =   1455
-   End
-   Begin VB.CommandButton cmdSave 
-      Height          =   375
-      Left            =   120
-      TabIndex        =   7
-      Top             =   3120
-      Width           =   2175
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Format d'export"
-      Height          =   1575
-      Index           =   1
-      Left            =   120
-      TabIndex        =   11
-      Top             =   1440
-      Width           =   4215
-      Begin VB.CheckBox chkOffset 
-         Height          =   195
-         Left            =   120
-         TabIndex        =   4
-         Top             =   840
-         Width           =   1695
-      End
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   1215
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   1215
-         ScaleWidth      =   3975
-         TabIndex        =   12
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   3975
-         Begin VB.TextBox txtOpt 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   2400
-            TabIndex        =   6
-            Top             =   720
-            Visible         =   0   'False
-            Width           =   1455
-         End
-         Begin VB.CheckBox chkString 
-            Height          =   195
-            Left            =   0
-            TabIndex        =   5
-            Top             =   840
-            Width           =   2175
-         End
-         Begin VB.ComboBox cbFormat 
-            Height          =   315
-            ItemData        =   "frmExport.frx":000C
-            Left            =   0
-            List            =   "frmExport.frx":000E
-            Style           =   2  'Dropdown List
-            TabIndex        =   3
-            Tag             =   "pref lang_ok"
-            Top             =   120
-            Width           =   3975
-         End
-         Begin VB.Label lbl 
-            Height          =   255
-            Left            =   2400
-            TabIndex        =   13
-            Top             =   480
-            Visible         =   0   'False
-            Width           =   1335
-         End
-      End
-   End
    Begin VB.Frame Frame1 
       Caption         =   "Fichier à sauvegarder"
       Height          =   855
       Index           =   0
-      Left            =   120
-      TabIndex        =   9
-      Top             =   120
+      Left            =   113
+      TabIndex        =   10
+      Top             =   105
       Width           =   4215
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
@@ -123,32 +38,126 @@ Begin VB.Form frmExport
          Left            =   120
          ScaleHeight     =   495
          ScaleWidth      =   3975
-         TabIndex        =   10
+         TabIndex        =   11
          TabStop         =   0   'False
          Top             =   240
          Width           =   3975
-         Begin VB.CommandButton cmdBrowse 
-            Height          =   315
-            Left            =   3480
-            TabIndex        =   1
-            Top             =   120
-            Width           =   375
-         End
          Begin VB.TextBox txtFile 
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   0
-            TabIndex        =   0
+            TabIndex        =   13
+            ToolTipText     =   "Emplacement du fichier à sauvegarder"
             Top             =   120
             Width           =   3255
          End
+         Begin VB.CommandButton cmdBrowse 
+            Caption         =   "..."
+            Height          =   315
+            Left            =   3480
+            TabIndex        =   12
+            ToolTipText     =   "Choix du fichier à sauvegarder"
+            Top             =   120
+            Width           =   375
+         End
       End
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
+   Begin VB.Frame Frame1 
+      Caption         =   "Format d'export"
+      Height          =   1575
+      Index           =   1
+      Left            =   113
+      TabIndex        =   3
+      Top             =   1425
+      Width           =   4215
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   1215
+         Index           =   1
+         Left            =   120
+         ScaleHeight     =   1215
+         ScaleWidth      =   3975
+         TabIndex        =   5
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   3975
+         Begin VB.ComboBox cbFormat 
+            Height          =   315
+            ItemData        =   "frmExport.frx":000C
+            Left            =   0
+            List            =   "frmExport.frx":0022
+            Style           =   2  'Dropdown List
+            TabIndex        =   8
+            Tag             =   "pref lang_ok"
+            ToolTipText     =   "Format d'exportation"
+            Top             =   120
+            Width           =   3975
+         End
+         Begin VB.CheckBox chkString 
+            Caption         =   "Ajouter les valeurs ASCII"
+            Height          =   195
+            Left            =   0
+            TabIndex        =   7
+            ToolTipText     =   "Permet l'ajout des valeurs ASCII au fichier"
+            Top             =   840
+            Width           =   2175
+         End
+         Begin VB.TextBox txtOpt 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   2400
+            TabIndex        =   6
+            Text            =   "texte de l'option"
+            Top             =   720
+            Visible         =   0   'False
+            Width           =   1455
+         End
+         Begin VB.Label lbl 
+            Caption         =   "option"
+            Height          =   255
+            Left            =   2400
+            TabIndex        =   9
+            Top             =   480
+            Visible         =   0   'False
+            Width           =   1335
+         End
+      End
+      Begin VB.CheckBox chkOffset 
+         Caption         =   "Ajouter les offsets"
+         Height          =   195
+         Left            =   120
+         TabIndex        =   4
+         ToolTipText     =   "Permer d'ajouter les offsets au fichier (en hexa ou décimal, selon les préférences)"
+         Top             =   840
+         Width           =   1695
+      End
+   End
+   Begin VB.CommandButton cmdSave 
+      Caption         =   "Lancer la sauvegarde"
+      Height          =   375
+      Left            =   113
+      TabIndex        =   2
+      ToolTipText     =   "Lancer la sauvegarde"
+      Top             =   3105
+      Width           =   2175
+   End
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   2873
+      TabIndex        =   1
+      ToolTipText     =   "Ne pas sauvegarder"
+      Top             =   3105
+      Width           =   1455
+   End
+   Begin VB.CheckBox chkClip 
+      Caption         =   "Copier dans le clipboard"
+      Height          =   195
+      Left            =   113
+      TabIndex        =   0
+      ToolTipText     =   "Permet de copier dans le clipboard plutôt que de créer un fichier"
+      Top             =   1065
+      Width           =   2535
    End
 End
 Attribute VB_Name = "frmExport"
@@ -193,6 +202,7 @@ Option Explicit
 'FORM D'EXPORT MULTIFORMATS
 '=======================================================
 
+Private Lang As New clsLang
 Private bEntireFile As Boolean
 
 Private Sub cbFormat_Click()
@@ -272,7 +282,7 @@ End Sub
 
 Private Sub cmdSave_Click()
 'lance la sauvegarde
-Dim x As Long
+Dim X As Long
 
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_Exporting"))
@@ -293,8 +303,8 @@ Dim x As Long
     Select Case cbFormat.Text
         Case Lang.GetString("_HTML!")
             
-            x = Int(Abs(Val(txtOpt.Text)))
-            If x < 1 Or x > 10 Then
+            X = Int(Abs(Val(txtOpt.Text)))
+            If X < 1 Or X > 10 Then
                 MsgBox Lang.GetString("_SizeNoOk"), vbCritical, _
                     Lang.GetString("_War")
                 GoTo ResumeMe
@@ -304,11 +314,11 @@ Dim x As Long
                 'sauvegarde d'un fichier entier
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), _
                     CBool(chkString.Value), frmContent.ActiveForm.Caption, _
-                    -1, , x, CBool(chkClip.Value))
+                    -1, , X, CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), _
-                    CBool(chkString.Value), "az", 1, 1, x, CBool(chkClip.Value))
+                    CBool(chkString.Value), "az", 1, 1, X, CBool(chkClip.Value))
             End If
             
         Case Lang.GetString("_RTF!")
@@ -410,7 +420,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         Call .LoadControlsCaption
     End With
 End Sub

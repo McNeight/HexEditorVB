@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmFillSelection 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Insertion / remplissage de bytes"
@@ -22,76 +21,13 @@ Begin VB.Form frmFillSelection
    ScaleHeight     =   3540
    ScaleWidth      =   4485
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdQuit 
-      Height          =   375
-      Left            =   3240
-      TabIndex        =   1
-      Top             =   2880
-      Width           =   1095
-   End
-   Begin VB.CommandButton cmdApply 
-      Height          =   375
-      Left            =   3240
-      TabIndex        =   0
-      Top             =   2280
-      Width           =   1095
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Passes"
-      Height          =   1815
-      Index           =   1
-      Left            =   120
-      TabIndex        =   16
-      Top             =   1680
-      Width           =   3015
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   1455
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   1455
-         ScaleWidth      =   2775
-         TabIndex        =   17
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   2775
-         Begin VB.CommandButton cmdSanitization 
-            Height          =   375
-            Left            =   1680
-            TabIndex        =   11
-            Top             =   960
-            Width           =   975
-         End
-         Begin VB.CommandButton cmdDelete 
-            Height          =   375
-            Left            =   1680
-            TabIndex        =   10
-            Top             =   480
-            Width           =   975
-         End
-         Begin VB.CommandButton cmdAdd 
-            Height          =   375
-            Left            =   1680
-            TabIndex        =   9
-            Top             =   0
-            Width           =   975
-         End
-         Begin VB.ListBox lstPasses 
-            Height          =   1425
-            Left            =   0
-            TabIndex        =   12
-            Top             =   0
-            Width           =   1575
-         End
-      End
-   End
    Begin VB.Frame Frame1 
       Caption         =   "Méthode"
       Height          =   1455
       Index           =   0
-      Left            =   120
-      TabIndex        =   13
-      Top             =   120
+      Left            =   135
+      TabIndex        =   8
+      Top             =   83
       Width           =   3735
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
@@ -100,30 +36,54 @@ Begin VB.Form frmFillSelection
          Left            =   120
          ScaleHeight     =   1095
          ScaleWidth      =   3495
-         TabIndex        =   14
+         TabIndex        =   9
          TabStop         =   0   'False
          Top             =   240
          Width           =   3495
-         Begin VB.TextBox txtList 
+         Begin VB.OptionButton Option1 
+            Caption         =   "Valeurs hexa"
+            Height          =   255
+            Index           =   0
+            Left            =   0
+            TabIndex        =   16
+            Tag             =   "pref0"
+            ToolTipText     =   "Remplit avec un byte fixe"
+            Top             =   0
+            Value           =   -1  'True
+            Width           =   1455
+         End
+         Begin VB.OptionButton Option1 
+            Caption         =   "Random entre "
+            Height          =   255
+            Index           =   1
+            Left            =   0
+            TabIndex        =   15
+            Tag             =   "pref1"
+            ToolTipText     =   "Remplit avec byte sélectionné au hasard"
+            Top             =   360
+            Width           =   1455
+         End
+         Begin VB.OptionButton Option1 
+            Caption         =   "Byte dans la liste"
+            Height          =   255
+            Index           =   2
+            Left            =   0
+            TabIndex        =   14
+            Tag             =   "pref2"
+            ToolTipText     =   "Remplit avec un byte choisi dans une liste"
+            Top             =   720
+            Width           =   1575
+         End
+         Begin VB.TextBox txtByte 
             BorderStyle     =   0  'None
-            Enabled         =   0   'False
             Height          =   285
             Left            =   1680
-            TabIndex        =   8
+            TabIndex        =   13
             Tag             =   "pref"
-            Top             =   720
+            Text            =   "55"
+            ToolTipText     =   "Valeur hexa de remplissement"
+            Top             =   0
             Width           =   975
-         End
-         Begin VB.TextBox txtBorneSup 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Enabled         =   0   'False
-            Height          =   285
-            Left            =   2760
-            TabIndex        =   6
-            Tag             =   "pref"
-            Top             =   360
-            Width           =   615
          End
          Begin VB.TextBox txtBorneInf 
             Alignment       =   2  'Center
@@ -131,68 +91,121 @@ Begin VB.Form frmFillSelection
             Enabled         =   0   'False
             Height          =   285
             Left            =   1680
-            TabIndex        =   5
+            TabIndex        =   12
             Tag             =   "pref"
+            Text            =   "0"
+            ToolTipText     =   "Borne inférieure du random (0-254)"
             Top             =   360
             Width           =   615
          End
-         Begin VB.TextBox txtByte 
+         Begin VB.TextBox txtBorneSup 
+            Alignment       =   2  'Center
             BorderStyle     =   0  'None
+            Enabled         =   0   'False
+            Height          =   285
+            Left            =   2760
+            TabIndex        =   11
+            Tag             =   "pref"
+            Text            =   "FF"
+            ToolTipText     =   "Borne supérieure du random (1-255)"
+            Top             =   360
+            Width           =   615
+         End
+         Begin VB.TextBox txtList 
+            BorderStyle     =   0  'None
+            Enabled         =   0   'False
             Height          =   285
             Left            =   1680
-            TabIndex        =   3
+            TabIndex        =   10
             Tag             =   "pref"
-            Top             =   0
+            Text            =   "00 55 AA FF"
+            ToolTipText     =   "Liste des bytes (séparer par un espace les paquets de 2)"
+            Top             =   720
             Width           =   975
          End
-         Begin VB.OptionButton Option1 
-            Caption         =   "Byte dans la liste"
-            Height          =   255
-            Index           =   2
-            Left            =   0
-            TabIndex        =   7
-            Tag             =   "pref2"
-            ToolTipText     =   "Remplit avec un byte choisi dans une liste"
-            Top             =   720
-            Width           =   1575
-         End
-         Begin VB.OptionButton Option1 
-            Caption         =   "Random entre"
-            Height          =   255
-            Index           =   1
-            Left            =   0
-            TabIndex        =   4
-            Tag             =   "pref1"
-            ToolTipText     =   "Remplit avec byte sélectionné au hasard"
-            Top             =   360
-            Width           =   1455
-         End
-         Begin VB.OptionButton Option1 
-            Caption         =   "Valeurs hexa"
-            Height          =   255
-            Index           =   0
-            Left            =   0
-            TabIndex        =   2
-            Tag             =   "pref0"
-            ToolTipText     =   "Remplit avec un byte fixe"
-            Top             =   0
-            Value           =   -1  'True
-            Width           =   1455
-         End
          Begin VB.Label Label1 
+            Caption         =   "et"
             Height          =   255
             Left            =   2400
-            TabIndex        =   15
+            TabIndex        =   17
             Top             =   360
             Width           =   255
          End
       End
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
+   Begin VB.Frame Frame1 
+      Caption         =   "Passes"
+      Height          =   1815
+      Index           =   1
+      Left            =   135
+      TabIndex        =   2
+      Top             =   1643
+      Width           =   3015
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   1455
+         Index           =   1
+         Left            =   120
+         ScaleHeight     =   1455
+         ScaleWidth      =   2775
+         TabIndex        =   3
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   2775
+         Begin VB.ListBox lstPasses 
+            Height          =   1425
+            Left            =   0
+            TabIndex        =   7
+            ToolTipText     =   "Liste des passes à appliquer"
+            Top             =   0
+            Width           =   1575
+         End
+         Begin VB.CommandButton cmdAdd 
+            Caption         =   "Ajouter"
+            Height          =   375
+            Left            =   1680
+            TabIndex        =   6
+            ToolTipText     =   "Ajouter la passe en cours"
+            Top             =   0
+            Width           =   975
+         End
+         Begin VB.CommandButton cmdDelete 
+            Caption         =   "Enlever"
+            Height          =   375
+            Left            =   1680
+            TabIndex        =   5
+            ToolTipText     =   "Supprimer la passe sélectionnée"
+            Top             =   480
+            Width           =   975
+         End
+         Begin VB.CommandButton cmdSanitization 
+            Caption         =   "Sanitization"
+            Height          =   375
+            Left            =   1680
+            TabIndex        =   4
+            ToolTipText     =   "Ajouter les 3 passes de sanitization"
+            Top             =   960
+            Width           =   975
+         End
+      End
+   End
+   Begin VB.CommandButton cmdApply 
+      Caption         =   "Appliquer"
+      Height          =   375
+      Left            =   3255
+      TabIndex        =   1
+      ToolTipText     =   "Appliquer les passes"
+      Top             =   2243
+      Width           =   1095
+   End
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   3255
+      TabIndex        =   0
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   2843
+      Width           =   1095
    End
 End
 Attribute VB_Name = "frmFillSelection"
@@ -240,6 +253,7 @@ Option Explicit
 '=======================================================
 'VARIABLES PRIVEES
 '=======================================================
+Private Lang As New clsLang
 Private clsPref As clsIniForm
 Private tPasses() As PASSE_TYPE
 
@@ -331,7 +345,7 @@ End Sub
 Private Sub cmdDelete_Click()
 'enlève un élément de la liste
 Dim l As Long
-Dim x As Long
+Dim X As Long
 Dim tPTmp() As PASSE_TYPE
 
     On Error GoTo ErrGestion
@@ -346,19 +360,19 @@ Dim tPTmp() As PASSE_TYPE
     
     If UBound(tPTmp) = 0 Then Exit Sub   'rien à enlever
     
-    For x = 0 To l - 1
-        tPasses(x) = tPTmp(x)
-    Next x
-    For x = l + 1 To UBound(tPTmp) - 1
-        tPasses(x - 1) = tPTmp(x)
-    Next x
+    For X = 0 To l - 1
+        tPasses(X) = tPTmp(X)
+    Next X
+    For X = l + 1 To UBound(tPTmp) - 1
+        tPasses(X - 1) = tPTmp(X)
+    Next X
     
     Call lstPasses.Clear   'enlève les éléments de la liste
     
     'rajoute n-1 passes
-    For x = 1 To UBound(tPTmp) - 1
-        lstPasses.AddItem Lang.GetString("_Pass") & " " & CStr(x)
-    Next x
+    For X = 1 To UBound(tPTmp) - 1
+        lstPasses.AddItem Lang.GetString("_Pass") & " " & CStr(X)
+    Next X
     
     lstPasses.ListIndex = l - 1
     Call lstPasses_Click
@@ -425,7 +439,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         Call .LoadControlsCaption
     End With
     

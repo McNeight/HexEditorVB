@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Object = "{2245E336-2835-4C1E-B373-2395637023C8}#1.0#0"; "ProcessView_OCX.ocx"
 Begin VB.Form frmProcesses 
    BorderStyle     =   4  'Fixed ToolWindow
@@ -25,42 +24,42 @@ Begin VB.Form frmProcesses
    ScaleWidth      =   3765
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cmdOK 
+      Caption         =   "OK"
+      Height          =   375
+      Left            =   135
+      TabIndex        =   3
+      ToolTipText     =   "Ouvrir de processus"
+      Top             =   3623
+      Width           =   735
+   End
+   Begin VB.CommandButton cmdFermer 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   2535
+      TabIndex        =   2
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   3623
+      Width           =   1095
+   End
+   Begin VB.CommandButton cmdRefresh 
+      Caption         =   "Rafraichir"
+      Height          =   375
+      Left            =   1095
+      TabIndex        =   1
+      ToolTipText     =   "Ouvrir de processus"
+      Top             =   3623
+      Width           =   1215
+   End
    Begin ProcessView_OCX.ProcessView PV 
       Height          =   3495
-      Left            =   0
-      TabIndex        =   3
-      Top             =   0
+      Left            =   15
+      TabIndex        =   0
+      Top             =   23
       Width           =   3735
       _ExtentX        =   6588
       _ExtentY        =   6165
       Sorted          =   0   'False
-   End
-   Begin VB.CommandButton cmdRefresh 
-      Height          =   375
-      Left            =   1080
-      TabIndex        =   2
-      Top             =   3600
-      Width           =   1215
-   End
-   Begin VB.CommandButton cmdFermer 
-      Height          =   375
-      Left            =   2520
-      TabIndex        =   1
-      Top             =   3600
-      Width           =   1095
-   End
-   Begin VB.CommandButton cmdOK 
-      Height          =   375
-      Left            =   120
-      TabIndex        =   0
-      Top             =   3600
-      Width           =   735
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
    End
 End
 Attribute VB_Name = "frmProcesses"
@@ -105,6 +104,7 @@ Option Explicit
 'FORM QUI INVITE A SELECTIONNER UN PROCESSUS A EDITER
 '=======================================================
 
+Private Lang As New clsLang
 Private bFirst As Boolean
 
 Private Sub cmdFermer_Click()
@@ -186,7 +186,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     

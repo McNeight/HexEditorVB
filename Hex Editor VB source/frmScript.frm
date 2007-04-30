@@ -2,7 +2,6 @@ VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmScript 
    Caption         =   "Editeur de script"
    ClientHeight    =   5610
@@ -297,12 +296,6 @@ Begin VB.Form frmScript
          EndProperty
       EndProperty
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
    Begin VB.Menu rmnuFile 
       Caption         =   "&Fichier"
       Begin VB.Menu mnuNew 
@@ -390,6 +383,7 @@ Option Explicit
 'FORM D'EDITION/CREATION DE SCRIPTS
 '=======================================================
 
+Private Lang As New clsLang
 Private bIsModified As Boolean  'contient si le fichier est modifié ou non
 
 
@@ -413,7 +407,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     
@@ -502,7 +496,7 @@ End Sub
 Private Sub mnuOpen_Click()
 'ouverture de fichier
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -544,7 +538,7 @@ End Sub
 Private Sub mnuSaveAs_Click()
 'sauvegarde
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -559,9 +553,9 @@ Dim x As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
+        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
             vbYesNo, Lang.GetString("_War"))
-        If Not (x = vbYes) Then Exit Sub
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'sauvegarde du fichier

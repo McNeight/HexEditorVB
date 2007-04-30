@@ -1,34 +1,16 @@
-VERSION 5.00
-Begin VB.UserControl ctrlLanguage 
-   Appearance      =   0  'Flat
-   BackColor       =   &H80000005&
-   ClientHeight    =   3255
-   ClientLeft      =   0
-   ClientTop       =   0
-   ClientWidth     =   3765
-   BeginProperty Font 
-      Name            =   "Tahoma"
-      Size            =   8.25
-      Charset         =   0
-      Weight          =   400
-      Underline       =   0   'False
-      Italic          =   0   'False
-      Strikethrough   =   0   'False
-   EndProperty
-   HasDC           =   0   'False
-   InvisibleAtRuntime=   -1  'True
-   MaskPicture     =   "ctrlLanguage.ctx":0000
-   PaletteMode     =   4  'None
-   Picture         =   "ctrlLanguage.ctx":2162
-   ScaleHeight     =   3255
-   ScaleWidth      =   3765
-   ToolboxBitmap   =   "ctrlLanguage.ctx":42C4
-End
-Attribute VB_Name = "ctrlLanguage"
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+  Persistable = 0  'NotPersistable
+  DataBindingBehavior = 0  'vbNone
+  DataSourceBehavior  = 0  'vbNone
+  MTSTransactionMode  = 0  'NotAnMTSObject
+END
+Attribute VB_Name = "clsLang"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = True
+Attribute VB_Exposed = False
 ' =======================================================
 '
 ' Hex Editor VB
@@ -80,7 +62,6 @@ Private Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePr
 Private sLanguage As String     'langue utilisée
 Private sLangFolder As String    'path du répertoire de langue
 Private mParent As Object   'form parente
-Attribute mParent.VB_VarHelpID = -1
 
 
 '=======================================================
@@ -97,7 +78,7 @@ Public Property Let Language(Language As String)
 If sLanguage <> Language Then
     RaiseEvent LanguageChanged(sLanguage, Language)
     sLanguage = Language
-    LoadControlsCaption 'met à jour les controles
+    Call LoadControlsCaption 'met à jour les controles
 End If
 End Property
 Public Property Get LangFolder() As String: LangFolder = sLangFolder: End Property
@@ -106,44 +87,34 @@ Public Property Let LangFolder(LangFolder As String): sLangFolder = LangFolder: 
 
 
 '=======================================================
-'CONTROL SUBS
+'CLASS SUBS
 '=======================================================
-Private Sub UserControl_Initialize()
-    Me.LangFolder = App.Path & "\Lang"
-    Me.Language = "French"
-End Sub
-Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
-    With PropBag
-        Me.LangFolder = .ReadProperty("LangFolder", App.Path & "\Lang")
-        Me.Language = .ReadProperty("Language", "French")
+Private Sub Class_Initialize()
+    With Me
+        .LangFolder = App.Path & "\Lang"
+        .Language = "French"
     End With
-    Set mParent = UserControl.Parent    'récupère la form parent
-    
-    LoadControlsCaption 'met à jour les controles
 End Sub
-Private Sub UserControl_Resize()
-'resize impossible
-    UserControl.Width = 800
-    UserControl.Height = 800
-End Sub
-Private Sub UserControl_Terminate()
+Private Sub Class_Terminate()
     Set mParent = Nothing   'libère la mémoire
 End Sub
-Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
-    With PropBag
-        Call .WriteProperty("Language", Me.Language, "French")
-        Call .WriteProperty("LangFolder", Me.LangFolder, App.Path & "\Lang")
-    End With
+
+
+
+
+'=======================================================
+'active le changement de langue
+'=======================================================
+Public Sub ActiveLang(Frm As Form)
+    Set mParent = Frm
 End Sub
-
-
 
 '=======================================================
 'permet de récupérer une string
 '=======================================================
-Public Function GetString(ByVal StringName As String, Optional ByVal Language As String) As String
+Public Function GetString(ByVal StringName As String) As String
+    
 Dim lng As Integer
-Dim sLang As String
 Dim sReturn As String
 Dim strFile As String
 Dim Section As String
@@ -153,18 +124,16 @@ Dim sFile As String
     
     'créé le buffer
     sReturn = String$(255, 0)
-    
-    'récupère le nom de la langue
-    If IsMissing(Language) Then sLang = Me.Language Else sLang = Me.Language
-    
+        
     'détermine le fichier *.ini concerné
-    sFile = Me.LangFolder & "\" & sLang & ".ini"
+    sFile = Me.LangFolder & "\" & Me.Language & ".ini"
     
     'détermine la section
     Section = mParent.Name
     
     'obtient la valeur
-    lng = GetPrivateProfileString(Section, StringName, vbNullString, sReturn, 255, sFile)
+    lng = GetPrivateProfileString(Section, StringName, vbNullString, sReturn, _
+        255, sFile)
     
     'formate la string
     GetString = Left$(sReturn, lng)
@@ -174,7 +143,7 @@ End Function
 'définit les préférences du fichier *.ini
 '=======================================================
 Private Sub LetPref(ByVal sSection As String, ByVal sVariable As String, ByVal sValeur As String, ByVal sFile As String)
-    WritePrivateProfileString sSection, sVariable, sValeur, sFile
+    Call WritePrivateProfileString(sSection, sVariable, sValeur, sFile)
 End Sub
 
 '=======================================================
@@ -295,7 +264,6 @@ Dim s As String
                 
             End If
         End If
-            
 
     Next Obj
 
@@ -327,14 +295,14 @@ Dim s As String
         s = s & Trim$(Str$(Obj.Index))  '==> deux concaténation car erreur sur la deuxième
         'ligne pour les composants non indexés
         
-        LetPref mParent.Name, s & "|ToolTipText", Obj.ToolTipText, sFile
+        Call LetPref(mParent.Name, s & "|ToolTipText", Obj.ToolTipText, sFile)
         
         If TypeOf Obj Is TextBox Then
-            LetPref mParent.Name, s & "|Text", Obj.Text, sFile
+            Call LetPref(mParent.Name, s & "|Text", Obj.Text, sFile)
         ElseIf TypeOf Obj Is CheckBox Then
-            LetPref mParent.Name, s & "|Caption", Obj.Caption, sFile
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
         ElseIf TypeOf Obj Is OptionButton Then
-            LetPref mParent.Name, s & "|Caption", Obj.Caption, sFile
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
         ElseIf TypeOf Obj Is ComboBox Then
             
             'vérifie que le Tag est OK
@@ -342,23 +310,23 @@ Dim s As String
                 'c'est bon, on sauvegarde
                 
                 'récupère le nombre d'éléments
-                LetPref mParent.Name, s & "|Count", Obj.ListCount, sFile
+                Call LetPref(mParent.Name, s & "|Count", Obj.ListCount, sFile)
                 Y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
                 For X = 1 To Y
-                    LetPref mParent.Name, s & "|Item" & Trim$(Str$(X)), Obj.List(X - 1), sFile
+                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(X)), Obj.List(X - 1), sFile)
                 Next X
             End If
             
         ElseIf TypeOf Obj Is Label Then
-            LetPref mParent.Name, s & "|Caption", Obj.Caption, sFile
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
         ElseIf TypeOf Obj Is CommandButton Then
-            LetPref mParent.Name, s & "|Caption", Obj.Caption, sFile
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
         ElseIf TypeOf Obj Is Frame Then
-            LetPref mParent.Name, s & "|Caption", Obj.Caption, sFile
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
         ElseIf TypeOf Obj Is Menu Then
-            LetPref mParent.Name, s & "|Caption", Obj.Caption, sFile
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
         ElseIf TypeOf Obj Is ListBox Then
                     
             'vérifie que le Tag est OK
@@ -366,12 +334,12 @@ Dim s As String
                 'c'est bon, on sauvegarde
                 
                 'récupère le nombre d'éléments
-                LetPref mParent.Name, s & "|Count", Obj.ListCount, sFile
+                Call LetPref(mParent.Name, s & "|Count", Obj.ListCount, sFile)
                 Y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
                 For X = 1 To Y
-                    LetPref mParent.Name, s & "|Item" & Trim$(Str$(X)), Obj.List(X - 1), sFile
+                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(X)), Obj.List(X - 1), sFile)
                 Next X
             End If
         ElseIf TypeOf Obj Is ListView Then
@@ -381,13 +349,13 @@ Dim s As String
                 'c'est bon, on sauvegarde
                 
                 'récupère le nombre d'éléments
-                LetPref mParent.Name, s & "|Count", Obj.ColumnHeaders.Count, sFile
+                Call LetPref(mParent.Name, s & "|Count", Obj.ColumnHeaders.Count, sFile)
                 Y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
                 For X = 1 To Y
-                    LetPref mParent.Name, s & "|Item" & Trim$(Str$(X)), _
-                        Obj.ColumnHeaders.Item(X).Text, sFile
+                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(X)), _
+                        Obj.ColumnHeaders.Item(X).Text, sFile)
                 Next X
                 
             End If
@@ -398,19 +366,19 @@ Dim s As String
                 'c'est bon, on sauvegarde
                 
                 'récupère le nombre d'éléments
-                LetPref mParent.Name, s & "|Count", Obj.Tabs.Count, sFile
+                Call LetPref(mParent.Name, s & "|Count", Obj.Tabs.Count, sFile)
                 Y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
                 For X = 1 To Y
-                    LetPref mParent.Name, s & "|Item" & Trim$(Str$(X)), Obj.Tabs.Item(X).Caption, sFile
+                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(X)), Obj.Tabs.Item(X).Caption, sFile)
                 Next X
             End If
         End If
     Next Obj
 
     'sauvegarde le caption de la form
-    LetPref mParent.Name, mParent.Name, mParent.Caption, sFile
+    Call LetPref(mParent.Name, mParent.Name, mParent.Caption, sFile)
     
 End Sub
 
@@ -420,5 +388,6 @@ End Sub
 '=======================================================
 Public Sub AddSimpleStringToFile(ByVal StringName As String, Value As String)
     '/!\ conflit si identifiant de string porte un nom de controle /!\
-    LetPref mParent.Name, StringName, Value, Me.LangFolder & "\" & Me.Language & ".ini"
+    Call LetPref(mParent.Name, StringName, Value, Me.LangFolder & "\" & _
+        Me.Language & ".ini")
 End Sub

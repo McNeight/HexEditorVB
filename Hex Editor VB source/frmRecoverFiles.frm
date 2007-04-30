@@ -1,7 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmRecoverFiles 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Récupération de fichiers"
@@ -27,9 +26,46 @@ Begin VB.Form frmRecoverFiles
    StartUpPosition =   2  'CenterScreen
    Begin VB.Frame Frame1 
       Height          =   4815
+      Index           =   2
+      Left            =   0
+      TabIndex        =   8
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   6975
+      Begin VB.PictureBox Picture1 
+         Height          =   4575
+         Index           =   2
+         Left            =   120
+         ScaleHeight     =   4515
+         ScaleWidth      =   6675
+         TabIndex        =   9
+         Top             =   120
+         Width           =   6735
+      End
+   End
+   Begin VB.Frame Frame1 
+      Height          =   4815
+      Index           =   0
+      Left            =   120
+      TabIndex        =   5
+      Top             =   480
+      Width           =   6975
+      Begin VB.PictureBox Picture1 
+         Height          =   4575
+         Index           =   0
+         Left            =   120
+         ScaleHeight     =   4515
+         ScaleWidth      =   6675
+         TabIndex        =   6
+         Top             =   120
+         Width           =   6735
+      End
+   End
+   Begin VB.Frame Frame1 
+      Height          =   4815
       Index           =   1
       Left            =   840
-      TabIndex        =   3
+      TabIndex        =   0
       Top             =   1320
       Visible         =   0   'False
       Width           =   6975
@@ -40,29 +76,30 @@ Begin VB.Form frmRecoverFiles
          Left            =   120
          ScaleHeight     =   4575
          ScaleWidth      =   6735
-         TabIndex        =   4
+         TabIndex        =   1
          Top             =   120
          Width           =   6735
-         Begin VB.CommandButton cmdRestoreValidFile 
-            Height          =   375
-            Left            =   1320
-            TabIndex        =   8
-            Top             =   4200
-            Width           =   3855
-         End
          Begin VB.TextBox pctPath 
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   120
-            TabIndex        =   7
+            TabIndex        =   3
             TabStop         =   0   'False
             Top             =   3840
             Width           =   6615
          End
+         Begin VB.CommandButton cmdRestoreValidFile 
+            Caption         =   "Restaurer le fichier sélectionné..."
+            Height          =   375
+            Left            =   1320
+            TabIndex        =   2
+            Top             =   4200
+            Width           =   3855
+         End
          Begin FileView_OCX.FileView LV 
             Height          =   3615
             Left            =   0
-            TabIndex        =   9
+            TabIndex        =   4
             Top             =   120
             Width           =   6735
             _ExtentX        =   11880
@@ -82,28 +119,10 @@ Begin VB.Form frmRecoverFiles
          End
       End
    End
-   Begin VB.Frame Frame1 
-      Height          =   4815
-      Index           =   0
-      Left            =   120
-      TabIndex        =   1
-      Top             =   480
-      Width           =   6975
-      Begin VB.PictureBox Picture1 
-         Height          =   4575
-         Index           =   0
-         Left            =   120
-         ScaleHeight     =   4515
-         ScaleWidth      =   6675
-         TabIndex        =   2
-         Top             =   120
-         Width           =   6735
-      End
-   End
    Begin ComctlLib.TabStrip TB 
       Height          =   375
       Left            =   120
-      TabIndex        =   0
+      TabIndex        =   7
       Tag             =   "lang_ok"
       Top             =   120
       Width           =   6975
@@ -131,31 +150,6 @@ Begin VB.Form frmRecoverFiles
             ImageVarType    =   2
          EndProperty
       EndProperty
-   End
-   Begin VB.Frame Frame1 
-      Height          =   4815
-      Index           =   2
-      Left            =   0
-      TabIndex        =   5
-      Top             =   0
-      Visible         =   0   'False
-      Width           =   6975
-      Begin VB.PictureBox Picture1 
-         Height          =   4575
-         Index           =   2
-         Left            =   120
-         ScaleHeight     =   4515
-         ScaleWidth      =   6675
-         TabIndex        =   6
-         Top             =   120
-         Width           =   6735
-      End
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
    End
 End
 Attribute VB_Name = "frmRecoverFiles"
@@ -196,11 +190,11 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-
-
 '=======================================================
 'FORM DE RECUPERATION DE FICHIERS
 '=======================================================
+
+Private Lang As New clsLang
 
 Private Sub cmdRestoreValidFile_Click()
 'restaure le fichier sélectionné dans le FV2
@@ -227,7 +221,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     
@@ -242,13 +236,13 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Resize()
-Dim x As Long
+Dim X As Long
 
     'positionnement des frames
-    For x = 0 To Frame1.Count - 1
-        Frame1(x).Top = 480
-        Frame1(x).Left = 120
-    Next x
+    For X = 0 To Frame1.Count - 1
+        Frame1(X).Top = 480
+        Frame1(X).Left = 120
+    Next X
 End Sub
 
 Private Sub LV_PathChange(sOldPath As String, sNewPath As String)

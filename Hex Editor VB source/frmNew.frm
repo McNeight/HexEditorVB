@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmNew 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Nouveau fichier"
@@ -25,54 +24,55 @@ Begin VB.Form frmNew
    ScaleWidth      =   2715
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdNo 
-      Height          =   375
-      Left            =   1470
+   Begin VB.TextBox txtSize 
+      Alignment       =   2  'Center
+      BorderStyle     =   0  'None
+      Height          =   285
+      Left            =   150
       TabIndex        =   3
-      Top             =   1200
-      Width           =   975
-   End
-   Begin VB.CommandButton cmdOK 
-      Height          =   375
-      Left            =   270
-      TabIndex        =   2
-      Top             =   1200
+      Tag             =   "pref"
+      Text            =   "100"
+      ToolTipText     =   "Taille"
+      Top             =   660
       Width           =   975
    End
    Begin VB.ComboBox cdUnit 
       Height          =   315
       ItemData        =   "frmNew.frx":058A
-      Left            =   1200
-      List            =   "frmNew.frx":058C
+      Left            =   1230
+      List            =   "frmNew.frx":059A
       Style           =   2  'Dropdown List
-      TabIndex        =   1
+      TabIndex        =   2
       Tag             =   "pref lang_ok"
-      Top             =   720
+      ToolTipText     =   "Unité"
+      Top             =   660
       Width           =   1335
    End
-   Begin VB.TextBox txtSize 
-      Alignment       =   2  'Center
-      BorderStyle     =   0  'None
-      Height          =   285
-      Left            =   120
-      TabIndex        =   0
-      Tag             =   "pref"
-      Top             =   720
+   Begin VB.CommandButton cmdOK 
+      Caption         =   "Créer"
+      Height          =   375
+      Left            =   300
+      TabIndex        =   1
+      ToolTipText     =   "Créer le fichier (emplacement dans les fichiers temporaires)"
+      Top             =   1140
       Width           =   975
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
+   Begin VB.CommandButton cmdNo 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   1500
+      TabIndex        =   0
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   1140
+      Width           =   975
    End
    Begin VB.Label Label1 
       Alignment       =   2  'Center
       Caption         =   "Taille du fichier"
       Height          =   255
-      Left            =   390
+      Left            =   420
       TabIndex        =   4
-      Top             =   240
+      Top             =   180
       Width           =   1935
    End
 End
@@ -118,6 +118,7 @@ Option Explicit
 'FORM QUI INVITE A CREER UN NOUVEAU FICHIER DONT ON DEFINIT LA TAILLE
 '=======================================================
 
+Private Lang As New clsLang
 Private clsPref As clsIniForm
 
 Private Sub cmdNO_Click()
@@ -202,7 +203,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     

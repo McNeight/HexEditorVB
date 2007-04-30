@@ -1,7 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
 Begin VB.Form frmSanitization 
    BorderStyle     =   3  'Fixed Dialog
@@ -29,44 +28,44 @@ Begin VB.Form frmSanitization
    StartUpPosition =   2  'CenterScreen
    Begin VB.Frame Frame1 
       Height          =   3135
-      Index           =   2
-      Left            =   120
-      TabIndex        =   12
+      Index           =   0
+      Left            =   113
+      TabIndex        =   6
       Top             =   480
-      Visible         =   0   'False
       Width           =   3495
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
          Height          =   2895
-         Index           =   2
+         Index           =   0
          Left            =   120
          ScaleHeight     =   2895
          ScaleWidth      =   3255
-         TabIndex        =   13
+         TabIndex        =   7
          Top             =   120
          Width           =   3255
-         Begin VB.CommandButton cmdGoPhys 
+         Begin VB.CommandButton cmdGo 
+            Caption         =   "GO"
             Height          =   375
             Left            =   960
-            TabIndex        =   15
+            TabIndex        =   9
             Top             =   2520
             Width           =   1215
          End
-         Begin DriveView_OCX.DriveView DV2 
+         Begin DriveView_OCX.DriveView DV 
             Height          =   1935
             Left            =   0
-            TabIndex        =   14
+            TabIndex        =   8
             Top             =   120
             Width           =   3255
             _ExtentX        =   5741
             _ExtentY        =   3413
-            DisplayLogicalDrives=   0   'False
-            LogicalDrivesString=   ""
+            DisplayPhysicalDrives=   0   'False
+            PhysicalDrivesString=   ""
          End
-         Begin ProgressBar_OCX.pgrBar PGB3 
+         Begin ProgressBar_OCX.pgrBar PGB 
             Height          =   255
             Left            =   0
-            TabIndex        =   16
+            TabIndex        =   10
             Top             =   2160
             Width           =   3255
             _ExtentX        =   5741
@@ -79,16 +78,63 @@ Begin VB.Form frmSanitization
          End
       End
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   240
-      Top             =   360
-      _ExtentX        =   1402
-      _ExtentY        =   1402
+   Begin VB.Frame Frame1 
+      Height          =   3135
+      Index           =   2
+      Left            =   113
+      TabIndex        =   0
+      Top             =   480
+      Visible         =   0   'False
+      Width           =   3495
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   2895
+         Index           =   2
+         Left            =   120
+         ScaleHeight     =   2895
+         ScaleWidth      =   3255
+         TabIndex        =   1
+         Top             =   120
+         Width           =   3255
+         Begin VB.CommandButton cmdGoPhys 
+            Caption         =   "GO"
+            Height          =   375
+            Left            =   960
+            TabIndex        =   2
+            Top             =   2520
+            Width           =   1215
+         End
+         Begin DriveView_OCX.DriveView DV2 
+            Height          =   1935
+            Left            =   0
+            TabIndex        =   3
+            Top             =   120
+            Width           =   3255
+            _ExtentX        =   5741
+            _ExtentY        =   3413
+            DisplayLogicalDrives=   0   'False
+            LogicalDrivesString=   ""
+         End
+         Begin ProgressBar_OCX.pgrBar PGB3 
+            Height          =   255
+            Left            =   0
+            TabIndex        =   4
+            Top             =   2160
+            Width           =   3255
+            _ExtentX        =   5741
+            _ExtentY        =   450
+            BackColorTop    =   13027014
+            BackColorBottom =   15724527
+            Value           =   1
+            BackPicture     =   "frmSanitization.frx":0044
+            FrontPicture    =   "frmSanitization.frx":0060
+         End
+      End
    End
    Begin ComctlLib.TabStrip TB 
       Height          =   375
-      Left            =   120
-      TabIndex        =   0
+      Left            =   113
+      TabIndex        =   5
       Top             =   60
       Width           =   3495
       _ExtentX        =   6165
@@ -127,81 +173,46 @@ Begin VB.Form frmSanitization
    End
    Begin VB.Frame Frame1 
       Height          =   3135
-      Index           =   0
-      Left            =   120
-      TabIndex        =   1
-      Top             =   480
-      Width           =   3495
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   2895
-         Index           =   0
-         Left            =   120
-         ScaleHeight     =   2895
-         ScaleWidth      =   3255
-         TabIndex        =   2
-         Top             =   120
-         Width           =   3255
-         Begin DriveView_OCX.DriveView DV 
-            Height          =   1935
-            Left            =   0
-            TabIndex        =   11
-            Top             =   120
-            Width           =   3255
-            _ExtentX        =   5741
-            _ExtentY        =   3413
-            DisplayPhysicalDrives=   0   'False
-            PhysicalDrivesString=   ""
-         End
-         Begin VB.CommandButton cmdGo 
-            Caption         =   "GO"
-            Height          =   375
-            Left            =   960
-            TabIndex        =   3
-            Top             =   2520
-            Width           =   1215
-         End
-         Begin ProgressBar_OCX.pgrBar PGB 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   10
-            Top             =   2160
-            Width           =   3255
-            _ExtentX        =   5741
-            _ExtentY        =   450
-            BackColorTop    =   13027014
-            BackColorBottom =   15724527
-            Value           =   1
-            BackPicture     =   "frmSanitization.frx":0044
-            FrontPicture    =   "frmSanitization.frx":0060
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   3135
       Index           =   1
-      Left            =   120
-      TabIndex        =   4
+      Left            =   113
+      TabIndex        =   11
       Top             =   480
       Visible         =   0   'False
-      Width           =   3255
+      Width           =   3495
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
          Height          =   2895
          Index           =   1
          Left            =   120
          ScaleHeight     =   2895
-         ScaleWidth      =   3045
-         TabIndex        =   5
+         ScaleWidth      =   3285
+         TabIndex        =   12
          Top             =   120
-         Width           =   3050
+         Width           =   3285
+         Begin VB.CommandButton cmdGo2 
+            Caption         =   "GO"
+            Enabled         =   0   'False
+            Height          =   375
+            Left            =   2400
+            TabIndex        =   15
+            Top             =   2520
+            Width           =   735
+         End
+         Begin VB.CommandButton cmdSelFile 
+            Caption         =   "Sélection de fichiers..."
+            Height          =   375
+            Left            =   0
+            TabIndex        =   14
+            Top             =   2520
+            Width           =   2055
+         End
          Begin ProgressBar_OCX.pgrBar PGB2 
             Height          =   255
             Left            =   0
-            TabIndex        =   9
+            TabIndex        =   13
             Top             =   2160
-            Width           =   3015
-            _ExtentX        =   5318
+            Width           =   3255
+            _ExtentX        =   5741
             _ExtentY        =   450
             BackColorTop    =   13027014
             BackColorBottom =   15724527
@@ -209,30 +220,13 @@ Begin VB.Form frmSanitization
             BackPicture     =   "frmSanitization.frx":007C
             FrontPicture    =   "frmSanitization.frx":0098
          End
-         Begin VB.CommandButton cmdSelFile 
-            Caption         =   "Sélection de fichiers..."
-            Height          =   375
-            Left            =   0
-            TabIndex        =   7
-            Top             =   2520
-            Width           =   2055
-         End
-         Begin VB.CommandButton cmdGo2 
-            Caption         =   "GO"
-            Enabled         =   0   'False
-            Height          =   375
-            Left            =   2280
-            TabIndex        =   6
-            Top             =   2520
-            Width           =   735
-         End
          Begin ComctlLib.ListView LV 
             Height          =   2055
             Left            =   0
-            TabIndex        =   8
+            TabIndex        =   16
             Top             =   0
-            Width           =   3015
-            _ExtentX        =   5318
+            Width           =   3255
+            _ExtentX        =   5741
             _ExtentY        =   3625
             View            =   3
             LabelEdit       =   1
@@ -297,6 +291,7 @@ Option Explicit
 'FORM DE SANITIZATION DE DISQUE
 '=======================================================
 
+Public Lang As New clsLang
 Private tDrive As DriveView_OCX.clsDrive
 
 Private Sub cmdGoPhys_Click()
@@ -319,12 +314,12 @@ End Sub
 
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
 'supprime si touche Delete
-Dim x As Long
+Dim X As Long
 
     If KeyCode = vbKeyDelete Then
-        For x = LV.ListItems.Count To 1 Step -1
-            If LV.ListItems.Item(x).Selected Then LV.ListItems.Remove x
-        Next x
+        For X = LV.ListItems.Count To 1 Step -1
+            If LV.ListItems.Item(X).Selected Then LV.ListItems.Remove X
+        Next X
     End If
     
     cmdGo2.Enabled = CBool(LV.ListItems.Count)
@@ -354,7 +349,7 @@ Private Sub cmdGo_Click()
         MsgBox .GetString("_SanitWarLau"), vbInformation, .GetString("_War")
     End With
     
-    cmdGO.Enabled = False
+    cmdGo.Enabled = False
     
     'on lance le processus de sanitization
     Call SanitDiskNow(tDrive.VolumeLetter & ":\", Me.PGB)
@@ -387,7 +382,7 @@ Private Sub cmdSelFile_Click()
 Dim cFile As FileSystemLibrary.FileSystem
 Dim s() As String
 Dim s2 As String
-Dim x As Long
+Dim X As Long
 
     'sélection d'un ou plusieurs fichiers
  
@@ -398,9 +393,9 @@ Dim x As Long
         Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
         OFN_ALLOWMULTISELECT, s())
         
-    For x = 1 To UBound(s())
-        If cFile.FileExists(s(x)) Then LV.ListItems.Add Text:=s(x)
-    Next x
+    For X = 1 To UBound(s())
+        If cFile.FileExists(s(X)) Then LV.ListItems.Add Text:=s(X)
+    Next X
     
     'dans le cas d'un fichier simple
     If cFile.FileExists(s2) Then LV.ListItems.Add Text:=s2
@@ -420,12 +415,12 @@ Dim s As String
         If InStr(1, LCase$(s), "fat") Or InStr(1, LCase$(s), "ntfs") Then
             'on a choisi le drive
             Set tDrive = DV.GetSelectedDrive
-            cmdGO.Enabled = True
+            cmdGo.Enabled = True
         Else
-            cmdGO.Enabled = False
+            cmdGo.Enabled = False
         End If
     Else
-        cmdGO.Enabled = False
+        cmdGo.Enabled = False
     End If
 End Sub
 
@@ -449,7 +444,7 @@ Private Sub Form_Activate()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
         
         DV.LogicalDrivesString = .GetString("_LogString")
@@ -460,7 +455,7 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-Dim x As Long
+Dim X As Long
     
     Set tDrive = New DriveView_OCX.clsDrive
     
@@ -469,10 +464,10 @@ Dim x As Long
     ReDim sH55(2097151)
     ReDim sHAA(2097151)
     'remplit
-    For x = 0 To 2097151
-        sH55(x) = 85
-        sHAA(x) = 170
-    Next x
+    For X = 0 To 2097151
+        sH55(X) = 85
+        sHAA(X) = 170
+    Next X
     
     'récupère les pointeurs
     pAA = VarPtr(sHAA(0))

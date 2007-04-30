@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmSelect 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sélectionner une zone"
@@ -18,65 +17,64 @@ Begin VB.Form frmSelect
    EndProperty
    Icon            =   "frmSelect.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   1425
    ScaleWidth      =   2745
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdQuit 
-      Height          =   375
-      Left            =   1485
+   Begin VB.TextBox txtFrom 
+      BorderStyle     =   0  'None
+      Height          =   285
+      Left            =   1545
       TabIndex        =   3
-      Top             =   960
-      Width           =   1095
-   End
-   Begin VB.CommandButton cmdOK 
-      Height          =   375
-      Left            =   165
-      TabIndex        =   2
-      Top             =   960
+      ToolTipText     =   "Offset inférieur"
+      Top             =   105
       Width           =   1095
    End
    Begin VB.TextBox txtTo 
       BorderStyle     =   0  'None
       Height          =   285
-      Left            =   1560
+      Left            =   1545
+      TabIndex        =   2
+      ToolTipText     =   "Offset supérieur"
+      Top             =   465
+      Width           =   1095
+   End
+   Begin VB.CommandButton cmdOK 
+      Caption         =   "Sélectionner"
+      Height          =   375
+      Left            =   150
       TabIndex        =   1
-      Top             =   480
+      ToolTipText     =   "Procéder à la restriction"
+      Top             =   945
       Width           =   1095
    End
-   Begin VB.TextBox txtFrom 
-      BorderStyle     =   0  'None
-      Height          =   285
-      Left            =   1560
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   1470
       TabIndex        =   0
-      Top             =   120
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   945
       Width           =   1095
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
-   Begin VB.Label Label1 
-      Caption         =   "jusqu'au byte"
-      Height          =   255
-      Index           =   1
-      Left            =   120
-      TabIndex        =   5
-      Top             =   480
-      Width           =   1215
    End
    Begin VB.Label Label1 
       Caption         =   "A partir du byte"
       Height          =   255
       Index           =   0
-      Left            =   120
+      Left            =   105
+      TabIndex        =   5
+      Top             =   105
+      Width           =   1215
+   End
+   Begin VB.Label Label1 
+      Caption         =   "jusqu'au byte"
+      Height          =   255
+      Index           =   1
+      Left            =   105
       TabIndex        =   4
-      Top             =   120
+      Top             =   465
       Width           =   1215
    End
 End
@@ -122,13 +120,14 @@ Option Explicit
 'FORM POUR SELECTIONNER UNE ZONE PARTICULIERE
 '=======================================================
 
+Private Lang As New clsLang
 Private byteFunc As Byte
 
 Private Sub cmdOk_Click()
 'valide
 Dim lFrom As Currency
 Dim lTo As Currency
-Dim x As Currency
+Dim X As Currency
 
     'On Error GoTo ErrGestion
     
@@ -138,9 +137,9 @@ Dim x As Currency
     
     'fait en sorte que lFrom soit le plus petit
     If lFrom > lTo Then
-        x = lFrom
+        X = lFrom
         lFrom = lTo
-        lTo = x
+        lTo = X
     End If
         
     If byteFunc = 0 Then    'il s'agit d'une sélection paramétrée
@@ -233,7 +232,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     
@@ -250,5 +249,9 @@ End Sub
 '1 = affichage restreint
 '=======================================================
 Public Sub GetEditFunction(ByVal btFunction As Byte)
+    
+    'active la gestion des langues
+    Call Lang.ActiveLang(Me)
+    
     byteFunc = btFunction
 End Sub
