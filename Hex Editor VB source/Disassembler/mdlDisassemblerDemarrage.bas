@@ -41,6 +41,7 @@ Option Explicit
 '=======================================================
 'VARIABLES PUBLIQUES
 '=======================================================
+Public Chr_(255) As String  'contient la liste des char, pour gagner en vitesse
 Public cFile As FileSystemLibrary.FileSystem
 Private AfManifest As AfClsManifest
 Public tmpDir As String
@@ -58,8 +59,7 @@ Dim s As String
 Dim x As WINDOWS_VERSION
 Dim y As Long
 Dim sFile() As String
-
-    
+        
     '//vérifie la version de Windows
         x = GetWindowsVersion(s, y)
         If x <> [Windows Vista] And x <> [Windows XP] And x <> [Windows 2000] Then
@@ -86,6 +86,11 @@ Dim sFile() As String
         Set cFile = New FileSystemLibrary.FileSystem
         Set cPref = New clsIniPref
         Set clsPref = New clsIniFile
+        
+    '//on remplit le tableau Chr_()
+        For y = 0 To 255
+            Chr_(x) = Chr$(y)
+        Next y
     
     '// récupère la langue
         'liste les fichiers de langue
@@ -123,7 +128,7 @@ Dim sFile() As String
             cFile.CreateEmptyFile clsPref.sDefaultPath, True
             
             'remplit le fichier
-            cFile.SaveDATAinFile clsPref.sDefaultPath, DEFAULT_INI, False
+            cFile.SaveDataInFile clsPref.sDefaultPath, DEFAULT_INI, False
         End If
          
         Set cPref = clsPref.GetIniFile

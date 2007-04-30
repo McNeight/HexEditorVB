@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmConvert 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Conversions"
@@ -18,32 +17,81 @@ Begin VB.Form frmConvert
    EndProperty
    Icon            =   "frmConvert.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   2370
    ScaleWidth      =   5265
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CheckBox chkPlan 
-      Height          =   255
-      Left            =   360
-      TabIndex        =   6
-      Tag             =   "pref"
-      Top             =   1920
-      Value           =   1  'Checked
-      Width           =   2415
-   End
-   Begin VB.CommandButton cmdQuitter 
-      Height          =   375
-      Left            =   3120
-      TabIndex        =   7
-      Top             =   1920
-      Width           =   1575
+   Begin VB.Frame Frame1 
+      Caption         =   "Entrée"
+      Height          =   855
+      Left            =   105
+      TabIndex        =   8
+      Top             =   98
+      Width           =   5055
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   495
+         Left            =   120
+         ScaleHeight     =   495
+         ScaleWidth      =   4815
+         TabIndex        =   9
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   4815
+         Begin VB.ComboBox cbI 
+            Height          =   315
+            ItemData        =   "frmConvert.frx":058A
+            Left            =   2520
+            List            =   "frmConvert.frx":05A0
+            Style           =   2  'Dropdown List
+            TabIndex        =   12
+            Tag             =   "pref lang_ok"
+            ToolTipText     =   "Base de départ"
+            Top             =   120
+            Width           =   1575
+         End
+         Begin VB.TextBox txtBase 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Enabled         =   0   'False
+            Height          =   285
+            Index           =   0
+            Left            =   4200
+            TabIndex        =   11
+            Tag             =   "pref"
+            Text            =   "12"
+            ToolTipText     =   "Base personnelle"
+            Top             =   120
+            Width           =   615
+         End
+         Begin VB.TextBox txtI 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Index           =   0
+            Left            =   0
+            TabIndex        =   10
+            Tag             =   "pref0"
+            ToolTipText     =   "Valeur dans la base de départ"
+            Top             =   120
+            Width           =   1215
+         End
+         Begin VB.Label Label1 
+            Caption         =   "dans la base"
+            Height          =   255
+            Index           =   0
+            Left            =   1440
+            TabIndex        =   13
+            Top             =   120
+            Width           =   975
+         End
+      End
    End
    Begin VB.Frame Frame2 
+      Caption         =   "Sortie"
       Height          =   855
-      Left            =   120
-      TabIndex        =   9
-      Top             =   960
+      Left            =   105
+      TabIndex        =   2
+      Top             =   938
       Width           =   5055
       Begin VB.PictureBox Picture2 
          BorderStyle     =   0  'None
@@ -51,20 +99,21 @@ Begin VB.Form frmConvert
          Left            =   120
          ScaleHeight     =   495
          ScaleWidth      =   4815
-         TabIndex        =   12
+         TabIndex        =   3
          TabStop         =   0   'False
          Top             =   240
          Width           =   4815
-         Begin VB.TextBox txtI 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Index           =   1
-            Left            =   0
-            TabIndex        =   3
-            Tag             =   "pref1"
-            ToolTipText     =   "Valeur dans la base d'arrivée"
+         Begin VB.ComboBox cbO 
+            Height          =   315
+            ItemData        =   "frmConvert.frx":05E0
+            Left            =   2520
+            List            =   "frmConvert.frx":05F6
+            Style           =   2  'Dropdown List
+            TabIndex        =   6
+            Tag             =   "pref lang_ok"
+            ToolTipText     =   "Base d'arrivée"
             Top             =   120
-            Width           =   1215
+            Width           =   1575
          End
          Begin VB.TextBox txtBase 
             Alignment       =   2  'Center
@@ -80,96 +129,47 @@ Begin VB.Form frmConvert
             Top             =   120
             Width           =   615
          End
-         Begin VB.ComboBox cbO 
-            Height          =   315
-            ItemData        =   "frmConvert.frx":058A
-            Left            =   2520
-            List            =   "frmConvert.frx":058C
-            Style           =   2  'Dropdown List
+         Begin VB.TextBox txtI 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Index           =   1
+            Left            =   0
             TabIndex        =   4
-            Tag             =   "pref lang_ok"
+            Tag             =   "pref1"
+            ToolTipText     =   "Valeur dans la base d'arrivée"
             Top             =   120
-            Width           =   1575
+            Width           =   1215
          End
          Begin VB.Label Label1 
             Caption         =   "dans la base"
             Height          =   255
             Index           =   1
             Left            =   1440
-            TabIndex        =   13
+            TabIndex        =   7
             Top             =   120
             Width           =   975
          End
       End
    End
-   Begin VB.Frame Frame1 
-      Height          =   855
-      Left            =   120
-      TabIndex        =   8
-      Top             =   120
-      Width           =   5055
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   495
-         Left            =   120
-         ScaleHeight     =   495
-         ScaleWidth      =   4815
-         TabIndex        =   10
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   4815
-         Begin VB.TextBox txtI 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Index           =   0
-            Left            =   0
-            TabIndex        =   0
-            Tag             =   "pref0"
-            ToolTipText     =   "Valeur dans la base de départ"
-            Top             =   120
-            Width           =   1215
-         End
-         Begin VB.TextBox txtBase 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Enabled         =   0   'False
-            Height          =   285
-            Index           =   0
-            Left            =   4200
-            TabIndex        =   2
-            Tag             =   "pref"
-            Text            =   "12"
-            ToolTipText     =   "Base personnelle"
-            Top             =   120
-            Width           =   615
-         End
-         Begin VB.ComboBox cbI 
-            Height          =   315
-            ItemData        =   "frmConvert.frx":058E
-            Left            =   2520
-            List            =   "frmConvert.frx":0590
-            Style           =   2  'Dropdown List
-            TabIndex        =   1
-            Tag             =   "pref lang_ok"
-            Top             =   120
-            Width           =   1575
-         End
-         Begin VB.Label Label1 
-            Caption         =   "dans la base"
-            Height          =   255
-            Index           =   0
-            Left            =   1440
-            TabIndex        =   11
-            Top             =   120
-            Width           =   975
-         End
-      End
+   Begin VB.CommandButton cmdQuitter 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   3105
+      TabIndex        =   1
+      ToolTipText     =   "Fermer cette feuille"
+      Top             =   1898
+      Width           =   1575
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
+   Begin VB.CheckBox chkPlan 
+      Caption         =   "Mettre au premier plan"
+      Height          =   255
+      Left            =   345
+      TabIndex        =   0
+      Tag             =   "pref"
+      ToolTipText     =   "Active ou non la mise au premier plan de la fenêtre"
+      Top             =   1898
+      Value           =   1  'Checked
+      Width           =   2415
    End
 End
 Attribute VB_Name = "frmConvert"
@@ -217,6 +217,7 @@ Option Explicit
 
 Private clsPref As clsIniForm
 Private cConv As clsConvert
+Private Lang As New clsLang
 
 Private Sub cbI_Click()
     Call DisplayResult
@@ -315,7 +316,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         Call .LoadControlsCaption
     End With
 

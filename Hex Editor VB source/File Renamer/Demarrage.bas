@@ -36,6 +36,7 @@ Option Explicit
 '=======================================================
 
 Public AfManifest As New AfClsManifest  'classe appliquant le style XP
+Public Chr_(255) As String  'contient la liste des char, pour gagner en vitesse
 Public cFile As FileSystemLibrary.FileSystem
 
 
@@ -43,14 +44,20 @@ Public cFile As FileSystemLibrary.FileSystem
 'sub de démarrage du programme
 '=======================================================
 Sub Main()
+Dim x As Long
 
     '//on instancie les classes
     Set AfManifest = New AfClsManifest
     Set cFile = New FileSystemLibrary.FileSystem
-    
+            
     '//application du style XP
-    AfManifest.Run
+    Call AfManifest.Run
     
+    '//on remplit le tableau Chr_()
+    For x = 0 To 255
+        Chr_(x) = Chr$(x)
+    Next x
+        
     '//lecture des préférences
     
     '//lance la form principale

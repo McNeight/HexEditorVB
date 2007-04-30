@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmAdvancedConversion 
    Caption         =   "Conversion avancée"
    ClientHeight    =   7170
@@ -20,12 +19,6 @@ Begin VB.Form frmAdvancedConversion
    ScaleHeight     =   7170
    ScaleWidth      =   7935
    StartUpPosition =   2  'CenterScreen
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
    Begin VB.PictureBox Picture3 
       BorderStyle     =   0  'None
       Height          =   1935
@@ -405,6 +398,7 @@ Option Explicit
 '=======================================================
 
 Private clsPref As clsIniForm
+Private Lang As New clsLang
 Private cConv As clsConvert
 
 Private Sub cbI_Click()
@@ -448,7 +442,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         Call .LoadControlsCaption
     End With
 
@@ -515,12 +509,12 @@ Private Sub Form_Unload(Cancel As Integer)
     Set cConv = Nothing
 End Sub
 
-Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
 End Sub
 
-Private Sub Frame2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Frame2_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp2
 End Sub
@@ -558,11 +552,11 @@ Private Sub optUseSeparator_Click()
     End If
 End Sub
 
-Private Sub Picture1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Picture1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
 End Sub
-Private Sub Picture2_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub Picture2_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche le popup menu
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp2
 End Sub
@@ -576,7 +570,7 @@ Dim s As String
 Dim LS As Long
 Dim lmax As Long
 Dim sSep As String
-Dim x As Long
+Dim X As Long
 Dim sA() As String
 
     If cbI.ListIndex < 0 Or cbO.ListIndex < 0 Then Exit Sub 'pas de base sélectionnée
@@ -598,16 +592,16 @@ Dim sA() As String
         Me.Caption = Lang.GetString("_ConvCour")
         
         lmax = Len(txtI.Text)
-        For x = 1 To lmax Step LS
+        For X = 1 To lmax Step LS
         
-            If (x Mod 1000) = 0 Then DoEvents
+            If (X Mod 1000) = 0 Then DoEvents
             
             'on extrait le(s) caractère(s)
-            s = Mid$(txtI.Text, x, LS)
+            s = Mid$(txtI.Text, X, LS)
             
             'on récupère la valeur formatée et on ajoute au buffer final
             sO = sO & GetCv(s)
-        Next x
+        Next X
         
         'on affiche çà
         txtO.Text = sO
@@ -634,10 +628,10 @@ Dim sA() As String
         'récupère toutes les valeurs séparément
         sA() = Split(txtI.Text, sSep, , vbBinaryCompare)
         
-        For x = 0 To UBound(sA())
-            If (x Mod 1000) = 0 Then DoEvents
-            sO = sO & GetCv(sA(x)) & sSep
-        Next x
+        For X = 0 To UBound(sA())
+            If (X Mod 1000) = 0 Then DoEvents
+            sO = sO & GetCv(sA(X)) & sSep
+        Next X
         
         'on affiche en virant le dernier séparateur
         txtO.Text = Left$(sO, Len(sO) - Len(sSep))

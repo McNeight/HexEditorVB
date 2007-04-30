@@ -1,6 +1,5 @@
 VERSION 5.00
 Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
 Begin VB.Form frmISO 
    BorderStyle     =   3  'Fixed Dialog
@@ -26,10 +25,65 @@ Begin VB.Form frmISO
    ScaleWidth      =   4350
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cmdGO 
+      Caption         =   "GO"
+      Enabled         =   0   'False
+      Height          =   495
+      Left            =   3608
+      TabIndex        =   7
+      ToolTipText     =   "Démarre la création du fichier ISO"
+      Top             =   2160
+      Width           =   615
+   End
+   Begin VB.Frame Frame1 
+      Caption         =   "Fichier ISO résultant"
+      Height          =   615
+      Left            =   128
+      TabIndex        =   3
+      Top             =   2040
+      Width           =   3255
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   330
+         Left            =   120
+         ScaleHeight     =   330
+         ScaleWidth      =   3015
+         TabIndex        =   4
+         Top             =   240
+         Width           =   3015
+         Begin VB.CommandButton cmdBrowse 
+            Caption         =   "..."
+            Height          =   255
+            Left            =   2520
+            TabIndex        =   6
+            ToolTipText     =   "Sélectionne un fichier résultant"
+            Top             =   0
+            Width           =   375
+         End
+         Begin VB.TextBox txtFile 
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   0
+            TabIndex        =   5
+            Tag             =   "Choix du fichier ISO résultant"
+            Top             =   0
+            Width           =   2295
+         End
+      End
+   End
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   3368
+      TabIndex        =   2
+      ToolTipText     =   "Ferme cette fenêtre"
+      Top             =   2760
+      Width           =   855
+   End
    Begin DriveView_OCX.DriveView DV 
       Height          =   1815
-      Left            =   120
-      TabIndex        =   7
+      Left            =   128
+      TabIndex        =   0
       Top             =   120
       Width           =   4095
       _ExtentX        =   7223
@@ -38,8 +92,8 @@ Begin VB.Form frmISO
    End
    Begin ProgressBar_OCX.pgrBar PGB 
       Height          =   375
-      Left            =   120
-      TabIndex        =   6
+      Left            =   128
+      TabIndex        =   1
       Top             =   2760
       Width           =   3135
       _ExtentX        =   5530
@@ -49,60 +103,6 @@ Begin VB.Form frmISO
       Value           =   1
       BackPicture     =   "frmISO.frx":000C
       FrontPicture    =   "frmISO.frx":0028
-   End
-   Begin VB.CommandButton cmdQuit 
-      Height          =   375
-      Left            =   3360
-      TabIndex        =   5
-      Top             =   2760
-      Width           =   855
-   End
-   Begin VB.Frame Frame1 
-      Height          =   615
-      Left            =   120
-      TabIndex        =   1
-      Top             =   2040
-      Width           =   3255
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   330
-         Left            =   120
-         ScaleHeight     =   330
-         ScaleWidth      =   3015
-         TabIndex        =   2
-         Top             =   240
-         Width           =   3015
-         Begin VB.TextBox txtFile 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   0
-            TabIndex        =   4
-            Tag             =   "Choix du fichier ISO résultant"
-            Top             =   0
-            Width           =   2295
-         End
-         Begin VB.CommandButton cmdBrowse 
-            Height          =   255
-            Left            =   2520
-            TabIndex        =   3
-            Top             =   0
-            Width           =   375
-         End
-      End
-   End
-   Begin VB.CommandButton cmdGO 
-      Enabled         =   0   'False
-      Height          =   495
-      Left            =   3600
-      TabIndex        =   0
-      Top             =   2160
-      Width           =   615
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
    End
 End
 Attribute VB_Name = "frmISO"
@@ -148,6 +148,7 @@ Option Explicit
 'FORM DE CREATION DE FICHIER ISO
 '=======================================================
 
+Private Lang As New clsLang
 Private tDrive As DriveView_OCX.clsDrive
 Private clsPref As clsIniForm
 Dim sFile As String
@@ -174,7 +175,7 @@ Private Sub cmdGo_Click()
 'lance la création du fichier ISO
 Dim lngSec As Long
 Dim s As String
-Dim x As Long
+Dim X As Long
 Dim lFile As Long
 Dim lBPC As Long
 Dim lTLS As Long
@@ -186,8 +187,8 @@ Dim hDisk As Long
     'vérifie si le fichier existe pas déjà
     If cFile.FileExists(sFile) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'vérifie que le dossier existe bien
@@ -303,7 +304,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
         
         DV.LogicalDrivesString = .GetString("_LogicalString")

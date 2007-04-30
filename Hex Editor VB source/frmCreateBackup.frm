@@ -1,6 +1,5 @@
 VERSION 5.00
 Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmCreateBackup 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Attention"
@@ -26,12 +25,6 @@ Begin VB.Form frmCreateBackup
    ScaleWidth      =   4680
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
    Begin VB.Frame Frame1 
       Caption         =   "Avancement du backup"
       Height          =   735
@@ -131,6 +124,7 @@ Option Explicit
 'Private strFile As String
 'Private Frm As Pfm
 'Private tAction As BACKUP_ACTION
+Private Lang As New clsLang
 
 '=======================================================
 'ENUMS
@@ -172,7 +166,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         Call .LoadControlsCaption
     End With
 End Sub

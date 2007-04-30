@@ -1,6 +1,5 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmPropertyShow 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Propriétés"
@@ -193,12 +192,6 @@ Begin VB.Form frmPropertyShow
          End
       End
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
    Begin VB.Menu mnuDisplayWindowsProp 
       Caption         =   "&Afficher les proriétés Windows"
    End
@@ -244,13 +237,14 @@ Option Explicit
 '=======================================================
 'FORM D'AFFICHAGE DES PROPRIETES
 '=======================================================
+Private Lang As New clsLang
 
 Private Sub Form_Activate()
     Call RefreshProp
 End Sub
 
 Private Sub Form_Load()
-Dim x As Long
+Dim X As Long
 
     With Lang
         #If MODE_DEBUG Then
@@ -270,15 +264,15 @@ Dim x As Long
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     
-    For x = 0 To 2
-        Frame1(x).Top = 600
-        Frame1(x).Left = 120
-        Frame1(x).Visible = False
-    Next x
+    For X = 0 To 2
+        Frame1(X).Top = 600
+        Frame1(X).Left = 120
+        Frame1(X).Visible = False
+    Next X
     
     If TypeOfForm(frmContent.ActiveForm) = "Disque physique" Then _
         Me.mnuDisplayWindowsProp.Enabled = False

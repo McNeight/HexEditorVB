@@ -1,6 +1,5 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmSignets 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Gestionnaire de signets"
@@ -26,75 +25,12 @@ Begin VB.Form frmSignets
    ScaleWidth      =   5415
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdSaveChanges 
-      Height          =   375
-      Left            =   120
-      TabIndex        =   8
-      Top             =   4680
-      Width           =   2655
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Signets"
-      Height          =   1215
-      Index           =   1
-      Left            =   60
-      TabIndex        =   12
-      Top             =   3360
-      Width           =   5295
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   885
-         Index           =   1
-         Left            =   100
-         ScaleHeight     =   885
-         ScaleWidth      =   5100
-         TabIndex        =   13
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   5100
-         Begin VB.CommandButton cmdComment 
-            Height          =   375
-            Left            =   0
-            TabIndex        =   7
-            Top             =   480
-            Width           =   5055
-         End
-         Begin VB.CommandButton cmdNew 
-            Height          =   375
-            Left            =   0
-            TabIndex        =   4
-            Top             =   0
-            Width           =   1455
-         End
-         Begin VB.CommandButton cmdDeleteSel 
-            Height          =   375
-            Left            =   1560
-            TabIndex        =   5
-            Top             =   0
-            Width           =   1815
-         End
-         Begin VB.CommandButton cmdDeleteAll 
-            Height          =   375
-            Left            =   3600
-            TabIndex        =   6
-            Top             =   0
-            Width           =   1455
-         End
-      End
-   End
-   Begin VB.CommandButton dmQuit 
-      Height          =   375
-      Left            =   3840
-      TabIndex        =   9
-      Top             =   4680
-      Width           =   1455
-   End
    Begin VB.Frame Frame1 
       Caption         =   "Liste des signets"
       Height          =   735
       Index           =   0
       Left            =   60
-      TabIndex        =   10
+      TabIndex        =   8
       Top             =   2640
       Width           =   5295
       Begin VB.PictureBox Picture1 
@@ -104,37 +40,118 @@ Begin VB.Form frmSignets
          Left            =   100
          ScaleHeight     =   405
          ScaleWidth      =   5100
-         TabIndex        =   11
+         TabIndex        =   9
          TabStop         =   0   'False
          Top             =   240
          Width           =   5100
-         Begin VB.CommandButton cmdSave 
+         Begin VB.CommandButton cmdOpen 
+            Caption         =   "Ouvrir..."
             Height          =   375
-            Left            =   3600
-            TabIndex        =   3
+            Left            =   0
+            TabIndex        =   12
+            ToolTipText     =   "Ouvre une liste de signets"
             Top             =   0
             Width           =   1455
          End
          Begin VB.CommandButton cmdAdd 
+            Caption         =   "Ajouter..."
             Height          =   375
             Left            =   1800
-            TabIndex        =   2
+            TabIndex        =   11
+            ToolTipText     =   "Ajoute une liste de signets"
             Top             =   0
             Width           =   1455
          End
-         Begin VB.CommandButton cmdOpen 
+         Begin VB.CommandButton cmdSave 
+            Caption         =   "Sauvegarder..."
             Height          =   375
-            Left            =   0
-            TabIndex        =   1
+            Left            =   3600
+            TabIndex        =   10
+            ToolTipText     =   "Sauvegarde la liste de signets actuelle"
             Top             =   0
             Width           =   1455
          End
       End
    End
+   Begin VB.CommandButton dmQuit 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   3840
+      TabIndex        =   7
+      ToolTipText     =   "Ferme cette fenêtre"
+      Top             =   4680
+      Width           =   1455
+   End
+   Begin VB.Frame Frame1 
+      Caption         =   "Signets"
+      Height          =   1215
+      Index           =   1
+      Left            =   60
+      TabIndex        =   1
+      Top             =   3360
+      Width           =   5295
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   885
+         Index           =   1
+         Left            =   100
+         ScaleHeight     =   885
+         ScaleWidth      =   5100
+         TabIndex        =   2
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   5100
+         Begin VB.CommandButton cmdDeleteAll 
+            Caption         =   "Supprimer tout"
+            Height          =   375
+            Left            =   3600
+            TabIndex        =   6
+            ToolTipText     =   "Supprime tous les signets"
+            Top             =   0
+            Width           =   1455
+         End
+         Begin VB.CommandButton cmdDeleteSel 
+            Caption         =   "Supprimer sélection"
+            Height          =   375
+            Left            =   1560
+            TabIndex        =   5
+            ToolTipText     =   "Supprime les fichiers sélectionnés"
+            Top             =   0
+            Width           =   1815
+         End
+         Begin VB.CommandButton cmdNew 
+            Caption         =   "Nouveau"
+            Height          =   375
+            Left            =   0
+            TabIndex        =   4
+            ToolTipText     =   "Créé un nouveau signet"
+            Top             =   0
+            Width           =   1455
+         End
+         Begin VB.CommandButton cmdComment 
+            Caption         =   "Ajouter un commentaite sur le signet sélectionné"
+            Height          =   375
+            Left            =   0
+            TabIndex        =   3
+            ToolTipText     =   "Ajoute un commentaire sur les signets sélectionnés"
+            Top             =   480
+            Width           =   5055
+         End
+      End
+   End
+   Begin VB.CommandButton cmdSaveChanges 
+      Caption         =   "Appliquer les changements"
+      Height          =   375
+      Left            =   120
+      TabIndex        =   0
+      ToolTipText     =   "Applique les changements à la fenêtre active"
+      Top             =   4680
+      Width           =   2655
+   End
    Begin ComctlLib.ListView lstSignets 
       Height          =   2535
       Left            =   37
-      TabIndex        =   0
+      TabIndex        =   13
       TabStop         =   0   'False
       Tag             =   "lang_ok"
       Top             =   0
@@ -164,12 +181,6 @@ Begin VB.Form frmSignets
          Text            =   "Commentaire"
          Object.Width           =   6703
       EndProperty
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
    End
 End
 Attribute VB_Name = "frmSignets"
@@ -214,6 +225,7 @@ Option Explicit
 'FORM DE GESTION DES SIGNETS
 '=======================================================
 
+Private Lang As New clsLang
 Private mouseUped As Boolean
 
 Private Sub cmdAdd_Click()
@@ -223,17 +235,17 @@ End Sub
 
 Private Sub cmdComment_Click()
 'ajoute un commentaire sur les signets sélectionnés
-Dim x As Long
+Dim X As Long
 Dim s As String
 
-    For x = Me.lstSignets.ListItems.Count To 1 Step -1
-        If Me.lstSignets.ListItems.Item(x).Selected Then
+    For X = Me.lstSignets.ListItems.Count To 1 Step -1
+        If Me.lstSignets.ListItems.Item(X).Selected Then
             s = InputBox(Lang.GetString("_NewComment") & " " & _
-                Me.lstSignets.ListItems.Item(x).Text, Lang.GetString("_AddComment"))
+                Me.lstSignets.ListItems.Item(X).Text, Lang.GetString("_AddComment"))
             If StrPtr(s) <> 0 Then _
-                Me.lstSignets.ListItems.Item(x).SubItems(1) = s
+                Me.lstSignets.ListItems.Item(X).SubItems(1) = s
         End If
-    Next x
+    Next X
 End Sub
 
 Private Sub cmdDeleteAll_Click()
@@ -243,12 +255,12 @@ End Sub
 
 Private Sub cmdDeleteSel_Click()
 'supprime la sélection
-Dim x As Long
+Dim X As Long
 
-    For x = Me.lstSignets.ListItems.Count To 1 Step -1
-        If Me.lstSignets.ListItems.Item(x).Selected Then _
-            Me.lstSignets.ListItems.Remove x
-    Next x
+    For X = Me.lstSignets.ListItems.Count To 1 Step -1
+        If Me.lstSignets.ListItems.Item(X).Selected Then _
+            Me.lstSignets.ListItems.Remove X
+    Next X
 End Sub
 
 Private Sub cmdNew_Click()
@@ -278,7 +290,7 @@ Private Sub cmdSave_Click()
 'enregistre la liste des signets de la form active
 Dim s As String
 Dim lFile As Long
-Dim x As Long
+Dim X As Long
 
     On Error GoTo ErrGestion
     
@@ -299,8 +311,8 @@ Dim x As Long
 
     If cFile.FileExists(s) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_Warning"))
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_Warning"))
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'ouvre le fchier
@@ -308,9 +320,9 @@ Dim x As Long
     Open s For Output As lFile
     
     'enregistre les entrées
-    For x = 1 To lstSignets.ListItems.Count
-        Write #lFile, lstSignets.ListItems.Item(x) & "|" & lstSignets.ListItems.Item(x).SubItems(1)
-    Next x
+    For X = 1 To lstSignets.ListItems.Count
+        Write #lFile, lstSignets.ListItems.Item(X) & "|" & lstSignets.ListItems.Item(X).SubItems(1)
+    Next X
     
     Close lFile
 
@@ -321,23 +333,23 @@ ErrGestion:
 End Sub
 
 Private Sub cmdSaveChanges_Click()
-Dim x As Long
+Dim X As Long
 
     'applique les changements à la forme active
  
     With frmContent.ActiveForm
         'on ajoute tous les signets qui sont affichés dans l'activeform
         .lstSignets.ListItems.Clear
-        For x = 1 To Me.lstSignets.ListItems.Count
-            .lstSignets.ListItems.Add Text:=Me.lstSignets.ListItems.Item(x).Text
-            .lstSignets.ListItems.Item(x).SubItems(1) = Me.lstSignets.ListItems.Item(x).SubItems(1)
-        Next x
+        For X = 1 To Me.lstSignets.ListItems.Count
+            .lstSignets.ListItems.Add Text:=Me.lstSignets.ListItems.Item(X).Text
+            .lstSignets.ListItems.Item(X).SubItems(1) = Me.lstSignets.ListItems.Item(X).SubItems(1)
+        Next X
         
         'on vire les anciens signets du HW actif et on rajoute les nouveau
         Call .HW.RemoveAllSignets
-        For x = 1 To Me.lstSignets.ListItems.Count
-            .HW.AddSignet CCur(Val(Me.lstSignets.ListItems.Item(x).Text))
-        Next x
+        For X = 1 To Me.lstSignets.ListItems.Count
+            .HW.AddSignet CCur(Val(Me.lstSignets.ListItems.Item(X).Text))
+        Next X
         
         Call .HW.Refresh
         
@@ -350,7 +362,7 @@ Private Sub dmQuit_Click()
 End Sub
 
 Private Sub Form_Load()
-Dim x As Long
+Dim X As Long
 
     With Lang
         #If MODE_DEBUG Then
@@ -370,7 +382,7 @@ Dim x As Long
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     
@@ -378,10 +390,10 @@ Dim x As Long
     
     'on ajoute tous les signets qui sont affichés dans l'activeform
     With lstSignets.ListItems
-        For x = 1 To frmContent.ActiveForm.lstSignets.ListItems.Count
-            .Add Text:=frmContent.ActiveForm.lstSignets.ListItems.Item(x).Text
-            .Item(x).SubItems(1) = frmContent.ActiveForm.lstSignets.ListItems.Item(x).SubItems(1)
-        Next x
+        For X = 1 To frmContent.ActiveForm.lstSignets.ListItems.Count
+            .Add Text:=frmContent.ActiveForm.lstSignets.ListItems.Item(X).Text
+            .Item(X).SubItems(1) = frmContent.ActiveForm.lstSignets.ListItems.Item(X).SubItems(1)
+        Next X
     End With
     
 End Sub
@@ -392,7 +404,7 @@ End Sub
 Private Sub AddSignetIn(ByVal bOverWrite As Boolean)
 Dim s As String
 Dim lFile As Long
-Dim x As Long
+Dim X As Long
 Dim sTemp As String
 Dim l As Long
 
@@ -464,7 +476,7 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 Dim tLst As ListItem
 Dim s As String
 Dim r As Long
@@ -472,7 +484,7 @@ Dim r As Long
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
         s = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, _
             Lang.GetString("_AddComment"))
@@ -484,7 +496,7 @@ Dim r As Long
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
         
         'on enlève du listview
@@ -493,7 +505,7 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub

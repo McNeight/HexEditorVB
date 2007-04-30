@@ -1,7 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmStringSearch 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Recherche de chaînes de caractères"
@@ -20,17 +19,145 @@ Begin VB.Form frmStringSearch
    EndProperty
    Icon            =   "frmStringSearch.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   6810
    ScaleWidth      =   6585
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Frame Frame1 
+      Caption         =   "Options de recherche"
+      Height          =   2055
+      Left            =   105
+      TabIndex        =   5
+      Top             =   98
+      Width           =   4335
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   1695
+         Left            =   120
+         ScaleHeight     =   1695
+         ScaleWidth      =   4095
+         TabIndex        =   6
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   4095
+         Begin VB.CheckBox chkNumb3r 
+            Caption         =   "Rechercher des chiffres"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   13
+            Tag             =   "pref"
+            ToolTipText     =   "Inclure les chiffres dans la recherche"
+            Top             =   0
+            Width           =   2895
+         End
+         Begin VB.TextBox txtSize 
+            Alignment       =   2  'Center
+            BorderStyle     =   0  'None
+            Height          =   285
+            Left            =   3240
+            TabIndex        =   12
+            Tag             =   "pref"
+            Text            =   "5"
+            ToolTipText     =   "Taille minimale (au dessous de cette taille, les suites de caractères ne sont pas considérées comme des strings)"
+            Top             =   1460
+            Width           =   735
+         End
+         Begin VB.CheckBox chkMin 
+            Caption         =   "Rechercher des minuscules"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   11
+            Tag             =   "pref"
+            ToolTipText     =   "Inclure les minuscules dans la recherche"
+            Top             =   240
+            Value           =   1  'Checked
+            Width           =   2895
+         End
+         Begin VB.CheckBox chkMaj 
+            Caption         =   "Rechercher des majuscules"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   10
+            Tag             =   "pref"
+            ToolTipText     =   "Inclure les majuscules dans la recherche"
+            Top             =   480
+            Value           =   1  'Checked
+            Width           =   2895
+         End
+         Begin VB.CheckBox chkSigns 
+            Caption         =   "Rechercher des signes"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   9
+            Tag             =   "pref"
+            ToolTipText     =   "Inclure les signes dans la recherche"
+            Top             =   720
+            Width           =   2895
+         End
+         Begin VB.CheckBox chkAddSignet 
+            Caption         =   "Ajouter un signet pour les chaines trouvées"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   8
+            Tag             =   "pref"
+            ToolTipText     =   "Ajouter un signet à chaque offset où une string est trouvée"
+            Top             =   1200
+            Width           =   3975
+         End
+         Begin VB.CheckBox chkAccent 
+            Caption         =   "Rechercher des caractères accentués"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   7
+            Tag             =   "pref"
+            ToolTipText     =   "Rechercher des caractères avec des accents ("
+            Top             =   960
+            Width           =   3735
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Taille minimale de la chaîne de caractères :"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   14
+            Top             =   1460
+            Width           =   3135
+         End
+      End
+   End
+   Begin VB.CommandButton cmdGo 
+      Caption         =   "Lancer la recherche"
+      Height          =   375
+      Left            =   4785
+      TabIndex        =   4
+      ToolTipText     =   "Lancer la recherche"
+      Top             =   218
+      Width           =   1575
+   End
+   Begin VB.CommandButton cmdSave 
+      Caption         =   "Sauvegarder les résultats"
+      Height          =   495
+      Left            =   4785
+      TabIndex        =   3
+      ToolTipText     =   "Sauvegarder les résultats (format texte)"
+      Top             =   938
+      Width           =   1575
+   End
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   4785
+      TabIndex        =   2
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   1778
+      Width           =   1575
+   End
    Begin ProgressBar_OCX.pgrBar PGB 
       Height          =   255
-      Left            =   120
-      TabIndex        =   15
+      Left            =   105
+      TabIndex        =   0
       TabStop         =   0   'False
-      Top             =   2280
+      ToolTipText     =   "Progression de la recherche"
+      Top             =   2258
       Width           =   4335
       _ExtentX        =   7646
       _ExtentY        =   450
@@ -42,11 +169,11 @@ Begin VB.Form frmStringSearch
    End
    Begin ComctlLib.ListView LV 
       Height          =   3735
-      Left            =   120
-      TabIndex        =   14
+      Left            =   105
+      TabIndex        =   1
       TabStop         =   0   'False
       Tag             =   "lang_ok"
-      Top             =   3000
+      Top             =   2978
       Width           =   6375
       _ExtentX        =   11245
       _ExtentY        =   6588
@@ -73,126 +200,14 @@ Begin VB.Form frmStringSearch
          Object.Width           =   7673
       EndProperty
    End
-   Begin VB.CommandButton cmdQuit 
-      Height          =   375
-      Left            =   4800
-      TabIndex        =   10
-      Top             =   1800
-      Width           =   1575
-   End
-   Begin VB.CommandButton cmdSave 
-      Height          =   495
-      Left            =   4800
-      TabIndex        =   9
-      Top             =   960
-      Width           =   1575
-   End
-   Begin VB.CommandButton cmdGo 
-      Height          =   375
-      Left            =   4800
-      TabIndex        =   0
-      Top             =   240
-      Width           =   1575
-   End
-   Begin VB.Frame Frame1 
-      Height          =   2055
-      Left            =   120
-      TabIndex        =   11
-      Top             =   120
-      Width           =   4335
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   1695
-         Left            =   120
-         ScaleHeight     =   1695
-         ScaleWidth      =   4095
-         TabIndex        =   12
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   4095
-         Begin VB.CheckBox chkAccent 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   5
-            Tag             =   "pref"
-            Top             =   960
-            Width           =   3735
-         End
-         Begin VB.CheckBox chkAddSignet 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   6
-            Tag             =   "pref"
-            Top             =   1200
-            Width           =   3975
-         End
-         Begin VB.CheckBox chkSigns 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   4
-            Tag             =   "pref"
-            Top             =   720
-            Width           =   2895
-         End
-         Begin VB.CheckBox chkMaj 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   3
-            Tag             =   "pref"
-            Top             =   480
-            Value           =   1  'Checked
-            Width           =   2895
-         End
-         Begin VB.CheckBox chkMin 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   2
-            Tag             =   "pref"
-            Top             =   240
-            Value           =   1  'Checked
-            Width           =   2895
-         End
-         Begin VB.TextBox txtSize 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   3240
-            TabIndex        =   8
-            Tag             =   "pref"
-            Top             =   1460
-            Width           =   735
-         End
-         Begin VB.CheckBox chkNumb3r 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   1
-            Tag             =   "pref"
-            Top             =   0
-            Width           =   2895
-         End
-         Begin VB.Label Label1 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   7
-            Top             =   1460
-            Width           =   3135
-         End
-      End
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
    Begin VB.Label Label2 
       Alignment       =   2  'Center
       BackColor       =   &H8000000A&
       Caption         =   "Résultats de la recherche"
       Height          =   255
-      Left            =   120
-      TabIndex        =   13
-      Top             =   2760
+      Left            =   105
+      TabIndex        =   15
+      Top             =   2738
       Width           =   6375
    End
 End
@@ -238,6 +253,7 @@ Option Explicit
 'FORM DE RECHERCHE DE STRINGS DANS LE FICHIER/MEMOIRE
 '=======================================================
 
+Private Lang As New clsLang
 Private clsPref As clsIniForm
 
 Private Sub cmdGo_Click()
@@ -370,7 +386,7 @@ Private Sub cmdSave_Click()
 'sauvegarde les résultats
 Dim lFile As Long
 Dim sFile As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -400,11 +416,11 @@ Dim x As Long
         sFile & vbNewLine & Lang.GetString("_DateIs") & Date$ & "  " & Time$ & _
         vbNewLine & "[match]=" & LV.ListItems.Count
     
-    For x = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
-        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(x)) & "  [string]=" & _
-        LV.ListItems.Item(x).SubItems(1)
+    For X = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
+        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(X)) & "  [string]=" & _
+        LV.ListItems.Item(X).SubItems(1)
         DoEvents
-    Next x
+    Next X
     
     Close lFile
     
@@ -434,7 +450,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     

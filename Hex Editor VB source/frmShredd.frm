@@ -1,7 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmShredd 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Effacement définitif de fichiers"
@@ -25,10 +24,49 @@ Begin VB.Form frmShredd
    ScaleWidth      =   4860
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin VB.CommandButton cmdAddFile 
+      Caption         =   "Ajouter des fichiers..."
+      Height          =   375
+      Left            =   143
+      TabIndex        =   4
+      ToolTipText     =   "Permet l'ajout de fichiers à détruire"
+      Top             =   3600
+      Width           =   2175
+   End
+   Begin VB.CommandButton cmdProceed 
+      Caption         =   "Supprimer définitivement"
+      Enabled         =   0   'False
+      Height          =   375
+      Left            =   2543
+      TabIndex        =   3
+      ToolTipText     =   "Détruit les fichiers (/!\ suppression IRRECUPERABLE)"
+      Top             =   3600
+      Width           =   2175
+   End
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   3360
+      TabIndex        =   2
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   4200
+      Width           =   1335
+   End
+   Begin VB.TextBox txtPass 
+      Alignment       =   2  'Center
+      BorderStyle     =   0  'None
+      Height          =   285
+      Left            =   2280
+      TabIndex        =   1
+      Text            =   "3"
+      ToolTipText     =   "Désigne le nombre de sanitizations qui seront effectuées"
+      Top             =   4200
+      Width           =   735
+   End
    Begin ProgressBar_OCX.pgrBar PGB 
       Height          =   375
       Left            =   120
-      TabIndex        =   6
+      TabIndex        =   0
       Top             =   4680
       Width           =   4695
       _ExtentX        =   8281
@@ -39,41 +77,10 @@ Begin VB.Form frmShredd
       BackPicture     =   "frmShredd.frx":058A
       FrontPicture    =   "frmShredd.frx":05A6
    End
-   Begin VB.TextBox txtPass 
-      Alignment       =   2  'Center
-      BorderStyle     =   0  'None
-      Height          =   285
-      Left            =   2280
-      TabIndex        =   5
-      Top             =   4200
-      Width           =   735
-   End
-   Begin VB.CommandButton cmdQuit 
-      Height          =   375
-      Left            =   3360
-      TabIndex        =   2
-      Top             =   4200
-      Width           =   1335
-   End
-   Begin VB.CommandButton cmdProceed 
-      Enabled         =   0   'False
-      Height          =   375
-      Left            =   2543
-      TabIndex        =   1
-      Top             =   3600
-      Width           =   2175
-   End
-   Begin VB.CommandButton cmdAddFile 
-      Height          =   375
-      Left            =   143
-      TabIndex        =   0
-      Top             =   3600
-      Width           =   2175
-   End
    Begin ComctlLib.ListView LV 
       Height          =   3375
       Left            =   0
-      TabIndex        =   3
+      TabIndex        =   5
       Tag             =   "lang_ok"
       Top             =   0
       Width           =   4815
@@ -98,17 +105,11 @@ Begin VB.Form frmShredd
          Object.Width           =   7056
       EndProperty
    End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
    Begin VB.Label Label1 
       Caption         =   "Nombre de sanitizations :"
       Height          =   255
       Left            =   120
-      TabIndex        =   4
+      TabIndex        =   6
       Top             =   4200
       Width           =   2055
    End
@@ -154,23 +155,24 @@ Option Explicit
 '=======================================================
 'FORM POUR LA SUPPRESSION DEFINITIVE DE FICHIER
 '=======================================================
+Private Lang As New clsLang
 
 Private Sub cmdAddFile_Click()
 'ajoute un fichier à la liste à supprimer
 Dim s() As String
 Dim s2 As String
-Dim x As Long
+Dim X As Long
 
     ReDim s(0)
     s2 = cFile.ShowOpen(Lang.GetString("_FilesToKillSel"), Me.hWnd, _
         Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
         OFN_ALLOWMULTISELECT, s())
     
-    For x = 1 To UBound(s())
-        If cFile.FileExists(s(x)) Then
-            LV.ListItems.Add Text:=s(x) 'ajoute l'élément
+    For X = 1 To UBound(s())
+        If cFile.FileExists(s(X)) Then
+            LV.ListItems.Add Text:=s(X) 'ajoute l'élément
         End If
-    Next x
+    Next X
     
     'dans le cas d'un fichier simple
     If cFile.FileExists(s2) Then LV.ListItems.Add Text:=s2
@@ -182,14 +184,14 @@ End Sub
 
 Private Sub cmdProceed_Click()
 'procède à la suppression définitive
-Dim x As Long
+Dim X As Long
 
     'affiche un advertissement
-    x = MsgBox(Lang.GetString("_FilesWillBeLost") & vbNewLine & _
+    X = MsgBox(Lang.GetString("_FilesWillBeLost") & vbNewLine & _
         Lang.GetString("_WannaKill"), vbYesNo + vbInformation, _
         Lang.GetString("_War"))
     
-    If Not (x = vbYes) Then Exit Sub
+    If Not (X = vbYes) Then Exit Sub
     
     If Abs(Int(Val(txtPass.Text))) < 1 Or Abs(Int(Val(txtPass.Text))) > 2048 Then
         'nombre de sanitizations incorrecte
@@ -197,10 +199,10 @@ Dim x As Long
         Exit Sub
     End If
     
-    For x = LV.ListItems.Count To 1 Step -1
+    For X = LV.ListItems.Count To 1 Step -1
         DoEvents    'rend quand même la main, si bcp de fichiers, c'est utile
-        If ShreddFile(LV.ListItems.Item(x), Int(Val(txtPass.Text)), Me.PGB) Then   'procède à la suppression
-            LV.ListItems.Remove (x) 'enlève l'item si la suppression à échoué
+        If ShreddFile(LV.ListItems.Item(X), Int(Val(txtPass.Text)), Me.PGB) Then   'procède à la suppression
+            LV.ListItems.Remove (X) 'enlève l'item si la suppression à échoué
         End If
     Next
     
@@ -242,7 +244,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
 End Sub
@@ -268,7 +270,7 @@ Private Sub CheckBtn()
 End Sub
 
 Private Sub LV_OLEDragDrop(Data As ComctlLib.DataObject, Effect As Long, _
-    Button As Integer, Shift As Integer, x As Single, y As Single)
+    Button As Integer, Shift As Integer, X As Single, Y As Single)
     
 Dim i As Long
 

@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.Form frmSaveProcess 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sauvegarder le contenu mémoire du processus"
@@ -18,47 +17,36 @@ Begin VB.Form frmSaveProcess
    EndProperty
    Icon            =   "frmSaveProcess.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   4110
    ScaleWidth      =   7590
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdQuit 
+   Begin VB.ListBox lstList 
+      Height          =   2985
+      Left            =   128
+      Style           =   1  'Checkbox
+      TabIndex        =   10
+      Top             =   488
+      Width           =   3855
+   End
+   Begin VB.CheckBox chkAll 
+      Caption         =   "Tout enregistrer (au minimum 2Go sont requis)"
       Height          =   375
-      Left            =   5880
-      TabIndex        =   1
-      Top             =   3600
-      Width           =   1575
-   End
-   Begin VB.CommandButton cmdSave 
-      Height          =   375
-      Left            =   4200
-      TabIndex        =   0
-      Top             =   3600
-      Width           =   1575
-   End
-   Begin VB.CommandButton cmdBrowse 
-      Height          =   255
-      Left            =   7080
-      TabIndex        =   7
-      Top             =   3000
-      Width           =   375
-   End
-   Begin VB.TextBox txtPath 
-      BorderStyle     =   0  'None
-      Height          =   285
-      Left            =   4200
-      TabIndex        =   6
-      Top             =   3000
-      Width           =   2775
+      Left            =   128
+      TabIndex        =   9
+      Tag             =   "pref"
+      ToolTipText     =   "Enregistre toute la mémoire (/!\ 2Go sont requis)"
+      Top             =   3608
+      Width           =   3855
    End
    Begin VB.Frame Frame1 
+      Caption         =   "Contenu de l'enregistrement"
       Height          =   1575
-      Left            =   4200
-      TabIndex        =   10
-      Top             =   120
+      Left            =   4208
+      TabIndex        =   4
+      Top             =   128
       Width           =   3255
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
@@ -66,82 +54,102 @@ Begin VB.Form frmSaveProcess
          Left            =   120
          ScaleHeight     =   1215
          ScaleWidth      =   3015
-         TabIndex        =   11
+         TabIndex        =   5
          TabStop         =   0   'False
          Top             =   240
          Width           =   3015
-         Begin VB.CheckBox chkOffset 
+         Begin VB.CheckBox chkHexa 
+            Caption         =   "Sauvegarder les valeurs hexa"
             Height          =   255
             Left            =   0
-            TabIndex        =   5
+            TabIndex        =   8
             Tag             =   "pref"
-            Top             =   840
+            ToolTipText     =   "Sauvegarder les valeurs hexa"
+            Top             =   120
             Width           =   2895
          End
          Begin VB.CheckBox chkASCII 
+            Caption         =   "Sauvegarder les valeurs ASCII"
             Height          =   255
             Left            =   0
-            TabIndex        =   4
+            TabIndex        =   7
             Tag             =   "pref"
+            ToolTipText     =   "Sauvegarder les valeurs ASCII réelles uniquement si coché seul"
             Top             =   480
             Width           =   2895
          End
-         Begin VB.CheckBox chkHexa 
+         Begin VB.CheckBox chkOffset 
+            Caption         =   "Sauvegarder les offsets"
             Height          =   255
             Left            =   0
-            TabIndex        =   3
+            TabIndex        =   6
             Tag             =   "pref"
-            Top             =   120
+            ToolTipText     =   "La sauvegarde des offsets nécessite la sauvegarde de strings formatées"
+            Top             =   840
             Width           =   2895
          End
       End
    End
-   Begin VB.CheckBox chkAll 
-      Height          =   375
-      Left            =   120
-      TabIndex        =   8
-      Tag             =   "pref"
-      Top             =   3600
-      Width           =   3855
+   Begin VB.TextBox txtPath 
+      BorderStyle     =   0  'None
+      Height          =   285
+      Left            =   4208
+      TabIndex        =   3
+      ToolTipText     =   "Chemin du fichier résultat"
+      Top             =   3008
+      Width           =   2775
    End
-   Begin VB.ListBox lstList 
-      Height          =   2985
-      Left            =   120
-      Style           =   1  'Checkbox
-      TabIndex        =   2
-      Top             =   480
-      Width           =   3855
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
-   Begin VB.Label lblSize 
-      Caption         =   "Taille du fichier résultant=[0]"
-      Height          =   615
-      Left            =   4200
-      TabIndex        =   13
-      ToolTipText     =   "Taille estimée du fichier qui sera créé"
-      Top             =   1800
-      Width           =   3255
-   End
-   Begin VB.Label Label2 
-      Caption         =   "Chemin du fichier"
+   Begin VB.CommandButton cmdBrowse 
+      Caption         =   "..."
       Height          =   255
-      Left            =   4200
-      TabIndex        =   12
-      Top             =   2640
-      Width           =   3255
+      Left            =   7088
+      TabIndex        =   2
+      ToolTipText     =   "Sélectionner l'emplacement du fichier à sauvegarder"
+      Top             =   3008
+      Width           =   375
+   End
+   Begin VB.CommandButton cmdSave 
+      Caption         =   "Sauvegarder"
+      Height          =   375
+      Left            =   4208
+      TabIndex        =   1
+      ToolTipText     =   "Sauvegarder dans le fichier sélectionné"
+      Top             =   3608
+      Width           =   1575
+   End
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   5888
+      TabIndex        =   0
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   3608
+      Width           =   1575
    End
    Begin VB.Label Label1 
       Caption         =   "Zones mémoire à enregistrer"
       Height          =   255
-      Left            =   120
-      TabIndex        =   9
-      Top             =   120
+      Left            =   128
+      TabIndex        =   13
+      Top             =   128
       Width           =   2175
+   End
+   Begin VB.Label Label2 
+      Caption         =   "Chemin du fichier"
+      Height          =   255
+      Left            =   4208
+      TabIndex        =   12
+      Top             =   2648
+      Width           =   3255
+   End
+   Begin VB.Label lblSize 
+      Caption         =   "Taille du fichier résultant=[0]"
+      Height          =   615
+      Left            =   4208
+      TabIndex        =   11
+      ToolTipText     =   "Taille estimée du fichier qui sera créé"
+      Top             =   1808
+      Width           =   3255
    End
    Begin VB.Menu mnuPopUp 
       Caption         =   "mnuPopUp"
@@ -196,6 +204,7 @@ Option Explicit
 'FORM DE SAUVEGARDE DU CONTENU MEMOIRE D'UN PROCESSUS
 '=======================================================
 
+Private Lang As New clsLang
 Private clsPref As clsIniForm
 Private LS() As Long
 
@@ -209,7 +218,7 @@ End Sub
 
 Private Sub cmdBrowse_Click()
 'browse
-Dim x As Long
+Dim X As Long
     
     On Error GoTo CancelPushed
     
@@ -224,9 +233,9 @@ Dim x As Long
     
     If cFile.FileExists(txtPath.Text) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
+        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
             vbYesNo, Lang.GetString("_War"))
-        If Not (x = vbYes) Then Exit Sub
+        If Not (X = vbYes) Then Exit Sub
     End If
     
 CancelPushed:
@@ -266,7 +275,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     
@@ -287,27 +296,27 @@ End Sub
 Private Sub RecalcSize()
 'alors on recalcule la taille du fichier résultat
 Dim lSize As Long
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 Dim s As String
     
     lSize = 0
-    For x = 0 To lstList.ListCount - 1
-        s = Left$(lstList.List(x), Len(lstList.List(x)) - 1)  'garde l'item sans le ']' final
-        y = InStrRev(s, "[", , vbBinaryCompare)
-        s = Mid$(s, y + 1, Len(s) - y) 'contient la taille
+    For X = 0 To lstList.ListCount - 1
+        s = Left$(lstList.List(X), Len(lstList.List(X)) - 1)  'garde l'item sans le ']' final
+        Y = InStrRev(s, "[", , vbBinaryCompare)
+        s = Mid$(s, Y + 1, Len(s) - Y) 'contient la taille
         
-        If lstList.Selected(x) Then
+        If lstList.Selected(X) Then
             'ajoute la taille
             lSize = lSize + Val(s)
         End If
-    Next x
+    Next X
     
     lblSize.Caption = Lang.GetString("_SizeRes") & Trim$(Str$(lSize)) & "]" & _
         vbNewLine & FormatedSize(lSize)
 End Sub
 
-Private Sub lstList_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstList_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche le popup menu sur le listbox
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
     
@@ -316,13 +325,13 @@ End Sub
 
 Private Sub mnuDeselectAll_Click()
 'décoche toutes les cases
-Dim x As Long
+Dim X As Long
     
     lstList.Visible = False
     
-    For x = lstList.ListCount - 1 To 0 Step -1
-        lstList.Selected(x) = False
-    Next x
+    For X = lstList.ListCount - 1 To 0 Step -1
+        lstList.Selected(X) = False
+    Next X
     
     lblSize.Caption = Lang.GetString("_SizeRes") & "0]"
     lstList.Visible = True
@@ -330,14 +339,14 @@ End Sub
 
 Private Sub mnuSelectAll_Click()
 'coche toutes les cases
-Dim x As Long
+Dim X As Long
     
     lstList.Visible = False
     
-    For x = lstList.ListCount - 1 To 0 Step -1
+    For X = lstList.ListCount - 1 To 0 Step -1
         ValidateRect lstList.hWnd, 0&
-        lstList.Selected(x) = True
-    Next x
+        lstList.Selected(X) = True
+    Next X
     
     lstList.Visible = True
     
@@ -350,7 +359,7 @@ End Sub
 Public Sub GetProcess(ByVal lPID As Long, sFile As String)
 Dim clsProc As clsMemoryRW
 Dim LB() As Long
-Dim x As Long
+Dim X As Long
 
     txtPath.Text = sFile
     
@@ -363,9 +372,9 @@ Dim x As Long
     lstList.Visible = False
     
     'les ajoute
-    For x = 1 To UBound(LS())
-        lstList.AddItem "Offset=[" & CStr(LB(x)) & "], " & Lang.GetString("_Size") & "=[" & CStr(LS(x)) & "]"
-    Next x
+    For X = 1 To UBound(LS())
+        lstList.AddItem "Offset=[" & CStr(LB(X)) & "], " & Lang.GetString("_Size") & "=[" & CStr(LS(X)) & "]"
+    Next X
     
     lstList.Visible = True
         

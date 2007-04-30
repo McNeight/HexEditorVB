@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
 Begin VB.Form frmDrive 
    BorderStyle     =   3  'Fixed Dialog
@@ -19,48 +18,47 @@ Begin VB.Form frmDrive
    EndProperty
    Icon            =   "frmDrive.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   3705
    ScaleWidth      =   3450
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdRefresh 
+   Begin VB.CommandButton cmdOK 
+      Caption         =   "Ouvrir..."
       Height          =   375
-      Left            =   1238
+      Left            =   98
       TabIndex        =   3
-      Top             =   3240
+      ToolTipText     =   "Ouvrir ce lecteur"
+      Top             =   3225
+      Width           =   975
+   End
+   Begin VB.CommandButton cmdNo 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   2378
+      TabIndex        =   2
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   3225
+      Width           =   975
+   End
+   Begin VB.CommandButton cmdRefresh 
+      Caption         =   "Actualiser"
+      Height          =   375
+      Left            =   1216
+      TabIndex        =   0
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   3225
       Width           =   975
    End
    Begin DriveView_OCX.DriveView DV 
       Height          =   2895
-      Left            =   120
-      TabIndex        =   2
-      Top             =   120
+      Left            =   98
+      TabIndex        =   1
+      Top             =   105
       Width           =   3255
       _ExtentX        =   5741
       _ExtentY        =   5106
-   End
-   Begin VB.CommandButton cmdNo 
-      Height          =   375
-      Left            =   2400
-      TabIndex        =   1
-      Top             =   3240
-      Width           =   975
-   End
-   Begin VB.CommandButton cmdOK 
-      Height          =   375
-      Left            =   120
-      TabIndex        =   0
-      Top             =   3240
-      Width           =   975
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
    End
 End
 Attribute VB_Name = "frmDrive"
@@ -105,6 +103,7 @@ Option Explicit
 '=======================================================
 'FORM PERMETTANT LE CHOIX DU DRIVE A OUVRIR
 '=======================================================
+Private Lang As New clsLang
 
 
 '=======================================================
@@ -197,7 +196,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     

@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmDates 
    BorderStyle     =   1  'Fixed Single
@@ -19,211 +18,70 @@ Begin VB.Form frmDates
    EndProperty
    Icon            =   "frmDates.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   4680
    ScaleWidth      =   6720
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdRefresh 
+   Begin VB.TextBox txtFile 
+      BorderStyle     =   0  'None
+      Height          =   285
+      Left            =   833
+      TabIndex        =   25
+      ToolTipText     =   "Emplacement du fichier"
+      Top             =   173
+      Width           =   3615
+   End
+   Begin VB.CommandButton cmdBrowse 
+      Caption         =   "..."
       Height          =   255
-      Left            =   5280
-      TabIndex        =   2
-      Top             =   240
-      Width           =   1215
+      Left            =   4673
+      TabIndex        =   24
+      ToolTipText     =   "Sélection du fichier"
+      Top             =   173
+      Width           =   375
    End
    Begin VB.Frame Frame1 
-      Caption         =   "Date de dernier accès actuelle"
+      Caption         =   "Date de création actuelle"
       Height          =   1095
-      Index           =   4
-      Left            =   3600
-      TabIndex        =   22
-      Top             =   1920
+      Index           =   3
+      Left            =   3593
+      TabIndex        =   21
+      Top             =   653
       Width           =   3015
-      Begin VB.Label lblHour 
-         Alignment       =   2  'Center
-         Appearance      =   0  'Flat
-         BackColor       =   &H80000005&
-         ForeColor       =   &H80000008&
-         Height          =   255
-         Index           =   1
-         Left            =   120
-         TabIndex        =   24
-         Top             =   720
-         Width           =   2775
-      End
       Begin VB.Label lblDate 
          Alignment       =   2  'Center
          Appearance      =   0  'Flat
          BackColor       =   &H80000005&
          ForeColor       =   &H80000008&
          Height          =   255
-         Index           =   1
+         Index           =   0
          Left            =   120
          TabIndex        =   23
          Top             =   360
          Width           =   2775
       End
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Date de dernière modification actuelle"
-      Height          =   1215
-      Index           =   5
-      Left            =   3600
-      TabIndex        =   19
-      Top             =   3120
-      Width           =   3015
       Begin VB.Label lblHour 
          Alignment       =   2  'Center
          Appearance      =   0  'Flat
          BackColor       =   &H80000005&
          ForeColor       =   &H80000008&
          Height          =   255
-         Index           =   2
+         Index           =   0
          Left            =   120
-         TabIndex        =   26
+         TabIndex        =   22
          Top             =   720
          Width           =   2775
-      End
-      Begin VB.Label lblDate 
-         Alignment       =   2  'Center
-         Appearance      =   0  'Flat
-         BackColor       =   &H80000005&
-         ForeColor       =   &H80000008&
-         Height          =   255
-         Index           =   2
-         Left            =   120
-         TabIndex        =   25
-         Top             =   360
-         Width           =   2775
-      End
-   End
-   Begin VB.CommandButton cmdQuit 
-      Height          =   375
-      Left            =   1560
-      TabIndex        =   10
-      Top             =   4200
-      Width           =   1215
-   End
-   Begin VB.CommandButton cmdAppliquer 
-      Height          =   375
-      Left            =   120
-      TabIndex        =   9
-      Top             =   4200
-      Width           =   1215
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Date de dernière modification"
-      Height          =   855
-      Index           =   2
-      Left            =   120
-      TabIndex        =   15
-      Top             =   3120
-      Width           =   3255
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   495
-         Index           =   2
-         Left            =   120
-         ScaleHeight     =   495
-         ScaleWidth      =   3015
-         TabIndex        =   18
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   3015
-         Begin VB.CommandButton cmdDefaut 
-            Caption         =   "Par défaut"
-            Height          =   255
-            Index           =   2
-            Left            =   2040
-            TabIndex        =   8
-            ToolTipText     =   "Dates par défaut (actuelles) du fichier"
-            Top             =   120
-            Width           =   975
-         End
-         Begin MSComCtl2.DTPicker DT 
-            Height          =   300
-            Index           =   2
-            Left            =   0
-            TabIndex        =   7
-            Top             =   120
-            Width           =   1935
-            _ExtentX        =   3413
-            _ExtentY        =   529
-            _Version        =   393216
-            CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63700995
-            CurrentDate     =   39133
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Date de dernier accès"
-      Height          =   855
-      Index           =   1
-      Left            =   120
-      TabIndex        =   14
-      Top             =   1920
-      Width           =   3255
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   495
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   495
-         ScaleWidth      =   3015
-         TabIndex        =   17
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   3015
-         Begin VB.CommandButton cmdDefaut 
-            Caption         =   "Par défaut"
-            Height          =   255
-            Index           =   1
-            Left            =   2040
-            TabIndex        =   6
-            ToolTipText     =   "Dates par défaut (actuelles) du fichier"
-            Top             =   120
-            Width           =   975
-         End
-         Begin MSComCtl2.DTPicker DT 
-            Height          =   300
-            Index           =   1
-            Left            =   0
-            TabIndex        =   5
-            Top             =   120
-            Width           =   1935
-            _ExtentX        =   3413
-            _ExtentY        =   529
-            _Version        =   393216
-            CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63700995
-            CurrentDate     =   39133
-         End
       End
    End
    Begin VB.Frame Frame1 
       Caption         =   "Date de création"
       Height          =   855
       Index           =   0
-      Left            =   120
-      TabIndex        =   13
-      Top             =   720
+      Left            =   113
+      TabIndex        =   17
+      Top             =   653
       Width           =   3375
-      Begin MSComCtl2.DTPicker DT 
-         Height          =   300
-         Index           =   0
-         Left            =   120
-         TabIndex        =   3
-         Top             =   360
-         Width           =   1935
-         _ExtentX        =   3413
-         _ExtentY        =   529
-         _Version        =   393216
-         CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-         Format          =   63700995
-         CurrentDate     =   39133.9583333333
-      End
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
          Height          =   495
@@ -231,7 +89,7 @@ Begin VB.Form frmDates
          Left            =   120
          ScaleHeight     =   495
          ScaleWidth      =   3135
-         TabIndex        =   16
+         TabIndex        =   19
          TabStop         =   0   'False
          Top             =   240
          Width           =   3135
@@ -240,74 +98,217 @@ Begin VB.Form frmDates
             Height          =   255
             Index           =   0
             Left            =   2040
-            TabIndex        =   4
+            TabIndex        =   20
             ToolTipText     =   "Dates par défaut (actuelles) du fichier"
             Top             =   120
             Width           =   975
          End
       End
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Date de création actuelle"
-      Height          =   1095
-      Index           =   3
-      Left            =   3600
-      TabIndex        =   12
-      Top             =   720
-      Width           =   3015
-      Begin VB.Label lblHour 
-         Alignment       =   2  'Center
-         Appearance      =   0  'Flat
-         BackColor       =   &H80000005&
-         ForeColor       =   &H80000008&
-         Height          =   255
+      Begin MSComCtl2.DTPicker DT 
+         Height          =   300
          Index           =   0
          Left            =   120
-         TabIndex        =   21
-         Top             =   720
-         Width           =   2775
+         TabIndex        =   18
+         Top             =   360
+         Width           =   1935
+         _ExtentX        =   3413
+         _ExtentY        =   529
+         _Version        =   393216
+         CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
+         Format          =   64159747
+         CurrentDate     =   39133.9583333333
       End
+   End
+   Begin VB.Frame Frame1 
+      Caption         =   "Date de dernier accès"
+      Height          =   855
+      Index           =   1
+      Left            =   113
+      TabIndex        =   13
+      Top             =   1853
+      Width           =   3255
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   495
+         Index           =   1
+         Left            =   120
+         ScaleHeight     =   495
+         ScaleWidth      =   3015
+         TabIndex        =   14
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   3015
+         Begin VB.CommandButton cmdDefaut 
+            Caption         =   "Par défaut"
+            Height          =   255
+            Index           =   1
+            Left            =   2040
+            TabIndex        =   15
+            ToolTipText     =   "Dates par défaut (actuelles) du fichier"
+            Top             =   120
+            Width           =   975
+         End
+         Begin MSComCtl2.DTPicker DT 
+            Height          =   300
+            Index           =   1
+            Left            =   0
+            TabIndex        =   16
+            Top             =   120
+            Width           =   1935
+            _ExtentX        =   3413
+            _ExtentY        =   529
+            _Version        =   393216
+            CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
+            Format          =   64159747
+            CurrentDate     =   39133
+         End
+      End
+   End
+   Begin VB.Frame Frame1 
+      Caption         =   "Date de dernière modification"
+      Height          =   855
+      Index           =   2
+      Left            =   113
+      TabIndex        =   9
+      Top             =   3053
+      Width           =   3255
+      Begin VB.PictureBox Picture1 
+         BorderStyle     =   0  'None
+         Height          =   495
+         Index           =   2
+         Left            =   120
+         ScaleHeight     =   495
+         ScaleWidth      =   3015
+         TabIndex        =   10
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   3015
+         Begin VB.CommandButton cmdDefaut 
+            Caption         =   "Par défaut"
+            Height          =   255
+            Index           =   2
+            Left            =   2040
+            TabIndex        =   11
+            ToolTipText     =   "Dates par défaut (actuelles) du fichier"
+            Top             =   120
+            Width           =   975
+         End
+         Begin MSComCtl2.DTPicker DT 
+            Height          =   300
+            Index           =   2
+            Left            =   0
+            TabIndex        =   12
+            Top             =   120
+            Width           =   1935
+            _ExtentX        =   3413
+            _ExtentY        =   529
+            _Version        =   393216
+            CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
+            Format          =   64159747
+            CurrentDate     =   39133
+         End
+      End
+   End
+   Begin VB.CommandButton cmdAppliquer 
+      Caption         =   "Appliquer"
+      Height          =   375
+      Left            =   113
+      TabIndex        =   8
+      ToolTipText     =   "Appliquer les changements"
+      Top             =   4133
+      Width           =   1215
+   End
+   Begin VB.CommandButton cmdQuit 
+      Caption         =   "Fermer"
+      Height          =   375
+      Left            =   1553
+      TabIndex        =   7
+      ToolTipText     =   "Fermer la fenêtre"
+      Top             =   4133
+      Width           =   1215
+   End
+   Begin VB.Frame Frame1 
+      Caption         =   "Date de dernière modification actuelle"
+      Height          =   1215
+      Index           =   5
+      Left            =   3593
+      TabIndex        =   4
+      Top             =   3053
+      Width           =   3015
       Begin VB.Label lblDate 
          Alignment       =   2  'Center
          Appearance      =   0  'Flat
          BackColor       =   &H80000005&
          ForeColor       =   &H80000008&
          Height          =   255
-         Index           =   0
+         Index           =   2
          Left            =   120
-         TabIndex        =   20
+         TabIndex        =   6
          Top             =   360
          Width           =   2775
       End
+      Begin VB.Label lblHour 
+         Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
+         Height          =   255
+         Index           =   2
+         Left            =   120
+         TabIndex        =   5
+         Top             =   720
+         Width           =   2775
+      End
    End
-   Begin VB.CommandButton cmdBrowse 
-      Height          =   255
-      Left            =   4680
+   Begin VB.Frame Frame1 
+      Caption         =   "Date de dernier accès actuelle"
+      Height          =   1095
+      Index           =   4
+      Left            =   3593
       TabIndex        =   1
-      Top             =   240
-      Width           =   375
+      Top             =   1853
+      Width           =   3015
+      Begin VB.Label lblDate 
+         Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
+         Height          =   255
+         Index           =   1
+         Left            =   120
+         TabIndex        =   3
+         Top             =   360
+         Width           =   2775
+      End
+      Begin VB.Label lblHour 
+         Alignment       =   2  'Center
+         Appearance      =   0  'Flat
+         BackColor       =   &H80000005&
+         ForeColor       =   &H80000008&
+         Height          =   255
+         Index           =   1
+         Left            =   120
+         TabIndex        =   2
+         Top             =   720
+         Width           =   2775
+      End
    End
-   Begin VB.TextBox txtFile 
-      BorderStyle     =   0  'None
-      Height          =   285
-      Left            =   840
+   Begin VB.CommandButton cmdRefresh 
+      Caption         =   "Rafraichir"
+      Height          =   255
+      Left            =   5273
       TabIndex        =   0
-      Top             =   240
-      Width           =   3615
-   End
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
+      ToolTipText     =   "Rafraichir les dates"
+      Top             =   173
+      Width           =   1215
    End
    Begin VB.Label Label1 
       Caption         =   "Fichier :"
       Height          =   255
       Index           =   0
-      Left            =   120
-      TabIndex        =   11
-      Top             =   240
+      Left            =   113
+      TabIndex        =   26
+      Top             =   173
       Width           =   615
    End
 End
@@ -352,7 +353,7 @@ Option Explicit
 '=======================================================
 'FORM PERMETTANT DE CHANGER LES DATES D'UN FICHIER
 '=======================================================
-
+Private Lang As New clsLang
 Private mFile As FileSystemLibrary.File
 
 '=======================================================
@@ -424,6 +425,10 @@ End Sub
 'récupère le fichier
 '=======================================================
 Public Sub GetFile(ByVal tFile As FileSystemLibrary.File)
+    
+    'active la gestion des langues
+    Call Lang.ActiveLang(Me)
+    
     Set mFile = tFile
     Call ChangeDates
 End Sub
@@ -448,7 +453,7 @@ Private Sub Form_Load()
         End If
         
         'applique la langue désirée aux controles
-        .Language = cPref.env_Lang
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
         .LoadControlsCaption
     End With
     
