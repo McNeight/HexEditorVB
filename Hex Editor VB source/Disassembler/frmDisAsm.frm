@@ -1,6 +1,5 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{C77F04DF-B546-4EBA-AFE7-F46C1BA9BCF4}#1.0#0"; "LanguageTranslator.ocx"
 Begin VB.MDIForm frmDisAsm 
    BackColor       =   &H8000000C&
    Caption         =   "Désassembleur d'exécutables"
@@ -11,12 +10,6 @@ Begin VB.MDIForm frmDisAsm
    Icon            =   "frmDisAsm.frx":0000
    LinkTopic       =   "MDIForm1"
    StartUpPosition =   2  'CenterScreen
-   Begin LanguageTranslator.ctrlLanguage Lang 
-      Left            =   0
-      Top             =   0
-      _ExtentX        =   1402
-      _ExtentY        =   1402
-   End
    Begin ComctlLib.StatusBar Sb 
       Align           =   2  'Align Bottom
       Height          =   255
@@ -35,7 +28,6 @@ Begin VB.MDIForm frmDisAsm
             MinWidth        =   14993
             Text            =   "Status = Ready"
             TextSave        =   "Status = Ready"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -185,13 +177,14 @@ Option Explicit
 'PROJET DE DESASSEMBLAGE D'EXECUTABLES
 '=======================================================
 
+Private Lang As New clsLang
 Private sFile As String 'fichier ouvert
 Private sFileW As String
 
 Private Sub mnuLang_Click(Index As Integer)
 'on change de langue
 Dim s As String
-Dim x As Long
+Dim X As Long
 
     'détermine le path du dossier
     If App.LogMode = 0 Then
@@ -207,9 +200,9 @@ Dim x As Long
     If cFile.FileExists(s) = False Then MsgBox "Le fichier de langue n'existe pas !", vbCritical, "Erreur": Exit Sub
     
     'on décoche tout les menus
-    For x = 1 To UBound(sLang())
-        mnuLang(x).Checked = False
-    Next x
+    For X = 1 To UBound(sLang())
+        mnuLang(X).Checked = False
+    Next X
     
     'on coche celui sélectionné
     mnuLang(Index).Checked = True
@@ -229,7 +222,7 @@ Dim x As Long
 End Sub
 
 Private Sub MDIForm_Load()
-Dim x As Long
+Dim X As Long
 
     On Error Resume Next
     
@@ -250,22 +243,24 @@ Dim x As Long
     End If
     
     'applique la langue désirée aux controles
+    Call Lang.ActiveLang(Me)
+    
     Lang.Language = cPref.env_Lang
     Lang.LoadControlsCaption
     
     'chargement des menus de langue (sLang())
-    For x = 1 To UBound(sLang())
+    For X = 1 To UBound(sLang())
         'ajoute une entrée au menu
-        Load Me.mnuLang(x)
-        Me.mnuLang(x).Caption = Left$(cFile.GetFileName(sLang(x)), Len(cFile.GetFileName(sLang(x))) - 4)
-    Next x
+        Load Me.mnuLang(X)
+        Me.mnuLang(X).Caption = Left$(cFile.GetFileName(sLang(X)), Len(cFile.GetFileName(sLang(X))) - 4)
+    Next X
     
     'coche le bon menu
-    For x = 1 To mnuLang.Count
+    For X = 1 To mnuLang.Count
         
-        If Replace$(Me.mnuLang(x).Caption, "&", vbNullString) = cPref.env_Lang _
-            Then Me.mnuLang(x).Checked = True
-    Next x
+        If Replace$(Me.mnuLang(X).Caption, "&", vbNullString) = cPref.env_Lang _
+            Then Me.mnuLang(X).Checked = True
+    Next X
 End Sub
 
 Private Sub mnuDisAsm_Click()
