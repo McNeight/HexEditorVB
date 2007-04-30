@@ -192,34 +192,42 @@ Private bRecursive As Boolean   'pour éviter des boucles lors de l'update
 '=======================================================
 Private Sub UserControl_InitProperties()
     'valeurs par défaut
-    Me.Min = 0
-    Me.Max = 100
-    Me.Value = 50
-    Me.LargeChange = 10
-    Me.SmallChange = 1
+    With Me
+        .Min = 0
+        .Max = 100
+        .Value = 50
+        .LargeChange = 10
+        .SmallChange = 1
+    End With
 End Sub
 
 Private Sub UserControl_Terminate()
 'enleve le hook
-    sc_Terminate
+    Call sc_Terminate
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
-    Call PropBag.WriteProperty("Min", Me.Min, 1)
-    Call PropBag.WriteProperty("Value", Me.Value, 50)
-    Call PropBag.WriteProperty("LargeChange", Me.LargeChange, 10)
-    Call PropBag.WriteProperty("SmallChange", Me.SmallChange, 1)
-    Call PropBag.WriteProperty("Max", Me.Max, 100)
+    With PropBag
+        Call .WriteProperty("Min", Me.Min, 1)
+        Call .WriteProperty("Value", Me.Value, 50)
+        Call .WriteProperty("LargeChange", Me.LargeChange, 10)
+        Call .WriteProperty("SmallChange", Me.SmallChange, 1)
+        Call .WriteProperty("Max", Me.Max, 100)
+    End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     
-    Me.Min = PropBag.ReadProperty("Min", 1)
-    Me.Value = PropBag.ReadProperty("Value", 50)
-    Me.Max = PropBag.ReadProperty("Max", 100)
-    Me.LargeChange = PropBag.ReadProperty("LargeChange", 100)
-    Me.SmallChange = PropBag.ReadProperty("SmallChange", 100)
+    With PropBag
+        Me.Min = .ReadProperty("Min", 1)
+        Me.Value = .ReadProperty("Value", 50)
+        Me.Max = .ReadProperty("Max", 100)
+        Me.LargeChange = .ReadProperty("LargeChange", 100)
+        Me.SmallChange = .ReadProperty("SmallChange", 100)
+    End With
+    
     lOldValue = VS.Value
-    RefreshVS
+    
+    Call RefreshVS
     
     'c'est la bonne place pour commencer à subclasser
     If Ambient.UserMode Then  'If we're not in design mode
@@ -232,42 +240,44 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
       
       If bTrack Then
         'OS supports mouse leave, so let's subclass for it
-      With VS
-        'Subclass the UserControl
+        With VS
+            'Subclass the UserControl
+            
+            sc_Subclass .hWnd
+            
+            sc_AddMsg .hWnd, WM_MOUSEWHEEL
+            sc_AddMsg .hWnd, WM_MOUSEMOVE, MSG_AFTER
+            sc_AddMsg .hWnd, WM_MOUSELEAVE, MSG_AFTER
+            
         
-        sc_Subclass .hWnd
+            sc_AddMsg .hWnd, WM_MBUTTONDBLCLK
+            sc_AddMsg .hWnd, WM_MBUTTONDOWN
+            sc_AddMsg .hWnd, WM_MBUTTONUP
+            sc_AddMsg .hWnd, WM_RBUTTONDBLCLK
+            sc_AddMsg .hWnd, WM_RBUTTONDOWN
+            sc_AddMsg .hWnd, WM_RBUTTONUP
+            sc_AddMsg .hWnd, WM_LBUTTONDBLCLK
+            sc_AddMsg .hWnd, WM_LBUTTONDOWN     'UP
         
-        sc_AddMsg .hWnd, WM_MOUSEWHEEL
-        sc_AddMsg .hWnd, WM_MOUSEMOVE, MSG_AFTER
-        sc_AddMsg .hWnd, WM_MOUSELEAVE, MSG_AFTER
-        
-
-        sc_AddMsg .hWnd, WM_MBUTTONDBLCLK
-        sc_AddMsg .hWnd, WM_MBUTTONDOWN
-        sc_AddMsg .hWnd, WM_MBUTTONUP
-        sc_AddMsg .hWnd, WM_RBUTTONDBLCLK
-        sc_AddMsg .hWnd, WM_RBUTTONDOWN
-        sc_AddMsg .hWnd, WM_RBUTTONUP
-        sc_AddMsg .hWnd, WM_LBUTTONDBLCLK
-        sc_AddMsg .hWnd, WM_LBUTTONDOWN     'UP
-        
-      End With
+        End With
     End If
     
     'Subclass the parent form
     With UserControl.Parent
-      sc_Subclass .hWnd
-      sc_AddMsg .hWnd, WM_MOVING, MSG_AFTER
-      sc_AddMsg .hWnd, WM_SIZING, MSG_AFTER
-      sc_AddMsg .hWnd, WM_EXITSIZEMOVE, MSG_AFTER
+        sc_Subclass .hWnd
+        sc_AddMsg .hWnd, WM_MOVING, MSG_AFTER
+        sc_AddMsg .hWnd, WM_SIZING, MSG_AFTER
+        sc_AddMsg .hWnd, WM_EXITSIZEMOVE, MSG_AFTER
     End With
     End If
 End Sub
 Private Sub UserControl_Resize()
-    VS.Height = UserControl.Height
-    VS.Width = UserControl.Width
-    VS.Left = 0
-    VS.Top = 0
+    With VS
+        .Height = UserControl.Height
+        .Width = UserControl.Width
+        .Left = 0
+        .Top = 0
+    End With
 End Sub
 
 
@@ -298,13 +308,14 @@ Dim VirtualRange As Currency
 
     'calcule tout d'abord les intervalles réelles et virtuelles
     
-    CheckValues 'vérifie que les valeurs sont compatibles
+    Call CheckValues 'vérifie que les valeurs sont compatibles
 
     RealRange = VS.Max - VS.Min
     VirtualRange = lMax - lMin
     
     'calcule maintenant le pourcentage du VS (vrituel ou réel, c'est la même chose)
-    If VirtualRange Then lPercent = (lValue - lMin) / VirtualRange Else lPercent = 0
+    If VirtualRange Then lPercent = (lValue - lMin) / VirtualRange _
+        Else lPercent = 0
     
     'affecte la nouvelle value au VRAI VS
     bRecursive = True   'évite de faire une boucle
@@ -326,7 +337,7 @@ Dim lEcart As Currency
 Dim lDelta As Currency
 Dim l As Currency
 
-    CheckValues 'vérifie que les valeurs sont compatibles
+    Call CheckValues 'vérifie que les valeurs sont compatibles
 
     If bRecursive Then Exit Sub
     
@@ -348,7 +359,8 @@ Dim l As Currency
         'calcule les range et le percentage
         RealRange = VS.Max - VS.Min
         VirtualRange = lMax - lMin
-        If VirtualRange Then lPercent = (lValue - lMin) / VirtualRange Else lPercent = 0
+        If VirtualRange Then lPercent = (lValue - lMin) / VirtualRange _
+            Else lPercent = 0
                 
         'affecte les VRAIES valeurs
         l = lPercent * RealRange
@@ -362,7 +374,8 @@ Dim l As Currency
         'calcule les valeurs range (identique)
         RealRange = VS.Max - VS.Min
         VirtualRange = lMax - lMin
-        If VirtualRange Then lPercent = (VS.Value - VS.Min) / RealRange Else lPercent = 0    'pourcentage NOUVEAU
+        If VirtualRange Then lPercent = (VS.Value - VS.Min) / RealRange _
+            Else lPercent = 0    'pourcentage NOUVEAU
         
         'affecte les valeurs VIRTUELLES
         lValue = Round(lMin + lPercent * VirtualRange)  'arrondi, car le currency gère les décimales
@@ -392,16 +405,18 @@ Dim l As Currency
     '/!\ Vérifications PRIMAIRES qui doivent aussi être faites dans les Property Let
     'du usercontrol
 
-    If Me.Min > Me.Max Then
-        l = Me.Min
-        Me.Min = Me.Max
-        Me.Max = l
-    End If
-    If Me.Value > Me.Max Then
-        Me.Value = Me.Max
-    ElseIf Me.Value < Me.Min Then
-        Me.Value = Me.Min
-    End If
+    With Me
+        If .Min > .Max Then
+            l = .Min
+            .Min = .Max
+            .Max = l
+        End If
+        If .Value > .Max Then
+            .Value = .Max
+        ElseIf .Value < .Min Then
+            .Value = .Min
+        End If
+    End With
 End Sub
 
 

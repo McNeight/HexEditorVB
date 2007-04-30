@@ -80,9 +80,11 @@ Public Event MouseUp(Button As Integer, Shift As Integer, x As Single, y As Sing
 '=======================================================
 Private Sub UserControl_InitProperties()
 'valeurs par défaut
-    Me.BackColor = vbWhite
-    Me.BarreColor1 = vbRed
-    Me.BarreColor2 = vbRed
+    With Me
+        .BackColor = vbWhite
+        .BarreColor1 = vbRed
+        .BarreColor2 = vbRed
+    End With
 End Sub
 
 '=======================================================
@@ -109,7 +111,8 @@ Dim dPxlPerX
     'en X
     dPxlPerX = (UserControl.Width / 256)
     
-    RaiseEvent MouseMove(Round((x - 30) / dPxlPerX), m(Round((x - 30) / dPxlPerX)), Button, Shift, x, y)
+    RaiseEvent MouseMove(Round((x - 30) / dPxlPerX), m(Round((x - 30) / _
+        dPxlPerX)), Button, Shift, x, y)
 End Sub
 Private Sub UserControl_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     RaiseEvent MouseUp(Button, Shift, x, y)
@@ -119,38 +122,42 @@ End Sub
 'USERCONTROL PROPERTIES
 '=======================================================
 Private Sub UserControl_Resize()
-    TraceGraph
+    Call TraceGraph
 End Sub
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
-    Call PropBag.WriteProperty("BackColor", Me.BackColor, vbWhite)
-    Call PropBag.WriteProperty("BarreColor1", Me.BarreColor1, vbRed)
-    Call PropBag.WriteProperty("BarreColor2", Me.BarreColor2, vbRed)
+    With PropBag
+        Call .WriteProperty("BackColor", Me.BackColor, vbWhite)
+        Call .WriteProperty("BarreColor1", Me.BarreColor1, vbRed)
+        Call .WriteProperty("BarreColor2", Me.BarreColor2, vbRed)
+    End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
-    Me.BackColor = PropBag.ReadProperty("BackColor", vbWhite)
-    Me.BarreColor1 = PropBag.ReadProperty("BarreColor1", vbRed)
-    Me.BarreColor2 = PropBag.ReadProperty("BarreColor2", vbRed)
+    With PropBag
+        Me.BackColor = .ReadProperty("BackColor", vbWhite)
+        Me.BarreColor1 = .ReadProperty("BarreColor1", vbRed)
+        Me.BarreColor2 = .ReadProperty("BarreColor2", vbRed)
+    End With
 End Sub
 Public Property Get BackColor() As OLE_COLOR
     BackColor = lBackColor
 End Property
 Public Property Let BackColor(BackColor As OLE_COLOR)
     lBackColor = BackColor
-    TraceGraph
+    Call TraceGraph
 End Property
 Public Property Get BarreColor1() As OLE_COLOR
     BarreColor1 = lBarreColor1
 End Property
 Public Property Let BarreColor1(BarreColor1 As OLE_COLOR)
     lBarreColor1 = BarreColor1
-    TraceGraph
+    Call TraceGraph
 End Property
 Public Property Get BarreColor2() As OLE_COLOR
     BarreColor2 = lBarreColor2
 End Property
 Public Property Let BarreColor2(BarreColor2 As OLE_COLOR)
     lBarreColor2 = BarreColor2
-    TraceGraph
+    Call TraceGraph
 End Property
 
 
@@ -168,10 +175,15 @@ Dim lColorR As Double
 Dim lColorG As Double
 Dim lColorB As Double
 Dim lColorRGB As Long
-Dim lR1 As Long, lG1 As Long, lB1 As Long, lR2 As Long, lG2 As Long, lB2 As Long
+Dim lR1 As Long
+Dim lG1 As Long
+Dim lB1 As Long
+Dim lR2 As Long
+Dim lG2 As Long
+Dim lB2 As Long
 
 
-    ClearGraphe
+    Call ClearGraphe
     
     'calcule la valeur maximale (pour l'échelle)
     For x = 0 To 255
@@ -254,7 +266,7 @@ End Sub
 'efface le graphe
 '=======================================================
 Public Sub ClearGraphe()
-    UserControl.Cls
+    Call UserControl.Cls
 End Sub
 
 '=======================================================
@@ -266,7 +278,7 @@ Public Sub SaveBMP(ByVal sFile As String, Optional ByVal lWidth As Long = 640, O
         .Width = lWidth
         .Height = lHeight
         .Picture = UserControl.Image
-        SavePicture .Picture, sFile
+        Call SavePicture(.Picture, sFile)
     End With
 End Sub
 
