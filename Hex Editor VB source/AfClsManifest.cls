@@ -177,11 +177,11 @@ Public Sub Run(Optional ByVal bReLoad As Boolean = True)
         Call RegQueryValueEx(lKeyHandle, sPathFileExe, 0&, REG_SZ, sBuffer, Len(sBuffer))
     
         sValue = LeftB$(sBuffer, 14)
-        sBuffer = Chr$(0)
+        sBuffer = vbNullChar
 
 '       si la clé n'existe pas ou n'est pas bonne, on la créé
         If sValue <> cDestValue Then
-            sValue = cDestValue & Chr$(0)
+            sValue = cDestValue & vbNullChar
             Call RegSetValueEx(lKeyHandle, sPathFileExe, 0&, REG_SZ, sValue, Len(sValue))
         End If
 
@@ -198,22 +198,22 @@ Public Sub Run(Optional ByVal bReLoad As Boolean = True)
     FF = FreeFile
     On Error GoTo ErrHandler
         Open sPathFileManifest For Output As #FF
-            Print #FF, "<?xml version=" & Chr$(34) & "1.0" & Chr$(34) & " encoding=" & Chr$(34) & "UTF-8" & Chr$(34) & " standalone=" & Chr$(34) & "yes" & Chr$(34) & "?>"
+            Print #FF, "<?xml version=" & Chr_(34) & "1.0" & Chr_(34) & " encoding=" & Chr_(34) & "UTF-8" & Chr_(34) & " standalone=" & Chr_(34) & "yes" & Chr_(34) & "?>"
             Print #FF, ""
-            Print #FF, "<assembly xmlns=" & Chr$(34) & "urn:schemas-microsoft-com:asm.v1" & Chr$(34) & " manifestVersion=" & Chr$(34) & "1.0" & Chr$(34) & "> <assemblyIdentity"
-            Print #FF, "    name=" & Chr$(34) & "Process Explorer" & Chr$(34)
-            Print #FF, "    processorArchitecture=" & Chr$(34) & "x86" & Chr$(34)
-            Print #FF, "    version=" & Chr$(34) & "1.0.0.0" & Chr$(34)
-            Print #FF, "    type=" & Chr$(34) & "win32" & Chr$(34) & "/>"
+            Print #FF, "<assembly xmlns=" & Chr_(34) & "urn:schemas-microsoft-com:asm.v1" & Chr_(34) & " manifestVersion=" & Chr_(34) & "1.0" & Chr_(34) & "> <assemblyIdentity"
+            Print #FF, "    name=" & Chr_(34) & "Process Explorer" & Chr_(34)
+            Print #FF, "    processorArchitecture=" & Chr_(34) & "x86" & Chr_(34)
+            Print #FF, "    version=" & Chr_(34) & "1.0.0.0" & Chr_(34)
+            Print #FF, "    type=" & Chr_(34) & "win32" & Chr_(34) & "/>"
             Print #FF, "<description>Process Explorer</description> <dependency>"
             Print #FF, "    <dependentAssembly>"
             Print #FF, "        <assemblyIdentity"
-            Print #FF, "            type=" & Chr$(34) & "win32" & Chr$(34)
-            Print #FF, "            name=" & Chr$(34) & "Microsoft.Windows.Common-Controls" & Chr$(34)
-            Print #FF, "            version=" & Chr$(34) & "6.0.0.0" & Chr$(34)
-            Print #FF, "            processorArchitecture=" & Chr$(34) & "x86" & Chr$(34)
-            Print #FF, "            publicKeyToken=" & Chr$(34) & "6595b64144ccf1df" & Chr$(34)
-            Print #FF, "            language=" & Chr$(34) & "*" & Chr$(34)
+            Print #FF, "            type=" & Chr_(34) & "win32" & Chr_(34)
+            Print #FF, "            name=" & Chr_(34) & "Microsoft.Windows.Common-Controls" & Chr_(34)
+            Print #FF, "            version=" & Chr_(34) & "6.0.0.0" & Chr_(34)
+            Print #FF, "            processorArchitecture=" & Chr_(34) & "x86" & Chr_(34)
+            Print #FF, "            publicKeyToken=" & Chr_(34) & "6595b64144ccf1df" & Chr_(34)
+            Print #FF, "            language=" & Chr_(34) & "*" & Chr_(34)
             Print #FF, "        />"
             Print #FF, "    </dependentAssembly>"
             Print #FF, "</dependency>"

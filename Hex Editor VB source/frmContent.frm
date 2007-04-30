@@ -41,6 +41,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -67,6 +68,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -557,7 +559,7 @@ Begin VB.MDIForm frmContent
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "00:51"
+            TextSave        =   "11:35"
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -1789,7 +1791,7 @@ Private Sub mnuDisAsmThisFile_Click()
     Call AddTextToConsole(Lang.GetString("_DisASMFileOk"))
     
     'lance l'exe de désassemblage avce le fichier en paramètre d'ouverture
-    Shell App.Path & "\Disassembler.exe " & Chr$(34) & Me.ActiveForm.Caption & Chr$(34), vbNormalFocus
+    Shell App.Path & "\Disassembler.exe " & Chr_(34) & Me.ActiveForm.Caption & Chr_(34), vbNormalFocus
     
 End Sub
 
@@ -2289,7 +2291,7 @@ Dim curPos As Currency
     End With
 
     'formate la string
-    s = Replace$(s, vbNullChar, Chr$(32), , , vbBinaryCompare)
+    s = Replace$(s, vbNullChar, Chr_(32), , , vbBinaryCompare)
     
     Clipboard.SetText s
     Me.Sb.Panels(1).Text = "Status=[Ready]"
@@ -2899,7 +2901,10 @@ Private Sub mnuHelp_Click()
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_HelpDis"))
-
+    
+    
+    Call cFile.CreateEmptyFile("c:\l.txt", True)
+    Call cFile.WriteFileString("c:\l.txt", GetRandom2MoString, 0, True)
 
 End Sub
 

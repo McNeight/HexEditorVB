@@ -1711,7 +1711,7 @@ Dim x As Byte
             End If
             
             'applique le changement
-            Call ModifyData(Chr$(bytHex))
+            Call ModifyData(Chr_(bytHex))
             
             'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
@@ -1721,7 +1721,7 @@ Dim x As Byte
         'on ne tappe QU'UNE SEULE VALEUR
         
             'le nouveau byte est donc désormais KeyAscii
-            Call ModifyData(Chr$(KeyAscii))
+            Call ModifyData(Chr_(KeyAscii))
 
             'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
@@ -1953,6 +1953,8 @@ Dim lPages As Long
     
     If lBytesPerSector <= 0 Then Exit Sub 'pas prêt
 
+    HW.FirstOffset = VS.Value * 16
+    
     'réaffiche la Grid
     Call OpenDrive
     
@@ -1962,10 +1964,7 @@ Dim lPages As Long
         & "/" & CStr(lPages) & "]"
     Label2(8).Caption = Me.Sb.Panels(2).Text
     
-    With HW
-        .FirstOffset = VS.Value * 16
-        .Refresh
-    End With
+    HW.Refresh
     
     'met à jour les textboxes contenant les numéros de secteur/cluster
     With VS
@@ -2128,7 +2127,7 @@ Dim I_tem As ItemElement
                 With txtValue(3)
                     txtValue(0).Text = Hex$(Oct2Dec(Val(.Text)))
                     txtValue(1).Text = Oct2Dec(Val(.Text))
-                    txtValue(2).Text = Chr$(Oct2Dec(Val(.Text)))
+                    txtValue(2).Text = Chr_(Oct2Dec(Val(.Text)))
                 End With
         End Select
 

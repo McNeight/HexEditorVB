@@ -42,17 +42,16 @@ Option Explicit
 Public Sub SanitFilesNow(LV As ListView, PGB As pgrBar)
 Dim x As Long
 Dim s As String
-Dim pt As Long
 Dim hFile As Long
-Dim cFile As FileSystemLibrary.FileSystem
 Dim curSize As Currency
 Dim nbBuf As Long
 Dim lLastSize As Long
 Dim y As Long
+Dim cASM As CAsmProc
+Dim Tbl(2097151) As Byte
 
-    Call SetCurrentDirectoryA(App.Path)
-    
-    Set cFile = New FileSystemLibrary.FileSystem
+    'instancie les classes
+    Set cASM = New CAsmProc
 
     With PGB
         .Max = LV.ListItems.Count
@@ -73,7 +72,7 @@ TestPres:
         If curSize < 2097152 Then
         
             'un seul buffer, on génère une string aléatoire unique
-            pt = GetPtRandomString
+            Call cASM.bnAlloc2MoAlea(Tbl(0))
             
             'on récupère le handle du fichier
             hFile = GetFileHandleWrite(LV.ListItems.Item(x))
@@ -86,15 +85,14 @@ TestPres:
             Call WriteBytesToFileHandle(hFile, pAA, 0, curSize)
     
             '//random string
-            Call WriteBytesToFileHandle(hFile, pt, 0, curSize)
-            Call FreePtRandomString(pt)
+            Call WriteBytesToFileHandle(hFile, VarPtr(Tbl(0)), 0, curSize)
     
             'rend la main
             PGB.Value = x
             DoEvents
                             
             'referme le handle
-            CloseHandle hFile
+            Call CloseHandle(hFile)
             
         Else
         
@@ -110,7 +108,7 @@ TestPres:
                 hFile = GetFileHandleWrite(LV.ListItems.Item(x))
                 
                 'on récupère un pointeur sur une string de 2Mo
-                pt = GetPtRandomString
+                Call cASM.bnAlloc2MoAlea(Tbl(0))
         
                 'on écrit dans le fichier
                 '// &H55
@@ -122,17 +120,14 @@ TestPres:
                     2097152)
         
                 '//random string
-                Call WriteBytesToFileHandle(hFile, pt, (y - 1) * 2097152, 2097152)
-        
-                'on libère les 2Mo
-                Call FreePtRandomString(pt)
+                Call WriteBytesToFileHandle(hFile, VarPtr(Tbl(0)), (y - 1) * 2097152, 2097152)
         
                 'rend la main de tps en tps
                 DoEvents
             Next y
             
             's'occupe du dernier buffer (plus petit)
-            pt = GetPtRandomString
+            Call cASM.bnAlloc2MoAlea(Tbl(0))
 
             '// &H55
             Call WriteBytesToFileHandle(hFile, p55, nbBuf * 2097152, _
@@ -143,11 +138,10 @@ TestPres:
                 lLastSize)
     
             '//random string
-            Call WriteBytesToFileHandle(hFile, pt, nbBuf * 2097152, lLastSize)
-            Call FreePtRandomString(pt)
+            Call WriteBytesToFileHandle(hFile, VarPtr(Tbl(0)), nbBuf * 2097152, lLastSize)
             
             'referme le handle
-            CloseHandle hFile
+            Call CloseHandle(hFile)
             
             DoEvents
             PGB.Value = x
@@ -159,6 +153,7 @@ TestPres:
     PGB.Value = PGB.Max
 
     'libère classe + affiche message
+    Set cASM = Nothing
     MsgBox frmSanitization.Lang.GetString("_SanitOk"), vbInformation, frmSanitization.Lang.GetString("_SanitOk")
 
 End Sub
@@ -171,13 +166,14 @@ Dim cDisk As FileSystemLibrary.PhysicalDisk
 Dim x As Long
 Dim secPerString As Long
 Dim s As String
-Dim pt As Long
 Dim hDevice As Long
 Dim bPerSec As Long
 Dim curOp As Currency
 Dim bMax As Long
+Dim cASM As CAsmProc
+Dim Tbl(2097151) As Byte
 
-    Call SetCurrentDirectoryA(App.Path)
+    Set cASM = New CAsmProc
 
     'vérifie que le disque est accessible
     With frmSanitization.Lang
@@ -187,7 +183,7 @@ Dim bMax As Long
         End If
     End With
     
-    'récupère les infos sue le disque
+    'récupère les infos sur le disque
     Set cDisk = cFile.GetPhysicalDisk(DiskNumber)
     
     'nombre de secteurs pour une string de 2Mo
@@ -209,7 +205,7 @@ Dim bMax As Long
     For x = 1 To bMax
     
         'on récupère un pointeur sur une string de 2Mo
-        pt = GetPtRandomString
+        Call cASM.bnAlloc2MoAlea(Tbl(0))
         
         'calcul unique
         curOp = CCur(x * secPerString)
@@ -222,10 +218,7 @@ Dim bMax As Long
         Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, pAA)
             
         '//random string
-        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, pt)
-        
-        'on libère les 2Mo
-        Call FreePtRandomString(pt)
+        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, VarPtr(Tbl(0)))
         
         'rend la main de tps en tps
         If (x Mod 5) = 0 Then
@@ -236,7 +229,7 @@ Dim bMax As Long
     Next x
     
     '//s'occupe de l'entête du disque
-        pt = GetPtRandomString
+        Call cASM.bnAlloc2MoAlea(Tbl(0))
         
         'on écrit dans le disque
         '// &H55
@@ -246,19 +239,17 @@ Dim bMax As Long
         Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, pAA)
             
         '//random string
-        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, pt)
-        
-        'on libère les 2Mo
-        Call FreePtRandomString(pt)
+        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, VarPtr(Tbl(0)))
     
     
     PGB.Value = PGB.Max
     
     'referme le handle
-    CloseHandle hDevice
+    Call CloseHandle(hDevice)
     
-    'libère classe + affiche message
+    'libère classes + affiche message
     Set cDisk = Nothing
+    Set cASM = Nothing
     MsgBox frmSanitization.Lang.GetString("_SanitOk"), vbInformation, frmSanitization.Lang.GetString("_SanitOk")
 
 End Sub
@@ -267,30 +258,29 @@ End Sub
 'lance la sanitization du disque logique
 '=======================================================
 Public Sub SanitDiskNow(ByVal sDisk As String, PGB As pgrBar)
-Dim cDriv As clsDrive
-Dim clsDriv As clsDiskInfos
+Dim cDriv As FileSystemLibrary.Drive
 Dim x As Long
 Dim secPerString As Long
 Dim s As String
-Dim pt As Long
 Dim hDevice As Long
 Dim bPerSec As Long
 Dim curOp As Currency
 Dim bMax As Long
-
-    Call SetCurrentDirectoryA(App.Path)
+Dim Tbl(2097151) As Byte
+Dim cASM As CAsmProc
+    
+    Set cASM = New CAsmProc
 
     'vérifie que le disque est accessible
-    Set clsDriv = New clsDiskInfos
     With frmSanitization.Lang
-        If clsDriv.IsLogicalDriveAccessible(sDisk) = False Then
+        If cFile.IsDriveAvailable(Left$(sDisk, 1)) = False Then
             MsgBox .GetString("_DiskNotR"), vbCritical, .GetString("_War")
             Exit Sub
         End If
     End With
     
     'récupère les infos sue le disque
-    Set cDriv = clsDriv.GetLogicalDrive(sDisk)
+    Set cDriv = cFile.GetDrive(Left$(sDisk, 1))
     
     'nombre de secteurs pour une string de 2Mo
     secPerString = 2097152 / cDriv.BytesPerSector
@@ -311,7 +301,7 @@ Dim bMax As Long
     For x = 1 To bMax
     
         'on récupère un pointeur sur une string de 2Mo
-        pt = GetPtRandomString
+        Call cASM.bnAlloc2MoAlea(Tbl(0))
         
         'calcul unique
         curOp = CCur(x * secPerString)
@@ -324,10 +314,7 @@ Dim bMax As Long
         Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, pAA)
             
         '//random string
-        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, pt)
-        
-        'on libère les 2Mo
-        Call FreePtRandomString(pt)
+        Call DirectWritePtHandle(hDevice, curOp, 2097152, bPerSec, VarPtr(cASM(0)))
         
         'rend la main de tps en tps
         If (x Mod 5) = 0 Then
@@ -338,7 +325,7 @@ Dim bMax As Long
     Next x
     
     '//s'occupe de l'entête du disque
-        pt = GetPtRandomString
+        Call cASM.bnAlloc2MoAlea(Tbl(0))
         
         'on écrit dans le disque
         '// &H55
@@ -348,33 +335,16 @@ Dim bMax As Long
         Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, pAA)
             
         '//random string
-        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, pt)
-        
-        'on libère les 2Mo
-        Call FreePtRandomString(pt)
-    
+        Call DirectWritePtHandle(hDevice, 0, 2097152, bPerSec, VarPtr(Tbl(0)))
     
     PGB.Value = PGB.Max
     
     'referme le handle
-    CloseHandle hDevice
+    Call CloseHandle(hDevice)
     
-    'libère classe + affiche message
-    Set clsDriv = Nothing
+    'libère classes + affiche message
     Set cDriv = Nothing
+    Set cASM = Nothing
     MsgBox frmSanitization.Lang.GetString("_SanitOk"), vbInformation, frmSanitization.Lang.GetString("_SanitOk")
 
-End Sub
-
-'=======================================================
-'récupère un pointeur sur une string aléatoire de 2Mo
-'(2*1024^2 octets) générée par la dll bnAlloc
-'/!\ ne pas oublier de libérer la mémoire une fois la string
-'utilisée et plus utile
-'=======================================================
-Public Function GetPtRandomString() As Long
-    GetPtRandomString = bnAlloc2MoAlea
-End Function
-Public Sub FreePtRandomString(pt As Long)
-    Call bnFreeAlloc(pt)
 End Sub

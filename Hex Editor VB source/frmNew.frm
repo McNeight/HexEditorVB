@@ -167,7 +167,7 @@ Dim s As String
     lFile = FreeFile
     
     Open sFile For Binary Access Write As lFile
-        Put lFile, , String$(lLen, Chr$(0))
+        Put lFile, , String$(lLen, vbNullChar)
     Close lFile
     
     Call Frm.GetFile(sFile)

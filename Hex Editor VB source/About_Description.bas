@@ -342,6 +342,7 @@ Attribute VB_Name = "About_Description"
 ' choses), ShareVB (source de Disassembler_Dll + GetFileBitmap)
 '
 ' La Dll de désassemblage est directement issue du travail de ShareVB.
+' CAsmProc a été entièrement codée par EBArtSoft.
 
 
 
@@ -358,6 +359,7 @@ Attribute VB_Name = "About_Description"
 ' Renfield (help for several things) , ShareVB (Disassembler_DLL + GetFileBitmap)
 '
 ' Disassembler DLL was coded by ShareVB.
+' CAsmProc was coded by EBArtSoft.
 
 
 

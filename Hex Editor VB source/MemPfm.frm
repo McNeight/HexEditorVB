@@ -1378,7 +1378,7 @@ Dim x As Byte
             Call AddAChange(bytHex)
             
             'ajoute l'historique
-            Me.AddHistoFrm actByteWritten, Chr$(bytHex), s, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, , HW.Item.Col, , pProcess.th32ProcessID
+            Me.AddHistoFrm actByteWritten, Chr_(bytHex), s, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, , HW.Item.Col, , pProcess.th32ProcessID
             
            'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
@@ -1395,7 +1395,7 @@ Dim x As Byte
             Call AddAChange(KeyAscii)
 
             'ajoute l'historique
-            Me.AddHistoFrm actByteWritten, Chr$(KeyAscii), s, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, , HW.Item.Col, , pProcess.th32ProcessID
+            Me.AddHistoFrm actByteWritten, Chr_(KeyAscii), s, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, , HW.Item.Col, , pProcess.th32ProcessID
             
            'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
@@ -1680,8 +1680,9 @@ End Sub
 '=======================================================
 Public Sub VS_Change(Value As Currency)
 Dim lPages As Long
+
     'réaffiche la Grid
-    OpenFile 16 * Value + 1, VS.Value * 16 + NumberPerPage * 16
+    Call OpenFile(16 * Value + 1, VS.Value * 16 + NumberPerPage * 16)
     
     'calcule le nbre de pages
     lPages = lLength / (NumberPerPage * 16) + 1
@@ -1690,7 +1691,6 @@ Dim lPages As Long
     Label2(8).Caption = Me.Sb.Panels(2).Text
     
     HW.FirstOffset = VS.Value * 16
-    
     HW.Refresh
 'frmContent.Caption = "min=" & VS.Min & "   val=" & VS.Value & "   max=" & VS.Max
 End Sub
@@ -1793,7 +1793,7 @@ Dim x As Long
 
     'écrit le nouveau byte dans la mémoire
     Call cMem.WriteBytesH(lHandle, HW.FirstOffset + 16 * (HW.Item.Line - 1) + _
-        HW.Item.Col - 1, Chr$(sNewByte))
+        HW.Item.Col - 1, Chr_(sNewByte))
     
     'refresh
     Call VS_Change(VS.Value)
@@ -1831,7 +1831,7 @@ Dim I_tem As ItemElement
                 'alors on change les autres champs que le champ "octal"
                 txtValue(0).Text = Hex$(Oct2Dec(Val(txtValue(3).Text)))
                 txtValue(1).Text = Oct2Dec(Val(txtValue(3).Text))
-                txtValue(2).Text = Chr$(Oct2Dec(Val(txtValue(3).Text)))
+                txtValue(2).Text = Chr_(Oct2Dec(Val(txtValue(3).Text)))
         End Select
 
         AddAChange (Hex2Dec(txtValue(0).Text))

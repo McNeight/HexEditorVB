@@ -39,28 +39,21 @@ Option Explicit
 
 
 '=======================================================
-'renvoie le nom du path sans le fichier
-'=======================================================
-Public Function GetFolderFormPath(ByVal sPath As String) As String
-    GetFolderFormPath = Left(sPath, InStrRev(sPath, "\", Len(sPath)))
-End Function
-
-'=======================================================
 'formate les 16 caractères d'une chaine de 16
 '=======================================================
 Public Function Formated16String(ByVal sString As String) As String
 Dim x As Long
-Dim s As String
 
     On Error Resume Next
     
-    s = vbNullString
+    'buffer
+    Formated16String = Space$(16)
     
     For x = 1 To 16
-        s = s & Byte2FormatedString(Asc(Mid$(sString, x, 1)))
+        Mid$(Formated16String, x, 1) = Byte2FormatedString(Asc(Mid$(sString, _
+            x, 1)))
     Next x
-    
-    Formated16String = s
+
 End Function
 
 '=======================================================
@@ -70,20 +63,18 @@ End Function
 '=======================================================
 Public Function FormatednString(ByVal sString As String) As String
 Dim x As Long
-Dim curLen As Currency
-Dim s As String
-
-    s = vbNullString
+Dim lLen As Long
     
     'longueur de la chaine à formater
-    curLen = Len(sString)
+    lLen = Len(sString)
     
-    For x = 1 To curLen
-        If (x Mod 2000) = 0 Then DoEvents
-        s = s & Byte2FormatedString(Asc(Mid$(sString, x, 1)))
+    'buffer
+    FormatednString = Space$(lLen)
+    
+    For x = 1 To lLen
+        Mid$(FormatednString, x, 1) = Byte2FormatedString(Asc(Mid$(sString, x, 1)))
     Next x
-    
-    FormatednString = s
+
 End Function
 
 '=======================================================
@@ -98,7 +89,9 @@ End Function
 '=======================================================
 'formate la taille d'un fichier
 '=======================================================
-Public Function FormatedSize(ByVal LS As Currency, Optional ByVal lRoundNumber = 5) As String
+Public Function FormatedSize(ByVal LS As Currency, Optional ByVal _
+    lRoundNumber = 5) As String
+    
 Dim dS As Double
 Dim n As Byte
 
@@ -158,12 +151,12 @@ Public Function Byte2FormatedString(ByVal bCar As Long) As String
 
     'renvoie un "." pour les caractères non affichables
 
-    If bCar < 32 Or bCar > 255 Or bCar = 144 Or bCar = 143 Then
+    If bCar < 32 Or bCar = 144 Or bCar = 143 Then
         'caractère non affichable
         Byte2FormatedString = "."
     Else
         'caractère OK
-        Byte2FormatedString = Chr$(bCar)
+        Byte2FormatedString = Chr_(bCar)
     End If
    
 End Function
@@ -172,7 +165,9 @@ End Function
 'renvoie un tableau de 1 à ubound de string
 'qui contient les strings comprises entre un caractère défini
 '=======================================================
-Public Sub SplitString(ByVal strSeparator As String, ByVal strString As String, ByRef strArray() As String)
+Public Sub SplitString(ByVal strSeparator As String, ByVal strString As String, _
+    ByRef strArray() As String)
+    
 Dim s As String
 Dim x As Long
 Dim i As Long
@@ -207,45 +202,11 @@ Dim s As String
 
     s = CStr(lNumber)
     
-    While Len(s) < lLongueur
-        s = "0" + s
-    Wend
+    Do While Len(s) < lLongueur
+        s = "0" & s
+    Loop
 
     FormatedAdress = s
-End Function
-
-'=======================================================
-'transforme une date en FILETIME vers une date en string
-'=======================================================
-Public Function FileTimeToString(fDate As FILETIME, Optional ByVal bConvertToLocal As Boolean = True) As String
-Dim sDate As SYSTEMTIME
-Dim sDay As String
-Dim sMonth As String
-Dim sYear As String
-Dim sHour As String
-Dim sMinute As String
-Dim sSecond As String
-Dim s As String
-
-    If bConvertToLocal Then
-        'conversion en LocalFileTime (temps universel ==> temps local)
-        FileTimeToLocalFileTime fDate, fDate
-    End If
-    
-    'conversion en SystemTime
-    FileTimeToSystemTime fDate, sDate
-    
-    'conversion en string vers un format du genre 24/04/2000 09:50:59
-    sDay = Trim$(IIf(sDate.wDay < 10, "0" & Trim$(Str$(sDate.wDay)), Trim$(Str$(sDate.wDay))))
-    sMonth = Trim$(IIf(sDate.wMonth < 10, "0" & Trim$(Str$(sDate.wMonth)), Trim$(Str$(sDate.wMonth))))
-    sHour = Trim$(IIf(sDate.wHour < 10, "0" & Trim$(Str$(sDate.wHour)), Trim$(Str$(sDate.wHour))))
-    sMinute = Trim$(IIf(sDate.wMinute < 10, "0" & Trim$(Str$(sDate.wMinute)), Trim$(Str$(sDate.wMinute))))
-    sSecond = Trim$(IIf(sDate.wSecond < 10, "0" & Trim$(Str$(sDate.wSecond)), Trim$(Str$(sDate.wSecond))))
-    sYear = sDate.wYear
-    
-    s = sDay & "/" & sMonth & "/" & sYear & " " & sHour & ":" & sMinute & ":" & sSecond
-    FileTimeToString = s
-
 End Function
 
 '=======================================================
@@ -261,24 +222,25 @@ Dim s As String
     'len("SystemRoot")=10
     If Left$(sPath, 10) = "SystemRoot" Then
         'obtient le répertoire de windows
-        sPath = cFile.GetSpecialFolder(CSIDL_WINDOWS) & "\" & Right$(sPath, Len(sPath) - 10)
+        sPath = cFile.GetSpecialFolder(CSIDL_WINDOWS) & "\" & Right$(sPath, _
+            Len(sPath) - 10)
     End If
     'len("\SystemRoor")=11
     If Left$(sPath, 11) = "\SystemRoot" Then
         'obtient le répertoire de windows
-        sPath = cFile.GetSpecialFolder(CSIDL_WINDOWS) & "\" & Right$(sPath, Len(sPath) - 11)
+        sPath = cFile.GetSpecialFolder(CSIDL_WINDOWS) & "\" & Right$(sPath, _
+            Len(sPath) - 11)
     End If
     
     s = sPath
-    While ((Asc(UCase(Left$(s, 1))) < 65 Or Asc(UCase(Left$(s, 1))) > 90) And Len(s) > 3)
+    Do While ((Asc(UCase$(Left$(s, 1))) < 65 Or Asc(UCase$(Left$(s, 1))) > 90) And Len(s) > 3)
         'alors ce n'est pas une lettre valide ==> on enlève cette lettre
         s = Right$(s, Len(s) - 1)
-        DoEvents
-    Wend
+    Loop
     
     'enlève deux antislash successifs et les remplace par un seul
     x = InStr(1, s, "\\")
-    If x > 0 Then
+    If x Then
         s = Left$(s, x - 1) & "\" & Right$(s, Len(s) - Len(Left$(s, x - 1)) - 2)
     End If
     
@@ -312,7 +274,7 @@ Public Function CreateMeHtmlString(lvPhys As ListView, lvLog As ListView) As Str
 Dim s As String
 Dim x As Long
 
-    s = "<html>" & vbNewLine & "<body>" & vbNewLine & "<font face=" & Chr$(34) & "courier new" & Chr$(34) & ">" & vbNewLine & "<H2>Disques physiques</H2>"
+    s = "<html>" & vbNewLine & "<body>" & vbNewLine & "<font face=" & Chr_(34) & "courier new" & Chr_(34) & ">" & vbNewLine & "<H2>Disques physiques</H2>"
     
     'disques physiques
     With lvPhys

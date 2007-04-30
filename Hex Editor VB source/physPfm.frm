@@ -20,7 +20,6 @@ Begin VB.Form physPfm
    EndProperty
    Icon            =   "physPfm.frx":0000
    LinkTopic       =   "physPfm"
-   LockControls    =   -1  'True
    MDIChild        =   -1  'True
    ScaleHeight     =   8415
    ScaleWidth      =   10155
@@ -96,208 +95,7 @@ Begin VB.Form physPfm
       LargeChange     =   100
       SmallChange     =   100
    End
-   Begin VB.Frame FrameInfo2 
-      Caption         =   "Informations"
-      ForeColor       =   &H00FF0000&
-      Height          =   5415
-      Left            =   7080
-      TabIndex        =   35
-      Top             =   2520
-      Width           =   2175
-      Begin VB.PictureBox Picture3 
-         BorderStyle     =   0  'None
-         Height          =   5055
-         Left            =   50
-         ScaleHeight     =   5055
-         ScaleWidth      =   2085
-         TabIndex        =   36
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   2085
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   22
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   51
-            Text            =   "Fichier=[path]"
-            Top             =   3840
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   21
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   50
-            Text            =   "Fichier=[path]"
-            Top             =   3600
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   20
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   49
-            Text            =   "Taille=[taille]"
-            Top             =   3360
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   27
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   48
-            Text            =   "Taille=[taille]"
-            Top             =   2760
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   26
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   47
-            Text            =   "Fichier=[path]"
-            Top             =   3000
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   19
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   46
-            Text            =   "Fichier=[path]"
-            Top             =   1920
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   18
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   45
-            Text            =   "Fichier=[path]"
-            Top             =   1560
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   17
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   44
-            Text            =   "Taille=[taille]"
-            Top             =   0
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   16
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   43
-            Text            =   "Fichier=[path]"
-            Top             =   240
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   7
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   42
-            Text            =   "Fichier=[path]"
-            Top             =   480
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   6
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   41
-            Text            =   "Fichier=[path]"
-            Top             =   840
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   5
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   40
-            Text            =   "Fichier=[path]"
-            Top             =   1080
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   4
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   39
-            Text            =   "Fichier=[path]"
-            Top             =   1320
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   3
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   38
-            Text            =   "Fichier=[path]"
-            Top             =   2400
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   2
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   37
-            Text            =   "Fichier=[path]"
-            Top             =   2160
-            Width           =   2895
-         End
-      End
-   End
    Begin VB.Frame FrameData 
-      Caption         =   "Valeur"
       ForeColor       =   &H00000000&
       Height          =   1455
       Left            =   7200
@@ -392,7 +190,6 @@ Begin VB.Form physPfm
       End
    End
    Begin VB.Frame FrameInfos 
-      Caption         =   "Informations"
       ForeColor       =   &H00FF0000&
       Height          =   6975
       Left            =   3720
@@ -402,7 +199,7 @@ Begin VB.Form physPfm
       Begin ComctlLib.ListView lstHisto 
          Height          =   1575
          Left            =   120
-         TabIndex        =   52
+         TabIndex        =   32
          TabStop         =   0   'False
          Tag             =   "lang_ok"
          Top             =   4800
@@ -446,26 +243,13 @@ Begin VB.Form physPfm
             BackColor       =   &H8000000F&
             BorderStyle     =   0  'None
             Height          =   200
-            Index           =   1
+            Index           =   0
             Left            =   0
             Locked          =   -1  'True
             TabIndex        =   33
             TabStop         =   0   'False
             Text            =   "Fichier=[path]"
-            Top             =   2160
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   0
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   32
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   2400
+            Top             =   1920
             Width           =   2895
          End
          Begin VB.TextBox TextBox 
@@ -475,7 +259,7 @@ Begin VB.Form physPfm
             Index           =   13
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   31
+            TabIndex        =   30
             TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1440
@@ -488,7 +272,7 @@ Begin VB.Form physPfm
             Index           =   12
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   30
+            TabIndex        =   29
             TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1200
@@ -501,7 +285,7 @@ Begin VB.Form physPfm
             Index           =   11
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   29
+            TabIndex        =   28
             TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   960
@@ -514,7 +298,7 @@ Begin VB.Form physPfm
             Index           =   10
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   28
+            TabIndex        =   27
             TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   720
@@ -527,7 +311,7 @@ Begin VB.Form physPfm
             Index           =   9
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   27
+            TabIndex        =   26
             TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   480
@@ -540,7 +324,7 @@ Begin VB.Form physPfm
             Index           =   8
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   26
+            TabIndex        =   25
             TabStop         =   0   'False
             Text            =   "Taille=[taille]"
             Top             =   240
@@ -553,31 +337,16 @@ Begin VB.Form physPfm
             Index           =   14
             Left            =   0
             Locked          =   -1  'True
-            TabIndex        =   25
+            TabIndex        =   24
             TabStop         =   0   'False
             Text            =   "Fichier=[path]"
             Top             =   1680
             Width           =   2895
          End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   15
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   24
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   1920
-            Width           =   2895
-         End
          Begin VB.CommandButton cmdMAJ 
-            Caption         =   "Mettre à jour"
             Height          =   255
             Left            =   600
             TabIndex        =   2
-            ToolTipText     =   "Mettre à jour les informations"
             Top             =   6240
             Width           =   1695
          End
@@ -650,7 +419,7 @@ Begin VB.Form physPfm
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   34
+            TabIndex        =   31
             Top             =   0
             Width           =   2895
          End
@@ -776,12 +545,11 @@ Private ChangeListDim As Long
 Private lFile As Long   'n° d'ouverture du fichier
 Private bOkToOpen As Boolean
 Private bytDrive As Byte
-Private clsDrive As clsDiskInfos    'contient toutes les infos sur le drive en cours
-Private cDrive As clsDrive
+Private cDisk As FileSystemLibrary.PhysicalDisk
 Private mouseUped As Boolean
 Private bFirstChange As Boolean
+Private hDisk As Long       'handle du disque
 Private bytFirstChange As Byte
-
 Public cUndo As clsUndoItem 'infos générales sur 'historique
 Private cHisto() As clsUndoSubItem  'historique pour le Undo/Redo
 
@@ -793,7 +561,8 @@ Dim lPages As Long
     On Error Resume Next
     
     Label2(8).Caption = Me.Sb.Panels(2).Text
-    Label2(9).Caption = Lang.GetString("_Selec") & CStr(HW.NumberOfSelectedItems) & " " & Lang.GetString("_Bytes")
+    Label2(9).Caption = Lang.GetString("_Selec") & _
+        CStr(HW.NumberOfSelectedItems) & " " & Lang.GetString("_Bytes")
     Label2(10).Caption = Me.Sb.Panels(3).Text
     Label2(11).Caption = Lang.GetString("_OffMax") & CStr(16 * Int(lLength / 16)) & "]"
     'Label2(12).Caption = "[" & sDescription & "]"
@@ -812,18 +581,23 @@ Private Sub Form_Activate()
     
     bOkToOpen = False 'pas prêt à l'ouverture
     
-    UpdateWindow Me.hWnd    'refresh de la form
+    Call UpdateWindow(Me.hWnd)     'refresh de la form
     
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
+
     Set cUndo = Nothing
+    
     #If USE_FORM_SUBCLASSING Then
         'alors enlève le subclassing
         Call RestoreResizing(Me.hWnd)
     #End If
     
     'Call frmContent.MDIForm_Resize 'évite le bug d'affichage
+    
+    'referme le handle
+    Call CloseHandle(hDisk)
 End Sub
 
 Private Sub lstSignets_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -857,25 +631,27 @@ Private Sub Form_Load()
     'instancie la classe Undo
     Set cUndo = New clsUndoItem
     
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     'subclasse la form pour éviter de resizer trop
     #If USE_FORM_SUBCLASSING Then
@@ -891,11 +667,11 @@ Private Sub Form_Load()
     Set cHisto(0) = New clsUndoSubItem
     
     'affiche ou non les éléments en fonction des paramètres d'affichage de frmcontent
-    Me.HW.Visible = frmContent.mnuTab.Checked
-    Me.VS.Visible = frmContent.mnuTab.Checked
-    Me.FrameData.Visible = frmContent.mnuEditTools.Checked
-    Me.FrameInfo2.Visible = frmContent.mnuInformations.Checked
-    Me.FrameInfos.Visible = frmContent.mnuInformations.Checked
+    With frmContent
+        Me.HW.Visible = .mnuTab.Checked
+        Me.VS.Visible = .mnuTab.Checked
+        Me.FrameData.Visible = .mnuEditTools.Checked
+    End With
         
     'change les couleurs du HW
     With cPref
@@ -931,8 +707,6 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     'FileContent = vbNullString
     lNbChildFrm = lNbChildFrm - 1
     frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
-    
-    Close lFile 'ferme le fichier
 End Sub
 
 Private Sub Form_Resize()
@@ -940,31 +714,27 @@ Private Sub Form_Resize()
     On Error Resume Next
 
     'redimensionne/bouge le frameInfo
-    FrameInfos.Top = 0
-    FrameInfos.Height = Me.Height - 700 - FrameInfos.Top
-    FrameInfos.Left = 20
-    cmdMAJ.Top = FrameInfos.Height - 650
-    lstHisto.Height = FrameInfos.Height - 5300
-    lstSignets.Height = FrameInfos.Height - 5300
-    Me.pctContain_cmdMAJ.Height = FrameInfos.Height - 350
+    With FrameInfos
+        .Top = 0
+        .Height = Me.Height - 700 - FrameInfos.Top
+        .Left = 20
+        cmdMAJ.Top = .Height - 650
+        lstHisto.Height = .Height - 5300
+        lstSignets.Height = .Height - 5300
+        Me.pctContain_cmdMAJ.Height = .Height - 350
+    End With
     
     'met le Grid à la taille de la fenêtre
-    HW.Width = 9620
-    HW.Height = Me.Height - 400 - Sb.Height - FrameInfos.Top
-    HW.Left = IIf(FrameInfos.Visible, FrameInfos.Width, 0) + 50
-    HW.Top = FrameInfos.Top
+    With HW
+        .Width = 9620
+        .Height = Me.Height - 400 - Sb.Height - FrameInfos.Top
+        .Left = IIf(FrameInfos.Visible, FrameInfos.Width, 0) + 50
+        .Top = FrameInfos.Top
+    End With
     
     'bouge le frameData
     FrameData.Top = 100 + HW.Top
     FrameData.Left = IIf(HW.Visible, HW.Width + HW.Left, IIf(FrameInfos.Visible, FrameInfos.Width, 0)) + 500
-    
-    'bouge le FrameInfo2
-    FrameInfo2.Top = 200 + HW.Top + FrameData.Height
-    FrameInfo2.Left = FrameData.Left - 200
-    FrameInfo2.Width = Me.Width - HW.Left - HW.Width - 500
-    FrameInfo2.Height = HW.Height - 1700
-    Picture3.Width = FrameInfo2.Width - 100
-    Picture3.Height = FrameInfo2.Height - 300
     
     'calcule le nombre de lignes du Grid à afficher
     'NumberPerPage = Int(Me.Height / 250) - 1
@@ -973,11 +743,12 @@ Private Sub Form_Resize()
     HW.NumberPerPage = NumberPerPage
     HW.Refresh
    
-    Call VS_Change(VS.Value)
-    
-    VS.Top = FrameInfos.Top
-    VS.Height = Me.Height - 430 - Sb.Height - FrameInfos.Top
-    VS.Left = IIf(Me.Width < 13100, Me.Width - 350, HW.Left + HW.Width)
+    With VS
+        Call VS_Change(.Value)
+        .Top = FrameInfos.Top
+        .Height = Me.Height - 430 - Sb.Height - FrameInfos.Top
+        .Left = IIf(Me.Width < 13100, Me.Width - 350, HW.Left + HW.Width)
+    End With
             
 End Sub
 
@@ -985,7 +756,7 @@ End Sub
 'permet de lancer le Resize depuis uen autre form
 '=======================================================
 Public Sub ResizeMe()
-    Form_Resize
+    Call Form_Resize
 End Sub
 
 '=======================================================
@@ -1001,7 +772,7 @@ Dim lDisplayableBytes As Long, Sb As Currency, sA As Currency
 Dim offsetFinSectorBef As Currency, offsetFinSectorVis As Currency, offsetFinSectorAft As Currency
 Dim lDecal As Long
 
-    On Error GoTo ErrGestion
+    'On Error GoTo ErrGestion
     'On Error Resume Next
     
     'initialise tous les tableaux de bytes
@@ -1016,10 +787,10 @@ Dim lDecal As Long
     'de manière à pouvoir visualiser de manière continue les secteurs
     Sb = Sector - 1: sA = Sector + 1
     If Sb >= 0 Then
-        DirectReadPhys bytDrive, Sb, lBytesPerSector, lBytesPerSector, RB()      'obtient le secteur d'avant celui visualisé
+        Call DirectReadHandle(hDisk, Sb, lBytesPerSector, lBytesPerSector, RB())       'obtient le secteur d'avant celui visualisé
     End If
-    If sA <= cDrive.TotalPhysicalSectors Then
-        DirectReadPhys bytDrive, sA, lBytesPerSector, lBytesPerSector, RA()    'obtient le secteur d'apres
+    If sA <= cDisk.TotalPhysicalSectors Then
+        Call DirectReadHandle(hDisk, sA, lBytesPerSector, lBytesPerSector, RA())      'obtient le secteur d'apres
     End If
     
     'détermine les limites (en offset) des 3 secteurs
@@ -1028,7 +799,7 @@ Dim lDecal As Long
     offsetFinSectorAft = offsetFinSectorVis + lBytesPerSector
     
     'obtient les bytes du secteur visualisé en partie
-    DirectReadPhys bytDrive, Sector, lBytesPerSector, lBytesPerSector, r()
+    Call DirectReadHandle(hDisk, Sector, lBytesPerSector, lBytesPerSector, r())
     
     'créé la liste RD() des bytes visualisés à partir des 3 secteurs dont ont a les bytes
     ReDim RD(lDisplayableBytes)     'redimensionne le tableau au nombre de bytes qui vont être affichés
@@ -1092,7 +863,6 @@ Dim lDecal As Long
     Exit Sub
 ErrGestion:
     clsERREUR.AddError "physPfm.OpenDrive", True
-
 End Sub
 
 '=======================================================
@@ -1143,68 +913,58 @@ Dim l As Currency
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_OpDisk") & " " & Trim$(Str$(lDrive)) & " ...")
     
+    'récupère le handle du disque physique
+    hDisk = CreateFile("\\.\PHYSICALDRIVE" & CStr(lDrive), GENERIC_READ, _
+        FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+
     Me.Tag = lDrive
     bytDrive = lDrive
     
     '//obtient maintenant les infos sur le Drive
     frmContent.Sb.Panels(1).Text = "Status=[Rerieving disk informations]"
-    Set clsDrive = New clsDiskInfos
     
     'appelle la classe
-    Set cDrive = clsDrive.GetPhysicalDrive(lDrive)
-    lBytesPerSector = cDrive.BytesPerSector
-    lLength = cDrive.TotalSpace    'taille totale
+    Set cDisk = cFile.GetPhysicalDisk(lDrive)
+    lBytesPerSector = cDisk.BytesPerSector
+    lLength = cDisk.TotalSpace    'taille totale
     HW.MaxOffset = lLength 'offset maximal
     HW.FileSize = lLength
     Me.Caption = Lang.GetString("_OpDisk") & " " & Trim$(Str$(lDrive))
     
     'affiche les infos disque dans les textboxes
-    With cDrive
-        TextBox(8).Text = Lang.GetString("_Disk") & .VolumeLetter & "]"
-        TextBox(9).Text = Lang.GetString("_VolName") & .VolumeName & "]"
-        TextBox(10).Text = Lang.GetString("_PartType") & .FileSystemName & "]"
-        TextBox(11).Text = Lang.GetString("_SN") & Hex$(.VolumeSerialNumber) & "]"
-        TextBox(12).Text = Lang.GetString("_DiskType") & .strDriveType & "]"
+    With cDisk
+        TextBox(8).Text = Lang.GetString("_DiskO") & "=[" & .DiskName & "]"
+        TextBox(9).Text = Lang.GetString("_TotalPhysSpace") & .TotalSpace & "]"
         TextBox(13).Text = Lang.GetString("_MediaT") & .strMediaType & "]"
-        TextBox(14).Text = Lang.GetString("_TotalPhysSpace") & Trim$(Str$(.PartitionLength)) & "]"
-        TextBox(15).Text = Lang.GetString("_FreeSpace") & Trim$(Str$(.FreeSpace)) & "]"
-        TextBox(0).Text = Lang.GetString("_UsedSpace") & Trim$(Str$(.UsedSpace)) & "]"
-        TextBox(1).Text = Lang.GetString("_Percent") & Trim$(Str$(Round(.PercentageFree, 4))) & " %]"
-        TextBox(17).Text = Lang.GetString("_Cyl") & Trim$(Str$(.Cylinders)) & "]"
-        TextBox(16).Text = Lang.GetString("_TrackPerCyl") & Trim$(Str$(.TracksPerCylinder)) & "]"
-        TextBox(7).Text = Lang.GetString("_SecPerT") & Trim$(Str$(.SectorsPerTrack)) & "]"
-        TextBox(6).Text = Lang.GetString("_SecLog") & Trim$(Str$(.TotalLogicalSectors)) & "]"
-        TextBox(5).Text = Lang.GetString("_SecP") & Trim$(Str$(.TotalPhysicalSectors)) & "]"
-        TextBox(4).Text = Lang.GetString("_SecPerC") & Trim$(Str$(.SectorPerCluster)) & "]"
-        TextBox(18).Text = Lang.GetString("_HidSec") & Trim$(Str$(.HiddenSectors)) & "]"
-        TextBox(19).Text = Lang.GetString("_Clust") & Trim$(Str$(.TotalClusters)) & "]"
-        TextBox(2).Text = Lang.GetString("_FClust") & Trim$(Str$(.FreeClusters)) & "]"
-        TextBox(3).Text = Lang.GetString("_UClust") & Trim$(Str$(.UsedClusters)) & "]"
-        TextBox(27).Text = Lang.GetString("_BPerSec") & Trim$(Str$(.BytesPerSector)) & "]"
-        TextBox(26).Text = Lang.GetString("_BPerClust") & Trim$(Str$(.BytesPerCluster)) & "]"
+        TextBox(0).Text = Lang.GetString("_Cyl") & Trim$(Str$(.Cylinders)) & "]"
+        TextBox(10).Text = Lang.GetString("_TrackPerCyl") & Trim$(Str$(.TracksPerCylinder)) & "]"
+        TextBox(11).Text = Lang.GetString("_SecPerT") & Trim$(Str$(.SectorsPerTrack)) & "]"
+        TextBox(12).Text = Lang.GetString("_SecP") & Trim$(Str$(.TotalPhysicalSectors)) & "]"
+        TextBox(14).Text = Lang.GetString("_BPerSec") & Trim$(Str$(.BytesPerSector)) & "]"
     End With
-    TextBox(20).Text = Lang.GetString("_N0Clust") & "0]"
-    TextBox(21).Text = Lang.GetString("_N0LogSec") & "0]"
-    TextBox(22).Text = Lang.GetString("_N0PhysSec") & "0]"
 
     frmContent.Sb.Panels(1).Text = "Status=[Ready]"
 
     'règle la taille de VS
-    VS.Min = 0
-    VS.Max = ByN(cDrive.TotalSpace / 16, 16)
-    VS.Value = 0
-    VS.SmallChange = 1
-    VS.LargeChange = NumberPerPage - 1
+    With VS
+        .Min = 0
+        .Max = ByN(cDisk.TotalPhysicalSectors * cDisk.BytesPerSector / 16, 16)
+        .Value = 0
+        .SmallChange = 1
+        .LargeChange = NumberPerPage - 1
+    End With
     
     'stocke dans les tag les valeurs Max et Min des offsets
-    HW.curTag1 = HW.FirstOffset
-    HW.curTag2 = HW.MaxOffset
+    With HW
+        .curTag1 = .FirstOffset
+        .curTag2 = .MaxOffset
+    End With
     
     'MAJ
-    cmdMAJ_Click
+    Call cmdMAJ_Click
     
     'affichage
-    OpenDrive
+    Call OpenDrive
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_OpDisk") & " " & Trim$(Str$(lDrive)) & " " & Lang.GetString("_Opened"))
@@ -1219,108 +979,114 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
     DoEvents    '/!\ IMPORTANT : DO NOT REMOVE
     'it allows to refresh correctly the HW control
     
-    If KeyCode = vbKeyUp Then
-        'alors monte
-        If HW.FirstOffset = 0 And HW.Item.Line = 1 Then Exit Sub  'tout au début déjà
-        'on remonte d'une ligne alors
-        HW.Item.Line = HW.Item.Line - 1
-        If HW.Item.Line = 0 Then
-            'alors on remonte le firstoffset
-            HW.Item.Line = 1
-            HW.FirstOffset = HW.FirstOffset - 16
-            VS.Value = VS.Value - 1
-            Call VS_Change(VS.Value)
-        End If
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
-    End If
-    
-    If KeyCode = vbKeyDown Then
-        'alors descend
-        If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) Then Exit Sub  'tout en bas
-        'on descend d'une ligne alors
-        HW.Item.Line = HW.Item.Line + 1
-        If HW.Item.Line = HW.NumberPerPage Then
-            'alors on descend le firstoffset
-            HW.Item.Line = HW.NumberPerPage - 1
-            HW.FirstOffset = HW.FirstOffset + 16
-            VS.Value = VS.Value + 1
-            Call VS_Change(VS.Value)
-        End If
-        'change le VS
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
-   End If
-    
-    If KeyCode = vbKeyEnd Then
-        'alors aller tout à la fin
-        VS.Value = VS.Max
-        Call VS_Change(VS.Value)
-    End If
-    If KeyCode = vbKeyHome Then
-        'alors tout au début
-        VS.Value = VS.Min
-        Call VS_Change(VS.Value)
-    End If
-    If KeyCode = vbKeyPageUp Then
-        'alors monter de NumberPerPage
-        VS.Value = IIf((VS.Value - NumberPerPage) > VS.Min, VS.Value - NumberPerPage, VS.Min)
-        Call VS_Change(VS.Value)
-    End If
-    If KeyCode = vbKeyPageDown Then
-        'alors descendre de NumberPerPage
-        VS.Value = IIf((VS.Value + NumberPerPage) < VS.Max, VS.Value + NumberPerPage, VS.Max)
-        Call VS_Change(VS.Value)
-    End If
-    
-    If KeyCode = vbKeyLeft Then
-        'alors va à gauche
-        If HW.FirstOffset = 0 And HW.Item.Col = 1 And HW.Item.Line = 1 Then Exit Sub 'tout au début déjà
-        If HW.Item.Col = 1 Then
-            'tout à gauche ==> on remonte d'une ligne alors
-            HW.Item.Col = 16: HW.Item.Line = HW.Item.Line - 1
-            If HW.Item.Line = 0 Then
+    With HW
+        If KeyCode = vbKeyUp Then
+            'alors monte
+            If .FirstOffset = 0 And .Item.Line = 1 Then Exit Sub  'tout au début déjà
+            'on remonte d'une ligne alors
+            .Item.Line = .Item.Line - 1
+            If .Item.Line = 0 Then
                 'alors on remonte le firstoffset
-                HW.Item.Line = 1
-                HW.FirstOffset = HW.FirstOffset - 16
+                .Item.Line = 1
+                .FirstOffset = .FirstOffset - 16
                 VS.Value = VS.Value - 1
                 Call VS_Change(VS.Value)
             End If
-        Else
-            'va à gauche
-            HW.Item.Col = HW.Item.Col - 1
+            .ColorItem tHex, .Item.Line, .Item.Col, .Value(.Item.Line, .Item.Col), .SelectionColor, True
+            .AddSelection .Item.Line, .Item.Col
         End If
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
-    End If
-         
-    If KeyCode = vbKeyRight Then
-        'alors va à droite
-        If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) And HW.Item.Col = 16 Then Exit Sub  'tout à la fin déjà
-        If HW.Item.Col = 16 Then
-            'tout à droite ==> on descend d'une ligne alors
-            HW.Item.Col = 1: HW.Item.Line = HW.Item.Line + 1
-            If HW.Item.Line = HW.NumberPerPage Then
+        
+        If KeyCode = vbKeyDown Then
+            'alors descend
+            If .FirstOffset + .Item.Line * 16 - 16 = By16(.MaxOffset) Then Exit Sub  'tout en bas
+            'on descend d'une ligne alors
+            .Item.Line = .Item.Line + 1
+            If .Item.Line = .NumberPerPage Then
                 'alors on descend le firstoffset
-                HW.Item.Line = HW.NumberPerPage - 1
-                HW.FirstOffset = HW.FirstOffset + 16
+                .Item.Line = .NumberPerPage - 1
+                .FirstOffset = .FirstOffset + 16
                 VS.Value = VS.Value + 1
                 Call VS_Change(VS.Value)
             End If
-        Else
-            'va à droite
-            HW.Item.Col = HW.Item.Col + 1
+            'change le VS
+            .ColorItem tHex, .Item.Line, .Item.Col, .Value(.Item.Line, .Item.Col), .SelectionColor, True
+            .AddSelection .Item.Line, .Item.Col
         End If
-        'change le VS
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
-    End If
+    End With
     
-    'réenregistre le numéro de l'offset actuel dans hw.item
-    HW.Item.Offset = HW.FirstOffset + (HW.Item.Line - 1) * 16
-    'affecte les autres valeurs dans Item
-    'HW.Item.tType = tHex
-    HW.Item.Value = HW.Value(HW.Item.Line, HW.Item.Col)
+    With VS
+        If KeyCode = vbKeyEnd Then
+            'alors aller tout à la fin
+            .Value = .Max
+            Call VS_Change(.Value)
+        End If
+        If KeyCode = vbKeyHome Then
+            'alors tout au début
+            .Value = .Min
+            Call VS_Change(.Value)
+        End If
+        If KeyCode = vbKeyPageUp Then
+            'alors monter de NumberPerPage
+            .Value = IIf((.Value - NumberPerPage) > .Min, .Value - NumberPerPage, .Min)
+            Call VS_Change(.Value)
+        End If
+        If KeyCode = vbKeyPageDown Then
+            'alors descendre de NumberPerPage
+            .Value = IIf((.Value + NumberPerPage) < .Max, .Value + NumberPerPage, .Max)
+            Call VS_Change(.Value)
+        End If
+    End With
+    
+    With HW
+        If KeyCode = vbKeyLeft Then
+            'alors va à gauche
+            If .FirstOffset = 0 And .Item.Col = 1 And .Item.Line = 1 Then Exit Sub 'tout au début déjà
+            If .Item.Col = 1 Then
+                'tout à gauche ==> on remonte d'une ligne alors
+                .Item.Col = 16: .Item.Line = .Item.Line - 1
+                If .Item.Line = 0 Then
+                    'alors on remonte le firstoffset
+                    .Item.Line = 1
+                    .FirstOffset = .FirstOffset - 16
+                    VS.Value = VS.Value - 1
+                    Call VS_Change(VS.Value)
+                End If
+            Else
+                'va à gauche
+                .Item.Col = .Item.Col - 1
+            End If
+            .ColorItem tHex, .Item.Line, .Item.Col, .Value(.Item.Line, .Item.Col), .SelectionColor, True
+            .AddSelection .Item.Line, .Item.Col
+        End If
+             
+        If KeyCode = vbKeyRight Then
+            'alors va à droite
+            If .FirstOffset + .Item.Line * 16 - 16 = By16(.MaxOffset) And .Item.Col = 16 Then Exit Sub  'tout à la fin déjà
+            If .Item.Col = 16 Then
+                'tout à droite ==> on descend d'une ligne alors
+                .Item.Col = 1: .Item.Line = .Item.Line + 1
+                If .Item.Line = .NumberPerPage Then
+                    'alors on descend le firstoffset
+                    .Item.Line = .NumberPerPage - 1
+                    .FirstOffset = .FirstOffset + 16
+                    VS.Value = VS.Value + 1
+                    Call VS_Change(VS.Value)
+                End If
+            Else
+                'va à droite
+                .Item.Col = .Item.Col + 1
+            End If
+            'change le VS
+            .ColorItem tHex, .Item.Line, .Item.Col, .Value(.Item.Line, .Item.Col), .SelectionColor, True
+            .AddSelection .Item.Line, .Item.Col
+        End If
+        
+        'réenregistre le numéro de l'offset actuel dans hw.item
+        .Item.Offset = .FirstOffset + (.Item.Line - 1) * 16
+        'affecte les autres valeurs dans Item
+        'HW.Item.tType = tHex
+        .Item.Value = .Value(.Item.Line, .Item.Col)
+    End With
     
     DoEvents
     
@@ -1367,7 +1133,7 @@ Dim x As Byte
             End If
             
             'applique le changement
-            ModifyData Chr$(bytHex)
+            Call ModifyData(Chr_(bytHex))
             
             'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
@@ -1377,7 +1143,7 @@ Dim x As Byte
         'on ne tappe QU'UNE SEULE VALEUR
         
             'le nouveau byte est donc désormais KeyAscii
-            ModifyData Chr$(KeyAscii)
+            Call ModifyData(Chr_(KeyAscii))
 
             'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
@@ -1430,11 +1196,13 @@ Dim l As Currency
         'affiche la donnée sélectionnée dans frmData
         If Item.tType = tHex Then
             'valeur hexa sélectionnée
-            txtValue(0).Text = Item.Value
-            txtValue(1).Text = Hex2Dec(Item.Value)
-            txtValue(2).Text = Hex2Str(Item.Value)
-            txtValue(3).Text = Hex2Oct(Item.Value)
-            FrameData.Caption = "Data=[" & Item.Value & "]"
+            With Item
+                txtValue(0).Text = .Value
+                txtValue(1).Text = Hex2Dec(.Value)
+                txtValue(2).Text = Hex2Str(.Value)
+                txtValue(3).Text = Hex2Oct(.Value)
+                FrameData.Caption = "Data=[" & .Value & "]"
+            End With
         End If
         If Item.tType = tString Then
             'valeur strind sélectionnée
@@ -1475,7 +1243,7 @@ Dim l As Currency
     ElseIf Button = 4 And Shift = 2 Then
         'click molette + control
         'sélectionne une zone définie
-        frmSelect.GetEditFunction 0 'selection mode
+        Call frmSelect.GetEditFunction(0)  'selection mode
         frmSelect.Show vbModal
     End If
     
@@ -1491,15 +1259,17 @@ Private Sub HW_MouseWheel(ByVal lSens As Long)
     DoEvents    '/!\ IMPORTANT : DO NOT REMOVE
     'it allows to refresh correctly the HW control
     
-    If lSens > 0 Then
-        'alors on descend
-        VS.Value = IIf((VS.Value - 3) >= 0, VS.Value - 3, 0)
-        Call VS_Change(VS.Value)
-    Else
-        'alors on monte
-        VS.Value = IIf((VS.Value + 3) <= VS.Max, VS.Value + 3, VS.Max)
-        Call VS_Change(VS.Value)
-    End If
+    With VS
+        If lSens > 0 Then
+            'alors on descend
+            .Value = IIf((.Value - 3) >= 0, .Value - 3, 0)
+            Call VS_Change(.Value)
+        Else
+            'alors on monte
+            .Value = IIf((.Value + 3) <= .Max, .Value + 3, .Max)
+            Call VS_Change(.Value)
+        End If
+    End With
 End Sub
 
 Private Sub HW_UserMakeFirstOffsetChangeByMovingMouse()
@@ -1569,19 +1339,20 @@ End Sub
 Public Sub VS_Change(Value As Currency)
 Dim lPages As Long
 
-    On Error GoTo ErrGestion
+    On Error Resume Next
     
     If lBytesPerSector <= 0 Then Exit Sub 'pas prêt
 
+    HW.FirstOffset = VS.Value * 16
+    
     'réaffiche la Grid
-    OpenDrive
+    Call OpenDrive
     
     'calcule le nbre de pages
     lPages = lLength / (NumberPerPage * 16) + 1
-    Me.Sb.Panels(2).Text = "Page=[" & CStr(1 + Int(VS.Value / NumberPerPage)) & "/" & CStr(lPages) & "]"
+    Me.Sb.Panels(2).Text = "Page=[" & CStr(1 + Int(VS.Value / NumberPerPage)) _
+        & "/" & CStr(lPages) & "]"
     Label2(8).Caption = Me.Sb.Panels(2).Text
-    
-    HW.FirstOffset = VS.Value * 16
     
     HW.Refresh
     
@@ -1699,8 +1470,8 @@ End Function
 '=======================================================
 'renvoie le cDrive du disque ouvert par cette form
 '=======================================================
-Public Function GetDriveInfos() As clsDrive
-    Set GetDriveInfos = cDrive
+Public Function GetDriveInfos() As FileSystemLibrary.PhysicalDisk
+    Set GetDriveInfos = cDisk
 End Function
 
 '=======================================================
@@ -1718,24 +1489,32 @@ Dim I_tem As ItemElement
         Select Case Index
             Case 0
                 'alors on change les autres champs que le champ "Hexa"
-                txtValue(1).Text = Hex2Dec(txtValue(0).Text)
-                txtValue(2).Text = Hex2Str(txtValue(0).Text)
-                txtValue(3).Text = Hex2Oct(txtValue(0).Text)
+                With txtValue(0)
+                    txtValue(1).Text = Hex2Dec(.Text)
+                    txtValue(2).Text = Hex2Str(.Text)
+                    txtValue(3).Text = Hex2Oct(.Text)
+                End With
             Case 1
                 'alors on change les autres champs que le champ "decimal"
-                txtValue(0).Text = Hex$(Val(txtValue(1).Text))
-                txtValue(2).Text = Byte2FormatedString(Val(txtValue(1).Text))
-                txtValue(3).Text = Oct$(Val(txtValue(1).Text))
+                With txtValue(1)
+                    txtValue(0).Text = Hex$(Val(.Text))
+                    txtValue(2).Text = Byte2FormatedString(Val(.Text))
+                    txtValue(3).Text = Oct$(Val(.Text))
+                End With
             Case 2
                 'alors on change les autres champs que le champ "ASCII"
-                txtValue(0).Text = Str2Hex(txtValue(2).Text)
-                txtValue(1).Text = Str2Dec(txtValue(2).Text)
-                txtValue(3).Text = Str2Oct(txtValue(2).Text)
+                With txtValue(2)
+                    txtValue(0).Text = Str2Hex(.Text)
+                    txtValue(1).Text = Str2Dec(.Text)
+                    txtValue(3).Text = Str2Oct(.Text)
+                End With
             Case 3
                 'alors on change les autres champs que le champ "octal"
-                txtValue(0).Text = Hex$(Oct2Dec(Val(txtValue(3).Text)))
-                txtValue(1).Text = Oct2Dec(Val(txtValue(3).Text))
-                txtValue(2).Text = Chr$(Oct2Dec(Val(txtValue(3).Text)))
+                With txtValue(3)
+                    txtValue(0).Text = Hex$(Oct2Dec(Val(.Text)))
+                    txtValue(1).Text = Oct2Dec(Val(.Text))
+                    txtValue(2).Text = Chr_(Oct2Dec(Val(.Text)))
+                End With
         End Select
 
         With frmContent.ActiveForm.HW
@@ -1800,7 +1579,8 @@ Public Sub AddHistoFrm(ByVal tUndo As UNDO_TYPE, Optional ByVal sData1 As String
     Optional ByVal curData2 As Currency, Optional ByVal bytData1 As Byte, _
     Optional ByVal bytData2 As Byte, Optional ByVal lngData1 As Long)
     
-    AddHisto -1, cUndo, cHisto(), tUndo, sData1, sData2, curData1, curData2, bytData1, bytData2, lngData1
+    Call AddHisto(-1, cUndo, cHisto(), tUndo, sData1, sData2, curData1, _
+        curData2, bytData1, bytData2, lngData1)
     lstHisto.ListItems.Item(lstHisto.ListItems.Count).Selected = True
 End Sub
 
@@ -1821,7 +1601,7 @@ Public Sub UndoM()
             cUndo.lRang = 1
         End If
     End With
-    UndoMe cUndo, cHisto()
+    Call UndoMe(cUndo, cHisto())
     DoEvents    '/!\ DO NOT REMOVE ! (permet d'effectuer les changements d'enabled et de ne pas pouvoir appuyer sur ctrl+Z quand on est au tout début)
     Call ModifyHistoEnabled 'vérifie que c'est Ok pour les enabled
 End Sub
@@ -1844,7 +1624,7 @@ Public Sub RedoM()
             cUndo.lRang = .ListItems.Count
         End If
     End With
-    RedoMe cUndo, cHisto()
+    Call RedoMe(cUndo, cHisto())
     DoEvents    '/!\ DO NOT REMOVE !
     Call ModifyHistoEnabled 'vérifie que c'est Ok pour les enabled
 End Sub

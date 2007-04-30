@@ -164,19 +164,22 @@ Dim hProc As Long
     hProc = GetCurrentProcess
     
     'change les droits de cette application
-    OpenProcessToken hProc, TOKEN_ALL_ACCESS, lhTokenHandle
-    LookupPrivilegeValue "", SE_DEBUG_NAME, tLuid
+    Call OpenProcessToken(hProc, TOKEN_ALL_ACCESS, lhTokenHandle)
+    Call LookupPrivilegeValue(vbNullString, SE_DEBUG_NAME, tLuid)
     
     'détermine le nombre de privileges à changer
-    tTokenPriv.PrivilegeCount = 1
-    tTokenPriv.TheLuid = tLuid
-    tTokenPriv.Attributes = SE_PRIVILEGE_ENABLED
+    With tTokenPriv
+        .PrivilegeCount = 1
+        .TheLuid = tLuid
+        .Attributes = SE_PRIVILEGE_ENABLED
+    End With
     
     'autorise le privilege SE_DEBUG_NAME
-    AdjustTokenPrivileges lhTokenHandle, False, tTokenPriv, Len(tTokenPrivNew), tTokenPrivNew, lBufferNeeded
+    Call AdjustTokenPrivileges(lhTokenHandle, False, tTokenPriv, _
+        Len(tTokenPrivNew), tTokenPrivNew, lBufferNeeded)
     
     'ferme les handles
-    CloseHandle lhTokenHandle
+    Call CloseHandle(lhTokenHandle)
 End Sub
 
 '=======================================================
@@ -190,7 +193,9 @@ End Function
 'lit lSize bytes dans la zone virtuelle de la mémoire d'un processus
 'demande un PID
 '=======================================================
-Public Function ReadBytes(ByVal PID As Long, ByVal lngOffset As Long, ByVal lngSize As Long) As String
+Public Function ReadBytes(ByVal PID As Long, ByVal lngOffset As Long, _
+    ByVal lngSize As Long) As String
+    
 Dim sBuf As String
 Dim lByte As Long
 Dim lHandle As Long
@@ -205,10 +210,10 @@ Dim lHandle As Long
     lHandle = OpenProcess(PROCESS_ALL_ACCESS, False, PID)
     
     'lit les bytes et stocke dans le buffer
-    ReadProcessMemory lHandle, lngOffset, sBuf, lngSize, lByte
+    Call ReadProcessMemory(lHandle, lngOffset, sBuf, lngSize, lByte)
     
     'referme le handle
-    CloseHandle lHandle
+    Call CloseHandle(lHandle)
     
     ReadBytes = sBuf
 End Function
@@ -217,7 +222,9 @@ End Function
 'lit lSize bytes dans la zone virtuelle de la mémoire d'un processus
 'demande un handle
 '=======================================================
-Public Function ReadBytesH(ByVal lHandle As Long, ByVal lngOffset As Long, ByVal lngSize As Long) As String
+Public Function ReadBytesH(ByVal lHandle As Long, ByVal lngOffset As Long, _
+    ByVal lngSize As Long) As String
+    
 Dim sBuf As String
 Dim lByte As Long
 Dim lRet As Long
@@ -237,31 +244,38 @@ End Function
 '=======================================================
 'écrit une string dans la mémoire virtuelle d'un processus
 '=======================================================
-Public Function WriteBytes(ByVal PID As Long, ByVal lngOffset As Long, ByVal strStringToWrite As String) As Long
+Public Function WriteBytes(ByVal PID As Long, ByVal lngOffset As Long, _
+    ByVal strStringToWrite As String) As Long
+    
 Dim lHandle As Long
 
     'obtient le handle du processus
     lHandle = OpenProcess(PROCESS_ALL_ACCESS, False, PID)
 
-    WriteBytes = WriteProcessMemory(lHandle, lngOffset, ByVal strStringToWrite, Len(strStringToWrite), 0&)
+    WriteBytes = WriteProcessMemory(lHandle, lngOffset, ByVal strStringToWrite, _
+        Len(strStringToWrite), 0&)
     
     'referme le handle
-    CloseHandle lHandle
+    Call CloseHandle(lHandle)
 End Function
 
 '=======================================================
 'écrit une string dans la mémoire virtuelle d'un processus (à partir d'un handle)
 '=======================================================
-Public Function WriteBytesH(ByVal lngHandle As Long, ByVal lngOffset As Long, ByVal strStringToWrite As String) As Long
-'écrit en mémoire
-    WriteBytesH = WriteProcessMemory(lngHandle, lngOffset, ByVal strStringToWrite, Len(strStringToWrite), 0&)
+Public Function WriteBytesH(ByVal lngHandle As Long, ByVal lngOffset As Long, _
+    ByVal strStringToWrite As String) As Long
+    
+    WriteBytesH = WriteProcessMemory(lngHandle, lngOffset, ByVal _
+        strStringToWrite, Len(strStringToWrite), 0&)
 End Function
 
 '=======================================================
 'obtient les différentes zones mémoire d'un processus utilisées dans la zone virtuelle
 'stocke de 1 à Ubound
 '=======================================================
-Public Sub RetrieveMemRegions(ByVal PID As Long, ByRef lBaseAdress() As Long, ByRef lRegionSize() As Long)
+Public Sub RetrieveMemRegions(ByVal PID As Long, ByRef lBaseAdress() As Long, _
+    ByRef lRegionSize() As Long)
+    
 Dim lHandle As Long
 Dim lPosMem As Long
 Dim lRet As Long
@@ -277,7 +291,7 @@ Dim si As SYSTEM_INFO
     lHandle = OpenProcess(PROCESS_ALL_ACCESS, False, PID)
 
     lLenMBI = Len(mbi)  'taille de la structure
-    GetSystemInfo si    'obtient les infos sur les adresses de début et de fin de la plage mémoire maximum
+    Call GetSystemInfo(si)     'obtient les infos sur les adresses de début et de fin de la plage mémoire maximum
     
     lPosMem = si.lpMinimumApplicationAddress  'adresse la plus petite ==> part de là
     
@@ -316,7 +330,7 @@ Dim si As SYSTEM_INFO
     Loop
     
 ErrCapacityGestion:
-   CloseHandle lHandle 'ferme le handle du processus
+   Call CloseHandle(lHandle)  'ferme le handle du processus
 End Sub
 
 '=======================================================
@@ -324,7 +338,7 @@ End Sub
 'de 1 à Ubound
 '=======================================================
 Public Sub SearchForStringMemory(ByVal PID As Long, ByVal sMatch As String, _
-    ByVal bCasse As Boolean, ByRef tRes() As Long, Optional ByVal PGB As pgrbar)
+    ByVal bCasse As Boolean, ByRef tRes() As Long, Optional ByVal PGB As pgrBar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim x As Long
 Dim bytAsc As Byte
@@ -340,7 +354,7 @@ Dim LS() As Long
     ReDim tRes(0)
 
     'on obtient les différentes régions de la mémoire du processus
-    RetrieveMemRegions PID, LB(), LS()
+    Call RetrieveMemRegions(PID, LB(), LS())
     
     If Not (PGB Is Nothing) Then
         'on initialise la progressabr
@@ -383,7 +397,7 @@ Dim LS() As Long
 
 ErrGestion:
     'referme le handle
-    CloseHandle lHandle
+    Call CloseHandle(lHandle)
 End Sub
 
 '=======================================================
@@ -391,7 +405,10 @@ End Sub
 'des paramètres Afficher : min, MAJ, nbres, signes
 'function utilisée directement avec les procédures de SearchStringIn...
 '=======================================================
-Private Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean) As Boolean
+Private Function IsCharConsideredInAString(ByVal bytChar As Byte, _
+    ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, _
+    ByVal bNumbers As Boolean, ByVal bAccent As Boolean) As Boolean
+    
     If bMaj Then
         IsCharConsideredInAString = (bytChar >= 65 And bytChar <= 90)
         If IsCharConsideredInAString Then Exit Function
@@ -427,7 +444,11 @@ End Function
 'ne cherche pas une string en particulier, mais toutes les strings qui ressemblent à des mots
 'stocke dans un tableau de 1 à Ubound
 '=======================================================
-Public Sub SearchEntireStringMemory(ByVal PID As Long, ByVal lMinimalLength As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef lngRes() As Long, ByRef strRes() As String, Optional PGB As pgrbar)
+Public Sub SearchEntireStringMemory(ByVal PID As Long, ByVal lMinimalLength _
+    As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As _
+    Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, _
+    ByRef lngRes() As Long, ByRef strRes() As String, Optional PGB As pgrBar)
+    
 Dim strCtemp As String
 Dim x As Long
 Dim lngLen As Long
@@ -443,7 +464,7 @@ Dim LS() As Long
     On Error GoTo ErrGestion
     
     'on obtient les différentes régions de la mémoire du processus
-    RetrieveMemRegions PID, LB(), LS()
+    Call RetrieveMemRegions(PID, LB(), LS())
     
     'calcule la taille max (lngLen)
     lngLen = 0
@@ -488,7 +509,7 @@ Dim LS() As Long
             
             If IsCharConsideredInAString(bytAsc, bSigns, bMaj, bMin, bNumbers, bAccent) Then
                 'caractère x est valide
-                strCtemp = strCtemp & Chr(bytAsc)
+                strCtemp = strCtemp & Chr_(bytAsc)
             Else
                 strCtemp = Trim$(strCtemp)
                 If Len(strCtemp) > lMinimalLength Then
@@ -516,7 +537,7 @@ Dim LS() As Long
     If Not (PGB Is Nothing) Then PGB.Value = PGB.Max
     
     Let strBuffer = vbNullString
-    CloseHandle lHandle 'ferme le handle du process
+    Call CloseHandle(lHandle)  'ferme le handle du process
     
     'maintenant, stocke dans les arrays de sortie
     ReDim lngRes(UBound(tRes()))
@@ -531,7 +552,7 @@ Dim LS() As Long
     
 ErrGestion:
 
-    CloseHandle lHandle 'ferme le handle du process
+    Call CloseHandle(lHandle)  'ferme le handle du process
     clsERREUR.AddError "mdlDisk.SearchStringInFile", True
 End Sub
 
@@ -539,5 +560,5 @@ End Sub
 'procédure d'initialisation de la classe
 '=======================================================
 Private Sub Class_Initialize()
-    GetAllPrivileges    'obtient le privileges debug
+    Call GetAllPrivileges    'obtient le privileges debug
 End Sub

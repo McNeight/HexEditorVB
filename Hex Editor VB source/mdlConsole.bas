@@ -364,21 +364,21 @@ Dim x As Form
     'créé ou supprime les menus contextuels de Windows en fonction des nouvelles prefs.
     If CBool(cPref.integ_FileContextual) = False Then
         'enlève
-        RemoveContextMenu 1
+        Call RemoveContextMenu(1)
     Else
         'ajoute
-        AddContextMenu 1
+        Call AddContextMenu(1)
     End If
     If CBool(cPref.integ_FolderContextual) = False Then
         'enlève
-        RemoveContextMenu 0
+        Call RemoveContextMenu(0)
     Else
         'ajoute
-        AddContextMenu 0
+        Call AddContextMenu(0)
     End If
     
     'créé ou pas le raccourci
-    Shortcut CBool(cPref.integ_SendTo)
+    Call Shortcut(CBool(cPref.integ_SendTo))
 
 
     'change les settings du Explorer

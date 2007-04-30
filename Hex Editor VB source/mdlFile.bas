@@ -39,7 +39,9 @@ Option Explicit
 '=======================================================
 'obtient le path du fichier temp à créer
 '=======================================================
-Public Sub ObtainTempPathFile(ByVal sFile As String, ByRef sTempFile As String, sExt As String)
+Public Sub ObtainTempPathFile(ByVal sFile As String, ByRef sTempFile As String, _
+    sExt As String)
+    
 Dim sBuf As String
 Dim s As String
 
@@ -47,7 +49,7 @@ Dim s As String
     'buffer
     sBuf = String$(256, vbNullChar)
     'obtient le dossier temp
-    GetTempPath 256, sBuf
+    Call GetTempPath(256, sBuf)
     'formate le path
     sBuf = Left$(sBuf, InStr(sBuf, vbNullChar) - 1)
     
@@ -55,7 +57,7 @@ Dim s As String
     'buffer
     s = String$(256, vbNullChar)
     'obtient le dossier temp
-    GetTempFileName sBuf, sFile, 0, s
+    Call GetTempFileName(sBuf, sFile, 0, s)
     'formate le path
     s = Left$(s, InStr(s, vbNullChar) - 1)
     
@@ -76,16 +78,13 @@ End Sub
 Public Function CreateAFile(Frm As Form, ByVal sPath As String) As Boolean
 Dim sFile As String
 Dim lFile As Long
-
-    On Error GoTo GestionErr
     
     'sauvegarde le fichier
-    cFile.deletefile sPath
+    Call cFile.DeleteFile(sPath)
     
     'créé ke fichier
     Call Frm.GetNewFile(sPath)
 
-GestionErr:
 End Function
 
 '=======================================================
@@ -96,10 +95,10 @@ Public Function ExecuteTempFile(ByVal hWnd As Long, Frm As Form, sExt As String)
 Dim sTempFile As String
 
     'obtient un path temporaire
-    ObtainTempPathFile "to_execute", sTempFile, sExt
+    Call ObtainTempPathFile("to_execute", sTempFile, sExt)
     
     'créé le fichier
-    CreateAFile Frm, sTempFile
+    Call CreateAFile(Frm, sTempFile)
      
     'l'exécute
     ExecuteTempFile = cFile.ShellOpenFile(sTempFile, hWnd)
@@ -120,16 +119,18 @@ Dim sPath As String
         
         ' Création d'un objet raccourci sur le Bureau
         Set Sh = WSHShell.CreateShortcut(sPath & "\HexEditor.lnk")
-        Sh.TargetPath = App.Path & "\HexEditor.exe"
-        Sh.WorkingDirectory = WSHShell.ExpandEnvironmentStrings("%windir%")
-        Sh.WindowStyle = 4
-        Sh.IconLocation = WSHShell.ExpandEnvironmentStrings(App.Path & "\HexEditor.exe,0")
-        Sh.Save
+        With Sh
+            .TargetPath = App.Path & "\HexEditor.exe"
+            .WorkingDirectory = WSHShell.ExpandEnvironmentStrings("%windir%")
+            .WindowStyle = 4
+            .IconLocation = WSHShell.ExpandEnvironmentStrings(App.Path & "\HexEditor.exe,0")
+            .Save
+        End With
     Else
         'le supprime
         sPath = cFile.GetSpecialFolder(CSIDL_SENDTO) 'contient le nom du path du shortcut
         
-        cFile.deletefile sPath & "\HexEditor.lnk"
+        Call cFile.DeleteFile(sPath & "\HexEditor.lnk")
     End If
 
 End Sub
@@ -181,18 +182,19 @@ End Sub
 '=======================================================
 'récupérer des bytes dans un fichier
 '=======================================================
-Public Function GetBytesFromFile(ByVal sFile As String, ByVal curSize As Currency, ByVal curOffset As Currency) As String
+Public Function GetBytesFromFile(ByVal sFile As String, ByVal curSize As _
+    Currency, ByVal curOffset As Currency) As String
+    
 Dim tmpText As String
 Dim Ret As Long
 Dim lFile As Long
     
     'obtient un handle vers le fichier à ouvrir
-    lFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+    lFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
     
-    If lFile = -1 Then
-        'fichier inexistant, ou en tout cas inaccessible
-        Exit Function
-    End If
+    'fichier inexistant, ou en tout cas inaccessible
+    If lFile = INVALID_HANDLE_VALUE Then Exit Function
         
     'créé un buffer qui contiendra les valeurs
     tmpText = String$(curSize, 0)
@@ -207,47 +209,38 @@ Dim lFile As Long
     'affecte à la fonction
     GetBytesFromFile = tmpText
     
-ErrGestion:
-
     'referme le handle
-    CloseHandle lFile
+    Call CloseHandle(lFile)
     
 End Function
 
 '=======================================================
 'écrire des bytes dans un fichier
 '=======================================================
-Public Function WriteBytesToFile(ByVal sFile As String, ByVal sString As String, ByVal curOffset As Currency) As String
+Public Function WriteBytesToFile(ByVal sFile As String, ByVal sString As _
+    String, ByVal curOffset As Currency) As String
+    
 Dim tmpText As String
 Dim Ret As Long
 Dim lFile As Long
-
        
     'obtient un handle vers le fichier à écrire
     'ouverture en ECRITURE, avec overwrite si déjà existant (car déjà demandé confirmation avant)
-    lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+    lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
 
-    If lFile = -1 Then Exit Function 'fichier indisponible
+    If lFile = INVALID_HANDLE_VALUE Then Exit Function 'fichier indisponible
     
     'bouge le pointeur sur le fichier au bon emplacement
     Ret = SetFilePointerEx(lFile, curOffset / 10000, 0&, FILE_BEGIN)
     'a divisé par 10^4 pour obtenir un nombre décimal de Currency
 
     'écriture dans le fichier
-    WriteFile lFile, ByVal sString, Len(sString), Ret, ByVal 0&
+    Call WriteFile(lFile, ByVal sString, Len(sString), Ret, ByVal 0&)
     
-ErrGestion:
-
     'ferme le handle du fichier écrit
-    CloseHandle lFile
+    Call CloseHandle(lFile)
     
-End Function
-
-'=======================================================
-'récupère un handle d'écriture vers un fichier
-'=======================================================
-Public Function GetFileHandleWrite(ByVal sFile As String) As Long
-    GetFileHandleWrite = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
 End Function
 
 '=======================================================
@@ -255,6 +248,7 @@ End Function
 '=======================================================
 Public Sub WriteBytesToFileHandle(ByVal hFile As Long, ByVal pt As Long, _
     ByVal curOffset As Currency, ByVal lLen As Long)
+    
 Dim tmpText As String
 Dim Ret As Long
     
@@ -262,48 +256,52 @@ Dim Ret As Long
     Ret = SetFilePointerEx(hFile, curOffset / 10000, 0&, FILE_BEGIN)
 
     'écriture dans le fichier
-    WriteFile hFile, ByVal pt, lLen, Ret, ByVal 0&
+    Call WriteFile(hFile, ByVal pt, lLen, Ret, ByVal 0&)
     
 End Sub
 
 '=======================================================
 'écrire des bytes dans un fichier (à la fin du fichier)
 '=======================================================
-Public Function WriteBytesToFileEnd(ByVal sFile As String, ByVal sString As String) As String
+Public Function WriteBytesToFileEnd(ByVal sFile As String, ByVal sString As _
+    String) As String
+    
 Dim tmpText As String
 Dim Ret As Long
 Dim lFile As Long
        
     'obtient un handle vers le fichier à écrire
     'ouverture en ECRITURE, avec overwrite si déjà existant (car déjà demandé confirmation avant)
-    lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+    lFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
 
-    If lFile = -1 Then Exit Function 'fichier non dispo
+    If lFile = INVALID_HANDLE_VALUE Then Exit Function 'fichier non dispo
     
     'bouge le pointeur sur le fichier à la fin du fichier
     Ret = SetFilePointerEx(lFile, 0&, 0&, FILE_END) '
 
     'écriture dans le fichier
-    WriteFile lFile, ByVal sString, Len(sString), Ret, ByVal 0&
+    Call WriteFile(lFile, ByVal sString, Len(sString), Ret, ByVal 0&)
     
-ErrGestion:
-
     'ferme le handle du fichier écrit
-    CloseHandle lFile
+    Call CloseHandle(lFile)
 
 End Function
 
 '=======================================================
-'obtient un handle vers un fichier pour ECRITURE
+'récupère un handle d'écriture vers un fichier
 '=======================================================
-Public Function GetFileHandle(ByVal sFile As String) As Long
-    GetFileHandle = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+Public Function GetFileHandleWrite(ByVal sFile As String) As Long
+    GetFileHandleWrite = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
 End Function
 
 '=======================================================
 'écrire des bytes dans un fichier (à la fin du fichier) avec en entrée un handle
 '=======================================================
-Public Function WriteBytesToFileEndHandle(ByVal lngFile As Long, ByVal sString As String) As String
+Public Function WriteBytesToFileEndHandle(ByVal lngFile As Long, ByVal _
+    sString As String) As String
+    
 Dim tmpText As String
 Dim Ret As Long
         
@@ -311,6 +309,6 @@ Dim Ret As Long
     Ret = SetFilePointerEx(lngFile, 0&, 0&, FILE_END) '
 
     'écriture dans le fichier
-    WriteFile lngFile, ByVal sString, Len(sString), Ret, ByVal 0&
+    Call WriteFile(lngFile, ByVal sString, Len(sString), Ret, ByVal 0&)
 
 End Function

@@ -43,7 +43,6 @@ Begin VB.Form Pfm
             MinWidth        =   4410
             Text            =   "Fichier=[Modifié]"
             TextSave        =   "Fichier=[Modifié]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -51,7 +50,6 @@ Begin VB.Form Pfm
             MinWidth        =   4410
             Text            =   "Page=[0/0]"
             TextSave        =   "Page=[0/0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -59,7 +57,6 @@ Begin VB.Form Pfm
             MinWidth        =   3175
             Text            =   "Offset=[0]"
             TextSave        =   "Offset=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -67,13 +64,11 @@ Begin VB.Form Pfm
             MinWidth        =   5292
             Text            =   "Sélection=[0 Bytes]"
             TextSave        =   "Sélection=[0 Bytes]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
    End
    Begin VB.Frame FrameData 
-      Caption         =   "Valeur"
       ForeColor       =   &H00000000&
       Height          =   1455
       Left            =   600
@@ -180,7 +175,6 @@ Begin VB.Form Pfm
       Width           =   615
    End
    Begin VB.Frame FrameIcon 
-      Caption         =   "Icones"
       ForeColor       =   &H00000000&
       Height          =   2895
       Left            =   360
@@ -212,7 +206,6 @@ Begin VB.Form Pfm
       End
    End
    Begin VB.Frame FrameInfos 
-      Caption         =   "Informations"
       ForeColor       =   &H00FF0000&
       Height          =   6975
       Left            =   3720
@@ -237,7 +230,6 @@ Begin VB.Form Pfm
             Locked          =   -1  'True
             TabIndex        =   20
             TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
             Top             =   240
             Width           =   2895
          End
@@ -346,11 +338,9 @@ Begin VB.Form Pfm
             Width           =   2895
          End
          Begin VB.CommandButton cmdMAJ 
-            Caption         =   "Mettre à jour"
             Height          =   255
             Left            =   600
             TabIndex        =   2
-            ToolTipText     =   "Mettre à jour les informations"
             Top             =   6240
             Width           =   1695
          End
@@ -404,13 +394,11 @@ Begin VB.Form Pfm
                NumTabs         =   2
                BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Historique"
-                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
                BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Signets"
-                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
@@ -622,12 +610,12 @@ Private lngFormStyle As Long
 Public cUndo As clsUndoItem 'infos générales sur 'historique
 Private cHisto() As clsUndoSubItem  'historique pour le Undo/Redo
 
-Public TheFile As filesystemlibrary.File
+Public TheFile As FileSystemLibrary.File
 
 Public Sub cmdMAJ_Click()
 'MAJ des infos
 Dim lPages As Long
-Dim cFic As filesystemlibrary.File
+Dim cFic As FileSystemLibrary.File
 
     On Error Resume Next
     
@@ -672,7 +660,7 @@ Private Sub Form_Activate()
     
     HW.Refresh
 
-    UpdateWindow Me.hWnd    'refresh de la form
+    Call UpdateWindow(Me.hWnd)     'refresh de la form
 End Sub
 
 Private Sub Form_Load()
@@ -680,25 +668,27 @@ Private Sub Form_Load()
     'instancie la classe Undo
     Set cUndo = New clsUndoItem
     
-    #If MODE_DEBUG Then
-        If App.LogMode = 0 And CREATE_FRENCH_FILE Then
-            'on créé le fichier de langue français
-            Lang.Language = "French"
-            Lang.LangFolder = LANG_PATH
-            Lang.WriteIniFileFormIDEform
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
         End If
-    #End If
-    
-    If App.LogMode = 0 Then
-        'alors on est dans l'IDE
-        Lang.LangFolder = LANG_PATH
-    Else
-        Lang.LangFolder = App.Path & "\Lang"
-    End If
-    
-    'applique la langue désirée aux controles
-    Lang.Language = cPref.env_Lang
-    Lang.LoadControlsCaption
+        
+        'applique la langue désirée aux controles
+        .Language = cPref.env_Lang
+        .LoadControlsCaption
+    End With
     
     lngFormStyle = GetWindowLong(Me.hWnd, GWL_STYLE)
 
@@ -719,11 +709,13 @@ Private Sub Form_Load()
     Set cHisto(0) = New clsUndoSubItem
     
     'affiche ou non les éléments en fonction des paramètres d'affichage de frmcontent
-    Me.HW.Visible = frmContent.mnuTab.Checked
-    Me.VS.Visible = frmContent.mnuTab.Checked
-    Me.FrameData.Visible = frmContent.mnuEditTools.Checked
-    Me.FrameInfos.Visible = frmContent.mnuInformations.Checked
-    Me.FrameIcon.Visible = frmContent.mnuShowIcons.Checked
+    With frmContent
+        Me.HW.Visible = .mnuTab.Checked
+        Me.VS.Visible = .mnuTab.Checked
+        Me.FrameData.Visible = .mnuEditTools.Checked
+        Me.FrameInfos.Visible = .mnuInformations.Checked
+        Me.FrameIcon.Visible = .mnuShowIcons.Checked
+    End With
     
     'change les couleurs du HW
     With cPref
@@ -762,7 +754,7 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     lNbChildFrm = lNbChildFrm - 1
     frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
     
-    CloseHandle lFile 'ferme le handle sur le fichier
+    Call CloseHandle(lFile)  'ferme le handle sur le fichier
 End Sub
 
 Private Sub Form_Resize()
@@ -803,27 +795,33 @@ Private Sub Form_Resize()
     
 
     'redimensionne/bouge le frameInfo
-    FrameInfos.Top = 0
-    FrameInfos.Height = Me.Height - 700
-    FrameInfos.Left = 20
-    cmdMAJ.Top = FrameInfos.Height - 650
-    lstHisto.Height = FrameInfos.Height - 5300
-    lstSignets.Height = FrameInfos.Height - 5300
-    Me.pctContain_cmdMAJ.Height = FrameInfos.Height - 350
+    With FrameInfos
+        .Top = 0
+        .Height = Me.Height - 700
+        .Left = 20
+        cmdMAJ.Top = .Height - 650
+        lstHisto.Height = .Height - 5300
+        lstSignets.Height = .Height - 5300
+        Me.pctContain_cmdMAJ.Height = .Height - 350
+    End With
     
     'met le Grid à la taille de la fenêtre
-    HW.Width = 9620
-    HW.Height = Me.Height - 400 - Sb.Height
-    HW.Left = IIf(FrameInfos.Visible, FrameInfos.Width, 0) + 50
-    HW.Top = 0
+    With HW
+        .Width = 9620
+        .Height = Me.Height - 400 - Sb.Height
+        .Left = IIf(FrameInfos.Visible, FrameInfos.Width, 0) + 50
+        .Top = 0
+    End With
     
     'bouge le frameData
     FrameData.Top = 100
-    FrameData.Left = IIf(HW.Visible, HW.Width + HW.Left, IIf(FrameInfos.Visible, FrameInfos.Width, 0)) + 500
+    FrameData.Left = IIf(HW.Visible, HW.Width + HW.Left, _
+        IIf(FrameInfos.Visible, FrameInfos.Width, 0)) + 500
     
     'bouge le frameIcon
     FrameIcon.Top = 1700
-    FrameIcon.Left = IIf(HW.Visible, HW.Width + HW.Left, IIf(FrameInfos.Visible, FrameInfos.Width, 0)) + 500
+    FrameIcon.Left = IIf(HW.Visible, HW.Width + HW.Left, _
+        IIf(FrameInfos.Visible, FrameInfos.Width, 0)) + 500
     
     'calcule le nombre de lignes du Grid à afficher
     'NumberPerPage = Int(Me.Height / 250) - 1
@@ -831,13 +829,13 @@ Private Sub Form_Resize()
     
     HW.NumberPerPage = NumberPerPage
     HW.Refresh
-
    
-    Call VS_Change(VS.Value)
-    
-    VS.Top = 0
-    VS.Height = Me.Height - 430 - Sb.Height
-    VS.Left = IIf(Me.Width < 13100, Me.Width - 350, HW.Left + HW.Width)
+    With VS
+        Call VS_Change(.Value)
+        .Top = 0
+        .Height = Me.Height - 430 - Sb.Height
+        .Left = IIf(Me.Width < 13100, Me.Width - 350, HW.Left + HW.Width)
+    End With
             
 End Sub
 
@@ -845,7 +843,7 @@ End Sub
 'permet de lancer le Resize depuis uen autre form
 '=======================================================
 Public Sub ResizeMe()
-    Form_Resize
+    Call Form_Resize
 End Sub
 
 '=======================================================
@@ -865,12 +863,10 @@ Dim sTemp() As String
 Dim lOff As Currency
 Dim lPlace As Long
 Dim Ret As Long
-    
-    'On Error GoTo ErrGestion
-    
+        
     If bOkToOpen = False Then Exit Sub  'pas prêt à ouvrir
     
-    HW.ChangeValues 'permet d'empêcher de voir des valeurs hexa vers la fin du fichier
+    Call HW.ChangeValues 'permet d'empêcher de voir des valeurs hexa vers la fin du fichier
     
     'créé un buffer qui contiendra les valeurs
     tmpText = String$(By16(lEd - lBg) + 16, 0)
@@ -937,10 +933,6 @@ Dim Ret As Long
     frmContent.Sb.Panels(1).Text = "Status=[Ready]"
     
     'HW.Refresh  'affiche les résultats
-    
-    Exit Sub
-ErrGestion:
-    clsERREUR.AddError "Pfm.OpenFile", True
 End Sub
 
 '=======================================================
@@ -975,15 +967,17 @@ Dim y As Long
 Dim a As Long
 Dim lNewPos As Long
 Dim e As Long
-Dim lLen As Long, lFile2 As Long
+Dim lLen As Long
+Dim lFile2 As Long
 Dim lPlace As Long
 Dim tempFileLen As Long
-Dim OfF As Currency, OfL As Currency
+Dim OfF As Currency
+Dim OfL As Currency
     
     On Error GoTo ErrGestion
     
     'obtient un path temporaire
-    ObtainTempPathFile vbNullString, tempFile, cFile.GetFileExtension(Me.Caption)
+    Call ObtainTempPathFile(vbNullString, tempFile, cFile.GetFileExtension(Me.Caption))
     
     '//suppression d'une zone
     'créé le fichier normalement jusqu'à la zone à enlever
@@ -1093,7 +1087,7 @@ End Function
 Public Sub GetFile(ByVal sFile As String)
 Dim l As Currency
 
-    On Error GoTo ErrGestion
+    'On Error GoTo ErrGestion
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_OpFileCour") & " " & sFile & " ...")
@@ -1113,29 +1107,34 @@ Dim l As Currency
     Set Me.Icon = CreateIcon(sFile)
     
     'obtient un handle vers le fichier
-    lFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
+    lFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
     
     If NumberPerPage = 0 Then Call Form_Resize  'besoin de cette valeur
         
     'règle la taille de VS
-    VS.Min = 0
-    l = Int(lLength / 16)
-    VS.Max = l
-    VS.Value = 0
-    VS.SmallChange = 1
-    VS.LargeChange = NumberPerPage - 1
+    With VS
+        .Min = 0
+        l = Int(lLength / 16)
+        .Max = l
+        .Value = 0
+        .SmallChange = 1
+        .LargeChange = NumberPerPage - 1
+    End With
     
     'stocke dans les tag les valeurs Max et Min des offsets
-    HW.curTag1 = HW.FirstOffset
-    HW.curTag2 = HW.MaxOffset
+    With HW
+        .curTag1 = .FirstOffset
+        .curTag2 = .MaxOffset
+    End With
     
     bOkToOpen = True 'prêt à l'ouverture
 
     'affichage
-    OpenFile 16 * VS.Value + 1, VS.Value * 16 + NumberPerPage * 16
+    Call OpenFile(16 * VS.Value + 1, VS.Value * 16 + NumberPerPage * 16)
     
     'affiche aussi les icones du fichier
-    LoadIconesToLV sFile, lvIcon, Me.pct, Me.IMG
+    Call LoadIconesToLV(sFile, lvIcon, Me.pct, Me.IMG)
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_File") & " " & sFile & " " & Lang.GetString("_Opened"))
@@ -1146,7 +1145,9 @@ ErrGestion:
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
+
     Set cUndo = Nothing
+    
     #If USE_FORM_SUBCLASSING Then
         'alors enlève le subclassing
         Call RestoreResizing(Me.hWnd)
@@ -1170,143 +1171,149 @@ Private Sub HW_KeyDown(KeyCode As Integer, Shift As Integer)
     DoEvents    '/!\ IMPORTANT : DO NOT REMOVE
     'it allows to refresh correctly the HW control
     
-    If KeyCode = vbKeyUp Then
-        bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
-        'pour l'édition dynamique au clavier
-        
-        'alors monte
-        If HW.FirstOffset = 0 And HW.Item.Line = 1 Then Exit Sub  'tout au début déjà
-        'on remonte d'une ligne alors
-        HW.Item.Line = HW.Item.Line - 1
-        If HW.Item.Line = 0 Then
-            'alors on remonte le firstoffset
-            HW.Item.Line = 1
-            HW.FirstOffset = HW.FirstOffset - 16
-            VS.Value = VS.Value - 1
-            Call VS_Change(VS.Value)
-        End If
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
-    End If
-    
-    If KeyCode = vbKeyDown Then
-        bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
-        'pour l'édition dynamique au clavier
-        
-        'alors descend
-        
-        'on vérifie que l'on ne dépasse pas la fin du fichier
-        If (HW.FirstOffset + 16 * HW.Item.Line + HW.Item.Col) > lLength Then _
-            Exit Sub    'dépasse du fichier
+    With HW
+        If KeyCode = vbKeyUp Then
+            bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
+            'pour l'édition dynamique au clavier
             
-            
-        If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) Then Exit Sub  'tout en bas
-        'on descend d'une ligne alors
-        HW.Item.Line = HW.Item.Line + 1
-        If HW.Item.Line = HW.NumberPerPage Then
-            'alors on descend le firstoffset
-            HW.Item.Line = HW.NumberPerPage - 1
-            HW.FirstOffset = HW.FirstOffset + 16
-            VS.Value = VS.Value + 1
-            Call VS_Change(VS.Value)
-        End If
-        'change le VS
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
-   End If
-    
-    If KeyCode = vbKeyEnd Then
-        bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
-        'pour l'édition dynamique au clavier
-        
-        'alors aller tout à la fin
-        VS.Value = VS.Max
-        Call VS_Change(VS.Value)
-    End If
-    If KeyCode = vbKeyHome Then
-        bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
-        'pour l'édition dynamique au clavier
-        
-        'alors tout au début
-        VS.Value = VS.Min
-        Call VS_Change(VS.Value)
-    End If
-    If KeyCode = vbKeyPageUp Then
-        bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
-        'pour l'édition dynamique au clavier
-        
-        'alors monter de NumberPerPage
-        VS.Value = IIf((VS.Value - NumberPerPage) > VS.Min, VS.Value - NumberPerPage, VS.Min)
-        Call VS_Change(VS.Value)
-    End If
-    If KeyCode = vbKeyPageDown Then
-        bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
-        'pour l'édition dynamique au clavier
-        
-        'alors descendre de NumberPerPage
-        VS.Value = IIf((VS.Value + NumberPerPage) < VS.Max, VS.Value + NumberPerPage, VS.Max)
-        Call VS_Change(VS.Value)
-    End If
-    
-    If KeyCode = vbKeyLeft Then
-        bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
-        'pour l'édition dynamique au clavier
-        
-        'alors va à gauche
-        If HW.FirstOffset = 0 And HW.Item.Col = 1 And HW.Item.Line = 1 Then Exit Sub 'tout au début déjà
-        If HW.Item.Col = 1 Then
-            'tout à gauche ==> on remonte d'une ligne alors
-            HW.Item.Col = 16: HW.Item.Line = HW.Item.Line - 1
-            If HW.Item.Line = 0 Then
+            'alors monte
+            If .FirstOffset = 0 And .Item.Line = 1 Then Exit Sub  'tout au début déjà
+            'on remonte d'une ligne alors
+            .Item.Line = .Item.Line - 1
+            If .Item.Line = 0 Then
                 'alors on remonte le firstoffset
-                HW.Item.Line = 1
-                HW.FirstOffset = HW.FirstOffset - 16
+                .Item.Line = 1
+                .FirstOffset = .FirstOffset - 16
                 VS.Value = VS.Value - 1
                 Call VS_Change(VS.Value)
             End If
-        Else
-            'va à gauche
-            HW.Item.Col = HW.Item.Col - 1
+            .ColorItem tHex, .Item.Line, .Item.Col, .Value(.Item.Line, .Item.Col), .SelectionColor, True
+            .AddSelection .Item.Line, .Item.Col
         End If
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
-    End If
-         
-    If KeyCode = vbKeyRight Then
-        bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
-        'pour l'édition dynamique au clavier
         
-        'alors on va à droite
-        
-        'on vérifie que l'on ne dépasse pas la fin du fichier
-        If (HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col) >= lLength Then _
-            Exit Sub    'dépasse du fichier
-        
-        If HW.FirstOffset + HW.Item.Line * 16 - 16 = By16(HW.MaxOffset) And HW.Item.Col = 16 Then Exit Sub  'tout à la fin déjà
-        If HW.Item.Col = 16 Then
-            'tout à droite ==> on descend d'une ligne alors
-            HW.Item.Col = 1: HW.Item.Line = HW.Item.Line + 1
-            If HW.Item.Line = HW.NumberPerPage Then
+        If KeyCode = vbKeyDown Then
+            bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
+            'pour l'édition dynamique au clavier
+            
+            'alors descend
+            
+            'on vérifie que l'on ne dépasse pas la fin du fichier
+            If (.FirstOffset + 16 * .Item.Line + .Item.Col) > lLength Then _
+                Exit Sub    'dépasse du fichier
+                
+                
+            If .FirstOffset + .Item.Line * 16 - 16 = By16(.MaxOffset) Then Exit Sub  'tout en bas
+            'on descend d'une ligne alors
+            .Item.Line = .Item.Line + 1
+            If .Item.Line = .NumberPerPage Then
                 'alors on descend le firstoffset
-                HW.Item.Line = HW.NumberPerPage - 1
-                HW.FirstOffset = HW.FirstOffset + 16
+                .Item.Line = .NumberPerPage - 1
+                .FirstOffset = .FirstOffset + 16
                 VS.Value = VS.Value + 1
                 Call VS_Change(VS.Value)
             End If
-        Else
-            'va à droite
-            HW.Item.Col = HW.Item.Col + 1
+            'change le VS
+            .ColorItem tHex, .Item.Line, .Item.Col, .Value(.Item.Line, .Item.Col), .SelectionColor, True
+            .AddSelection .Item.Line, .Item.Col
         End If
-        'change le VS
-        HW.ColorItem tHex, HW.Item.Line, HW.Item.Col, HW.Value(HW.Item.Line, HW.Item.Col), HW.SelectionColor, True
-        HW.AddSelection HW.Item.Line, HW.Item.Col
-    End If
+    End With
     
-    'réenregistre le numéro de l'offset actuel dans hw.item
-    HW.Item.Offset = HW.Item.Line * 16 - 16
-    'affecte les autres valeurs dans Item
-    'HW.Item.tType = tHex
-    HW.Item.Value = HW.Value(HW.Item.Line, HW.Item.Col)
+    With VS
+        If KeyCode = vbKeyEnd Then
+            bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
+            'pour l'édition dynamique au clavier
+            
+            'alors aller tout à la fin
+            .Value = .Max
+            Call VS_Change(.Value)
+        End If
+        If KeyCode = vbKeyHome Then
+            bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
+            'pour l'édition dynamique au clavier
+            
+            'alors tout au début
+            .Value = .Min
+            Call VS_Change(.Value)
+        End If
+        If KeyCode = vbKeyPageUp Then
+            bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
+            'pour l'édition dynamique au clavier
+            
+            'alors monter de NumberPerPage
+            VS.Value = IIf((.Value - NumberPerPage) > .Min, .Value - NumberPerPage, .Min)
+            Call VS_Change(.Value)
+        End If
+        If KeyCode = vbKeyPageDown Then
+            bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
+            'pour l'édition dynamique au clavier
+            
+            'alors descendre de NumberPerPage
+            .Value = IIf((.Value + NumberPerPage) < .Max, .Value + NumberPerPage, .Max)
+            Call VS_Change(.Value)
+        End If
+    End With
+    
+    With HW
+        If KeyCode = vbKeyLeft Then
+            bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
+            'pour l'édition dynamique au clavier
+            
+            'alors va à gauche
+            If .FirstOffset = 0 And .Item.Col = 1 And .Item.Line = 1 Then Exit Sub 'tout au début déjà
+            If .Item.Col = 1 Then
+                'tout à gauche ==> on remonte d'une ligne alors
+                .Item.Col = 16: .Item.Line = .Item.Line - 1
+                If .Item.Line = 0 Then
+                    'alors on remonte le firstoffset
+                    .Item.Line = 1
+                    .FirstOffset = .FirstOffset - 16
+                    VS.Value = VS.Value - 1
+                    Call VS_Change(VS.Value)
+                End If
+            Else
+                'va à gauche
+                .Item.Col = .Item.Col - 1
+            End If
+            .ColorItem tHex, .Item.Line, .Item.Col, .Value(.Item.Line, .Item.Col), .SelectionColor, True
+            .AddSelection .Item.Line, .Item.Col
+        End If
+             
+        If KeyCode = vbKeyRight Then
+            bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
+            'pour l'édition dynamique au clavier
+            
+            'alors on va à droite
+            
+            'on vérifie que l'on ne dépasse pas la fin du fichier
+            If (.FirstOffset + 16 * (.Item.Line - 1) + .Item.Col) >= lLength Then _
+                Exit Sub    'dépasse du fichier
+            
+            If .FirstOffset + .Item.Line * 16 - 16 = By16(.MaxOffset) And .Item.Col = 16 Then Exit Sub  'tout à la fin déjà
+            If .Item.Col = 16 Then
+                'tout à droite ==> on descend d'une ligne alors
+                .Item.Col = 1: .Item.Line = .Item.Line + 1
+                If .Item.Line = .NumberPerPage Then
+                    'alors on descend le firstoffset
+                    .Item.Line = .NumberPerPage - 1
+                    .FirstOffset = .FirstOffset + 16
+                    VS.Value = VS.Value + 1
+                    Call VS_Change(VS.Value)
+                End If
+            Else
+                'va à droite
+                .Item.Col = .Item.Col + 1
+            End If
+            'change le VS
+            .ColorItem tHex, .Item.Line, .Item.Col, .Value(.Item.Line, .Item.Col), .SelectionColor, True
+            .AddSelection .Item.Line, .Item.Col
+        End If
+        
+        'réenregistre le numéro de l'offset actuel dans hw.item
+        .Item.Offset = .Item.Line * 16 - 16
+        'affecte les autres valeurs dans Item
+        'HW.Item.tType = tHex
+        .Item.Value = .Value(.Item.Line, .Item.Col)
+    End With
     
     DoEvents
 
@@ -1323,8 +1330,6 @@ Dim bytHex As Byte
 Dim Valu As Byte
 Dim x As Byte
 Dim s2 As String
-
-    On Error GoTo ErrGestion
     
     If HW.Item.tType = tHex Then  'si l'on est dans la zone hexa
         If (KeyAscii >= 48 And KeyAscii <= 57) Or (KeyAscii >= 65 And KeyAscii <= 70) Or (KeyAscii >= 97 And KeyAscii <= 102) Then
@@ -1363,12 +1368,13 @@ Dim s2 As String
             s2 = s
             
             'calcule la nouvelle string (partie de gauche ancienne + nouveau byte + partie de droite ancienne)
-            s = Mid$(s, 1, HW.Item.Col - 1) & Chr$(bytHex) & Mid$(s, HW.Item.Col + 1, 16 - HW.Item.Col)   'avant & nouvelle & après
+            s = Mid$(s, 1, HW.Item.Col - 1) & Chr_(bytHex) & Mid$(s, HW.Item.Col + 1, 16 - HW.Item.Col)   'avant & nouvelle & après
             
             'applique le changement
             Call Me.AddChange((HW.Item.Line - 1) * 16 + HW.FirstOffset, HW.Item.Col, s)
             'ajoute l'historique
-            Me.AddHistoFrm actByteWritten, s2, s, (HW.Item.Line - 1) * 16 + HW.FirstOffset, , HW.Item.Col
+            Call Me.AddHistoFrm(actByteWritten, s2, s, (HW.Item.Line - 1) * _
+                16 + HW.FirstOffset, , HW.Item.Col)
            'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
             
@@ -1387,20 +1393,17 @@ Dim s2 As String
             s2 = s
             
             'calcule la nouvelle string (partie de gauche ancienne + nouveau byte + partie de droite ancienne)
-            s = Mid$(s, 1, HW.Item.Col - 1) & Chr$(KeyAscii) & Mid$(s, HW.Item.Col + 1, 16 - HW.Item.Col)   'avant & nouvelle & après
+            s = Mid$(s, 1, HW.Item.Col - 1) & Chr_(KeyAscii) & Mid$(s, HW.Item.Col + 1, 16 - HW.Item.Col)   'avant & nouvelle & après
             
             'applique le changement
             Call Me.AddChange((HW.Item.Line - 1) * 16 + HW.FirstOffset, HW.Item.Col, s)
             'ajoute l'historique
-            Me.AddHistoFrm actByteWritten, s2, s, (HW.Item.Line - 1) * 16 + HW.FirstOffset, , HW.Item.Col
+            Call Me.AddHistoFrm(actByteWritten, s2, s, (HW.Item.Line - 1) * _
+                16 + HW.FirstOffset, , HW.Item.Col)
             'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
             
     End If
-
-    Exit Sub
-ErrGestion:
-    clsERREUR.AddError "Pfm.KeyPress", True
 End Sub
 
 Public Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As HexViewer_OCX.ItemElement)
@@ -1427,7 +1430,6 @@ Dim l As Currency
     
     Label2(10).Caption = Me.Sb.Panels(3).Text
     
-    
     If Button = 1 Then
         'alors on a sélectionné un objet
         
@@ -1449,11 +1451,13 @@ Dim l As Currency
         'affiche la donnée sélectionnée dans frmData
         If Item.tType = tHex Then
             'valeur hexa sélectionnée
-            txtValue(0).Text = Item.Value
-            txtValue(1).Text = Hex2Dec(Item.Value)
-            txtValue(2).Text = Hex2Str(Item.Value)
-            txtValue(3).Text = Hex2Oct(Item.Value)
-            FrameData.Caption = "Data=[" & Item.Value & "]"
+            With Item
+                txtValue(0).Text = .Value
+                txtValue(1).Text = Hex2Dec(.Value)
+                txtValue(2).Text = Hex2Str(.Value)
+                txtValue(3).Text = Hex2Oct(.Value)
+                FrameData.Caption = "Data=[" & .Value & "]"
+            End With
         End If
         If Item.tType = tString Then
             'valeur strind sélectionnée
@@ -1473,7 +1477,7 @@ Dim l As Currency
             'on l'ajoute
             HW.AddSignet Item.Offset
             Me.lstSignets.ListItems.Add Text:=CStr(Item.Offset)
-            HW.TraceSignets
+            Call HW.TraceSignets
         Else
         
             'alors on l'enlève
@@ -1489,12 +1493,12 @@ Dim l As Currency
                 End If
             Next r
             
-            Refresh
+            Call Refresh
         End If
     ElseIf Button = 4 And Shift = 2 Then
         'click molette + control
         'sélectionne une zone définie
-        frmSelect.GetEditFunction 0 'selection mode
+        Call frmSelect.GetEditFunction(0)  'selection mode
         frmSelect.Show vbModal
     End If
     
@@ -1512,16 +1516,18 @@ Private Sub HW_MouseWheel(ByVal lSens As Long)
     
     bFirstChange = False 'ALORS IL FAUDRA RETAPER LA PREMIERE PARTIE DE LA STRING HEXA
     'pour l'édition dynamique au clavier
-        
-    If lSens > 0 Then
-        'alors on descend
-        VS.Value = IIf((VS.Value - 3) >= 0, VS.Value - 3, 0)
-        Call VS_Change(VS.Value)
-    Else
-        'alors on monte
-        VS.Value = IIf((VS.Value + 3) <= VS.Max, VS.Value + 3, VS.Max)
-        Call VS_Change(VS.Value)
-    End If
+    
+    With VS
+        If lSens > 0 Then
+            'alors on descend
+            .Value = IIf((.Value - 3) >= 0, .Value - 3, 0)
+            Call VS_Change(.Value)
+        Else
+            'alors on monte
+            .Value = IIf((.Value + 3) <= .Max, .Value + 3, .Max)
+            Call VS_Change(.Value)
+        End If
+    End With
 End Sub
 
 Private Sub HW_UserMakeFirstOffsetChangeByMovingMouse()
@@ -1539,7 +1545,7 @@ Dim Item As ListItem
         If Item Is Nothing Then Exit Sub
         
         'supprime
-        DelHisto Val(Item.SubItems(1)), cHisto(), cUndo
+        Call DelHisto(Val(Item.SubItems(1)), cHisto(), cUndo)
     ElseIf Button = 4 Then
         'récupère l'item
         Set Item = lstHisto.HitTest(x, y)
@@ -1548,7 +1554,7 @@ Dim Item As ListItem
         'active l'élément
         cUndo.lRang = Item.Index
         Item.Selected = True
-        RedoMe cUndo, cHisto()
+        Call RedoMe(cUndo, cHisto())
         DoEvents    '/!\ DO NOT REMOVE !
         Call ModifyHistoEnabled 'vérifie que c'est Ok pour les enabled
     End If
@@ -1663,11 +1669,11 @@ Dim lPages As Long
     
     'calcule le nbre de pages
     lPages = lLength / (NumberPerPage * 16) + 1
-    Me.Sb.Panels(2).Text = "Page=[" & CStr(1 + Int(VS.Value / NumberPerPage)) & "/" & CStr(lPages) & "]"
+    Me.Sb.Panels(2).Text = "Page=[" & CStr(1 + Int(VS.Value / NumberPerPage)) & _
+        "/" & CStr(lPages) & "]"
     Label2(8).Caption = Me.Sb.Panels(2).Text
     
     HW.FirstOffset = VS.Value * 16
-    
     HW.Refresh
 
     Exit Sub
@@ -1718,7 +1724,8 @@ Dim Ret As Long
        
     'obtient un handle vers le fichier à écrire
     'ouverture en ECRITURE, avec overwrite si déjà existant (car déjà demandé confirmation avant)
-    lFile2 = CreateFile(sFile2, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, CREATE_ALWAYS, 0, 0)
+    lFile2 = CreateFile(sFile2, GENERIC_WRITE, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, ByVal 0&, CREATE_ALWAYS, 0, 0)
 
     'créé un buffer de longueur divisible par 16
     'recoupera à la fin pour la longueur exacte du fichier
@@ -1765,7 +1772,7 @@ Dim Ret As Long
             'bouge le pointeur
             Ret = SetFilePointerEx(lFile2, 0&, 0&, FILE_END) 'FILE_END ==> écrit à la fin du fichier
             'écriture dans le fichier
-            WriteFile lFile2, ByVal s, Len(s), Ret, ByVal 0&
+            Call WriteFile(lFile2, ByVal s, Len(s), Ret, ByVal 0&)
             
             If (a Mod 160017) = 0 Then
                 'rend un peu la main
@@ -1777,7 +1784,7 @@ Dim Ret As Long
         Next a
     
     'ferme le handle du fichier écrit
-    CloseHandle lFile2
+    Call CloseHandle(lFile2)
     
     'affiche le message de fin de sauvegarde
     frmContent.Sb.Panels(1).Text = "Status=[Ready]"
@@ -1814,24 +1821,32 @@ Dim I_tem As ItemElement
         Select Case Index
             Case 0
                 'alors on change les autres champs que le champ "Hexa"
-                txtValue(1).Text = Hex2Dec(txtValue(0).Text)
-                txtValue(2).Text = Hex2Str(txtValue(0).Text)
-                txtValue(3).Text = Hex2Oct(txtValue(0).Text)
+                With txtValue(0)
+                    txtValue(1).Text = Hex2Dec(.Text)
+                    txtValue(2).Text = Hex2Str(.Text)
+                    txtValue(3).Text = Hex2Oct(.Text)
+                End With
             Case 1
                 'alors on change les autres champs que le champ "decimal"
-                txtValue(0).Text = Hex$(Val(txtValue(1).Text))
-                txtValue(2).Text = Byte2FormatedString(Val(txtValue(1).Text))
-                txtValue(3).Text = Oct$(Val(txtValue(1).Text))
+                With txtValue(1)
+                    txtValue(0).Text = Hex$(Val(.Text))
+                    txtValue(2).Text = Byte2FormatedString(Val(.Text))
+                    txtValue(3).Text = Oct$(Val(.Text))
+                End With
             Case 2
                 'alors on change les autres champs que le champ "ASCII"
-                txtValue(0).Text = Str2Hex(txtValue(2).Text)
-                txtValue(1).Text = Str2Dec(txtValue(2).Text)
-                txtValue(3).Text = Str2Oct(txtValue(2).Text)
+                With txtValue(2)
+                    txtValue(0).Text = Str2Hex(.Text)
+                    txtValue(1).Text = Str2Dec(.Text)
+                    txtValue(3).Text = Str2Oct(.Text)
+                End With
             Case 3
                 'alors on change les autres champs que le champ "octal"
-                txtValue(0).Text = Hex$(Oct2Dec(Val(txtValue(3).Text)))
-                txtValue(1).Text = Oct2Dec(Val(txtValue(3).Text))
-                txtValue(2).Text = Chr$(Oct2Dec(Val(txtValue(3).Text)))
+                With txtValue(3)
+                    txtValue(0).Text = Hex$(Oct2Dec(Val(.Text)))
+                    txtValue(1).Text = Oct2Dec(Val(.Text))
+                    txtValue(2).Text = Chr_(Oct2Dec(Val(.Text)))
+                End With
         End Select
 
         With frmContent.ActiveForm.HW
@@ -1873,7 +1888,8 @@ Public Sub AddHistoFrm(ByVal tUndo As UNDO_TYPE, Optional ByVal sData1 As String
     Optional ByVal curData2 As Currency, Optional ByVal bytData1 As Byte, _
     Optional ByVal bytData2 As Byte, Optional ByVal lngData1 As Long)
     
-    AddHisto -1, cUndo, cHisto(), tUndo, sData1, sData2, curData1, curData2, bytData1, bytData2, lngData1
+    Call AddHisto(-1, cUndo, cHisto(), tUndo, sData1, sData2, curData1, _
+        curData2, bytData1, bytData2, lngData1)
     lstHisto.ListItems.Item(lstHisto.ListItems.Count).Selected = True
 End Sub
 
@@ -1894,7 +1910,7 @@ Public Sub UndoM()
             cUndo.lRang = 1
         End If
     End With
-    UndoMe cUndo, cHisto()
+    Call UndoMe(cUndo, cHisto())
     DoEvents    '/!\ DO NOT REMOVE ! (permet d'effectuer les changements d'enabled et de ne pas pouvoir appuyer sur ctrl+Z quand on est au tout début)
     Call ModifyHistoEnabled 'vérifie que c'est Ok pour les enabled
 End Sub
@@ -1917,7 +1933,7 @@ Public Sub RedoM()
             cUndo.lRang = .ListItems.Count
         End If
     End With
-    RedoMe cUndo, cHisto()
+    Call RedoMe(cUndo, cHisto())
     DoEvents    '/!\ DO NOT REMOVE !
     Call ModifyHistoEnabled 'vérifie que c'est Ok pour les enabled
 End Sub

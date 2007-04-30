@@ -48,8 +48,10 @@ Private AdressWinProc As Long
 '=======================================================
 'met au premier plan ou non une form
 '=======================================================
-Public Function SetFormForeBackGround(Frm As Form, IsPremierPlan As ModePlan) As Long
-    Select Case IsPremierPlan
+Public Function SetFormForeBackGround(Frm As Form, FormGround As ModePlan) _
+    As Long
+    
+    Select Case FormGround
         Case True
             SetFormForeBackGround = SetWindowPos(Frm.hWnd, -1, 0, 0, 0, 0, VISIBLEFLAGS)
         Case False
@@ -149,17 +151,19 @@ Dim cReg As clsRegistry
     'tType=1 ==> Fichier
     'tType=2 ==> Dossier
 
-    If tType = 1 Then
-        'créé les clés registre nécessaires pour ajouter une entrée au menu contextuel (fichier)
-        cReg.CreateKey HKEY_CLASSES_ROOT, "*\Shell\hexeditShellMenu\Command"
-        cReg.WriteValue HKEY_CLASSES_ROOT, "*\Shell\hexeditShellMenu", "", "Ouvrir avec HexEditor", REG_SZ
-        cReg.WriteValue HKEY_CLASSES_ROOT, "*\Shell\hexeditShellMenu\Command\", "", Chr$(34) & App.Path & "\HexEditor.exe" & Chr$(34) & " " & Chr$(34) & "%1" & Chr$(34), REG_SZ
-    Else
-        'dossier
-        cReg.CreateKey HKEY_CLASSES_ROOT, "Folder\Shell\hexeditShellMenu\Command"
-        cReg.WriteValue HKEY_CLASSES_ROOT, "Folder\Shell\hexeditShellMenu", "", "Ouvrir avec HexEditor", REG_SZ
-        cReg.WriteValue HKEY_CLASSES_ROOT, "Folder\Shell\hexeditShellMenu\Command\", "", Chr$(34) & App.Path & "\HexEditor.exe" & Chr$(34) & " " & Chr$(34) & "%1" & Chr$(34), REG_SZ
-    End If
+    With cReg
+        If tType = 1 Then
+            'créé les clés registre nécessaires pour ajouter une entrée au menu contextuel (fichier)
+            Call .CreateKey(HKEY_CLASSES_ROOT, "*\Shell\hexeditShellMenu\Command")
+            Call .WriteValue(HKEY_CLASSES_ROOT, "*\Shell\hexeditShellMenu", "", "Ouvrir avec HexEditor", REG_SZ)
+            Call .WriteValue(HKEY_CLASSES_ROOT, "*\Shell\hexeditShellMenu\Command\", "", Chr_(34) & App.Path & "\HexEditor.exe" & Chr_(34) & " " & Chr_(34) & "%1" & Chr_(34), REG_SZ)
+        Else
+            'dossier
+            Call .CreateKey(HKEY_CLASSES_ROOT, "Folder\Shell\hexeditShellMenu\Command")
+            Call .WriteValue(HKEY_CLASSES_ROOT, "Folder\Shell\hexeditShellMenu", "", "Ouvrir avec HexEditor", REG_SZ)
+            Call .WriteValue(HKEY_CLASSES_ROOT, "Folder\Shell\hexeditShellMenu\Command\", "", Chr_(34) & App.Path & "\HexEditor.exe" & Chr_(34) & " " & Chr_(34) & "%1" & Chr_(34), REG_SZ)
+        End If
+    End With
     
     Set cReg = Nothing
 End Sub
@@ -172,15 +176,17 @@ Dim cReg As clsRegistry
 
     Set cReg = New clsRegistry
     
-    If tType = 1 Then
-        'fichier
-        cReg.DelKey HKEY_CLASSES_ROOT, "*\Shell\hexeditShellMenu\Command"
-        cReg.DelKey HKEY_CLASSES_ROOT, "*\Shell\hexeditShellMenu"
-    Else
-        'dossier
-        cReg.DelKey HKEY_CLASSES_ROOT, "Folder\Shell\hexeditShellMenu\Command"
-        cReg.DelKey HKEY_CLASSES_ROOT, "Folder\Shell\hexeditShellMenu"
-    End If
+    With cReg
+        If tType = 1 Then
+            'fichier
+            Call .DelKey(HKEY_CLASSES_ROOT, "*\Shell\hexeditShellMenu\Command")
+            Call .DelKey(HKEY_CLASSES_ROOT, "*\Shell\hexeditShellMenu")
+        Else
+            'dossier
+            Call .DelKey(HKEY_CLASSES_ROOT, "Folder\Shell\hexeditShellMenu\Command")
+            Call .DelKey(HKEY_CLASSES_ROOT, "Folder\Shell\hexeditShellMenu")
+        End If
+    End With
     
     Set cReg = Nothing
     
@@ -212,33 +218,14 @@ End Function
 'renvoie une valeur divisible par 16 (supérieure à l)
 '=======================================================
 Public Function By16(ByVal l As Currency) As Currency
-Dim r As Currency
-
-    r = l
-    While Int(r / 16) < (r / 16)
-        r = r + 1
-    Wend
-    By16 = r
-
+    By16 = Int((l + 15) / 16) * 16
 End Function
 
 '=======================================================
 'renvoie une valeur divisible par 16 (inférieure à l)
 '=======================================================
 Public Function By16D(ByVal l As Currency) As Currency
-Dim r As Currency
-
-    If (l Mod 16) = 0 Then
-        By16D = l
-        Exit Function
-    End If
-
-    r = l
-    While Int(r / 16) < (r / 16)
-        r = r + 1
-    Wend
-    By16D = r - 16
-
+    By16D = Int((l - 1) / 16) * 16
 End Function
 
 '=======================================================
@@ -253,33 +240,14 @@ End Function
 'renvoie une valeur divisible par n (inférieure à l)
 '=======================================================
 Public Function ByND(ByVal l As Currency, ByVal n As Long) As Currency
-Dim r As Currency
-
-    If Mod2(l, n) = 0 Then
-        ByND = l
-        Exit Function
-    End If
-
-    r = l
-    While Int(r / n) < (r / n)
-        r = r + 1
-    Wend
-    ByND = r - n
-
+    ByND = Int(l / n) * n
 End Function
 
 '=======================================================
 'renvoie une valeur divisible par n (supérieure à l)
 '=======================================================
 Public Function ByN(ByVal l As Currency, ByVal n As Long) As Currency
-Dim r As Currency
-
-    r = l
-    While Int(r / n) < (r / n)
-        r = r + 1
-    Wend
-    ByN = r
-
+    ByN = Int((l + n - 1) / n) * n
 End Function
 
 '=======================================================
@@ -301,7 +269,10 @@ Public Function TypeOfForm(Frm As Form) As String
     
     On Error Resume Next
     
-    TypeOfForm = IIf(Frm.Useless = "Pfm", "Fichier", vbNullString) & IIf(Frm.Useless = "Mem", "Processus", vbNullString) & IIf(Frm.Useless = "Disk", "Disque", vbNullString) & IIf(Frm.Useless = "Phys", "Disque physique", vbNullString)
+    TypeOfForm = IIf(Frm.Useless = "Pfm", "Fichier", vbNullString) & _
+        IIf(Frm.Useless = "Mem", "Processus", vbNullString) & _
+        IIf(Frm.Useless = "Disk", "Disque", vbNullString) & _
+        IIf(Frm.Useless = "Phys", "Disque physique", vbNullString)
 
 End Function
 
@@ -347,7 +318,8 @@ End Function
 'affichage de la boite de dialogue Executer...
 '=======================================================
 Public Function ShowRunBox(ByVal hWnd As Long) As Long
-    ShowRunBox = SHRunDialog(hWnd, 0, 0, StrConv("Exécuter", vbUnicode), _
+    ShowRunBox = SHRunDialog(hWnd, 0, 0, _
+        StrConv(frmContent.Lang.GetString("_ShowRunBoxTitle"), vbUnicode), _
         StrConv(frmContent.Lang.GetString("_ShowRunBoxMsg"), vbUnicode), 0)
 End Function
 
@@ -361,13 +333,11 @@ Dim lAttr As Long
 Dim vStruct As PICTDESC
 Dim vGuid   As GUID
 
-    On Error GoTo ErrGestion
-
     'prend la LargeIcon ==> définit un Flag correspondant
     lAttr = SHGFI_LARGEICON Or SHGFI_ICON Or SHGFI_USEFILEATTRIBUTES Or SHGFI_TYPENAME
     
     'obtient infos sur le fichier (ici l'icone est utilisée)
-    SHGetFileInfo sFile, FILE_ATTRIBUTE_NORMAL, vSHFI, Len(vSHFI), lAttr
+    Call SHGetFileInfo(sFile, FILE_ATTRIBUTE_NORMAL, vSHFI, Len(vSHFI), lAttr)
 
     If vSHFI.hIcon = 0 Then Exit Function
     
@@ -381,11 +351,8 @@ Dim vGuid   As GUID
     'affectation de l'icone sous form de IPicture à la fonction CreateIcon
     'en fonction de la structure définie
     If CLSIDFromString(StrPtr(IID_IICON), vGuid) = 0 Then _
-    OleCreatePictureIndirect vStruct, vGuid, True, CreateIcon
+        Call OleCreatePictureIndirect(vStruct, vGuid, True, CreateIcon)
 
-    Exit Function
-ErrGestion:
-    clsERREUR.AddError "mdlOther.CreateIcon", True
 End Function
 
 '=======================================================
@@ -397,23 +364,21 @@ Dim lIcon As Long
 Dim x As Long
 Dim b As Long
     
-    On Error GoTo ErrGestion
-    
     LV.ListItems.Clear
     lIcon = 1: x = 0
     
     'tant que l'on trouve des icones
     Do
+        'récupère un handle vers l'icone
         lIcon = ExtractIcon(App.hInstance, sFile, x)
-        
         If lIcon = 0 Then Exit Do   'plus d'icone, quitte
         
-        pct.Cls 'clear picture
+        Call pct.Cls 'clear picture
         
-        DrawIconEx pct.hdc, 0, 0, lIcon, 0, 0, 0, 0, &H1 Or &H2 'trace la picture
-        SimpleAddToLV "_" & CStr(lIcon), pct.Image, IMG 'ajoute au LV
-        
-        ValidateRect LV.hWnd, 0&    'gèle l'affichage
+        'trace la picture dans pct
+        Call DrawIconEx(pct.hdc, 0, 0, lIcon, 0, 0, 0, 0, &H1 Or &H2)
+        Call SimpleAddToLV("_" & CStr(lIcon), pct.Image, IMG)  'ajoute au LV
+        Call ValidateRect(LV.hWnd, 0&)     'gèle l'affichage
         
         'Incrementation de l'emplacement de l'icone pour l'extraction
         x = x + 1
@@ -421,14 +386,10 @@ Dim b As Long
         LV.ListItems.Add , , vbNullString, , "_" & CStr(lIcon)    'ajout de l'icone
         DoEvents
         
-        DestroyIcon lIcon   'décharge l'icone
+        Call DestroyIcon(lIcon)    'décharge l'icone
     Loop
     
-    InvalidateRect LV.hWnd, 0&, 0&  'dégèle l'affichage
-    
-    Exit Sub
-ErrGestion:
-    clsERREUR.AddError "mdlOther.LoadIconesToLV", True
+    Call InvalidateRect(LV.hWnd, 0&, 0&)   'dégèle l'affichage
 End Sub
 
 '=======================================================
@@ -438,7 +399,7 @@ End Sub
 Public Sub SimpleAddToLV(ByVal sKey As String, IMG As Picture, ImageL As ImageList)
 Dim lst As ListImage
 
-    'On Error Resume Next
+    On Error Resume Next
 
     Set lst = ImageL.ListImages.Add(Key:=sKey, Picture:=IMG)
 
@@ -482,11 +443,13 @@ Public Function MaWinProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam A
     
     'Intercepte le Message Windows de redimensionnement de fenêtre
     If uMsg = WM_GETMINMAXINFO Then
-        CopyMemory MinMax, ByVal lParam, Len(MinMax)
+        
+        Call CopyMemory(MinMax, ByVal lParam, Len(MinMax))
+        
         MinMax.ptMinTrackSize.x = MinX \ Screen.TwipsPerPixelX
         MinMax.ptMinTrackSize.y = MinY \ Screen.TwipsPerPixelY
 
-        CopyMemory ByVal lParam, MinMax, Len(MinMax)
+        Call CopyMemory(ByVal lParam, MinMax, Len(MinMax))
         'Code de retour pour signaler à Windows que le traitement s'est correctement effectué
         MaWinProc = 1
         Exit Function
@@ -607,10 +570,10 @@ Dim ST As SYSTEMTIME
     End With
     
     'passe en filetime
-    SystemTimeToFileTime ST, FT
+    Call SystemTimeToFileTime(ST, FT)
     
     'passe en heure locale
-    FileTimeToLocalFileTime FT, FT
+    Call FileTimeToLocalFileTime(FT, FT)
     
     'passe en currency
     DateString2Currency = FT2Currency(FT)
@@ -766,12 +729,14 @@ Dim bOverWrite As Boolean
     
     frmContent.Sb.Panels(1).Text = "Status=[Creating file from selection]"
     
-    'détermine la taille
-    curSize = frmContent.ActiveForm.HW.SecondSelectionItem.Offset + frmContent.ActiveForm.HW.SecondSelectionItem.Col - _
-        frmContent.ActiveForm.HW.FirstSelectionItem.Offset - frmContent.ActiveForm.HW.FirstSelectionItem.Col + 1
-    
-    'détermine la position du premier offset
-    curPos = frmContent.ActiveForm.HW.FirstSelectionItem.Offset + frmContent.ActiveForm.HW.FirstSelectionItem.Col - 1
+    With frmContent.ActiveForm.HW
+        'détermine la taille
+        curSize = .SecondSelectionItem.Offset + .SecondSelectionItem.Col - _
+            .FirstSelectionItem.Offset - .FirstSelectionItem.Col + 1
+        
+        'détermine la position du premier offset
+        curPos = .FirstSelectionItem.Offset + .FirstSelectionItem.Col - 1
+    End With
     
     With frmContent.CMD
         .CancelError = True
@@ -825,31 +790,33 @@ Dim bOverWrite As Boolean
             
             'redéfinit correctement la position et la taille (doivent être multiple du nombre
             'de bytes par secteur)
-            curPos2 = ByND(curPos, frmContent.ActiveForm.GetDriveInfos.BytesPerSector)
-            curSize2 = frmContent.ActiveForm.HW.SecondSelectionItem.Offset + frmContent.ActiveForm.HW.SecondSelectionItem.Col - _
-                curPos2  'recalcule la taille en partant du début du secteur
-            curSize2 = ByN(curSize2, frmContent.ActiveForm.GetDriveInfos.BytesPerSector)
-            
-            If curSize2 <= frmContent.ActiveForm.GetDriveInfos.BytesPerSector Then
-                'alors tout rentre dans un buffer (de la taille d'un secteur)
-                'récupère la string
-                DirectReadS frmContent.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                    curPos2 / frmContent.ActiveForm.GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                    frmContent.ActiveForm.GetDriveInfos.BytesPerSector, s2
-                    
-                'recoupe la string pour récupérer ce qui intéresse vraiment
-                s2 = Mid$(s2, curPos - curPos2 + 1, curSize)
-                GoTo CreateMyFileFromOneBuffer
-            Else
-                'plusieurs buffers nécessaires
+            With frmContent.ActiveForm
+                curPos2 = ByND(curPos, .GetDriveInfos.BytesPerSector)
+                curSize2 = .HW.SecondSelectionItem.Offset + .HW.SecondSelectionItem.Col - _
+                    curPos2  'recalcule la taille en partant du début du secteur
+                curSize2 = ByN(curSize2, .GetDriveInfos.BytesPerSector)
                 
-                GoTo CreateMyFileFromBuffers
-            End If
+                If curSize2 <= .GetDriveInfos.BytesPerSector Then
+                    'alors tout rentre dans un buffer (de la taille d'un secteur)
+                    'récupère la string
+                    Call DirectReadS(.GetDriveInfos.VolumeLetter & ":\", _
+                        curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
+                        .GetDriveInfos.BytesPerSector, s2)
+
+                    'recoupe la string pour récupérer ce qui intéresse vraiment
+                    s2 = Mid$(s2, curPos - curPos2 + 1, curSize)
+                    GoTo CreateMyFileFromOneBuffer
+                Else
+                    'plusieurs buffers nécessaires
+                    
+                    GoTo CreateMyFileFromBuffers
+                End If
+            End With
     End Select
 
 CreateMyFileFromOneBuffer:
     'sauvegarde le fichier (un seul buffer)
-    cFile.SaveDataInFile sFile, s2, bOverWrite   'lance la sauvegarde
+    Call cFile.SaveDataInFile(sFile, s2, bOverWrite)    'lance la sauvegarde
 
     'ajoute du texte à la console
     Call AddTextToConsole(frmContent.Lang.GetString("_FileCreatedOkMdl"))
@@ -860,7 +827,7 @@ CreateMyFileFromBuffers:
     'sauvegarde le fichier (plusieurs buffers)
     
     'commence par créer un fichier vierge
-    cFile.CreateEmptyFile sFile, bOverWrite
+    Call cFile.CreateEmptyFile(sFile, bOverWrite)
     
     Select Case TypeOfForm(frmContent.ActiveForm)
         Case "Fichier"
@@ -879,14 +846,14 @@ CreateMyFileFromBuffers:
                 s2 = GetBytesFromFile(frmContent.ActiveForm.Caption, 512000, curPos + 512000 * (x - 1) + 1)
                 
                 'sauve le morceau à la fin du fichier
-                WriteBytesToFileEnd sFile, s2
+                Call WriteBytesToFileEnd(sFile, s2)
             Next x
 
             's'occupe du dernier buffer
             s2 = GetBytesFromFile(frmContent.ActiveForm.Caption, lLastBufSize, curPos + 512000 * (curBuf - 1) + 1)
             
             'sauvegarde la string
-            WriteBytesToFileEnd sFile, s2
+            Call WriteBytesToFileEnd(sFile, s2)
         
         Case "Processus"
             'sauvegarde avec un buffer de 50Ko
@@ -904,14 +871,14 @@ CreateMyFileFromBuffers:
                 s2 = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos + 512000 * (x - 1) + 1), CLng(512000))
                 
                 'sauve le morceau à la fin du fichier
-                WriteBytesToFileEnd sFile, s2
+                Call WriteBytesToFileEnd(sFile, s2)
             Next x
 
             's'occupe du dernier buffer
             s2 = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos + 512000 * (curBuf - 1) + 1), CLng(512000))
             
             'sauvegarde la string
-            WriteBytesToFileEnd sFile, s2
+            Call WriteBytesToFileEnd(sFile, s2)
             
         Case "Disque"
             'sauvegarde avec un buffer de frmContent.ActiveForm.GetDriveInfos.BytesPerSector octets
@@ -935,14 +902,14 @@ CreateMyFileFromBuffers:
             For x = 1 To curBuf - 1
                 
                 'récupère la string
-                DirectReadS frmContent.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
-                    curPos2 / lSect + (x - 1) * 1000, CLng(curSize2), lSect, s2
+                Call DirectReadS(frmContent.ActiveForm.GetDriveInfos.VolumeLetter & ":\", _
+                    curPos2 / lSect + (x - 1) * 1000, CLng(curSize2), lSect, s2)
                 
                 'recoupe la string pour récupérer ce qui intéresse vraiment
                 s2 = Mid$(s2, curPos - curPos2 + 1, (lSect * 1000))
             
                 'écrit dans le fichier (à la fin)
-                WriteBytesToFileEnd sFile, s2
+                Call WriteBytesToFileEnd(sFile, s2)
             Next x
             
             'maintenant on s'occupe du dernier morceau de fichier
@@ -953,7 +920,7 @@ CreateMyFileFromBuffers:
             s2 = Mid$(s2, curPos - curPos2 + 1, lLastBufSize)
             
             'écrit dans le fichier
-            WriteBytesToFileEnd sFile, s2
+            Call WriteBytesToFileEnd(sFile, s2)
             
     End Select
 
@@ -975,7 +942,9 @@ Dim Buffer As String
     Buffer = Space$(1024)
     
     'récupère la string
-    FormatMessage FORMAT_MESSAGE_FROM_SYSTEM, ByVal 0&, hError, LANG_NEUTRAL, Buffer, Len(Buffer), ByVal 0&
+    Call FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, ByVal 0&, hError, _
+        LANG_NEUTRAL, Buffer, Len(Buffer), ByVal 0&)
+        
     GetError = Trim$(Buffer)
     
 End Function
@@ -1022,7 +991,7 @@ Public Function Hex2Str(ByVal s As String) As String
     Hex2Str = Byte2FormatedString(Hex2Dec(s))
 End Function
 Public Function Hex2Str_(ByVal s As String) As String
-    Hex2Str_ = Chr$(Hex2Dec(s))
+    Hex2Str_ = Chr_(Hex2Dec(s))
 End Function
 Public Function Hex2Oct(ByVal s As String) As String
     Hex2Oct = Oct$(Hex2Dec(s))
@@ -1187,7 +1156,7 @@ Dim x As Long
     sRes = vbNullString
     'maintenant que la string ne comporte plus de séparants, on créé le résultat
     For x = 1 To Int(Len(sString) / 2)
-        sRes = sRes & Chr$(Hex2Dec(Mid$(sString, 2 * x - 1, 2)))
+        sRes = sRes & Chr_(Hex2Dec(Mid$(sString, 2 * x - 1, 2)))
     Next x
     
     HexValues2String = sRes

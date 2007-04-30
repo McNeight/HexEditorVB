@@ -192,6 +192,7 @@ End Function
 'lance un script
 '=======================================================
 Public Function LauchScript(ByVal sText As String) As Boolean
+'
 
 End Function
 

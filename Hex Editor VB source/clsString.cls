@@ -51,8 +51,7 @@ Option Explicit
 '=======================================================
 'API
 '=======================================================
-Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (ByVal pDst As _
-    Any, ByVal pSrc As Any, ByVal ByteLen As Long)
+Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (ByVal pDst As Any, ByVal pSrc As Any, ByVal ByteLen As Long)
 
 '=======================================================
 'CONSTANTE
@@ -79,7 +78,7 @@ Dim l As Long
       Buffer = Buffer & Space$(BUFFER_SIZE)
    Loop
 
-   CopyMemory StrPtr(Buffer) + (StrLen * 2), StrPtr(s), LenB(s)
+   Call CopyMemory(StrPtr(Buffer) + (StrLen * 2), StrPtr(s), LenB(s))
    
    StrLen = l
 
