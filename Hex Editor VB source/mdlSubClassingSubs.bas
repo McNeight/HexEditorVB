@@ -124,7 +124,7 @@ Dim id2 As String
     'vire les '&'
     id = Replace$(id, "&", vbNullString, 1, , vbBinaryCompare)
     'vire les &H9
-    id = Replace$(id, Chr$(9), vbNullString, 1, , vbBinaryCompare)
+    id = Replace$(id, Chr_(9), vbNullString, 1, , vbBinaryCompare)
     
     If InStr(1, id, "erreur") Then id = "Aide|Rap"
     

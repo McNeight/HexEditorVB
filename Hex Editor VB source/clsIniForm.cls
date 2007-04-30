@@ -59,7 +59,7 @@ Private Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePr
 'définit les préférences du fichier *.ini
 '=======================================================
 Private Sub LetPref(ByVal sSection As String, ByVal sVariable As String, ByVal sValeur As String, ByVal sFile As String)
-    WritePrivateProfileString sSection, sVariable, sValeur, sFile
+    Call WritePrivateProfileString(sSection, sVariable, sValeur, sFile)
 End Sub
 
 '=======================================================
@@ -88,60 +88,64 @@ Dim Obj As Control
 
     On Error Resume Next
     
-    For Each Obj In Frm.Controls
-        
-        'mettre "pref..." en tag pour autoriser la sauvegarde
-        'ajouter une string différente après "pref" pour différencier deux controles indexés
-        If Left$(LCase$(Obj.Tag), 4) = "pref" Then
-            'teste le type de obj, et sauvegarde les propriétés que vous
-            'voulez concernant ce composant
-            If TypeOf Obj Is TextBox Then
-                LetPref Obj.Name & Obj.Tag, "text", Obj.Text, strIniFile
-            ElseIf TypeOf Obj Is CheckBox Then
-                LetPref Obj.Name & Obj.Tag, "value", Obj.Value, strIniFile
-            ElseIf TypeOf Obj Is OptionButton Then
-                LetPref Obj.Name & Obj.Tag, "value", Obj.Value, strIniFile
-            ElseIf TypeOf Obj Is ProgressBar Then
-                LetPref Obj.Name & Obj.Tag, "min", Obj.Min, strIniFile
-                LetPref Obj.Name & Obj.Tag, "max", Obj.Max, strIniFile
-                LetPref Obj.Name & Obj.Tag, "value", Obj.Value, strIniFile
-            ElseIf TypeOf Obj Is HScrollBar Then
-                LetPref Obj.Name & Obj.Tag, "min", Obj.Min, strIniFile
-                LetPref Obj.Name & Obj.Tag, "max", Obj.Max, strIniFile
-                LetPref Obj.Name & Obj.Tag, "value", Obj.Value, strIniFile
-            ElseIf TypeOf Obj Is VScrollBar Then
-                LetPref Obj.Name & Obj.Tag, "min", Obj.Min, strIniFile
-                LetPref Obj.Name & Obj.Tag, "max", Obj.Max, strIniFile
-                LetPref Obj.Name & Obj.Tag, "value", Obj.Value, strIniFile
-            ElseIf TypeOf Obj Is DriveListBox Then
-                LetPref Obj.Name & Obj.Tag, "drive", Obj.Drive, strIniFile
-            ElseIf TypeOf Obj Is DirListBox Then
-                LetPref Obj.Name & Obj.Tag, "path", Obj.Path, strIniFile
-            ElseIf TypeOf Obj Is Slider Then
-                LetPref Obj.Name & Obj.Tag, "min", Obj.Min, strIniFile
-                LetPref Obj.Name & Obj.Tag, "max", Obj.Max, strIniFile
-                LetPref Obj.Name & Obj.Tag, "value", Obj.Value, strIniFile
-            ElseIf TypeOf Obj Is CommonDialog Then
-                LetPref Obj.Name & Obj.Tag, "initdir", Obj.initdire, strIniFile
-                LetPref Obj.Name & Obj.Tag, "filename", Obj.Filename, strIniFile
-            ElseIf TypeOf Obj Is FileListBox Then
-                LetPref Obj.Name & Obj.Tag, "path", Obj.Path, strIniFile
-            ElseIf TypeOf Obj Is TabStrip Then
-                LetPref Obj.Name & Obj.Tag, "SelectedItemIndex", Obj.SelectedItem.Index, strIniFile
-            ElseIf TypeOf Obj Is ComboBox Then
-                LetPref Obj.Name & Obj.Tag, "text", Obj.Text, strIniFile
+    With Obj
+        For Each Obj In Frm.Controls
+            
+            'mettre "pref..." en tag pour autoriser la sauvegarde
+            'ajouter une string différente après "pref" pour différencier deux controles indexés
+            If Left$(LCase$(.Tag), 4) = "pref" Then
+                'teste le type de obj, et sauvegarde les propriétés que vous
+                'voulez concernant ce composant
+                If TypeOf Obj Is TextBox Then
+                    LetPref .Name & .Tag, "text", .Text, strIniFile
+                ElseIf TypeOf Obj Is CheckBox Then
+                    LetPref .Name & .Tag, "value", .Value, strIniFile
+                ElseIf TypeOf Obj Is OptionButton Then
+                    LetPref .Name & .Tag, "value", .Value, strIniFile
+                ElseIf TypeOf Obj Is ProgressBar Then
+                    LetPref .Name & .Tag, "min", .Min, strIniFile
+                    LetPref .Name & .Tag, "max", .Max, strIniFile
+                    LetPref .Name & .Tag, "value", .Value, strIniFile
+                ElseIf TypeOf Obj Is HScrollBar Then
+                    LetPref .Name & .Tag, "min", .Min, strIniFile
+                    LetPref .Name & .Tag, "max", .Max, strIniFile
+                    LetPref .Name & .Tag, "value", .Value, strIniFile
+                ElseIf TypeOf Obj Is VScrollBar Then
+                    LetPref .Name & .Tag, "min", .Min, strIniFile
+                    LetPref .Name & .Tag, "max", .Max, strIniFile
+                    LetPref .Name & .Tag, "value", .Value, strIniFile
+                ElseIf TypeOf Obj Is DriveListBox Then
+                    LetPref .Name & .Tag, "drive", .Drive, strIniFile
+                ElseIf TypeOf Obj Is DirListBox Then
+                    LetPref .Name & .Tag, "path", .Path, strIniFile
+                ElseIf TypeOf Obj Is Slider Then
+                    LetPref .Name & .Tag, "min", .Min, strIniFile
+                    LetPref .Name & .Tag, "max", .Max, strIniFile
+                    LetPref .Name & .Tag, "value", .Value, strIniFile
+                ElseIf TypeOf Obj Is CommonDialog Then
+                    LetPref .Name & .Tag, "initdir", .initdire, strIniFile
+                    LetPref .Name & .Tag, "filename", .Filename, strIniFile
+                ElseIf TypeOf Obj Is FileListBox Then
+                    LetPref .Name & .Tag, "path", .Path, strIniFile
+                ElseIf TypeOf Obj Is TabStrip Then
+                    LetPref .Name & .Tag, "SelectedItemIndex", .SelectedItem.Index, strIniFile
+                ElseIf TypeOf Obj Is ComboBox Then
+                    LetPref .Name & .Tag, "text", .Text, strIniFile
+                End If
             End If
-        End If
-                    
-    Next Obj
+                        
+        Next Obj
+    End With
     
     If Left$(LCase$(Obj.Tag), 4) = "pref" Then
         'ici, il faut aussi gérer les propriété de la form en elle même
-        LetPref Frm.Name, "height", Frm.Height, strIniFile
-        LetPref Frm.Name, "width", Frm.Width, strIniFile
-        LetPref Frm.Name, "top", Frm.Top, strIniFile
-        LetPref Frm.Name, "left", Frm.Left, strIniFile
-        LetPref Frm.Name, "WindowState", Frm.WindowState, strIniFile
+        With Frm
+            LetPref .Name, "height", .Height, strIniFile
+            LetPref .Name, "width", .Width, strIniFile
+            LetPref .Name, "top", .Top, strIniFile
+            LetPref .Name, "left", .Left, strIniFile
+            LetPref .Name, "WindowState", .WindowState, strIniFile
+        End With
     End If
     
 End Sub
@@ -155,61 +159,64 @@ Dim Obj As Control
 
     On Error Resume Next
 
-    For Each Obj In Frm.Controls
-    
-        'mettre "pref..." en tag pour autoriser la sauvegarde
-        'ajouter une string différente après "pref" pour différencier deux controles indexés
-        If Left$(LCase$(Obj.Tag), 4) = "pref" Then
-            'teste le type de controle (rajouter les autres controles que vous voulez supporter)
-            'et change les propriétés
-            If TypeOf Obj Is TextBox Then
-                Obj.Text = GetPref(Obj.Name & Obj.Tag, "text", strIniFile)
-            ElseIf TypeOf Obj Is CheckBox Then
-                Obj.Value = CLng(GetPref(Obj.Name & Obj.Tag, "value", strIniFile))
-            ElseIf TypeOf Obj Is OptionButton Then
-                Obj.Value = CBool(GetPref(Obj.Name & Obj.Tag, "value", strIniFile))
-            ElseIf TypeOf Obj Is ProgressBar Then
-                Obj.Min = CLng(GetPref(Obj.Name & Obj.Tag, "min", strIniFile))
-                Obj.Max = CLng(GetPref(Obj.Name & Obj.Tag, "max", strIniFile))
-                Obj.Value = CLng(GetPref(Obj.Name & Obj.Tag, "value", strIniFile))
-            ElseIf TypeOf Obj Is HScrollBar Then
-                Obj.Min = CLng(GetPref(Obj.Name & Obj.Tag, "min", strIniFile))
-                Obj.Max = CLng(GetPref(Obj.Name & Obj.Tag, "max", strIniFile))
-                Obj.Value = CLng(GetPref(Obj.Name & Obj.Tag, "value", strIniFile))
-            ElseIf TypeOf Obj Is VScrollBar Then
-                Obj.Min = CLng(GetPref(Obj.Name & Obj.Tag, "min", strIniFile))
-                Obj.Max = CLng(GetPref(Obj.Name & Obj.Tag, "max", strIniFile))
-                Obj.Value = CLng(GetPref(Obj.Name & Obj.Tag, "value", strIniFile))
-            ElseIf TypeOf Obj Is DriveListBox Then
-                Obj.Drive = GetPref(Obj.Name & Obj.Tag, "drive", strIniFile)
-            ElseIf TypeOf Obj Is DirListBox Then
-                Obj.Path = GetPref(Obj.Name & Obj.Tag, "path", strIniFile)
-            ElseIf TypeOf Obj Is Slider Then
-                Obj.Min = CLng(GetPref(Obj.Name & Obj.Tag, "min", strIniFile))
-                Obj.Max = CLng(GetPref(Obj.Name & Obj.Tag, "max", strIniFile))
-                Obj.Value = CLng(GetPref(Obj.Name & Obj.Tag, "value", strIniFile))
-            ElseIf TypeOf Obj Is CommonDialog Then
-                Obj.InitDir = GetPref(Obj.Name & Obj.Tag, "initdir", strIniFile)
-                Obj.Filename = GetPref(Obj.Name & Obj.Tag, "filename", strIniFile)
-            ElseIf TypeOf Obj Is FileListBox Then
-                Obj.Path = GetPref(Obj.Name & Obj.Tag, "path", strIniFile)
-            ElseIf TypeOf Obj Is TabStrip Then
-                Obj.Tabs.Item(CLng(GetPref(Obj.Name & Obj.Tag, "SelectedItemIndex", strIniFile))).Selected = True
-            ElseIf TypeOf Obj Is ComboBox Then
-                Obj.Text = GetPref(Obj.Name & Obj.Tag, "text", strIniFile)
+    With Obj
+        For Each Obj In Frm.Controls
+        
+            'mettre "pref..." en tag pour autoriser la sauvegarde
+            'ajouter une string différente après "pref" pour différencier deux controles indexés
+            If Left$(LCase$(.Tag), 4) = "pref" Then
+                'teste le type de controle (rajouter les autres controles que vous voulez supporter)
+                'et change les propriétés
+                If TypeOf Obj Is TextBox Then
+                    .Text = GetPref(.Name & .Tag, "text", strIniFile)
+                ElseIf TypeOf Obj Is CheckBox Then
+                    .Value = CLng(GetPref(.Name & .Tag, "value", strIniFile))
+                ElseIf TypeOf Obj Is OptionButton Then
+                    .Value = CBool(GetPref(.Name & .Tag, "value", strIniFile))
+                ElseIf TypeOf Obj Is ProgressBar Then
+                    .Min = CLng(GetPref(.Name & .Tag, "min", strIniFile))
+                    .Max = CLng(GetPref(.Name & .Tag, "max", strIniFile))
+                    .Value = CLng(GetPref(.Name & .Tag, "value", strIniFile))
+                ElseIf TypeOf Obj Is HScrollBar Then
+                    .Min = CLng(GetPref(.Name & .Tag, "min", strIniFile))
+                    .Max = CLng(GetPref(.Name & .Tag, "max", strIniFile))
+                    .Value = CLng(GetPref(.Name & .Tag, "value", strIniFile))
+                ElseIf TypeOf Obj Is VScrollBar Then
+                    .Min = CLng(GetPref(.Name & .Tag, "min", strIniFile))
+                    .Max = CLng(GetPref(.Name & .Tag, "max", strIniFile))
+                    .Value = CLng(GetPref(.Name & .Tag, "value", strIniFile))
+                ElseIf TypeOf Obj Is DriveListBox Then
+                    .Drive = GetPref(.Name & .Tag, "drive", strIniFile)
+                ElseIf TypeOf Obj Is DirListBox Then
+                    .Path = GetPref(.Name & .Tag, "path", strIniFile)
+                ElseIf TypeOf Obj Is Slider Then
+                    .Min = CLng(GetPref(.Name & .Tag, "min", strIniFile))
+                    .Max = CLng(GetPref(.Name & .Tag, "max", strIniFile))
+                    .Value = CLng(GetPref(.Name & .Tag, "value", strIniFile))
+                ElseIf TypeOf Obj Is CommonDialog Then
+                    .InitDir = GetPref(.Name & .Tag, "initdir", strIniFile)
+                    .Filename = GetPref(.Name & .Tag, "filename", strIniFile)
+                ElseIf TypeOf Obj Is FileListBox Then
+                    .Path = GetPref(.Name & .Tag, "path", strIniFile)
+                ElseIf TypeOf Obj Is TabStrip Then
+                    .Tabs.Item(CLng(GetPref(.Name & .Tag, "SelectedItemIndex", strIniFile))).Selected = True
+                ElseIf TypeOf Obj Is ComboBox Then
+                    .Text = GetPref(.Name & .Tag, "text", strIniFile)
+                End If
             End If
-        End If
-
-                    
-    Next Obj
+                        
+        Next Obj
+    End With
     
     If Left$(LCase$(Obj.Tag), 4) = "pref" Then
         'pareil avec la form en elle même
-        Frm.Height = CLng(GetPref(Frm.Name, "height", strIniFile))
-        Frm.Width = CLng(GetPref(Frm.Name, "width", strIniFile))
-        Frm.Top = CLng(GetPref(Frm.Name, "top", strIniFile))
-        Frm.Left = CLng(GetPref(Frm.Name, "left", strIniFile))
-        Frm.WindowState = CLng(GetPref(Frm.Name, "WindowState", strIniFile))
+        With Frm
+            .Height = CLng(GetPref(.Name, "height", strIniFile))
+            .Width = CLng(GetPref(.Name, "width", strIniFile))
+            .Top = CLng(GetPref(.Name, "top", strIniFile))
+            .Left = CLng(GetPref(.Name, "left", strIniFile))
+            .WindowState = CLng(GetPref(.Name, "WindowState", strIniFile))
+        End With
     End If
 
 End Sub

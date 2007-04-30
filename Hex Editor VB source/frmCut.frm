@@ -456,7 +456,7 @@ Dim lTime As Long
         
         If Option1(0).Value Then
             'taille
-            tMethod.tMethode = [Taille fixe]
+            tMethod.tMethod = [Taille fixe]
             lLen = Abs(Val(txtSize.Text))
             With Lang
                 If cdUnit.Text = .GetString("_Ko") Then lLen = lLen * 1024
@@ -483,7 +483,7 @@ Dim lTime As Long
             End If
             
             With tMethod
-                .tMethode = [Nombre fichiers fixe]
+                .tMethod = [Nombre fichiers fixe]
                 .lParam = Abs(Int(Val(txtNumberOfFiles.Text)))
             End With
         End If

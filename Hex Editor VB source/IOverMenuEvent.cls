@@ -49,5 +49,5 @@ Option Explicit
 '=======================================================
 
 Public Sub OnMenuOver(ByVal strCaption As String)
-    
+'
 End Sub

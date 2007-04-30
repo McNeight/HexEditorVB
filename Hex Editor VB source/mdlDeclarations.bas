@@ -207,12 +207,6 @@ Public Const DEUX_EXP_32                        As Double = 4294967296#
 '//APIs
 '=======================================================
 
-'dll bnAlloc pour générer des strings aléatoire
-Public Declare Sub bnFreeAlloc Lib "bnAlloc.dll" (ByVal pmem As Long)
-Public Declare Function bnAlloc2MoAlea Lib "bnAlloc.dll" () As Long
-'pour permettre de reconnaitre la dll
-Public Declare Sub SetCurrentDirectoryA Lib "kernel32.dll" (ByVal pdir As String)
-
 'systèmes de temps
 Public Declare Function FileTimeToSystemTime Lib "kernel32" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
 Public Declare Function FileTimeToLocalFileTime Lib "kernel32" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
@@ -311,6 +305,7 @@ Public Declare Function SHGetSpecialFolderLocation Lib "shell32.dll" (ByVal hwnd
 Public Declare Function SHGetPathFromIDList Lib "shell32.dll" Alias "SHGetPathFromIDListA" (ByVal pidl As Long, ByVal pszPath As String) As Long
 Public Declare Function SHRunDialog Lib "shell32" Alias "#61" (ByVal hOwner As Long, ByVal Unknown1 As Long, ByVal Unknown2 As Long, ByVal szTitle As String, ByVal szPrompt As String, ByVal uFlags As Long) As Long
 Public Declare Function SHGetFileInfo Lib "shell32" Alias "SHGetFileInfoA" (ByVal pszPath As Any, ByVal dwFileAttributes As Long, psfi As SHFILEINFO, ByVal cbFileInfo As Long, ByVal uFlags As Long) As Long
+Public Declare Sub SetCurrentDirectoryA Lib "kernel32.dll" (ByVal pdir As String)
 Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 Public Declare Function ShellExecuteEX Lib "shell32.dll" Alias "ShellExecuteEx" (SEI As SHELLEXECUTEINFO) As Long
 Public Declare Function PrintDlg Lib "comdlg32.dll" Alias "PrintDlgA" (pPrintdlg As PRINTER_INFO) As Long
@@ -634,7 +629,7 @@ End Type
 
 'définit la méthode de découpe (splitter de fichiers)
 Public Type CUT_METHOD
-    tMethode As CUT_METHOD_ENUM
+    tMethod As CUT_METHOD_ENUM
     lParam As Long
 End Type
 

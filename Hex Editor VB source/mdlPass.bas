@@ -77,7 +77,7 @@ Dim Frm2 As Form
     nb = (c2 - c1) / 16
     
     'créé un pseudo hasard
-    Randomize
+    Call Randomize
     
     For x = 0 To UBound(tP()) - 1
         
@@ -85,7 +85,8 @@ Dim Frm2 As Form
         If tP(x).tType = FixedByte Then
             
             'lance la sauvegarde dans le fichier
-            Call WriteBytesToFile(sFile, String$(curPos2 - curPos1 + 1, Hex2Dec(tP(x).sData1)), curPos1)
+            Call WriteBytesToFile(sFile, String$(curPos2 - curPos1 + 1, _
+                Hex2Dec(tP(x).sData1)), curPos1)
             
             'on ouvre ce nouveau fichier
             If x = UBound(tP()) - 1 Then
@@ -100,14 +101,16 @@ Dim Frm2 As Form
                 DoEvents    '/!\ IMPORTANT DO NOT REMOVE
                 frmContent.Sb.Panels(2).Text = frmContent.Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
                 
-                'récupère les signets
-                For y = 1 To Frm2.lstSignets.ListItems.Count
-                    frmContent.ActiveForm.lstSignets.ListItems.Add _
-                        Text:=Frm2.lstSignets.ListItems.Item(y)
-                    frmContent.ActiveForm.lstSignets.ListItems.Item(y).SubItems(1) = _
-                        Frm2.lstSignets.ListItems.Item(y).SubItems(1)
-                    frmContent.ActiveForm.HW.AddSignet Val(Frm2.lstSignets.ListItems.Item(y))
-                Next y
+                With frmContent.ActiveForm
+                    'récupère les signets
+                    For y = 1 To Frm2.lstSignets.ListItems.Count
+                        .lstSignets.ListItems.Add _
+                            Text:=Frm2.lstSignets.ListItems.Item(y)
+                        .lstSignets.ListItems.Item(y).SubItems(1) = _
+                            Frm2.lstSignets.ListItems.Item(y).SubItems(1)
+                        .HW.AddSignet Val(Frm2.lstSignets.ListItems.Item(y))
+                    Next y
+                End With
                 
                 'décharge l'autre form
                 Set Frm2 = Nothing
@@ -136,7 +139,7 @@ Dim Frm2 As Form
             s = vbNullString
             For y = 1 To curPos2 - curPos1 + 1
                 z = Int(Rnd * l1)
-                s = s & Chr$(Val(Sb(z)))
+                s = s & Chr_(Val(Sb(z)))
                 If (y Mod 50000) = 0 Then DoEvents  'rend la main de tps en tps
             Next y
         
@@ -157,13 +160,15 @@ Dim Frm2 As Form
                 frmContent.Sb.Panels(2).Text = frmContent.Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
                 
                 'récupère les signets
-                For y = 1 To Frm2.lstSignets.ListItems.Count
-                    frmContent.ActiveForm.lstSignets.ListItems.Add _
-                        Text:=Frm2.lstSignets.ListItems.Item(y)
-                    frmContent.ActiveForm.lstSignets.ListItems.Item(y).SubItems(1) = _
-                        Frm2.lstSignets.ListItems.Item(y).SubItems(1)
-                    frmContent.ActiveForm.HW.AddSignet Val(Frm2.lstSignets.ListItems.Item(y))
-                Next y
+                With frmContent.ActiveForm
+                    For y = 1 To Frm2.lstSignets.ListItems.Count
+                        .lstSignets.ListItems.Add _
+                            Text:=Frm2.lstSignets.ListItems.Item(y)
+                        .lstSignets.ListItems.Item(y).SubItems(1) = _
+                            Frm2.lstSignets.ListItems.Item(y).SubItems(1)
+                        .HW.AddSignet Val(Frm2.lstSignets.ListItems.Item(y))
+                    Next y
+                End With
                 
                 'décharge l'autre form
                 Set Frm2 = Nothing
@@ -203,13 +208,15 @@ Dim Frm2 As Form
                 frmContent.Sb.Panels(2).Text = frmContent.Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
                 
                 'récupère les signets
-                For y = 1 To Frm2.lstSignets.ListItems.Count
-                    frmContent.ActiveForm.lstSignets.ListItems.Add _
-                        Text:=Frm2.lstSignets.ListItems.Item(y)
-                    frmContent.ActiveForm.lstSignets.ListItems.Item(y).SubItems(1) = _
-                        Frm2.lstSignets.ListItems.Item(y).SubItems(1)
-                    frmContent.ActiveForm.HW.AddSignet Val(Frm2.lstSignets.ListItems.Item(y))
-                Next y
+                With frmContent.ActiveForm
+                    For y = 1 To Frm2.lstSignets.ListItems.Count
+                        .lstSignets.ListItems.Add _
+                            Text:=Frm2.lstSignets.ListItems.Item(y)
+                        .lstSignets.ListItems.Item(y).SubItems(1) = _
+                            Frm2.lstSignets.ListItems.Item(y).SubItems(1)
+                        .HW.AddSignet Val(Frm2.lstSignets.ListItems.Item(y))
+                    Next y
+                End With
                 
                 'décharge l'autre form
                 Set Frm2 = Nothing
@@ -228,35 +235,26 @@ Dim Frm2 As Form
 End Sub
 
 '=======================================================
-'récupère un pointeur sur une string aléatoire de 2Mo
-'(2*1024^2 octets) générée par la dll bnAlloc
-'/!\ ne pas oublier de libérer la mémoire une fois la string
-'utilisée et plus utile
-'=======================================================
-Public Function GetPtRandomString() As Long
-    GetPtRandomString = bnAlloc2MoAlea
-End Function
-Public Sub FreePtRandomString(pt As Long)
-    Call bnFreeAlloc(pt)
-End Sub
-'=======================================================
 'récupère une string aléatoire de 2 Mo de long
 '=======================================================
 Public Function GetRandom2MoString() As String
 Dim pt As Long
 Dim s As String
+Dim cASM As CAsmProc
+Dim Tbl(2097151) As Byte
+
+    Set cASM = New CAsmProc
 
     'récupère le pointeur sur la string
-    pt = bnAlloc2MoAlea
+    Call cASM.bnAlloc2MoAlea(Tbl(0))
     
     'créé un buffer
     s = Space$(2097152)
     
-    'copie la mémoire sur la stirng
-    CopyMemory ByVal StrPtr(s), ByVal pt, 2097152
-
-    'libère les 2Mo alloué au pointeur pt
-    Call bnFreeAlloc(pt)
+    'copie les bytes du tableau sur la stirng
+    Call CopyMemory(ByVal s, Tbl(0), 2097152)
+    
+    Set cASM = Nothing
     
     GetRandom2MoString = s
 End Function
@@ -293,7 +291,7 @@ Dim l1 As Long
         lByte = Int(Rnd * l1) + lBg
         
         'concatère avec la string
-        Call cString.Append(Chr$(lByte))
+        Call cString.Append(Chr_(lByte))
     
     Next x
     

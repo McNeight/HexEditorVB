@@ -61,7 +61,7 @@ Private Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePr
 'définit les préférences du fichier *.ini
 '=======================================================
 Private Sub LetPref(ByVal sSection As String, ByVal sVariable As String, ByVal sValeur As String, ByVal sFile As String)
-    WritePrivateProfileString sSection, sVariable, sValeur, sFile
+    Call WritePrivateProfileString(sSection, sVariable, sValeur, sFile)
 End Sub
 
 '=======================================================

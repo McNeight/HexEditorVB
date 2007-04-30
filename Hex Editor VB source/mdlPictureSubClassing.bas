@@ -133,7 +133,6 @@ Dim tET As TRACKMOUSEEVENTTYPE
                 pc.MousePointer = 7
                 
             End If
-
            
             ProcPictureSubClassProc = CallWindowProc(AddrWndProc, hWnd, uMsg, wParam, lParam)
         
@@ -227,7 +226,6 @@ Dim tET As TRACKMOUSEEVENTTYPE
                 pc2.MousePointer = 7
                 
             End If
-
            
             ProcPictureSubClassProc2 = CallWindowProc(AddrWndProc2, hWnd, uMsg, wParam, lParam)
         

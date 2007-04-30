@@ -241,7 +241,7 @@ Private Function GetAssociatedCar(ByVal bytChar As Long) As String
     If bytChar < 10 Then
         GetAssociatedCar = Trim$(Str$(bytChar))
     Else
-        GetAssociatedCar = Chr$(55 + bytChar)
+        GetAssociatedCar = Chr_(55 + bytChar)
     End If
   
 End Function

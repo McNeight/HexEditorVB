@@ -237,7 +237,7 @@ Dim lProcess As Long
     
     SuspendProcess = NtSuspendProcess(lProcess)
     
-    CloseHandle lProcess
+    Call CloseHandle(lProcess)
 End Function
 
 '=======================================================
@@ -251,7 +251,7 @@ Dim lProcess As Long
     
     ResumeProcess = NtResumeProcess(lProcess)
     
-    CloseHandle lProcess
+    Call CloseHandle(lProcess)
 End Function
 
 '=======================================================
@@ -263,8 +263,6 @@ Dim Ret As Long
 Dim sResult As String
 Dim hModule As Long
 
-    On Error GoTo ErrGest
-
     If PID = 0 Then
         GetProcessPathFromPID = "[System Process]"
     ElseIf PID = 4 Then
@@ -273,7 +271,8 @@ Dim hModule As Long
         'création d'un buffer
         sResult = Space$(512)
         
-        lHprcss = OpenProcess(PROCESS_QUERY_INFORMATION Or PROCESS_VM_READ, 0, PID)    'recupère un handle du processus
+        lHprcss = OpenProcess(PROCESS_QUERY_INFORMATION Or PROCESS_VM_READ, 0, _
+            PID)    'recupère un handle du processus
         
         If lHprcss = 0 Then
         'erreur d'accès
@@ -282,19 +281,17 @@ Dim hModule As Long
         End If
         
         'handle du module du fichier *.exe
-        EnumProcessModules lHprcss, hModule, 4&, Ret
+        Call EnumProcessModules(lHprcss, hModule, 4&, Ret)
         'buffer
         sResult = Space(260) 'max path
         'obtient le path
-        GetModuleFileNameExA lHprcss, hModule, sResult, 260
+        Call GetModuleFileNameExA(lHprcss, hModule, sResult, 260)
         'ferme le handle
-        CloseHandle lHprcss
+        Call CloseHandle(lHprcss)
         'formate la string
         GetProcessPathFromPID = FormatedPath(FormatedString(sResult))  'Left$(sResult, InStr(sResult, vbNullChar) - 1)
     End If
-    
-ErrGest:
-    CloseHandle lHprcss
+
 End Function
 
 '=======================================================
@@ -365,14 +362,16 @@ End Function
 '=======================================================
 'termine un processus en fonction de son PID
 '=======================================================
-Public Function TerminateProcessByPID(ByVal PID As Long, Optional ByVal Confirm As Boolean = False) As Long
+Public Function TerminateProcessByPID(ByVal PID As Long, Optional ByVal _
+    Confirm As Boolean = False) As Long
+    
 Dim lhwndProcess As Long
 Dim lRep As Long
 Dim lExitCode As Long
 
     If Confirm Then
         'demande de confirmation
-        lRep = MsgBox("Êtes vous sur de vouloir terminer ces processus ?" & vbNewLine & "Même les processus système seront fermés, ce qui peut entrainer des problèmes.", vbInformation + vbYesNo, "Attention")
+        lRep = MsgBox("Êtes vous sur de vouloir terminer ce processus ?" & vbNewLine & "Même les processus système seront fermés, ce qui peut entrainer des problèmes.", vbInformation + vbYesNo, "Attention")
         If Not (lRep = vbYes) Then Exit Function
     End If
     
@@ -383,14 +382,16 @@ Dim lExitCode As Long
     TerminateProcessByPID = TerminateProcess(lhwndProcess, lExitCode)
     
     'ferme le handle
-    CloseHandle lhwndProcess
+    Call CloseHandle(lhwndProcess)
 
 End Function
 
 '=======================================================
 'obtient les infos sur le temps processeur
 '=======================================================
-Public Sub GetProcessTimesByPID(ByVal PID As Long, ByRef KernelTime As Double, ByRef UserTime As Double, ByRef ProcessorTime As Double)
+Public Sub GetProcessTimesByPID(ByVal PID As Long, ByRef KernelTime As Double, _
+    ByRef UserTime As Double, ByRef ProcessorTime As Double)
+    
 'permet de récupérer les temps kernel, user et processor d'un processus en fonction de son PID
 'Le temps processeur (visible dans TaskMgr) est le temps noyau + temps utilisateur
 Dim T0 As FILETIME  'cette variable n'est pas utilisées, mais est nécessaire comme argument de l'API
@@ -404,14 +405,14 @@ Dim lTime2 As Double 'temps que l'on récupère
     lProcess = OpenProcess(PROCESS_QUERY_INFORMATION Or PROCESS_VM_READ, 0, PID)
     
     'récupère les temps
-    GetProcessTimes lProcess, T0, T0, curTime, curTime2
+    Call GetProcessTimes(lProcess, T0, T0, curTime, curTime2)
     
     'Renvoit le temps en secondes
     lTime = curTime / 1000
     lTime2 = curTime2 / 1000
     
     'Ferme le handle ouvert par OpenProcess
-    CloseHandle lProcess
+    Call CloseHandle(lProcess)
         
     KernelTime = lTime
     UserTime = lTime2
@@ -440,7 +441,7 @@ Dim sComputerName As String
     sComputerName = String$(lBufferLen, "0")
     
     'obtient le nom
-    GetComputerName sComputerName, lBufferLen
+    Call GetComputerName(sComputerName, lBufferLen)
     'formate la string
     sComputerName = Left$(sComputerName, lBufferLen)
     
@@ -448,19 +449,22 @@ Dim sComputerName As String
     hProc = GetCurrentProcess
     
     'change les droits de cette application
-    OpenProcessToken hProc, TOKEN_ALL_ACCESS, lhTokenHandle
-    LookupPrivilegeValue sComputerName, SE_DEBUG_NAME, tLuid
+    Call OpenProcessToken(hProc, TOKEN_ALL_ACCESS, lhTokenHandle)
+    Call LookupPrivilegeValue(sComputerName, SE_DEBUG_NAME, tLuid)
     
     'détermine le nombre de privileges à changer
-    tTokenPriv.PrivilegeCount = 1
-    tTokenPriv.TheLuid = tLuid
-    tTokenPriv.Attributes = SE_PRIVILEGE_ENABLED
+    With tTokenPriv
+        .PrivilegeCount = 1
+        .TheLuid = tLuid
+        .Attributes = SE_PRIVILEGE_ENABLED
+    End With
     
     'autorise le privilege SE_DEBUG_NAME
-    AdjustTokenPrivileges lhTokenHandle, False, tTokenPriv, Len(tTokenPrivNew), tTokenPrivNew, lBufferNeeded
+    Call AdjustTokenPrivileges(lhTokenHandle, False, tTokenPriv, _
+        Len(tTokenPrivNew), tTokenPrivNew, lBufferNeeded)
     
     'ferme les handles
-    CloseHandle lhTokenHandle
+    Call CloseHandle(lhTokenHandle)
     CloseHandle hProc
 End Sub
 
@@ -524,7 +528,7 @@ Dim NulProc As ProcessItem
                     .procModulesCount = NumberOfModules(.th32ProcessID)
                     
                     Dim m() As ProcessModuleItem
-                    Me.EnumerateModules PID, m()
+                    Call Me.EnumerateModules(PID, m())
                     
                     .procModules = m()
                     
@@ -616,7 +620,7 @@ Dim mdTemp() As MODULEENTRY32
     mdList = mdTemp 'on aurait directement pu travailler sur mdList sans passer par mdTemp, mais il est plus propre de ne changer mdList (d'ailleurs toute autre valeur renvoyée par une sub/fonction) uniquement A LA FIN de cette sub/fonction
     
     'on ferme le handle du snap
-    CloseHandle lSnap
+    Call CloseHandle(lSnap)
 End Sub
 
 '=======================================================
@@ -626,9 +630,7 @@ Public Function EnumerateModules(ByVal PID As Long, ByRef m() As ProcessModuleIt
 Dim mdl() As MODULEENTRY32
 Dim x As Long
 
-    On Error Resume Next
-
-    CreateModuleList PID, mdl() 'créé la liste
+    Call CreateModuleList(PID, mdl())  'créé la liste
     
     ReDim m(UBound(mdl()))
     
@@ -667,13 +669,10 @@ Dim x As Long
 Dim NOPROCESS As ProcessItem
 Dim procMem As PROCESS_MEMORY_COUNTERS
     
-    
     Set NOPROCESS = New ProcessItem 'c'est le process nul
     
-    x = 0
-        
     'redimensionne le tableau de la liste des processus
-    ReDim p(0)
+    ReDim p(0): x = 0
     
     'création du snapshot (liste)
     hSnapshot = CreateToolhelpSnapshot(TH32CS_SNAPPROCESS, 0&)
@@ -743,7 +742,7 @@ Dim procMem As PROCESS_MEMORY_COUNTERS
     Loop
     
     'fermeture du handle
-    CloseHandle hSnapshot
+    Call CloseHandle(hSnapshot)
     
     EnumerateProcesses = x
 
@@ -782,7 +781,7 @@ Dim mdTemp() As MODULEENTRY32
     NumberOfModules = x - 1
 
     'on le handle du snap
-    CloseHandle lSnap
+    Call CloseHandle(lSnap)
 End Function
 
 '=======================================================
@@ -796,10 +795,10 @@ Dim hProcess As Long
     hProcess = OpenProcess(PROCESS_SET_INFORMATION, 0, PID)
     
     'changement de priorité
-    SetPriorityClass hProcess, NewPriority
+    Call SetPriorityClass(hProcess, NewPriority)
     
     'ferme le handle
-    CloseHandle hProcess
+    Call CloseHandle(hProcess)
 End Sub
 
 '=======================================================
@@ -816,10 +815,10 @@ Dim lngExit As Long
     hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, 0&, PID)
     If hProcess = 0 Then Exit Function  'raté ==> inexistant
     
-    GetExitCodeProcess hProcess, lngExit
+    Call GetExitCodeProcess(hProcess, lngExit)
     
     'ferme le handle
-    CloseHandle hProcess
+    Call CloseHandle(hProcess)
     
     If lngExit = STILL_ACTIVE Then DoesPIDExist = True
 
@@ -835,7 +834,7 @@ Dim sPath As String
     sPath = Space$(255)
     
     'get the directory
-    GetWindowsDirectory sPath, Len(sPath)
+    Call GetWindowsDirectory(sPath, Len(sPath))
     
     'formate la string
     sPath = Left$(sPath, InStr(sPath, vbNullChar) - 1)
@@ -904,7 +903,7 @@ Dim hProcess As Long
     hProcess = OpenProcess(PROCESS_QUERY_INFORMATION Or PROCESS_VM_READ, 0, PID)
     
     'obtient les infos
-    GetProcessMemoryInfo hProcess, procMem, procMem.cb
+    Call GetProcessMemoryInfo(hProcess, procMem, procMem.cb)
     
     'stocke les infos
     With GetMemoryInfo
@@ -921,22 +920,19 @@ Dim hProcess As Long
     End With
     
     'ferme le handle
-    CloseHandle hProcess
+    Call CloseHandle(hProcess)
 End Function
 
 '=======================================================
 'formatage de string
 '=======================================================
 Private Function FormatedString(ByVal sString As String) As String
-Dim s As String
-
-    s = sString
     
     'enlève le vbnullchar de fin si nécessaire
-    If InStr(s, vbNullChar) Then s = Left$(s, InStr(s, vbNullChar) - 1)
+    If InStr(sString, vbNullChar) Then sString = Left$(sString, _
+        InStr(sString, vbNullChar) - 1)
     
     'enlève les espaces inutiles
-    s = Trim$(s)
-    
-    FormatedString = s
+    FormatedString = Trim$(sString)
+
 End Function

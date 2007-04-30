@@ -76,7 +76,7 @@ Private m_CRC32Table(0 To 255) As Long
 
 Private Const TaileTab As Long = 262144 '=2^18
 
-Private Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hwnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Private Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 
 Public Function AddBytes(ByteArray() As Byte) As Long
 
@@ -179,13 +179,13 @@ Public Function CalculateFile(Filename As String) As String
             ReDim ByteArray(LOF(Filenr) - 1)
             Get #Filenr, lCompteur, ByteArray()
             CalculateF = CalculateBytes(ByteArray)
-            CalculateFile = CalculateFile & Hex$(CalculateF) & Chr(0)
+            CalculateFile = CalculateFile & Hex$(CalculateF) & vbNullChar
             Exit Do
          Else
             ReDim ByteArray(TaileTab)
             Get #Filenr, lCompteur, ByteArray()
             CalculateF = CalculateBytes(ByteArray)
-            CalculateFile = CalculateFile & Hex$(CalculateF) & Chr(0)
+            CalculateFile = CalculateFile & Hex$(CalculateF) & vbNullChar
          End If
          lCompteur = lCompteur + TaileTab
       Loop

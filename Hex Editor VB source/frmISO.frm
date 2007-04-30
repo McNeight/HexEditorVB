@@ -199,7 +199,7 @@ Dim hDisk As Long
     
     txtFile.Enabled = False
     cmdBrowse.Enabled = False
-    cmdGO.Enabled = False
+    cmdGo.Enabled = False
     cmdQuit.Enabled = False
     
     With PGB
@@ -212,7 +212,7 @@ Dim hDisk As Long
     Call cFile.CreateEmptyFile(sFile, True)
     
     'récupère les handles
-    lFile = GetFileHandle(sFile)
+    lFile = GetFileHandleWrite(sFile)
     hDisk = GetDiskHandleRead(tDrive.VolumeLetter & ":\")
     
     lBPC = tDrive.BytesPerSector
@@ -241,7 +241,7 @@ Dim hDisk As Long
     
     txtFile.Enabled = True
     cmdBrowse.Enabled = True
-    cmdGO.Enabled = True
+    cmdGo.Enabled = True
     cmdQuit.Enabled = True
 
     'ajoute du texte à la console
@@ -268,12 +268,12 @@ Dim s As String
         If s = "UDF" Or s = "CDFS" Then
             'on a choisi le drive
             Set tDrive = DV.GetSelectedDrive
-            cmdGO.Enabled = True
+            cmdGo.Enabled = True
         Else
-            cmdGO.Enabled = False
+            cmdGo.Enabled = False
         End If
     Else
-        cmdGO.Enabled = False
+        cmdGo.Enabled = False
     End If
 End Sub
 

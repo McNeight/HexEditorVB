@@ -175,13 +175,13 @@ Public Function ReadValue(ByVal hKey As KEY_TYPE, ByVal strPath As String, ByVal
 Dim Ret As Long
 
     'ouvre la clé
-    RegOpenKey hKey, strPath, Ret
+    Call RegOpenKey(hKey, strPath, Ret)
     
     'récupère la valeur de la clé
     ReadValue = RegQueryStringValue(Ret, strValue)
     
     'referme la clé
-    RegCloseKey Ret
+    Call RegCloseKey(Ret)
 End Function
 
 '=======================================================
@@ -192,13 +192,13 @@ Public Function WriteValue(ByVal hKey As KEY_TYPE, ByVal strPath As String, ByVa
 Dim Ret As Long
 
     'créé la nouvelle clé
-    RegCreateKey hKey, strPath, Ret
+    Call RegCreateKey(hKey, strPath, Ret)
     
     'sauvegarde la clé
     WriteValue = RegSetValueEx(Ret, strValue, 0, tType, ByVal strData, Len(strData))
     
     'la referme
-    RegCloseKey Ret
+    Call RegCloseKey(Ret)
 End Function
 
 '=======================================================
@@ -209,13 +209,13 @@ Public Function DelKeyValue(ByVal hKey As KEY_TYPE, ByVal strPath As String, ByV
 Dim Ret As Long
    
     'ouvre la clé
-    RegOpenKey hKey, strPath, Ret
+    Call RegOpenKey(hKey, strPath, Ret)
     
     'supprime la valeur de clé
     DelKeyValue = RegDeleteValue(Ret, strValue)
     
     'referme la clé
-    RegCloseKey Ret
+    Call RegCloseKey(Ret)
 End Function
 
 '=======================================================
@@ -242,7 +242,7 @@ Dim Ret As Long
         KEY_ALL_ACCESS, ByVal 0&, result, Ret)
 
     'referme la clé
-    RegCloseKey result
+    Call RegCloseKey(result)
 End Function
 
 '=======================================================
@@ -252,20 +252,22 @@ Public Function DoesKeyExist(ByVal hKey As KEY_TYPE, ByVal strPath As String) As
 Dim result As Long
 
     'ouvre la clé
-    RegOpenKey hKey, strPath, result
+    Call RegOpenKey(hKey, strPath, result)
     
     'affecte le résultat à la fonction
     DoesKeyExist = CBool(result)
     
     'referme la clé
-    RegCloseKey result
+    Call RegCloseKey(result)
 End Function
 
 '=======================================================
 'énumère les sous clés
 'stocke de 1 à ubound
 '=======================================================
-Public Sub GetSubKeys(ByVal hKey As KEY_TYPE, ByVal strPath As String, ByRef SubKeys() As String)
+Public Sub GetSubKeys(ByVal hKey As KEY_TYPE, ByVal strPath As String, _
+    ByRef SubKeys() As String)
+    
 Dim Cnt As Long
 Dim sName As String
 Dim sData As String
@@ -297,7 +299,7 @@ Dim s() As String
         Wend
         
         'referme la clé
-        RegCloseKey result
+        Call RegCloseKey(result)
     End If
     
     'affecte le tableau
@@ -307,7 +309,9 @@ End Sub
 '=======================================================
 'énumère les valeurs de clé
 '=======================================================
-Public Sub GetKeyValues(ByVal hKey As KEY_TYPE, ByVal strPath As String, ByRef KeyValues() As String, ByRef KeyValuesData() As String)
+Public Sub GetKeyValues(ByVal hKey As KEY_TYPE, ByVal strPath As String, _
+    ByRef KeyValues() As String, ByRef KeyValuesData() As String)
+    
 Dim Cnt As Long
 Dim sName As String
 Dim sData As String
@@ -349,13 +353,12 @@ Dim s2() As String
         Wend
         
         'referme la clé
-        RegCloseKey hKey
+        Call RegCloseKey(hKey)
     End If
     
     'affectation des tableaux
     KeyValues = s
     KeyValuesData = s2
-
 End Sub
 
 

@@ -114,7 +114,7 @@ Dim sRes As String
                             "<BR>" & vbNewLine  'AVEC OPTIMISATION (BAD RESULT)
 
                     Next y
-                    Call WriteBytesToFileEnd(sOutputFile, Replace$(sRes, "|", Chr$(34), , , _
+                    Call WriteBytesToFileEnd(sOutputFile, Replace$(sRes, "|", Chr_(34), , , _
                         vbBinaryCompare)): DoEvents
                 Next x
                 
@@ -691,7 +691,7 @@ Dim sRes As String
                 'pose le header
                 s = "'==========================================" & vbNewLine & "'Source File: " & cFile.GetFileName(sStringHex)
                 s = s & vbNewLine & "'Length: " & Trim$(Str$(curS)) & vbNewLine & "'==========================================" & vbNewLine
-                s = s & "Private Const HEX_VALUES = " & Chr$(34)
+                s = s & "Private Const HEX_VALUES = " & Chr_(34)
                 Call WriteBytesToFileEnd(sOutputFile, s)
                 
                 o = 0   'nombre de retours à la ligne
@@ -715,14 +715,14 @@ Dim sRes As String
                         If Len(sRes) - z2 > 800 Then
                             'alors il faut faire un saut de ligne
                             z2 = Len(sRes)
-                            sRes = sRes & Chr$(34) & IIf(o < 10, " & _" & vbNewLine & "    " & Chr$(34), vbNewLine)
+                            sRes = sRes & Chr_(34) & IIf(o < 10, " & _" & vbNewLine & "    " & Chr_(34), vbNewLine)
                             o = o + 1
                         End If
                         
                         If o > 10 Then
                             'alors trop de retours à la ligne
                             ov = ov + 1
-                            sRes = sRes & IIf(o <> 11, Chr$(34), vbNullString) & vbNewLine & "Private Const HEX_VALUES_" & Trim$(Str$(ov)) & " = " & Chr$(34)
+                            sRes = sRes & IIf(o <> 11, Chr_(34), vbNullString) & vbNewLine & "Private Const HEX_VALUES_" & Trim$(Str$(ov)) & " = " & Chr_(34)
                             o = 0
                         End If
                         
@@ -747,20 +747,20 @@ Dim sRes As String
                     If Len(sRes) - z2 > 800 Then
                         'alors il faut faire un saut de ligne
                         z2 = Len(sRes)
-                        sRes = sRes & Chr$(34) & IIf(o < 10, " & _" & vbNewLine & "    " & Chr$(34), vbNewLine)
+                        sRes = sRes & Chr_(34) & IIf(o < 10, " & _" & vbNewLine & "    " & Chr_(34), vbNewLine)
                         o = o + 1
                     End If
                     
                     If o > 10 Then
                         'alors trop de retours à la ligne
                         ov = ov + 1
-                        sRes = sRes & IIf(o <> 11, Chr$(34), vbNullString) & vbNewLine & "Private Const HEX_VALUES_" & Trim$(Str$(ov)) & " = " & Chr$(34)
+                        sRes = sRes & IIf(o <> 11, Chr_(34), vbNullString) & vbNewLine & "Private Const HEX_VALUES_" & Trim$(Str$(ov)) & " = " & Chr_(34)
                         o = 0
                     End If
                     
                 Next y
                 Call WriteBytesToFileEnd(sOutputFile, sRes): DoEvents
-                Call WriteBytesToFileEnd(sOutputFile, Chr$(34))
+                Call WriteBytesToFileEnd(sOutputFile, Chr_(34))
             Case "Disque"
             
             Case "Processus"

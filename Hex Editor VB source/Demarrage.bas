@@ -59,6 +59,7 @@ Public lNbChildFrm As Long
 Public bEndSplash As Boolean
 Public lngTimeLoad As Long
 Public sLang() As String
+Public Chr_(255) As String  'contient la liste des char, pour gagner en vitesse
 
 'pour la sanitization
 Public sH55() As Byte
@@ -107,7 +108,7 @@ Dim s As String
     
     '//applique le style XP (création d'un *.manifest si nécessaire)
         Set AfManifest = New AfClsManifest
-        AfManifest.Run
+        Call AfManifest.Run
         Set AfManifest = Nothing
         
     
@@ -140,7 +141,11 @@ Dim s As String
     '//initialise les tableaux
         ReDim JailedProcess(0)  'contient les process bloqués
         ReDim TempFiles(0)  'contient les fichiers temporaires à supprimer au déchargement du logiciel
-
+        
+        'on remplit le tableau Chr_()
+        For x = 0 To 255
+            Chr_(x) = Chr$(x)
+        Next x
     
     '// récupère la langue
         'liste les fichiers de langue
@@ -176,10 +181,10 @@ Dim s As String
         If cFile.FileExists(clsPref.sDefaultPath) = False Then
             'le fichier de configuration est inexistant
             'il est necesasire de le crér (par défaut)
-            cFile.CreateEmptyFile clsPref.sDefaultPath, True
+            Call cFile.CreateEmptyFile(clsPref.sDefaultPath, True)
             
             'remplit le fichier
-            cFile.SaveDataInFile clsPref.sDefaultPath, DEFAULT_INI, False
+            Call cFile.SaveDataInFile(clsPref.sDefaultPath, DEFAULT_INI, False)
         End If
          
         Set cPref = clsPref.GetIniFile
@@ -229,13 +234,13 @@ Dim s As String
            
             If InStrRev(Command, "shredd", , vbBinaryCompare) Then
                 'alors on ouvrira la form de suppression si il y a l'argument shredd à la fin
-                If Right$(Command, 8) = Chr$(34) & "shredd" & Chr$(34) Then
+                If Right$(Command, 8) = Chr_(34) & "shredd" & Chr_(34) Then
                     'alors c'est bon ==> suppression form
                     
                     ReDim sFile(0)   'contiendra les paths
            
                     'sépare Command en plusieurs path
-                    SplitString Chr$(34), Command, sFile()
+                    Call SplitString(Chr_(34), Command, sFile())
                     
                     'affiche la form
                     frmShredd.Show
@@ -262,7 +267,7 @@ Dim s As String
                     Next x
                 End If
             ElseIf InStrRev(Command, "date", , vbBinaryCompare) Then
-                If Right$(Command, 6) = Chr$(34) & "date" & Chr$(34) Then
+                If Right$(Command, 6) = Chr_(34) & "date" & Chr_(34) Then
                     'alors c'est bon ==> date form
                     
                     
@@ -270,13 +275,13 @@ Dim s As String
                         
                 End If
             ElseIf InStrRev(Command, "viewfile", , vbBinaryCompare) Then
-                If Right$(Command, 10) = Chr$(34) & "viewfile" & Chr$(34) Then
+                If Right$(Command, 10) = Chr_(34) & "viewfile" & Chr_(34) Then
                     'alors c'est bon ==> visualise le fichier en mode File
                     
                     ReDim sFile(0)   'contiendra les paths
            
                     'sépare Command en plusieurs path
-                    SplitString Chr$(34), Command, sFile()
+                    Call SplitString(Chr_(34), Command, sFile())
                     
                     For x = 1 To UBound(sFile())
                         'teste l'existence de chaque path
@@ -313,7 +318,7 @@ Dim s As String
                  ReDim sFile(0)   'contiendra les paths
         
                  'sépare Command en plusieurs path
-                 SplitString Chr$(34), Command, sFile()
+                 Call SplitString(Chr_(34), Command, sFile())
                  
                  For x = 1 To UBound(sFile())
                      'teste l'existence de chaque path
@@ -387,7 +392,7 @@ Dim x As Long
 
     '//supprime les fichiers temporaires de TempFiles
         For x = 1 To UBound(TempFiles())
-            cFile.DeleteFile TempFiles(x)
+            Call cFile.DeleteFile(TempFiles(x))
         Next x
     
     '//libère les classes
@@ -401,7 +406,7 @@ Dim x As Long
         cPref.exe_HasCrashed = 0
         
         'sauvegarde les pref (met à jour la valeur)
-        clsPref.SaveIniFile cPref
+        Call clsPref.SaveIniFile(cPref)
         
         'libère les dernières classes
         Set cPref = Nothing
@@ -573,10 +578,10 @@ Dim x As Long
             End With
             
             'lance la sauvegarde
-            cFile.SaveDataInFile App.Path & "\Preferences\QuickBackup.ini", s, True
+            Call cFile.SaveDataInFile(App.Path & "\Preferences\QuickBackup.ini", s, True)
         Else
             'on delete le fichier
-            cFile.DeleteFile App.Path & "\Preferences\QuickBackup.ini"
+            Call cFile.DeleteFile(App.Path & "\Preferences\QuickBackup.ini")
         End If
     End If
 End Sub

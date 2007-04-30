@@ -187,7 +187,7 @@ Dim y As Long
                 For y = 0 To 15
                     .CurrentX = 360 + 230 * x
                     .CurrentY = 240 + 240 * y
-                    Me.Print Chr$(Val(16 * y + x))
+                    Me.Print Chr_(Val(16 * y + x))
                 Next y
             Next x
         End With
@@ -217,7 +217,7 @@ Dim y As Long
                 Oct$(x - 1))) 'octal
                 .ListItems.Item(x).SubItems(3) = IIf(Len(Hex$(x - 1)) = 1, "0" & Hex$(x - 1), _
                 Hex$(x - 1)) 'hexa
-                .ListItems.Item(x).SubItems(4) = Chr$(x - 1) 'ANSI ASCII
+                .ListItems.Item(x).SubItems(4) = Chr_(x - 1) 'ANSI ASCII
             Next x
         End With
         LV.Visible = True

@@ -60,7 +60,7 @@ Dim tPrint As Printer
     If PrintDlg(selectedPrinter) <> 1 Then Exit Sub
     
     addrstructDev = GlobalLock(selectedPrinter.hDevMode)
-    CopyMemory infoDevice, ByVal addrstructDev, Len(infoDevice)
+    Call CopyMemory(infoDevice, ByVal addrstructDev, Len(infoDevice))
 
     'formate le nom de l'imprimante
     strPrinterName = Left(infoDevice.dmDeviceName, InStr(1, infoDevice.dmDeviceName, vbNullChar) - 1)

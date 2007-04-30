@@ -87,7 +87,10 @@ End Function
 '=======================================================
 'permet de lire des bytes directement dans le disque
 '=======================================================
-Public Sub DirectRead(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef ReadOctet() As Byte)
+Public Sub DirectRead(ByVal sDrive As String, ByVal iStartSec As Currency, _
+    ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef ReadOctet() _
+    As Byte)
+    
 ' Attention le nombre d'octets lus ou écrits ainsi que l'offset du premier octet lu ou écrit
 ' doivent impérativement être un multiple de la taille d'un secteur de disque
 ' Istartsec et nbytes doivent être des multiples de 512 ( taille standard des secteurs des disques)
@@ -95,15 +98,15 @@ Dim BytesRead As Long
 Dim Pointeur As Currency
 Dim Ret As Long
 Dim hDevice As Long
-Dim lLowPart As Long, lHighPart As Long
-
-    On Error GoTo dskerror
+Dim lLowPart As Long
+Dim lHighPart As Long
     
     'obtient un path valide pour l'API CreateFIle si nécessaire
     If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
 
     'ouvre le drive
-    hDevice = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    hDevice = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
    
     'quitte si le handle n'est pas valide
     If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
@@ -112,23 +115,20 @@ Dim lLowPart As Long, lHighPart As Long
     Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
     
     'transforme un currency en 2 long pour une structure LARGE_INTEGER
-    GetLargeInteger Pointeur, lLowPart, lHighPart
+    Call GetLargeInteger(Pointeur, lLowPart, lHighPart)
 
     'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
     'byte que l'on veut lire (donné par deux long)
     Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
-    If Ret = -1 Then GoTo dskerror
-           
+    
     'redimensionne le tableaux résultant
     ReDim ReadOctet(0 To nBytes - 1) 'contient les nBytes lus, de 0 à Ubound-1
     
     'appelle l'API de lecture
     Ret = ReadFile(hDevice, ReadOctet(0), nBytes, BytesRead, 0&)
     
-dskerror:
-
     'ferme le handle
-    CloseHandle hDevice
+    Call CloseHandle(hDevice)
 End Sub
 
 '=======================================================
@@ -156,7 +156,6 @@ Dim lHighPart As Long
     'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
     'byte que l'on veut lire (donné par deux long)
     Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
-    If Ret = INVALID_HANDLE_VALUE Then Exit Sub
            
     'redimensionne le tableaux résultant
     ReDim ReadOctet(0 To nBytes - 1) 'contient les nBytes lus, de 0 à Ubound-1
@@ -169,7 +168,10 @@ End Sub
 '=======================================================
 'permet de lire des bytes directement dans le disque PHYSIQUE
 '=======================================================
-Public Sub DirectReadPhys(ByVal bytDrive As Byte, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef ReadOctet() As Byte)
+Public Sub DirectReadPhys(ByVal bytDrive As Byte, ByVal iStartSec As Currency, _
+    ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef ReadOctet() _
+    As Byte)
+    
 ' Attention le nombre d'octets lus ou écrits ainsi que l'offset du premier octet lu ou écrit
 ' doivent impérativement être un multiple de la taille d'un secteur de disque
 ' Istartsec et nbytes doivent être des multiples de 512 ( taille standard des secteurs des disques)
@@ -177,9 +179,8 @@ Dim BytesRead As Long
 Dim Pointeur As Currency
 Dim Ret As Long
 Dim hDevice As Long
-Dim lLowPart As Long, lHighPart As Long
-
-    On Error GoTo dskerror
+Dim lLowPart As Long
+Dim lHighPart As Long
 
     'ouvre le drive
     hDevice = CreateFile("\\.\PHYSICALDRIVE" & CStr(bytDrive), GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
@@ -191,12 +192,11 @@ Dim lLowPart As Long, lHighPart As Long
     Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
     
     'transforme un currency en 2 long pour une structure LARGE_INTEGER
-    GetLargeInteger Pointeur, lLowPart, lHighPart
+    Call GetLargeInteger(Pointeur, lLowPart, lHighPart)
 
     'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
     'byte que l'on veut lire (donné par deux long)
     Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
-    If Ret = -1 Then GoTo dskerror
            
     'redimensionne le tableaux résultant
     ReDim ReadOctet(0 To nBytes - 1) 'contient les nBytes lus, de 0 à Ubound-1
@@ -204,30 +204,31 @@ Dim lLowPart As Long, lHighPart As Long
     'appelle l'API de lecture
     Ret = ReadFile(hDevice, ReadOctet(0), nBytes, BytesRead, 0&)
     
-dskerror:
-
     'ferme le handle
-    CloseHandle hDevice
+    Call CloseHandle(hDevice)
 End Sub
 
 '=======================================================
 'permet de d'écrire de manière directe dans le disque
 '=======================================================
-Public Sub DirectWriteS(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sStringToWrite As String)
+Public Sub DirectWriteS(ByVal sDrive As String, ByVal iStartSec As Currency, _
+    ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sStringToWrite _
+    As String)
+    
 '/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
 Dim BytesRead As Long
 Dim Pointeur As Currency
 Dim Ret As Long
 Dim hDevice As Long
-Dim lLowPart As Long, lHighPart As Long
-
-    'On Error GoTo dskerror
-    
+Dim lLowPart As Long
+Dim lHighPart As Long
+   
     'obtient un path valide pour l'API CreateFIle si nécessaire
     If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
 
     'ouvre le drive
-    hDevice = CreateFile(sDrive, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, FILE_FLAG_NO_BUFFERING, 0&)
+    hDevice = CreateFile(sDrive, GENERIC_WRITE, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, 0&, OPEN_EXISTING, FILE_FLAG_NO_BUFFERING, 0&)
    
     'quitte si le handle n'est pas valide
     If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
@@ -236,12 +237,11 @@ Dim lLowPart As Long, lHighPart As Long
     Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
     
     'transforme un currency en 2 long pour une structure LARGE_INTEGER
-    GetLargeInteger Pointeur, lLowPart, lHighPart
+    Call GetLargeInteger(Pointeur, lLowPart, lHighPart)
 
     'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
     'byte que l'on veut lire (donné par deux long)
     Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
-    If Ret = -1 Then GoTo dskerror
     
     'verrouilage de la zone du disque à écrire
     Call LockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
@@ -252,11 +252,9 @@ Dim lLowPart As Long, lHighPart As Long
     'on vide les buffers internes et on dévérouille la zone
     Call FlushFileBuffers(hDevice)
     Call UnlockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
-    
-dskerror:
 
     'ferme le handle
-    CloseHandle hDevice
+    Call CloseHandle(hDevice)
 End Sub
 
 '=======================================================
@@ -279,7 +277,7 @@ Dim lHighPart As Long
     Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
     
     'transforme un currency en 2 long pour une structure LARGE_INTEGER
-    GetLargeInteger Pointeur, lLowPart, lHighPart
+    Call GetLargeInteger(Pointeur, lLowPart, lHighPart)
 
     'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
     'byte que l'on veut lire (donné par deux long)
@@ -301,21 +299,23 @@ End Sub
 'permet de lire des bytes directement dans le disque
 'sortie en String
 '=======================================================
-Public Sub DirectReadS(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sBufferOut As String)
+Public Sub DirectReadS(ByVal sDrive As String, ByVal iStartSec As Currency, _
+    ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sBufferOut As String)
+    
 '/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
 Dim BytesRead As Long
 Dim Pointeur As Currency
 Dim Ret As Long
 Dim hDevice As Long
-Dim lLowPart As Long, lHighPart As Long
-
-    On Error GoTo dskerror
+Dim lLowPart As Long
+Dim lHighPart As Long
     
     'obtient un path valide pour l'API CreateFIle si nécessaire
     If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
 
     'ouvre le drive
-    hDevice = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    hDevice = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
    
     'quitte si le handle n'est pas valide
     If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
@@ -324,12 +324,11 @@ Dim lLowPart As Long, lHighPart As Long
     Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
     
     'transforme un currency en 2 long pour une structure LARGE_INTEGER
-    GetLargeInteger Pointeur, lLowPart, lHighPart
+    Call GetLargeInteger(Pointeur, lLowPart, lHighPart)
 
     'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
     'byte que l'on veut lire (donné par deux long)
     Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
-    If Ret = -1 Then GoTo dskerror
     
     'création d'un buffer
     sBufferOut = Space$(nBytes)
@@ -337,10 +336,8 @@ Dim lLowPart As Long, lHighPart As Long
     'obtention de la string
     Ret = ReadFile(hDevice, ByVal sBufferOut, nBytes, BytesRead, 0&)
 
-dskerror:
-
     'ferme le handle
-    CloseHandle hDevice
+    Call CloseHandle(hDevice)
 End Sub
 
 '=======================================================
@@ -352,7 +349,19 @@ Public Function GetDiskHandleRead(ByVal sDrive As String) As Long
     If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
 
     'ouvre le drive
-    GetDiskHandleRead = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    GetDiskHandleRead = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+End Function
+
+'=======================================================
+'récupère un handle de disque valide pour la lecture
+'=======================================================
+Public Function GetPhysicalDiskHandleRead(ByVal DiskNumber As Byte) As Long
+
+    'ouvre le drive
+    GetPhysicalDiskHandleRead = CreateFile("\\.\PHYSICALDRIVE" & _
+        CStr(DiskNumber), GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, _
+        0&, OPEN_EXISTING, 0&, 0&)
 End Function
 
 '=======================================================
@@ -364,7 +373,8 @@ Public Function GetDiskHandleWrite(ByVal sDrive As String) As Long
     If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
 
     'ouvre le drive
-    GetDiskHandleWrite = CreateFile(sDrive, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    GetDiskHandleWrite = CreateFile(sDrive, GENERIC_WRITE, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
 End Function
 
 '=======================================================
@@ -383,18 +393,22 @@ End Function
 'sortie en String
 'demande un handle
 '=======================================================
-Public Sub DirectReadSHandle(ByVal hDevice As Long, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sBufferOut As String)
+Public Sub DirectReadSHandle(ByVal hDevice As Long, ByVal iStartSec As _
+    Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef _
+    sBufferOut As String)
+    
 '/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
 Dim BytesRead As Long
 Dim Pointeur As Currency
 Dim Ret As Long
-Dim lLowPart As Long, lHighPart As Long
+Dim lLowPart As Long
+Dim lHighPart As Long
    
     'détermine le byte de départ du secteur
     Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
     
     'transforme un currency en 2 long pour une structure LARGE_INTEGER
-    GetLargeInteger Pointeur, lLowPart, lHighPart
+    Call GetLargeInteger(Pointeur, lLowPart, lHighPart)
 
     'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
     'byte que l'on veut lire (donné par deux long)
@@ -412,18 +426,20 @@ End Sub
 'permet de lire des bytes directement dans le disque PHYSIQUE
 'sortie en String
 '=======================================================
-Public Sub DirectReadSPhys(ByVal bytDrive As Byte, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sBufferOut As String)
+Public Sub DirectReadSPhys(ByVal bytDrive As Byte, ByVal iStartSec As Currency, _
+    ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sBufferOut As String)
+    
 '/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
 Dim BytesRead As Long
 Dim Pointeur As Currency
 Dim Ret As Long
 Dim hDevice As Long
-Dim lLowPart As Long, lHighPart As Long
-
-    On Error GoTo dskerror
+Dim lLowPart As Long
+Dim lHighPart As Long
 
     'ouvre le drive
-    hDevice = CreateFile("\\.\PHYSICALDRIVE" & CStr(bytDrive), GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    hDevice = CreateFile("\\.\PHYSICALDRIVE" & CStr(bytDrive), GENERIC_READ, _
+        FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
    
     'quitte si le handle n'est pas valide
     If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
@@ -432,12 +448,11 @@ Dim lLowPart As Long, lHighPart As Long
     Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
     
     'transforme un currency en 2 long pour une structure LARGE_INTEGER
-    GetLargeInteger Pointeur, lLowPart, lHighPart
+    Call GetLargeInteger(Pointeur, lLowPart, lHighPart)
 
     'déplace, dans le fichier (ici un disque) pointé par hDevice, le "curseur" au premier
     'byte que l'on veut lire (donné par deux long)
     Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
-    If Ret = -1 Then GoTo dskerror
     
     'création d'un buffer
     sBufferOut = Space$(nBytes)
@@ -445,22 +460,20 @@ Dim lLowPart As Long, lHighPart As Long
     'obtention de la string
     Ret = ReadFile(hDevice, ByVal sBufferOut, nBytes, BytesRead, 0&)
 
-dskerror:
-
     'ferme le handle
-    CloseHandle hDevice
+    Call CloseHandle(hDevice)
 End Sub
 
 '=======================================================
 'lecture de lLen bytes à l'offset lOffset dans le drive sDrive
 '=======================================================
-Public Sub ReadDiskBytes(ByVal sDrive As String, ByVal lOffset As Currency, ByVal lLen As Long, ByRef lResult() As Byte, ByVal lBytesPerSector As Long)
+Public Sub ReadDiskBytes(ByVal sDrive As String, ByVal lOffset As Currency, _
+    ByVal lLen As Long, ByRef lResult() As Byte, ByVal lBytesPerSector As Long)
+    
 Dim lDrive As Long
 Dim crPointeur As Currency
 Dim tOver As OVERLAPPED
 Dim crHi32 As Currency
-
-    On Error GoTo DiskErr
 
     'obtient un path valide pour l'API CreateFIle si nécessaire
     If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
@@ -469,7 +482,8 @@ Dim crHi32 As Currency
     ReDim lResult(0)
         
     'obtient un handle vers le Drive
-    lDrive = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    lDrive = CreateFile(sDrive, GENERIC_READ, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
     
     'si le handle est correct
     If lDrive <> INVALID_HANDLE_VALUE Then
@@ -488,20 +502,19 @@ Dim crHi32 As Currency
         'on ajoute 1 au HighOffset si crPointer>2^32
         'car on doit stocker cette valeur Currency en une LARGE_INTEGER
         'pour la structure OverLapped
-        GetLargeInteger crPointeur, tOver.Offset, tOver.OffsetHigh
+        Call GetLargeInteger(crPointeur, tOver.Offset, tOver.OffsetHigh)
         
         'affecte les valeurs de l'offset (constitué de la partie High et de la partie Low)
         'à la structure OverLapped
         tOver.Offset = CLng(crPointeur): tOver.OffsetHigh = CLng(crHi32)
         
         'obtient les bytes désirés
-        ReadFileEx lDrive, ByVal VarPtr(lResult(0)), lLen, tOver, AddressOf CallBackFunction
+        Call ReadFileEx(lDrive, ByVal VarPtr(lResult(0)), lLen, tOver, _
+            AddressOf CallBackFunction)
+    
+        'ferme le handle ouvert
+        Call CloseHandle(lDrive)
     End If
-    
-DiskErr:
-    
-    'ferme le handle ouvert
-    CloseHandle lDrive
 End Sub
 
 '=======================================================
@@ -564,7 +577,11 @@ End Function
 'fonction de recherche de string complètes dans un fichier
 'stocke dans un tableau de 1 à Ubound
 '=======================================================
-Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLength As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, ByRef tRes() As SearchResult, Optional PGB As pgrBar)
+Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLength _
+    As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin _
+    As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, _
+    ByRef tRes() As SearchResult, Optional PGB As pgrBar)
+    
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
 Dim strCtemp As String
@@ -576,8 +593,6 @@ Dim strBuffer As String
 Dim curByte As Currency
 Dim tOver As OVERLAPPED
 Dim i As Long
-
-    On Error GoTo ErrGestion
     
     'taille du fichier
     lngLen = cFile.GetFileSize(sFile)
@@ -593,7 +608,8 @@ Dim i As Long
     ReDim tRes(0)
 
     'obtient le handle du fichier
-    lngFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
+    lngFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ, 0&, _
+        OPEN_EXISTING, 0&, 0&)
     
     'vérifie que le handle est valide
     If lngFile = INVALID_HANDLE_VALUE Then Exit Sub
@@ -612,10 +628,11 @@ Dim i As Long
         x = x + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
-        GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
+        Call GetLargeInteger(curByte, tOver.Offset, tOver.OffsetHigh)
         
         'obtient la string sur le buffer
-        ReadFileEx lngFile, ByVal strBuffer, 51200, tOver, AddressOf CallBackFunction
+        Call ReadFileEx(lngFile, ByVal strBuffer, 51200, tOver, _
+            AddressOf CallBackFunction)
     
         strCtemp = vbNullString
         
@@ -626,7 +643,7 @@ Dim i As Long
             
             If IsCharConsideredInAString(bytAsc, bSigns, bMaj, bMin, bNumbers, bAccent) Then
                 'caractère x est valide
-                strCtemp = strCtemp & Chr(bytAsc)
+                strCtemp = strCtemp & Chr_(bytAsc)
             Else
                 strCtemp = Trim$(strCtemp)
                 If Len(strCtemp) > lMinimalLength Then
@@ -657,21 +674,18 @@ Dim i As Long
     If Not (PGB Is Nothing) Then PGB.Value = lngLen
     
     Let strBuffer = vbNullString
-    CloseHandle lngFile 'ferme le handle du fichier
     
-    Exit Sub
-ErrGestion:
+    Call CloseHandle(lngFile)  'ferme le handle du fichier
 
-    CloseHandle lngFile 'ferme le handle du fichier
-    
-    clsERREUR.AddError "mdlDisk.SearchStringInFile", True
 End Sub
 
 '=======================================================
 'fonction de recherche de string dans un fichier
 'de 1 à Ubound
 '=======================================================
-Public Sub SearchForStringFile(ByVal sFile As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrBar)
+Public Sub SearchForStringFile(ByVal sFile As String, ByVal sMatch As String, _
+    ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrBar)
+    
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
 Dim x As Long
@@ -684,8 +698,6 @@ Dim strBufT As String
 Dim curByte As Currency
 Dim tOver As OVERLAPPED
 Dim i As Long
-
-    On Error GoTo ErrGestion
 
     'taille du fichier
     lngLen = cFile.GetFileSize(sFile)
@@ -701,7 +713,8 @@ Dim i As Long
     ReDim tRes(0)
 
     'obtient le handle du fichier
-    lngFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ, 0&, OPEN_EXISTING, 0&, 0&)
+    lngFile = CreateFile(sFile, GENERIC_READ, FILE_SHARE_READ, 0&, _
+        OPEN_EXISTING, 0&, 0&)
     
     'vérifie que le handle est valide
     If lngFile = INVALID_HANDLE_VALUE Then Exit Sub
@@ -729,11 +742,11 @@ Dim i As Long
         'Enlève le résultat précédent (avec Replace) pour éviter lse doublons
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
-        GetLargeInteger curByte, tOver.Offset, tOver.OffsetHigh
+        Call GetLargeInteger(curByte, tOver.Offset, tOver.OffsetHigh)
         
         'obtient la string sur le buffer
-        ReadFileEx lngFile, ByVal strBuffer, 51200, tOver, AddressOf CallBackFunction
-    
+        Call ReadFileEx(lngFile, ByVal strBuffer, 51200, tOver, _
+            AddressOf CallBackFunction)
         
         strBufT = strBuffer2 & strBuffer 'concaténation de l'ancien et du nouveau buffer
      
@@ -763,21 +776,17 @@ Dim i As Long
     Let strBuffer2 = vbNullString
     Let strBuffer = vbNullString
     
-    CloseHandle lngFile 'ferme le handle du fichier
-
-    Exit Sub
-ErrGestion:
-
-    CloseHandle lngFile 'ferme le handle du fichier
-    
-    clsERREUR.AddError "mdlDisk.SearchForStringFile", True
+    Call CloseHandle(lngFile)  'ferme le handle du fichier
 End Sub
 
 '=======================================================
 'fonction de recherche de string dans un disque
 'de 1 à Ubound
 '=======================================================
-Public Sub SearchForStringDisk(ByVal sDrive As String, ByVal sMatch As String, ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrBar, Optional ByVal IsPhys As Boolean = False)
+Public Sub SearchForStringDisk(ByVal sDrive As String, ByVal sMatch As String, _
+    ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrBar, _
+    Optional ByVal IsPhys As Boolean = False)
+    
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim x As Long
 Dim r() As Byte
@@ -789,29 +798,38 @@ Dim tOver As OVERLAPPED
 Dim i As Currency
 Dim btPerSec As Long
 Dim nbSec As Currency
-Dim cDrive As clsDrive
-Dim clsDrive As clsDiskInfos
-
-    On Error GoTo ErrGestion
+Dim cDrive As FileSystemLibrary.Drive
+Dim cDisk As FileSystemLibrary.PhysicalDisk
+Dim hDevice As Long
 
     'initialise les tableaux
     ReDim tRes(0): ReDim r(0)
     
     'ré-obtient les infos sur les secteurs (nombre et taille)
-    Set clsDrive = New clsDiskInfos
         
     If IsPhys Then
-        Set cDrive = clsDrive.GetPhysicalDrive(Val(sDrive))
+        Set cDisk = cFile.GetPhysicalDisk(Val(sDrive))
+        
+        'affecte les infos sur les secteurs aux variables
+        nbSec = cDisk.TotalPhysicalSectors
+        btPerSec = cDisk.BytesPerSector
+        
+        'récupère un handle
+        hDevice = GetPhysicalDiskHandleRead(Val(sDrive))
     Else
         'formate le nom du disque
         strDrive = BuildDrive(Right$(sDrive, 3))
 
-        Set cDrive = clsDrive.GetLogicalDrive(strDrive)
+        Set cDrive = cFile.GetDrive(Left$(strDrive, 1))
+        
+        'affecte les infos sur les secteurs aux variables
+        nbSec = cDrive.TotalPhysicalSectors
+        btPerSec = cDrive.BytesPerSector
+        
+        'récupère un handle
+        hDevice = GetDiskHandleRead(strDrive)
     End If
-    
-    'affecte les infos sur les secteurs aux variables
-    nbSec = cDrive.TotalLogicalSectors
-    btPerSec = cDrive.BytesPerSector
+
     
     If Not (PGB Is Nothing) Then
         'on initialise la progressabr
@@ -823,14 +841,10 @@ Dim clsDrive As clsDiskInfos
     If bCasse = False Then sMatch = LCase$(sMatch)  'cherche que les minuscules
 
     For i = 0 To nbSec Step 20000  'pour chaque secteur logique
-        
-        If IsPhys Then
-            'obtient les bytes du secteur visualisé en partie
-            DirectReadSPhys Val(sDrive), CCur(i), 20000 * btPerSec, btPerSec, strBufT
-        Else
-            'obtient les bytes du secteur visualisé en partie
-            DirectReadS strDrive, CCur(i), 20000 * btPerSec, btPerSec, strBufT
-        End If
+
+        'obtient les bytes du secteur visualisé en partie
+        Call DirectReadSHandle(hDevice, CCur(i), 20000 * btPerSec, btPerSec, _
+            strBufT)
         
         If bCasse = False Then strBufT = LCase$(strBufT)    'cherche que des minuscules (pas de casse respectée)
          
@@ -852,10 +866,6 @@ Dim clsDrive As clsDiskInfos
     If Not (PGB Is Nothing) Then PGB.Value = nbSec
     
     Let strBufT = vbNullString
-
-    Exit Sub
-ErrGestion:
-    clsERREUR.AddError "mdlDisk.SearchForStringFile", True
 End Sub
 
 '=======================================================
@@ -863,7 +873,10 @@ End Sub
 'des paramètres Afficher : min, MAJ, nbres, signes
 'function utilisée directement avec les procédures de SearchStringIn...
 '=======================================================
-Public Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean) As Boolean
+Public Function IsCharConsideredInAString(ByVal bytChar As Byte, ByVal _
+    bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As Boolean, _
+    ByVal bNumbers As Boolean, ByVal bAccent As Boolean) As Boolean
+    
     If bMaj Then
         IsCharConsideredInAString = (bytChar >= 65 And bytChar <= 90)
         If IsCharConsideredInAString Then Exit Function
@@ -897,22 +910,25 @@ End Function
 '=======================================================
 'écriture de bytes dans un disque physique
 '=======================================================
-Public Sub DirectWrite(ByVal sDrive As String, ByVal iStartSec As Currency, ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sStringToWrite As String)
+Public Sub DirectWrite(ByVal sDrive As String, ByVal iStartSec As Currency, _
+    ByVal nBytes As Long, ByVal lBytesPerSector As Long, ByRef sStringToWrite _
+    As String)
+    
 '/!\ iStartsec et nbytes doivent être des multiples de la taille d'un secteur (généralement 512 octets)
 Dim BytesRead As Long
 Dim Pointeur As Currency
 Dim Ret As Long
 Dim OVER As OVERLAPPED
 Dim hDevice As Long
-Dim lLowPart As Long, lHighPart As Long
-
-    'On Error GoTo dskerror
+Dim lLowPart As Long
+Dim lHighPart As Long
     
     'obtient un path valide pour l'API CreateFIle si nécessaire
     If Len(sDrive) <> 6 Then sDrive = BuildDrive(sDrive)
 
     'ouvre le drive
-    hDevice = CreateFile(sDrive, GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, 0&)
+    hDevice = CreateFile(sDrive, GENERIC_WRITE, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, 0&, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, 0&)
    
     'quitte si le handle n'est pas valide
     If hDevice = INVALID_HANDLE_VALUE Then Exit Sub
@@ -921,7 +937,7 @@ Dim lLowPart As Long, lHighPart As Long
     Pointeur = CCur(iStartSec) * CCur(lBytesPerSector)
 
     'transforme un currency en 2 long pour une structure LARGE_INTEGER
-    GetLargeInteger Pointeur, lLowPart, lHighPart
+    Call GetLargeInteger(Pointeur, lLowPart, lHighPart)
     
     'définit le OVERLAPPED
     With OVER
@@ -933,24 +949,22 @@ Dim lLowPart As Long, lHighPart As Long
     'byte que l'on veut lire (donné par deux long)
     
     'Ret = SetFilePointer(hDevice, lLowPart, lHighPart, FILE_BEGIN)  'FILE_BEGIN ==> part du début du fichier pour décompter la DistanceToMove
-    'If Ret = -1 Then GoTo dskerror
     
     'verrouilage de la zone du disque à écrire
     Call LockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
     
     'écriture disque
-    Ret = WriteFileEx(hDevice, ByVal sStringToWrite, nBytes, OVER, AddressOf CallBackFunction)
+    Ret = WriteFileEx(hDevice, ByVal sStringToWrite, nBytes, OVER, _
+        AddressOf CallBackFunction)
     
     If Ret = 0 Then Stop
     
     'on vide les buffers internes et on dévérouille la zone
     Call FlushFileBuffers(hDevice)
     Call UnlockFile(hDevice, lLowPart, lHighPart, nBytes, 0)
-    
-dskerror:
 
     'ferme le handle
-    CloseHandle hDevice
+    Call CloseHandle(hDevice)
 End Sub
 
 '=======================================================
@@ -958,6 +972,7 @@ End Sub
 '=======================================================
 Public Function ShreddFile(ByVal sFile As String, ByVal nPass As Integer, _
     PGB As ProgressBar_OCX.pgrBar) As Boolean
+    
 Dim hFile As Long
 Dim sFile2 As String
 Dim Ret As Long
@@ -966,8 +981,6 @@ Dim x As Long
 Dim tTime As FILETIME
 Dim tsTime As SYSTEMTIME
     
-    On Error GoTo ErrGestion
-
     ShreddFile = False
 
     'étapes de shredd
@@ -980,7 +993,8 @@ Dim tsTime As SYSTEMTIME
     ret2 = SetFileAttributes(sFile, FILE_ATTRIBUTE_NORMAL)
 
     'obtient le handle du fichier
-    hFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_WRITE, 0, TRUNCATE_EXISTING, FILE_FLAG_NO_BUFFERING Or FILE_FLAG_WRITE_THROUGH, 0)
+    hFile = CreateFile(sFile, GENERIC_WRITE, FILE_SHARE_WRITE, 0, _
+        TRUNCATE_EXISTING, FILE_FLAG_NO_BUFFERING Or FILE_FLAG_WRITE_THROUGH, 0)
     
     'initialise le PGB
     With PGB
@@ -1012,15 +1026,16 @@ Dim tsTime As SYSTEMTIME
     Next x
     
     'ferme le handle ouvert
-    CloseHandle hFile
+    Call CloseHandle(hFile)
     
     'renomme le fichier de manière bidon (car le nom reste quand même dans le fichier MFT)
-    Randomize   'pour obtenir un pseudo-hasard
+    Call Randomize   'pour obtenir un pseudo-hasard
     sFile2 = Left$(sFile, 3) & Replace(CStr(Rnd), ",", vbNullString) & ".temp" 'déplace à la racine, mais peu importe car suppression. Nécessite une extension
-    cFile.Rename sFile, sFile2
+    Call cFile.Rename(sFile, sFile2)
     
     'ré-obtient le handle du fichier
-    hFile = CreateFile(sFile2, GENERIC_WRITE, FILE_SHARE_WRITE, 0, TRUNCATE_EXISTING, FILE_FLAG_NO_BUFFERING Or FILE_FLAG_WRITE_THROUGH, 0)
+    hFile = CreateFile(sFile2, GENERIC_WRITE, FILE_SHARE_WRITE, 0, _
+        TRUNCATE_EXISTING, FILE_FLAG_NO_BUFFERING Or FILE_FLAG_WRITE_THROUGH, 0)
  
     'change la date
     With tsTime
@@ -1029,15 +1044,16 @@ Dim tsTime As SYSTEMTIME
         .wDay = 1
         .wDayOfWeek = Weekday("1/1/1999")
     End With
-    SystemTimeToFileTime tsTime, tTime
-    SetFileTime hFile, tTime, tTime, tTime
+    
+    Call SystemTimeToFileTime(tsTime, tTime)
+    Call SetFileTime(hFile, tTime, tTime, tTime)
     
     'referme définitivement le handle
-    CloseHandle hFile
+    Call CloseHandle(hFile)
     
     'on efface le fichier (deux suppressions si renommage raté)
-    cFile.DeleteFile sFile2
-    cFile.DeleteFile sFile
+    Call cFile.DeleteFile(sFile2)
+    Call cFile.DeleteFile(sFile)
     
     'vérifie que toutes les étapes sont OK
     If cFile.FileExists(sFile) Or cFile.FileExists(sFile2) Then Exit Function   'raté
@@ -1046,15 +1062,13 @@ Dim tsTime As SYSTEMTIME
     
     ShreddFile = True
 
-    Exit Function
-ErrGestion:
-    clsERREUR.AddError "mdlDisk.ShreddFile", True
 End Function
 
 '=======================================================
 'obtient les infos sur l'emplacement (clusters) du fichier sur le disque
 '=======================================================
 Public Function GetFileBitmap(File As String) As FileClusters
+
 Dim hFile As Long 'handle de fichier dont on veut la carte des clusters
 Dim FileBitmap As RETRIEVAL_POINTERS_BUFFER 'carte des clusters du fichier
 Dim nExtents As Long 'nombre d'extents (fragments) du fichier
@@ -1064,7 +1078,8 @@ Dim status As Long 'état de l'opération
 Dim x As Long 'compteur
 
     'ouvre le fichier avec les droits de la déplacer juste pour voir si on pourrait le déplacer
-    hFile = CreateFile(File, FILE_READ_ACCESS Or &H10000, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    hFile = CreateFile(File, FILE_READ_ACCESS Or &H10000, FILE_SHARE_READ Or _
+        FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
     
     'copie le nom du fichier
     GetFileBitmap.File = File
@@ -1089,7 +1104,8 @@ Dim x As Long 'compteur
     'on demande la carte du fichier tant qu'il y en a encore à récupérer
     Do
         'demande un morceau de 512 fragments
-        DeviceIoControl hFile, FSCTL_GET_RETRIEVAL_POINTERS, StartingAddress, 8&, FileBitmap, Len(FileBitmap), bt, 0&
+        Call DeviceIoControl(hFile, FSCTL_GET_RETRIEVAL_POINTERS, _
+            StartingAddress, 8&, FileBitmap, Len(FileBitmap), bt, 0&)
         status = Err.LastDllError
         
         'si la partie contient des fragments
@@ -1103,13 +1119,15 @@ Dim x As Long 'compteur
         'si le nombre de fragments est > 512
         If FileBitmap.ExtentCount > 512 Then
             'on copie les 512 premier fragments, car notre structure allouée ne peut pas en contenir plus
-            CopyMemory GetFileBitmap.Extents(nExtents), FileBitmap.Extents(0), 512& * 16&
+            Call CopyMemory(GetFileBitmap.Extents(nExtents), _
+                FileBitmap.Extents(0), 512& * 16&)
             'on avance de 512 fragments
             nExtents = nExtents + 512
         'sinon s'il y a moins de 512 fragments dans la partie de carte
         ElseIf FileBitmap.ExtentCount Then
             'on les copies
-            CopyMemory GetFileBitmap.Extents(nExtents), FileBitmap.Extents(0), FileBitmap.ExtentCount * 16&
+            Call CopyMemory(GetFileBitmap.Extents(nExtents), _
+                FileBitmap.Extents(0), FileBitmap.ExtentCount * 16&)
             'on avance du nombre de fragments renvoyés
             nExtents = nExtents + FileBitmap.ExtentCount
         End If
@@ -1121,7 +1139,7 @@ Dim x As Long 'compteur
     'tant que l'on n'est pas à la fin des fragments du fichier
     Loop While status = ERROR_MORE_DATA
     
-    CloseHandle hFile
+    Call CloseHandle(hFile)
 End Function
 
 'Public Function GetFileBitmap(File As String) As FileClusters

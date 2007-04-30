@@ -354,7 +354,7 @@ Private Sub cmdGo_Click()
         MsgBox .GetString("_SanitWarLau"), vbInformation, .GetString("_War")
     End With
     
-    cmdGo.Enabled = False
+    cmdGO.Enabled = False
     
     'on lance le processus de sanitization
     Call SanitDiskNow(tDrive.VolumeLetter & ":\", Me.PGB)
@@ -367,11 +367,9 @@ Private Sub cmdGo2_Click()
     'messages d'alerte
     With Lang
         If MsgBox(.GetString("_SanitWarF"), vbCritical + vbYesNo, _
-            .GetString("_War") & "  " & .GetString("_Disk") & " " & _
-            tDrive.VolumeLetter) <> vbYes Then Exit Sub
+            .GetString("_War")) <> vbYes Then Exit Sub
         If MsgBox(.GetString("_SanitWarF2"), vbCritical + vbYesNo, _
-            .GetString("_War") & "  " & .GetString("_Disk") & " " & _
-            tDrive.VolumeLetter) <> vbYes Then Exit Sub
+            .GetString("_War")) <> vbYes Then Exit Sub
         MsgBox .GetString("_SanitWarLau"), vbInformation, .GetString("_War")
     End With
     
@@ -422,12 +420,12 @@ Dim s As String
         If InStr(1, LCase$(s), "fat") Or InStr(1, LCase$(s), "ntfs") Then
             'on a choisi le drive
             Set tDrive = DV.GetSelectedDrive
-            cmdGo.Enabled = True
+            cmdGO.Enabled = True
         Else
-            cmdGo.Enabled = False
+            cmdGO.Enabled = False
         End If
     Else
-        cmdGo.Enabled = False
+        cmdGO.Enabled = False
     End If
 End Sub
 
