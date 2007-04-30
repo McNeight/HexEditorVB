@@ -31,6 +31,39 @@ Begin VB.Form physPfm
       TabIndex        =   13
       Top             =   0
       Width           =   3135
+      Begin ComctlLib.ListView lstHisto 
+         Height          =   1575
+         Left            =   120
+         TabIndex        =   14
+         TabStop         =   0   'False
+         Tag             =   "lang_ok"
+         Top             =   4800
+         Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   2778
+         View            =   3
+         LabelEdit       =   1
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         _Version        =   327682
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         Appearance      =   0
+         NumItems        =   2
+         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Action"
+            Object.Width           =   5644
+         EndProperty
+         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   1
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Rang"
+            Object.Width           =   706
+         EndProperty
+      End
       Begin VB.PictureBox pctContain_cmdMAJ 
          BorderStyle     =   0  'None
          Height          =   6615
@@ -41,6 +74,41 @@ Begin VB.Form physPfm
          TabStop         =   0   'False
          Top             =   240
          Width           =   2950
+         Begin ComctlLib.ListView lstSignets 
+            Height          =   1575
+            Left            =   0
+            TabIndex        =   27
+            TabStop         =   0   'False
+            Tag             =   "lang_ok"
+            Top             =   4560
+            Visible         =   0   'False
+            Width           =   2895
+            _ExtentX        =   5106
+            _ExtentY        =   2778
+            View            =   3
+            LabelEdit       =   1
+            MultiSelect     =   -1  'True
+            LabelWrap       =   -1  'True
+            HideSelection   =   -1  'True
+            _Version        =   327682
+            ForeColor       =   -2147483640
+            BackColor       =   -2147483643
+            Appearance      =   0
+            NumItems        =   2
+            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+               Key             =   ""
+               Object.Tag             =   ""
+               Text            =   "Offset"
+               Object.Width           =   1411
+            EndProperty
+            BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+               SubItemIndex    =   1
+               Key             =   ""
+               Object.Tag             =   ""
+               Text            =   "Commentaire"
+               Object.Width           =   4410
+            EndProperty
+         End
          Begin VB.CommandButton cmdMAJ 
             Caption         =   "Mettre à jour"
             Height          =   255
@@ -180,41 +248,6 @@ Begin VB.Form physPfm
             Top             =   2160
             Width           =   2895
          End
-         Begin ComctlLib.ListView lstSignets 
-            Height          =   1575
-            Left            =   0
-            TabIndex        =   27
-            TabStop         =   0   'False
-            Tag             =   "lang_ok"
-            Top             =   4560
-            Visible         =   0   'False
-            Width           =   2895
-            _ExtentX        =   5106
-            _ExtentY        =   2778
-            View            =   3
-            LabelEdit       =   1
-            MultiSelect     =   -1  'True
-            LabelWrap       =   -1  'True
-            HideSelection   =   -1  'True
-            _Version        =   327682
-            ForeColor       =   -2147483640
-            BackColor       =   -2147483643
-            Appearance      =   0
-            NumItems        =   2
-            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Offset"
-               Object.Width           =   1411
-            EndProperty
-            BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   1
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Commentaire"
-               Object.Width           =   4410
-            EndProperty
-         End
          Begin ComctlLib.TabStrip TB 
             Height          =   375
             Left            =   0
@@ -230,13 +263,11 @@ Begin VB.Form physPfm
                NumTabs         =   2
                BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Historique"
-                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
                BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                   Caption         =   "Signets"
-                  Key             =   ""
                   Object.Tag             =   ""
                   ImageVarType    =   2
                EndProperty
@@ -309,39 +340,6 @@ Begin VB.Form physPfm
             Top             =   0
             Width           =   2895
          End
-      End
-      Begin ComctlLib.ListView lstHisto 
-         Height          =   1575
-         Left            =   120
-         TabIndex        =   14
-         TabStop         =   0   'False
-         Tag             =   "lang_ok"
-         Top             =   4800
-         Width           =   2895
-         _ExtentX        =   5106
-         _ExtentY        =   2778
-         View            =   3
-         LabelEdit       =   1
-         LabelWrap       =   -1  'True
-         HideSelection   =   -1  'True
-         _Version        =   327682
-         ForeColor       =   -2147483640
-         BackColor       =   -2147483643
-         Appearance      =   0
-         NumItems        =   2
-         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
-            Object.Tag             =   ""
-            Text            =   "Action"
-            Object.Width           =   5644
-         EndProperty
-         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-            SubItemIndex    =   1
-            Key             =   ""
-            Object.Tag             =   ""
-            Text            =   "Rang"
-            Object.Width           =   706
-         EndProperty
       End
    End
    Begin VB.Frame FrameData 
@@ -457,7 +455,6 @@ Begin VB.Form physPfm
             MinWidth        =   4410
             Text            =   "Fichier=[Modifié]"
             TextSave        =   "Fichier=[Modifié]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -465,7 +462,6 @@ Begin VB.Form physPfm
             MinWidth        =   4410
             Text            =   "Page=[0/0]"
             TextSave        =   "Page=[0/0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -473,7 +469,6 @@ Begin VB.Form physPfm
             MinWidth        =   3175
             Text            =   "Offset=[0]"
             TextSave        =   "Offset=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -481,7 +476,6 @@ Begin VB.Form physPfm
             MinWidth        =   5292
             Text            =   "Sélection=[0 Bytes]"
             TextSave        =   "Sélection=[0 Bytes]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty

@@ -20,13 +20,60 @@ Begin VB.Form frmHome
    EndProperty
    Icon            =   "frmHome.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
    ScaleHeight     =   5700
    ScaleWidth      =   6855
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin ComctlLib.TabStrip TB 
+      Height          =   375
+      Left            =   120
+      TabIndex        =   2
+      Tag             =   "lang_ok"
+      Top             =   113
+      Width           =   6495
+      _ExtentX        =   11456
+      _ExtentY        =   661
+      _Version        =   327682
+      BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
+         NumTabs         =   5
+         BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Ouvrir fichier"
+            Key             =   ""
+            Object.Tag             =   ""
+            Object.ToolTipText     =   "Ouvrir un fichier"
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Ouvrir dossier"
+            Key             =   ""
+            Object.Tag             =   ""
+            Object.ToolTipText     =   "Ouvrir un dossier de fichiers"
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Ouvrir disque"
+            Key             =   ""
+            Object.Tag             =   ""
+            Object.ToolTipText     =   "Ouvrir un disque"
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Ouvrir processus"
+            Key             =   ""
+            Object.Tag             =   ""
+            Object.ToolTipText     =   "Ouvrir un processus"
+            ImageVarType    =   2
+         EndProperty
+         BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   "Nouveau fichier"
+            Key             =   ""
+            Object.Tag             =   ""
+            ImageVarType    =   2
+         EndProperty
+      EndProperty
+   End
    Begin VB.Frame Frame1 
       Height          =   4455
       Index           =   4
@@ -445,54 +492,6 @@ Begin VB.Form frmHome
       TabIndex        =   0
       Top             =   5153
       Width           =   1575
-   End
-   Begin ComctlLib.TabStrip TB 
-      Height          =   375
-      Left            =   120
-      TabIndex        =   2
-      Tag             =   "lang_ok"
-      Top             =   113
-      Width           =   6495
-      _ExtentX        =   11456
-      _ExtentY        =   661
-      _Version        =   327682
-      BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-         NumTabs         =   5
-         BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Ouvrir fichier"
-            Key             =   ""
-            Object.Tag             =   ""
-            Object.ToolTipText     =   "Ouvrir un fichier"
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Ouvrir dossier"
-            Key             =   ""
-            Object.Tag             =   ""
-            Object.ToolTipText     =   "Ouvrir un dossier de fichiers"
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Ouvrir disque"
-            Key             =   ""
-            Object.Tag             =   ""
-            Object.ToolTipText     =   "Ouvrir un disque"
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Ouvrir processus"
-            Key             =   ""
-            Object.Tag             =   ""
-            Object.ToolTipText     =   "Ouvrir un processus"
-            ImageVarType    =   2
-         EndProperty
-         BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   "Nouveau fichier"
-            Key             =   ""
-            Object.Tag             =   ""
-            ImageVarType    =   2
-         EndProperty
-      EndProperty
    End
 End
 Attribute VB_Name = "frmHome"
