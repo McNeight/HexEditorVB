@@ -501,9 +501,9 @@ Begin VB.MDIForm frmContent
       End
       Begin FileView_OCX.FileView LV 
          Height          =   2055
-         Left            =   120
+         Left            =   0
          TabIndex        =   1
-         Top             =   120
+         Top             =   0
          Width           =   7095
          _ExtentX        =   12515
          _ExtentY        =   3625
@@ -537,6 +537,7 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -544,20 +545,23 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "18:27"
+            TextSave        =   "16:18"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "30/04/2007"
+            TextSave        =   "01/05/2007"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1989,7 +1993,7 @@ Public Sub MDIForm_Resize()
     'If Me.WindowState = vbMinimized Then frmData.Hide Else If Me.mnuEditTools.Checked Then frmData.Show
     
     With LV
-        .Width = Me.Width - 400
+        .Width = Me.Width - 120
         .Height = Me.pctExplorer.Height - 370
     End With
     
@@ -2892,10 +2896,9 @@ Private Sub mnuHelp_Click()
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_HelpDis"))
     
+    'affiche
+    Call cFile.ShellOpenFile(App.Path & "\Help.chm", Me.hWnd)
     
-    Call cFile.CreateEmptyFile("c:\l.txt", True)
-    Call cFile.WriteFileString("c:\l.txt", GetRandom2MoString, 0, True)
-
 End Sub
 
 Private Sub mnuInformations_Click()
