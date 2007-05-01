@@ -136,7 +136,6 @@ Dim s As String
         Set cPref = New clsIniPref
         Set cProc = New clsProcess
         Set clsConv = New clsConvert
-        
     
     '//initialise les tableaux
         ReDim JailedProcess(0)  'contient les process bloqués
