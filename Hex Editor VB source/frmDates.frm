@@ -16,6 +16,7 @@ Begin VB.Form frmDates
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   30
    Icon            =   "frmDates.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
@@ -82,6 +83,20 @@ Begin VB.Form frmDates
       TabIndex        =   17
       Top             =   653
       Width           =   3375
+      Begin MSComCtl2.DTPicker DT 
+         Height          =   300
+         Index           =   0
+         Left            =   120
+         TabIndex        =   18
+         Top             =   360
+         Width           =   1935
+         _ExtentX        =   3413
+         _ExtentY        =   529
+         _Version        =   393216
+         CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
+         Format          =   63504387
+         CurrentDate     =   39133.9583333333
+      End
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
          Height          =   495
@@ -103,20 +118,6 @@ Begin VB.Form frmDates
             Top             =   120
             Width           =   975
          End
-      End
-      Begin MSComCtl2.DTPicker DT 
-         Height          =   300
-         Index           =   0
-         Left            =   120
-         TabIndex        =   18
-         Top             =   360
-         Width           =   1935
-         _ExtentX        =   3413
-         _ExtentY        =   529
-         _Version        =   393216
-         CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-         Format          =   64159747
-         CurrentDate     =   39133.9583333333
       End
    End
    Begin VB.Frame Frame1 
@@ -159,7 +160,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   64159747
+            Format          =   63504387
             CurrentDate     =   39133
          End
       End
@@ -204,7 +205,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   64159747
+            Format          =   63504387
             CurrentDate     =   39133
          End
       End

@@ -15,6 +15,7 @@ Begin VB.Form frmSelect
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   44
    Icon            =   "frmSelect.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
@@ -127,7 +128,7 @@ Private Sub cmdOk_Click()
 'valide
 Dim lFrom As Currency
 Dim lTo As Currency
-Dim X As Currency
+Dim x As Currency
 
     'On Error GoTo ErrGestion
     
@@ -137,9 +138,9 @@ Dim X As Currency
     
     'fait en sorte que lFrom soit le plus petit
     If lFrom > lTo Then
-        X = lFrom
+        x = lFrom
         lFrom = lTo
-        lTo = X
+        lTo = x
     End If
         
     If byteFunc = 0 Then    'il s'agit d'une sélection paramétrée

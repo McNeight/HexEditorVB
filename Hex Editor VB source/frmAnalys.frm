@@ -17,6 +17,7 @@ Begin VB.Form frmAnalys
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   27
    Icon            =   "frmAnalys.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
@@ -338,7 +339,7 @@ Dim cF As FileSystemLibrary.File
 End Sub
 
 Private Sub BG_MouseMove(bByteX As Byte, lOccurence As Long, Button As Integer, _
-    Shift As Integer, X As Single, Y As Single)
+    Shift As Integer, x As Single, y As Single)
     
     Label1.Caption = "Byte=[" & CStr(bByteX) & "] = [" & _
         Byte2FormatedString(bByteX) & "]  :   " & CStr(lOccurence)
@@ -348,8 +349,8 @@ End Sub
 Public Sub cmdAnalyse_Click()
 'lance l'analyse du fichier sFile
 Dim lngLen As Long
-Dim X As Long
-Dim Y As Long
+Dim x As Long
+Dim y As Long
 Dim b As Byte
 Dim l As Long
 Dim F(255) As Long
@@ -385,7 +386,7 @@ Dim lngFile As Long
     curByte = 0
     Do Until curByte > lngLen  'tant que le fichier n'est pas fini
     
-        X = X + 1
+        x = x + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         Call GetLargeInteger(curByte, tOver.Offset, tOver.OffsetHigh)
@@ -402,13 +403,13 @@ Dim lngFile As Long
             l = lngLen - curByte
         End If
         
-        For Y = 1 To l
-            b = Asc(Mid$(strBuffer, Y, 1))
+        For y = 1 To l
+            b = Asc(Mid$(strBuffer, y, 1))
             'ajoute une occurence
             F(b) = F(b) + 1
-        Next Y
+        Next y
         
-        If (X Mod 10) = 0 Then
+        If (x Mod 10) = 0 Then
             'rend la main
             DoEvents
             PGB.Value = curByte
@@ -421,9 +422,9 @@ Dim lngFile As Long
     Call CloseHandle(lngFile)
     
     'remplit le BG
-    For X = 0 To 255
-        Call BG.AddValue(X, F(X))
-    Next X
+    For x = 0 To 255
+        Call BG.AddValue(x, F(x))
+    Next x
         
     PGB.Value = PGB.Max
     Call BG.TraceGraph
@@ -443,7 +444,7 @@ End Sub
 Private Sub cmdSaveBMP_Click()
 'sauvegarder en bmp
 Dim s As String
-Dim X As Long
+Dim x As Long
 
     On Error GoTo Err
     
@@ -462,9 +463,9 @@ Dim X As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        X = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, _
+        x = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, _
             Lang.GetString("_War"))
-        If Not (X = vbYes) Then Exit Sub
+        If Not (x = vbYes) Then Exit Sub
     End If
 
     'sauvegarde
@@ -479,7 +480,7 @@ End Sub
 Private Sub cmdSaveStats_Click()
 'sauvegarde les stats dans un fichier *.log
 Dim s As String
-Dim X As Long
+Dim x As Long
 Dim s2 As String
 
     On Error GoTo Err
@@ -499,9 +500,9 @@ Dim s2 As String
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        X = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, _
+        x = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, _
             Lang.GetString("_War"))
-        If Not (X = vbYes) Then Exit Sub
+        If Not (x = vbYes) Then Exit Sub
     End If
     
     'créé le fichier
@@ -509,10 +510,10 @@ Dim s2 As String
     
     s2 = vbNullString
     'créé la string
-    For X = 0 To 255
-        s2 = s2 & "Byte=[" & Trim$(Str$(X)) & "] --> " & Lang.GetString("_Occ") _
-            & Trim$(Str$(BG.GetValue(X))) & "]" & vbNewLine
-    Next X
+    For x = 0 To 255
+        s2 = s2 & "Byte=[" & Trim$(Str$(x)) & "] --> " & Lang.GetString("_Occ") _
+            & Trim$(Str$(BG.GetValue(x))) & "]" & vbNewLine
+    Next x
     
     'sauvegarde le fichier
     Call cFile.SaveDataInFile(s, Left$(s2, Len(s2) - 2), True)

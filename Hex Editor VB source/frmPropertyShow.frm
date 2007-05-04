@@ -16,6 +16,7 @@ Begin VB.Form frmPropertyShow
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   17
    Icon            =   "frmPropertyShow.frx":0000
    LockControls    =   -1  'True
    MaxButton       =   0   'False
@@ -244,7 +245,7 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-Dim X As Long
+Dim x As Long
 
     With Lang
         #If MODE_DEBUG Then
@@ -268,11 +269,11 @@ Dim X As Long
         .LoadControlsCaption
     End With
     
-    For X = 0 To 2
-        Frame1(X).Top = 600
-        Frame1(X).Left = 120
-        Frame1(X).Visible = False
-    Next X
+    For x = 0 To 2
+        Frame1(x).Top = 600
+        Frame1(x).Left = 120
+        Frame1(x).Visible = False
+    Next x
     
     If TypeOfForm(frmContent.ActiveForm) = "Disque physique" Then _
         Me.mnuDisplayWindowsProp.Enabled = False

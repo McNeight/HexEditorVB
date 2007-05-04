@@ -18,6 +18,7 @@ Begin VB.Form frmHome
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   14
    Icon            =   "frmHome.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
@@ -561,7 +562,7 @@ Private Sub cmdOk_Click()
 'ouvre l'élément sélectionné
 Dim m() As String
 Dim Frm As Form
-Dim X As Long
+Dim x As Long
 Dim sDrive As String
 Dim lH As Long
 Dim lFile As Long
@@ -592,16 +593,16 @@ Dim lLen As Double
             If UBound(m()) < 1 Then Exit Sub
             
             'les ouvre un par un
-            For X = 1 To UBound(m)
-                If cFile.FileExists(m(X)) Then
+            For x = 1 To UBound(m)
+                If cFile.FileExists(m(x)) Then
                     Set Frm = New Pfm
-                    Call Frm.GetFile(m(X))
+                    Call Frm.GetFile(m(x))
                     Frm.Show
                     lNbChildFrm = lNbChildFrm + 1
                     frmContent.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
                     DoEvents
                 End If
-            Next X
+            Next x
     
         Case 3
         
@@ -851,7 +852,7 @@ End Sub
 'FORM HOME ==> CHOIX DE L'OBJET A OUVRIR
 '=======================================================
 Private Sub Form_Load()
-Dim X As Long
+Dim x As Long
 
     Set clsPref = New clsIniForm
     
@@ -887,14 +888,14 @@ Dim X As Long
     optFolderSub(1).Value = Not (optFolderSub(0).Value)
     
     'réorganise les Frames
-    For X = 0 To Frame1.Count - 1
-        With Frame1(X)
+    For x = 0 To Frame1.Count - 1
+        With Frame1(x)
             .Left = 120
             .Top = 480
             .Width = 6600
             .Height = 4500
         End With
-    Next X
+    Next x
     
     'affiche un seul frame
     Call MaskFrames(0)
@@ -904,11 +905,11 @@ End Sub
 'masque tous les frames sauf un
 '=======================================================
 Private Sub MaskFrames(ByVal lFrame As Long)
-Dim X As Long
+Dim x As Long
 
-    For X = 0 To Frame1.Count - 1
-        Frame1(X).Visible = False
-    Next X
+    For x = 0 To Frame1.Count - 1
+        Frame1(x).Visible = False
+    Next x
     Frame1(lFrame).Visible = True
     
     If lFrame = 4 Then

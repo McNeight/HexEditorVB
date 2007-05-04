@@ -17,6 +17,7 @@ Begin VB.Form MemPfm
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   7
    Icon            =   "MemPfm.frx":0000
    LinkTopic       =   "Form1"
    MDIChild        =   -1  'True

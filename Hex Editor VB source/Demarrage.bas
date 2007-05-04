@@ -167,6 +167,10 @@ Dim s As String
             End If
         Next X
         
+    '//récupère le fichier d'aide
+        If cFile.FileExists(App.Path & "\Help.chm") Then _
+            App.HelpFile = App.Path & "\Help.chm"
+        
     
     '//récupère les préférences
         #If MODE_DEBUG Then

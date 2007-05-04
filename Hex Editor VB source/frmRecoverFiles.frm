@@ -17,6 +17,7 @@ Begin VB.Form frmRecoverFiles
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   33
    Icon            =   "frmRecoverFiles.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
@@ -236,13 +237,13 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Resize()
-Dim X As Long
+Dim x As Long
 
     'positionnement des frames
-    For X = 0 To Frame1.Count - 1
-        Frame1(X).Top = 480
-        Frame1(X).Left = 120
-    Next X
+    For x = 0 To Frame1.Count - 1
+        Frame1(x).Top = 480
+        Frame1(x).Left = 120
+    Next x
 End Sub
 
 Private Sub LV_PathChange(sOldPath As String, sNewPath As String)

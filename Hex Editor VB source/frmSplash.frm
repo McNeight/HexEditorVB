@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmSplash 
+   BackColor       =   &H00FF0000&
    BorderStyle     =   0  'None
    ClientHeight    =   3945
    ClientLeft      =   210

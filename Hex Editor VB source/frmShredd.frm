@@ -17,6 +17,7 @@ Begin VB.Form frmShredd
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   31
    Icon            =   "frmShredd.frx":0000
    MaxButton       =   0   'False
    MinButton       =   0   'False
@@ -161,18 +162,18 @@ Private Sub cmdAddFile_Click()
 'ajoute un fichier à la liste à supprimer
 Dim s() As String
 Dim s2 As String
-Dim X As Long
+Dim x As Long
 
     ReDim s(0)
     s2 = cFile.ShowOpen(Lang.GetString("_FilesToKillSel"), Me.hWnd, _
         Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
         OFN_ALLOWMULTISELECT, s())
     
-    For X = 1 To UBound(s())
-        If cFile.FileExists(s(X)) Then
-            LV.ListItems.Add Text:=s(X) 'ajoute l'élément
+    For x = 1 To UBound(s())
+        If cFile.FileExists(s(x)) Then
+            LV.ListItems.Add Text:=s(x) 'ajoute l'élément
         End If
-    Next X
+    Next x
     
     'dans le cas d'un fichier simple
     If cFile.FileExists(s2) Then LV.ListItems.Add Text:=s2
@@ -184,14 +185,14 @@ End Sub
 
 Private Sub cmdProceed_Click()
 'procède à la suppression définitive
-Dim X As Long
+Dim x As Long
 
     'affiche un advertissement
-    X = MsgBox(Lang.GetString("_FilesWillBeLost") & vbNewLine & _
+    x = MsgBox(Lang.GetString("_FilesWillBeLost") & vbNewLine & _
         Lang.GetString("_WannaKill"), vbYesNo + vbInformation, _
         Lang.GetString("_War"))
     
-    If Not (X = vbYes) Then Exit Sub
+    If Not (x = vbYes) Then Exit Sub
     
     If Abs(Int(Val(txtPass.Text))) < 1 Or Abs(Int(Val(txtPass.Text))) > 2048 Then
         'nombre de sanitizations incorrecte
@@ -199,10 +200,10 @@ Dim X As Long
         Exit Sub
     End If
     
-    For X = LV.ListItems.Count To 1 Step -1
+    For x = LV.ListItems.Count To 1 Step -1
         DoEvents    'rend quand même la main, si bcp de fichiers, c'est utile
-        If ShreddFile(LV.ListItems.Item(X), Int(Val(txtPass.Text)), Me.PGB) Then   'procède à la suppression
-            LV.ListItems.Remove (X) 'enlève l'item si la suppression à échoué
+        If ShreddFile(LV.ListItems.Item(x), Int(Val(txtPass.Text)), Me.PGB) Then   'procède à la suppression
+            LV.ListItems.Remove (x) 'enlève l'item si la suppression à échoué
         End If
     Next
     
@@ -270,7 +271,7 @@ Private Sub CheckBtn()
 End Sub
 
 Private Sub LV_OLEDragDrop(Data As ComctlLib.DataObject, Effect As Long, _
-    Button As Integer, Shift As Integer, X As Single, Y As Single)
+    Button As Integer, Shift As Integer, x As Single, y As Single)
     
 Dim i As Long
 

@@ -18,6 +18,7 @@ Begin VB.Form frmOptions
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   40
    Icon            =   "frmOptions.frx":0000
    LinkTopic       =   "Form1"
    LockControls    =   -1  'True
@@ -1127,8 +1128,8 @@ End Sub
 
 Private Sub cmdDefault_Click()
 'remet tout par défaut
-Dim X As Long
-Dim Y As Long
+Dim x As Long
+Dim y As Long
 Dim s As String
 
     With HW
@@ -1171,14 +1172,14 @@ Dim s As String
     'affiche un exemple de valeurs Offset, String et Hexa dans le HW
     HW.NumberPerPage = 13
     Randomize
-    For X = 1 To 13
+    For x = 1 To 13
         s = vbNullString
-        For Y = 1 To 16
-            HW.AddHexValue X, Y, Hex$(Y - 1) & "0"
+        For y = 1 To 16
+            HW.AddHexValue x, y, Hex$(y - 1) & "0"
             s = s & Byte2FormatedString(Int(Rnd * 256))
-        Next Y
-        HW.AddStringValue X, s
-    Next X
+        Next y
+        HW.AddStringValue x, s
+    Next x
     
     With HW
         .FillText
@@ -1246,7 +1247,7 @@ Private Sub cmdQuitter_Click()
 End Sub
 
 Private Sub cmdSauvegarder_Click()
-Dim X As Form
+Dim x As Form
 Dim s As String
 
     'sauvegarde les options
@@ -1321,11 +1322,11 @@ Dim s As String
     
     'On Error Resume Next
     'on change l'apparence de tous les HW de toutes les forms
-    For Each X In Forms
-        If (TypeOf X Is Pfm) Or (TypeOf X Is diskPfm) Or (TypeOf X Is MemPfm) _
-            Or (TypeOf X Is physPfm) Then
+    For Each x In Forms
+        If (TypeOf x Is Pfm) Or (TypeOf x Is diskPfm) Or (TypeOf x Is MemPfm) _
+            Or (TypeOf x Is physPfm) Then
 
-                With X.HW
+                With x.HW
                     'on applique ces couleurs au HW de CETTE form
                     .BackColor = cPref.app_BackGroundColor
                     .OffsetForeColor = cPref.app_OffsetForeColor
@@ -1345,12 +1346,12 @@ Dim s As String
                 End With
                 
                 'change les Visible des frames de toutes les forms active
-                X.FrameData.Visible = CBool(cPref.general_DisplayData)
-                X.FrameInfos.Visible = CBool(cPref.general_DisplayInfos)
-                If (TypeOf X Is diskPfm) Or (TypeOf X Is physPfm) Then X.FrameInfo2.Visible = CBool(cPref.general_DisplayInfos)
+                x.FrameData.Visible = CBool(cPref.general_DisplayData)
+                x.FrameInfos.Visible = CBool(cPref.general_DisplayInfos)
+                If (TypeOf x Is diskPfm) Or (TypeOf x Is physPfm) Then x.FrameInfo2.Visible = CBool(cPref.general_DisplayInfos)
             'End If
         End If
-    Next X
+    Next x
               
     On Error Resume Next
     
@@ -1429,8 +1430,8 @@ Dim s As String
 End Sub
 
 Private Sub Form_Load()
-Dim X As Long
-Dim Y As Long
+Dim x As Long
+Dim y As Long
 Dim s As String
 
     With Lang
@@ -1458,12 +1459,12 @@ Dim s As String
     TB.ZOrder vbSendToBack  'dernier plan
     
     'remet/redimensionne les frames à leur place et redimensionne la form
-    For X = 0 To Frame1.Count - 1
-        Frame1(X).Top = 430
-        Frame1(X).Width = 9855
-        Frame1(X).Height = 6375
-        Frame1(X).Left = 50
-    Next X
+    For x = 0 To Frame1.Count - 1
+        Frame1(x).Top = 430
+        Frame1(x).Width = 9855
+        Frame1(x).Height = 6375
+        Frame1(x).Left = 50
+    Next x
     
     With Me
         Me.Width = 10065
@@ -1519,14 +1520,14 @@ Dim s As String
         'affiche un exemple de valeurs Offset, String et Hexa dans le HW
         HW.NumberPerPage = 13
         Randomize
-        For X = 1 To 13
+        For x = 1 To 13
             s = vbNullString
-            For Y = 1 To 16
-                HW.AddHexValue X, Y, Hex$(Y - 1) & "0"
+            For y = 1 To 16
+                HW.AddHexValue x, y, Hex$(y - 1) & "0"
                 s = s & Byte2FormatedString(Int(Rnd * 256))
-            Next Y
-            HW.AddStringValue X, s
-        Next X
+            Next y
+            HW.AddStringValue x, s
+        Next x
         
         'affiche la bonne valeur de grille dans le combobox
         Select Case cPref.app_Grid
@@ -1637,7 +1638,7 @@ Dim s As String
         
 End Sub
 
-Private Sub HW_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single, Item As HexViewer_OCX.ItemElement)
+Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As HexViewer_OCX.ItemElement)
  
     If Button = 4 And Shift = 0 Then
         'click avec la molette, et pas de Shift or Control
@@ -1702,12 +1703,12 @@ End Sub
 
 Private Sub TB_Click()
 'change le frame Visible
-Dim X As Long
+Dim x As Long
 
     'rend invisible tout les frames
-    For X = 0 To Frame1.Count - 1
-        Frame1(X).Visible = False
-    Next X
+    For x = 0 To Frame1.Count - 1
+        Frame1(x).Visible = False
+    Next x
     
     'affiche le bon en fonction du tab
     Frame1(TB.SelectedItem.Index - 1).Visible = True

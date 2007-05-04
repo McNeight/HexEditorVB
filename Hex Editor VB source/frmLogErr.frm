@@ -16,6 +16,7 @@ Begin VB.Form frmLogErr
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   44
    Icon            =   "frmLogErr.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
@@ -172,7 +173,7 @@ End Sub
 
 Private Sub Form_Load()
 Dim var As Variant
-Dim X As Long
+Dim x As Long
 
     With Lang
         #If MODE_DEBUG Then
@@ -203,14 +204,14 @@ Dim X As Long
     LV.ListItems.Clear
     
     With LV.ListItems
-        For X = 1 To clsERREUR.NumberOfErrorInLogFile
-            .Add Text:=var(X).ErrDate
-            .Item(X).SubItems(1) = var(X).ErrTime
-            .Item(X).SubItems(2) = var(X).ErrZone
-            .Item(X).SubItems(3) = var(X).ErrSource
-            .Item(X).SubItems(4) = var(X).ErrNumber
-            .Item(X).SubItems(5) = var(X).ErrDescription
-        Next X
+        For x = 1 To clsERREUR.NumberOfErrorInLogFile
+            .Add Text:=var(x).ErrDate
+            .Item(x).SubItems(1) = var(x).ErrTime
+            .Item(x).SubItems(2) = var(x).ErrZone
+            .Item(x).SubItems(3) = var(x).ErrSource
+            .Item(x).SubItems(4) = var(x).ErrNumber
+            .Item(x).SubItems(5) = var(x).ErrDescription
+        Next x
     End With
     
     With Text1
