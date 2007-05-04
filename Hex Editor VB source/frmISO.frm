@@ -17,6 +17,7 @@ Begin VB.Form frmISO
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   39
    Icon            =   "frmISO.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
@@ -175,7 +176,7 @@ Private Sub cmdGo_Click()
 'lance la création du fichier ISO
 Dim lngSec As Long
 Dim s As String
-Dim X As Long
+Dim x As Long
 Dim lFile As Long
 Dim lBPC As Long
 Dim lTLS As Long
@@ -187,8 +188,8 @@ Dim hDisk As Long
     'vérifie si le fichier existe pas déjà
     If cFile.FileExists(sFile) Then
         'message de confirmation
-        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
-        If Not (X = vbYes) Then Exit Sub
+        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
+        If Not (x = vbYes) Then Exit Sub
     End If
     
     'vérifie que le dossier existe bien

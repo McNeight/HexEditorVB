@@ -17,6 +17,7 @@ Begin VB.Form frmStringSearch
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   21
    Icon            =   "frmStringSearch.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
@@ -386,7 +387,7 @@ Private Sub cmdSave_Click()
 'sauvegarde les résultats
 Dim lFile As Long
 Dim sFile As String
-Dim X As Long
+Dim x As Long
 
     On Error GoTo CancelPushed
     
@@ -416,11 +417,11 @@ Dim X As Long
         sFile & vbNewLine & Lang.GetString("_DateIs") & Date$ & "  " & Time$ & _
         vbNewLine & "[match]=" & LV.ListItems.Count
     
-    For X = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
-        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(X)) & "  [string]=" & _
-        LV.ListItems.Item(X).SubItems(1)
+    For x = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
+        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(x)) & "  [string]=" & _
+        LV.ListItems.Item(x).SubItems(1)
         DoEvents
-    Next X
+    Next x
     
     Close lFile
     

@@ -15,6 +15,7 @@ Begin VB.Form frmConvert
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   25
    Icon            =   "frmConvert.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False

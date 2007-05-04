@@ -16,6 +16,7 @@ Begin VB.Form frmSignets
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   22
    Icon            =   "frmSignets.frx":0000
    LinkTopic       =   "Form1"
    LockControls    =   -1  'True
@@ -235,17 +236,17 @@ End Sub
 
 Private Sub cmdComment_Click()
 'ajoute un commentaire sur les signets sélectionnés
-Dim X As Long
+Dim x As Long
 Dim s As String
 
-    For X = Me.lstSignets.ListItems.Count To 1 Step -1
-        If Me.lstSignets.ListItems.Item(X).Selected Then
+    For x = Me.lstSignets.ListItems.Count To 1 Step -1
+        If Me.lstSignets.ListItems.Item(x).Selected Then
             s = InputBox(Lang.GetString("_NewComment") & " " & _
-                Me.lstSignets.ListItems.Item(X).Text, Lang.GetString("_AddComment"))
+                Me.lstSignets.ListItems.Item(x).Text, Lang.GetString("_AddComment"))
             If StrPtr(s) <> 0 Then _
-                Me.lstSignets.ListItems.Item(X).SubItems(1) = s
+                Me.lstSignets.ListItems.Item(x).SubItems(1) = s
         End If
-    Next X
+    Next x
 End Sub
 
 Private Sub cmdDeleteAll_Click()
@@ -255,12 +256,12 @@ End Sub
 
 Private Sub cmdDeleteSel_Click()
 'supprime la sélection
-Dim X As Long
+Dim x As Long
 
-    For X = Me.lstSignets.ListItems.Count To 1 Step -1
-        If Me.lstSignets.ListItems.Item(X).Selected Then _
-            Me.lstSignets.ListItems.Remove X
-    Next X
+    For x = Me.lstSignets.ListItems.Count To 1 Step -1
+        If Me.lstSignets.ListItems.Item(x).Selected Then _
+            Me.lstSignets.ListItems.Remove x
+    Next x
 End Sub
 
 Private Sub cmdNew_Click()
@@ -290,7 +291,7 @@ Private Sub cmdSave_Click()
 'enregistre la liste des signets de la form active
 Dim s As String
 Dim lFile As Long
-Dim X As Long
+Dim x As Long
 
     On Error GoTo ErrGestion
     
@@ -311,8 +312,8 @@ Dim X As Long
 
     If cFile.FileExists(s) Then
         'message de confirmation
-        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_Warning"))
-        If Not (X = vbYes) Then Exit Sub
+        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_Warning"))
+        If Not (x = vbYes) Then Exit Sub
     End If
     
     'ouvre le fchier
@@ -320,9 +321,9 @@ Dim X As Long
     Open s For Output As lFile
     
     'enregistre les entrées
-    For X = 1 To lstSignets.ListItems.Count
-        Write #lFile, lstSignets.ListItems.Item(X) & "|" & lstSignets.ListItems.Item(X).SubItems(1)
-    Next X
+    For x = 1 To lstSignets.ListItems.Count
+        Write #lFile, lstSignets.ListItems.Item(x) & "|" & lstSignets.ListItems.Item(x).SubItems(1)
+    Next x
     
     Close lFile
 
@@ -333,23 +334,23 @@ ErrGestion:
 End Sub
 
 Private Sub cmdSaveChanges_Click()
-Dim X As Long
+Dim x As Long
 
     'applique les changements à la forme active
  
     With frmContent.ActiveForm
         'on ajoute tous les signets qui sont affichés dans l'activeform
         .lstSignets.ListItems.Clear
-        For X = 1 To Me.lstSignets.ListItems.Count
-            .lstSignets.ListItems.Add Text:=Me.lstSignets.ListItems.Item(X).Text
-            .lstSignets.ListItems.Item(X).SubItems(1) = Me.lstSignets.ListItems.Item(X).SubItems(1)
-        Next X
+        For x = 1 To Me.lstSignets.ListItems.Count
+            .lstSignets.ListItems.Add Text:=Me.lstSignets.ListItems.Item(x).Text
+            .lstSignets.ListItems.Item(x).SubItems(1) = Me.lstSignets.ListItems.Item(x).SubItems(1)
+        Next x
         
         'on vire les anciens signets du HW actif et on rajoute les nouveau
         Call .HW.RemoveAllSignets
-        For X = 1 To Me.lstSignets.ListItems.Count
-            .HW.AddSignet CCur(Val(Me.lstSignets.ListItems.Item(X).Text))
-        Next X
+        For x = 1 To Me.lstSignets.ListItems.Count
+            .HW.AddSignet CCur(Val(Me.lstSignets.ListItems.Item(x).Text))
+        Next x
         
         Call .HW.Refresh
         
@@ -362,7 +363,7 @@ Private Sub dmQuit_Click()
 End Sub
 
 Private Sub Form_Load()
-Dim X As Long
+Dim x As Long
 
     With Lang
         #If MODE_DEBUG Then
@@ -390,10 +391,10 @@ Dim X As Long
     
     'on ajoute tous les signets qui sont affichés dans l'activeform
     With lstSignets.ListItems
-        For X = 1 To frmContent.ActiveForm.lstSignets.ListItems.Count
-            .Add Text:=frmContent.ActiveForm.lstSignets.ListItems.Item(X).Text
-            .Item(X).SubItems(1) = frmContent.ActiveForm.lstSignets.ListItems.Item(X).SubItems(1)
-        Next X
+        For x = 1 To frmContent.ActiveForm.lstSignets.ListItems.Count
+            .Add Text:=frmContent.ActiveForm.lstSignets.ListItems.Item(x).Text
+            .Item(x).SubItems(1) = frmContent.ActiveForm.lstSignets.ListItems.Item(x).SubItems(1)
+        Next x
     End With
     
 End Sub
@@ -404,7 +405,7 @@ End Sub
 Private Sub AddSignetIn(ByVal bOverWrite As Boolean)
 Dim s As String
 Dim lFile As Long
-Dim X As Long
+Dim x As Long
 Dim sTemp As String
 Dim l As Long
 
@@ -476,7 +477,7 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 Dim tLst As ListItem
 Dim s As String
 Dim r As Long
@@ -484,7 +485,7 @@ Dim r As Long
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(X, Y)
+        Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         s = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, _
             Lang.GetString("_AddComment"))
@@ -496,7 +497,7 @@ Dim r As Long
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(X, Y)
+        Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         
         'on enlève du listview
@@ -505,7 +506,7 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub

@@ -43,7 +43,7 @@ Attribute VB_Exposed = True
 
 
 Option Explicit
-
+'BUG LIGNE 1157 RESOLU
 
 '=======================================================
 'CONSTANTES
@@ -1166,9 +1166,9 @@ Dim bytesReturned As Long
 
     strDrive = "\\.\PHYSICALDRIVE" & CStr(DiskNumber)
     
-    '//obtient le handle du drive
-    hDrive = CreateFile(strDrive, GENERIC_READ, FILE_SHARE_READ Or _
-        FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0&, 0&)
+    '//obtient le handle du disque
+    hDrive = CreateFile(strDrive, GENERIC_READ Or _
+        GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0, 0)
     
     If hDrive = INVALID_HANDLE_VALUE Then Exit Function
     

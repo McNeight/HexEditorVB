@@ -15,6 +15,7 @@ Begin VB.Form frmSelect2
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   44
    Icon            =   "frmSelect2.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False

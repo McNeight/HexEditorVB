@@ -17,6 +17,7 @@ Begin VB.Form frmScript
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   24
    Icon            =   "frmScript.frx":0000
    LinkTopic       =   "Form1"
    LockControls    =   -1  'True
@@ -94,7 +95,6 @@ Begin VB.Form frmScript
       _ExtentY        =   4895
       _Version        =   393217
       BorderStyle     =   0
-      Enabled         =   -1  'True
       ScrollBars      =   3
       Appearance      =   0
       TextRTF         =   $"frmScript.frx":2307
@@ -496,7 +496,7 @@ End Sub
 Private Sub mnuOpen_Click()
 'ouverture de fichier
 Dim s As String
-Dim X As Long
+Dim x As Long
 
     On Error GoTo CancelPushed
     
@@ -538,7 +538,7 @@ End Sub
 Private Sub mnuSaveAs_Click()
 'sauvegarde
 Dim s As String
-Dim X As Long
+Dim x As Long
 
     On Error GoTo CancelPushed
     
@@ -553,9 +553,9 @@ Dim X As Long
     
     If cFile.FileExists(s) Then
         'message de confirmation
-        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
+        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
             vbYesNo, Lang.GetString("_War"))
-        If Not (X = vbYes) Then Exit Sub
+        If Not (x = vbYes) Then Exit Sub
     End If
     
     'sauvegarde du fichier

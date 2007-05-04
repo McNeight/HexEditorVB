@@ -16,6 +16,7 @@ Begin VB.Form frmCreateBackup
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   44
    Icon            =   "frmCreateBackup.frx":0000
    LinkTopic       =   "Form1"
    LockControls    =   -1  'True

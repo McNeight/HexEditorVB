@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
-Object = "{67F3B6F5-143C-4724-BF0B-20B81F5D8E04}#1.0#0"; "ExtendedVScrollbar_OCX.ocx"
+Object = "{67F3B6F5-143C-4724-BF0B-20B81F5D8E04}#4.0#0"; "ExtendedVScrollbar_OCX.ocx"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
 Begin VB.Form diskPfm 
    Caption         =   "Ouverture d'un disque..."
@@ -18,6 +18,7 @@ Begin VB.Form diskPfm
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   11
    Icon            =   "diskPfm.frx":0000
    LinkTopic       =   "diskPfm"
    LockControls    =   -1  'True
@@ -1008,7 +1009,7 @@ Dim curOffset As Currency
     Call VS_Change(VS.Value)
 End Sub
 
-Private Sub lblGOTO_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lblGOTO_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche un popup pour sauter à un autre emplacement du disque
     lblGOTO.BorderStyle = 1
     If Button = 1 Then Me.PopupMenu frmContent.mnuPopupDisk, , _
@@ -1058,7 +1059,7 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub
@@ -1298,9 +1299,9 @@ Dim RD() As Byte
 Dim RT() As Byte
 Dim Offset As Currency
 Dim Sector As Currency
-Dim X As Long
+Dim x As Long
 Dim s As String
-Dim Y As Long
+Dim y As Long
 Dim h As Long
 Dim lDisplayableBytes As Long
 Dim Sb As Currency
@@ -1349,53 +1350,53 @@ Dim lDecal As Long
         'le "+2" n'est pas logique pour moi, mais bon, sans çà çà plante (+1 pour moi)
 
     '//remplit le tableau temporaire contenant la réunion des secteurs lus
-        For X = 0 To lBytesPerSector - 1
+        For x = 0 To lBytesPerSector - 1
             If UBound(RB) > 0 Then
                 'alors on pioche dans le secteur 1
-                RT(X) = RB(X)
+                RT(x) = RB(x)
             Else
                 'alors on pioche dans le secteur 2 (toujours lu)
-                RT(X) = r(X)
+                RT(x) = r(x)
             End If
-        Next X
+        Next x
         If UBound(RT) > lBytesPerSector Then
-            For X = lBytesPerSector To 2 * lBytesPerSector - 1
+            For x = lBytesPerSector To 2 * lBytesPerSector - 1
                 If UBound(RB) > 0 Then
                     'alors on pioche dans le secteur 2
-                    RT(X) = r(X - lBytesPerSector)
+                    RT(x) = r(x - lBytesPerSector)
                 Else
                     'alors on pioche dans le secteur 3
-                    RT(X) = RA(X - lBytesPerSector)
+                    RT(x) = RA(x - lBytesPerSector)
                 End If
-            Next X
+            Next x
         End If
         If UBound(RT) > 2 * lBytesPerSector Then
-            For X = 2 * lBytesPerSector To 3 * lBytesPerSector - 1
+            For x = 2 * lBytesPerSector To 3 * lBytesPerSector - 1
                 'on pioche forcément dans le 3eme secteur
-                RT(X) = RA(X - 2 * lBytesPerSector)
-            Next X
+                RT(x) = RA(x - 2 * lBytesPerSector)
+            Next x
         End If
         
         
         'affecte au tableau affiché les bytes qui proviennent de la réunion des 3 secteurs
         lDecal = Offset - offsetFinSectorBef + lBytesPerSector
         
-        For X = 0 To lDisplayableBytes
+        For x = 0 To lDisplayableBytes
             'calcule le décalage
-            RD(X) = RT(X + lDecal) 'affecte la valeur qui sera affichée
-        Next X
+            RD(x) = RT(x + lDecal) 'affecte la valeur qui sera affichée
+        Next x
     
     'ajoute les valeurs string/hexa obtenues au HW
-    For X = 0 To ByN(UBound(RD()), 16) - 1 Step 16
+    For x = 0 To ByN(UBound(RD()), 16) - 1 Step 16
         s = vbNullString
-        For Y = 0 To 15
-            h = X + Y
+        For y = 0 To 15
+            h = x + y
             s = s & Byte2FormatedString(RD(h))
-            HW.AddHexValue 1 + X / 16, Y + 1, IIf(Len(Hex$(RD(h))) = 1, "0" & _
+            HW.AddHexValue 1 + x / 16, y + 1, IIf(Len(Hex$(RD(h))) = 1, "0" & _
                 Hex$(RD(h)), Hex$(RD(h)))
-        Next Y
-        HW.AddStringValue 1 + X / 16, s
-    Next X
+        Next y
+        HW.AddStringValue 1 + x / 16, s
+    Next x
     
     'HW.Refresh  'refresh HW
     
@@ -1410,19 +1411,19 @@ End Sub
 Private Function IsOffsetModified(ByVal lOffset As Long, ByRef lPlace As Long) _
     As Boolean
     
-Dim X As Long
+Dim x As Long
     
     IsOffsetModified = False
     
-    For X = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
+    For x = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
     'dans le cas où il y a eu plusieurs modifs dans le même offset
-        If ChangeListO(X) = lOffset + 1 Then
+        If ChangeListO(x) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            lPlace = X
+            lPlace = x
             IsOffsetModified = True
             Exit Function
         End If
-    Next X
+    Next x
     
 End Function
 
@@ -1430,19 +1431,19 @@ End Function
 'renvoie si la case a été modifiée ou non
 '=======================================================
 Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Long) As Boolean
-Dim X As Long
+Dim x As Long
     
     IsModified = False
     
-    For X = 2 To ChangeListDim
-        If ChangeListO(X) = lOffset + 1 Then
+    For x = 2 To ChangeListDim
+        If ChangeListO(x) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            If ChangeListC(X) = lCol Then
+            If ChangeListC(x) = lCol Then
                 IsModified = True
                 Exit Function
             End If
         End If
-    Next X
+    Next x
 End Function
 
 '=======================================================
@@ -1686,7 +1687,7 @@ Dim s As String
 Dim sKey As Long
 Dim bytHex As Byte
 Dim Valu As Byte
-Dim X As Byte
+Dim x As Byte
 
     On Error GoTo ErrGestion
 
@@ -1740,7 +1741,7 @@ ErrGestion:
     clsERREUR.AddError "Pfm.KeyPress", True
 End Sub
 
-Private Sub HW_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single, Item As ItemElement)
+Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As ItemElement)
 Dim s As String
 Dim r As Long
 Dim l As Currency
@@ -1842,7 +1843,7 @@ Dim l As Currency
     
 End Sub
 
-Private Sub HW_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub HW_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     Me.Sb.Panels(4).Text = Lang.GetString("_Selec") & _
         CStr(HW.NumberOfSelectedItems) & " " & Lang.GetString("_Bytes")
     Label2(9) = Me.Sb.Panels(4).Text
@@ -1883,7 +1884,7 @@ Private Sub lstSignets_ItemClick(ByVal Item As ComctlLib.ListItem)
     End If
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 Dim tLst As ListItem
 Dim s As String
 Dim r As Long
@@ -1891,7 +1892,7 @@ Dim r As Long
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(X, Y)
+        Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         s = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, Lang.GetString("_AddCom"))
         If StrPtr(s) <> 0 Then
@@ -1902,7 +1903,7 @@ Dim r As Long
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(X, Y)
+        Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         
         r = MsgBox(Lang.GetString("_DelSig") & " " & tLst.Text & " ?", vbInformation + vbYesNo, Lang.GetString("_War"))

@@ -16,6 +16,7 @@ Begin VB.Form frmMain
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   43
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   8205
@@ -100,7 +101,7 @@ Begin VB.Form frmMain
       End
    End
    Begin VB.Menu mnuEdit 
-      Caption         =   "&Edition"
+      Caption         =   "&Edit"
       Begin VB.Menu mnuCopyModel 
          Caption         =   "&Copy model to clipboard"
          Enabled         =   0   'False
@@ -180,6 +181,8 @@ Dim cManif As AfClsManifest
     Set cManif = New AfClsManifest
     Call cManif.Run
     Set cManif = Nothing
+    
+    App.HelpFile = App.Path & "\Help.chm"
     
     'en anglais par défaut
     sOpenFile = "Choose a file"
@@ -307,12 +310,13 @@ Private Sub mnuEnglish_Click()
     mnuFile.Caption = "&File"
     mnuChooseLang.Caption = "&Lang"
     mnuSave.Caption = "&Save lang file..."
-    Me.mnuCopyModel.Caption = "&Copier le modèle dans le presse-papier"
-    Me.mnuInsert.Caption = "&Insérer depuis le presse-papier"
+    Me.mnuCopyModel.Caption = "&Copy model to clipboard"
+    Me.mnuInsert.Caption = "&Insert from clipboard"
     LV.ColumnHeaders.Item(2).Text = "Model string"
     LV.ColumnHeaders.Item(1).Text = "New string"
     sOpenFile = "Choose a file"
     sOpenModel = "Choose a model"
+    Me.mnuEdit.Caption = "&Edit"
     sSaveFile = "Save lang file"
 End Sub
 
@@ -331,40 +335,33 @@ Private Sub mnuFrench_Click()
     mnuSave.Caption = "&Enregistrer le fichier de langue..."
     LV.ColumnHeaders.Item(2).Text = "Texte du modèle"
     LV.ColumnHeaders.Item(1).Text = "Nouveau texte"
-    Me.mnuCopyModel.Caption = "&Copy model to clipboard"
-    Me.mnuInsert.Caption = "&Insert from clipboard"
+    Me.mnuCopyModel.Caption = "&Copier le modèle dans le presse-papier"
+    Me.mnuInsert.Caption = "&Insérer depuis le presse-papier"
     sOpenFile = "Choix d'un fichier"
     sOpenModel = "Choix d'un modèle"
+    Me.mnuEdit.Caption = "&Edition"
     sSaveFile = "Sauvegarder le fichier"
 End Sub
 
 Private Sub mnuHelp_Click()
-'aide
-Dim s As String
+Dim FS As FileSystemLibrary.FileSystem
     
-    If Me.mnuFrench.Checked Then
-        'en français
-        s = "Module d'édition de fichiers de langue pour Hex Editor VB" & vbNewLine
-        s = s & vbNewLine & "Vous devez :" & vbNewLine & "1) Choisir un modèle, c'est à dire un fichier de langue déjà existant"
-        s = s & vbNewLine & "2) Créer votre fichier de langue en traduisant dans la colonne de gauche les textes de droite"
-        s = s & vbNewLine & "3) Sauvegarder votre nouveau fichier de langue"
-        s = s & vbNewLine & "4) Vous pouvez 'Copier le modèle dans le presse papier', coller dans google traduction, copier le"
-        s = s & vbNewLine & "résultat traduit, et 'Insérer depuis le presse papier'"
-        s = s & vbNewLine & "Il est (très fortement) conseillé de faire une traduction google depuis le modèle anglais."
-        s = s & vbNewLine & vbNewLine & "By violent_ken"
+    Set FS = New FileSystemLibrary.FileSystem
+    
+    'vérifie la présence du fichier d'aide
+    If FS.FileExists(App.HelpFile) Then
+        'on lance
+        Call FS.ShellOpenFile(App.HelpFile, Me.hWnd)
     Else
-        s = "Lang Editor Tool for Hex Editor VB" & vbNewLine
-        s = s & vbNewLine & "You should :" & vbNewLine & "1) Choose a model, i.e. an existant lang file"
-        s = s & vbNewLine & "2) Create your own lang file by translating in the left column the text of the right column"
-        s = s & vbNewLine & "3) Save your new lang file"
-        s = s & vbNewLine & "4) You can 'Copy model to clipboard', paste it in Google Traduction, copy it"
-        s = s & vbNewLine & "to clipboard and 'Insert from clipboard' the translation"
-        s = s & vbNewLine & "It is (very strongly) advised to make a google translation from the English model."
-        s = s & vbNewLine & vbNewLine & "By violent_ken"
+        'message d'erreur
+        If Me.mnuFrench.Checked Then
+            MsgBox "Le fichier d'aide n'existe pas.", vbInformation, "Aide indisponible"
+        Else
+            MsgBox "Can't find help file.", vbInformation, "Help unavailable"
+        End If
     End If
     
-    MsgBox s, vbInformation, "Lang Editor for Hex Editor VB"
-        
+    Set FS = Nothing
 End Sub
 
 Private Sub mnuInsert_Click()
@@ -472,7 +469,7 @@ Dim sFile As String
     Next x
     
     'lance l'enregistrement
-    Call cFile.SaveDATAinFile(sFile, s, True)
+    Call cFile.SaveDataInFile(sFile, s, True)
     
     
 CancelPushed:

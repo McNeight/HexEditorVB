@@ -17,6 +17,7 @@ Begin VB.Form frmSearch
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   20
    Icon            =   "frmSearch.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
@@ -440,7 +441,7 @@ End Sub
 Private Sub cmdSearch_Click()
 'lance la recherche
 Dim tRes() As Long
-Dim X As Long
+Dim x As Long
 Dim s As String
 
     If txtSearch.Text = vbNullString Then Exit Sub
@@ -559,16 +560,16 @@ Dim s As String
     Call AddTextToConsole(Lang.GetString("_DisplayRes"))
 
     '//affiche les résultats
-    For X = 1 To UBound(tRes())
-        LV.ListItems.Add Text:=Lang.GetString("_FoundAt") & " " & CStr(By16D(tRes(X)))
+    For x = 1 To UBound(tRes())
+        LV.ListItems.Add Text:=Lang.GetString("_FoundAt") & " " & CStr(By16D(tRes(x)))
         If Check2.Value Then
             With frmContent.ActiveForm
-                .HW.AddSignet By16D(tRes(X))
-                .lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(X))))
+                .HW.AddSignet By16D(tRes(x))
+                .lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(x))))
                 .lstSignets.ListItems.Item(.lstSignets.ListItems.Count).SubItems(1) = "Found [" & Trim$(txtSearch.Text) & "]"
             End With
         End If
-    Next X
+    Next x
     
     Frame1(4).Caption = Lang.GetString("_ResAre") & " " & CStr(UBound(tRes()))
     

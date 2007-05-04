@@ -18,6 +18,7 @@ Begin VB.Form frmTable
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   44
    Icon            =   "frmTable.frx":0000
    LinkTopic       =   "Form1"
    LockControls    =   -1  'True
@@ -148,8 +149,8 @@ Private Lang As New clsLang
 'valeurs en base octale, décimale, hexa, ascii et binaire
 '=======================================================
 Public Sub CreateTable(ByVal tType As TableType)
-Dim X As Long
-Dim Y As Long
+Dim x As Long
+Dim y As Long
     
     'active la gestion des langues
     Call Lang.ActiveLang(Me)
@@ -170,24 +171,24 @@ Dim Y As Long
             .CurrentY = 0
             .ForeColor = 16737380
             .BackColor = vbWhite
-            For X = 0 To 15
-                .CurrentY = 240 + 240 * X
+            For x = 0 To 15
+                .CurrentY = 240 + 240 * x
                 .CurrentX = 0
-                Me.Print Hex$(X) & "0"
-                .CurrentX = 360 + 230 * X
+                Me.Print Hex$(x) & "0"
+                .CurrentX = 360 + 230 * x
                 .CurrentY = 0
-                Me.Print Hex$(X)
-            Next X
+                Me.Print Hex$(x)
+            Next x
         
             'affichage des valeurs
             .ForeColor = vbBlack
-            For X = 0 To 15
-                For Y = 0 To 15
-                    .CurrentX = 360 + 230 * X
-                    .CurrentY = 240 + 240 * Y
-                    Me.Print Chr_(Val(16 * Y + X))
-                Next Y
-            Next X
+            For x = 0 To 15
+                For y = 0 To 15
+                    .CurrentX = 360 + 230 * x
+                    .CurrentY = 240 + 240 * y
+                    Me.Print Chr_(Val(16 * y + x))
+                Next y
+            Next x
         End With
         
     Else
@@ -206,17 +207,17 @@ Dim Y As Long
         End With
         
         With LV
-            For X = 1 To 256
-                .ListItems.Add Text:=IIf(Len(CStr(X - 1)) = 1, "00" & CStr(X - 1), _
-                IIf(Len(CStr(X - 1)) = 2, "0" & CStr(X - 1), CStr(X - 1)))  'décimal
-                .ListItems.Item(X).SubItems(1) = Dec2Bin(X - 1, 8) 'binaire
-                .ListItems.Item(X).SubItems(2) = IIf(Len(Oct$(X - 1)) = 1, _
-                "00" & Oct$(X - 1), IIf(Len(Oct$(X - 1)) = 2, "0" & Oct$(X - 1), _
-                Oct$(X - 1))) 'octal
-                .ListItems.Item(X).SubItems(3) = IIf(Len(Hex$(X - 1)) = 1, "0" & Hex$(X - 1), _
-                Hex$(X - 1)) 'hexa
-                .ListItems.Item(X).SubItems(4) = Chr_(X - 1) 'ANSI ASCII
-            Next X
+            For x = 1 To 256
+                .ListItems.Add Text:=IIf(Len(CStr(x - 1)) = 1, "00" & CStr(x - 1), _
+                IIf(Len(CStr(x - 1)) = 2, "0" & CStr(x - 1), CStr(x - 1)))  'décimal
+                .ListItems.Item(x).SubItems(1) = Dec2Bin(x - 1, 8) 'binaire
+                .ListItems.Item(x).SubItems(2) = IIf(Len(Oct$(x - 1)) = 1, _
+                "00" & Oct$(x - 1), IIf(Len(Oct$(x - 1)) = 2, "0" & Oct$(x - 1), _
+                Oct$(x - 1))) 'octal
+                .ListItems.Item(x).SubItems(3) = IIf(Len(Hex$(x - 1)) = 1, "0" & Hex$(x - 1), _
+                Hex$(x - 1)) 'hexa
+                .ListItems.Item(x).SubItems(4) = Chr_(x - 1) 'ANSI ASCII
+            Next x
         End With
         LV.Visible = True
     End If
@@ -257,13 +258,13 @@ Private Sub Form_Load()
     End With
 End Sub
 
-Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Form_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affichage du popu menu
     Me.SetFocus
     If Button = 2 Then Me.PopupMenu Me.mnuVisible
 End Sub
 
-Private Sub LV_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affichage du popu menu
     Me.SetFocus
     If Button = 2 Then Me.PopupMenu Me.mnuVisible

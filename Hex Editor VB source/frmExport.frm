@@ -15,6 +15,7 @@ Begin VB.Form frmExport
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   HelpContextID   =   15
    Icon            =   "frmExport.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
@@ -282,7 +283,7 @@ End Sub
 
 Private Sub cmdSave_Click()
 'lance la sauvegarde
-Dim X As Long
+Dim x As Long
 
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_Exporting"))
@@ -303,8 +304,8 @@ Dim X As Long
     Select Case cbFormat.Text
         Case Lang.GetString("_HTML!")
             
-            X = Int(Abs(Val(txtOpt.Text)))
-            If X < 1 Or X > 10 Then
+            x = Int(Abs(Val(txtOpt.Text)))
+            If x < 1 Or x > 10 Then
                 MsgBox Lang.GetString("_SizeNoOk"), vbCritical, _
                     Lang.GetString("_War")
                 GoTo ResumeMe
@@ -314,11 +315,11 @@ Dim X As Long
                 'sauvegarde d'un fichier entier
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), _
                     CBool(chkString.Value), frmContent.ActiveForm.Caption, _
-                    -1, , X, CBool(chkClip.Value))
+                    -1, , x, CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), _
-                    CBool(chkString.Value), "az", 1, 1, X, CBool(chkClip.Value))
+                    CBool(chkString.Value), "az", 1, 1, x, CBool(chkClip.Value))
             End If
             
         Case Lang.GetString("_RTF!")
