@@ -949,6 +949,55 @@ Dim Buffer As String
     
 End Function
 
+'=======================================================
+'applique un gradient de couleur sur un objet
+'il doit être "en autoredraw=true" (si c'est une form, picturebox...)
+'=======================================================
+Public Sub FillGradient(Obj As Object, LeftColor As RGB_COLOR, _
+    RightColor As RGB_COLOR)
+    
+Dim rAverageColorPerSizeUnit As Double
+Dim gAverageColorPerSizeUnit As Double
+Dim bAverageColorPerSizeUnit As Double
+Dim lWidth As Long
+Dim x As Long
+
+    With Obj
+        
+        'récupère la largeur de l'objet
+        lWidth = Obj.Width / 15
+        
+        'récupère la moyenne de couleur par unité de longueur
+        rAverageColorPerSizeUnit = Abs((RightColor.r - LeftColor.r) / lWidth)
+        gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lWidth)
+        bAverageColorPerSizeUnit = Abs((RightColor.b - LeftColor.b) / lWidth)
+        
+        'se positionne tout à gauche de l'objet ==> balayera vers la droite
+        Call MoveToEx(Obj.hdc, 0, 0, 0&)
+        
+        'pour chaque 'colonne' constituée par une ligne verticale, on trace une
+        'ligne en récupérant la couleur correspondante
+        For x = 0 To lWidth
+            
+            'change le ForeColor qui détermine la couleur de la Line
+            'multiplie la largeur actuelle par la couleur par unité de longueur
+            .ForeColor = RGB(LeftColor.r + x * rAverageColorPerSizeUnit, LeftColor.G + x * _
+                gAverageColorPerSizeUnit, LeftColor.b + x * bAverageColorPerSizeUnit)
+               
+            'trace une ligne
+            Call LineTo(.hdc, x, lWidth)
+            
+            'bouge 'd'une colonne' vers la droite
+            Call MoveToEx(.hdc, x, 0, 0&)
+        
+        Next x
+        
+        'on refresh l'objet
+        Call .Refresh
+    End With
+
+End Sub
+
 
 
 
