@@ -71,6 +71,15 @@ Begin VB.Form frmExport
       TabIndex        =   3
       Top             =   1425
       Width           =   4215
+      Begin VB.CheckBox chkOffset 
+         Caption         =   "Ajouter les offsets"
+         Height          =   195
+         Left            =   120
+         TabIndex        =   4
+         ToolTipText     =   "Permer d'ajouter les offsets au fichier (en hexa ou décimal, selon les préférences)"
+         Top             =   840
+         Width           =   1695
+      End
       Begin VB.PictureBox Picture1 
          BorderStyle     =   0  'None
          Height          =   1215
@@ -122,15 +131,6 @@ Begin VB.Form frmExport
             Visible         =   0   'False
             Width           =   1335
          End
-      End
-      Begin VB.CheckBox chkOffset 
-         Caption         =   "Ajouter les offsets"
-         Height          =   195
-         Left            =   120
-         TabIndex        =   4
-         ToolTipText     =   "Permer d'ajouter les offsets au fichier (en hexa ou décimal, selon les préférences)"
-         Top             =   840
-         Width           =   1695
       End
    End
    Begin VB.CommandButton cmdSave 

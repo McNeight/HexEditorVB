@@ -684,7 +684,7 @@ End Sub
 'de 1 à Ubound
 '=======================================================
 Public Sub SearchForStringFile(ByVal sFile As String, ByVal sMatch As String, _
-    ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrBar)
+    ByVal bCasse As Boolean, ByRef tRes() As Currency, Optional PGB As pgrBar)
     
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
@@ -784,7 +784,7 @@ End Sub
 'de 1 à Ubound
 '=======================================================
 Public Sub SearchForStringDisk(ByVal sDrive As String, ByVal sMatch As String, _
-    ByVal bCasse As Boolean, ByRef tRes() As Long, Optional PGB As pgrBar, _
+    ByVal bCasse As Boolean, ByRef tRes() As Currency, Optional PGB As pgrBar, _
     Optional ByVal IsPhys As Boolean = False)
     
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
@@ -820,7 +820,7 @@ Dim hDevice As Long
         'formate le nom du disque
         strDrive = BuildDrive(Right$(sDrive, 3))
 
-        Set cDrive = cFile.GetDrive(Left$(strDrive, 1))
+        Set cDrive = cFile.GetDrive(Mid$(strDrive, 5, 1))
         
         'affecte les infos sur les secteurs aux variables
         nbSec = cDrive.TotalPhysicalSectors

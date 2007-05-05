@@ -151,8 +151,8 @@ End Sub
 '=======================================================
 Public Sub LoadControlsCaption()
 Dim Obj As Control
-Dim X As Long
-Dim Y As Long
+Dim x As Long
+Dim y As Long
 Dim s As String
 
     On Error Resume Next
@@ -191,12 +191,12 @@ Dim s As String
                 Obj.Clear
                 
                 'récupère le nombre d'éléments
-                Y = Val(Me.GetString(s & "|Count"))
+                y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
-                For X = 1 To Y
-                    Obj.AddItem Me.GetString(s & "|Item" & Trim$(Str$(X)))
-                Next X
+                For x = 1 To y
+                    Obj.AddItem Me.GetString(s & "|Item" & Trim$(Str$(x)))
+                Next x
                 
             End If
             
@@ -217,12 +217,12 @@ Dim s As String
                 Obj.Clear
                 
                 'récupère le nombre d'éléments
-                Y = Val(Me.GetString(s & "|Count"))
+                y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
-                For X = 1 To Y
-                    Obj.AddItem Me.GetString(s & "|Item" & Trim$(Str$(X)))
-                Next X
+                For x = 1 To y
+                    Obj.AddItem Me.GetString(s & "|Item" & Trim$(Str$(x)))
+                Next x
                 
             End If
         ElseIf TypeOf Obj Is Menu Then
@@ -236,13 +236,13 @@ Dim s As String
                 'c'est bon, on loade
                 
                 'récupère le nombre d'éléments
-                Y = Val(Me.GetString(s & "|Count"))
+                y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
-                For X = 1 To Y
-                    Obj.ColumnHeaders.Item(X).Text = Me.GetString(s & "|Item" & _
-                        Trim$(Str$(X)))
-                Next X
+                For x = 1 To y
+                    Obj.ColumnHeaders.Item(x).Text = Me.GetString(s & "|Item" & _
+                        Trim$(Str$(x)))
+                Next x
                 
             End If
             
@@ -254,13 +254,13 @@ Dim s As String
                 'c'est bon, ol loade
                 
                 'récupère le nombre d'éléments
-                Y = Val(Me.GetString(s & "|Count"))
+                y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
-                For X = 1 To Y
-                    Obj.Tabs.Item(X).Caption = Me.GetString(s & "|Item" & _
-                        Trim$(Str$(X)))
-                Next X
+                For x = 1 To y
+                    Obj.Tabs.Item(x).Caption = Me.GetString(s & "|Item" & _
+                        Trim$(Str$(x)))
+                Next x
                 
             End If
         End If
@@ -278,8 +278,8 @@ End Sub
 Public Sub WriteIniFileFormIDEform()
 Dim Obj As Control
 Dim sFile As String
-Dim X As Long
-Dim Y As Long
+Dim x As Long
+Dim y As Long
 Dim s As String
 
     On Error Resume Next
@@ -311,12 +311,12 @@ Dim s As String
                 
                 'récupère le nombre d'éléments
                 Call LetPref(mParent.Name, s & "|Count", Obj.ListCount, sFile)
-                Y = Val(Me.GetString(s & "|Count"))
+                y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
-                For X = 1 To Y
-                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(X)), Obj.List(X - 1), sFile)
-                Next X
+                For x = 1 To y
+                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(x)), Obj.List(x - 1), sFile)
+                Next x
             End If
             
         ElseIf TypeOf Obj Is Label Then
@@ -335,12 +335,12 @@ Dim s As String
                 
                 'récupère le nombre d'éléments
                 Call LetPref(mParent.Name, s & "|Count", Obj.ListCount, sFile)
-                Y = Val(Me.GetString(s & "|Count"))
+                y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
-                For X = 1 To Y
-                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(X)), Obj.List(X - 1), sFile)
-                Next X
+                For x = 1 To y
+                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(x)), Obj.List(x - 1), sFile)
+                Next x
             End If
         ElseIf TypeOf Obj Is ListView Then
             
@@ -350,13 +350,13 @@ Dim s As String
                 
                 'récupère le nombre d'éléments
                 Call LetPref(mParent.Name, s & "|Count", Obj.ColumnHeaders.Count, sFile)
-                Y = Val(Me.GetString(s & "|Count"))
+                y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
-                For X = 1 To Y
-                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(X)), _
-                        Obj.ColumnHeaders.Item(X).Text, sFile)
-                Next X
+                For x = 1 To y
+                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(x)), _
+                        Obj.ColumnHeaders.Item(x).Text, sFile)
+                Next x
                 
             End If
         ElseIf TypeOf Obj Is TabStrip Then
@@ -367,12 +367,12 @@ Dim s As String
                 
                 'récupère le nombre d'éléments
                 Call LetPref(mParent.Name, s & "|Count", Obj.Tabs.Count, sFile)
-                Y = Val(Me.GetString(s & "|Count"))
+                y = Val(Me.GetString(s & "|Count"))
                 
                 'ajoute les éléments
-                For X = 1 To Y
-                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(X)), Obj.Tabs.Item(X).Caption, sFile)
-                Next X
+                For x = 1 To y
+                    Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(x)), Obj.Tabs.Item(x).Caption, sFile)
+                Next x
             End If
         End If
     Next Obj
