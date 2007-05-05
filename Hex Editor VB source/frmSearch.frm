@@ -440,7 +440,7 @@ End Sub
 
 Private Sub cmdSearch_Click()
 'lance la recherche
-Dim tRes() As Long
+Dim tRes() As Currency
 Dim x As Long
 Dim s As String
 

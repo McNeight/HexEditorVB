@@ -34,6 +34,39 @@ Begin VB.Form diskPfm
       TabIndex        =   39
       Top             =   0
       Width           =   3135
+      Begin ComctlLib.ListView lstHisto 
+         Height          =   1575
+         Left            =   120
+         TabIndex        =   40
+         TabStop         =   0   'False
+         Tag             =   "lang_ok"
+         Top             =   4800
+         Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   2778
+         View            =   3
+         LabelEdit       =   1
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         _Version        =   327682
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         Appearance      =   0
+         NumItems        =   2
+         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Action"
+            Object.Width           =   5644
+         EndProperty
+         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   1
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Rang"
+            Object.Width           =   706
+         EndProperty
+      End
       Begin VB.PictureBox pctContain_cmdMAJ 
          BorderStyle     =   0  'None
          Height          =   6615
@@ -312,39 +345,6 @@ Begin VB.Form diskPfm
             Top             =   0
             Width           =   2895
          End
-      End
-      Begin ComctlLib.ListView lstHisto 
-         Height          =   1575
-         Left            =   120
-         TabIndex        =   40
-         TabStop         =   0   'False
-         Tag             =   "lang_ok"
-         Top             =   4800
-         Width           =   2895
-         _ExtentX        =   5106
-         _ExtentY        =   2778
-         View            =   3
-         LabelEdit       =   1
-         LabelWrap       =   -1  'True
-         HideSelection   =   -1  'True
-         _Version        =   327682
-         ForeColor       =   -2147483640
-         BackColor       =   -2147483643
-         Appearance      =   0
-         NumItems        =   2
-         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
-            Object.Tag             =   ""
-            Text            =   "Action"
-            Object.Width           =   5644
-         EndProperty
-         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-            SubItemIndex    =   1
-            Key             =   ""
-            Object.Tag             =   ""
-            Text            =   "Rang"
-            Object.Width           =   706
-         EndProperty
       End
    End
    Begin VB.Frame FrameData 

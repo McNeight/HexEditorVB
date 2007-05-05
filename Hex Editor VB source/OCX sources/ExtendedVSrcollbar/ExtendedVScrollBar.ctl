@@ -336,6 +336,7 @@ Dim VirtualRange As Currency
 Dim lEcart As Currency
 Dim lDelta As Currency
 Dim l As Currency
+Dim o As Currency
 
     Call CheckValues 'vérifie que les valeurs sont compatibles
 
@@ -365,7 +366,17 @@ Dim l As Currency
         'affecte les VRAIES valeurs
         l = lPercent * RealRange
         bRecursive = True   'évite les boucles
-        VS.Value = VS.Min + l
+        
+        o = VS.Min + l
+        
+        If o < VS.Min Then
+            VS.Value = VS.Min
+        ElseIf o > VS.Max Then
+            VS.Value = VS.Max
+        Else
+            VS.Value = o
+        End If
+        
         bRecursive = False
                         
     Else
