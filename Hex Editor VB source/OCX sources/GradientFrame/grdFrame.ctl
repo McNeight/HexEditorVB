@@ -166,7 +166,7 @@ Private bNotOk2 As Boolean
 Private bEnable As Boolean
 Private lBorderColor As OLE_COLOR
 Private bShowBorder As Boolean
-
+Private bBreakCorner As Boolean
 
 '=======================================================
 'EVENTS
@@ -296,6 +296,7 @@ Private Sub UserControl_InitProperties()
         .Enabled = True '
         .BorderColor = &HC00000 '
         .ShowBorder = True '
+        .BreakCorner = True
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -325,6 +326,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("Enabled", Me.Enabled, True)
         Call .WriteProperty("BorderColor", Me.BorderColor, &HC00000)
         Call .WriteProperty("ShowBorder", Me.ShowBorder, True)
+        Call .WriteProperty("BreakCorner", Me.BreakCorner, True)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -348,6 +350,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.Enabled = .ReadProperty("Enabled", True)
         Me.BorderColor = .ReadProperty("BorderColor", &HC00000)
         Me.ShowBorder = .ReadProperty("ShowBorder", True)
+        Me.BreakCorner = .ReadProperty("BreakCorner", True)
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -429,6 +432,8 @@ Public Property Get BorderColor() As OLE_COLOR: BorderColor = lBorderColor: End 
 Public Property Let BorderColor(BorderColor As OLE_COLOR): lBorderColor = BorderColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get ShowBorder() As Boolean: ShowBorder = bShowBorder: End Property
 Public Property Let ShowBorder(ShowBorder As Boolean): bShowBorder = ShowBorder: bNotOk = False: UserControl_Paint: End Property
+Public Property Get BreakCorner() As Boolean: BreakCorner = bBreakCorner: End Property
+Public Property Let BreakCorner(BreakCorner As Boolean): bBreakCorner = BreakCorner: bNotOk = False: UserControl_Paint: End Property
 
 Private Sub UserControl_Paint()
 
@@ -436,7 +441,6 @@ Private Sub UserControl_Paint()
     
     Call Refresh    'on refresh
 End Sub
-
 
 
 
@@ -738,6 +742,96 @@ Dim R As RECT
             UserControl.Line (0, .Height)-(0, 0), lBorderColor
         End With
     End If
+    
+    
+    If bBreakCorner = False Then
+        'on ne casse pas les angles
+        bNotOk = True
+        Exit Sub
+    End If
+    
+    '//maintenant il faut pouvoir 'effacer' les angles pour arrondir
+    'technique ==> on met le MaskColor de la couleur de peinture des angles
+    'on cherche une couleur pas utilisée par le controle pour pouvoir utiliser
+    'le maskcolor sans effacer le controle !
+    
+    'obligé de faire du Rnd...
+    Dim rndCol As Long
+    Dim lW As Long
+    Dim lH As Long
+    
+    Randomize   'créé un pseudo hasard
+    
+    Do While Not (rndCol <> Me.BackColor1 And rndCol <> Me.BackColor2 And rndCol _
+        <> Me.TitleColor1 And rndCol <> Me.TitleColor2 And rndCol <> Me.ForeColor And _
+        rndCol <> Me.BorderColor)    'erf !
+        rndCol = Int(Rnd * vbWhite) 'vbWhite = pleine échelle (RGB(255,255,255))
+    Loop
+       
+    'maintenant on trace des points sur les angles
+    With UserControl
+    
+        lW = .ScaleWidth
+        lH = .ScaleHeight
+        
+        .ForeColor = rndCol 'pour la vitesse ==> ne précise pas 20 fois la couleur
+        
+        'haut gauche
+        UserControl.PSet (0, 0)
+        UserControl.PSet (15, 0)
+        UserControl.PSet (30, 0)
+        UserControl.PSet (0, 15)
+        UserControl.PSet (15, 15)
+        UserControl.PSet (0, 30)
+        If bShowBorder Then
+            UserControl.PSet (30, 15), lBorderColor
+            UserControl.PSet (15, 30), lBorderColor
+        End If
+        
+        'bas gauche
+        UserControl.PSet (0, lH - 15)
+        UserControl.PSet (0, lH - 30)
+        UserControl.PSet (0, lH - 45)
+        UserControl.PSet (15, lH - 15)
+        UserControl.PSet (15, lH - 30)
+        UserControl.PSet (30, lH - 15)
+        If bShowBorder Then
+            UserControl.PSet (30, lH - 30), lBorderColor
+            UserControl.PSet (15, lH - 45), lBorderColor
+        End If
+        
+        'haut droite
+        UserControl.PSet (lW - 15, 0)
+        UserControl.PSet (lW - 30, 0)
+        UserControl.PSet (lW - 45, 0)
+        UserControl.PSet (lW - 15, 15)
+        UserControl.PSet (lW - 30, 15)
+        UserControl.PSet (lW - 15, 30)
+        If bShowBorder Then
+            UserControl.PSet (lW - 45, 15), lBorderColor
+            UserControl.PSet (lW - 30, 30), lBorderColor
+        End If
+        
+        'bas droite
+        UserControl.PSet (lW - 45, lH - 15)
+        UserControl.PSet (lW - 30, lH - 15)
+        UserControl.PSet (lW - 15, lH - 15)
+        UserControl.PSet (lW - 30, lH - 30)
+        UserControl.PSet (lW - 15, lH - 30)
+        UserControl.PSet (lW - 15, lH - 45)
+        If bShowBorder Then
+            UserControl.PSet (lW - 45, lH - 30), lBorderColor
+            UserControl.PSet (lW - 30, lH - 45), lBorderColor
+        End If
+        
+        UserControl.BackStyle = 0
+        .MaskColor = rndCol 'applique la couleur de transparence
+        
+        Set MaskPicture = UserControl.Image 'applique la couleur masque et créé
+        'la transparence
+        
+    End With
+        
     
     bNotOk = True
 End Sub
