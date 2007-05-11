@@ -9,6 +9,31 @@ Begin VB.UserControl grdFrame
    ScaleHeight     =   3600
    ScaleWidth      =   4800
    ToolboxBitmap   =   "grdFrame.ctx":0000
+   Begin VB.PictureBox pctG 
+      BorderStyle     =   0  'None
+      Height          =   240
+      Left            =   2160
+      ScaleHeight     =   240
+      ScaleWidth      =   240
+      TabIndex        =   0
+      Top             =   1080
+      Visible         =   0   'False
+      Width           =   240
+   End
+   Begin VB.Image PCTcolor 
+      Height          =   240
+      Left            =   720
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   240
+   End
+   Begin VB.Image PCTgray 
+      Height          =   240
+      Left            =   360
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   240
+   End
 End
 Attribute VB_Name = "grdFrame"
 Attribute VB_GlobalNameSpace = False
@@ -78,6 +103,10 @@ Private Const TME_HOVER                     As Long = &H1&
 Private Const DT_CENTER                     As Long = &H1&
 Private Const DT_LEFT                       As Long = &H0&
 Private Const DT_RIGHT                      As Long = &H2&
+Private Const DI_MASK                       As Long = &H1
+Private Const DI_IMAGE                      As Long = &H2
+Private Const DI_NORMAL                     As Long = DI_MASK Or DI_IMAGE
+
 
 '=======================================================
 'APIS
@@ -93,6 +122,15 @@ Private Declare Function LineTo Lib "gdi32" (ByVal hdc As Long, ByVal x As Long,
 Private Declare Function DrawText Lib "user32" Alias "DrawTextA" (ByVal hdc As Long, ByVal lpStr As String, ByVal nCount As Long, lpRect As RECT, ByVal wFormat As Long) As Long
 Private Declare Function SetRect Lib "user32" (lpRect As RECT, ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long) As Long
 Private Declare Function GetTabbedTextExtent Lib "user32" Alias "GetTabbedTextExtentA" (ByVal hdc As Long, ByVal lpString As String, ByVal nCount As Long, ByVal nTabPositions As Long, lpnTabStopPositions As Long) As Long
+Private Declare Function OleTranslateColor Lib "olepro32.dll" (ByVal OLE_COLOR As Long, ByVal HPALETTE As Long, pccolorref As Long) As Long
+Private Declare Function CreateRoundRectRgn Lib "gdi32" (ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long, ByVal X3 As Long, ByVal Y3 As Long) As Long
+Private Declare Function FrameRgn Lib "gdi32" (ByVal hdc As Long, ByVal hRgn As Long, ByVal hBrush As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
+Private Declare Function DeleteObject Lib "gdi32" (ByVal hObject As Long) As Long
+Private Declare Function CreateSolidBrush Lib "gdi32" (ByVal crColor As Long) As Long
+Private Declare Function SetWindowRgn Lib "user32" (ByVal hWnd As Long, ByVal hRgn As Long, ByVal bRedraw As Boolean) As Long
+Private Declare Function CreateRectRgn Lib "gdi32" (ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long) As Long
+Private Declare Function DrawIconEx Lib "user32" (ByVal hdc As Long, ByVal xLeft As Long, ByVal yTop As Long, ByVal hIcon As Long, ByVal cxWidth As Long, ByVal cyWidth As Long, ByVal istepIfAniCur As Long, ByVal hbrFlickerFreeDraw As Long, ByVal diFlags As Long) As Long
+Private Declare Function LockWindowUpdate Lib "user32" (ByVal hwndLock As Long) As Long
 
 
 '=======================================================
@@ -115,6 +153,17 @@ Private Type RECT
     Right As Long
     Bottom As Long
 End Type
+Private Type POINTAPI
+    x As Long
+    y As Long
+End Type
+Private Type BLENDFUNCTION
+  BlendOp As Byte
+  BlendFlags As Byte
+  SourceConstantAlpha As Byte
+  AlphaFormat As Byte
+End Type
+
 
 '=======================================================
 'ENUMS
@@ -136,6 +185,10 @@ Public Enum GradientConstants
     None = 0
     Vertical = 1
     Horizontal = 2
+End Enum
+Public Enum PictureAligment
+    [Left Justify]
+    [Right Justify]
 End Enum
  
 
@@ -165,8 +218,15 @@ Private bNotOk As Boolean
 Private bNotOk2 As Boolean
 Private bEnable As Boolean
 Private lBorderColor As OLE_COLOR
-Private bShowBorder As Boolean
+Private bDisplayBorder As Boolean
 Private bBreakCorner As Boolean
+Private lCornerSize As Long
+Private lBWidth As Long
+Private pctAlign As PictureAligment
+Private bPic As Boolean
+Private lOffsetX As Long
+Private lOffsetY As Long
+Private bGray As Boolean
 
 '=======================================================
 'EVENTS
@@ -249,7 +309,7 @@ End Function
 Private Sub UserControl_Initialize()
 Dim Ofs As Long
 Dim Ptr As Long
-
+        
     'Recupere l'adresse de "Me.WindowProc"
     Call CopyMemory(Ptr, ByVal (ObjPtr(Me)), 4)
     Call CopyMemory(Ptr, ByVal (Ptr + 489 * 4), 4)
@@ -294,9 +354,17 @@ Private Sub UserControl_InitProperties()
         .TitleGradient = Vertical '
         .TitleHeight = 300 '
         .Enabled = True '
-        .BorderColor = &HC00000 '
-        .ShowBorder = True '
-        .BreakCorner = True
+        .BorderColor = &HFF8080    '
+        .DisplayBorder = True '
+        .BreakCorner = True '
+        .BorderWidth = 1 '
+        .RoundAngle = 7 '
+        Set .Picture = Nothing
+        .PictureAligment = [Left Justify]
+        .DisplayPicture = True
+        .PictureOffsetX = 0
+        .PictureOffsetY = 0
+        .GrayPictureWhenDisabled = True
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -324,9 +392,17 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("TitleGradient", Me.TitleGradient, Vertical)
         Call .WriteProperty("TitleHeight", Me.TitleHeight, 300)
         Call .WriteProperty("Enabled", Me.Enabled, True)
-        Call .WriteProperty("BorderColor", Me.BorderColor, &HC00000)
-        Call .WriteProperty("ShowBorder", Me.ShowBorder, True)
+        Call .WriteProperty("BorderColor", Me.BorderColor, &HFF8080)
+        Call .WriteProperty("DisplayBorder", Me.DisplayBorder, True)
         Call .WriteProperty("BreakCorner", Me.BreakCorner, True)
+        Call .WriteProperty("Picture", Me.Picture, Nothing)
+        Call .WriteProperty("RoundAngle", Me.RoundAngle, 7)
+        Call .WriteProperty("BorderWidth", Me.BorderWidth, 1)
+        Call .WriteProperty("PictureAligment", Me.PictureAligment, [Left Justify])
+        Call .WriteProperty("DisplayPicture", Me.DisplayPicture, True)
+        Call .WriteProperty("PictureOffsetX", Me.PictureOffsetX, 0)
+        Call .WriteProperty("PictureOffsetY", Me.PictureOffsetY, 0)
+        Call .WriteProperty("GrayPictureWhenDisabled", Me.GrayPictureWhenDisabled, True)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -348,9 +424,17 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.TitleGradient = .ReadProperty("TitleGradient", Vertical)
         Me.TitleHeight = .ReadProperty("TitleHeight", 300)
         Me.Enabled = .ReadProperty("Enabled", True)
-        Me.BorderColor = .ReadProperty("BorderColor", &HC00000)
-        Me.ShowBorder = .ReadProperty("ShowBorder", True)
+        Me.BorderColor = .ReadProperty("BorderColor", &HFF8080)
+        Me.DisplayBorder = .ReadProperty("DisplayBorder", True)
         Me.BreakCorner = .ReadProperty("BreakCorner", True)
+        Set Me.Picture = .ReadProperty("Picture", Nothing)
+        Me.BorderWidth = .ReadProperty("BorderWidth", 1)
+        Me.RoundAngle = .ReadProperty("RoundAngle", 7)
+        Me.PictureAligment = .ReadProperty("PictureAligment", [Left Justify])
+        Me.DisplayPicture = .ReadProperty("DisplayPicture", True)
+        Me.PictureOffsetX = .ReadProperty("PictureOffsetX", 0)
+        Me.PictureOffsetY = .ReadProperty("PictureOffsetY", 0)
+        Me.GrayPictureWhenDisabled = .ReadProperty("GrayPictureWhenDisabled", True)
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -427,13 +511,38 @@ Public Property Let TitleGradient(TitleGradient As GradientConstants): lTitleGra
 Public Property Get BackGradient() As GradientConstants: BackGradient = lBackGradient: End Property
 Public Property Let BackGradient(BackGradient As GradientConstants): lBackGradient = BackGradient: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Enabled() As Boolean: Enabled = bEnable: End Property
-Public Property Let Enabled(Enabled As Boolean): bEnable = Enabled: EnableControls: End Property
+Public Property Let Enabled(Enabled As Boolean)
+bEnable = Enabled: bNotOk = False: UserControl_Paint: EnableControls
+End Property
 Public Property Get BorderColor() As OLE_COLOR: BorderColor = lBorderColor: End Property
 Public Property Let BorderColor(BorderColor As OLE_COLOR): lBorderColor = BorderColor: bNotOk = False: UserControl_Paint: End Property
-Public Property Get ShowBorder() As Boolean: ShowBorder = bShowBorder: End Property
-Public Property Let ShowBorder(ShowBorder As Boolean): bShowBorder = ShowBorder: bNotOk = False: UserControl_Paint: End Property
+Public Property Get DisplayBorder() As Boolean: DisplayBorder = bDisplayBorder: End Property
+Public Property Let DisplayBorder(DisplayBorder As Boolean): bDisplayBorder = DisplayBorder: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BreakCorner() As Boolean: BreakCorner = bBreakCorner: End Property
 Public Property Let BreakCorner(BreakCorner As Boolean): bBreakCorner = BreakCorner: bNotOk = False: UserControl_Paint: End Property
+Public Property Get Picture() As Picture: Set Picture = PCTcolor.Picture: End Property
+Public Property Set Picture(NewPic As Picture)
+Set PCTcolor.Picture = NewPic
+Set pctG.Picture = NewPic
+If Not (NewPic Is Nothing) Then Call GrayScale(pctG)
+PCTgray.Picture = pctG.Image
+bNotOk = False: UserControl_Paint
+End Property
+Public Property Get RoundAngle() As Long: RoundAngle = lCornerSize: End Property
+Public Property Let RoundAngle(RoundAngle As Long): lCornerSize = RoundAngle: bNotOk = False: UserControl_Paint: End Property
+Public Property Get BorderWidth() As Long: BorderWidth = lBWidth: End Property
+Public Property Let BorderWidth(BorderWidth As Long): lBWidth = BorderWidth: bNotOk = False: UserControl_Paint: End Property
+Public Property Get PictureAligment() As PictureAligment: PictureAligment = pctAlign: End Property
+Public Property Let PictureAligment(PictureAligment As PictureAligment): pctAlign = PictureAligment: bNotOk = False: UserControl_Paint: End Property
+Public Property Get DisplayPicture() As Boolean: DisplayPicture = bPic: End Property
+Public Property Let DisplayPicture(DisplayPicture As Boolean): bPic = DisplayPicture: bNotOk = False: UserControl_Paint: End Property
+Public Property Get PictureOffsetX() As Long: PictureOffsetX = lOffsetX: End Property
+Public Property Let PictureOffsetX(PictureOffsetX As Long): lOffsetX = PictureOffsetX: bNotOk = False: UserControl_Paint: End Property
+Public Property Get PictureOffsetY() As Long: PictureOffsetY = lOffsetY: End Property
+Public Property Let PictureOffsetY(PictureOffsetY As Long): lOffsetY = PictureOffsetY: bNotOk = False: UserControl_Paint: End Property
+Public Property Get GrayPictureWhenDisabled() As Boolean: GrayPictureWhenDisabled = bGray: End Property
+Public Property Let GrayPictureWhenDisabled(GrayPictureWhenDisabled As Boolean): bGray = GrayPictureWhenDisabled: bNotOk = False: UserControl_Paint: End Property
+
 
 Private Sub UserControl_Paint()
 
@@ -462,6 +571,7 @@ Dim bAverageColorPerSizeUnit As Double
 Dim lWidth As Long
 Dim x As Long
 Dim lHeight As Long
+Dim lSigne As Long
 
     With UserControl
         
@@ -474,6 +584,15 @@ Dim lHeight As Long
         gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lWidth)
         bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lWidth)
         
+        'on change le signe (sens) au cas où
+        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
+            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
+            
+            lSigne = 1
+        Else
+            lSigne = -1
+        End If
+        
         'se positionne tout à gauche de l'objet ==> balayera vers la droite
         Call MoveToEx(.hdc, 0, Dep, 0&)
         
@@ -483,8 +602,8 @@ Dim lHeight As Long
             
             'change le ForeColor qui détermine la couleur de la Line
             'multiplie la largeur actuelle par la couleur par unité de longueur
-            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit, LeftColor.G + x * _
-                gAverageColorPerSizeUnit, LeftColor.B + x * bAverageColorPerSizeUnit)
+            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
+                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
                
             'trace une ligne
             Call LineTo(.hdc, x, lHeight)
@@ -513,6 +632,7 @@ Dim gAverageColorPerSizeUnit As Double
 Dim bAverageColorPerSizeUnit As Double
 Dim lHeight As Long
 Dim x As Long
+Dim lSigne As Long
 
     With UserControl
         
@@ -523,6 +643,15 @@ Dim x As Long
         rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lHeight)
         gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lHeight)
         bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lHeight)
+
+        'on change le signe (sens) au cas où
+        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
+            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
+            
+            lSigne = 1
+        Else
+            lSigne = -1
+        End If
         
         'se positionne tout à gauche de l'objet ==> balayera vers le bas
         Call MoveToEx(.hdc, 0, Dep, 0&)
@@ -533,8 +662,8 @@ Dim x As Long
             
             'change le ForeColor qui détermine la couleur de la Line
             'multiplie la largeur actuelle par la couleur par unité de longueur
-            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit, LeftColor.G + x * _
-                gAverageColorPerSizeUnit, LeftColor.B + x * bAverageColorPerSizeUnit)
+            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
+                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
                
             'trace une ligne
             Call LineTo(.hdc, Width, x)
@@ -584,27 +713,27 @@ Dim Res As Long
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
-'=======================================================
-'renvoie le min des composantes
-'=======================================================
-Private Function RGB_Min(RGB1 As RGB_COLOR, RGB2 As RGB_COLOR) As RGB_COLOR
-    With RGB_Min
-        If RGB1.R < RGB2.R Then .R = RGB1.R Else .R = RGB2.R
-        If RGB1.B < RGB2.B Then .B = RGB1.B Else .B = RGB2.B
-        If RGB1.G < RGB2.G Then .G = RGB1.G Else .G = RGB2.G
-    End With
-End Function
-
-'=======================================================
-'renvoie le max des composantes
-'=======================================================
-Private Function RGB_Max(RGB1 As RGB_COLOR, RGB2 As RGB_COLOR) As RGB_COLOR
-    With RGB_Max
-        If RGB1.R > RGB2.R Then .R = RGB1.R Else .R = RGB2.R
-        If RGB1.B > RGB2.B Then .B = RGB1.B Else .B = RGB2.B
-        If RGB1.G > RGB2.G Then .G = RGB1.G Else .G = RGB2.G
-    End With
-End Function
+''=======================================================
+''renvoie le min des composantes
+''=======================================================
+'Private Function RGB_Min(RGB1 As RGB_COLOR, RGB2 As RGB_COLOR) As RGB_COLOR
+'    With RGB_Min
+'        If RGB1.R < RGB2.R Then .R = RGB1.R Else .R = RGB2.R
+'        If RGB1.B < RGB2.B Then .B = RGB1.B Else .B = RGB2.B
+'        If RGB1.G < RGB2.G Then .G = RGB1.G Else .G = RGB2.G
+'    End With
+'End Function
+'
+''=======================================================
+''renvoie le max des composantes
+''=======================================================
+'Private Function RGB_Max(RGB1 As RGB_COLOR, RGB2 As RGB_COLOR) As RGB_COLOR
+'    With RGB_Max
+'        If RGB1.R > RGB2.R Then .R = RGB1.R Else .R = RGB2.R
+'        If RGB1.B > RGB2.B Then .B = RGB1.B Else .B = RGB2.B
+'        If RGB1.G > RGB2.G Then .G = RGB1.G Else .G = RGB2.G
+'    End With
+'End Function
 
 
 
@@ -635,15 +764,50 @@ Dim RGB1 As RGB_COLOR
 Dim RGB2 As RGB_COLOR
 Dim Dep As Long
 Dim R As RECT
+Dim hBrush As Long
+Dim Rec As Long
+Dim hRgn As Long
+Dim W As Long
+Dim H As Long
+    
+    '//on locke le controle
+    Call LockWindowUpdate(UserControl.hWnd)
     
     '//on efface et on vire le maskpicture
     Call UserControl.Cls
     UserControl.Picture = Nothing
     UserControl.MaskPicture = Nothing
-        
+    
+    '//on convertir les différentes couleurs si couleurs système
+    Call OleTranslateColor(lBorderColor, 0, lBorderColor)
+    Call OleTranslateColor(lForeColor, 0, lForeColor)
+    Call OleTranslateColor(tCol1, 0, tCol1)
+    Call OleTranslateColor(tCol2, 0, tCol2)
+    Call OleTranslateColor(bCol1, 0, bCol1)
+    Call OleTranslateColor(bCol2, 0, bCol2)
+    
+    
     '//on commence par créer le Title
     If bShowTitle Then
         
+'        If lBackStyle = Transparent And bBreakCorner = True Then
+'            'alors c'est transparent et avec arrondi
+'            'alors on créé la zone perso dès maintenant
+'            'pour ne pas pouvoir tracer le titre dans les coins
+'            'haut-gauche et haut-droite
+'
+'            'on définit une zone rectangulaire à bords arrondi
+'            hRgn = CreateRoundRectRgn(0, 0, UserControl.ScaleWidth / 15, _
+'                UserControl.ScaleHeight / 15, lCornerSize, lCornerSize)
+'
+'            'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
+'            Call SetWindowRgn(UserControl.hWnd, hRgn, True)
+'
+'            'on détruit le brush et la zone
+'            Call DeleteObject(hRgn)
+'        End If
+            
+            
         'récupère les 3 composantes des deux couleurs
         Call ToRGB(tCol1, RGB1)
         Call ToRGB(tCol2, RGB2)
@@ -682,13 +846,45 @@ Dim R As RECT
         'alors on créé une image dans le maskpicture
         
         'on dessine donc maintenant le bord
-        If bShowBorder Then
-            With UserControl
-                UserControl.Line (0, 0)-(.Width, 0), lBorderColor
-                UserControl.Line (.Width - 15, 0)-(.Width - 15, .Height), lBorderColor
-                UserControl.Line (.ScaleWidth - 15, .Height - 15)-(0, .Height - 15), lBorderColor
-                UserControl.Line (0, .Height)-(0, 0), lBorderColor
-            End With
+        If bDisplayBorder Then
+            If bBreakCorner = False Then
+                'alors c'est un rectangle
+                
+                'on défini un brush
+                hBrush = CreateSolidBrush(lBorderColor)
+                
+                'on définit une zone rectangulaire à bords arrondi
+                hRgn = CreateRectRgn(0, 0, UserControl.ScaleWidth / 15, _
+                    UserControl.ScaleHeight / 15)
+                
+                'on dessine le contour
+                Call FrameRgn(UserControl.hdc, hRgn, hBrush, lBWidth, lBWidth)
+    
+                'on détruit le brush et la zone
+                Call DeleteObject(hBrush)
+                Call DeleteObject(hRgn)
+                
+            Else
+                'alors c'est un arrondi
+                
+                'on défini un brush
+                hBrush = CreateSolidBrush(lBorderColor)
+                
+                'on définit une zone rectangulaire à bords arrondi
+                hRgn = CreateRoundRectRgn(0, 0, UserControl.ScaleWidth / 15, _
+                    UserControl.ScaleHeight / 15, lCornerSize, lCornerSize)
+                
+                'on dessine le contour
+                Call FrameRgn(UserControl.hdc, hRgn, hBrush, lBWidth, lBWidth)
+                
+                'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
+                Call SetWindowRgn(UserControl.hWnd, hRgn, True)
+    
+                'on détruit le brush et la zone
+                Call DeleteObject(hBrush)
+                Call DeleteObject(hRgn)
+    
+            End If
         End If
         
         UserControl.MaskPicture = UserControl.Image
@@ -726,112 +922,140 @@ Dim R As RECT
                     UserControl.ScaleHeight, Dep)
             End If
         End If
-    Else
-        'on récupère le maskpicture et on met le controle en transparent
-        
-        UserControl.BackStyle = 0
-        UserControl.Picture = UserControl.MaskPicture
+'    Else
+'        'on récupère le maskpicture et on met le controle en transparent
+'
+'        UserControl.BackStyle = 0
+'        UserControl.Picture = UserControl.MaskPicture
+'
     End If
+    
+    
+    
+    '//on va se tracer la bitmapt maintenant ^^
+    If bPic Then
+        'on montre l'image présente
+        
+        'on choisit celle à afficher (Grise ou pas)
+        If bEnable Or Not (bGray) And bShowTitle Then
+            With PCTcolor
+                'on move IMG en fonction du choix de Aligment
+                'on centre l'image dans la barre de titre
+                If pctAlign = [Left Justify] Then
+                    'à gauche
+                    
+                    W = (lTitleHeight - .Height) / 2 + lOffsetY
+                    H = 30 + lCornerSize * 2 + lOffsetX
+                    If W < 0 Then W = 0
+                    If H < 0 Then H = 0
+                    
+                    .Top = W
+                    .Left = H '2 pxls + arrondi
+                    
+                Else
+                    'à droite
+                    
+                    W = (lTitleHeight - .Height) / 2 + lOffsetY
+                    H = UserControl.Width - 30 - .Width - lCornerSize * 2 - lOffsetX
+                    If H < 0 Then H = 0
+                    If W < 0 Then W = 0
+        
+                    .Top = W
+                    .Left = H '2 pxls + arrondi
+                    
+                End If
+                    
+                .Visible = True
+                PCTgray.Visible = False
+            End With
+        ElseIf bShowTitle Then
+            With PCTgray
+                'on move IMG en fonction du choix de Aligment
+                'on centre l'image dans la barre de titre
+                If pctAlign = [Left Justify] Then
+                    'à gauche
+                    
+                    W = (lTitleHeight - .Height) / 2 + lOffsetY
+                    H = 30 + lCornerSize * 2 + lOffsetX
+                    If W < 0 Then W = 0
+                    If H < 0 Then H = 0
+                    
+                    .Top = W
+                    .Left = H '2 pxls + arrondi
+                    
+                Else
+                    'à droite
+                    
+                    W = (lTitleHeight - .Height) / 2 + lOffsetY
+                    H = UserControl.Width - 30 - .Width - lCornerSize * 2 - lOffsetX
+                    If H < 0 Then H = 0
+                    If W < 0 Then W = 0
+        
+                    .Top = W
+                    .Left = H '2 pxls + arrondi
+                    
+                End If
+                    
+                .Visible = True
+                PCTcolor.Visible = False
+            End With
+        End If
+    Else
+        'on masque l'image
+        PCTgray.Visible = False
+        PCTcolor.Visible = False
+    End If
+    
     
     '//on trace la bordure si opaque
-    If lBackStyle = Opaque And bShowBorder Then
-        With UserControl
-            UserControl.Line (0, 0)-(.Width, 0), lBorderColor
-            UserControl.Line (.Width - 15, 0)-(.Width - 15, .Height), lBorderColor
-            UserControl.Line (.ScaleWidth - 15, .Height - 15)-(0, .Height - 15), lBorderColor
-            UserControl.Line (0, .Height)-(0, 0), lBorderColor
-        End With
+    If lBackStyle = Opaque And bDisplayBorder Then
+    
+        If bBreakCorner = False Then
+            'alors c'est un rectangle
+            
+            'on défini un brush
+            hBrush = CreateSolidBrush(lBorderColor)
+            
+            'on définit une zone rectangulaire à bords arrondi
+            hRgn = CreateRectRgn(0, 0, UserControl.ScaleWidth / 15, _
+                UserControl.ScaleHeight / 15)
+            
+            'on dessine le contour
+            Call FrameRgn(UserControl.hdc, hRgn, hBrush, lBWidth, lBWidth)
+
+            'on détruit le brush et la zone
+            Call DeleteObject(hBrush)
+            Call DeleteObject(hRgn)
+        
+        Else
+            'alors c'est un arrondi
+            
+            'on défini un brush
+            hBrush = CreateSolidBrush(lBorderColor)
+            
+            'on définit une zone rectangulaire à bords arrondi
+            hRgn = CreateRoundRectRgn(0, 0, UserControl.ScaleWidth / 15, _
+                UserControl.ScaleHeight / 15, lCornerSize, lCornerSize)
+            
+            'on dessine le contour
+            Call FrameRgn(UserControl.hdc, hRgn, hBrush, lBWidth, lBWidth)
+            
+            'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
+            Call SetWindowRgn(UserControl.hWnd, hRgn, True)
+
+            'on détruit le brush et la zone
+            Call DeleteObject(hBrush)
+            Call DeleteObject(hRgn)
+            
+        End If
+        
     End If
-    
-    
-    If bBreakCorner = False Then
-        'on ne casse pas les angles
-        bNotOk = True
-        Exit Sub
-    End If
-    
-    '//maintenant il faut pouvoir 'effacer' les angles pour arrondir
-    'technique ==> on met le MaskColor de la couleur de peinture des angles
-    'on cherche une couleur pas utilisée par le controle pour pouvoir utiliser
-    'le maskcolor sans effacer le controle !
-    
-    'obligé de faire du Rnd...
-    Dim rndCol As Long
-    Dim lW As Long
-    Dim lH As Long
-    
-    Randomize   'créé un pseudo hasard
-    
-    Do While Not (rndCol <> Me.BackColor1 And rndCol <> Me.BackColor2 And rndCol _
-        <> Me.TitleColor1 And rndCol <> Me.TitleColor2 And rndCol <> Me.ForeColor And _
-        rndCol <> Me.BorderColor)    'erf !
-        rndCol = Int(Rnd * vbWhite) 'vbWhite = pleine échelle (RGB(255,255,255))
-    Loop
-       
-    'maintenant on trace des points sur les angles
-    With UserControl
-    
-        lW = .ScaleWidth
-        lH = .ScaleHeight
-        
-        .ForeColor = rndCol 'pour la vitesse ==> ne précise pas 20 fois la couleur
-        
-        'haut gauche
-        UserControl.PSet (0, 0)
-        UserControl.PSet (15, 0)
-        UserControl.PSet (30, 0)
-        UserControl.PSet (0, 15)
-        UserControl.PSet (15, 15)
-        UserControl.PSet (0, 30)
-        If bShowBorder Then
-            UserControl.PSet (30, 15), lBorderColor
-            UserControl.PSet (15, 30), lBorderColor
-        End If
-        
-        'bas gauche
-        UserControl.PSet (0, lH - 15)
-        UserControl.PSet (0, lH - 30)
-        UserControl.PSet (0, lH - 45)
-        UserControl.PSet (15, lH - 15)
-        UserControl.PSet (15, lH - 30)
-        UserControl.PSet (30, lH - 15)
-        If bShowBorder Then
-            UserControl.PSet (30, lH - 30), lBorderColor
-            UserControl.PSet (15, lH - 45), lBorderColor
-        End If
-        
-        'haut droite
-        UserControl.PSet (lW - 15, 0)
-        UserControl.PSet (lW - 30, 0)
-        UserControl.PSet (lW - 45, 0)
-        UserControl.PSet (lW - 15, 15)
-        UserControl.PSet (lW - 30, 15)
-        UserControl.PSet (lW - 15, 30)
-        If bShowBorder Then
-            UserControl.PSet (lW - 45, 15), lBorderColor
-            UserControl.PSet (lW - 30, 30), lBorderColor
-        End If
-        
-        'bas droite
-        UserControl.PSet (lW - 45, lH - 15)
-        UserControl.PSet (lW - 30, lH - 15)
-        UserControl.PSet (lW - 15, lH - 15)
-        UserControl.PSet (lW - 30, lH - 30)
-        UserControl.PSet (lW - 15, lH - 30)
-        UserControl.PSet (lW - 15, lH - 45)
-        If bShowBorder Then
-            UserControl.PSet (lW - 45, lH - 30), lBorderColor
-            UserControl.PSet (lW - 30, lH - 45), lBorderColor
-        End If
-        
-        UserControl.BackStyle = 0
-        .MaskColor = rndCol 'applique la couleur de transparence
-        
-        Set MaskPicture = UserControl.Image 'applique la couleur masque et créé
-        'la transparence
-        
-    End With
-        
     
     bNotOk = True
+
+    '//on délocke le controle --> a évité les clignotements
+    Call LockWindowUpdate(0)
+    
+    'permet de refresh la bordure
+    Call UserControl.Refresh
 End Sub

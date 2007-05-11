@@ -1,6 +1,7 @@
 Type=Control
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\WINDOWS\system32\STDOLE2.TLB#OLE Automation
 UserControl=grdFrame.ctl
+Module=mdlGray; mdlGray.bas
 Startup="(None)"
 HelpFile=""
 Title="GradientFrame"
