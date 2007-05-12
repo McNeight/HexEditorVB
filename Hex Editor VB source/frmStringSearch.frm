@@ -1,10 +1,13 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{8C07804D-9EA0-4B2A-9D0C-ADD44D83E35F}#1.0#0"; "GradientFrame.ocx"
+Object = "{09BF9278-787A-4BD6-B7D6-90E82738AB57}#5.0#0"; "vkChekbox_OCX.ocx"
 Begin VB.Form frmStringSearch 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Recherche de chaînes de caractères"
-   ClientHeight    =   6810
+   ClientHeight    =   6960
    ClientLeft      =   45
    ClientTop       =   360
    ClientWidth     =   6585
@@ -21,108 +24,175 @@ Begin VB.Form frmStringSearch
    Icon            =   "frmStringSearch.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   6810
+   ScaleHeight     =   6960
    ScaleWidth      =   6585
    StartUpPosition =   2  'CenterScreen
-   Begin VB.Frame Frame1 
+   Begin GradientFrame.grdFrame grdFrame1 
+      Height          =   2295
+      Left            =   120
+      TabIndex        =   6
+      Top             =   120
+      Width           =   4455
+      _ExtentX        =   7858
+      _ExtentY        =   4048
       Caption         =   "Options de recherche"
-      Height          =   2055
-      Left            =   105
-      TabIndex        =   5
-      Top             =   98
-      Width           =   4335
-      Begin VB.PictureBox Picture1 
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin VB.TextBox txtSize 
+         Alignment       =   2  'Center
          BorderStyle     =   0  'None
-         Height          =   1695
+         Height          =   285
+         Left            =   3360
+         TabIndex        =   13
+         Tag             =   "pref"
+         Text            =   "5"
+         ToolTipText     =   "Taille minimale (au dessous de cette taille, les suites de caractères ne sont pas considérées comme des strings)"
+         Top             =   1920
+         Width           =   735
+      End
+      Begin vkChekbox_OCX.vkCheckBox chkAddSignet 
+         Height          =   255
          Left            =   120
-         ScaleHeight     =   1695
-         ScaleWidth      =   4095
-         TabIndex        =   6
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   4095
-         Begin VB.CheckBox chkNumb3r 
-            Caption         =   "Rechercher des chiffres"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   13
-            Tag             =   "pref"
-            ToolTipText     =   "Inclure les chiffres dans la recherche"
-            Top             =   0
-            Width           =   2895
-         End
-         Begin VB.TextBox txtSize 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   3240
-            TabIndex        =   12
-            Tag             =   "pref"
-            Text            =   "5"
-            ToolTipText     =   "Taille minimale (au dessous de cette taille, les suites de caractères ne sont pas considérées comme des strings)"
-            Top             =   1460
-            Width           =   735
-         End
-         Begin VB.CheckBox chkMin 
-            Caption         =   "Rechercher des minuscules"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   11
-            Tag             =   "pref"
-            ToolTipText     =   "Inclure les minuscules dans la recherche"
-            Top             =   240
-            Value           =   1  'Checked
-            Width           =   2895
-         End
-         Begin VB.CheckBox chkMaj 
-            Caption         =   "Rechercher des majuscules"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   10
-            Tag             =   "pref"
-            ToolTipText     =   "Inclure les majuscules dans la recherche"
-            Top             =   480
-            Value           =   1  'Checked
-            Width           =   2895
-         End
-         Begin VB.CheckBox chkSigns 
-            Caption         =   "Rechercher des signes"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   9
-            Tag             =   "pref"
-            ToolTipText     =   "Inclure les signes dans la recherche"
-            Top             =   720
-            Width           =   2895
-         End
-         Begin VB.CheckBox chkAddSignet 
-            Caption         =   "Ajouter un signet pour les chaines trouvées"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   8
-            Tag             =   "pref"
-            ToolTipText     =   "Ajouter un signet à chaque offset où une string est trouvée"
-            Top             =   1200
-            Width           =   3975
-         End
-         Begin VB.CheckBox chkAccent 
-            Caption         =   "Rechercher des caractères accentués"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   7
-            Tag             =   "pref"
-            ToolTipText     =   "Rechercher des caractères avec des accents ("
-            Top             =   960
-            Width           =   3735
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Taille minimale de la chaîne de caractères :"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   14
-            Top             =   1460
-            Width           =   3135
-         End
+         TabIndex        =   12
+         Top             =   1560
+         Width           =   3615
+         _ExtentX        =   6376
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Ajouter un signet pour les chaines trouvées"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkChekbox_OCX.vkCheckBox chkAccent 
+         Height          =   255
+         Left            =   120
+         TabIndex        =   11
+         Top             =   1320
+         Width           =   3375
+         _ExtentX        =   5953
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Rechercher des caractères accentués"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkChekbox_OCX.vkCheckBox chkSigns 
+         Height          =   255
+         Left            =   120
+         TabIndex        =   10
+         Top             =   1080
+         Width           =   2655
+         _ExtentX        =   4683
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Rechercher des signes"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkChekbox_OCX.vkCheckBox chkMaj 
+         Height          =   255
+         Left            =   120
+         TabIndex        =   9
+         Top             =   840
+         Width           =   2655
+         _ExtentX        =   4683
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Rechercher des majuscules"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Value           =   1
+      End
+      Begin vkChekbox_OCX.vkCheckBox chkMin 
+         Height          =   255
+         Left            =   120
+         TabIndex        =   8
+         Top             =   600
+         Width           =   2655
+         _ExtentX        =   4683
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Rechercher des minuscules"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Value           =   1
+      End
+      Begin vkChekbox_OCX.vkCheckBox chkNumb3r 
+         Height          =   255
+         Left            =   120
+         TabIndex        =   7
+         Top             =   360
+         Width           =   2655
+         _ExtentX        =   4683
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Rechercher des chiffres"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Taille minimale de la chaîne de caractères :"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   14
+         Top             =   1920
+         Width           =   3135
       End
    End
    Begin VB.CommandButton cmdGo 
@@ -158,7 +228,7 @@ Begin VB.Form frmStringSearch
       TabIndex        =   0
       TabStop         =   0   'False
       ToolTipText     =   "Progression de la recherche"
-      Top             =   2258
+      Top             =   2520
       Width           =   4335
       _ExtentX        =   7646
       _ExtentY        =   450
@@ -174,7 +244,7 @@ Begin VB.Form frmStringSearch
       TabIndex        =   1
       TabStop         =   0   'False
       Tag             =   "lang_ok"
-      Top             =   2978
+      Top             =   3105
       Width           =   6375
       _ExtentX        =   11245
       _ExtentY        =   6588
@@ -207,8 +277,8 @@ Begin VB.Form frmStringSearch
       Caption         =   "Résultats de la recherche"
       Height          =   255
       Left            =   105
-      TabIndex        =   15
-      Top             =   2738
+      TabIndex        =   5
+      Top             =   2865
       Width           =   6375
    End
 End

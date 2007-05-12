@@ -2,8 +2,10 @@ VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{67F3B6F5-143C-4724-BF0B-20B81F5D8E04}#4.0#0"; "ExtendedVScrollbar_OCX.ocx"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
+Object = "{8C07804D-9EA0-4B2A-9D0C-ADD44D83E35F}#1.0#0"; "GradientFrame.ocx"
 Begin VB.Form Pfm 
    AutoRedraw      =   -1  'True
+   BackColor       =   &H00F9E5D9&
    Caption         =   "Ouverture d'un fichier..."
    ClientHeight    =   8115
    ClientLeft      =   60
@@ -21,348 +23,321 @@ Begin VB.Form Pfm
    HelpContextID   =   6
    Icon            =   "Pfm.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MDIChild        =   -1  'True
    ScaleHeight     =   8115
    ScaleWidth      =   7635
    Visible         =   0   'False
-   Begin VB.Frame FrameInfos 
-      Caption         =   "Informations"
-      ForeColor       =   &H00FF0000&
+   Begin GradientFrame.grdFrame FrameInfos 
       Height          =   6975
-      Left            =   3720
-      TabIndex        =   14
-      Top             =   0
+      Left            =   4080
+      TabIndex        =   15
+      Top             =   360
       Width           =   3135
-      Begin VB.PictureBox pctContain_cmdMAJ 
-         BorderStyle     =   0  'None
-         Height          =   6615
+      _ExtentX        =   5530
+      _ExtentY        =   12303
+      Caption         =   "Informations"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin VB.CommandButton cmdMAJ 
+         Caption         =   "Mettre à jour"
+         Height          =   255
+         Left            =   720
+         TabIndex        =   16
+         ToolTipText     =   "Mettre à jour les informations"
+         Top             =   6600
+         Width           =   1695
+      End
+      Begin ComctlLib.ListView lstHisto 
+         Height          =   1575
          Left            =   120
-         ScaleHeight     =   6615
-         ScaleWidth      =   2955
-         TabIndex        =   15
+         TabIndex        =   27
          TabStop         =   0   'False
-         Top             =   240
-         Width           =   2950
-         Begin VB.CommandButton cmdMAJ 
-            Caption         =   "Mettre à jour"
-            Height          =   255
-            Left            =   600
-            TabIndex        =   25
-            ToolTipText     =   "Mettre à jour les informations"
-            Top             =   6240
-            Width           =   1695
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   7
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   24
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   2160
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   6
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   23
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   1920
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   5
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   22
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   1680
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   4
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   21
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   1440
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   3
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   20
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   1200
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   2
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   19
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   960
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   1
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   18
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   720
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   0
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   17
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   480
-            Width           =   2895
-         End
-         Begin VB.TextBox txtFile 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   16
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   240
-            Width           =   2895
-         End
-         Begin ComctlLib.ListView lstSignets 
-            Height          =   1575
-            Left            =   0
-            TabIndex        =   26
-            TabStop         =   0   'False
-            Tag             =   "lang_ok"
-            Top             =   4560
-            Visible         =   0   'False
-            Width           =   2895
-            _ExtentX        =   5106
-            _ExtentY        =   2778
-            View            =   3
-            LabelEdit       =   1
-            MultiSelect     =   -1  'True
-            LabelWrap       =   -1  'True
-            HideSelection   =   -1  'True
-            _Version        =   327682
-            ForeColor       =   -2147483640
-            BackColor       =   -2147483643
-            Appearance      =   0
-            NumItems        =   2
-            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+         Tag             =   "lang_ok"
+         Top             =   4920
+         Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   2778
+         View            =   3
+         LabelEdit       =   1
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         _Version        =   327682
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         Appearance      =   0
+         NumItems        =   2
+         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Action"
+            Object.Width           =   5644
+         EndProperty
+         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   1
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Rang"
+            Object.Width           =   706
+         EndProperty
+      End
+      Begin ComctlLib.TabStrip TB 
+         Height          =   375
+         Left            =   120
+         TabIndex        =   19
+         TabStop         =   0   'False
+         Tag             =   "lang_ok"
+         Top             =   4515
+         Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   661
+         _Version        =   327682
+         BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
+            NumTabs         =   2
+            BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+               Caption         =   "Historique"
                Key             =   ""
                Object.Tag             =   ""
-               Text            =   "Offset"
-               Object.Width           =   1411
+               ImageVarType    =   2
             EndProperty
-            BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   1
+            BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+               Caption         =   "Signets"
                Key             =   ""
                Object.Tag             =   ""
-               Text            =   "Commentaire"
-               Object.Width           =   4410
+               ImageVarType    =   2
             EndProperty
-         End
-         Begin ComctlLib.TabStrip TB 
-            Height          =   375
-            Left            =   0
-            TabIndex        =   27
-            TabStop         =   0   'False
-            Tag             =   "lang_ok"
-            Top             =   4160
-            Width           =   2895
-            _ExtentX        =   5106
-            _ExtentY        =   661
-            _Version        =   327682
-            BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-               NumTabs         =   2
-               BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-                  Caption         =   "Historique"
-                  Key             =   ""
-                  Object.Tag             =   ""
-                  ImageVarType    =   2
-               EndProperty
-               BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-                  Caption         =   "Signets"
-                  Key             =   ""
-                  Object.Tag             =   ""
-                  ImageVarType    =   2
-               EndProperty
-            EndProperty
-         End
-         Begin ComctlLib.ListView lstHisto 
-            Height          =   1575
-            Left            =   0
-            TabIndex        =   28
-            TabStop         =   0   'False
-            Tag             =   "lang_ok"
-            Top             =   4560
-            Width           =   2895
-            _ExtentX        =   5106
-            _ExtentY        =   2778
-            View            =   3
-            LabelEdit       =   1
-            LabelWrap       =   -1  'True
-            HideSelection   =   -1  'True
-            _Version        =   327682
-            ForeColor       =   -2147483640
-            BackColor       =   -2147483643
-            Appearance      =   0
-            NumItems        =   2
-            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Action"
-               Object.Width           =   5644
-            EndProperty
-            BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   1
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Rang"
-               Object.Width           =   706
-            EndProperty
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Historique=[nombre]"
-            Height          =   200
-            Index           =   12
-            Left            =   0
-            TabIndex        =   35
-            Top             =   3840
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Offset Maximum=[offset max]"
-            Height          =   200
-            Index           =   11
-            Left            =   0
-            TabIndex        =   34
-            Top             =   3600
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Offset=[offset]"
-            Height          =   200
-            Index           =   10
-            Left            =   0
-            TabIndex        =   33
-            Top             =   3360
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Sélection=[selection]"
-            Height          =   200
-            Index           =   9
-            Left            =   0
-            TabIndex        =   32
-            Top             =   3120
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Pages=[pages]"
-            Height          =   200
-            Index           =   8
-            Left            =   0
-            TabIndex        =   31
-            Top             =   2880
-            Width           =   2895
-         End
-         Begin VB.Label Label1 
-            Alignment       =   1  'Right Justify
-            Caption         =   "Statistiques"
-            ForeColor       =   &H00FF0000&
-            Height          =   255
-            Index           =   0
-            Left            =   0
-            TabIndex        =   30
-            Top             =   2520
-            Width           =   2895
-         End
-         Begin VB.Label Label1 
-            Alignment       =   1  'Right Justify
-            Caption         =   "Fichier"
-            ForeColor       =   &H00FF0000&
-            Height          =   255
-            Index           =   1
-            Left            =   0
-            TabIndex        =   29
-            Top             =   0
-            Width           =   2895
-         End
+         EndProperty
+      End
+      Begin ComctlLib.ListView lstSignets 
+         Height          =   1575
+         Left            =   120
+         TabIndex        =   18
+         TabStop         =   0   'False
+         Tag             =   "lang_ok"
+         Top             =   4920
+         Visible         =   0   'False
+         Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   2778
+         View            =   3
+         LabelEdit       =   1
+         MultiSelect     =   -1  'True
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         _Version        =   327682
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         Appearance      =   0
+         NumItems        =   2
+         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Offset"
+            Object.Width           =   1411
+         EndProperty
+         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   1
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Commentaire"
+            Object.Width           =   4410
+         EndProperty
+      End
+      Begin VB.TextBox txtFile 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   2115
+         Left            =   120
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
+         TabIndex        =   17
+         TabStop         =   0   'False
+         Text            =   "Pfm.frx":08CA
+         Top             =   600
+         Width           =   2895
+      End
+      Begin VB.Label Label1 
+         Alignment       =   1  'Right Justify
+         BackStyle       =   0  'Transparent
+         Caption         =   "Fichier"
+         ForeColor       =   &H00FF0000&
+         Height          =   255
+         Index           =   1
+         Left            =   120
+         TabIndex        =   26
+         Top             =   360
+         Width           =   2895
+      End
+      Begin VB.Label Label1 
+         Alignment       =   1  'Right Justify
+         BackStyle       =   0  'Transparent
+         Caption         =   "Statistiques"
+         ForeColor       =   &H00FF0000&
+         Height          =   255
+         Index           =   0
+         Left            =   120
+         TabIndex        =   25
+         Top             =   2880
+         Width           =   2895
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Pages=[pages]"
+         Height          =   195
+         Index           =   8
+         Left            =   120
+         TabIndex        =   24
+         Top             =   3240
+         Width           =   2895
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Sélection=[selection]"
+         Height          =   195
+         Index           =   9
+         Left            =   120
+         TabIndex        =   23
+         Top             =   3480
+         Width           =   2895
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Offset=[offset]"
+         Height          =   195
+         Index           =   10
+         Left            =   120
+         TabIndex        =   22
+         Top             =   3720
+         Width           =   2895
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Offset Maximum=[offset max]"
+         Height          =   195
+         Index           =   11
+         Left            =   120
+         TabIndex        =   21
+         Top             =   3960
+         Width           =   2895
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Historique=[nombre]"
+         Height          =   195
+         Index           =   12
+         Left            =   120
+         TabIndex        =   20
+         Top             =   4200
+         Width           =   2895
       End
    End
-   Begin VB.Frame FrameIcon 
-      Caption         =   "Icones"
-      ForeColor       =   &H00000000&
-      Height          =   2895
-      Left            =   360
-      TabIndex        =   12
-      Top             =   4200
+   Begin GradientFrame.grdFrame FrameData 
+      Height          =   1455
+      Left            =   960
+      TabIndex        =   4
+      Top             =   4800
       Width           =   1695
-      Begin ComctlLib.ListView lvIcon 
-         Height          =   2535
-         Left            =   65
-         TabIndex        =   13
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   1550
-         _ExtentX        =   2752
-         _ExtentY        =   4471
-         View            =   1
-         Arrange         =   2
-         LabelEdit       =   1
-         LabelWrap       =   0   'False
-         HideSelection   =   -1  'True
-         HideColumnHeaders=   -1  'True
-         _Version        =   327682
-         Icons           =   "IMG"
-         SmallIcons      =   "IMG"
-         ForeColor       =   -2147483640
-         BackColor       =   -2147483633
-         Appearance      =   0
-         NumItems        =   0
+      _ExtentX        =   2990
+      _ExtentY        =   2566
+      Caption         =   "Valeur"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   3
+         Left            =   1080
+         TabIndex        =   8
+         Top             =   1080
+         Width           =   495
+      End
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   0
+         Left            =   1080
+         MaxLength       =   2
+         TabIndex        =   7
+         Top             =   360
+         Width           =   495
+      End
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   1
+         Left            =   1080
+         MaxLength       =   3
+         TabIndex        =   6
+         Top             =   600
+         Width           =   495
+      End
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   2
+         Left            =   1080
+         MaxLength       =   1
+         TabIndex        =   5
+         Top             =   840
+         Width           =   495
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Octal :"
+         Height          =   255
+         Index           =   3
+         Left            =   120
+         TabIndex        =   12
+         Top             =   1080
+         Width           =   855
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Hexa :"
+         Height          =   255
+         Index           =   0
+         Left            =   120
+         TabIndex        =   11
+         Top             =   360
+         Width           =   855
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Decimal :"
+         Height          =   255
+         Index           =   1
+         Left            =   120
+         TabIndex        =   10
+         Top             =   600
+         Width           =   855
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "ASCII :"
+         Height          =   255
+         Index           =   2
+         Left            =   120
+         TabIndex        =   9
+         Top             =   840
+         Width           =   855
       End
    End
    Begin VB.PictureBox pct 
@@ -372,105 +347,11 @@ Begin VB.Form Pfm
       Left            =   2760
       ScaleHeight     =   555
       ScaleWidth      =   555
-      TabIndex        =   11
+      TabIndex        =   1
       TabStop         =   0   'False
       Top             =   4320
       Visible         =   0   'False
       Width           =   615
-   End
-   Begin VB.Frame FrameData 
-      Caption         =   "Valeur"
-      ForeColor       =   &H00000000&
-      Height          =   1455
-      Left            =   600
-      TabIndex        =   1
-      Top             =   2760
-      Width           =   1695
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   1095
-         Left            =   50
-         ScaleHeight     =   1095
-         ScaleWidth      =   1605
-         TabIndex        =   2
-         Top             =   240
-         Width           =   1600
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   2
-            Left            =   960
-            MaxLength       =   1
-            TabIndex        =   6
-            Top             =   480
-            Width           =   495
-         End
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   1
-            Left            =   960
-            MaxLength       =   3
-            TabIndex        =   5
-            Top             =   240
-            Width           =   495
-         End
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   0
-            Left            =   960
-            MaxLength       =   2
-            TabIndex        =   4
-            Top             =   0
-            Width           =   495
-         End
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   3
-            Left            =   960
-            TabIndex        =   3
-            Top             =   720
-            Width           =   495
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "ASCII :"
-            Height          =   255
-            Index           =   2
-            Left            =   0
-            TabIndex        =   10
-            Top             =   480
-            Width           =   855
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "Decimal :"
-            Height          =   255
-            Index           =   1
-            Left            =   0
-            TabIndex        =   9
-            Top             =   240
-            Width           =   855
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "Hexa :"
-            Height          =   255
-            Index           =   0
-            Left            =   0
-            TabIndex        =   8
-            Top             =   0
-            Width           =   855
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "Octal :"
-            Height          =   255
-            Index           =   3
-            Left            =   0
-            TabIndex        =   7
-            Top             =   720
-            Width           =   855
-         End
-      End
    End
    Begin ComctlLib.StatusBar Sb 
       Align           =   2  'Align Bottom
@@ -522,7 +403,7 @@ Begin VB.Form Pfm
    Begin ExtVS.ExtendedVScrollBar VS 
       Height          =   2895
       Left            =   3240
-      TabIndex        =   36
+      TabIndex        =   2
       Top             =   0
       Width           =   255
       _ExtentX        =   450
@@ -535,13 +416,57 @@ Begin VB.Form Pfm
    Begin HexViewer_OCX.HexViewer HW 
       Height          =   2535
       Left            =   240
-      TabIndex        =   37
+      TabIndex        =   3
       Top             =   0
       Width           =   2415
       _ExtentX        =   4260
       _ExtentY        =   4471
       strTag1         =   "0"
       strTag2         =   "0"
+   End
+   Begin GradientFrame.grdFrame FrameIcon 
+      Height          =   3015
+      Left            =   600
+      TabIndex        =   13
+      Top             =   4080
+      Width           =   1695
+      _ExtentX        =   2990
+      _ExtentY        =   5318
+      BackColor1      =   16777215
+      BackGradient    =   0
+      Caption         =   "Icones"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin ComctlLib.ListView lvIcon 
+         Height          =   2535
+         Left            =   55
+         TabIndex        =   14
+         TabStop         =   0   'False
+         Top             =   360
+         Width           =   1545
+         _ExtentX        =   2725
+         _ExtentY        =   4471
+         View            =   1
+         Arrange         =   2
+         LabelEdit       =   1
+         LabelWrap       =   0   'False
+         HideSelection   =   -1  'True
+         HideColumnHeaders=   -1  'True
+         _Version        =   327682
+         Icons           =   "IMG"
+         SmallIcons      =   "IMG"
+         ForeColor       =   -2147483640
+         BackColor       =   16777215
+         Appearance      =   0
+         NumItems        =   0
+      End
    End
    Begin ComctlLib.ImageList IMG 
       Left            =   2520
@@ -624,27 +549,30 @@ Public Sub cmdMAJ_Click()
 'MAJ des infos
 Dim lPages As Long
 Dim cFic As FileSystemLibrary.File
+Dim s As String
 
     On Error Resume Next
     
     'nom du fichier
-    txtFile.Text = "[" & Me.Caption & "]"
+    s = "[" & Me.Caption & "]"
     
     'récupère les infos sur le fichier
     Set cFic = cFile.GetFile(Me.Caption)
     
     'affiche tout çà
     With cFic
-        TextBox(0).Text = Lang.GetString("_SizeIs") & CStr(.FileSize) & " Octets  -  " & CStr(Round(.FileSize / 1024, 3)) & " Ko" & "]"
-        TextBox(1).Text = Lang.GetString("_AttrIs") & CStr(.Attributes) & "]"
-        TextBox(2).Text = Lang.GetString("_CreaIs") & .DateCreated & "]"
-        TextBox(3).Text = Lang.GetString("_AccessIs") & .DateLastAccessed & "]"
-        TextBox(4).Text = Lang.GetString("_ModifIs") & .DateLastModified & "]"
-        TextBox(5).Text = Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
-        TextBox(6).Text = Lang.GetString("_DescrIs") & .FileVersionInfos.FileDescription & "]"
-        TextBox(7).Text = "Copyright=[" & .FileVersionInfos.Copyright & "]"
+        s = s & vbNewLine & Lang.GetString("_SizeIs") & CStr(.FileSize) & " Octets  -  " & CStr(Round(.FileSize / 1024, 3)) & " Ko" & "]"
+        s = s & vbNewLine & Lang.GetString("_AttrIs") & CStr(.Attributes) & "]"
+        s = s & vbNewLine & Lang.GetString("_CreaIs") & .DateCreated & "]"
+        s = s & vbNewLine & Lang.GetString("_AccessIs") & .DateLastAccessed & "]"
+        s = s & vbNewLine & Lang.GetString("_ModifIs") & .DateLastModified & "]"
+        s = s & vbNewLine & Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
+        s = s & vbNewLine & Lang.GetString("_DescrIs") & .FileVersionInfos.FileDescription & "]"
+        s = s & vbNewLine & "Copyright=[" & .FileVersionInfos.Copyright & "]"
     End With
-   
+    
+    txtFile.Text = s
+    
     Label2(8).Caption = Me.Sb.Panels(2).Text
     Label2(9).Caption = Lang.GetString("_SelIs") & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(10).Caption = Me.Sb.Panels(3).Text
@@ -804,13 +732,13 @@ Private Sub Form_Resize()
 
     'redimensionne/bouge le frameInfo
     With FrameInfos
-        .Top = 0
+        .Top = 10
         .Height = Me.Height - 700
         .Left = 20
-        cmdMAJ.Top = .Height - 650
-        lstHisto.Height = .Height - 5300
-        lstSignets.Height = .Height - 5300
-        Me.pctContain_cmdMAJ.Height = .Height - 350
+        cmdMAJ.Top = .Height - 330
+        lstHisto.Height = .Height - 5350
+        lstSignets.Height = .Height - 5350
+        'Me.pctContain_cmdMAJ.Height = .Height - 350
     End With
     
     'met le Grid à la taille de la fenêtre

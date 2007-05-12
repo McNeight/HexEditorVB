@@ -126,6 +126,9 @@ Dim strIniFile As String
         LetPref "General", "DoNotChangeDates", .general_DoNotChangeDates, .IniFilePath
         LetPref "General", "Splash", .general_Splash, .IniFilePath
         LetPref "General", "QuickBackup", .general_QuickBackup, .IniFilePath
+        LetPref "General", "FormBackColor", .general_FormBackColor, .IniFilePath
+        LetPref "General", "MenuBackColor", .general_MenuBackColor, .IniFilePath
+        LetPref "General", "ToolbarPCT", .general_ToolbarPCT, .IniFilePath
         LetPref "Environnement", "OS", .env_OS, .IniFilePath  '0=XP,1=Vista
         LetPref "Environnement", "Lang", .env_Lang, .IniFilePath
         LetPref "Historique", "NumberOfSave", .histo_NumberOfSave, .IniFilePath
@@ -202,6 +205,9 @@ Dim strIniFile As String
         .general_QuickBackup = Val(GetPref("General", "QuickBackup", sFile))
         .general_AllowMultipleInstances = (Val(GetPref("General", "AllowMultipleInstances", sFile)))
         .general_DoNotChangeDates = (Val(GetPref("General", "DoNotChangeDates", sFile)))
+        .general_FormBackColor = (Val(GetPref("General", "FormBackColor", sFile)))
+        .general_MenuBackColor = (Val(GetPref("General", "MenuBackColor", sFile)))
+        .general_ToolbarPCT = (Val(GetPref("General", "ToolbarPCT", sFile)))
         .env_OS = Val(GetPref("Environnement", "OS", sFile))
         .env_Lang = GetPref("Environnement", "Lang", sFile)
         .histo_NumberOfSave = Val(GetPref("Historique", "NumberOfSave", sFile))

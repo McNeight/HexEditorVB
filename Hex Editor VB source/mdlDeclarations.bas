@@ -53,6 +53,11 @@ Public Const CREATE_FRENCH_FILE As Byte = 0
 '//CONSTANTES
 '=======================================================
 
+'pour la colorisation des menus
+Public Const BS_SOLID                           As Long = 0
+Public Const MIM_APPLYTOSUBMENUS                As Long = &H80000000
+Public Const MIM_BACKGROUND                     As Long = &H2
+
 'constantes d'accès à un processus (pour OpenProcess)
 Public Const SYNCHRONIZE                        As Long = &H100000
 Public Const PROCESS_SUSPEND_RESUME             As Long = &H800
@@ -200,6 +205,7 @@ Public Const RED_COLOR                          As Long = &HC0&
 Public Const INVALID_HANDLE_VALUE               As Long = -1&
 Public Const DEUX_EXP_31                        As Double = 2147483648#
 Public Const DEUX_EXP_32                        As Double = 4294967296#
+Public Const GCL_HBRBACKGROUND                  As Long = -10
 
 
 
@@ -214,18 +220,22 @@ Public Declare Function SystemTimeToFileTime Lib "kernel32" (lpSystemTime As SYS
 Public Declare Function LocalFileTimeToFileTime Lib "kernel32" (lpLocalFileTime As FILETIME, lpFileTime As FILETIME) As Long
 Public Declare Function CompareFileTime Lib "kernel32" (lpFileTime1 As Currency, lpFileTime2 As Currency) As Long
 
-'APIS pour les menus
+'APIS pour les menus / toolbar
 Public Declare Function CreatePopupMenu Lib "user32" () As Long
 Public Declare Function InsertMenuItem Lib "user32.dll" Alias "InsertMenuItemA" (ByVal hMenu As Long, ByVal uItem As Long, ByVal fByPosition As Long, lpmii As MENUITEMINFO) As Long
-Public Declare Function TrackPopupMenuEx Lib "user32" (ByVal hMenu As Long, ByVal wFlags As Long, ByVal x As Long, ByVal Y As Long, ByVal hWnd As Long, ByVal lptpm As Any) As Long
+Public Declare Function TrackPopupMenuEx Lib "user32" (ByVal hMenu As Long, ByVal wFlags As Long, ByVal x As Long, ByVal y As Long, ByVal hwnd As Long, ByVal lptpm As Any) As Long
 Public Declare Function GetCursorPos Lib "user32" (Lppoint As POINTAPI) As Long
 Public Declare Function DestroyMenu Lib "user32" (ByVal hMenu As Long) As Long
-Public Declare Function GetMenu Lib "user32" (ByVal hWnd As Long) As Long
+Public Declare Function GetMenu Lib "user32" (ByVal hwnd As Long) As Long
+Public Declare Function GetMenuInfo Lib "user32" (ByVal hMenu As Long, lpcmi As tagMENUINFO) As Long
+Public Declare Function SetMenuInfo Lib "user32" (ByVal hMenu As Long, lpcmi As tagMENUINFO) As Long
 Public Declare Function GetSubMenu Lib "user32" (ByVal hMenu As Long, ByVal nPos As Long) As Long
 Public Declare Function SetMenuItemBitmaps Lib "user32" (ByVal hMenu As Long, ByVal nPosition As Long, ByVal wFlags As Long, ByVal hBitmapUnchecked As Long, ByVal hBitmapChecked As Long) As Long
 Public Declare Function GetMenuItemCount Lib "user32" (ByVal hMenu As Long) As Long
 Public Declare Function GetMenuState Lib "user32" (ByVal hMenu As Long, ByVal wID As Long, ByVal wFlags As Long) As Long
 Public Declare Function GetMenuString Lib "user32" Alias "GetMenuStringA" (ByVal hMenu As Long, ByVal wIDItem As Long, ByVal lpString As String, ByVal nMaxCount As Long, ByVal wFlag As Long) As Long
+Public Declare Function FindWindowEx Lib "user32" Alias "FindWindowExA" (ByVal hWnd1 As Long, ByVal hWnd2 As Long, ByVal lpsz1 As String, ByVal lpsz2 As String) As Long
+Public Declare Function SetClassLong Lib "user32" Alias "SetClassLongA" (ByVal hwnd As Long, ByVal nIndex As Long, ByVal dwnewlong As Long) As Long
 
 'APIs sur les processus
 Public Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
@@ -280,26 +290,29 @@ Public Declare Function lstrlen Lib "kernel32" Alias "lstrlenA" (ByVal lpString 
 Public Declare Function CLSIDFromString Lib "ole32" (ByVal lpsz As Any, pclsid As GUID) As Long
 
 'APIs "graphiques"
+Public Declare Function CreatePatternBrush Lib "gdi32" (ByVal hBitmap As Long) As Long
+Public Declare Function DeleteObject Lib "gdi32" (ByVal hObject As Long) As Long
+Public Declare Function CreateBrushIndirect Lib "gdi32" (lpLogBrush As LOGBRUSH) As Long
 Public Declare Function ExtractIcon Lib "shell32.dll" Alias "ExtractIconA" (ByVal hInst As Long, ByVal lpszExeFileName As String, ByVal nIconIndex As Long) As Long
 Public Declare Function DrawIconEx Lib "user32" (ByVal hdc As Long, ByVal xLeft As Long, ByVal yTop As Long, ByVal hIcon As Long, ByVal cxWidth As Long, ByVal cyWidth As Long, ByVal istepIfAniCur As Long, ByVal hbrFlickerFreeDraw As Long, ByVal diFlags As Long) As Long
 Public Declare Function DestroyIcon Lib "user32" (ByVal hIcon As Long) As Long
-Public Declare Function DrawIcon Lib "user32" (ByVal hdc As Long, ByVal x As Long, ByVal Y As Long, ByVal hIcon As Long) As Long
+Public Declare Function DrawIcon Lib "user32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, ByVal hIcon As Long) As Long
 Public Declare Function OleCreatePictureIndirect Lib "olepro32.dll" (lpPictDesc As PICTDESC, riid As GUID, ByVal fPictureOwnsHandle As Long, ipic As IPicture) As Long
-Public Declare Function ImageList_Draw Lib "Comctl32.dll" (ByVal himl&, ByVal i&, ByVal hDCDest&, ByVal x&, ByVal Y&, ByVal FLAGS&) As Long
-Public Declare Function MoveToEx Lib "gdi32" (ByVal hdc As Long, ByVal x As Long, ByVal Y As Long, Lppoint As Long) As Long
-Public Declare Function LineTo Lib "gdi32" (ByVal hdc As Long, ByVal x As Long, ByVal Y As Long) As Long
+Public Declare Function ImageList_Draw Lib "Comctl32.dll" (ByVal himl&, ByVal i&, ByVal hDCDest&, ByVal x&, ByVal y&, ByVal FLAGS&) As Long
+Public Declare Function MoveToEx Lib "gdi32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, Lppoint As Long) As Long
+Public Declare Function LineTo Lib "gdi32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long) As Long
 
 'APIs pour l'affichage/gestion des fenêtres
-Public Declare Sub InvalidateRect Lib "user32" (ByVal hWnd As Long, ByVal t As Long, ByVal bErase As Long)
-Public Declare Sub ValidateRect Lib "user32" (ByVal hWnd As Long, ByVal t As Long)
-Public Declare Function SetWindowPos Lib "user32" (ByVal hWnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal Y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
-Public Declare Function UpdateWindow Lib "user32" (ByVal hWnd As Long) As Long
-Public Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
-Public Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hWnd As Long, ByVal nIndex As Long) As Long
-Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hWnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
-Public Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Public Declare Function RectValidateRect Lib "user32" Alias "ValidateRect" (ByVal hWnd As Long, lpRect As RECT) As Long
-Public Declare Function RectInvalidateRect Lib "user32" Alias "InvalidateRect" (ByVal hWnd As Long, lpRect As RECT, ByVal bErase As Long) As Long
+Public Declare Sub InvalidateRect Lib "user32" (ByVal hwnd As Long, ByVal t As Long, ByVal bErase As Long)
+Public Declare Sub ValidateRect Lib "user32" (ByVal hwnd As Long, ByVal t As Long)
+Public Declare Function SetWindowPos Lib "user32" (ByVal hwnd As Long, ByVal hWndInsertAfter As Long, ByVal x As Long, ByVal y As Long, ByVal cx As Long, ByVal cy As Long, ByVal wFlags As Long) As Long
+Public Declare Function UpdateWindow Lib "user32" (ByVal hwnd As Long) As Long
+Public Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+Public Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long) As Long
+Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long, ByVal dwnewlong As Long) As Long
+Public Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hwnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Declare Function RectValidateRect Lib "user32" Alias "ValidateRect" (ByVal hwnd As Long, lpRect As RECT) As Long
+Public Declare Function RectInvalidateRect Lib "user32" Alias "InvalidateRect" (ByVal hwnd As Long, lpRect As RECT, ByVal bErase As Long) As Long
 Public Declare Function TrackMouseEvent Lib "user32" (lpEventTrack As TRACKMOUSEEVENTTYPE) As Long
 
 'APIs pour "l'environnement Windows"
@@ -308,7 +321,7 @@ Public Declare Function SHGetPathFromIDList Lib "shell32.dll" Alias "SHGetPathFr
 Public Declare Function SHRunDialog Lib "shell32" Alias "#61" (ByVal hOwner As Long, ByVal Unknown1 As Long, ByVal Unknown2 As Long, ByVal szTitle As String, ByVal szPrompt As String, ByVal uFlags As Long) As Long
 Public Declare Function SHGetFileInfo Lib "shell32" Alias "SHGetFileInfoA" (ByVal pszPath As Any, ByVal dwFileAttributes As Long, psfi As SHFILEINFO, ByVal cbFileInfo As Long, ByVal uFlags As Long) As Long
 Public Declare Sub SetCurrentDirectoryA Lib "kernel32.dll" (ByVal pdir As String)
-Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hWnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
+Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
 Public Declare Function ShellExecuteEX Lib "shell32.dll" Alias "ShellExecuteEx" (SEI As SHELLEXECUTEINFO) As Long
 Public Declare Function PrintDlg Lib "comdlg32.dll" Alias "PrintDlgA" (pPrintdlg As PRINTER_INFO) As Long
 Public Declare Function GetVersionEx Lib "kernel32" Alias "GetVersionExA" (lpVersionInformation As OSVERSIONINFO) As Long
@@ -488,7 +501,7 @@ End Type
 Public Type SHELLEXECUTEINFO
     cbSize As Long
     fMask As Long
-    hWnd As Long
+    hwnd As Long
     lpVerb As String
     lpFile As String
     lpParameters As String
@@ -593,9 +606,9 @@ End Type
 
 'pour le traçage de gradients
 Public Type RGB_COLOR
-    R As Long
+    r As Long
     G As Long
-    B As Long
+    b As Long
 End Type
 
 'utilisés pour la création de menus dynamiques
@@ -614,7 +627,7 @@ Public Type MENUITEMINFO
 End Type
 Public Type POINTAPI
     x As Long
-    Y As Long
+    y As Long
 End Type
 
 'utilisé pour subclasser le resize des form
@@ -676,4 +689,20 @@ Public Type TRACKMOUSEEVENTTYPE
     dwFlags As Long
     hwndTrack As Long
     dwHoverTime As Long
+End Type
+
+'types pour la colorisation des menus
+Public Type LOGBRUSH
+    lbStyle As Long
+    lbColor As Long
+    lbHatch As Long
+End Type
+Public Type tagMENUINFO
+    cbSize As Long
+    fMask As Long
+    dwStyle As Long
+    cyMax As Long
+    hbrBack As Long
+    dwContextHelpID As Long
+    dwMenuData As Long
 End Type

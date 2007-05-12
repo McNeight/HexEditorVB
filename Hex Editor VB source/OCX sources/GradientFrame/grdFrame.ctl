@@ -339,8 +339,8 @@ Private Sub UserControl_InitProperties()
     'valeurs par défaut
     bNotOk2 = True
     With Me
-        .BackColor1 = &HC0C0C0    '
-        .BackColor2 = vbWhite '
+        .BackColor1 = &HFBFBFB       '
+        .BackColor2 = &HDCDCDC    '
         .BackGradient = Horizontal '
         .BackStyle = Opaque
         .Caption = "Caption" '
@@ -349,10 +349,10 @@ Private Sub UserControl_InitProperties()
         .ShowBackGround = True '
         .ShowTitle = True '
         .TextPosition = Text_Center '
-        .TitleColor1 = vbBlue
-        .TitleColor2 = vbWhite '
+        .TitleColor1 = &HC85A21
+        .TitleColor2 = &HE4C6B5    '
         .TitleGradient = Vertical '
-        .TitleHeight = 300 '
+        .TitleHeight = 250 '
         .Enabled = True '
         .BorderColor = &HFF8080    '
         .DisplayBorder = True '
@@ -377,8 +377,8 @@ End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     With PropBag
-        Call .WriteProperty("BackColor1", Me.BackColor1, &HC0C0C0)
-        Call .WriteProperty("BackColor2", Me.BackColor2, vbWhite)
+        Call .WriteProperty("BackColor1", Me.BackColor1, &HFBFBFB)
+        Call .WriteProperty("BackColor2", Me.BackColor2, &HDCDCDC)
         Call .WriteProperty("BackGradient", Me.BackGradient, Horizontal)
         Call .WriteProperty("BackStyle", Me.BackStyle, Opaque)
         Call .WriteProperty("Caption", Me.Caption, "Caption")
@@ -387,10 +387,10 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("ShowBackGround", Me.ShowBackGround, True)
         Call .WriteProperty("ShowTitle", Me.ShowTitle, True)
         Call .WriteProperty("TextPosition", Me.TextPosition, Text_Center)
-        Call .WriteProperty("TitleColor1", Me.TitleColor1, vbBlue)
-        Call .WriteProperty("TitleColor2", Me.TitleColor2, vbWhite)
+        Call .WriteProperty("TitleColor1", Me.TitleColor1, &HC85A21)
+        Call .WriteProperty("TitleColor2", Me.TitleColor2, &HE4C6B5)
         Call .WriteProperty("TitleGradient", Me.TitleGradient, Vertical)
-        Call .WriteProperty("TitleHeight", Me.TitleHeight, 300)
+        Call .WriteProperty("TitleHeight", Me.TitleHeight, 250)
         Call .WriteProperty("Enabled", Me.Enabled, True)
         Call .WriteProperty("BorderColor", Me.BorderColor, &HFF8080)
         Call .WriteProperty("DisplayBorder", Me.DisplayBorder, True)
@@ -409,8 +409,8 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
 
     bNotOk2 = True
     With PropBag
-        Me.BackColor1 = .ReadProperty("BackColor1", &HC0C0C0)
-        Me.BackColor2 = .ReadProperty("BackColor2", vbWhite)
+        Me.BackColor1 = .ReadProperty("BackColor1", &HFBFBFB)
+        Me.BackColor2 = .ReadProperty("BackColor2", &HDCDCDC)
         Me.BackGradient = .ReadProperty("BackGradient", Horizontal)
         Me.BackStyle = .ReadProperty("BackStyle", Opaque)
         Me.Caption = .ReadProperty("Caption", "Caption")
@@ -419,10 +419,10 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.ShowBackGround = .ReadProperty("ShowBackGround", True)
         Me.ShowTitle = .ReadProperty("ShowTitle", True)
         Me.TextPosition = .ReadProperty("TextPosition", Text_Center)
-        Me.TitleColor1 = .ReadProperty("TitleColor1", vbBlue)
-        Me.TitleColor2 = .ReadProperty("TitleColor2", vbWhite)
+        Me.TitleColor1 = .ReadProperty("TitleColor1", &HC85A21)
+        Me.TitleColor2 = .ReadProperty("TitleColor2", &HE4C6B5)
         Me.TitleGradient = .ReadProperty("TitleGradient", Vertical)
-        Me.TitleHeight = .ReadProperty("TitleHeight", 300)
+        Me.TitleHeight = .ReadProperty("TitleHeight", 250)
         Me.Enabled = .ReadProperty("Enabled", True)
         Me.BorderColor = .ReadProperty("BorderColor", &HFF8080)
         Me.DisplayBorder = .ReadProperty("DisplayBorder", True)
