@@ -1,12 +1,13 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{8C07804D-9EA0-4B2A-9D0C-ADD44D83E35F}#1.0#0"; "GradientFrame.ocx"
 Begin VB.Form frmSignets 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Gestionnaire de signets"
-   ClientHeight    =   5160
+   ClientHeight    =   5490
    ClientLeft      =   45
    ClientTop       =   345
-   ClientWidth     =   5415
+   ClientWidth     =   5475
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -19,140 +20,146 @@ Begin VB.Form frmSignets
    HelpContextID   =   22
    Icon            =   "frmSignets.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   5160
-   ScaleWidth      =   5415
+   ScaleHeight     =   5490
+   ScaleWidth      =   5475
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.Frame Frame1 
-      Caption         =   "Liste des signets"
-      Height          =   735
+   Begin GradientFrame.grdFrame grdFrame2 
+      Height          =   1335
+      Left            =   90
+      TabIndex        =   7
+      Top             =   3600
+      Width           =   5295
+      _ExtentX        =   9340
+      _ExtentY        =   2355
+      BackColor1      =   16514043
+      BackColor2      =   14474460
+      Caption         =   "Signets"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      TitleColor1     =   13130273
+      TitleColor2     =   14993077
+      TitleHeight     =   250
+      Begin VB.CommandButton cmdComment 
+         Caption         =   "Ajouter un commentaite sur le signet sélectionné"
+         Height          =   375
+         Left            =   120
+         TabIndex        =   11
+         ToolTipText     =   "Ajoute un commentaire sur les signets sélectionnés"
+         Top             =   840
+         Width           =   5055
+      End
+      Begin VB.CommandButton cmdNew 
+         Caption         =   "Nouveau"
+         Height          =   375
+         Left            =   120
+         TabIndex        =   10
+         ToolTipText     =   "Créé un nouveau signet"
+         Top             =   360
+         Width           =   1455
+      End
+      Begin VB.CommandButton cmdDeleteSel 
+         Caption         =   "Supprimer sélection"
+         Height          =   375
+         Left            =   1680
+         TabIndex        =   9
+         ToolTipText     =   "Supprime les fichiers sélectionnés"
+         Top             =   360
+         Width           =   1815
+      End
+      Begin VB.CommandButton cmdDeleteAll 
+         Caption         =   "Supprimer tout"
+         Height          =   375
+         Left            =   3720
+         TabIndex        =   8
+         ToolTipText     =   "Supprime tous les signets"
+         Top             =   360
+         Width           =   1455
+      End
+   End
+   Begin GradientFrame.grdFrame grdFrame1 
+      Height          =   855
       Index           =   0
-      Left            =   60
-      TabIndex        =   8
+      Left            =   90
+      TabIndex        =   3
       Top             =   2640
       Width           =   5295
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   405
-         Index           =   0
-         Left            =   100
-         ScaleHeight     =   405
-         ScaleWidth      =   5100
-         TabIndex        =   9
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   5100
-         Begin VB.CommandButton cmdOpen 
-            Caption         =   "Ouvrir..."
-            Height          =   375
-            Left            =   0
-            TabIndex        =   12
-            ToolTipText     =   "Ouvre une liste de signets"
-            Top             =   0
-            Width           =   1455
-         End
-         Begin VB.CommandButton cmdAdd 
-            Caption         =   "Ajouter..."
-            Height          =   375
-            Left            =   1800
-            TabIndex        =   11
-            ToolTipText     =   "Ajoute une liste de signets"
-            Top             =   0
-            Width           =   1455
-         End
-         Begin VB.CommandButton cmdSave 
-            Caption         =   "Sauvegarder..."
-            Height          =   375
-            Left            =   3600
-            TabIndex        =   10
-            ToolTipText     =   "Sauvegarde la liste de signets actuelle"
-            Top             =   0
-            Width           =   1455
-         End
+      _ExtentX        =   9340
+      _ExtentY        =   1508
+      BackColor1      =   16514043
+      BackColor2      =   14474460
+      Caption         =   "Liste des signets"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      TitleColor1     =   13130273
+      TitleColor2     =   14993077
+      TitleHeight     =   250
+      Begin VB.CommandButton cmdSave 
+         Caption         =   "Sauvegarder..."
+         Height          =   375
+         Left            =   3720
+         TabIndex        =   6
+         ToolTipText     =   "Sauvegarde la liste de signets actuelle"
+         Top             =   360
+         Width           =   1455
+      End
+      Begin VB.CommandButton cmdAdd 
+         Caption         =   "Ajouter..."
+         Height          =   375
+         Left            =   1920
+         TabIndex        =   5
+         ToolTipText     =   "Ajoute une liste de signets"
+         Top             =   360
+         Width           =   1455
+      End
+      Begin VB.CommandButton cmdOpen 
+         Caption         =   "Ouvrir..."
+         Height          =   375
+         Left            =   120
+         TabIndex        =   4
+         ToolTipText     =   "Ouvre une liste de signets"
+         Top             =   360
+         Width           =   1455
       End
    End
    Begin VB.CommandButton dmQuit 
       Caption         =   "Fermer"
       Height          =   375
-      Left            =   3840
-      TabIndex        =   7
-      ToolTipText     =   "Ferme cette fenêtre"
-      Top             =   4680
-      Width           =   1455
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Signets"
-      Height          =   1215
-      Index           =   1
-      Left            =   60
+      Left            =   3851
       TabIndex        =   1
-      Top             =   3360
-      Width           =   5295
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   885
-         Index           =   1
-         Left            =   100
-         ScaleHeight     =   885
-         ScaleWidth      =   5100
-         TabIndex        =   2
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   5100
-         Begin VB.CommandButton cmdDeleteAll 
-            Caption         =   "Supprimer tout"
-            Height          =   375
-            Left            =   3600
-            TabIndex        =   6
-            ToolTipText     =   "Supprime tous les signets"
-            Top             =   0
-            Width           =   1455
-         End
-         Begin VB.CommandButton cmdDeleteSel 
-            Caption         =   "Supprimer sélection"
-            Height          =   375
-            Left            =   1560
-            TabIndex        =   5
-            ToolTipText     =   "Supprime les fichiers sélectionnés"
-            Top             =   0
-            Width           =   1815
-         End
-         Begin VB.CommandButton cmdNew 
-            Caption         =   "Nouveau"
-            Height          =   375
-            Left            =   0
-            TabIndex        =   4
-            ToolTipText     =   "Créé un nouveau signet"
-            Top             =   0
-            Width           =   1455
-         End
-         Begin VB.CommandButton cmdComment 
-            Caption         =   "Ajouter un commentaite sur le signet sélectionné"
-            Height          =   375
-            Left            =   0
-            TabIndex        =   3
-            ToolTipText     =   "Ajoute un commentaire sur les signets sélectionnés"
-            Top             =   480
-            Width           =   5055
-         End
-      End
+      ToolTipText     =   "Ferme cette fenêtre"
+      Top             =   5040
+      Width           =   1455
    End
    Begin VB.CommandButton cmdSaveChanges 
       Caption         =   "Appliquer les changements"
       Height          =   375
-      Left            =   120
+      Left            =   131
       TabIndex        =   0
       ToolTipText     =   "Applique les changements à la fenêtre active"
-      Top             =   4680
+      Top             =   5040
       Width           =   2655
    End
    Begin ComctlLib.ListView lstSignets 
       Height          =   2535
-      Left            =   37
-      TabIndex        =   13
+      Left            =   48
+      TabIndex        =   2
       TabStop         =   0   'False
       Tag             =   "lang_ok"
       Top             =   0
