@@ -87,6 +87,9 @@ Public general_ShowAlert As Byte
 Public general_AllowMultipleInstances As Byte
 Public general_DoNotChangeDates As Byte
 Public general_Splash As Byte
+Public general_FormBackColor As Long
+Public general_MenuBackColor As Long
+Public general_ToolbarPCT As Byte
 Public env_OS As Byte   '0=XP, 1=Vista
 Public env_Lang As String
 Public histo_NumberOfSave As Long
