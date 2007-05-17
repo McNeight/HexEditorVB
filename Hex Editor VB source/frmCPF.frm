@@ -25,10 +25,172 @@ Begin VB.Form frmCPF
    ScaleHeight     =   6990
    ScaleWidth      =   8250
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkFrame vkFrame3 
+      Height          =   4455
+      Left            =   120
+      TabIndex        =   11
+      Top             =   1800
+      Width           =   8055
+      _ExtentX        =   14208
+      _ExtentY        =   7858
+      Caption         =   "Résultats"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin BGraphe_OCX.BGraphe BG1 
+         Height          =   2895
+         Left            =   120
+         TabIndex        =   13
+         TabStop         =   0   'False
+         Top             =   1440
+         Width           =   3855
+         _ExtentX        =   6800
+         _ExtentY        =   5106
+         BarreColor1     =   0
+         BarreColor2     =   16711680
+      End
+      Begin BGraphe_OCX.BGraphe BG2 
+         Height          =   2895
+         Left            =   4080
+         TabIndex        =   12
+         TabStop         =   0   'False
+         Top             =   1440
+         Width           =   3855
+         _ExtentX        =   6800
+         _ExtentY        =   5106
+         BarreColor1     =   0
+         BarreColor2     =   16711680
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Fichier 2"
+         Height          =   255
+         Left            =   4080
+         TabIndex        =   18
+         Top             =   1200
+         Width           =   975
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Fichier 1"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   17
+         Top             =   1200
+         Width           =   975
+      End
+      Begin VB.Label lblDiffer 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Différences :"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   16
+         Top             =   840
+         Width           =   6015
+      End
+      Begin VB.Label lblMatch 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Pourcentage de correspondance :"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   15
+         Top             =   600
+         Width           =   6015
+      End
+      Begin VB.Label lblTailles 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Tailles :"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   14
+         Top             =   360
+         Width           =   6015
+      End
+   End
+   Begin vkUserContolsXP.vkFrame vkFrame2 
+      Height          =   735
+      Left            =   120
+      TabIndex        =   8
+      Top             =   960
+      Width           =   4455
+      _ExtentX        =   7858
+      _ExtentY        =   1296
+      Caption         =   "Fichier 2"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin VB.CommandButton cmdBrowse 
+         Caption         =   "..."
+         Height          =   255
+         Index           =   1
+         Left            =   3720
+         TabIndex        =   10
+         ToolTipText     =   "Sélectionner le fichier 2"
+         Top             =   360
+         Width           =   495
+      End
+      Begin VB.TextBox txtFile2 
+         Height          =   285
+         Left            =   120
+         TabIndex        =   9
+         ToolTipText     =   "Emplacement du fichier 2"
+         Top             =   360
+         Width           =   3375
+      End
+   End
+   Begin vkUserContolsXP.vkFrame vkFrame1 
+      Height          =   735
+      Left            =   120
+      TabIndex        =   5
+      Top             =   120
+      Width           =   4455
+      _ExtentX        =   7858
+      _ExtentY        =   1296
+      Caption         =   "Fichier 1"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin VB.CommandButton cmdBrowse 
+         Caption         =   "..."
+         Height          =   255
+         Index           =   0
+         Left            =   3720
+         TabIndex        =   7
+         ToolTipText     =   "Sélectionner le fichier 1"
+         Top             =   360
+         Width           =   495
+      End
+      Begin VB.TextBox txtFile1 
+         Height          =   285
+         Left            =   120
+         TabIndex        =   6
+         ToolTipText     =   "Emplacement du fichier 1"
+         Top             =   360
+         Width           =   3375
+      End
+   End
    Begin vkUserContolsXP.vkBar PGB 
       Height          =   375
       Left            =   4800
-      TabIndex        =   23
+      TabIndex        =   4
       Top             =   960
       Width           =   3255
       _ExtentX        =   5741
@@ -50,7 +212,7 @@ Begin VB.Form frmCPF
       Caption         =   "Examiner les différences"
       Height          =   495
       Left            =   1099
-      TabIndex        =   5
+      TabIndex        =   1
       ToolTipText     =   "Lancer une analyse détaillée"
       Top             =   6360
       Width           =   1455
@@ -59,7 +221,7 @@ Begin VB.Form frmCPF
       Caption         =   "Fermer"
       Height          =   495
       Left            =   5697
-      TabIndex        =   7
+      TabIndex        =   3
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   6360
       Width           =   1455
@@ -68,107 +230,10 @@ Begin VB.Form frmCPF
       Caption         =   "Sauvegarder le rapport..."
       Height          =   495
       Left            =   3297
-      TabIndex        =   6
+      TabIndex        =   2
       ToolTipText     =   "Sauvegarder le rapport au format texte"
       Top             =   6360
       Width           =   1455
-   End
-   Begin VB.Frame Frame3 
-      Caption         =   "Résultats"
-      Height          =   4575
-      Left            =   120
-      TabIndex        =   10
-      Top             =   1560
-      Width           =   8055
-      Begin VB.PictureBox Picture2 
-         BorderStyle     =   0  'None
-         Height          =   4215
-         Left            =   120
-         ScaleHeight     =   4215
-         ScaleWidth      =   7815
-         TabIndex        =   15
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   7815
-         Begin BGraphe_OCX.BGraphe BG2 
-            Height          =   3015
-            Left            =   3960
-            TabIndex        =   22
-            TabStop         =   0   'False
-            Top             =   1080
-            Width           =   3855
-            _ExtentX        =   6800
-            _ExtentY        =   5318
-            BarreColor1     =   0
-            BarreColor2     =   16711680
-         End
-         Begin BGraphe_OCX.BGraphe BG1 
-            Height          =   3015
-            Left            =   0
-            TabIndex        =   21
-            TabStop         =   0   'False
-            Top             =   1080
-            Width           =   3855
-            _ExtentX        =   6800
-            _ExtentY        =   5318
-            BarreColor1     =   0
-            BarreColor2     =   16711680
-         End
-         Begin VB.Label lblTailles 
-            Caption         =   "Tailles :"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   20
-            Top             =   0
-            Width           =   6015
-         End
-         Begin VB.Label lblMatch 
-            Caption         =   "Pourcentage de correspondance :"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   19
-            Top             =   240
-            Width           =   6015
-         End
-         Begin VB.Label lblDiffer 
-            Caption         =   "Différences :"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   18
-            Top             =   480
-            Width           =   6015
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Fichier 1"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   17
-            Top             =   840
-            Width           =   975
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Fichier 2"
-            Height          =   255
-            Left            =   3960
-            TabIndex        =   16
-            Top             =   840
-            Width           =   975
-         End
-      End
-      Begin VB.Label lblF2 
-         Height          =   255
-         Left            =   4080
-         TabIndex        =   14
-         Top             =   3720
-         Width           =   3855
-      End
-      Begin VB.Label lblF1 
-         Height          =   255
-         Left            =   120
-         TabIndex        =   13
-         Top             =   3720
-         Width           =   3855
-      End
    End
    Begin VB.CommandButton cmdGO 
       Caption         =   "Lancer l'analyse"
@@ -178,82 +243,6 @@ Begin VB.Form frmCPF
       ToolTipText     =   "Analyser"
       Top             =   240
       Width           =   1095
-   End
-   Begin VB.Frame Frame2 
-      Caption         =   "Fichier 2"
-      Height          =   735
-      Left            =   120
-      TabIndex        =   9
-      Top             =   840
-      Width           =   4455
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   375
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   375
-         ScaleWidth      =   4215
-         TabIndex        =   12
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   4215
-         Begin VB.TextBox txtFile2 
-            Height          =   285
-            Left            =   0
-            TabIndex        =   3
-            ToolTipText     =   "Emplacement du fichier 2"
-            Top             =   0
-            Width           =   3375
-         End
-         Begin VB.CommandButton cmdBrowse 
-            Caption         =   "..."
-            Height          =   255
-            Index           =   1
-            Left            =   3600
-            TabIndex        =   4
-            ToolTipText     =   "Sélectionner le fichier 2"
-            Top             =   0
-            Width           =   495
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Fichier 1"
-      Height          =   735
-      Left            =   120
-      TabIndex        =   8
-      Top             =   120
-      Width           =   4455
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   375
-         Index           =   0
-         Left            =   120
-         ScaleHeight     =   375
-         ScaleWidth      =   4215
-         TabIndex        =   11
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   4215
-         Begin VB.TextBox txtFile1 
-            Height          =   285
-            Left            =   0
-            TabIndex        =   1
-            ToolTipText     =   "Emplacement du fichier 1"
-            Top             =   0
-            Width           =   3375
-         End
-         Begin VB.CommandButton cmdBrowse 
-            Caption         =   "..."
-            Height          =   255
-            Index           =   0
-            Left            =   3600
-            TabIndex        =   2
-            ToolTipText     =   "Sélectionner le fichier 1"
-            Top             =   0
-            Width           =   495
-         End
-      End
    End
 End
 Attribute VB_Name = "frmCPF"

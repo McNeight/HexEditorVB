@@ -27,10 +27,47 @@ Begin VB.Form frmISO
    ScaleWidth      =   4350
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkFrame vkFrame1 
+      Height          =   685
+      Left            =   120
+      TabIndex        =   4
+      Top             =   2010
+      Width           =   3135
+      _ExtentX        =   5530
+      _ExtentY        =   1217
+      Caption         =   "Fichier ISO résultant"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin VB.TextBox txtFile 
+         BorderStyle     =   0  'None
+         Height          =   285
+         Left            =   120
+         TabIndex        =   6
+         Tag             =   "Choix du fichier ISO résultant"
+         Top             =   320
+         Width           =   2295
+      End
+      Begin VB.CommandButton cmdBrowse 
+         Caption         =   "..."
+         Height          =   255
+         Left            =   2640
+         TabIndex        =   5
+         ToolTipText     =   "Sélectionne un fichier résultant"
+         Top             =   320
+         Width           =   375
+      End
+   End
    Begin vkUserContolsXP.vkBar PGB 
       Height          =   375
       Left            =   120
-      TabIndex        =   7
+      TabIndex        =   3
       Top             =   2760
       Width           =   3135
       _ExtentX        =   5530
@@ -53,46 +90,10 @@ Begin VB.Form frmISO
       Enabled         =   0   'False
       Height          =   495
       Left            =   3608
-      TabIndex        =   6
+      TabIndex        =   2
       ToolTipText     =   "Démarre la création du fichier ISO"
       Top             =   2160
       Width           =   615
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Fichier ISO résultant"
-      Height          =   615
-      Left            =   128
-      TabIndex        =   2
-      Top             =   2040
-      Width           =   3255
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   330
-         Left            =   120
-         ScaleHeight     =   330
-         ScaleWidth      =   3015
-         TabIndex        =   3
-         Top             =   240
-         Width           =   3015
-         Begin VB.CommandButton cmdBrowse 
-            Caption         =   "..."
-            Height          =   255
-            Left            =   2520
-            TabIndex        =   5
-            ToolTipText     =   "Sélectionne un fichier résultant"
-            Top             =   0
-            Width           =   375
-         End
-         Begin VB.TextBox txtFile 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   0
-            TabIndex        =   4
-            Tag             =   "Choix du fichier ISO résultant"
-            Top             =   0
-            Width           =   2295
-         End
-      End
    End
    Begin VB.CommandButton cmdQuit 
       Caption         =   "Fermer"
@@ -209,7 +210,7 @@ Dim hDisk As Long
     
     txtFile.Enabled = False
     cmdBrowse.Enabled = False
-    cmdGo.Enabled = False
+    cmdGO.Enabled = False
     cmdQuit.Enabled = False
     
     With PGB
@@ -251,7 +252,7 @@ Dim hDisk As Long
     
     txtFile.Enabled = True
     cmdBrowse.Enabled = True
-    cmdGo.Enabled = True
+    cmdGO.Enabled = True
     cmdQuit.Enabled = True
 
     'ajoute du texte à la console
@@ -278,12 +279,12 @@ Dim s As String
         If s = "UDF" Or s = "CDFS" Then
             'on a choisi le drive
             Set tDrive = DV.GetSelectedDrive
-            cmdGo.Enabled = True
+            cmdGO.Enabled = True
         Else
-            cmdGo.Enabled = False
+            cmdGO.Enabled = False
         End If
     Else
-        cmdGo.Enabled = False
+        cmdGO.Enabled = False
     End If
 End Sub
 

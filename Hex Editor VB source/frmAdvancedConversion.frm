@@ -27,7 +27,7 @@ Begin VB.Form frmAdvancedConversion
       Left            =   120
       ScaleHeight     =   1935
       ScaleWidth      =   7695
-      TabIndex        =   19
+      TabIndex        =   18
       TabStop         =   0   'False
       Top             =   2520
       Width           =   7695
@@ -36,7 +36,7 @@ Begin VB.Form frmAdvancedConversion
          Enabled         =   0   'False
          Height          =   975
          Left            =   3840
-         TabIndex        =   22
+         TabIndex        =   21
          Top             =   840
          Width           =   3735
          Begin VB.PictureBox Picture4 
@@ -45,7 +45,7 @@ Begin VB.Form frmAdvancedConversion
             Left            =   120
             ScaleHeight     =   615
             ScaleWidth      =   3495
-            TabIndex        =   23
+            TabIndex        =   22
             TabStop         =   0   'False
             Top             =   270
             Width           =   3495
@@ -55,7 +55,7 @@ Begin VB.Form frmAdvancedConversion
                Enabled         =   0   'False
                Height          =   285
                Left            =   2280
-               TabIndex        =   12
+               TabIndex        =   11
                Tag             =   "pref"
                Text            =   "00"
                ToolTipText     =   "Valeur hexa faisant office de séparateur"
@@ -68,7 +68,7 @@ Begin VB.Form frmAdvancedConversion
                Enabled         =   0   'False
                Height          =   285
                Left            =   2280
-               TabIndex        =   10
+               TabIndex        =   9
                Tag             =   "pref"
                Text            =   "-"
                ToolTipText     =   "String faisant office de séparateur"
@@ -81,7 +81,7 @@ Begin VB.Form frmAdvancedConversion
                Height          =   195
                Index           =   1
                Left            =   0
-               TabIndex        =   11
+               TabIndex        =   10
                Tag             =   "pref"
                ToolTipText     =   "Définir le séparateur par une valeur hexa (utile en cas de séparateur non écrivable au clavier)"
                Top             =   360
@@ -94,7 +94,7 @@ Begin VB.Form frmAdvancedConversion
                Height          =   195
                Index           =   0
                Left            =   0
-               TabIndex        =   9
+               TabIndex        =   8
                Tag             =   "pref"
                ToolTipText     =   "Définir le sépareteur par une string"
                Top             =   0
@@ -107,7 +107,7 @@ Begin VB.Form frmAdvancedConversion
          BorderStyle     =   0  'None
          Height          =   285
          Left            =   2880
-         TabIndex        =   7
+         TabIndex        =   6
          Tag             =   "pref"
          Text            =   "2"
          ToolTipText     =   "Taille des paquets"
@@ -120,7 +120,7 @@ Begin VB.Form frmAdvancedConversion
          Enabled         =   0   'False
          Height          =   285
          Left            =   3120
-         TabIndex        =   5
+         TabIndex        =   4
          Tag             =   "pref"
          ToolTipText     =   "Base personnelle"
          Top             =   480
@@ -130,7 +130,7 @@ Begin VB.Form frmAdvancedConversion
          Caption         =   "Utiliser un séparateur"
          Height          =   255
          Left            =   120
-         TabIndex        =   8
+         TabIndex        =   7
          Tag             =   "pref"
          ToolTipText     =   "Utiliser un séparateur entre les paquets"
          Top             =   1320
@@ -140,7 +140,7 @@ Begin VB.Form frmAdvancedConversion
          Caption         =   "Utiliser une taille de paquet fixe"
          Height          =   255
          Left            =   120
-         TabIndex        =   6
+         TabIndex        =   5
          Tag             =   "pref"
          ToolTipText     =   "Utiliser une taille de paquets fixes"
          Top             =   960
@@ -151,7 +151,7 @@ Begin VB.Form frmAdvancedConversion
          Caption         =   "Fermer"
          Height          =   375
          Left            =   5880
-         TabIndex        =   14
+         TabIndex        =   13
          ToolTipText     =   "Fermer cette fenêtre"
          Top             =   120
          Width           =   1455
@@ -171,7 +171,7 @@ Begin VB.Form frmAdvancedConversion
          Enabled         =   0   'False
          Height          =   285
          Left            =   3120
-         TabIndex        =   3
+         TabIndex        =   2
          Tag             =   "pref"
          ToolTipText     =   "Base personnelle"
          Top             =   60
@@ -183,7 +183,7 @@ Begin VB.Form frmAdvancedConversion
          Left            =   1200
          List            =   "frmAdvancedConversion.frx":05A0
          Style           =   2  'Dropdown List
-         TabIndex        =   4
+         TabIndex        =   3
          Tag             =   "pref lang_ok"
          ToolTipText     =   "Base d'arrivée"
          Top             =   420
@@ -195,7 +195,7 @@ Begin VB.Form frmAdvancedConversion
          Left            =   1200
          List            =   "frmAdvancedConversion.frx":05F6
          Style           =   2  'Dropdown List
-         TabIndex        =   2
+         TabIndex        =   1
          Tag             =   "pref lang_ok"
          ToolTipText     =   "Base de départ"
          Top             =   60
@@ -206,7 +206,7 @@ Begin VB.Form frmAdvancedConversion
          Height          =   255
          Index           =   1
          Left            =   720
-         TabIndex        =   21
+         TabIndex        =   20
          Top             =   480
          Width           =   495
       End
@@ -215,7 +215,7 @@ Begin VB.Form frmAdvancedConversion
          Height          =   255
          Index           =   0
          Left            =   120
-         TabIndex        =   20
+         TabIndex        =   19
          Top             =   120
          Width           =   975
       End
@@ -224,7 +224,7 @@ Begin VB.Form frmAdvancedConversion
       Caption         =   "Sortie"
       Height          =   2535
       Left            =   120
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   4560
       Width           =   7695
       Begin VB.PictureBox Picture2 
@@ -233,7 +233,7 @@ Begin VB.Form frmAdvancedConversion
          Left            =   120
          ScaleHeight     =   2055
          ScaleWidth      =   7455
-         TabIndex        =   18
+         TabIndex        =   17
          TabStop         =   0   'False
          Top             =   240
          Width           =   7455
@@ -251,7 +251,7 @@ Begin VB.Form frmAdvancedConversion
             Left            =   240
             MultiLine       =   -1  'True
             ScrollBars      =   2  'Vertical
-            TabIndex        =   13
+            TabIndex        =   12
             Top             =   120
             Width           =   6015
          End
@@ -261,7 +261,7 @@ Begin VB.Form frmAdvancedConversion
       Caption         =   "Entrée"
       Height          =   2295
       Left            =   120
-      TabIndex        =   15
+      TabIndex        =   14
       Top             =   120
       Width           =   7695
       Begin VB.PictureBox Picture1 
@@ -270,7 +270,7 @@ Begin VB.Form frmAdvancedConversion
          Left            =   120
          ScaleHeight     =   1815
          ScaleWidth      =   7455
-         TabIndex        =   16
+         TabIndex        =   15
          TabStop         =   0   'False
          Top             =   240
          Width           =   7455
@@ -288,7 +288,7 @@ Begin VB.Form frmAdvancedConversion
             Left            =   0
             MultiLine       =   -1  'True
             ScrollBars      =   2  'Vertical
-            TabIndex        =   1
+            TabIndex        =   23
             Top             =   0
             Width           =   6015
          End

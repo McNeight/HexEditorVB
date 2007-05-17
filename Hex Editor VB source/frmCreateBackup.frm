@@ -4,7 +4,7 @@ Begin VB.Form frmCreateBackup
    BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Attention"
-   ClientHeight    =   1815
+   ClientHeight    =   1785
    ClientLeft      =   45
    ClientTop       =   360
    ClientWidth     =   4680
@@ -22,25 +22,36 @@ Begin VB.Form frmCreateBackup
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   1815
+   ScaleHeight     =   1785
    ScaleWidth      =   4680
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.Frame Frame1 
-      Caption         =   "Avancement du backup"
+   Begin vkUserContolsXP.vkFrame Frame1 
       Height          =   735
       Left            =   120
       TabIndex        =   3
       Top             =   1920
       Width           =   4455
+      _ExtentX        =   7858
+      _ExtentY        =   1296
+      Caption         =   "Avancement du backup"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Begin vkUserContolsXP.vkBar pgrBar1 
-         Height          =   375
+         Height          =   255
          Left            =   120
          TabIndex        =   4
-         Top             =   240
+         Top             =   360
          Width           =   4215
          _ExtentX        =   7435
-         _ExtentY        =   661
+         _ExtentY        =   450
          Value           =   1
          BackPicture     =   "frmCreateBackup.frx":000C
          FrontPicture    =   "frmCreateBackup.frx":0028

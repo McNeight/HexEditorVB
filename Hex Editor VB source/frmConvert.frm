@@ -248,13 +248,13 @@ Private Sub chkPlan_Click()
     If chkPlan.Value = 1 Then Call SetFormForeBackGround(Me, SetFormForeGround) Else Call SetFormForeBackGround(Me, SetFormBackGround)
 End Sub
 
-Private Sub cmdQuitter_Click()
-    Unload Me
-End Sub
-
-Private Sub Form_Activate()
+Private Sub chkPlan_Change(Value As CheckBoxConstants)
     If chkPlan.Value Then Call SetFormForeBackGround(Me, SetFormForeGround) Else _
         Call SetFormForeBackGround(Me, SetFormBackGround)
+End Sub
+
+Private Sub cmdQuitter_Click()
+    Unload Me
 End Sub
 
 '=======================================================

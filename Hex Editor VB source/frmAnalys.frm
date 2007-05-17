@@ -5,10 +5,10 @@ Begin VB.Form frmAnalys
    BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Statistiques"
-   ClientHeight    =   7935
+   ClientHeight    =   8235
    ClientLeft      =   45
    ClientTop       =   360
-   ClientWidth     =   10185
+   ClientWidth     =   10320
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -22,231 +22,232 @@ Begin VB.Form frmAnalys
    Icon            =   "frmAnalys.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   7935
-   ScaleWidth      =   10185
+   ScaleHeight     =   8235
+   ScaleWidth      =   10320
    StartUpPosition =   2  'CenterScreen
-   Begin VB.Frame Frame1 
-      Caption         =   "Fichier"
-      Height          =   1335
-      Left            =   50
-      TabIndex        =   0
-      Top             =   0
+   Begin vkUserContolsXP.vkFrame vkFrame2 
+      Height          =   5895
+      Left            =   120
+      TabIndex        =   13
+      Top             =   1680
       Width           =   10095
-      Begin VB.PictureBox Picture2 
-         BorderStyle     =   0  'None
-         Height          =   975
+      _ExtentX        =   17806
+      _ExtentY        =   10398
+      Caption         =   "Occurences"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin VB.CommandButton cmdAnalyse 
+         Caption         =   "Analyser"
+         Height          =   375
+         Left            =   4560
+         TabIndex        =   16
+         ToolTipText     =   "Lance l'analyse"
+         Top             =   5400
+         Width           =   975
+      End
+      Begin BGraphe_OCX.BGraphe BG 
+         Height          =   4935
          Left            =   120
-         ScaleHeight     =   975
-         ScaleWidth      =   9855
-         TabIndex        =   7
-         TabStop         =   0   'False
-         Top             =   240
+         TabIndex        =   15
+         ToolTipText     =   "Occurences de distribution des bytes"
+         Top             =   360
          Width           =   9855
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   285
-            Index           =   7
-            Left            =   6360
-            Locked          =   -1  'True
-            TabIndex        =   16
-            Text            =   "Fichier=[path]"
-            Top             =   0
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   285
-            Index           =   6
-            Left            =   3120
-            Locked          =   -1  'True
-            TabIndex        =   15
-            Text            =   "Fichier=[path]"
-            Top             =   720
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   285
-            Index           =   5
-            Left            =   3120
-            Locked          =   -1  'True
-            TabIndex        =   14
-            Text            =   "Fichier=[path]"
-            Top             =   480
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   285
-            Index           =   4
-            Left            =   3120
-            Locked          =   -1  'True
-            TabIndex        =   13
-            Text            =   "Fichier=[path]"
-            Top             =   240
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   285
-            Index           =   3
-            Left            =   3120
-            Locked          =   -1  'True
-            TabIndex        =   12
-            Text            =   "Fichier=[path]"
-            Top             =   0
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   285
-            Index           =   2
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   11
-            Text            =   "Fichier=[path]"
-            Top             =   720
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   285
-            Index           =   1
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   10
-            Text            =   "Fichier=[path]"
-            Top             =   480
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   285
-            Index           =   0
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   9
-            Text            =   "Fichier=[path]"
-            Top             =   240
-            Width           =   2895
-         End
-         Begin VB.TextBox txtFile 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   8
-            Text            =   "Fichier=[path]"
-            Top             =   0
-            Width           =   2895
-         End
+         _ExtentX        =   17383
+         _ExtentY        =   8705
+         BarreColor1     =   0
+         BarreColor2     =   16711680
+      End
+      Begin vkUserContolsXP.vkBar PGB 
+         Height          =   375
+         Left            =   120
+         TabIndex        =   14
+         Top             =   5400
+         Width           =   4215
+         _ExtentX        =   7435
+         _ExtentY        =   661
+         Value           =   1
+         BackPicture     =   "frmAnalys.frx":058A
+         FrontPicture    =   "frmAnalys.frx":05A6
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.Label Label1 
+         Alignment       =   1  'Right Justify
+         BackStyle       =   0  'Transparent
+         Caption         =   "Byte [65] = [A] : 45845"
+         Height          =   255
+         Left            =   5880
+         TabIndex        =   17
+         Top             =   5520
+         Width           =   3855
+      End
+   End
+   Begin vkUserContolsXP.vkFrame vkFrame1 
+      Height          =   1455
+      Left            =   120
+      TabIndex        =   3
+      Top             =   120
+      Width           =   10095
+      _ExtentX        =   17806
+      _ExtentY        =   2566
+      BackColor2      =   16777215
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin VB.TextBox txtFile 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Left            =   240
+         Locked          =   -1  'True
+         TabIndex        =   12
+         Text            =   "Fichier=[path]"
+         Top             =   360
+         Width           =   2895
+      End
+      Begin VB.TextBox TextBox 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Index           =   0
+         Left            =   240
+         Locked          =   -1  'True
+         TabIndex        =   11
+         Text            =   "Fichier=[path]"
+         Top             =   600
+         Width           =   2895
+      End
+      Begin VB.TextBox TextBox 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Index           =   1
+         Left            =   240
+         Locked          =   -1  'True
+         TabIndex        =   10
+         Text            =   "Fichier=[path]"
+         Top             =   840
+         Width           =   2895
+      End
+      Begin VB.TextBox TextBox 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Index           =   2
+         Left            =   240
+         Locked          =   -1  'True
+         TabIndex        =   9
+         Text            =   "Fichier=[path]"
+         Top             =   1080
+         Width           =   2895
+      End
+      Begin VB.TextBox TextBox 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Index           =   3
+         Left            =   3360
+         Locked          =   -1  'True
+         TabIndex        =   8
+         Text            =   "Fichier=[path]"
+         Top             =   360
+         Width           =   2895
+      End
+      Begin VB.TextBox TextBox 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Index           =   4
+         Left            =   3360
+         Locked          =   -1  'True
+         TabIndex        =   7
+         Text            =   "Fichier=[path]"
+         Top             =   600
+         Width           =   2895
+      End
+      Begin VB.TextBox TextBox 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Index           =   5
+         Left            =   3360
+         Locked          =   -1  'True
+         TabIndex        =   6
+         Text            =   "Fichier=[path]"
+         Top             =   840
+         Width           =   2895
+      End
+      Begin VB.TextBox TextBox 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Index           =   6
+         Left            =   3360
+         Locked          =   -1  'True
+         TabIndex        =   5
+         Text            =   "Fichier=[path]"
+         Top             =   1080
+         Width           =   2895
+      End
+      Begin VB.TextBox TextBox 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   285
+         Index           =   7
+         Left            =   6600
+         Locked          =   -1  'True
+         TabIndex        =   4
+         Text            =   "Fichier=[path]"
+         Top             =   360
+         Width           =   2895
       End
    End
    Begin VB.CommandButton cmdSaveStats 
       Caption         =   "Sauvegarder statistiques..."
       Height          =   495
       Left            =   1245
-      TabIndex        =   2
+      TabIndex        =   0
       ToolTipText     =   "Sauvegarder les statistiques au format texte"
-      Top             =   7320
+      Top             =   7680
       Width           =   2655
    End
    Begin VB.CommandButton cmdSaveBMP 
       Caption         =   "Sauvegarder BMP..."
       Height          =   495
       Left            =   4680
-      TabIndex        =   3
+      TabIndex        =   1
       ToolTipText     =   "Sauvegarder la bitmap des occurences"
-      Top             =   7320
+      Top             =   7680
       Width           =   1935
    End
    Begin VB.CommandButton cmdQuitter 
       Caption         =   "Quitter"
       Height          =   495
       Left            =   7365
-      TabIndex        =   4
+      TabIndex        =   2
       ToolTipText     =   "Quitter cette fenêtre"
-      Top             =   7320
+      Top             =   7680
       Width           =   1575
-   End
-   Begin VB.Frame Frame2 
-      Caption         =   "Occurences"
-      Height          =   5895
-      Left            =   50
-      TabIndex        =   5
-      Top             =   1320
-      Width           =   10095
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   5535
-         Left            =   120
-         ScaleHeight     =   5535
-         ScaleWidth      =   9855
-         TabIndex        =   6
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   9855
-         Begin vkUserContolsXP.vkBar PGB 
-            Height          =   375
-            Left            =   120
-            TabIndex        =   19
-            Top             =   5160
-            Width           =   4215
-            _ExtentX        =   7435
-            _ExtentY        =   661
-            Value           =   1
-            BackPicture     =   "frmAnalys.frx":058A
-            FrontPicture    =   "frmAnalys.frx":05A6
-            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-         End
-         Begin BGraphe_OCX.BGraphe BG 
-            Height          =   5055
-            Left            =   0
-            TabIndex        =   18
-            ToolTipText     =   "Occurences de distribution des bytes"
-            Top             =   0
-            Width           =   9855
-            _ExtentX        =   17383
-            _ExtentY        =   8916
-            BarreColor1     =   0
-            BarreColor2     =   16711680
-         End
-         Begin VB.CommandButton cmdAnalyse 
-            Caption         =   "Analyser"
-            Height          =   375
-            Left            =   4560
-            TabIndex        =   1
-            ToolTipText     =   "Lance l'analyse"
-            Top             =   5160
-            Width           =   975
-         End
-         Begin VB.Label Label1 
-            Alignment       =   1  'Right Justify
-            Caption         =   "Byte [65] = [A] : 45845"
-            Height          =   255
-            Left            =   5880
-            TabIndex        =   17
-            Top             =   5280
-            Width           =   3855
-         End
-      End
    End
 End
 Attribute VB_Name = "frmAnalys"
