@@ -1255,7 +1255,7 @@ Dim x As Long
 Dim Y As Long
 
     If bStillOkForRefresh = True Then Exit Sub  'contrôle pas encore chargé
-    
+        
     UserControl.Picture = LoadPicture() 'efface le contenu du controle (pas correct avec Cls)
     
     'alors on efface les anciennes sélections
@@ -1272,6 +1272,7 @@ Dim Y As Long
     
     'sauvegarde la maskpicture
     UserControl.MaskPicture = UserControl.Image
+
 End Sub
 
 '=======================================================
