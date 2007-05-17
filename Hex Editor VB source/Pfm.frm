@@ -26,6 +26,53 @@ Begin VB.Form Pfm
    ScaleHeight     =   8115
    ScaleWidth      =   7635
    Visible         =   0   'False
+   Begin ComctlLib.StatusBar Sb 
+      Align           =   2  'Align Bottom
+      Height          =   255
+      Left            =   0
+      TabIndex        =   0
+      Top             =   7860
+      Width           =   7635
+      _ExtentX        =   13467
+      _ExtentY        =   450
+      SimpleText      =   ""
+      _Version        =   327682
+      BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
+         NumPanels       =   4
+         BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   4410
+            MinWidth        =   4410
+            Text            =   "Fichier=[Modifié]"
+            TextSave        =   "Fichier=[Modifié]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+         BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   4410
+            MinWidth        =   4410
+            Text            =   "Page=[0/0]"
+            TextSave        =   "Page=[0/0]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+         BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   3175
+            MinWidth        =   3175
+            Text            =   "Offset=[0]"
+            TextSave        =   "Offset=[0]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+         BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   5292
+            MinWidth        =   5292
+            Text            =   "Sélection=[0 Bytes]"
+            TextSave        =   "Sélection=[0 Bytes]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+      EndProperty
+   End
    Begin vkUserContolsXP.vkVScroll VS 
       Height          =   2895
       Left            =   2880
@@ -303,53 +350,6 @@ Begin VB.Form Pfm
       Top             =   4320
       Visible         =   0   'False
       Width           =   615
-   End
-   Begin ComctlLib.StatusBar Sb 
-      Align           =   2  'Align Bottom
-      Height          =   255
-      Left            =   0
-      TabIndex        =   0
-      Top             =   7860
-      Width           =   7635
-      _ExtentX        =   13467
-      _ExtentY        =   450
-      SimpleText      =   ""
-      _Version        =   327682
-      BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
-         NumPanels       =   4
-         BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   4410
-            MinWidth        =   4410
-            Text            =   "Fichier=[Modifié]"
-            TextSave        =   "Fichier=[Modifié]"
-            Key             =   ""
-            Object.Tag             =   ""
-         EndProperty
-         BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   4410
-            MinWidth        =   4410
-            Text            =   "Page=[0/0]"
-            TextSave        =   "Page=[0/0]"
-            Key             =   ""
-            Object.Tag             =   ""
-         EndProperty
-         BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   3175
-            MinWidth        =   3175
-            Text            =   "Offset=[0]"
-            TextSave        =   "Offset=[0]"
-            Key             =   ""
-            Object.Tag             =   ""
-         EndProperty
-         BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   5292
-            MinWidth        =   5292
-            Text            =   "Sélection=[0 Bytes]"
-            TextSave        =   "Sélection=[0 Bytes]"
-            Key             =   ""
-            Object.Tag             =   ""
-         EndProperty
-      EndProperty
    End
    Begin HexViewer_OCX.HexViewer HW 
       Height          =   2535
