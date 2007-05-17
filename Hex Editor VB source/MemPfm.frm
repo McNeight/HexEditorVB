@@ -992,8 +992,8 @@ Dim si As SYSTEM_INFO
     lMinAdrr = si.lpMinimumApplicationAddress
     lMaxAdrr = si.lpMaximumApplicationAddress
     
-    VS.Min = By16(lBA(1) / 16)  'adresse min de lecture
     VS.Max = By16((lBA(1) + lRS(1)) / 16) 'adresse max de lecture
+    VS.Min = By16(lBA(1) / 16)  'adresse min de lecture
     VS.Value = By16(lBA(1) / 16)
     
     VS.SmallChange = 1

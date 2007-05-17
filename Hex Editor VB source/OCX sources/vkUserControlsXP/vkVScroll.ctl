@@ -649,7 +649,7 @@ End Function
 'change la valeur Value
 '=======================================================
 Private Sub ChangeValues()
-
+    
     If lValue > lMax Then lValue = lMax
     If lValue < lMin Then lValue = lMin
         
