@@ -1,5 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmDiskInfos 
    BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
@@ -20,309 +21,304 @@ Begin VB.Form frmDiskInfos
    HelpContextID   =   35
    Icon            =   "frmDiskInfos.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   6345
    ScaleWidth      =   9720
    StartUpPosition =   2  'CenterScreen
-   Begin VB.Frame Frame1 
-      Caption         =   "Partitions logiques accessibles"
+   Begin vkUserContolsXP.vkFrame vkFrame2 
       Height          =   3015
-      Index           =   1
-      Left            =   120
-      TabIndex        =   4
-      Top             =   3240
-      Width           =   9495
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   2655
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   2655
-         ScaleWidth      =   9255
-         TabIndex        =   5
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   9255
-         Begin ComctlLib.ListView LV2 
-            Height          =   2535
-            Left            =   0
-            TabIndex        =   1
-            Top             =   120
-            Width           =   9255
-            _ExtentX        =   16325
-            _ExtentY        =   4471
-            View            =   3
-            LabelEdit       =   1
-            LabelWrap       =   -1  'True
-            HideSelection   =   -1  'True
-            _Version        =   327682
-            ForeColor       =   -2147483640
-            BackColor       =   -2147483643
-            Appearance      =   0
-            NumItems        =   23
-            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Nom"
-               Object.Width           =   1764
-            EndProperty
-            BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   1
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Taille"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   2
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Taille physique"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(4) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   3
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Espace utilisé"
-               Object.Width           =   1764
-            EndProperty
-            BeginProperty ColumnHeader(5) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   4
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Espace llibre"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(6) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   5
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "% libre"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(7) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   6
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Taille cluster"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(8) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   7
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Clusters utilisés"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(9) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   8
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Clusters libres"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(10) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   9
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Clusters"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(11) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   10
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Secteurs cachés"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(12) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   11
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Secteurs logiques"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(13) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   12
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Secteurs physiques"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(14) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   13
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Type"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(15) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   14
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Numéro de série"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(16) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   15
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Octets par secteur"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(17) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   16
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Secteurs par cluster"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(18) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   17
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Cylindres"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(19) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   18
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Pistes par cylindre"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(20) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   19
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Secteurs par piste"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(21) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   20
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Offset de départ"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(22) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   21
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Format de fichier"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(23) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   22
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Type de lecteur"
-               Object.Width           =   2540
-            EndProperty
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Disques physiques accessibles"
-      Height          =   3015
-      Index           =   0
       Left            =   120
       TabIndex        =   2
+      Top             =   3240
+      Width           =   9495
+      _ExtentX        =   16748
+      _ExtentY        =   5318
+      Caption         =   "Partition logiques accessibles"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin ComctlLib.ListView LV2 
+         Height          =   2535
+         Left            =   120
+         TabIndex        =   3
+         Top             =   360
+         Width           =   9255
+         _ExtentX        =   16325
+         _ExtentY        =   4471
+         View            =   3
+         LabelEdit       =   1
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         _Version        =   327682
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         Appearance      =   0
+         NumItems        =   23
+         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Nom"
+            Object.Width           =   1764
+         EndProperty
+         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   1
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Taille"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   2
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Taille physique"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(4) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   3
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Espace utilisé"
+            Object.Width           =   1764
+         EndProperty
+         BeginProperty ColumnHeader(5) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   4
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Espace llibre"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(6) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   5
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "% libre"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(7) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   6
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Taille cluster"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(8) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   7
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Clusters utilisés"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(9) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   8
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Clusters libres"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(10) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   9
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Clusters"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(11) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   10
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Secteurs cachés"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(12) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   11
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Secteurs logiques"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(13) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   12
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Secteurs physiques"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(14) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   13
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Type"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(15) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   14
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Numéro de série"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(16) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   15
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Octets par secteur"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(17) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   16
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Secteurs par cluster"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(18) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   17
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Cylindres"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(19) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   18
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Pistes par cylindre"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(20) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   19
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Secteurs par piste"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(21) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   20
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Offset de départ"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(22) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   21
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Format de fichier"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(23) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   22
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Type de lecteur"
+            Object.Width           =   2540
+         EndProperty
+      End
+   End
+   Begin vkUserContolsXP.vkFrame vkFrame1 
+      Height          =   3015
+      Left            =   120
+      TabIndex        =   0
       Top             =   120
       Width           =   9495
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   2655
-         Index           =   0
+      _ExtentX        =   16748
+      _ExtentY        =   5318
+      Caption         =   "Disques physiques accessibles"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin ComctlLib.ListView LV1 
+         Height          =   2535
          Left            =   120
-         ScaleHeight     =   2655
-         ScaleWidth      =   9255
-         TabIndex        =   3
-         TabStop         =   0   'False
-         Top             =   240
+         TabIndex        =   1
+         Top             =   360
          Width           =   9255
-         Begin ComctlLib.ListView LV1 
-            Height          =   2535
-            Left            =   0
-            TabIndex        =   0
-            Top             =   120
-            Width           =   9255
-            _ExtentX        =   16325
-            _ExtentY        =   4471
-            View            =   3
-            LabelEdit       =   1
-            LabelWrap       =   -1  'True
-            HideSelection   =   -1  'True
-            _Version        =   327682
-            ForeColor       =   -2147483640
-            BackColor       =   -2147483643
-            Appearance      =   0
-            NumItems        =   9
-            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Numéro"
-               Object.Width           =   1411
-            EndProperty
-            BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   1
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Nom"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   2
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Taille"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(4) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   3
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Cylindres"
-               Object.Width           =   1764
-            EndProperty
-            BeginProperty ColumnHeader(5) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   4
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Pistes par cylindre"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(6) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   5
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Secteurs par piste"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(7) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   6
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Octets par secteur"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(8) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   7
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Type"
-               Object.Width           =   2540
-            EndProperty
-            BeginProperty ColumnHeader(9) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   8
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Secteurs physiques"
-               Object.Width           =   2540
-            EndProperty
-         End
+         _ExtentX        =   16325
+         _ExtentY        =   4471
+         View            =   3
+         LabelEdit       =   1
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         _Version        =   327682
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         Appearance      =   0
+         NumItems        =   9
+         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Numéro"
+            Object.Width           =   1411
+         EndProperty
+         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   1
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Nom"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(3) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   2
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Taille"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(4) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   3
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Cylindres"
+            Object.Width           =   1764
+         EndProperty
+         BeginProperty ColumnHeader(5) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   4
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Pistes par cylindre"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(6) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   5
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Secteurs par piste"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(7) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   6
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Octets par secteur"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(8) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   7
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Type"
+            Object.Width           =   2540
+         EndProperty
+         BeginProperty ColumnHeader(9) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   8
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Secteurs physiques"
+            Object.Width           =   2540
+         EndProperty
       End
    End
    Begin VB.Menu rmnuMenu 
