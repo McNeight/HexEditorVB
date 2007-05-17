@@ -1,6 +1,6 @@
 Type=Control
 UserControl=HexViewer.ctl
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\WINDOWS\System32\stdole2.tlb#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\WINDOWS\system32\STDOLE2.TLB#OLE Automation
 Class=ItemElement; ItemElement.cls
 Startup="(None)"
 HelpFile=""
@@ -15,7 +15,7 @@ CompatibleEXE32="..\..\..\Compatibility\HexViewer_OCX.ocx"
 VersionCompatible32="1"
 MajorVer=3
 MinorVer=1
-RevisionVer=113
+RevisionVer=115
 AutoIncrementVer=1
 ServerSupportFiles=0
 VersionComments="Composant de visualisation en base hexadécimale"
