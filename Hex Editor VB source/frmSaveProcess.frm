@@ -1,5 +1,7 @@
 VERSION 5.00
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmSaveProcess 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sauvegarder le contenu mémoire du processus"
    ClientHeight    =   4110
@@ -24,72 +26,120 @@ Begin VB.Form frmSaveProcess
    ScaleWidth      =   7590
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkCheck chkAll 
+      Height          =   375
+      Left            =   240
+      TabIndex        =   12
+      ToolTipText     =   "Enregistre toute la mémoire (/!\ 2Go sont requis)"
+      Top             =   3600
+      Width           =   3735
+      _ExtentX        =   6588
+      _ExtentY        =   661
+      BackColor       =   16777215
+      BackStyle       =   0
+      Caption         =   "Tout enregistrer (au minimum 2Go sont requis)"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin vkUserContolsXP.vkFrame vkFrame1 
+      Height          =   1695
+      Left            =   4200
+      TabIndex        =   8
+      Top             =   120
+      Width           =   3255
+      _ExtentX        =   5741
+      _ExtentY        =   2990
+      Caption         =   "Contenu de l'enregistrement"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin vkUserContolsXP.vkCheck chkOffset 
+         Height          =   255
+         Left            =   240
+         TabIndex        =   11
+         ToolTipText     =   "La sauvegarde des offsets nécessite la sauvegarde de strings formatées"
+         Top             =   1200
+         Width           =   2775
+         _ExtentX        =   4895
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Sauvegarder les offsets"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkCheck chkASCII 
+         Height          =   255
+         Left            =   240
+         TabIndex        =   10
+         ToolTipText     =   "Sauvegarder les valeurs ASCII réelles uniquement si coché seul"
+         Top             =   840
+         Width           =   2775
+         _ExtentX        =   4895
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Sauvegarder les valeurs ASCII"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkCheck chkHexa 
+         Height          =   255
+         Left            =   240
+         TabIndex        =   9
+         ToolTipText     =   "Sauvegarder les valeurs hexa"
+         Top             =   480
+         Width           =   2775
+         _ExtentX        =   4895
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Sauvegarder les valeurs hexa"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+   End
    Begin VB.ListBox lstList 
       Height          =   2985
-      Left            =   128
+      Left            =   120
       Style           =   1  'Checkbox
-      TabIndex        =   10
-      Top             =   488
-      Width           =   3855
-   End
-   Begin VB.CheckBox chkAll 
-      Caption         =   "Tout enregistrer (au minimum 2Go sont requis)"
-      Height          =   375
-      Left            =   128
-      TabIndex        =   9
-      Tag             =   "pref"
-      ToolTipText     =   "Enregistre toute la mémoire (/!\ 2Go sont requis)"
-      Top             =   3608
-      Width           =   3855
-   End
-   Begin VB.Frame Frame1 
-      Caption         =   "Contenu de l'enregistrement"
-      Height          =   1575
-      Left            =   4208
       TabIndex        =   4
-      Top             =   128
-      Width           =   3255
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   1215
-         Left            =   120
-         ScaleHeight     =   1215
-         ScaleWidth      =   3015
-         TabIndex        =   5
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   3015
-         Begin VB.CheckBox chkHexa 
-            Caption         =   "Sauvegarder les valeurs hexa"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   8
-            Tag             =   "pref"
-            ToolTipText     =   "Sauvegarder les valeurs hexa"
-            Top             =   120
-            Width           =   2895
-         End
-         Begin VB.CheckBox chkASCII 
-            Caption         =   "Sauvegarder les valeurs ASCII"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   7
-            Tag             =   "pref"
-            ToolTipText     =   "Sauvegarder les valeurs ASCII réelles uniquement si coché seul"
-            Top             =   480
-            Width           =   2895
-         End
-         Begin VB.CheckBox chkOffset 
-            Caption         =   "Sauvegarder les offsets"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   6
-            Tag             =   "pref"
-            ToolTipText     =   "La sauvegarde des offsets nécessite la sauvegarde de strings formatées"
-            Top             =   840
-            Width           =   2895
-         End
-      End
+      Top             =   480
+      Width           =   3855
    End
    Begin VB.TextBox txtPath 
       BorderStyle     =   0  'None
@@ -128,28 +178,31 @@ Begin VB.Form frmSaveProcess
       Width           =   1575
    End
    Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
       Caption         =   "Zones mémoire à enregistrer"
       Height          =   255
       Left            =   128
-      TabIndex        =   13
+      TabIndex        =   7
       Top             =   128
       Width           =   2175
    End
    Begin VB.Label Label2 
+      BackStyle       =   0  'Transparent
       Caption         =   "Chemin du fichier"
       Height          =   255
       Left            =   4208
-      TabIndex        =   12
+      TabIndex        =   6
       Top             =   2648
       Width           =   3255
    End
    Begin VB.Label lblSize 
+      BackStyle       =   0  'Transparent
       Caption         =   "Taille du fichier résultant=[0]"
       Height          =   615
-      Left            =   4208
-      TabIndex        =   11
+      Left            =   4215
+      TabIndex        =   5
       ToolTipText     =   "Taille estimée du fichier qui sera créé"
-      Top             =   1808
+      Top             =   1920
       Width           =   3255
    End
    Begin VB.Menu mnuPopUp 

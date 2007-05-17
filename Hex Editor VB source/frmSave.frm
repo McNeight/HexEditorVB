@@ -1,8 +1,10 @@
 VERSION 5.00
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmSave 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sauvegarder le fichier"
-   ClientHeight    =   2130
+   ClientHeight    =   2115
    ClientLeft      =   45
    ClientTop       =   345
    ClientWidth     =   3510
@@ -20,15 +22,37 @@ Begin VB.Form frmSave
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   2130
+   ScaleHeight     =   2115
    ScaleWidth      =   3510
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkCheck chkDoNotShowAlert 
+      Height          =   255
+      Left            =   608
+      TabIndex        =   3
+      ToolTipText     =   $"frmSave.frx":058A
+      Top             =   1680
+      Width           =   2295
+      _ExtentX        =   4048
+      _ExtentY        =   450
+      BackColor       =   16777215
+      BackStyle       =   0
+      Caption         =   "Ne plus afficher à l'avenir"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin VB.CommandButton cmdYES 
       Caption         =   "Oui"
       Height          =   495
       Left            =   248
-      TabIndex        =   2
+      TabIndex        =   1
       ToolTipText     =   "Procède à la sauvegarde et écrase le fichier"
       Top             =   1028
       Width           =   1215
@@ -37,21 +61,13 @@ Begin VB.Form frmSave
       Caption         =   "Non"
       Height          =   495
       Left            =   2048
-      TabIndex        =   1
+      TabIndex        =   0
       ToolTipText     =   "Ne procède pas à la sauvegarde"
       Top             =   1028
       Width           =   1215
    End
-   Begin VB.CheckBox chkDoNotShowAlert 
-      Caption         =   "Ne plus afficher à l'avenir"
-      Height          =   195
-      Left            =   248
-      TabIndex        =   0
-      ToolTipText     =   $"frmSave.frx":058A
-      Top             =   1748
-      Width           =   3015
-   End
    Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
       Caption         =   "Voulez vous réellement sauvegarder ? (le fichier actuel sera écrasé)"
       BeginProperty Font 
          Name            =   "Tahoma"
@@ -64,7 +80,7 @@ Begin VB.Form frmSave
       EndProperty
       Height          =   495
       Left            =   128
-      TabIndex        =   3
+      TabIndex        =   2
       Top             =   188
       Width           =   3255
    End

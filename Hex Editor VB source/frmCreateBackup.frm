@@ -1,9 +1,10 @@
 VERSION 5.00
-Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmCreateBackup 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Attention"
-   ClientHeight    =   1830
+   ClientHeight    =   1815
    ClientLeft      =   45
    ClientTop       =   360
    ClientWidth     =   4680
@@ -19,10 +20,9 @@ Begin VB.Form frmCreateBackup
    HelpContextID   =   44
    Icon            =   "frmCreateBackup.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   1830
+   ScaleHeight     =   1815
    ScaleWidth      =   4680
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
@@ -33,20 +33,26 @@ Begin VB.Form frmCreateBackup
       TabIndex        =   3
       Top             =   1920
       Width           =   4455
-      Begin ProgressBar_OCX.pgrBar pgrBar1 
+      Begin vkUserContolsXP.vkBar pgrBar1 
          Height          =   375
          Left            =   120
          TabIndex        =   4
-         TabStop         =   0   'False
          Top             =   240
          Width           =   4215
          _ExtentX        =   7435
          _ExtentY        =   661
-         BackColorTop    =   13027014
-         BackColorBottom =   15724527
          Value           =   1
          BackPicture     =   "frmCreateBackup.frx":000C
          FrontPicture    =   "frmCreateBackup.frx":0028
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
       End
    End
    Begin VB.CommandButton cmdNo 
@@ -68,6 +74,7 @@ Begin VB.Form frmCreateBackup
       Width           =   1095
    End
    Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
       Caption         =   $"frmCreateBackup.frx":0044
       Height          =   1095
       Left            =   120

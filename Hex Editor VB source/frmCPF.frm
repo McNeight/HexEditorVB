@@ -1,7 +1,8 @@
 VERSION 5.00
 Object = "{EF4A8ABF-4214-4B3F-8F82-ACF6D11FA80D}#1.0#0"; "BGraphe_OCX.ocx"
-Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmCPF 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Comparaison de fichiers"
    ClientHeight    =   6990
@@ -20,11 +21,31 @@ Begin VB.Form frmCPF
    HelpContextID   =   29
    Icon            =   "frmCPF.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   6990
    ScaleWidth      =   8250
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkBar PGB 
+      Height          =   375
+      Left            =   4800
+      TabIndex        =   23
+      Top             =   960
+      Width           =   3255
+      _ExtentX        =   5741
+      _ExtentY        =   661
+      Value           =   1
+      BackPicture     =   "frmCPF.frx":058A
+      FrontPicture    =   "frmCPF.frx":05A6
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin VB.CommandButton cmdExamineDifferences 
       Caption         =   "Examiner les différences"
       Height          =   495
@@ -233,22 +254,6 @@ Begin VB.Form frmCPF
             Width           =   495
          End
       End
-   End
-   Begin ProgressBar_OCX.pgrBar PGB 
-      Height          =   375
-      Left            =   4800
-      TabIndex        =   23
-      TabStop         =   0   'False
-      ToolTipText     =   "Progression de l'analyse"
-      Top             =   960
-      Width           =   3255
-      _ExtentX        =   5741
-      _ExtentY        =   661
-      BackColorTop    =   13027014
-      BackColorBottom =   15724527
-      Value           =   1
-      BackPicture     =   "frmCPF.frx":058A
-      FrontPicture    =   "frmCPF.frx":05A6
    End
 End
 Attribute VB_Name = "frmCPF"

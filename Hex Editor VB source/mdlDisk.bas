@@ -580,7 +580,7 @@ End Function
 Public Sub SearchStringInFile(ByVal sFile As String, ByVal lMinimalLength _
     As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin _
     As Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, _
-    ByRef tRes() As SearchResult, Optional PGB As pgrBar)
+    ByRef tRes() As SearchResult, Optional PGB As vkBar)
     
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
@@ -684,7 +684,7 @@ End Sub
 'de 1 à Ubound
 '=======================================================
 Public Sub SearchForStringFile(ByVal sFile As String, ByVal sMatch As String, _
-    ByVal bCasse As Boolean, ByRef tRes() As Currency, Optional PGB As pgrBar)
+    ByVal bCasse As Boolean, ByRef tRes() As Currency, Optional PGB As vkBar)
     
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim s As String
@@ -784,7 +784,7 @@ End Sub
 'de 1 à Ubound
 '=======================================================
 Public Sub SearchForStringDisk(ByVal sDrive As String, ByVal sMatch As String, _
-    ByVal bCasse As Boolean, ByRef tRes() As Currency, Optional PGB As pgrBar, _
+    ByVal bCasse As Boolean, ByRef tRes() As Currency, Optional PGB As vkBar, _
     Optional ByVal IsPhys As Boolean = False)
     
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
@@ -971,7 +971,7 @@ End Sub
 'efface complètement un fichier du disque dur
 '=======================================================
 Public Function ShreddFile(ByVal sFile As String, ByVal nPass As Integer, _
-    PGB As ProgressBar_OCX.pgrBar) As Boolean
+    PGB As vkBar) As Boolean
     
 Dim hFile As Long
 Dim sFile2 As String

@@ -338,7 +338,7 @@ End Sub
 'de 1 à Ubound
 '=======================================================
 Public Sub SearchForStringMemory(ByVal PID As Long, ByVal sMatch As String, _
-    ByVal bCasse As Boolean, ByRef tRes() As Currency, Optional ByVal PGB As pgrBar)
+    ByVal bCasse As Boolean, ByRef tRes() As Currency, Optional ByVal PGB As vkBar)
 'Utilisation de l'API CreateFile et ReadFileEx pour une lecture rapide
 Dim x As Long
 Dim bytAsc As Byte
@@ -447,7 +447,7 @@ End Function
 Public Sub SearchEntireStringMemory(ByVal PID As Long, ByVal lMinimalLength _
     As Long, ByVal bSigns As Boolean, ByVal bMaj As Boolean, ByVal bMin As _
     Boolean, ByVal bNumbers As Boolean, ByVal bAccent As Boolean, _
-    ByRef lngRes() As Long, ByRef strRes() As String, Optional PGB As pgrBar)
+    ByRef lngRes() As Long, ByRef strRes() As String, Optional PGB As vkBar)
     
 Dim strCtemp As String
 Dim x As Long

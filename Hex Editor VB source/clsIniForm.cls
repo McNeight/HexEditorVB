@@ -101,9 +101,11 @@ Dim Obj As Control
                     LetPref .Name & .Tag, "text", .Text, strIniFile
                 ElseIf TypeOf Obj Is CheckBox Then
                     LetPref .Name & .Tag, "value", .Value, strIniFile
-                ElseIf TypeOf Obj Is vkCheckBox Then
+                ElseIf TypeOf Obj Is vkCheck Then
                     LetPref .Name & .Tag, "value", .Value, strIniFile
                 ElseIf TypeOf Obj Is OptionButton Then
+                    LetPref .Name & .Tag, "value", .Value, strIniFile
+                ElseIf TypeOf Obj Is vkOptionButton Then
                     LetPref .Name & .Tag, "value", .Value, strIniFile
                 ElseIf TypeOf Obj Is ProgressBar Then
                     LetPref .Name & .Tag, "min", .Min, strIniFile
@@ -175,9 +177,11 @@ Dim Obj As Control
                     .Text = GetPref(.Name & .Tag, "text", strIniFile)
                 ElseIf TypeOf Obj Is CheckBox Then
                     .Value = CLng(GetPref(.Name & .Tag, "value", strIniFile))
-                ElseIf TypeOf Obj Is vkCheckBox Then
+                ElseIf TypeOf Obj Is vkCheck Then
                     .Value = CLng(GetPref(.Name & .Tag, "value", strIniFile))
                 ElseIf TypeOf Obj Is OptionButton Then
+                    .Value = CBool(GetPref(.Name & .Tag, "value", strIniFile))
+                ElseIf TypeOf Obj Is vkOptionButton Then
                     .Value = CBool(GetPref(.Name & .Tag, "value", strIniFile))
                 ElseIf TypeOf Obj Is ProgressBar Then
                     .Min = CLng(GetPref(.Name & .Tag, "min", strIniFile))

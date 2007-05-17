@@ -1,7 +1,8 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmShredd 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Effacement définitif de fichiers"
    ClientHeight    =   5100
@@ -25,11 +26,32 @@ Begin VB.Form frmShredd
    ScaleWidth      =   4860
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkBar PGB 
+      Height          =   375
+      Left            =   143
+      TabIndex        =   6
+      Top             =   4680
+      Width           =   4575
+      _ExtentX        =   8070
+      _ExtentY        =   661
+      Value           =   1
+      BackPicture     =   "frmShredd.frx":058A
+      FrontPicture    =   "frmShredd.frx":05A6
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin VB.CommandButton cmdAddFile 
       Caption         =   "Ajouter des fichiers..."
       Height          =   375
       Left            =   143
-      TabIndex        =   4
+      TabIndex        =   3
       ToolTipText     =   "Permet l'ajout de fichiers à détruire"
       Top             =   3600
       Width           =   2175
@@ -39,7 +61,7 @@ Begin VB.Form frmShredd
       Enabled         =   0   'False
       Height          =   375
       Left            =   2543
-      TabIndex        =   3
+      TabIndex        =   2
       ToolTipText     =   "Détruit les fichiers (/!\ suppression IRRECUPERABLE)"
       Top             =   3600
       Width           =   2175
@@ -48,7 +70,7 @@ Begin VB.Form frmShredd
       Caption         =   "Fermer"
       Height          =   375
       Left            =   3360
-      TabIndex        =   2
+      TabIndex        =   1
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   4200
       Width           =   1335
@@ -58,30 +80,16 @@ Begin VB.Form frmShredd
       BorderStyle     =   0  'None
       Height          =   285
       Left            =   2280
-      TabIndex        =   1
+      TabIndex        =   0
       Text            =   "3"
       ToolTipText     =   "Désigne le nombre de sanitizations qui seront effectuées"
       Top             =   4200
       Width           =   735
    End
-   Begin ProgressBar_OCX.pgrBar PGB 
-      Height          =   375
-      Left            =   120
-      TabIndex        =   0
-      Top             =   4680
-      Width           =   4695
-      _ExtentX        =   8281
-      _ExtentY        =   661
-      BackColorTop    =   13027014
-      BackColorBottom =   15724527
-      Value           =   1
-      BackPicture     =   "frmShredd.frx":058A
-      FrontPicture    =   "frmShredd.frx":05A6
-   End
    Begin ComctlLib.ListView LV 
       Height          =   3375
       Left            =   0
-      TabIndex        =   5
+      TabIndex        =   4
       Tag             =   "lang_ok"
       Top             =   0
       Width           =   4815
@@ -107,10 +115,11 @@ Begin VB.Form frmShredd
       EndProperty
    End
    Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
       Caption         =   "Nombre de sanitizations :"
       Height          =   255
       Left            =   120
-      TabIndex        =   6
+      TabIndex        =   5
       Top             =   4200
       Width           =   2055
    End

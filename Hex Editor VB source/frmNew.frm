@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmNew 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Nouveau fichier"
    ClientHeight    =   1695
@@ -69,6 +70,7 @@ Begin VB.Form frmNew
    End
    Begin VB.Label Label1 
       Alignment       =   2  'Center
+      BackStyle       =   0  'Transparent
       Caption         =   "Taille du fichier"
       Height          =   255
       Left            =   420

@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmPrint 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Impression"
    ClientHeight    =   4800

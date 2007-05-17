@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmSelect2 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sélectionner une zone"
    ClientHeight    =   1425
@@ -61,6 +62,7 @@ Begin VB.Form frmSelect2
       Width           =   1095
    End
    Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
       Caption         =   "A partir du byte"
       Height          =   255
       Index           =   0
@@ -70,6 +72,7 @@ Begin VB.Form frmSelect2
       Width           =   1215
    End
    Begin VB.Label Label1 
+      BackStyle       =   0  'Transparent
       Caption         =   "Taille de la sélection"
       Height          =   255
       Index           =   1

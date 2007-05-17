@@ -1,8 +1,9 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{67F3B6F5-143C-4724-BF0B-20B81F5D8E04}#1.0#0"; "ExtendedVScrollbar_OCX.ocx"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form MemPfm 
+   BackColor       =   &H00F9E5D9&
    Caption         =   "Ouverture d'un processus..."
    ClientHeight    =   8295
    ClientLeft      =   60
@@ -23,249 +24,31 @@ Begin VB.Form MemPfm
    MDIChild        =   -1  'True
    ScaleHeight     =   8295
    ScaleWidth      =   8730
-   Begin VB.Frame FrameInfos 
-      Caption         =   "Informations"
-      ForeColor       =   &H00FF0000&
+   Begin vkUserContolsXP.vkFrame FrameInfos 
       Height          =   6975
-      Left            =   4920
-      TabIndex        =   14
-      Top             =   360
+      Left            =   4680
+      TabIndex        =   15
+      Top             =   600
       Width           =   3135
-      Begin VB.PictureBox Picture2 
-         BorderStyle     =   0  'None
-         Height          =   2175
-         Index           =   0
-         Left            =   120
-         ScaleHeight     =   2175
-         ScaleWidth      =   2895
-         TabIndex        =   25
-         TabStop         =   0   'False
-         Top             =   720
-         Width           =   2895
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   7
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   34
-            Text            =   "Fichier=[path]"
-            Top             =   1920
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   6
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   33
-            Text            =   "Fichier=[path]"
-            Top             =   1680
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   5
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   32
-            Text            =   "Fichier=[path]"
-            Top             =   1440
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   4
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   31
-            Text            =   "Fichier=[path]"
-            Top             =   1200
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   3
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   30
-            Text            =   "Fichier=[path]"
-            Top             =   960
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   2
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   29
-            Text            =   "Fichier=[path]"
-            Top             =   720
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   1
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   28
-            Text            =   "Fichier=[path]"
-            Top             =   480
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   0
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   27
-            Text            =   "Fichier=[path]"
-            Top             =   240
-            Width           =   2895
-         End
-         Begin VB.TextBox txtFile 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   26
-            Text            =   "Fichier=[path]"
-            Top             =   0
-            Width           =   2895
-         End
-      End
-      Begin VB.PictureBox Picture2 
-         BorderStyle     =   0  'None
-         Height          =   2175
-         Index           =   1
-         Left            =   120
-         ScaleHeight     =   2175
-         ScaleWidth      =   2895
-         TabIndex        =   15
-         TabStop         =   0   'False
-         Top             =   720
-         Visible         =   0   'False
-         Width           =   2895
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   8
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   23
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   120
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   9
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   22
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   360
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   10
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   21
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   600
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   11
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   20
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   840
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   12
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   19
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   1080
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   13
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   18
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   1320
-            Width           =   2895
-         End
-         Begin VB.CommandButton cmdGoTaskMgr 
-            Caption         =   "Gestionnaire de processus..."
-            Height          =   300
-            Left            =   240
-            TabIndex        =   17
-            ToolTipText     =   "Afficher le gestionnaire de processus"
-            Top             =   1560
-            Width           =   2415
-         End
-         Begin VB.CommandButton cmdRefreshMemInfo 
-            Caption         =   "Rafraichir les infos processus"
-            Height          =   300
-            Left            =   240
-            TabIndex        =   16
-            ToolTipText     =   "Rafraichir les infos sur le processus"
-            Top             =   1845
-            Width           =   2415
-         End
-      End
+      _ExtentX        =   5530
+      _ExtentY        =   12303
+      Caption         =   "Informations"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Begin ComctlLib.ListView lstHisto 
          Height          =   1575
-         Left            =   120
-         TabIndex        =   24
+         Left            =   0
+         TabIndex        =   28
          TabStop         =   0   'False
          Tag             =   "lang_ok"
-         Top             =   4800
+         Top             =   4920
          Width           =   2895
          _ExtentX        =   5106
          _ExtentY        =   2778
@@ -292,265 +75,192 @@ Begin VB.Form MemPfm
             Object.Width           =   706
          EndProperty
       End
-      Begin VB.PictureBox pctContain_cmdMAJ 
+      Begin VB.TextBox txtFile 
+         BackColor       =   &H00FFFFFF&
          BorderStyle     =   0  'None
-         Height          =   6615
+         Height          =   2115
          Left            =   120
-         ScaleHeight     =   6615
-         ScaleWidth      =   2955
-         TabIndex        =   35
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   2950
-         Begin VB.CommandButton cmdMAJ 
-            Caption         =   "Mettre à jour"
-            Height          =   255
-            Left            =   600
-            TabIndex        =   38
-            ToolTipText     =   "Mettre à jour les informations"
-            Top             =   6240
-            Width           =   1695
-         End
-         Begin ComctlLib.ListView lstSignets 
-            Height          =   1575
-            Left            =   0
-            TabIndex        =   36
-            TabStop         =   0   'False
-            Tag             =   "lang_ok"
-            Top             =   4560
-            Visible         =   0   'False
-            Width           =   2895
-            _ExtentX        =   5106
-            _ExtentY        =   2778
-            View            =   3
-            LabelEdit       =   1
-            MultiSelect     =   -1  'True
-            LabelWrap       =   -1  'True
-            HideSelection   =   -1  'True
-            _Version        =   327682
-            ForeColor       =   -2147483640
-            BackColor       =   -2147483643
-            Appearance      =   0
-            NumItems        =   2
-            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Offset"
-               Object.Width           =   1411
-            EndProperty
-            BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   1
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Commentaire"
-               Object.Width           =   4410
-            EndProperty
-         End
-         Begin ComctlLib.TabStrip TB2 
-            Height          =   375
-            Left            =   0
-            TabIndex        =   37
-            TabStop         =   0   'False
-            Tag             =   "lang_ok"
-            Top             =   0
-            Width           =   2895
-            _ExtentX        =   5106
-            _ExtentY        =   661
-            _Version        =   327682
-            BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-               NumTabs         =   2
-               BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-                  Caption         =   "Fichier cible"
-                  Key             =   ""
-                  Object.Tag             =   ""
-                  ImageVarType    =   2
-               EndProperty
-               BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-                  Caption         =   "Processus"
-                  Key             =   ""
-                  Object.Tag             =   ""
-                  ImageVarType    =   2
-               EndProperty
-            EndProperty
-         End
-         Begin ComctlLib.TabStrip TB 
-            Height          =   375
-            Left            =   0
-            TabIndex        =   39
-            TabStop         =   0   'False
-            Tag             =   "lang_ok"
-            Top             =   4160
-            Width           =   2895
-            _ExtentX        =   5106
-            _ExtentY        =   661
-            _Version        =   327682
-            BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-               NumTabs         =   2
-               BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-                  Caption         =   "Historique"
-                  Key             =   ""
-                  Object.Tag             =   ""
-                  ImageVarType    =   2
-               EndProperty
-               BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-                  Caption         =   "Signets"
-                  Key             =   ""
-                  Object.Tag             =   ""
-                  ImageVarType    =   2
-               EndProperty
-            EndProperty
-         End
-         Begin VB.Label Label1 
-            Alignment       =   1  'Right Justify
-            Caption         =   "Statistiques"
-            ForeColor       =   &H00FF0000&
-            Height          =   255
-            Index           =   0
-            Left            =   0
-            TabIndex        =   45
-            Top             =   2640
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Pages=[pages]"
-            Height          =   255
-            Index           =   8
-            Left            =   0
-            TabIndex        =   44
-            Top             =   2880
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Sélection=[selection]"
-            Height          =   255
-            Index           =   9
-            Left            =   0
-            TabIndex        =   43
-            Top             =   3120
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Offset=[offset]"
-            Height          =   255
-            Index           =   10
-            Left            =   0
-            TabIndex        =   42
-            Top             =   3360
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Offset Maximum=[offset max]"
-            Height          =   255
-            Index           =   11
-            Left            =   0
-            TabIndex        =   41
-            Top             =   3600
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Historique=[nombre]"
-            Height          =   255
-            Index           =   12
-            Left            =   0
-            TabIndex        =   40
-            Top             =   3840
-            Width           =   2895
-         End
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
+         TabIndex        =   27
+         Text            =   "MemPfm.frx":08CA
+         Top             =   840
+         Width           =   2895
       End
-   End
-   Begin VB.Frame FrameData 
-      Caption         =   "Valeur"
-      ForeColor       =   &H00000000&
-      Height          =   1455
-      Left            =   1920
-      TabIndex        =   4
-      Top             =   4080
-      Width           =   1695
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   1095
-         Left            =   50
-         ScaleHeight     =   1095
-         ScaleWidth      =   1605
-         TabIndex        =   5
+      Begin ComctlLib.TabStrip TB2 
+         Height          =   375
+         Left            =   120
+         TabIndex        =   20
          TabStop         =   0   'False
-         Top             =   240
-         Width           =   1600
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   3
-            Left            =   960
-            TabIndex        =   9
-            Top             =   720
-            Width           =   495
-         End
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   0
-            Left            =   960
-            MaxLength       =   2
-            TabIndex        =   8
-            Top             =   0
-            Width           =   495
-         End
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   1
-            Left            =   960
-            MaxLength       =   3
-            TabIndex        =   7
-            Top             =   240
-            Width           =   495
-         End
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   2
-            Left            =   960
-            MaxLength       =   1
-            TabIndex        =   6
-            Top             =   480
-            Width           =   495
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "Octal :"
-            Height          =   255
-            Index           =   3
-            Left            =   0
-            TabIndex        =   13
-            Top             =   720
-            Width           =   855
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "Hexa :"
-            Height          =   255
-            Index           =   0
-            Left            =   0
-            TabIndex        =   12
-            Top             =   0
-            Width           =   855
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "Decimal :"
-            Height          =   255
-            Index           =   1
-            Left            =   0
-            TabIndex        =   11
-            Top             =   240
-            Width           =   855
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "ASCII :"
-            Height          =   255
-            Index           =   2
-            Left            =   0
-            TabIndex        =   10
-            Top             =   480
-            Width           =   855
-         End
+         Tag             =   "lang_ok"
+         Top             =   360
+         Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   661
+         _Version        =   327682
+         BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
+            NumTabs         =   2
+            BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+               Caption         =   "Fichier cible"
+               Key             =   ""
+               Object.Tag             =   ""
+               ImageVarType    =   2
+            EndProperty
+            BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+               Caption         =   "Processus"
+               Key             =   ""
+               Object.Tag             =   ""
+               ImageVarType    =   2
+            EndProperty
+         EndProperty
+      End
+      Begin VB.CommandButton cmdMAJ 
+         Caption         =   "Mettre à jour"
+         Height          =   255
+         Left            =   720
+         TabIndex        =   19
+         ToolTipText     =   "Mettre à jour les informations"
+         Top             =   6600
+         Width           =   1695
+      End
+      Begin ComctlLib.TabStrip TB 
+         Height          =   375
+         Left            =   120
+         TabIndex        =   18
+         TabStop         =   0   'False
+         Tag             =   "lang_ok"
+         Top             =   4515
+         Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   661
+         _Version        =   327682
+         BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
+            NumTabs         =   2
+            BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+               Caption         =   "Historique"
+               Key             =   ""
+               Object.Tag             =   ""
+               ImageVarType    =   2
+            EndProperty
+            BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+               Caption         =   "Signets"
+               Key             =   ""
+               Object.Tag             =   ""
+               ImageVarType    =   2
+            EndProperty
+         EndProperty
+      End
+      Begin ComctlLib.ListView lstSignets 
+         Height          =   1575
+         Left            =   120
+         TabIndex        =   17
+         TabStop         =   0   'False
+         Tag             =   "lang_ok"
+         Top             =   4920
+         Visible         =   0   'False
+         Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   2778
+         View            =   3
+         LabelEdit       =   1
+         MultiSelect     =   -1  'True
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         _Version        =   327682
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         Appearance      =   0
+         NumItems        =   2
+         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Offset"
+            Object.Width           =   1411
+         EndProperty
+         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   1
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Commentaire"
+            Object.Width           =   4410
+         EndProperty
+      End
+      Begin VB.TextBox txtProc 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   2115
+         Left            =   120
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
+         TabIndex        =   16
+         Text            =   "MemPfm.frx":08D9
+         Top             =   840
+         Visible         =   0   'False
+         Width           =   2895
+      End
+      Begin VB.Label Label1 
+         Alignment       =   1  'Right Justify
+         BackStyle       =   0  'Transparent
+         Caption         =   "Statistiques"
+         ForeColor       =   &H00FF0000&
+         Height          =   255
+         Index           =   0
+         Left            =   120
+         TabIndex        =   26
+         Top             =   3000
+         Width           =   2895
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Pages=[pages]"
+         Height          =   255
+         Index           =   8
+         Left            =   120
+         TabIndex        =   25
+         Top             =   3240
+         Width           =   2895
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Sélection=[selection]"
+         Height          =   255
+         Index           =   9
+         Left            =   120
+         TabIndex        =   24
+         Top             =   3480
+         Width           =   2895
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Offset=[offset]"
+         Height          =   255
+         Index           =   10
+         Left            =   120
+         TabIndex        =   23
+         Top             =   3720
+         Width           =   2895
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Offset Maximum=[offset max]"
+         Height          =   255
+         Index           =   11
+         Left            =   120
+         TabIndex        =   22
+         Top             =   3960
+         Width           =   2895
+      End
+      Begin VB.Label Label2 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Historique=[nombre]"
+         Height          =   255
+         Index           =   12
+         Left            =   120
+         TabIndex        =   21
+         Top             =   4200
+         Width           =   2895
       End
    End
    Begin VB.PictureBox pct 
@@ -560,41 +270,10 @@ Begin VB.Form MemPfm
       Left            =   3840
       ScaleHeight     =   555
       ScaleWidth      =   555
-      TabIndex        =   3
+      TabIndex        =   1
       Top             =   5880
       Visible         =   0   'False
       Width           =   615
-   End
-   Begin VB.Frame FrameIcon 
-      Caption         =   "Icones"
-      ForeColor       =   &H00000000&
-      Height          =   2895
-      Left            =   240
-      TabIndex        =   1
-      Top             =   4800
-      Width           =   1695
-      Begin ComctlLib.ListView lvIcon 
-         Height          =   2535
-         Left            =   65
-         TabIndex        =   2
-         Top             =   240
-         Width           =   1550
-         _ExtentX        =   2752
-         _ExtentY        =   4471
-         View            =   1
-         Arrange         =   2
-         LabelEdit       =   1
-         LabelWrap       =   0   'False
-         HideSelection   =   -1  'True
-         HideColumnHeaders=   -1  'True
-         _Version        =   327682
-         Icons           =   "IMG"
-         SmallIcons      =   "IMG"
-         ForeColor       =   -2147483640
-         BackColor       =   -2147483633
-         Appearance      =   0
-         NumItems        =   0
-      End
    End
    Begin ComctlLib.StatusBar Sb 
       Align           =   2  'Align Bottom
@@ -646,7 +325,7 @@ Begin VB.Form MemPfm
    Begin ComctlLib.TabStrip MemTB 
       Height          =   375
       Left            =   480
-      TabIndex        =   46
+      TabIndex        =   2
       ToolTipText     =   "Liste des plages disponibles"
       Top             =   3120
       Width           =   2175
@@ -656,7 +335,6 @@ Begin VB.Form MemPfm
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
          NumTabs         =   1
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-            Caption         =   ""
             Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
@@ -666,7 +344,7 @@ Begin VB.Form MemPfm
    Begin HexViewer_OCX.HexViewer HW 
       Height          =   2535
       Left            =   120
-      TabIndex        =   47
+      TabIndex        =   3
       Top             =   0
       Width           =   2415
       _ExtentX        =   4260
@@ -674,18 +352,161 @@ Begin VB.Form MemPfm
       strTag1         =   "0"
       strTag2         =   "0"
    End
-   Begin ExtVS.ExtendedVScrollBar VS 
+   Begin vkUserContolsXP.vkFrame FrameIcon 
+      Height          =   3015
+      Left            =   480
+      TabIndex        =   4
+      Top             =   4320
+      Width           =   1695
+      _ExtentX        =   2990
+      _ExtentY        =   5318
+      BackColor2      =   16777215
+      Caption         =   "Icones"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin ComctlLib.ListView lvIcon 
+         Height          =   2535
+         Left            =   60
+         TabIndex        =   5
+         TabStop         =   0   'False
+         Top             =   360
+         Width           =   1545
+         _ExtentX        =   2725
+         _ExtentY        =   4471
+         View            =   1
+         Arrange         =   2
+         LabelEdit       =   1
+         LabelWrap       =   0   'False
+         HideSelection   =   -1  'True
+         HideColumnHeaders=   -1  'True
+         _Version        =   327682
+         Icons           =   "IMG"
+         SmallIcons      =   "IMG"
+         ForeColor       =   -2147483640
+         BackColor       =   16777215
+         Appearance      =   0
+         NumItems        =   0
+      End
+   End
+   Begin vkUserContolsXP.vkFrame FrameData 
+      Height          =   1455
+      Left            =   2400
+      TabIndex        =   6
+      Top             =   4200
+      Width           =   1695
+      _ExtentX        =   2990
+      _ExtentY        =   2566
+      Caption         =   "Valeur"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   3
+         Left            =   1080
+         TabIndex        =   10
+         Top             =   1080
+         Width           =   495
+      End
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   0
+         Left            =   1080
+         MaxLength       =   2
+         TabIndex        =   9
+         Top             =   360
+         Width           =   495
+      End
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   1
+         Left            =   1080
+         MaxLength       =   3
+         TabIndex        =   8
+         Top             =   600
+         Width           =   495
+      End
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   2
+         Left            =   1080
+         MaxLength       =   1
+         TabIndex        =   7
+         Top             =   840
+         Width           =   495
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Octal :"
+         Height          =   255
+         Index           =   3
+         Left            =   120
+         TabIndex        =   14
+         Top             =   1080
+         Width           =   855
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Hexa :"
+         Height          =   255
+         Index           =   0
+         Left            =   120
+         TabIndex        =   13
+         Top             =   360
+         Width           =   855
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Decimal :"
+         Height          =   255
+         Index           =   1
+         Left            =   120
+         TabIndex        =   12
+         Top             =   600
+         Width           =   855
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "ASCII :"
+         Height          =   255
+         Index           =   2
+         Left            =   120
+         TabIndex        =   11
+         Top             =   840
+         Width           =   855
+      End
+   End
+   Begin vkUserContolsXP.vkVScroll VS 
       Height          =   2895
-      Left            =   3840
-      TabIndex        =   48
-      Top             =   360
+      Left            =   3360
+      TabIndex        =   29
+      Top             =   480
       Width           =   255
       _ExtentX        =   450
       _ExtentY        =   5106
-      Min             =   0
       Value           =   0
-      LargeChange     =   100
-      SmallChange     =   100
+      MouseInterval   =   1
    End
    Begin ComctlLib.ImageList IMG 
       Left            =   3240
@@ -789,8 +610,9 @@ Dim sCopyright As String
 Dim sVersion As String
 Dim lPages As Long
 Dim cF As FileSystemLibrary.File
+Dim s As String
     
-    txtFile.Text = pProcess.szImagePath
+    s = pProcess.szImagePath
     
     'récupère les infos sur le fichier
     Set cF = cFile.GetFile(pProcess.szImagePath)
@@ -806,15 +628,15 @@ Dim cF As FileSystemLibrary.File
         sDescription = IIf(sDescription = vbNullString, "--", sDescription)
         
         'affiche tout çà
-        TextBox(0).Text = Lang.GetString("_SizeIs") & CStr(.FileSize) & _
+        s = s & vbNewLine & Lang.GetString("_SizeIs") & CStr(.FileSize) & _
             " Octets  -  " & CStr(Round(.FileSize / 1024, 3)) & " Ko" & "]"
-        TextBox(1).Text = Lang.GetString("_AttrIs") & CStr(.Attributes) & "]"
-        TextBox(2).Text = Lang.GetString("_CreaIs") & .DateCreated & "]"
-        TextBox(3).Text = Lang.GetString("_AccessIs") & .DateLastAccessed & "]"
-        TextBox(4).Text = Lang.GetString("_ModifIs") & .DateLastModified & "]"
-        TextBox(5).Text = Lang.GetString("_Version") & sVersion & "]"
-        TextBox(6).Text = Lang.GetString("_DescrIs") & sDescription & "]"
-        TextBox(7).Text = "Copyright=[" & sCopyright & "]"
+        s = s & vbNewLine & Lang.GetString("_AttrIs") & CStr(.Attributes) & "]"
+        s = s & vbNewLine & Lang.GetString("_CreaIs") & .DateCreated & "]"
+        s = s & vbNewLine & Lang.GetString("_AccessIs") & .DateLastAccessed & "]"
+        s = s & vbNewLine & Lang.GetString("_ModifIs") & .DateLastModified & "]"
+        s = s & vbNewLine & Lang.GetString("_Version") & sVersion & "]"
+        s = s & vbNewLine & Lang.GetString("_DescrIs") & sDescription & "]"
+        s = s & vbNewLine & "Copyright=[" & sCopyright & "]"
        
         Label2(8).Caption = Me.Sb.Panels(2).Text
         Label2(9).Caption = Lang.GetString("_SelIs") & CStr(HW.NumberOfSelectedItems) & " bytes]"
@@ -822,6 +644,8 @@ Dim cF As FileSystemLibrary.File
         Label2(11).Caption = Lang.GetString("_MaxOff") & CStr(16 * Int(lLength / 16)) & "]"
         'Label2(12).Caption = "[" & sDescription & "]"
     End With
+    
+    txtFile.Text = s
     
     'affiche les informations concernant le processus
     Call cmdRefreshMemInfo_Click
@@ -831,17 +655,20 @@ End Sub
 Private Sub cmdRefreshMemInfo_Click()
 'refresh process info
 Dim p As ProcessItem
+Dim s As String
     
     Set p = clsProc.GetProcess(pProcess.th32ProcessID, True, False, True)   'réobtient les infos
     
     With p
-        TextBox(8).Text = "PID=[" & .th32ProcessID & "]"
-        TextBox(9).Text = Lang.GetString("_ParentProc") & .procParentProcess.szExeFile & " - " & pProcess.procParentProcess.th32ProcessID & "]"
-        TextBox(10).Text = Lang.GetString("_UsedMem") & .procMemory.WorkingSetSize & "]"
-        TextBox(11).Text = Lang.GetString("_SWAP") & .procMemory.PagefileUsage & "]"
-        TextBox(12).Text = Lang.GetString("_Prior") & PriorityFromLong(.pcPriClassBase) & "-" & .pcPriClassBase & "]"
-        TextBox(13).Text = "Threads=[" & .cntThreads & "]"
+        s = "PID=[" & .th32ProcessID & "]"
+        s = s & vbNewLine & Lang.GetString("_ParentProc") & .procParentProcess.szExeFile & " - " & pProcess.procParentProcess.th32ProcessID & "]"
+        s = s & vbNewLine & Lang.GetString("_UsedMem") & .procMemory.WorkingSetSize & "]"
+        s = s & vbNewLine & Lang.GetString("_SWAP") & .procMemory.PagefileUsage & "]"
+        s = s & vbNewLine & Lang.GetString("_Prior") & PriorityFromLong(.pcPriClassBase) & "-" & .pcPriClassBase & "]"
+        s = s & vbNewLine & "Threads=[" & .cntThreads & "]"
     End With
+    
+    txtProc.Text = s
 End Sub
 
 '=======================================================
@@ -967,13 +794,13 @@ Private Sub Form_Resize()
     
     'redimensionne/bouge le frameInfo
     With FrameInfos
-        .Top = 0
+        .Top = 10
         .Height = Me.Height - 700
         .Left = 20
-        cmdMAJ.Top = .Height - 650
-        lstHisto.Height = .Height - 5300
-        lstSignets.Height = .Height - 5300
-        Me.pctContain_cmdMAJ.Height = .Height - 350
+        cmdMAJ.Top = .Height - 330
+        lstHisto.Height = .Height - 5350
+        lstSignets.Height = .Height - 5350
+        'Me.pctContain_cmdMAJ.Height = .Height - 350
     End With
     
     'met le Grid à la taille de la fenêtre
@@ -1072,19 +899,19 @@ End Sub
 'renvoie si l'offset contient une modification
 '=======================================================
 Private Function IsOffsetModified(ByVal lOffset As Long, ByRef lPlace As Long) As Boolean
-Dim X As Long
+Dim x As Long
     
     IsOffsetModified = False
     
-    For X = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
+    For x = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
     'dans le cas où il y a eu plusieurs modifs dans le même offset
-        If ChangeListO(X) = lOffset + 1 Then
+        If ChangeListO(x) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            lPlace = X
+            lPlace = x
             IsOffsetModified = True
             Exit Function
         End If
-    Next X
+    Next x
     
 End Function
 
@@ -1092,19 +919,19 @@ End Function
 'renvoie si la case a été modifiée ou non (permet l'affichage en couleur dans HW)
 '=======================================================
 Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Long) As Boolean
-Dim X As Long
+Dim x As Long
     
     IsModified = False
     
-    For X = 2 To ChangeListDim
-        If ChangeListO(X) = lOffset + 1 Then
+    For x = 2 To ChangeListDim
+        If ChangeListO(x) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            If ChangeListC(X) = lCol Then
+            If ChangeListC(x) = lCol Then
                 IsModified = True
                 Exit Function
             End If
         End If
-    Next X
+    Next x
 End Function
 
 '=======================================================
@@ -1335,7 +1162,7 @@ ErrGestion:
     clsERREUR.AddError "MemPfm.KeyDown", True
 End Sub
 
-Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     If Button = 2 Then
         Me.PopupMenu frmContent.mnuPopupIcon
     End If
@@ -1347,7 +1174,7 @@ Dim s As String
 Dim sKey As Long
 Dim bytHex As Byte
 Dim Valu As Byte
-Dim X As Byte
+Dim x As Byte
 
     On Error GoTo ErrGestion
 
@@ -1414,7 +1241,7 @@ ErrGestion:
     clsERREUR.AddError "Pfm.KeyPress", True
 End Sub
 
-Private Sub HW_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single, Item As ItemElement)
+Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As ItemElement)
 Dim s As String
 Dim r As Long
 Dim l As Currency
@@ -1509,7 +1336,7 @@ Dim l As Currency
     
 End Sub
 
-Private Sub HW_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub HW_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     Me.Sb.Panels(4).Text = Lang.GetString("_SelIs") & _
         CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(9) = Me.Sb.Panels(4).Text
@@ -1550,7 +1377,7 @@ Private Sub lstSignets_ItemClick(ByVal Item As ComctlLib.ListItem)
     End If
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 Dim tLst As ListItem
 Dim s As String
 Dim r As Long
@@ -1558,7 +1385,7 @@ Dim r As Long
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(X, Y)
+        Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         s = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, _
             Lang.GetString("_AddCom"))
@@ -1570,7 +1397,7 @@ Dim r As Long
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(X, Y)
+        Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         
         r = MsgBox(Lang.GetString("_DelSig") & " " & tLst.Text & " ?", _
@@ -1615,7 +1442,7 @@ Dim l As Long
 
 End Sub
 
-Private Sub MemTB_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub MemTB_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 'affiche un popupmenu créé dynamiquement
 Dim l As Long
 
@@ -1644,17 +1471,17 @@ Private Sub TB2_Click()
 'change les données affichées
     If TB2.SelectedItem.Index = 1 Then
         'alors c'est le Tab qui concerne le fichier
-        Picture2(0).Visible = True
-        Picture2(1).Visible = False
+        txtFile.Visible = True
+        txtProc.Visible = False
     Else
         'alors c'est le tab qui concerne les infos sur le process
         'alors c'est le Tab qui concerne le fichier
-        Picture2(1).Visible = True
-        Picture2(0).Visible = False
+        txtProc.Visible = True
+        txtFile.Visible = False
     End If
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub
@@ -1741,7 +1568,7 @@ Dim pMenuInfo As MENUITEMINFO 'définit les info de l'item de menu ajouté
 Dim pPositionCurseur As POINTAPI 'stocke la position actuelle du curseur
 Dim lHandleMenu As Long 'stocke le handle du menu
 Dim lHandleSousMenu() As Long 'stocke les handles des sous-menus
-Dim X As Long
+Dim x As Long
 
     On Error GoTo erreur0
 
@@ -1751,31 +1578,31 @@ Dim X As Long
     Let lHandleMenu = CreatePopupMenu
     
     'insère MemTB.Tabs.Count sous-menus
-    For X = MemTB.Tabs.Count To 1 Step -1
+    For x = MemTB.Tabs.Count To 1 Step -1
         With pMenuInfo
             .cbSize = Len(pMenuInfo)
             .fType = MFT_STRING
             .fState = MFS_ENABLED
-            .dwTypeData = MemTB.Tabs.Item(X).Caption
+            .dwTypeData = MemTB.Tabs.Item(x).Caption
             .cch = Len(pMenuInfo.dwTypeData)
-            .wID = X
+            .wID = x
             .fMask = MIIM_ID Or MIIM_TYPE Or MIIM_STATE
             .hSubMenu = lHandleMenu
         End With
         Call InsertMenuItem(lHandleMenu, 0, True, pMenuInfo)
-        lHandleSousMenu(X) = CreatePopupMenu
-    Next X
+        lHandleSousMenu(x) = CreatePopupMenu
+    Next x
     
     'on affiche le menu crée
     Call GetCursorPos(pPositionCurseur)
     AfficherMenu = TrackPopupMenuEx(lHandleMenu, TPM_LEFTALIGN Or _
-        TPM_RIGHTBUTTON Or TPM_RETURNCMD, pPositionCurseur.X, _
-        pPositionCurseur.Y, Me.hWnd, ByVal 0&)
+        TPM_RIGHTBUTTON Or TPM_RETURNCMD, pPositionCurseur.x, _
+        pPositionCurseur.y, Me.hWnd, ByVal 0&)
     
     Call DestroyMenu(lHandleMenu)
-    For X = 1 To MemTB.Tabs.Count
+    For x = 1 To MemTB.Tabs.Count
         Call DestroyMenu(lHandleSousMenu(0))
-    Next X
+    Next x
 
 Exit Function
 
@@ -1797,7 +1624,7 @@ End Function
 '=======================================================
 Public Sub AddAChange(ByVal sNewByte As Long)
 Dim s As String
-Dim X As Long
+Dim x As Long
 
     'écrit le nouveau byte dans la mémoire
     Call cMem.WriteBytesH(lHandle, HW.FirstOffset + 16 * (HW.Item.Line - 1) + _
@@ -1919,9 +1746,12 @@ Public Sub RefreshHW()
     Call VS_Change(VS.Value)
 End Sub
 
-Private Sub VS_MouseAction(ByVal lngMouseAction As ExtVS.MOUSE_ACTION)
+Private Sub VS_MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
 'alors une action a été effectuée (lance le popup menu)
-    If lngMouseAction = RIGHT_CLICK Then
-        Me.PopupMenu frmContent.rmnuPos
-    End If
+    If Button = vbRightButton Then Me.PopupMenu frmContent.rmnuPos
+End Sub
+
+Private Sub VS_Scroll()
+    DoEvents     '/!\ DO NOT REMOVE !
+    Call VS_Change(VS.Value)
 End Sub

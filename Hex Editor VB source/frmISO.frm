@@ -1,7 +1,8 @@
 VERSION 5.00
-Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmISO 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Création de fichier ISO"
    ClientHeight    =   3255
@@ -26,12 +27,33 @@ Begin VB.Form frmISO
    ScaleWidth      =   4350
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkBar PGB 
+      Height          =   375
+      Left            =   120
+      TabIndex        =   7
+      Top             =   2760
+      Width           =   3135
+      _ExtentX        =   5530
+      _ExtentY        =   661
+      Value           =   1
+      BackPicture     =   "frmISO.frx":000C
+      FrontPicture    =   "frmISO.frx":0028
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin VB.CommandButton cmdGO 
       Caption         =   "GO"
       Enabled         =   0   'False
       Height          =   495
       Left            =   3608
-      TabIndex        =   7
+      TabIndex        =   6
       ToolTipText     =   "Démarre la création du fichier ISO"
       Top             =   2160
       Width           =   615
@@ -40,7 +62,7 @@ Begin VB.Form frmISO
       Caption         =   "Fichier ISO résultant"
       Height          =   615
       Left            =   128
-      TabIndex        =   3
+      TabIndex        =   2
       Top             =   2040
       Width           =   3255
       Begin VB.PictureBox Picture1 
@@ -49,14 +71,14 @@ Begin VB.Form frmISO
          Left            =   120
          ScaleHeight     =   330
          ScaleWidth      =   3015
-         TabIndex        =   4
+         TabIndex        =   3
          Top             =   240
          Width           =   3015
          Begin VB.CommandButton cmdBrowse 
             Caption         =   "..."
             Height          =   255
             Left            =   2520
-            TabIndex        =   6
+            TabIndex        =   5
             ToolTipText     =   "Sélectionne un fichier résultant"
             Top             =   0
             Width           =   375
@@ -65,7 +87,7 @@ Begin VB.Form frmISO
             BorderStyle     =   0  'None
             Height          =   285
             Left            =   0
-            TabIndex        =   5
+            TabIndex        =   4
             Tag             =   "Choix du fichier ISO résultant"
             Top             =   0
             Width           =   2295
@@ -76,7 +98,7 @@ Begin VB.Form frmISO
       Caption         =   "Fermer"
       Height          =   375
       Left            =   3368
-      TabIndex        =   2
+      TabIndex        =   1
       ToolTipText     =   "Ferme cette fenêtre"
       Top             =   2760
       Width           =   855
@@ -90,20 +112,6 @@ Begin VB.Form frmISO
       _ExtentX        =   7223
       _ExtentY        =   3201
       DisplayPhysicalDrives=   0   'False
-   End
-   Begin ProgressBar_OCX.pgrBar PGB 
-      Height          =   375
-      Left            =   128
-      TabIndex        =   1
-      Top             =   2760
-      Width           =   3135
-      _ExtentX        =   5530
-      _ExtentY        =   661
-      BackColorTop    =   13027014
-      BackColorBottom =   15724527
-      Value           =   1
-      BackPicture     =   "frmISO.frx":000C
-      FrontPicture    =   "frmISO.frx":0028
    End
 End
 Attribute VB_Name = "frmISO"
