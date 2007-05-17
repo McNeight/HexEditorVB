@@ -591,8 +591,8 @@ bNotOk = False: UserControl_Paint
 End Property
 Public Property Get Value() As Currency: Value = lValue: End Property
 Public Property Let Value(Value As Currency)
+If Value <> lValue Then RaiseEvent Change(lValue)
 lValue = Value: Call ChangeValues
-If Value <> lValue Then RaiseEvent Change(Value)
 End Property
 Public Property Get SmallChange() As Currency: SmallChange = lSmallChange: End Property
 Public Property Let SmallChange(SmallChange As Currency): lSmallChange = SmallChange: bNotOk = False: UserControl_Paint: End Property
