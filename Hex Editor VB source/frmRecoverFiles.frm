@@ -2,6 +2,7 @@ VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
 Begin VB.Form frmRecoverFiles 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Récupération de fichiers"
    ClientHeight    =   8100
@@ -25,43 +26,6 @@ Begin VB.Form frmRecoverFiles
    ScaleHeight     =   8100
    ScaleWidth      =   9795
    StartUpPosition =   2  'CenterScreen
-   Begin VB.Frame Frame1 
-      Height          =   4815
-      Index           =   2
-      Left            =   0
-      TabIndex        =   8
-      Top             =   0
-      Visible         =   0   'False
-      Width           =   6975
-      Begin VB.PictureBox Picture1 
-         Height          =   4575
-         Index           =   2
-         Left            =   120
-         ScaleHeight     =   4515
-         ScaleWidth      =   6675
-         TabIndex        =   9
-         Top             =   120
-         Width           =   6735
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   4815
-      Index           =   0
-      Left            =   120
-      TabIndex        =   5
-      Top             =   480
-      Width           =   6975
-      Begin VB.PictureBox Picture1 
-         Height          =   4575
-         Index           =   0
-         Left            =   120
-         ScaleHeight     =   4515
-         ScaleWidth      =   6675
-         TabIndex        =   6
-         Top             =   120
-         Width           =   6735
-      End
-   End
    Begin VB.Frame Frame1 
       Height          =   4815
       Index           =   1
@@ -118,6 +82,43 @@ Begin VB.Form frmRecoverFiles
                Strikethrough   =   0   'False
             EndProperty
          End
+      End
+   End
+   Begin VB.Frame Frame1 
+      Height          =   4815
+      Index           =   2
+      Left            =   0
+      TabIndex        =   8
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   6975
+      Begin VB.PictureBox Picture1 
+         Height          =   4575
+         Index           =   2
+         Left            =   120
+         ScaleHeight     =   4515
+         ScaleWidth      =   6675
+         TabIndex        =   9
+         Top             =   120
+         Width           =   6735
+      End
+   End
+   Begin VB.Frame Frame1 
+      Height          =   4815
+      Index           =   0
+      Left            =   120
+      TabIndex        =   5
+      Top             =   480
+      Width           =   6975
+      Begin VB.PictureBox Picture1 
+         Height          =   4575
+         Index           =   0
+         Left            =   120
+         ScaleHeight     =   4515
+         ScaleWidth      =   6675
+         TabIndex        =   6
+         Top             =   120
+         Width           =   6735
       End
    End
    Begin ComctlLib.TabStrip TB 

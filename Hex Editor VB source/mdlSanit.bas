@@ -39,7 +39,7 @@ Option Explicit
 '=======================================================
 'lance la sanitization des fichiers
 '=======================================================
-Public Sub SanitFilesNow(LV As ListView, PGB As pgrBar)
+Public Sub SanitFilesNow(LV As ListView, PGB As vkBar)
 Dim x As Long
 Dim s As String
 Dim hFile As Long
@@ -161,7 +161,7 @@ End Sub
 '=======================================================
 'lance la sanitization du disque physique
 '=======================================================
-Public Sub SanitPhysDiskNow(ByVal DiskNumber As Byte, PGB As pgrBar)
+Public Sub SanitPhysDiskNow(ByVal DiskNumber As Byte, PGB As vkBar)
 Dim cDisk As FileSystemLibrary.PhysicalDisk
 Dim x As Long
 Dim secPerString As Long
@@ -257,7 +257,7 @@ End Sub
 '=======================================================
 'lance la sanitization du disque logique
 '=======================================================
-Public Sub SanitDiskNow(ByVal sDisk As String, PGB As pgrBar)
+Public Sub SanitDiskNow(ByVal sDisk As String, PGB As vkBar)
 Dim cDriv As FileSystemLibrary.Drive
 Dim x As Long
 Dim secPerString As Long

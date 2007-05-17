@@ -1,6 +1,7 @@
 VERSION 5.00
 Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmDates 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Changement de dates"
    ClientHeight    =   4680
@@ -94,7 +95,7 @@ Begin VB.Form frmDates
          _ExtentY        =   529
          _Version        =   393216
          CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-         Format          =   63504387
+         Format          =   64356355
          CurrentDate     =   39133.9583333333
       End
       Begin VB.PictureBox Picture1 
@@ -160,7 +161,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63504387
+            Format          =   64356355
             CurrentDate     =   39133
          End
       End
@@ -205,7 +206,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   63504387
+            Format          =   64356355
             CurrentDate     =   39133
          End
       End

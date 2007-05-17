@@ -1,9 +1,10 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
-Object = "{67F3B6F5-143C-4724-BF0B-20B81F5D8E04}#4.0#0"; "ExtendedVScrollbar_OCX.ocx"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form diskPfm 
+   BackColor       =   &H00F9E5D9&
    Caption         =   "Ouverture d'un disque..."
    ClientHeight    =   8415
    ClientLeft      =   60
@@ -21,703 +22,10 @@ Begin VB.Form diskPfm
    HelpContextID   =   11
    Icon            =   "diskPfm.frx":0000
    LinkTopic       =   "diskPfm"
-   LockControls    =   -1  'True
    MDIChild        =   -1  'True
    ScaleHeight     =   8415
    ScaleWidth      =   10155
    Visible         =   0   'False
-   Begin VB.Frame FrameInfos 
-      Caption         =   "Informations"
-      ForeColor       =   &H00FF0000&
-      Height          =   6975
-      Left            =   3720
-      TabIndex        =   39
-      Top             =   0
-      Width           =   3135
-      Begin ComctlLib.ListView lstHisto 
-         Height          =   1575
-         Left            =   120
-         TabIndex        =   40
-         TabStop         =   0   'False
-         Tag             =   "lang_ok"
-         Top             =   4800
-         Width           =   2895
-         _ExtentX        =   5106
-         _ExtentY        =   2778
-         View            =   3
-         LabelEdit       =   1
-         LabelWrap       =   -1  'True
-         HideSelection   =   -1  'True
-         _Version        =   327682
-         ForeColor       =   -2147483640
-         BackColor       =   -2147483643
-         Appearance      =   0
-         NumItems        =   2
-         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
-            Object.Tag             =   ""
-            Text            =   "Action"
-            Object.Width           =   5644
-         EndProperty
-         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-            SubItemIndex    =   1
-            Key             =   ""
-            Object.Tag             =   ""
-            Text            =   "Rang"
-            Object.Width           =   706
-         EndProperty
-      End
-      Begin VB.PictureBox pctContain_cmdMAJ 
-         BorderStyle     =   0  'None
-         Height          =   6615
-         Left            =   120
-         ScaleHeight     =   6615
-         ScaleWidth      =   2955
-         TabIndex        =   41
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   2950
-         Begin VB.CommandButton cmdMAJ 
-            Caption         =   "Mettre à jour"
-            Height          =   255
-            Left            =   600
-            TabIndex        =   52
-            ToolTipText     =   "Mettre à jour les informations"
-            Top             =   6240
-            Width           =   1695
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   15
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   51
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   1920
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   14
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   50
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   1680
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   8
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   49
-            TabStop         =   0   'False
-            Text            =   "Taille=[taille]"
-            Top             =   240
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   9
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   48
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   480
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   10
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   47
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   720
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   11
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   46
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   960
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   12
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   45
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   1200
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   13
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   44
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   1440
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   0
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   43
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   2400
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   1
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   42
-            TabStop         =   0   'False
-            Text            =   "Fichier=[path]"
-            Top             =   2160
-            Width           =   2895
-         End
-         Begin ComctlLib.ListView lstSignets 
-            Height          =   1575
-            Left            =   0
-            TabIndex        =   53
-            TabStop         =   0   'False
-            Tag             =   "lang_ok"
-            Top             =   4560
-            Visible         =   0   'False
-            Width           =   2895
-            _ExtentX        =   5106
-            _ExtentY        =   2778
-            View            =   3
-            LabelEdit       =   1
-            MultiSelect     =   -1  'True
-            LabelWrap       =   -1  'True
-            HideSelection   =   -1  'True
-            _Version        =   327682
-            ForeColor       =   -2147483640
-            BackColor       =   -2147483643
-            Appearance      =   0
-            NumItems        =   2
-            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Offset"
-               Object.Width           =   1411
-            EndProperty
-            BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               SubItemIndex    =   1
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Commentaire"
-               Object.Width           =   4410
-            EndProperty
-         End
-         Begin ComctlLib.TabStrip TB 
-            Height          =   375
-            Left            =   0
-            TabIndex        =   54
-            TabStop         =   0   'False
-            Tag             =   "lang_ok"
-            Top             =   4160
-            Width           =   2895
-            _ExtentX        =   5106
-            _ExtentY        =   661
-            _Version        =   327682
-            BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
-               NumTabs         =   2
-               BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-                  Caption         =   "Historique"
-                  Key             =   ""
-                  Object.Tag             =   ""
-                  ImageVarType    =   2
-               EndProperty
-               BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
-                  Caption         =   "Signets"
-                  Key             =   ""
-                  Object.Tag             =   ""
-                  ImageVarType    =   2
-               EndProperty
-            EndProperty
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Historique=[nombre]"
-            Height          =   200
-            Index           =   12
-            Left            =   0
-            TabIndex        =   61
-            Top             =   3840
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Offset Maximum=[offset max]"
-            Height          =   200
-            Index           =   11
-            Left            =   0
-            TabIndex        =   60
-            Top             =   3600
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Offset=[offset]"
-            Height          =   200
-            Index           =   10
-            Left            =   0
-            TabIndex        =   59
-            Top             =   3360
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Sélection=[selection]"
-            Height          =   200
-            Index           =   9
-            Left            =   0
-            TabIndex        =   58
-            Top             =   3120
-            Width           =   2895
-         End
-         Begin VB.Label Label2 
-            Caption         =   "Pages=[pages]"
-            Height          =   200
-            Index           =   8
-            Left            =   0
-            TabIndex        =   57
-            Top             =   2880
-            Width           =   2895
-         End
-         Begin VB.Label Label1 
-            Alignment       =   1  'Right Justify
-            Caption         =   "Statistiques"
-            ForeColor       =   &H00FF0000&
-            Height          =   255
-            Index           =   0
-            Left            =   0
-            TabIndex        =   56
-            Top             =   2640
-            Width           =   2895
-         End
-         Begin VB.Label Label1 
-            Alignment       =   1  'Right Justify
-            Caption         =   "Disque"
-            ForeColor       =   &H00FF0000&
-            Height          =   255
-            Index           =   1
-            Left            =   0
-            TabIndex        =   55
-            Top             =   0
-            Width           =   2895
-         End
-      End
-   End
-   Begin VB.Frame FrameData 
-      Caption         =   "Valeur"
-      ForeColor       =   &H00000000&
-      Height          =   1455
-      Left            =   7200
-      TabIndex        =   29
-      Top             =   600
-      Width           =   1695
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   1095
-         Left            =   50
-         ScaleHeight     =   1095
-         ScaleWidth      =   1605
-         TabIndex        =   30
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   1600
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   2
-            Left            =   960
-            MaxLength       =   1
-            TabIndex        =   34
-            Top             =   480
-            Width           =   495
-         End
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   1
-            Left            =   960
-            MaxLength       =   3
-            TabIndex        =   33
-            Top             =   240
-            Width           =   495
-         End
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   0
-            Left            =   960
-            MaxLength       =   2
-            TabIndex        =   32
-            Top             =   0
-            Width           =   495
-         End
-         Begin VB.TextBox txtValue 
-            BorderStyle     =   0  'None
-            Height          =   195
-            Index           =   3
-            Left            =   960
-            TabIndex        =   31
-            Top             =   720
-            Width           =   495
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "ASCII :"
-            Height          =   255
-            Index           =   2
-            Left            =   0
-            TabIndex        =   38
-            Top             =   480
-            Width           =   855
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "Decimal :"
-            Height          =   255
-            Index           =   1
-            Left            =   0
-            TabIndex        =   37
-            Top             =   240
-            Width           =   855
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "Hexa :"
-            Height          =   255
-            Index           =   0
-            Left            =   0
-            TabIndex        =   36
-            Top             =   0
-            Width           =   855
-         End
-         Begin VB.Label lblValue 
-            Caption         =   "Octal :"
-            Height          =   255
-            Index           =   3
-            Left            =   0
-            TabIndex        =   35
-            Top             =   720
-            Width           =   855
-         End
-      End
-   End
-   Begin VB.Frame FrameInfo2 
-      Caption         =   "Informations"
-      ForeColor       =   &H00FF0000&
-      Height          =   5415
-      Left            =   7080
-      TabIndex        =   11
-      Top             =   2280
-      Width           =   2175
-      Begin VB.PictureBox Picture3 
-         BorderStyle     =   0  'None
-         Height          =   5055
-         Left            =   50
-         ScaleHeight     =   5055
-         ScaleWidth      =   2085
-         TabIndex        =   12
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   2085
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   2
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   27
-            Text            =   "Fichier=[path]"
-            Top             =   2160
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   3
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   26
-            Text            =   "Fichier=[path]"
-            Top             =   2400
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   4
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   25
-            Text            =   "Fichier=[path]"
-            Top             =   1320
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   5
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   24
-            Text            =   "Fichier=[path]"
-            Top             =   1080
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   6
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   23
-            Text            =   "Fichier=[path]"
-            Top             =   840
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   7
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   22
-            Text            =   "Fichier=[path]"
-            Top             =   480
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   16
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   21
-            Text            =   "Fichier=[path]"
-            Top             =   240
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   17
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   20
-            Text            =   "Taille=[taille]"
-            Top             =   0
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   18
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   19
-            Text            =   "Fichier=[path]"
-            Top             =   1560
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   19
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   18
-            Text            =   "Fichier=[path]"
-            Top             =   1920
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   26
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   17
-            Text            =   "Fichier=[path]"
-            Top             =   3000
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   27
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   16
-            Text            =   "Taille=[taille]"
-            Top             =   2760
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   20
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   15
-            Text            =   "Taille=[taille]"
-            Top             =   3360
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   21
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   14
-            Text            =   "Fichier=[path]"
-            Top             =   3600
-            Width           =   2895
-         End
-         Begin VB.TextBox TextBox 
-            BackColor       =   &H8000000F&
-            BorderStyle     =   0  'None
-            Height          =   200
-            Index           =   22
-            Left            =   0
-            Locked          =   -1  'True
-            TabIndex        =   13
-            Text            =   "Fichier=[path]"
-            Top             =   3840
-            Width           =   2895
-         End
-      End
-   End
-   Begin VB.Frame FrameFrag 
-      Caption         =   "Fichier"
-      ForeColor       =   &H00000000&
-      Height          =   2535
-      Left            =   2520
-      TabIndex        =   4
-      Top             =   4680
-      Width           =   2055
-      Begin VB.PictureBox Picture2 
-         BorderStyle     =   0  'None
-         Height          =   2175
-         Index           =   0
-         Left            =   120
-         ScaleHeight     =   2175
-         ScaleWidth      =   1815
-         TabIndex        =   5
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   1815
-         Begin VB.ListBox lstFrag 
-            Height          =   1620
-            ItemData        =   "diskPfm.frx":058A
-            Left            =   0
-            List            =   "diskPfm.frx":058C
-            TabIndex        =   8
-            ToolTipText     =   "Liste des fragments (numéro de cluster)"
-            Top             =   480
-            Width           =   1215
-         End
-         Begin VB.CommandButton cmdPrev 
-            Height          =   615
-            Left            =   1320
-            Picture         =   "diskPfm.frx":058E
-            Style           =   1  'Graphical
-            TabIndex        =   7
-            ToolTipText     =   "Fragment précédent"
-            Top             =   660
-            Width           =   495
-         End
-         Begin VB.CommandButton cmdNext 
-            Height          =   615
-            Left            =   1320
-            Picture         =   "diskPfm.frx":1F10
-            Style           =   1  'Graphical
-            TabIndex        =   6
-            ToolTipText     =   "Fragment suivant"
-            Top             =   1380
-            Width           =   495
-         End
-         Begin VB.Label lblFrag 
-            Caption         =   "Fragments=[0]"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   10
-            Top             =   0
-            Width           =   1815
-         End
-         Begin VB.Label Label3 
-            Caption         =   "Adresses des fragments"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   9
-            Top             =   240
-            Width           =   1815
-         End
-      End
-   End
-   Begin VB.TextBox pctPath 
-      BorderStyle     =   0  'None
-      Height          =   285
-      Left            =   720
-      TabIndex        =   1
-      TabStop         =   0   'False
-      Top             =   6600
-      Width           =   1575
-   End
    Begin ComctlLib.StatusBar Sb 
       Align           =   2  'Align Bottom
       Height          =   255
@@ -765,6 +73,705 @@ Begin VB.Form diskPfm
          EndProperty
       EndProperty
    End
+   Begin vkUserContolsXP.vkFrame FrameData 
+      Height          =   1455
+      Left            =   7320
+      TabIndex        =   53
+      Top             =   360
+      Width           =   1695
+      _ExtentX        =   2990
+      _ExtentY        =   2566
+      Caption         =   "Valeur"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   3
+         Left            =   1080
+         TabIndex        =   57
+         Top             =   1080
+         Width           =   495
+      End
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   0
+         Left            =   1080
+         MaxLength       =   2
+         TabIndex        =   56
+         Top             =   360
+         Width           =   495
+      End
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   1
+         Left            =   1080
+         MaxLength       =   3
+         TabIndex        =   55
+         Top             =   600
+         Width           =   495
+      End
+      Begin VB.TextBox txtValue 
+         BackColor       =   &H00FFFFFF&
+         BorderStyle     =   0  'None
+         Height          =   195
+         Index           =   2
+         Left            =   1080
+         MaxLength       =   1
+         TabIndex        =   54
+         Top             =   840
+         Width           =   495
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Octal :"
+         Height          =   255
+         Index           =   3
+         Left            =   120
+         TabIndex        =   61
+         Top             =   1080
+         Width           =   855
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Hexa :"
+         Height          =   255
+         Index           =   0
+         Left            =   120
+         TabIndex        =   60
+         Top             =   360
+         Width           =   855
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Decimal :"
+         Height          =   255
+         Index           =   1
+         Left            =   120
+         TabIndex        =   59
+         Top             =   600
+         Width           =   855
+      End
+      Begin VB.Label lblValue 
+         BackStyle       =   0  'Transparent
+         Caption         =   "ASCII :"
+         Height          =   255
+         Index           =   2
+         Left            =   120
+         TabIndex        =   58
+         Top             =   840
+         Width           =   855
+      End
+   End
+   Begin VB.Frame FrameInfos 
+      Caption         =   "Informations"
+      ForeColor       =   &H00FF0000&
+      Height          =   6975
+      Left            =   3720
+      TabIndex        =   28
+      Top             =   0
+      Width           =   3135
+      Begin ComctlLib.ListView lstHisto 
+         Height          =   1575
+         Left            =   120
+         TabIndex        =   29
+         TabStop         =   0   'False
+         Tag             =   "lang_ok"
+         Top             =   4800
+         Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   2778
+         View            =   3
+         LabelEdit       =   1
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         _Version        =   327682
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         Appearance      =   0
+         NumItems        =   2
+         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Action"
+            Object.Width           =   5644
+         EndProperty
+         BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            SubItemIndex    =   1
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Rang"
+            Object.Width           =   706
+         EndProperty
+      End
+      Begin VB.PictureBox pctContain_cmdMAJ 
+         BorderStyle     =   0  'None
+         Height          =   6615
+         Left            =   120
+         ScaleHeight     =   6615
+         ScaleWidth      =   2955
+         TabIndex        =   30
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   2950
+         Begin VB.CommandButton cmdMAJ 
+            Caption         =   "Mettre à jour"
+            Height          =   255
+            Left            =   600
+            TabIndex        =   41
+            ToolTipText     =   "Mettre à jour les informations"
+            Top             =   6240
+            Width           =   1695
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   15
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   40
+            TabStop         =   0   'False
+            Text            =   "Fichier=[path]"
+            Top             =   1920
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   14
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   39
+            TabStop         =   0   'False
+            Text            =   "Fichier=[path]"
+            Top             =   1680
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   8
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   38
+            TabStop         =   0   'False
+            Text            =   "Taille=[taille]"
+            Top             =   240
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   9
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   37
+            TabStop         =   0   'False
+            Text            =   "Fichier=[path]"
+            Top             =   480
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   10
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   36
+            TabStop         =   0   'False
+            Text            =   "Fichier=[path]"
+            Top             =   720
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   11
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   35
+            TabStop         =   0   'False
+            Text            =   "Fichier=[path]"
+            Top             =   960
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   12
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   34
+            TabStop         =   0   'False
+            Text            =   "Fichier=[path]"
+            Top             =   1200
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   13
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   33
+            TabStop         =   0   'False
+            Text            =   "Fichier=[path]"
+            Top             =   1440
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   0
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   32
+            TabStop         =   0   'False
+            Text            =   "Fichier=[path]"
+            Top             =   2400
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   1
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   31
+            TabStop         =   0   'False
+            Text            =   "Fichier=[path]"
+            Top             =   2160
+            Width           =   2895
+         End
+         Begin ComctlLib.ListView lstSignets 
+            Height          =   1575
+            Left            =   0
+            TabIndex        =   42
+            TabStop         =   0   'False
+            Tag             =   "lang_ok"
+            Top             =   4560
+            Visible         =   0   'False
+            Width           =   2895
+            _ExtentX        =   5106
+            _ExtentY        =   2778
+            View            =   3
+            LabelEdit       =   1
+            MultiSelect     =   -1  'True
+            LabelWrap       =   -1  'True
+            HideSelection   =   -1  'True
+            _Version        =   327682
+            ForeColor       =   -2147483640
+            BackColor       =   -2147483643
+            Appearance      =   0
+            NumItems        =   2
+            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+               Key             =   ""
+               Object.Tag             =   ""
+               Text            =   "Offset"
+               Object.Width           =   1411
+            EndProperty
+            BeginProperty ColumnHeader(2) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+               SubItemIndex    =   1
+               Key             =   ""
+               Object.Tag             =   ""
+               Text            =   "Commentaire"
+               Object.Width           =   4410
+            EndProperty
+         End
+         Begin ComctlLib.TabStrip TB 
+            Height          =   375
+            Left            =   0
+            TabIndex        =   43
+            TabStop         =   0   'False
+            Tag             =   "lang_ok"
+            Top             =   4160
+            Width           =   2895
+            _ExtentX        =   5106
+            _ExtentY        =   661
+            _Version        =   327682
+            BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
+               NumTabs         =   2
+               BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+                  Caption         =   "Historique"
+                  Key             =   ""
+                  Object.Tag             =   ""
+                  ImageVarType    =   2
+               EndProperty
+               BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+                  Caption         =   "Signets"
+                  Key             =   ""
+                  Object.Tag             =   ""
+                  ImageVarType    =   2
+               EndProperty
+            EndProperty
+         End
+         Begin VB.Label Label2 
+            Caption         =   "Historique=[nombre]"
+            Height          =   200
+            Index           =   12
+            Left            =   0
+            TabIndex        =   50
+            Top             =   3840
+            Width           =   2895
+         End
+         Begin VB.Label Label2 
+            Caption         =   "Offset Maximum=[offset max]"
+            Height          =   200
+            Index           =   11
+            Left            =   0
+            TabIndex        =   49
+            Top             =   3600
+            Width           =   2895
+         End
+         Begin VB.Label Label2 
+            Caption         =   "Offset=[offset]"
+            Height          =   200
+            Index           =   10
+            Left            =   0
+            TabIndex        =   48
+            Top             =   3360
+            Width           =   2895
+         End
+         Begin VB.Label Label2 
+            Caption         =   "Sélection=[selection]"
+            Height          =   200
+            Index           =   9
+            Left            =   0
+            TabIndex        =   47
+            Top             =   3120
+            Width           =   2895
+         End
+         Begin VB.Label Label2 
+            Caption         =   "Pages=[pages]"
+            Height          =   200
+            Index           =   8
+            Left            =   0
+            TabIndex        =   46
+            Top             =   2880
+            Width           =   2895
+         End
+         Begin VB.Label Label1 
+            Alignment       =   1  'Right Justify
+            Caption         =   "Statistiques"
+            ForeColor       =   &H00FF0000&
+            Height          =   255
+            Index           =   0
+            Left            =   0
+            TabIndex        =   45
+            Top             =   2640
+            Width           =   2895
+         End
+         Begin VB.Label Label1 
+            Alignment       =   1  'Right Justify
+            Caption         =   "Disque"
+            ForeColor       =   &H00FF0000&
+            Height          =   255
+            Index           =   1
+            Left            =   0
+            TabIndex        =   44
+            Top             =   0
+            Width           =   2895
+         End
+      End
+   End
+   Begin VB.Frame FrameInfo2 
+      Caption         =   "Informations"
+      ForeColor       =   &H00FF0000&
+      Height          =   5415
+      Left            =   7080
+      TabIndex        =   10
+      Top             =   2280
+      Width           =   2175
+      Begin VB.PictureBox Picture3 
+         BorderStyle     =   0  'None
+         Height          =   5055
+         Left            =   50
+         ScaleHeight     =   5055
+         ScaleWidth      =   2085
+         TabIndex        =   11
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   2085
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   2
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   26
+            Text            =   "Fichier=[path]"
+            Top             =   2160
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   3
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   25
+            Text            =   "Fichier=[path]"
+            Top             =   2400
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   4
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   24
+            Text            =   "Fichier=[path]"
+            Top             =   1320
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   5
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   23
+            Text            =   "Fichier=[path]"
+            Top             =   1080
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   6
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   22
+            Text            =   "Fichier=[path]"
+            Top             =   840
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   7
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   21
+            Text            =   "Fichier=[path]"
+            Top             =   480
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   16
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   20
+            Text            =   "Fichier=[path]"
+            Top             =   240
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   17
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   19
+            Text            =   "Taille=[taille]"
+            Top             =   0
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   18
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   18
+            Text            =   "Fichier=[path]"
+            Top             =   1560
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   19
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   17
+            Text            =   "Fichier=[path]"
+            Top             =   1920
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   26
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   16
+            Text            =   "Fichier=[path]"
+            Top             =   3000
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   27
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   15
+            Text            =   "Taille=[taille]"
+            Top             =   2760
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   20
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   14
+            Text            =   "Taille=[taille]"
+            Top             =   3360
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   21
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   13
+            Text            =   "Fichier=[path]"
+            Top             =   3600
+            Width           =   2895
+         End
+         Begin VB.TextBox TextBox 
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Height          =   200
+            Index           =   22
+            Left            =   0
+            Locked          =   -1  'True
+            TabIndex        =   12
+            Text            =   "Fichier=[path]"
+            Top             =   3840
+            Width           =   2895
+         End
+      End
+   End
+   Begin VB.Frame FrameFrag 
+      Caption         =   "Fichier"
+      ForeColor       =   &H00000000&
+      Height          =   2535
+      Left            =   2520
+      TabIndex        =   3
+      Top             =   4680
+      Width           =   2055
+      Begin VB.PictureBox Picture2 
+         BorderStyle     =   0  'None
+         Height          =   2175
+         Index           =   0
+         Left            =   120
+         ScaleHeight     =   2175
+         ScaleWidth      =   1815
+         TabIndex        =   4
+         TabStop         =   0   'False
+         Top             =   240
+         Width           =   1815
+         Begin VB.ListBox lstFrag 
+            Height          =   1620
+            ItemData        =   "diskPfm.frx":058A
+            Left            =   0
+            List            =   "diskPfm.frx":058C
+            TabIndex        =   7
+            ToolTipText     =   "Liste des fragments (numéro de cluster)"
+            Top             =   480
+            Width           =   1215
+         End
+         Begin VB.CommandButton cmdPrev 
+            Height          =   615
+            Left            =   1320
+            Picture         =   "diskPfm.frx":058E
+            Style           =   1  'Graphical
+            TabIndex        =   6
+            ToolTipText     =   "Fragment précédent"
+            Top             =   660
+            Width           =   495
+         End
+         Begin VB.CommandButton cmdNext 
+            Height          =   615
+            Left            =   1320
+            Picture         =   "diskPfm.frx":1F10
+            Style           =   1  'Graphical
+            TabIndex        =   5
+            ToolTipText     =   "Fragment suivant"
+            Top             =   1380
+            Width           =   495
+         End
+         Begin VB.Label lblFrag 
+            Caption         =   "Fragments=[0]"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   9
+            Top             =   0
+            Width           =   1815
+         End
+         Begin VB.Label Label3 
+            Caption         =   "Adresses des fragments"
+            Height          =   255
+            Left            =   0
+            TabIndex        =   8
+            Top             =   240
+            Width           =   1815
+         End
+      End
+   End
+   Begin VB.TextBox pctPath 
+      BorderStyle     =   0  'None
+      Height          =   285
+      Left            =   720
+      TabIndex        =   1
+      TabStop         =   0   'False
+      Top             =   6600
+      Width           =   1575
+   End
    Begin HexViewer_OCX.HexViewer HW 
       Height          =   2415
       Left            =   240
@@ -776,23 +783,10 @@ Begin VB.Form diskPfm
       strTag1         =   "0"
       strTag2         =   "0"
    End
-   Begin ExtVS.ExtendedVScrollBar VS 
-      Height          =   3615
-      Left            =   3120
-      TabIndex        =   3
-      Top             =   240
-      Width           =   255
-      _ExtentX        =   450
-      _ExtentY        =   6376
-      Min             =   0
-      Value           =   0
-      LargeChange     =   100
-      SmallChange     =   100
-   End
    Begin FileView_OCX.FileView FV 
       Height          =   1575
       Left            =   240
-      TabIndex        =   28
+      TabIndex        =   27
       Top             =   4920
       Width           =   2415
       _ExtentX        =   4260
@@ -815,7 +809,7 @@ Begin VB.Form diskPfm
    Begin FileView_OCX.FileView FV2 
       Height          =   1575
       Left            =   480
-      TabIndex        =   62
+      TabIndex        =   51
       Top             =   3000
       Width           =   2415
       _ExtentX        =   4260
@@ -834,13 +828,24 @@ Begin VB.Form diskPfm
          Strikethrough   =   0   'False
       EndProperty
    End
+   Begin vkUserContolsXP.vkVScroll VS 
+      Height          =   2895
+      Left            =   3120
+      TabIndex        =   62
+      Top             =   600
+      Width           =   255
+      _ExtentX        =   450
+      _ExtentY        =   5106
+      Value           =   0
+      MouseInterval   =   1
+   End
    Begin VB.Label lblGOTO 
       Alignment       =   2  'Center
       BackColor       =   &H8000000A&
       Caption         =   "Aller à ..."
       Height          =   255
       Left            =   240
-      TabIndex        =   63
+      TabIndex        =   52
       Top             =   7080
       Width           =   855
    End
@@ -2295,9 +2300,12 @@ Public Sub RefreshHW()
     Call VS_Change(VS.Value)
 End Sub
 
-Private Sub VS_MouseAction(ByVal lngMouseAction As ExtVS.MOUSE_ACTION)
+Private Sub VS_MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
 'alors une action a été effectuée (lance le popup menu)
-    If lngMouseAction = RIGHT_CLICK Then
-        Me.PopupMenu frmContent.rmnuPos
-    End If
+    If Button = vbRightButton Then Me.PopupMenu frmContent.rmnuPos
+End Sub
+
+Private Sub VS_Scroll()
+    DoEvents     '/!\ DO NOT REMOVE !
+    Call VS_Change(VS.Value)
 End Sub

@@ -1,8 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
-Object = "{8C07804D-9EA0-4B2A-9D0C-ADD44D83E35F}#1.0#0"; "GradientFrame.ocx"
-Object = "{09BF9278-787A-4BD6-B7D6-90E82738AB57}#5.0#0"; "vkChekbox_OCX.ocx"
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmStringSearch 
    BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
@@ -27,10 +25,31 @@ Begin VB.Form frmStringSearch
    ScaleHeight     =   6960
    ScaleWidth      =   6585
    StartUpPosition =   2  'CenterScreen
-   Begin GradientFrame.grdFrame grdFrame1 
+   Begin vkUserContolsXP.vkBar PGB 
+      Height          =   255
+      Left            =   120
+      TabIndex        =   14
+      Top             =   2520
+      Width           =   4335
+      _ExtentX        =   7646
+      _ExtentY        =   450
+      Value           =   1
+      BackPicture     =   "frmStringSearch.frx":058A
+      FrontPicture    =   "frmStringSearch.frx":05A6
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin vkUserContolsXP.vkFrame vkFrame1 
       Height          =   2295
       Left            =   120
-      TabIndex        =   6
+      TabIndex        =   5
       Top             =   120
       Width           =   4455
       _ExtentX        =   7858
@@ -45,25 +64,13 @@ Begin VB.Form frmStringSearch
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Begin VB.TextBox txtSize 
-         Alignment       =   2  'Center
-         BorderStyle     =   0  'None
-         Height          =   285
-         Left            =   3360
-         TabIndex        =   13
-         Tag             =   "pref"
-         Text            =   "5"
-         ToolTipText     =   "Taille minimale (au dessous de cette taille, les suites de caractères ne sont pas considérées comme des strings)"
-         Top             =   1920
-         Width           =   735
-      End
-      Begin vkChekbox_OCX.vkCheckBox chkAddSignet 
+      Begin vkUserContolsXP.vkCheck chkAddSignet 
          Height          =   255
          Left            =   120
-         TabIndex        =   12
+         TabIndex        =   13
          Top             =   1560
-         Width           =   3615
-         _ExtentX        =   6376
+         Width           =   3735
+         _ExtentX        =   6588
          _ExtentY        =   450
          BackColor       =   16777215
          BackStyle       =   0
@@ -78,13 +85,13 @@ Begin VB.Form frmStringSearch
             Strikethrough   =   0   'False
          EndProperty
       End
-      Begin vkChekbox_OCX.vkCheckBox chkAccent 
+      Begin vkUserContolsXP.vkCheck chkAccent 
          Height          =   255
          Left            =   120
-         TabIndex        =   11
+         TabIndex        =   12
          Top             =   1320
-         Width           =   3375
-         _ExtentX        =   5953
+         Width           =   3135
+         _ExtentX        =   5530
          _ExtentY        =   450
          BackColor       =   16777215
          BackStyle       =   0
@@ -99,13 +106,13 @@ Begin VB.Form frmStringSearch
             Strikethrough   =   0   'False
          EndProperty
       End
-      Begin vkChekbox_OCX.vkCheckBox chkSigns 
+      Begin vkUserContolsXP.vkCheck chkSigns 
          Height          =   255
          Left            =   120
-         TabIndex        =   10
+         TabIndex        =   11
          Top             =   1080
-         Width           =   2655
-         _ExtentX        =   4683
+         Width           =   3135
+         _ExtentX        =   5530
          _ExtentY        =   450
          BackColor       =   16777215
          BackStyle       =   0
@@ -120,13 +127,13 @@ Begin VB.Form frmStringSearch
             Strikethrough   =   0   'False
          EndProperty
       End
-      Begin vkChekbox_OCX.vkCheckBox chkMaj 
+      Begin vkUserContolsXP.vkCheck chkMaj 
          Height          =   255
          Left            =   120
-         TabIndex        =   9
+         TabIndex        =   10
          Top             =   840
-         Width           =   2655
-         _ExtentX        =   4683
+         Width           =   3135
+         _ExtentX        =   5530
          _ExtentY        =   450
          BackColor       =   16777215
          BackStyle       =   0
@@ -140,15 +147,14 @@ Begin VB.Form frmStringSearch
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Value           =   1
       End
-      Begin vkChekbox_OCX.vkCheckBox chkMin 
+      Begin vkUserContolsXP.vkCheck chkMin 
          Height          =   255
          Left            =   120
-         TabIndex        =   8
+         TabIndex        =   9
          Top             =   600
-         Width           =   2655
-         _ExtentX        =   4683
+         Width           =   3135
+         _ExtentX        =   5530
          _ExtentY        =   450
          BackColor       =   16777215
          BackStyle       =   0
@@ -162,15 +168,14 @@ Begin VB.Form frmStringSearch
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Value           =   1
       End
-      Begin vkChekbox_OCX.vkCheckBox chkNumb3r 
+      Begin vkUserContolsXP.vkCheck chkNumb3r 
          Height          =   255
          Left            =   120
-         TabIndex        =   7
+         TabIndex        =   8
          Top             =   360
-         Width           =   2655
-         _ExtentX        =   4683
+         Width           =   3135
+         _ExtentX        =   5530
          _ExtentY        =   450
          BackColor       =   16777215
          BackStyle       =   0
@@ -185,12 +190,24 @@ Begin VB.Form frmStringSearch
             Strikethrough   =   0   'False
          EndProperty
       End
+      Begin VB.TextBox txtSize 
+         Alignment       =   2  'Center
+         BorderStyle     =   0  'None
+         Height          =   285
+         Left            =   3360
+         TabIndex        =   6
+         Tag             =   "pref"
+         Text            =   "5"
+         ToolTipText     =   "Taille minimale (au dessous de cette taille, les suites de caractères ne sont pas considérées comme des strings)"
+         Top             =   1920
+         Width           =   735
+      End
       Begin VB.Label Label1 
          BackStyle       =   0  'Transparent
          Caption         =   "Taille minimale de la chaîne de caractères :"
          Height          =   255
          Left            =   120
-         TabIndex        =   14
+         TabIndex        =   7
          Top             =   1920
          Width           =   3135
       End
@@ -199,7 +216,7 @@ Begin VB.Form frmStringSearch
       Caption         =   "Lancer la recherche"
       Height          =   375
       Left            =   4785
-      TabIndex        =   4
+      TabIndex        =   3
       ToolTipText     =   "Lancer la recherche"
       Top             =   218
       Width           =   1575
@@ -208,7 +225,7 @@ Begin VB.Form frmStringSearch
       Caption         =   "Sauvegarder les résultats"
       Height          =   495
       Left            =   4785
-      TabIndex        =   3
+      TabIndex        =   2
       ToolTipText     =   "Sauvegarder les résultats (format texte)"
       Top             =   938
       Width           =   1575
@@ -217,31 +234,15 @@ Begin VB.Form frmStringSearch
       Caption         =   "Fermer"
       Height          =   375
       Left            =   4785
-      TabIndex        =   2
+      TabIndex        =   1
       ToolTipText     =   "Fermer cette fenêtre"
       Top             =   1778
       Width           =   1575
    End
-   Begin ProgressBar_OCX.pgrBar PGB 
-      Height          =   255
-      Left            =   105
-      TabIndex        =   0
-      TabStop         =   0   'False
-      ToolTipText     =   "Progression de la recherche"
-      Top             =   2520
-      Width           =   4335
-      _ExtentX        =   7646
-      _ExtentY        =   450
-      BackColorTop    =   13027014
-      BackColorBottom =   15724527
-      Value           =   1
-      BackPicture     =   "frmStringSearch.frx":058A
-      FrontPicture    =   "frmStringSearch.frx":05A6
-   End
    Begin ComctlLib.ListView LV 
       Height          =   3735
       Left            =   105
-      TabIndex        =   1
+      TabIndex        =   0
       TabStop         =   0   'False
       Tag             =   "lang_ok"
       Top             =   3105
@@ -277,7 +278,7 @@ Begin VB.Form frmStringSearch
       Caption         =   "Résultats de la recherche"
       Height          =   255
       Left            =   105
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   2865
       Width           =   6375
    End

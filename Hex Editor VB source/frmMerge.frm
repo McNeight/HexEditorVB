@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmMerge 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
    ClientHeight    =   7665
    ClientLeft      =   45

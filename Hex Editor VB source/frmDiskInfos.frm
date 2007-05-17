@@ -1,6 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Begin VB.Form frmDiskInfos 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Infos sur les disques"
    ClientHeight    =   6345

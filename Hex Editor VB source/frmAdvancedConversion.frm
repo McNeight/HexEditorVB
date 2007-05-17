@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmAdvancedConversion 
+   BackColor       =   &H00F9E5D9&
    Caption         =   "Conversion avancée"
    ClientHeight    =   7170
    ClientLeft      =   60
@@ -400,7 +401,6 @@ Option Explicit
 
 Private clsPref As clsIniForm
 Private Lang As New clsLang
-Private cConv As clsConvert
 
 Private Sub cbI_Click()
     txtBaseI.Enabled = (cbI.Text = Lang.GetString("_Other!"))
@@ -423,7 +423,6 @@ Private Sub Form_Load()
 
     'loading des preferences
     Set clsPref = New clsIniForm
-    Set cConv = New clsConvert
     
     With Lang
         #If MODE_DEBUG Then
@@ -507,7 +506,6 @@ Private Sub Form_Unload(Cancel As Integer)
     Call clsPref.SaveFormSettings(App.Path & "\Preferences\AdvancedConversion.ini", Me)
     
     Set clsPref = Nothing
-    Set cConv = Nothing
 End Sub
 
 Private Sub Frame1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
@@ -649,35 +647,35 @@ End Sub
 Private Function GetCv(ByVal sIn As String) As String
 Dim s2 As String
 
-    cConv.CurrentString = sIn
+    clsConv.CurrentString = sIn
     
     With Lang
         Select Case cbI.Text
             Case .GetString("_Decimal!")
-                cConv.CurrentBase = 10
+                clsConv.CurrentBase = 10
             Case .GetString("_Octal!")
-                cConv.CurrentBase = 8
+                clsConv.CurrentBase = 8
             Case .GetString("_Hexa!")
-                cConv.CurrentBase = 16
+                clsConv.CurrentBase = 16
             Case .GetString("_Binary!")
-                cConv.CurrentBase = 2
+                clsConv.CurrentBase = 2
             Case .GetString("_Other!")
-                cConv.CurrentBase = Val(txtBaseI.Text)
+                clsConv.CurrentBase = Val(txtBaseI.Text)
             Case Else
                 'ANSI ASCII
         End Select
         
         Select Case cbO.Text
             Case .GetString("_Decimal!")
-                s2 = cConv.Convert(10)
+                s2 = clsConv.Convert(10)
             Case .GetString("_Octal!")
-                s2 = cConv.Convert(8)
+                s2 = clsConv.Convert(8)
             Case .GetString("_Hexa!")
-                s2 = cConv.Convert(16)
+                s2 = clsConv.Convert(16)
             Case .GetString("_Binary!")
-                s2 = cConv.Convert(2)
+                s2 = clsConv.Convert(2)
             Case .GetString("_Other!")
-                s2 = cConv.Convert(Val(txtBaseI.Text))
+                s2 = clsConv.Convert(Val(txtBaseI.Text))
             Case Else
                 'ANSI ASCII
         End Select

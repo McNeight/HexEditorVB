@@ -1,7 +1,8 @@
 VERSION 5.00
 Object = "{EF4A8ABF-4214-4B3F-8F82-ACF6D11FA80D}#1.0#0"; "BGraphe_OCX.ocx"
-Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmAnalys 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Statistiques"
    ClientHeight    =   7935
@@ -194,21 +195,26 @@ Begin VB.Form frmAnalys
          TabStop         =   0   'False
          Top             =   240
          Width           =   9855
-         Begin ProgressBar_OCX.pgrBar PGB 
+         Begin vkUserContolsXP.vkBar PGB 
             Height          =   375
             Left            =   120
             TabIndex        =   19
-            TabStop         =   0   'False
-            ToolTipText     =   "Progression de l'analyse"
             Top             =   5160
-            Width           =   4095
-            _ExtentX        =   7223
+            Width           =   4215
+            _ExtentX        =   7435
             _ExtentY        =   661
-            BackColorTop    =   13027014
-            BackColorBottom =   15724527
             Value           =   1
             BackPicture     =   "frmAnalys.frx":058A
             FrontPicture    =   "frmAnalys.frx":05A6
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
          End
          Begin BGraphe_OCX.BGraphe BG 
             Height          =   5055

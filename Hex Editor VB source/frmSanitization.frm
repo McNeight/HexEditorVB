@@ -1,14 +1,15 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{BC0A7EAB-09F8-454A-AB7D-447C47D14F18}#1.0#0"; "ProgressBar_OCX.ocx"
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
+Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmSanitization 
+   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sanitization"
-   ClientHeight    =   3675
+   ClientHeight    =   3690
    ClientLeft      =   45
    ClientTop       =   435
-   ClientWidth     =   3720
+   ClientWidth     =   3705
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -23,119 +24,14 @@ Begin VB.Form frmSanitization
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   3675
-   ScaleWidth      =   3720
+   ScaleHeight     =   3690
+   ScaleWidth      =   3705
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.Frame Frame1 
-      Height          =   3135
-      Index           =   0
-      Left            =   113
-      TabIndex        =   6
-      Top             =   480
-      Width           =   3495
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   2895
-         Index           =   0
-         Left            =   120
-         ScaleHeight     =   2895
-         ScaleWidth      =   3255
-         TabIndex        =   7
-         Top             =   120
-         Width           =   3255
-         Begin VB.CommandButton cmdGo 
-            Caption         =   "GO"
-            Height          =   375
-            Left            =   960
-            TabIndex        =   9
-            Top             =   2520
-            Width           =   1215
-         End
-         Begin DriveView_OCX.DriveView DV 
-            Height          =   1935
-            Left            =   0
-            TabIndex        =   8
-            Top             =   120
-            Width           =   3255
-            _ExtentX        =   5741
-            _ExtentY        =   3413
-            DisplayPhysicalDrives=   0   'False
-            PhysicalDrivesString=   ""
-         End
-         Begin ProgressBar_OCX.pgrBar PGB 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   10
-            Top             =   2160
-            Width           =   3255
-            _ExtentX        =   5741
-            _ExtentY        =   450
-            BackColorTop    =   13027014
-            BackColorBottom =   15724527
-            Value           =   1
-            BackPicture     =   "frmSanitization.frx":000C
-            FrontPicture    =   "frmSanitization.frx":0028
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   3135
-      Index           =   2
-      Left            =   113
-      TabIndex        =   0
-      Top             =   480
-      Visible         =   0   'False
-      Width           =   3495
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   2895
-         Index           =   2
-         Left            =   120
-         ScaleHeight     =   2895
-         ScaleWidth      =   3255
-         TabIndex        =   1
-         Top             =   120
-         Width           =   3255
-         Begin VB.CommandButton cmdGoPhys 
-            Caption         =   "GO"
-            Height          =   375
-            Left            =   960
-            TabIndex        =   2
-            Top             =   2520
-            Width           =   1215
-         End
-         Begin DriveView_OCX.DriveView DV2 
-            Height          =   1935
-            Left            =   0
-            TabIndex        =   3
-            Top             =   120
-            Width           =   3255
-            _ExtentX        =   5741
-            _ExtentY        =   3413
-            DisplayLogicalDrives=   0   'False
-            LogicalDrivesString=   ""
-         End
-         Begin ProgressBar_OCX.pgrBar PGB3 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   4
-            Top             =   2160
-            Width           =   3255
-            _ExtentX        =   5741
-            _ExtentY        =   450
-            BackColorTop    =   13027014
-            BackColorBottom =   15724527
-            Value           =   1
-            BackPicture     =   "frmSanitization.frx":0044
-            FrontPicture    =   "frmSanitization.frx":0060
-         End
-      End
-   End
    Begin ComctlLib.TabStrip TB 
       Height          =   375
       Left            =   113
-      TabIndex        =   5
+      TabIndex        =   0
       Top             =   60
       Width           =   3495
       _ExtentX        =   6165
@@ -172,80 +68,207 @@ Begin VB.Form frmSanitization
          Strikethrough   =   0   'False
       EndProperty
    End
-   Begin VB.Frame Frame1 
+   Begin vkUserContolsXP.vkFrame Frame1 
+      Height          =   3135
+      Index           =   0
+      Left            =   120
+      TabIndex        =   5
+      Top             =   480
+      Width           =   3495
+      _ExtentX        =   6165
+      _ExtentY        =   5530
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkBar PGB 
+         Height          =   255
+         Left            =   120
+         TabIndex        =   8
+         Top             =   2280
+         Width           =   3255
+         _ExtentX        =   5741
+         _ExtentY        =   450
+         Value           =   1
+         BackPicture     =   "frmSanitization.frx":000C
+         FrontPicture    =   "frmSanitization.frx":0028
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin DriveView_OCX.DriveView DV 
+         Height          =   2055
+         Left            =   120
+         TabIndex        =   7
+         Top             =   120
+         Width           =   3255
+         _ExtentX        =   5741
+         _ExtentY        =   3625
+         DisplayPhysicalDrives=   0   'False
+         PhysicalDrivesString=   ""
+      End
+      Begin VB.CommandButton cmdGo 
+         Caption         =   "GO"
+         Height          =   375
+         Left            =   1080
+         TabIndex        =   6
+         Top             =   2640
+         Width           =   1215
+      End
+   End
+   Begin vkUserContolsXP.vkFrame Frame1 
       Height          =   3135
       Index           =   1
-      Left            =   113
-      TabIndex        =   11
+      Left            =   120
+      TabIndex        =   9
       Top             =   480
-      Visible         =   0   'False
       Width           =   3495
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   2895
-         Index           =   1
+      _ExtentX        =   6165
+      _ExtentY        =   5530
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkBar PGB2 
+         Height          =   255
          Left            =   120
-         ScaleHeight     =   2895
-         ScaleWidth      =   3285
+         TabIndex        =   13
+         Top             =   2280
+         Width           =   3255
+         _ExtentX        =   5741
+         _ExtentY        =   450
+         Value           =   1
+         BackPicture     =   "frmSanitization.frx":0044
+         FrontPicture    =   "frmSanitization.frx":0060
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.CommandButton cmdGo2 
+         Caption         =   "GO"
+         Enabled         =   0   'False
+         Height          =   375
+         Left            =   2520
          TabIndex        =   12
+         Top             =   2640
+         Width           =   735
+      End
+      Begin VB.CommandButton cmdSelFile 
+         Caption         =   "Sélection de fichiers..."
+         Height          =   375
+         Left            =   120
+         TabIndex        =   11
+         Top             =   2640
+         Width           =   2055
+      End
+      Begin ComctlLib.ListView LV 
+         Height          =   2055
+         Left            =   120
+         TabIndex        =   10
          Top             =   120
-         Width           =   3285
-         Begin VB.CommandButton cmdGo2 
-            Caption         =   "GO"
-            Enabled         =   0   'False
-            Height          =   375
-            Left            =   2400
-            TabIndex        =   15
-            Top             =   2520
-            Width           =   735
-         End
-         Begin VB.CommandButton cmdSelFile 
-            Caption         =   "Sélection de fichiers..."
-            Height          =   375
-            Left            =   0
-            TabIndex        =   14
-            Top             =   2520
-            Width           =   2055
-         End
-         Begin ProgressBar_OCX.pgrBar PGB2 
-            Height          =   255
-            Left            =   0
-            TabIndex        =   13
-            Top             =   2160
-            Width           =   3255
-            _ExtentX        =   5741
-            _ExtentY        =   450
-            BackColorTop    =   13027014
-            BackColorBottom =   15724527
-            Value           =   1
-            BackPicture     =   "frmSanitization.frx":007C
-            FrontPicture    =   "frmSanitization.frx":0098
-         End
-         Begin ComctlLib.ListView LV 
-            Height          =   2055
-            Left            =   0
-            TabIndex        =   16
-            Top             =   0
-            Width           =   3255
-            _ExtentX        =   5741
-            _ExtentY        =   3625
-            View            =   3
-            LabelEdit       =   1
-            MultiSelect     =   -1  'True
-            LabelWrap       =   -1  'True
-            HideSelection   =   -1  'True
-            _Version        =   327682
-            ForeColor       =   -2147483640
-            BackColor       =   -2147483643
-            Appearance      =   0
-            NumItems        =   1
-            BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-               Key             =   ""
-               Object.Tag             =   ""
-               Text            =   "Fichier"
-               Object.Width           =   14111
-            EndProperty
-         End
+         Width           =   3255
+         _ExtentX        =   5741
+         _ExtentY        =   3625
+         View            =   3
+         LabelEdit       =   1
+         MultiSelect     =   -1  'True
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         _Version        =   327682
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         Appearance      =   0
+         NumItems        =   1
+         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
+            Object.Tag             =   ""
+            Text            =   "Fichier"
+            Object.Width           =   14111
+         EndProperty
+      End
+   End
+   Begin vkUserContolsXP.vkFrame Frame1 
+      Height          =   3135
+      Index           =   2
+      Left            =   120
+      TabIndex        =   1
+      Top             =   480
+      Width           =   3495
+      _ExtentX        =   6165
+      _ExtentY        =   5530
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkBar PGB3 
+         Height          =   255
+         Left            =   120
+         TabIndex        =   4
+         Top             =   2280
+         Width           =   3255
+         _ExtentX        =   5741
+         _ExtentY        =   450
+         Value           =   1
+         BackPicture     =   "frmSanitization.frx":007C
+         FrontPicture    =   "frmSanitization.frx":0098
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin VB.CommandButton cmdGoPhys 
+         Caption         =   "GO"
+         Height          =   375
+         Left            =   1080
+         TabIndex        =   3
+         Top             =   2640
+         Width           =   1215
+      End
+      Begin DriveView_OCX.DriveView DV2 
+         Height          =   2055
+         Left            =   120
+         TabIndex        =   2
+         Top             =   120
+         Width           =   3255
+         _ExtentX        =   5741
+         _ExtentY        =   3625
+         DisplayLogicalDrives=   0   'False
+         LogicalDrivesString=   ""
       End
    End
 End
