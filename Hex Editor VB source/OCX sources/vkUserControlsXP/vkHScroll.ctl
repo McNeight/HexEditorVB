@@ -480,6 +480,11 @@ End Sub
 Private Sub UserControl_Resize()
     If Height < 255 Then Height = 255
     If Width < 800 Then Width = 800
+
+    'lScrollHeight représente le pourcentage de la hauteur
+    'calcule la hauteur du curseur
+    lH = Int((Height - 510) * lScrollWidth / 100)
+
     Call ChangeValues
     Call Refresh
 End Sub
@@ -562,8 +567,14 @@ Public Property Get Enabled() As Boolean: Enabled = bEnable: End Property
 Public Property Let Enabled(Enabled As Boolean): bEnable = Enabled: bNotOk = False: UserControl_Paint: End Property
 Public Property Get EnableWheel() As Boolean: EnableWheel = bEnableWheel: End Property
 Public Property Let EnableWheel(EnableWheel As Boolean): bEnableWheel = EnableWheel: bNotOk = False: UserControl_Paint: End Property
+Public Property Let ScrollWidth(ScrollWidth As Byte)
+lScrollWidth = ScrollWidth
+'lScrollHeight représente le pourcentage de la hauteur
+'calcule la hauteur du curseur
+lH = Int((Height - 510) * lScrollWidth / 100)
+ChangeValues: bNotOk = False: UserControl_Paint
+End Property
 Public Property Get ScrollWidth() As Byte: ScrollWidth = lScrollWidth: End Property
-Public Property Let ScrollWidth(ScrollWidth As Byte): lScrollWidth = ScrollWidth: ChangeValues: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Min() As Currency: Min = lMin: End Property
 Public Property Let Min(Min As Currency)
 If lMin > lValue Then Exit Property
@@ -644,12 +655,8 @@ Private Sub ChangeValues()
     If lValue > lMax Then lValue = lMax
     If lValue < lMin Then lValue = lMin
     
-    'lScrollWidth représente le pourcentage de la hauteur
-    'calcule la hauteur du curseur
-    lH = Int((Width - 510) * lScrollWidth / 100)
-    
     'calcule le Top du curseur
-    lT = Int(Abs((Width - 510 - lH) * (lValue - lMin) / (lMax - lMin))) + 255
+    lT = By15(Int(Abs((Width - 510 - lH) * (lValue - lMin) / (lMax - lMin))) + 255)
 
     If lT <= 270 Then lT = 270
     If lT >= Width - 285 - lH Then lT = Width - 285 - lH
@@ -818,4 +825,9 @@ Private Sub DrawSelRectDown()
     
 End Sub
 
-
+'=======================================================
+'renvoie une valeur divisible par 15 (supérieure à l)
+'=======================================================
+Private Function By15(ByVal l As Currency) As Currency
+    By15 = Int((l + 14) / 15) * 15
+End Function
