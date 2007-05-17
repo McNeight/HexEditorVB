@@ -437,9 +437,9 @@ Private Sub UserControl_KeyDown(KeyCode As Integer, Shift As Integer)
         Case vbKeyPageDown
             Me.Value = Me.Value + LargeChange
         Case vbKeyEnd
-            Me.Value = Me.Max
+            lValue = lMax: ChangeValues: RaiseEvent Change(lValue)
         Case vbKeyHome
-            Me.Value = Me.Min
+            lValue = lMin: ChangeValues: RaiseEvent Change(lValue)
     End Select
         
     RaiseEvent KeyDown(KeyCode, Shift)
@@ -589,8 +589,8 @@ bNotOk = False: UserControl_Paint
 End Property
 Public Property Get Value() As Currency: Value = lValue: End Property
 Public Property Let Value(Value As Currency)
+If Value <> lValue Then RaiseEvent Change(lValue)
 lValue = Value: Call ChangeValues
-If Value <> lValue Then RaiseEvent Change(Value)
 End Property
 Public Property Get SmallChange() As Currency: SmallChange = lSmallChange: End Property
 Public Property Let SmallChange(SmallChange As Currency): lSmallChange = SmallChange: bNotOk = False: UserControl_Paint: End Property

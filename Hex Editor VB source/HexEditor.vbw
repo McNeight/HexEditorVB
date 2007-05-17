@@ -1,4 +1,4 @@
-Pfm = 44, 58, 589, 488, , 154, 203, 699, 633, C
+Pfm = 44, 58, 589, 488, Z, 154, 203, 699, 633, C
 frmContent = 0, 0, 0, 0, C, 66, 87, 611, 517, C
 AfClsManifest = 0, 0, 0, 0, C
 Demarrage = 0, 0, 0, 0, C
@@ -76,7 +76,7 @@ frmISO = 0, 0, 0, 0, C, 22, 29, 567, 459, C
 mdlPass = 0, 0, 0, 0, C
 clsString = 0, 0, 0, 0, C
 frmSanitization = 88, 116, 633, 546, , 132, 174, 677, 604, C
-mdlSanit = 66, 87, 655, 377, Z
+mdlSanit = 66, 87, 655, 377, 
 CAsmProc = 0, 0, 0, 0, C
 clsLang = 0, 0, 0, 0, C
 mdlColorMenus = 0, 0, 0, 0, C
