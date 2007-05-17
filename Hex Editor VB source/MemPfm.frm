@@ -24,6 +24,53 @@ Begin VB.Form MemPfm
    MDIChild        =   -1  'True
    ScaleHeight     =   8295
    ScaleWidth      =   8730
+   Begin ComctlLib.StatusBar Sb 
+      Align           =   2  'Align Bottom
+      Height          =   255
+      Left            =   0
+      TabIndex        =   0
+      Top             =   8040
+      Width           =   8730
+      _ExtentX        =   15399
+      _ExtentY        =   450
+      SimpleText      =   ""
+      _Version        =   327682
+      BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
+         NumPanels       =   4
+         BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   4410
+            MinWidth        =   4410
+            Text            =   "Fichier=[Modifié]"
+            TextSave        =   "Fichier=[Modifié]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+         BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   4410
+            MinWidth        =   4410
+            Text            =   "Page=[0/0]"
+            TextSave        =   "Page=[0/0]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+         BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   3175
+            MinWidth        =   3175
+            Text            =   "Offset=[0]"
+            TextSave        =   "Offset=[0]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+         BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Object.Width           =   5292
+            MinWidth        =   5292
+            Text            =   "Sélection=[0 Bytes]"
+            TextSave        =   "Sélection=[0 Bytes]"
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+      EndProperty
+   End
    Begin vkUserContolsXP.vkFrame FrameInfos 
       Height          =   6975
       Left            =   4680
@@ -275,53 +322,6 @@ Begin VB.Form MemPfm
       Visible         =   0   'False
       Width           =   615
    End
-   Begin ComctlLib.StatusBar Sb 
-      Align           =   2  'Align Bottom
-      Height          =   255
-      Left            =   0
-      TabIndex        =   0
-      Top             =   8040
-      Width           =   8730
-      _ExtentX        =   15399
-      _ExtentY        =   450
-      SimpleText      =   ""
-      _Version        =   327682
-      BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
-         NumPanels       =   4
-         BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   4410
-            MinWidth        =   4410
-            Text            =   "Fichier=[Modifié]"
-            TextSave        =   "Fichier=[Modifié]"
-            Key             =   ""
-            Object.Tag             =   ""
-         EndProperty
-         BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   4410
-            MinWidth        =   4410
-            Text            =   "Page=[0/0]"
-            TextSave        =   "Page=[0/0]"
-            Key             =   ""
-            Object.Tag             =   ""
-         EndProperty
-         BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   3175
-            MinWidth        =   3175
-            Text            =   "Offset=[0]"
-            TextSave        =   "Offset=[0]"
-            Key             =   ""
-            Object.Tag             =   ""
-         EndProperty
-         BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Object.Width           =   5292
-            MinWidth        =   5292
-            Text            =   "Sélection=[0 Bytes]"
-            TextSave        =   "Sélection=[0 Bytes]"
-            Key             =   ""
-            Object.Tag             =   ""
-         EndProperty
-      EndProperty
-   End
    Begin ComctlLib.TabStrip MemTB 
       Height          =   375
       Left            =   480
@@ -335,6 +335,7 @@ Begin VB.Form MemPfm
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
          NumTabs         =   1
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   ""
             Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
