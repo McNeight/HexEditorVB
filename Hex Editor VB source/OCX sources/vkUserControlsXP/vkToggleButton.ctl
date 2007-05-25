@@ -5,9 +5,10 @@ Begin VB.UserControl vkToggleButton
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
+   PropertyPages   =   "vkToggleButton.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkToggleButton.ctx":0000
+   ToolboxBitmap   =   "vkToggleButton.ctx":0052
    Begin VB.PictureBox pctG 
       BorderStyle     =   0  'None
       Height          =   225
@@ -83,7 +84,7 @@ Private ET As TRACKMOUSEEVENTTYPE   'type pour le mouse_hover et le mouse_leave
 Private IsMouseIn As Boolean    'si la souris est dans le controle
 
 Private bPushed As Boolean
-Private lTextPos As TextPositionConstants
+Private lTextPos As AlignmentConstants
 Private lForeColor As OLE_COLOR
 Private bCol1 As OLE_COLOR
 Private bCol2 As OLE_COLOR
@@ -105,6 +106,7 @@ Private bDrawFocus As Boolean
 Private bDrawMouseInRect As Boolean
 Private bHasFocus As Boolean
 Private lNotEnabledColor As OLE_COLOR
+Private bUnRefreshControl As Boolean
 
 
 '=======================================================
@@ -289,7 +291,7 @@ Private Sub UserControl_InitProperties()
         .Caption = "Caption" '
         .Font = Ambient.Font '
         .ForeColor = 7552000 '
-        .TextPosition = Text_Center '
+        .TextPosition = vbCenter '
         .Enabled = True '
         .BorderColor = 7552000    '
         .BreakCorner = True '
@@ -303,6 +305,7 @@ Private Sub UserControl_InitProperties()
         .DrawMouseInRect = True
         .DisabledBackColor = 15198183
         .Value = False
+        .UnRefreshControl = False
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -372,7 +375,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("Caption", Me.Caption, "Caption")
         Call .WriteProperty("Font", Me.Font, Ambient.Font)
         Call .WriteProperty("ForeColor", Me.ForeColor, 7552000)
-        Call .WriteProperty("TextPosition", Me.TextPosition, Text_Center)
+        Call .WriteProperty("TextPosition", Me.TextPosition, vbCenter)
         Call .WriteProperty("Enabled", Me.Enabled, True)
         Call .WriteProperty("BorderColor", Me.BorderColor, 7552000)
         Call .WriteProperty("BreakCorner", Me.BreakCorner, True)
@@ -386,6 +389,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("DrawMouseInRect", Me.DrawMouseInRect, True)
         Call .WriteProperty("Value", Me.Value, False)
         Call .WriteProperty("DisabledBackColor", Me.DisabledBackColor, 15198183)
+        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -400,7 +404,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.Caption = .ReadProperty("Caption", "Caption")
         Set Me.Font = .ReadProperty("Font", Ambient.Font)
         Me.ForeColor = .ReadProperty("ForeColor", 7552000)
-        Me.TextPosition = .ReadProperty("TextPosition", Text_Center)
+        Me.TextPosition = .ReadProperty("TextPosition", vbCenter)
         Me.Enabled = .ReadProperty("Enabled", True)
         Me.BorderColor = .ReadProperty("BorderColor", 7552000)
         Me.BreakCorner = .ReadProperty("BreakCorner", True)
@@ -414,6 +418,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.DrawMouseInRect = .ReadProperty("DrawMouseInRect", True)
         Me.DisabledBackColor = .ReadProperty("DisabledBackColor", 15198183)
         Me.Value = .ReadProperty("Value", False)
+        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -461,8 +466,8 @@ End Sub
 '=======================================================
 Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
-Public Property Get TextPosition() As TextPositionConstants: TextPosition = lTextPos: End Property
-Public Property Let TextPosition(TextPosition As TextPositionConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
+Public Property Get TextPosition() As AlignmentConstants: TextPosition = lTextPos: End Property
+Public Property Let TextPosition(TextPosition As AlignmentConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Caption() As String: Caption = sCaption: End Property
 Public Property Let Caption(Caption As String): sCaption = Caption: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 Public Property Get ForeColor() As OLE_COLOR: ForeColor = lForeColor: End Property
@@ -517,6 +522,8 @@ Public Property Get DisabledBackColor() As OLE_COLOR: DisabledBackColor = lNotEn
 Public Property Let DisabledBackColor(DisabledBackColor As OLE_COLOR): lNotEnabledColor = DisabledBackColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Value() As Boolean: Value = bPushed: End Property
 Public Property Let Value(Value As Boolean): bPushed = Value: bNotOk = False: UserControl_Paint: End Property
+Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
 Private Sub UserControl_Paint()
@@ -706,9 +713,8 @@ Dim hRgn As Long
 Dim W As Long
 Dim H As Long
     
-    '//on locke le controle
-  '  Call LockWindowUpdate(UserControl.hWnd)
-    
+    If bUnRefreshControl Then Exit Sub
+        
     '//on efface et on vire le maskpicture
     Call UserControl.Cls
     UserControl.Picture = Nothing
@@ -800,10 +806,10 @@ Dim H As Long
     Else
         UserControl.ForeColor = 9934743
     End If
-    If lTextPos = Text_Center Then
+    If lTextPos = vbCenter Then
         'au centre
         Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_CENTER)
-    ElseIf lTextPos = Text_Right Then
+    ElseIf lTextPos = vbRightJustify Then
         'à droite
         Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_RIGHT)
     Else
@@ -1024,4 +1030,12 @@ Dim H As Long
 
 End Sub
 
-
+'=======================================================
+'renvoie l'objet extender de ce usercontrol (pour les propertypages)
+'=======================================================
+Friend Property Get MyExtender() As Object
+    Set MyExtender = UserControl.Extender
+End Property
+Friend Property Let MyExtender(MyExtender As Object)
+    Set UserControl.Extender = MyExtender
+End Property

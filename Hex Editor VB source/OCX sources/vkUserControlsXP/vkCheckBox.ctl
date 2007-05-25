@@ -5,13 +5,14 @@ Begin VB.UserControl vkCheck
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
+   PropertyPages   =   "vkCheckBox.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkCheckBox.ctx":0000
+   ToolboxBitmap   =   "vkCheckBox.ctx":0039
    Begin VB.Image Image1 
       Height          =   195
       Left            =   480
-      Picture         =   "vkCheckBox.ctx":0312
+      Picture         =   "vkCheckBox.ctx":034B
       Top             =   600
       Visible         =   0   'False
       Width           =   1170
@@ -76,11 +77,13 @@ Private bNotOk As Boolean
 Private bHasFocus As Boolean
 Private bNotOk2 As Boolean
 Private tAlig As AlignmentConstants
+Private bUnRefreshControl As Boolean
 
 
 '=======================================================
 'EVENTS
 '=======================================================
+Public Event Click()
 Public Event Change(Value As CheckBoxConstants)
 Public Event KeyDown(KeyCode As Integer, Shift As Integer)
 Public Event KeyPress(KeyAscii As Integer)
@@ -229,6 +232,7 @@ Private Sub ChangeValue()
     End If
     
     RaiseEvent Change(tVal)
+    RaiseEvent Click
     
     bNotOk = False: Call UserControl_Paint
     
@@ -310,6 +314,7 @@ Private Sub UserControl_InitProperties()
         .Enabled = True '
         .Value = False
         .Alignment = vbLeftJustify
+        .UnRefreshControl = False
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -358,6 +363,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("Enabled", Me.Enabled, True)
         Call .WriteProperty("Value", Me.Value, False)
         Call .WriteProperty("Alignment", Me.Alignment, vbLeftJustify)
+        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -372,6 +378,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.Enabled = .ReadProperty("Enabled", True)
         Me.Value = .ReadProperty("Value", False)
         Me.Alignment = .ReadProperty("Alignment", vbLeftJustify)
+        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -440,6 +447,8 @@ Public Property Get Value() As CheckBoxConstants: Value = tVal: End Property
 Public Property Let Value(Value As CheckBoxConstants): tVal = Value: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Alignment() As AlignmentConstants: Alignment = tAlig: End Property
 Public Property Let Alignment(Alignment As AlignmentConstants): tAlig = Alignment: bNotOk = False: UserControl_Paint: End Property
+Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
 Private Sub UserControl_Paint()
@@ -487,6 +496,8 @@ Dim R As RECT
 Dim yVal As Long
 Dim st As Long
 
+    If bUnRefreshControl Then Exit Sub
+    
     '//on efface
     Call UserControl.Cls
     
@@ -607,3 +618,12 @@ Dim lIMG As Long
     Call DeleteObject(SrcObj)
 End Sub
 
+'=======================================================
+'renvoie l'objet extender de ce usercontrol (pour les propertypages)
+'=======================================================
+Friend Property Get MyExtender() As Object
+    Set MyExtender = UserControl.Extender
+End Property
+Friend Property Let MyExtender(MyExtender As Object)
+    Set UserControl.Extender = MyExtender
+End Property

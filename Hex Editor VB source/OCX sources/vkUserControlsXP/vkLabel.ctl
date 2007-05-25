@@ -5,9 +5,10 @@ Begin VB.UserControl vkLabel
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
+   PropertyPages   =   "vkLabel.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkLabel.ctx":0000
+   ToolboxBitmap   =   "vkLabel.ctx":0039
 End
 Attribute VB_Name = "vkLabel"
 Attribute VB_GlobalNameSpace = False
@@ -70,6 +71,7 @@ Private bHasFocus As Boolean
 Private bNotOk2 As Boolean
 Private tAlig As AlignmentConstants
 Private bSize As Boolean
+Private bUnRefreshControl As Boolean
 
 
 '=======================================================
@@ -248,6 +250,7 @@ Private Sub UserControl_InitProperties()
         .BorderColor = 12937777
         .BorderStyle = NoBorder
         .Alignment = vbLeftJustify
+        .UnRefreshControl = False
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -282,6 +285,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("ForeColor", Me.ForeColor, vbBlack)
         Call .WriteProperty("Enabled", Me.Enabled, True)
         Call .WriteProperty("Alignment", Me.Alignment, vbLeftJustify)
+        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -298,6 +302,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.BorderColor = .ReadProperty("BorderColor", 12937777)
         Me.AutoSize = .ReadProperty("AutoSize", False)
         Me.BorderStyle = .ReadProperty("BorderStyle", NoBorder)
+        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -380,6 +385,8 @@ If AutoSize = True Then
 End If
 bSize = AutoSize: bNotOk = False: UserControl_Paint: bNotOk = True
 End Property
+Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
 Private Sub UserControl_Paint()
@@ -428,6 +435,8 @@ Dim st As Long
 Dim hRgn As Long
 Dim hBrush As Long
 
+    If bUnRefreshControl Then Exit Sub
+    
     '//on efface
     Call UserControl.Cls
     
@@ -491,3 +500,13 @@ Dim hBrush As Long
     
     bNotOk = True
 End Sub
+
+'=======================================================
+'renvoie l'objet extender de ce usercontrol (pour les propertypages)
+'=======================================================
+Friend Property Get MyExtender() As Object
+    Set MyExtender = UserControl.Extender
+End Property
+Friend Property Let MyExtender(MyExtender As Object)
+    Set UserControl.Extender = MyExtender
+End Property

@@ -5,9 +5,10 @@ Begin VB.UserControl vkUpDown
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
+   PropertyPages   =   "vkUpDown.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkUpDown.ctx":0000
+   ToolboxBitmap   =   "vkUpDown.ctx":002B
    Begin VB.Timer Timer1 
       Enabled         =   0   'False
       Left            =   1920
@@ -83,6 +84,7 @@ Private lGrise As Long
 Private lUpMoused As Long
 Private lDownMoused As Long
 Private lMouseInterval As Long
+Private bUnRefreshControl As Boolean
 
 
 
@@ -129,11 +131,14 @@ Dim z2 As Long
                 y = HiWord(lParam) * 15
                 
                 If lUpMoused = 1 Then
-                    lUpMoused = 2: Refresh: Me.Value = Me.Value - lSmallChange
+                    lUpMoused = 2: lValue = lValue - lSmallChange
                 End If
                 If lDownMoused = 1 Then
-                    lDownMoused = 2: Refresh: Me.Value = Me.Value + lSmallChange
+                    lDownMoused = 2: lValue = lValue + lSmallChange
                 End If
+                
+                Call ChangeValues
+                RaiseEvent Change(lValue)
                 
             RaiseEvent MouseDblClick(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONDOWN
@@ -143,12 +148,12 @@ Dim z2 As Long
                 y = HiWord(lParam) * 15
                                
                 If lUpMoused Then
-                     Me.Value = Me.Value - lSmallChange
-                    lUpMoused = 2: Refresh: Timer1.Enabled = True: RaiseEvent Change(lValue)
+                    lValue = lValue - lSmallChange
+                    lUpMoused = 2: Timer1.Enabled = True: ChangeValues: RaiseEvent Change(lValue)
                 End If
                 If lDownMoused Then
-                     Me.Value = Me.Value + lSmallChange
-                    lDownMoused = 2: Refresh: Timer1.Enabled = True: RaiseEvent Change(lValue)
+                    lValue = lValue + lSmallChange
+                    lDownMoused = 2: Timer1.Enabled = True: ChangeValues: RaiseEvent Change(lValue)
                 End If
                                                 
                 RaiseEvent MouseDown(vbLeftButton, iShift, iControl, x, y)
@@ -278,10 +283,14 @@ Private Sub Timer1_Timer()
     
     If lUpMoused = 2 Then
         'on clique sur le bouton haut
-        Me.Value = Me.Value - lSmallChange
+        lValue = lValue - lSmallChange
+        Call ChangeValues
+        RaiseEvent Change(lValue)
     ElseIf lDownMoused = 2 Then
         'bouton du bas
-        Me.Value = Me.Value + lSmallChange
+        lValue = lValue + lSmallChange
+        Call ChangeValues
+        RaiseEvent Change(lValue)
     End If
 End Sub
 
@@ -330,6 +339,7 @@ Private Sub UserControl_InitProperties()
         .MouseHoverColor = vbWhite
         .MouseInterval = 100
         .Direction = [Up_Down]
+        .UnRefreshControl = False
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -380,6 +390,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("DownColor", Me.DownColor, 12492429)
         Call .WriteProperty("MouseInterval", Me.MouseInterval, 100)
         Call .WriteProperty("Direction", Me.Direction, [Up_Down])
+        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -398,6 +409,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.DownColor = .ReadProperty("DownColor", 12492429)
         Me.MouseInterval = .ReadProperty("MouseInterval", 100)
         Me.Direction = .ReadProperty("Direction", [Up_Down])
+        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -484,6 +496,8 @@ Public Property Get MouseInterval() As Long: MouseInterval = lMouseInterval: End
 Public Property Let MouseInterval(MouseInterval As Long): lMouseInterval = MouseInterval: Timer1.Interval = lMouseInterval: End Property
 Public Property Get Direction() As Direction: Direction = lSens: End Property
 Public Property Let Direction(Direction As Direction): lSens = Direction: Refresh: End Property
+Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
 
@@ -542,6 +556,8 @@ Public Sub Refresh()
 Dim x As Long
 Dim y As Long
 
+    If bUnRefreshControl Then Exit Sub
+    
     '//on efface
     Call UserControl.Cls
 
@@ -721,4 +737,12 @@ Dim y As Long
     
 End Sub
 
-
+'=======================================================
+'renvoie l'objet extender de ce usercontrol (pour les propertypages)
+'=======================================================
+Friend Property Get MyExtender() As Object
+    Set MyExtender = UserControl.Extender
+End Property
+Friend Property Let MyExtender(MyExtender As Object)
+    Set UserControl.Extender = MyExtender
+End Property

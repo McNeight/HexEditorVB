@@ -5,9 +5,10 @@ Begin VB.UserControl vkHScroll
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
+   PropertyPages   =   "vkHScroll.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkHScroll.ctx":0000
+   ToolboxBitmap   =   "vkHScroll.ctx":002C
    Begin VB.Timer Timer1 
       Enabled         =   0   'False
       Left            =   1680
@@ -68,6 +69,7 @@ Private objHwnd As Long     'handle de l'objet concerné
 Private ET As TRACKMOUSEEVENTTYPE   'type pour le mouse_hover et le mouse_leave
 Private IsMouseIn As Boolean    'si la souris est dans le controle
 
+Private bUnRefreshControl As Boolean
 Private bCol As OLE_COLOR
 Private lArrowColor As OLE_COLOR
 Private lFrontColor As OLE_COLOR
@@ -141,22 +143,25 @@ Dim y As Long
                 y = HiWord(lParam) * 15
                 
                 If lUpMoused = 1 Then
-                    lUpMoused = 2: Refresh: Me.Value = Me.Value - lSmallChange
+                    lUpMoused = 2: lValue = lValue - lSmallChange
                 End If
                 If lDownMoused = 1 Then
-                    lDownMoused = 2: Refresh: Me.Value = Me.Value + lSmallChange
+                    lDownMoused = 2: lValue = lValue + lSmallChange
                 End If
                 
                 If bEnable Then
                     If x > 255 And x < lT Then
                         n1 = -1
-                        Me.Value = Me.Value - lLargeChange
+                        lValue = lValue - lLargeChange
                     End If
                     If x > lT + lH And x < Width - 270 Then
                         n1 = 1
-                        Me.Value = Me.Value + lLargeChange
+                        lValue = lValue + lLargeChange
                     End If
                 End If
+            
+                Call ChangeValues
+                RaiseEvent Change(lValue)
                 
             RaiseEvent MouseDblClick(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONDOWN
@@ -166,22 +171,22 @@ Dim y As Long
                 y = HiWord(lParam) * 15
                                
                 If lUpMoused Then
-                     Me.Value = Me.Value - lSmallChange
-                    lUpMoused = 2: Refresh: Timer1.Enabled = True: RaiseEvent Change(lValue)
+                    lValue = lValue - lSmallChange
+                    lUpMoused = 2: Timer1.Enabled = True: ChangeValues: RaiseEvent Change(lValue)
                 End If
                 If lDownMoused Then
-                     Me.Value = Me.Value + lSmallChange
-                    lDownMoused = 2: Refresh: Timer1.Enabled = True: RaiseEvent Change(lValue)
+                    lValue = lValue + lSmallChange
+                    lDownMoused = 2: Timer1.Enabled = True: ChangeValues: RaiseEvent Change(lValue)
                 End If
                 
                 If bEnable Then
                     If x > 255 And x < lT Then
-                        Me.Value = Me.Value - lLargeChange
-                        n1 = -1: Refresh
+                        lValue = lValue - lLargeChange
+                        n1 = -1: ChangeValues: RaiseEvent Change(lValue)
                     End If
                     If x > lT + lH And x < Width - 270 Then
-                        Me.Value = Me.Value + lLargeChange
-                        n1 = 1: Refresh
+                        lValue = lValue + lLargeChange
+                        n1 = 1: ChangeValues: RaiseEvent Change(lValue)
                     End If
                     If x > 255 And x < lT Then
                         Timer2.Enabled = True
@@ -294,6 +299,7 @@ Dim y As Long
                         
                         Call Refresh
                     End If
+                    RaiseEvent Change(lValue)
                 End If
                 
                 'sauvegarde la position
@@ -325,9 +331,11 @@ Dim y As Long
             If wParam < 0 Then
                 RaiseEvent MouseWheel(WHEEL_DOWN)
                 If bEnableWheel Then Me.Value = Me.Value + lWheelChange
+                RaiseEvent Change(lValue)
             Else
                 RaiseEvent MouseWheel(WHEEL_UP)
                 If bEnableWheel Then Me.Value = Me.Value - lWheelChange
+                RaiseEvent Change(lValue)
             End If
         Case WM_PAINT
             bNotOk = True  'évite le clignotement lors du survol de la souris
@@ -344,10 +352,14 @@ Private Sub Timer1_Timer()
     
     If lUpMoused = 2 Then
         'on clique sur le bouton haut
-        Me.Value = Me.Value - lSmallChange
+        lValue = lValue - lSmallChange
+        Call ChangeValues
+        RaiseEvent Change(lValue)
     ElseIf lDownMoused = 2 Then
         'bouton du bas
-        Me.Value = Me.Value + lSmallChange
+        lValue = lValue + lSmallChange
+        Call ChangeValues
+        RaiseEvent Change(lValue)
     End If
 End Sub
 
@@ -357,9 +369,13 @@ Private Sub Timer2_Timer()
     
     If n1 = 1 Then
         'largechange en bas
-        Me.Value = Me.Value + lLargeChange
+        lValue = lValue + lLargeChange
+        Call ChangeValues
+        RaiseEvent Change(lValue)
     ElseIf n1 = -1 Then
-        Me.Value = Me.Value - lLargeChange
+        lValue = lValue - lLargeChange
+        Call ChangeValues
+        RaiseEvent Change(lValue)
     End If
     
     If lValue = lMax Or lValue = lMin Then Timer2.Enabled = False
@@ -416,6 +432,7 @@ Private Sub UserControl_InitProperties()
         .MouseHoverColor = vbWhite
         .MouseInterval = 100
         .LargeChangeColor = 12492429
+        .UnRefreshControl = False
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -447,6 +464,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("DownColor", Me.DownColor, 12492429)
         Call .WriteProperty("MouseInterval", Me.MouseInterval, 100)
         Call .WriteProperty("LargeChangeColor", Me.LargeChangeColor, 12492429)
+        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -470,6 +488,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.DownColor = .ReadProperty("DownColor", 12492429)
         Me.MouseInterval = .ReadProperty("MouseInterval", 100)
         Me.LargeChangeColor = .ReadProperty("LargeChangeColor", 12492429)
+        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -483,7 +502,7 @@ Private Sub UserControl_Resize()
 
     'lScrollHeight représente le pourcentage de la hauteur
     'calcule la hauteur du curseur
-    lH = Int((Height - 510) * lScrollWidth / 100)
+    lH = Int((Width - 510) * lScrollWidth / 100)
 
     Call ChangeValues
     Call Refresh
@@ -571,7 +590,7 @@ Public Property Let ScrollWidth(ScrollWidth As Byte)
 lScrollWidth = ScrollWidth
 'lScrollHeight représente le pourcentage de la hauteur
 'calcule la hauteur du curseur
-lH = Int((Height - 510) * lScrollWidth / 100)
+lH = Int((Width - 510) * lScrollWidth / 100)
 ChangeValues: bNotOk = False: UserControl_Paint
 End Property
 Public Property Get ScrollWidth() As Byte: ScrollWidth = lScrollWidth: End Property
@@ -608,6 +627,8 @@ Public Property Get MouseInterval() As Long: MouseInterval = lMouseInterval: End
 Public Property Let MouseInterval(MouseInterval As Long): lMouseInterval = MouseInterval: Timer1.Interval = lMouseInterval: Timer2.Interval = lMouseInterval: End Property
 Public Property Get LargeChangeColor() As OLE_COLOR: LargeChangeColor = lLargeChangeColor: End Property
 Public Property Let LargeChangeColor(LargeChangeColor As OLE_COLOR): lLargeChangeColor = LargeChangeColor: bNotOk = False: UserControl_Paint: End Property
+Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
 
@@ -656,7 +677,8 @@ Private Sub ChangeValues()
     If lValue < lMin Then lValue = lMin
     
     'calcule le Top du curseur
-    lT = By15(Int(Abs((Width - 510 - lH) * (lValue - lMin) / (lMax - lMin))) + 255)
+    If lMax <> lMin Then _
+        lT = By15(Int(Abs((Height - 510 - lH) * (lValue - lMin) / (lMax - lMin))) + 255)
 
     If lT <= 270 Then lT = 270
     If lT >= Width - 285 - lH Then lT = Width - 285 - lH
@@ -672,6 +694,8 @@ Public Sub Refresh()
 Dim x As Long
 Dim y As Long
 
+    If bUnRefreshControl Then Exit Sub
+    
     '//on efface
     Call UserControl.Cls
 
@@ -831,3 +855,13 @@ End Sub
 Private Function By15(ByVal l As Currency) As Currency
     By15 = Int((l + 14) / 15) * 15
 End Function
+
+'=======================================================
+'renvoie l'objet extender de ce usercontrol (pour les propertypages)
+'=======================================================
+Friend Property Get MyExtender() As Object
+    Set MyExtender = UserControl.Extender
+End Property
+Friend Property Let MyExtender(MyExtender As Object)
+    Set UserControl.Extender = MyExtender
+End Property
