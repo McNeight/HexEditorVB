@@ -6,9 +6,10 @@ Begin VB.UserControl vkFrame
    ClientTop       =   0
    ClientWidth     =   4800
    ControlContainer=   -1  'True
+   PropertyPages   =   "vkFrame.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkFrame.ctx":0000
+   ToolboxBitmap   =   "vkFrame.ctx":004B
    Begin VB.PictureBox pctG 
       BorderStyle     =   0  'None
       Height          =   240
@@ -84,7 +85,7 @@ Private ET As TRACKMOUSEEVENTTYPE   'type pour le mouse_hover et le mouse_leave
 Private IsMouseIn As Boolean    'si la souris est dans le controle
 
 Private lBackStyle As BackStyleConstants
-Private lTextPos As TextPositionConstants
+Private lTextPos As AlignmentConstants
 Private lTitleHeight As Long
 Private lForeColor As OLE_COLOR
 Private tCol1 As OLE_COLOR
@@ -109,6 +110,7 @@ Private bPic As Boolean
 Private lOffsetX As Long
 Private lOffsetY As Long
 Private bGray As Boolean
+Private bUnRefreshControl As Boolean
 
 '=======================================================
 'EVENTS
@@ -285,7 +287,7 @@ Private Sub UserControl_InitProperties()
         .ForeColor = vbWhite '
         .ShowBackGround = True '
         .ShowTitle = True '
-        .TextPosition = Text_Center '
+        .TextPosition = vbCenter '
         .TitleColor1 = &HC85A21
         .TitleColor2 = &HE4C6B5    '
         .TitleGradient = Vertical '
@@ -302,6 +304,7 @@ Private Sub UserControl_InitProperties()
         .PictureOffsetX = 0
         .PictureOffsetY = 0
         .GrayPictureWhenDisabled = True
+        .UnRefreshControl = False
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -326,6 +329,7 @@ End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
     With PropBag
+        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
         Call .WriteProperty("BackColor1", Me.BackColor1, &HFBFBFB)
         Call .WriteProperty("BackColor2", Me.BackColor2, &HDCDCDC)
         Call .WriteProperty("BackGradient", Me.BackGradient, Horizontal)
@@ -335,7 +339,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("ForeColor", Me.ForeColor, vbWhite)
         Call .WriteProperty("ShowBackGround", Me.ShowBackGround, True)
         Call .WriteProperty("ShowTitle", Me.ShowTitle, True)
-        Call .WriteProperty("TextPosition", Me.TextPosition, Text_Center)
+        Call .WriteProperty("TextPosition", Me.TextPosition, vbCenter)
         Call .WriteProperty("TitleColor1", Me.TitleColor1, &HC85A21)
         Call .WriteProperty("TitleColor2", Me.TitleColor2, &HE4C6B5)
         Call .WriteProperty("TitleGradient", Me.TitleGradient, Vertical)
@@ -367,7 +371,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.ForeColor = .ReadProperty("ForeColor", vbWhite)
         Me.ShowBackGround = .ReadProperty("ShowBackGround", True)
         Me.ShowTitle = .ReadProperty("ShowTitle", True)
-        Me.TextPosition = .ReadProperty("TextPosition", Text_Center)
+        Me.TextPosition = .ReadProperty("TextPosition", vbCenter)
         Me.TitleColor1 = .ReadProperty("TitleColor1", &HC85A21)
         Me.TitleColor2 = .ReadProperty("TitleColor2", &HE4C6B5)
         Me.TitleGradient = .ReadProperty("TitleGradient", Vertical)
@@ -384,6 +388,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.PictureOffsetX = .ReadProperty("PictureOffsetX", 0)
         Me.PictureOffsetY = .ReadProperty("PictureOffsetY", 0)
         Me.GrayPictureWhenDisabled = .ReadProperty("GrayPictureWhenDisabled", True)
+        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -433,8 +438,8 @@ Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get BackStyle() As BackStyleConstants: BackStyle = lBackStyle: End Property
 Public Property Let BackStyle(BackStyle As BackStyleConstants): lBackStyle = BackStyle: UserControl.BackStyle = BackStyle: bNotOk = False: UserControl_Paint: End Property
-Public Property Get TextPosition() As TextPositionConstants: TextPosition = lTextPos: End Property
-Public Property Let TextPosition(TextPosition As TextPositionConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
+Public Property Get TextPosition() As AlignmentConstants: TextPosition = lTextPos: End Property
+Public Property Let TextPosition(TextPosition As AlignmentConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Caption() As String: Caption = sCaption: End Property
 Public Property Let Caption(Caption As String): sCaption = Caption: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 Public Property Get ShowTitle() As Boolean: ShowTitle = bShowTitle: End Property
@@ -495,7 +500,8 @@ Public Property Get PictureOffsetY() As Long: PictureOffsetY = lOffsetY: End Pro
 Public Property Let PictureOffsetY(PictureOffsetY As Long): lOffsetY = PictureOffsetY: bNotOk = False: UserControl_Paint: End Property
 Public Property Get GrayPictureWhenDisabled() As Boolean: GrayPictureWhenDisabled = bGray: End Property
 Public Property Let GrayPictureWhenDisabled(GrayPictureWhenDisabled As Boolean): bGray = GrayPictureWhenDisabled: bNotOk = False: UserControl_Paint: End Property
-
+Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 Private Sub UserControl_Paint()
 
@@ -700,9 +706,8 @@ Dim hRgn As Long
 Dim W As Long
 Dim H As Long
     
-    '//on locke le controle
-  '  Call LockWindowUpdate(UserControl.hWnd)
-    
+    If bUnRefreshControl Then Exit Sub
+        
     '//on efface et on vire le maskpicture
     Call UserControl.Cls
     UserControl.Picture = Nothing
@@ -761,10 +766,10 @@ Dim H As Long
     
     'on affiche le caption
     UserControl.ForeColor = lForeColor
-    If lTextPos = Text_Center Then
+    If lTextPos = vbCenter Then
         'au centre
         Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_CENTER)
-    ElseIf lTextPos = Text_Right Then
+    ElseIf lTextPos = vbRightJustify Then
         'à droite
         Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_RIGHT)
     Else
@@ -990,4 +995,12 @@ Dim H As Long
     Call UserControl.Refresh
 End Sub
 
-
+'=======================================================
+'renvoie l'objet extender de ce usercontrol (pour les propertypages)
+'=======================================================
+Friend Property Get MyExtender() As Object
+    Set MyExtender = UserControl.Extender
+End Property
+Friend Property Let MyExtender(MyExtender As Object)
+    Set UserControl.Extender = MyExtender
+End Property

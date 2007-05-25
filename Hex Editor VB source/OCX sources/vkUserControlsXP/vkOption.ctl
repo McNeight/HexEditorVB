@@ -5,15 +5,16 @@ Begin VB.UserControl vkOptionButton
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
+   PropertyPages   =   "vkOption.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkOption.ctx":0000
+   ToolboxBitmap   =   "vkOption.ctx":0040
    Begin VB.PictureBox Image1 
       AutoSize        =   -1  'True
       BorderStyle     =   0  'None
       Height          =   195
       Left            =   600
-      Picture         =   "vkOption.ctx":0312
+      Picture         =   "vkOption.ctx":0352
       ScaleHeight     =   195
       ScaleWidth      =   1170
       TabIndex        =   0
@@ -81,6 +82,7 @@ Private bHasFocus As Boolean
 Private bNotOk2 As Boolean
 Private lGroup As Byte
 Private tAlig As AlignmentConstants
+Private bUnRefreshControl As Boolean
 
 
 '=======================================================
@@ -345,6 +347,7 @@ Dim x As Long
         .Enabled = True '
         .Value = False
         .Alignment = vbLeftJustify
+        .UnRefreshControl = False
     End With
     
     'maintenant on va tenter de déterminer le Group convenable : part à la recherche
@@ -441,6 +444,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("Value", Me.Value, False)
         Call .WriteProperty("Group", Me.Group, 0)
         Call .WriteProperty("Alignment", Me.Alignment, vbLeftJustify)
+        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -456,6 +460,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.Enabled = .ReadProperty("Enabled", True)
         Me.Value = .ReadProperty("Value", False)
         Me.Group = .ReadProperty("Group", 0)
+        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -531,6 +536,8 @@ Public Property Let Group(Group As Byte): lGroup = Group: End Property
 Public Property Get Alignment() As AlignmentConstants: Alignment = tAlig: End Property
 Public Property Let Alignment(Alignment As AlignmentConstants): tAlig = Alignment: bNotOk = False: UserControl_Paint: End Property
 Public Property Get ContainerHwnd() As Long: ContainerHwnd = UserControl.ContainerHwnd: End Property
+Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
 Private Sub UserControl_Paint()
@@ -578,6 +585,8 @@ Dim R As RECT
 Dim yVal As Long
 Dim st As Long
 
+    If bUnRefreshControl Then Exit Sub
+    
     '//on efface
     Call UserControl.Cls
     
@@ -699,3 +708,12 @@ Dim lIMG As Long
     Call DeleteObject(SrcObj)
 End Sub
 
+'=======================================================
+'renvoie l'objet extender de ce usercontrol (pour les propertypages)
+'=======================================================
+Friend Property Get MyExtender() As Object
+    Set MyExtender = UserControl.Extender
+End Property
+Friend Property Let MyExtender(MyExtender As Object)
+    Set UserControl.Extender = MyExtender
+End Property

@@ -5,9 +5,10 @@ Begin VB.UserControl vkBar
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
+   PropertyPages   =   "vkBar.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkBar.ctx":0000
+   ToolboxBitmap   =   "vkBar.ctx":0049
    Begin VB.PictureBox frontImg 
       Appearance      =   0  'Flat
       AutoRedraw      =   -1  'True
@@ -150,6 +151,7 @@ Private lOSx As Long    'offsetX
 Private lOSy As Long    'offsetY
 Private bNotOk As Boolean
 Private bNotOk2 As Boolean
+Private bUnRefreshControl As Boolean
 
 
 '=======================================================
@@ -315,6 +317,7 @@ Private Sub UserControl_InitProperties()
         Set .Font = Ambient.Font
         .Alignment = MiddleCenter
         .OffSetX = 0
+        .UnRefreshControl = False
         .OffSetY = 0
     End With
     bNotOk2 = False
@@ -347,6 +350,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.InteractiveButton = .ReadProperty("InteractiveButton", LeftButton)
         Set backImg.Picture = .ReadProperty("BackPicture", imgNull.Picture)
         Set frontImg.Picture = .ReadProperty("FrontPicture", imgNull.Picture)
+        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     If backImg.Picture <> 0 Then Set tpn.Picture = backImg.Picture
     bNotOk2 = False
@@ -381,6 +385,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("InteractiveControl", Me.InteractiveControl, False)
         Call .WriteProperty("DisplayLabel", Me.DisplayLabel, PercentageMode)
         Call .WriteProperty("GradientMode", Me.GradientMode, AllLengh)
+        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
         Call .WriteProperty("ForeColor", Me.ForeColor, &H404040)
         Call .WriteProperty("BorderStyle", Me.BorderStyle, 0)
         Call .WriteProperty("InteractiveButton", Me.InteractiveButton, LeftButton)
@@ -469,6 +474,8 @@ Public Property Let BorderColor(BorderColor As OLE_COLOR): UserControl.BackColor
 Public Property Get GradientMode() As Mode_Degrade: GradientMode = mdDeg: End Property
 Public Property Let GradientMode(GradientMode As Mode_Degrade): mdDeg = GradientMode: bNotOk = False: Refresh: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
+Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
 '=======================================================
@@ -862,3 +869,12 @@ Private Sub LaunchKeyMouseEvents()
     
 End Sub
 
+'=======================================================
+'renvoie l'objet extender de ce usercontrol (pour les propertypages)
+'=======================================================
+Friend Property Get MyExtender() As Object
+    Set MyExtender = UserControl.Extender
+End Property
+Friend Property Let MyExtender(MyExtender As Object)
+    Set UserControl.Extender = MyExtender
+End Property

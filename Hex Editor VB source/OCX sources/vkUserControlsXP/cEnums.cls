@@ -83,11 +83,6 @@ Public Enum Text_Alignment
     BottomCenter = 8
     BottomRight = 9
 End Enum
-Public Enum TextPositionConstants
-    [Text_Left] = 0
-    [Text_Center] = 1
-    [Text_Right] = 2
-End Enum
 Public Enum Wheel_Sens
     WHEEL_UP
     WHEEL_DOWN
