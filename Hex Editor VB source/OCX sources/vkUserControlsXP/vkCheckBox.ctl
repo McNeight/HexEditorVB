@@ -78,6 +78,7 @@ Private bHasFocus As Boolean
 Private bNotOk2 As Boolean
 Private tAlig As AlignmentConstants
 Private bUnRefreshControl As Boolean
+Private bHasLeftOneTime As Boolean
 
 
 '=======================================================
@@ -169,7 +170,12 @@ Dim y As Long
             End If
         Case WM_MOUSELEAVE
             RaiseEvent MouseLeave
-            IsMouseIn = False: Call Refresh
+            IsMouseIn = False
+            If bHasLeftOneTime Then
+                Call Refresh
+            Else
+                bHasLeftOneTime = True
+            End If
         Case WM_MOUSEMOVE
             Call TrackMouseEvent(ET)
             
@@ -183,7 +189,7 @@ Dim y As Long
                 If (wParam And MK_MBUTTON) = MK_MBUTTON Then z = vbMiddleButton
                 RaiseEvent MouseMove(z, iShift, iControl, x, y)
         Case WM_RBUTTONDBLCLK
-                        iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
+                iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
                 x = LoWord(lParam) * 15
                 y = HiWord(lParam) * 15
@@ -381,7 +387,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
-    Call UserControl_Paint  'refresh
+    'Call UserControl_Paint  'refresh
     
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents

@@ -85,7 +85,7 @@ Private lUpMoused As Long
 Private lDownMoused As Long
 Private lMouseInterval As Long
 Private bUnRefreshControl As Boolean
-
+Private bHasLeftOneTime As Boolean
 
 
 '=======================================================
@@ -202,7 +202,11 @@ Dim z2 As Long
             IsMouseIn = False
             lUpMoused = 0
             lDownMoused = 0
-            Call Refresh
+            If bHasLeftOneTime Then
+                Call Refresh
+            Else
+                bHasLeftOneTime = True
+            End If
         Case WM_MOUSEMOVE
             Call TrackMouseEvent(ET)
             
@@ -352,13 +356,21 @@ Private Sub UserControl_KeyDown(KeyCode As Integer, Shift As Integer)
     
     Select Case KeyCode
         Case vbKeyLeft, vbKeyUp
-            Me.Value = Me.Value - SmallChange
+            lValue = lValue - SmallChange
+            Call ChangeValues
+            RaiseEvent Change(lValue)
         Case vbKeyRight, vbKeyDown
-            Me.Value = Me.Value + SmallChange
+            lValue = lValue + SmallChange
+            Call ChangeValues
+            RaiseEvent Change(lValue)
         Case vbKeyEnd
-            Me.Value = Me.Max
+            lValue = lMax
+            Call ChangeValues
+            RaiseEvent Change(lValue)
         Case vbKeyHome
-            Me.Value = Me.Min
+            lValue = lMin
+            Call ChangeValues
+            RaiseEvent Change(lValue)
     End Select
         
     RaiseEvent KeyDown(KeyCode, Shift)
@@ -412,7 +424,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
-    Call UserControl_Paint  'refresh
+    'Call UserControl_Paint  'refresh
     
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents
@@ -421,7 +433,7 @@ Private Sub UserControl_Resize()
     If Height < 255 Then Height = 255
     If Width < 255 Then Width = 255
     Call ChangeValues
-    Call Refresh
+    'Call Refresh
 End Sub
 
 '=======================================================
@@ -495,7 +507,7 @@ Public Property Let MouseHoverColor(MouseHoverColor As OLE_COLOR): lSelColor = M
 Public Property Get MouseInterval() As Long: MouseInterval = lMouseInterval: End Property
 Public Property Let MouseInterval(MouseInterval As Long): lMouseInterval = MouseInterval: Timer1.Interval = lMouseInterval: End Property
 Public Property Get Direction() As Direction: Direction = lSens: End Property
-Public Property Let Direction(Direction As Direction): lSens = Direction: Refresh: End Property
+Public Property Let Direction(Direction As Direction): lSens = Direction: bNotOk = False: UserControl_Paint: End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
@@ -546,7 +558,7 @@ Private Sub ChangeValues()
     If lValue < lMin Then lValue = lMin
        
     'refresh le controle
-    Call Refresh
+    bNotOk = False: Call UserControl_Paint
 End Sub
 
 '=======================================================
