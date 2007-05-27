@@ -98,6 +98,7 @@ Private lT As Long
 Private lH As Long
 Private nY As Long
 Private n1 As Long
+Private bHasLeftOneTime As Boolean
 
 
 '=======================================================
@@ -251,7 +252,11 @@ Dim y As Long
             IsMouseIn = False
             lUpMoused = 0
             lDownMoused = 0
-            Call Refresh
+            If bHasLeftOneTime Then
+                Call Refresh
+            Else
+                bHasLeftOneTime = True
+            End If
         Case WM_MOUSEMOVE
             Call TrackMouseEvent(ET)
             
@@ -491,7 +496,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
-    Call UserControl_Paint  'refresh
+    'Call UserControl_Paint  'refresh
     
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents
@@ -505,7 +510,7 @@ Private Sub UserControl_Resize()
     lH = Int((Width - 510) * lScrollWidth / 100)
 
     Call ChangeValues
-    Call Refresh
+    'Call Refresh
 End Sub
 
 Private Sub UserControl_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -514,21 +519,20 @@ Private Sub UserControl_KeyDown(KeyCode As Integer, Shift As Integer)
     
     Select Case KeyCode
         Case vbKeyLeft, vbKeyUp
-            Me.Value = Me.Value - SmallChange
+            lValue = lValue - SmallChange: ChangeValues: RaiseEvent Change(lValue)
         Case vbKeyRight, vbKeyDown
-            Me.Value = Me.Value + SmallChange
+            lValue = lValue + SmallChange: ChangeValues: RaiseEvent Change(lValue)
         Case vbKeyPageUp
-            Me.Value = Me.Value - LargeChange
+            lValue = lValue - LargeChange: ChangeValues: RaiseEvent Change(lValue)
         Case vbKeyPageDown
-            Me.Value = Me.Value + LargeChange
+            lValue = lValue + LargeChange: ChangeValues: RaiseEvent Change(lValue)
         Case vbKeyEnd
-            Me.Value = Me.Max
+            lValue = lMax: ChangeValues: RaiseEvent Change(lValue)
         Case vbKeyHome
-            Me.Value = Me.Min
+            lValue = lMin: ChangeValues: RaiseEvent Change(lValue)
     End Select
         
     RaiseEvent KeyDown(KeyCode, Shift)
-
 End Sub
 
 Private Sub UserControl_KeyPress(KeyAscii As Integer)
@@ -678,13 +682,13 @@ Private Sub ChangeValues()
     
     'calcule le Top du curseur
     If lMax <> lMin Then _
-        lT = By15(Int(Abs((Height - 510 - lH) * (lValue - lMin) / (lMax - lMin))) + 255)
+        lT = By15(Int(Abs((Width - 510 - lH) * (lValue - lMin) / (lMax - lMin))) + 255)
 
     If lT <= 270 Then lT = 270
     If lT >= Width - 285 - lH Then lT = Width - 285 - lH
     
     'refresh le controle
-    Call Refresh
+    bNotOk = False: Call UserControl_Paint
 End Sub
 
 '=======================================================

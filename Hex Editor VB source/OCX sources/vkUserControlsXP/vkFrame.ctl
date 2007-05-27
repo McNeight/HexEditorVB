@@ -391,7 +391,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
-    Call UserControl_Paint  'refresh
+    'Call UserControl_Paint  'refresh
     
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents

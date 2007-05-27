@@ -356,7 +356,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     bNotOk2 = False
     
     'refresh
-    Call Refresh
+    'Call Refresh
         
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents

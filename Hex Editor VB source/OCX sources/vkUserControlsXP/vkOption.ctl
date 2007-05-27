@@ -83,7 +83,8 @@ Private bNotOk2 As Boolean
 Private lGroup As Byte
 Private tAlig As AlignmentConstants
 Private bUnRefreshControl As Boolean
-
+Private bHasLeftOneTime As Boolean
+            
 
 '=======================================================
 'EVENTS
@@ -173,7 +174,12 @@ Dim y As Long
             End If
         Case WM_MOUSELEAVE
             RaiseEvent MouseLeave
-            IsMouseIn = False: Call Refresh
+            IsMouseIn = False
+            If bHasLeftOneTime Then
+                Call Refresh
+            Else
+                bHasLeftOneTime = True
+            End If
         Case WM_MOUSEMOVE
             Call TrackMouseEvent(ET)
             
@@ -463,7 +469,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
-    Call UserControl_Paint  'refresh
+    'Call UserControl_Paint  'refresh
     
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents

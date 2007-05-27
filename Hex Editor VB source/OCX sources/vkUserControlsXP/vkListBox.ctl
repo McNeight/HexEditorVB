@@ -10,6 +10,15 @@ Begin VB.UserControl vkListBox
    ScaleHeight     =   3210
    ScaleWidth      =   3780
    ToolboxBitmap   =   "vkListBox.ctx":002D
+   Begin vkUserContolsXP.vkVScrollPrivate VS 
+      Height          =   2295
+      Left            =   2400
+      TabIndex        =   6
+      Top             =   480
+      Width           =   255
+      _ExtentX        =   450
+      _ExtentY        =   4048
+   End
    Begin VB.PictureBox pic 
       AutoRedraw      =   -1  'True
       BackColor       =   &H00C0FFFF&
@@ -20,7 +29,7 @@ Begin VB.UserControl vkListBox
       Picture         =   "vkListBox.ctx":033F
       ScaleHeight     =   195
       ScaleWidth      =   195
-      TabIndex        =   6
+      TabIndex        =   5
       Top             =   960
       Visible         =   0   'False
       Width           =   195
@@ -35,7 +44,7 @@ Begin VB.UserControl vkListBox
       Picture         =   "vkListBox.ctx":0589
       ScaleHeight     =   195
       ScaleWidth      =   195
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   960
       Visible         =   0   'False
       Width           =   195
@@ -50,7 +59,7 @@ Begin VB.UserControl vkListBox
       Picture         =   "vkListBox.ctx":07D3
       ScaleHeight     =   195
       ScaleWidth      =   195
-      TabIndex        =   4
+      TabIndex        =   3
       Top             =   600
       Visible         =   0   'False
       Width           =   195
@@ -65,7 +74,7 @@ Begin VB.UserControl vkListBox
       Picture         =   "vkListBox.ctx":0A1D
       ScaleHeight     =   195
       ScaleWidth      =   195
-      TabIndex        =   3
+      TabIndex        =   2
       Top             =   600
       Visible         =   0   'False
       Width           =   195
@@ -80,7 +89,7 @@ Begin VB.UserControl vkListBox
       Picture         =   "vkListBox.ctx":0C67
       ScaleHeight     =   195
       ScaleWidth      =   195
-      TabIndex        =   2
+      TabIndex        =   1
       Top             =   600
       Visible         =   0   'False
       Width           =   195
@@ -95,19 +104,10 @@ Begin VB.UserControl vkListBox
       Picture         =   "vkListBox.ctx":0EB1
       ScaleHeight     =   195
       ScaleWidth      =   195
-      TabIndex        =   1
+      TabIndex        =   0
       Top             =   600
       Visible         =   0   'False
       Width           =   195
-   End
-   Begin vkUserContolsXP.vkVScroll VS 
-      Height          =   2295
-      Left            =   2640
-      TabIndex        =   0
-      Top             =   600
-      Width           =   255
-      _ExtentX        =   450
-      _ExtentY        =   4048
    End
 End
 Attribute VB_Name = "vkListBox"
@@ -187,8 +187,9 @@ Private MouseItemIndex As Long
 Private lFullRowSelect As Boolean
 Private lBorderSelColor  As OLE_COLOR
 Private tmpMouseItemIndex As Long
-Private Col As Collection
+Private Col As clsFastCollection
 Private zNumber As Long
+Private bVSvisible As Boolean
 
 
 '=======================================================
@@ -333,7 +334,7 @@ Dim Ptr As Long
     lListCount = 1
     
     'instancie la collection
-    Set Col = New Collection
+    Set Col = New clsFastCollection
     
     'créé un controle dynamique
     'Set VS = Controls.Add("vkUserContolsXP.vkVScroll", "VS")
@@ -521,7 +522,8 @@ End Sub
 Private Sub UserControl_Terminate()
     'vire le subclassing
     If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
-    'et allez, on vire la classe précedemment instanciée... coding rulez...
+    'on clear la collection
+    Call Col.Clear
     Set Col = Nothing
 End Sub
 
@@ -569,10 +571,13 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.TopIndex = .ReadProperty("TopIndex", 1)
     End With
     bNotOk2 = False
-    Call UserControl_Paint  'refresh
+    'Call UserControl_Paint  'refresh
     
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents
+    If Ambient.UserMode Then
+        Call VS.LaunchKeyMouseEvents    'subclasse également le VS
+    End If
 End Sub
 Private Sub UserControl_Resize()
     If Height < 800 Then Height = 800
@@ -670,8 +675,12 @@ Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefresh
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 Public Property Get VScroll() As vkVScroll: On Error Resume Next: Set VScroll = VS: End Property
 Public Property Let VScroll(VScroll As vkVScroll): On Error Resume Next: Set VS = VScroll: Call UserControl_Resize: End Property
-Public Property Get DisplayVScroll() As Boolean: On Error Resume Next: DisplayVScroll = VS.Visible: End Property
-Public Property Let DisplayVScroll(DisplayVScroll As Boolean): On Error Resume Next: VS.Visible = DisplayVScroll: End Property
+Public Property Get DisplayVScroll() As Boolean: DisplayVScroll = bVSvisible: End Property
+Public Property Let DisplayVScroll(DisplayVScroll As Boolean)
+bVSvisible = DisplayVScroll
+VS.Visible = bVSvisible
+bNotOk = False: UserControl_Paint
+End Property
 Public Property Get CheckCount() As Long: CheckCount = lCheckCount: End Property
 Public Property Get Alignment() As AlignmentConstants: Alignment = tAlig: End Property
 Public Property Let Alignment(Alignment As AlignmentConstants): tAlig = Alignment: bNotOk = False: UserControl_Paint: End Property
@@ -734,27 +743,27 @@ Dim tIt As vkListItem
         
         If Index = -1 Then
             tIt.Index = Col.Count + 1
-            Call Col.Add(tIt)
             lHeight(lListCount - 1) = tIt.Height
+            Call Col.Add(tIt)
         Else
             tIt.Index = Index
-            Call Col.Add(tIt, , , Index)
             lHeight(Index) = tIt.Height
+            Call Col.Add(tIt, Index)
         End If
         
     Else
         'on ajoute l'item passé en paramètre
         If Index = -1 Then
             Item.Index = lListCount - 1
-            Call Col.Add(Item)
             bSelected(Item.Index) = Item.Selected
             bChecked(Item.Index) = Item.Checked
             lHeight(lListCount - 1) = Item.Height
+            Call Col.Add(Item)
         Else
-            Call Col.Add(Item, , , Index)
             bSelected(Index) = Item.Selected
             bChecked(Index) = Item.Checked
             lHeight(Index) = Item.Height
+            Call Col.Add(Item, Index)
         End If
    
     End If
@@ -780,9 +789,8 @@ Dim x As Long
     ReDim bChecked(1)
     ReDim lHeight(1)
     
-    For x = Col.Count To 1 Step -1
-        Call Col.Remove(x)
-    Next x
+    'on vide la collection...
+    Call Col.Clear
     
     lListCount = 1
     lSelCount = 0
@@ -801,7 +809,7 @@ Dim x As Long
 Dim y As Long
 
     'inverse le contenu du tableau
-    For x = 1 To lListCount
+    For x = 1 To lListCount - 1
         bSelected(x) = Not (bSelected(x))
         If bSelected(x) Then y = y + 1
     Next x
@@ -821,7 +829,7 @@ Dim x As Long
 Dim y As Long
 
     'inverse le contenu du tableau
-    For x = 1 To lListCount
+    For x = 1 To lListCount - 1
         bChecked(x) = Not (bChecked(x))
         If bChecked(x) Then y = y + 1
     Next x
@@ -869,7 +877,7 @@ Public Sub SelectAll()
 Dim x As Long
 
     'remplit le contenu du tableau
-    For x = 1 To lListCount
+    For x = 1 To lListCount - 1
         bSelected(x) = True
     Next x
     
@@ -903,7 +911,7 @@ Public Sub CheckAll()
 Dim x As Long
 
     'remplit le contenu du tableau
-    For x = 1 To lListCount
+    For x = 1 To lListCount - 1
         bChecked(x) = True
     Next x
     
@@ -971,6 +979,15 @@ Dim hRgn As Long
 Dim x As Long
 Dim hBrush As Long
 Dim e As Long
+
+
+
+Static ni As Long
+Dim op As Long
+    ni = ni + 1
+    
+    
+    
     
     If bUnRefreshControl Then Exit Sub
     
@@ -1012,6 +1029,7 @@ Dim e As Long
     'on affiche maintenant chaque controle
     y = 1 'contient la hauteur temporaire
     st = 0
+    
     For x = lTopIndex To lTopIndex + z
 
         'trace le texte
@@ -1074,13 +1092,16 @@ Dim R As RECT
 Dim st As Long
 Dim tF As StdFont
 Dim o As Long
+Dim o2 As Long
 Dim f As Long
 Dim e As Long
 Dim H As Long
 
-    If VS.Visible Then
+    If bVSvisible Then
         'alors on décale le rect pour l'alignement à droite
         o = 19
+    Else
+        o2 = 17
     End If
     
     'décalage vers la droite si picture de checkboxes
@@ -1117,20 +1138,20 @@ Dim H As Long
     'dessine un rectangle (backcolor ou selection) dans cette zone
     If bSelected(Index) = False Then
         'backcolor
-        Line (15, lTop + 30)-(Width - 255 - 30, lTop + lHeight(Index) + 15), Item.BackColor, BF
+        Line (15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + lHeight(Index) + 15), Item.BackColor, BF
     Else
         'sélection
         If f Then
             'alors on décale ==> on doit quand même faire le backColor
-            Line (15, lTop + 30)-(Width - 255 - 30, lTop + lHeight(Index) + 15), Item.BackColor, BF
+            Line (15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + lHeight(Index) + 15), Item.BackColor, BF
         End If
         
         'fond de la sélection
-        Line (15 + f, lTop + 30)-(Width - 255 - 30, lTop + lHeight(Index) + 15), Item.SelColor, BF
+        Line (15 + f, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + lHeight(Index) + 15), Item.SelColor, BF
         'bordure de la sélection
-        Line (15 + f, lTop + 15)-(Width - 255 - 30, lTop + 15), Item.BorderSelColor
-        Line (Width - 255 - 30, lTop + 30)-(Width - 255 - 30, lTop + lHeight(Index) + 15), Item.BorderSelColor
-        Line (Width - 255 - 30, lTop + lHeight(Index) + 15)-(15 + f, lTop + lHeight(Index) + 15), Item.BorderSelColor
+        Line (15 + f, lTop + 15)-(Width - 255 - 30 + o2 * 15, lTop + 15), Item.BorderSelColor
+        Line (Width - 255 - 30 + o2 * 15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + lHeight(Index) + 15), Item.BorderSelColor
+        Line (Width - 255 - 30 + o2 * 15, lTop + lHeight(Index) + 15)-(15 + f, lTop + lHeight(Index) + 15), Item.BorderSelColor
         Line (15 + f, lTop + lHeight(Index) + 15)-(15 + f, lTop + 15), Item.BorderSelColor
     End If
         

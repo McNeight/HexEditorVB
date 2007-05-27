@@ -107,6 +107,7 @@ Private bDrawMouseInRect As Boolean
 Private bHasFocus As Boolean
 Private lNotEnabledColor As OLE_COLOR
 Private bUnRefreshControl As Boolean
+Private bHasLeftOneTime As Boolean
 
 
 '=======================================================
@@ -201,7 +202,12 @@ Dim y As Long
         Case WM_MOUSELEAVE
             RaiseEvent MouseLeave
             IsMouseIn = False
-            bNotOk = False: Call Refresh(False): Call DrawFocusRects
+            bNotOk = False
+            If bHasLeftOneTime Then
+                Call Refresh(False): Call DrawFocusRects
+            Else
+                bHasLeftOneTime = True
+            End If
         Case WM_MOUSEMOVE
             Call TrackMouseEvent(ET)
             
@@ -421,7 +427,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
     End With
     bNotOk2 = False
-    Call UserControl_Paint  'refresh
+    'Call UserControl_Paint  'refresh
     
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents

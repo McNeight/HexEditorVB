@@ -1,30 +1,28 @@
 VERSION 5.00
-Begin VB.UserControl vkVScroll 
+Begin VB.UserControl vkVScrollPrivate 
    AutoRedraw      =   -1  'True
    ClientHeight    =   3600
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
-   PropertyPages   =   "vkVScroll.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkVScroll.ctx":002C
-   Begin VB.Timer Timer2 
-      Enabled         =   0   'False
-      Left            =   1440
-      Top             =   1800
-   End
    Begin VB.Timer Timer1 
       Enabled         =   0   'False
-      Left            =   2040
-      Top             =   1680
+      Left            =   600
+      Top             =   0
+   End
+   Begin VB.Timer Timer2 
+      Enabled         =   0   'False
+      Left            =   0
+      Top             =   120
    End
 End
-Attribute VB_Name = "vkVScroll"
+Attribute VB_Name = "vkVScrollPrivate"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = True
+Attribute VB_Exposed = False
 ' =======================================================
 '
 ' Hex Editor VB
@@ -527,7 +525,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     'Call UserControl_Paint  'refresh
     
     'le bon endroit pour lancer le subclassing
-    Call LaunchKeyMouseEvents
+    'Call LaunchKeyMouseEvents
 End Sub
 Private Sub UserControl_Resize()
     If Height < 800 Then Height = 800
@@ -544,7 +542,7 @@ End Sub
 '=======================================================
 'lance le subclassing
 '=======================================================
-Private Sub LaunchKeyMouseEvents()
+Public Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
@@ -867,3 +865,5 @@ End Property
 Friend Property Let MyExtender(MyExtender As Object)
     Set UserControl.Extender = MyExtender
 End Property
+
+
