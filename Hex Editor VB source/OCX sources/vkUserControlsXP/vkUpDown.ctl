@@ -115,6 +115,7 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -469,11 +470,12 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get BorderColor() As OLE_COLOR: BorderColor = lBorderColor: End Property
 Public Property Let BorderColor(BorderColor As OLE_COLOR): lBorderColor = BorderColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get ArrowColor() As OLE_COLOR: ArrowColor = lArrowColor: End Property
+Attribute ArrowColor.VB_MemberFlags = "40"
 Public Property Let ArrowColor(ArrowColor As OLE_COLOR): lArrowColor = ArrowColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get FrontColor() As OLE_COLOR: FrontColor = lFrontColor: End Property
 Public Property Let FrontColor(FrontColor As OLE_COLOR): lFrontColor = FrontColor: bNotOk = False: UserControl_Paint: End Property
@@ -482,21 +484,27 @@ Public Property Let Enabled(Enabled As Boolean): bEnable = Enabled: bNotOk = Fal
 Public Property Get Min() As Currency: Min = lMin: End Property
 Public Property Let Min(Min As Currency)
 If lMin > lValue Then Exit Property
-lMin = Min
-ChangeValues
-bNotOk = False: UserControl_Paint
+If lMin <> Min Then
+    lMin = Min
+    ChangeValues
+    bNotOk = False: UserControl_Paint
+End If
 End Property
 Public Property Get Max() As Currency: Max = lMax: End Property
 Public Property Let Max(Max As Currency)
 If lMax < lValue Then Exit Property
-lMax = Max
-ChangeValues
-bNotOk = False: UserControl_Paint
+If Max <> lMax Then
+    lMax = Max
+    ChangeValues
+    bNotOk = False: UserControl_Paint
+End If
 End Property
 Public Property Get Value() As Currency: Value = lValue: End Property
 Public Property Let Value(Value As Currency)
-If Value <> lValue Then RaiseEvent Change(lValue)
-lValue = Value: Call ChangeValues
+If Value <> lValue Then
+    RaiseEvent Change(lValue)
+    lValue = Value: Call ChangeValues
+End If
 End Property
 Public Property Get SmallChange() As Currency: SmallChange = lSmallChange: End Property
 Public Property Let SmallChange(SmallChange As Currency): lSmallChange = SmallChange: bNotOk = False: UserControl_Paint: End Property
@@ -509,6 +517,7 @@ Public Property Let MouseInterval(MouseInterval As Long): lMouseInterval = Mouse
 Public Property Get Direction() As Direction: Direction = lSens: End Property
 Public Property Let Direction(Direction As Direction): lSens = Direction: bNotOk = False: UserControl_Paint: End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
@@ -545,7 +554,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 

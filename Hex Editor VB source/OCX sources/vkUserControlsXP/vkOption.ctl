@@ -114,6 +114,7 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -286,7 +287,7 @@ Dim x As Long
     Call SetRect(R, 17, y - 1, TextWidth(sCaption) / 15 + 23, y + _
         GetCharHeight + 2)
     'dessine
-    Call DrawFocusRect(UserControl.hdc, R)
+    Call DrawFocusRect(UserControl.hDc, R)
     
     If lBackStyle = [Transparent] Then
         'transparent
@@ -512,7 +513,7 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get BackStyle() As BackStyleConstants: BackStyle = lBackStyle: End Property
 Public Property Let BackStyle(BackStyle As BackStyleConstants): lBackStyle = BackStyle: UserControl.BackStyle = BackStyle: bNotOk = False: UserControl_Paint: End Property
@@ -532,6 +533,7 @@ Public Property Let Enabled(Enabled As Boolean)
 bEnable = Enabled: bNotOk = False: UserControl_Paint
 End Property
 Public Property Get Value() As CheckBoxConstants: Value = tVal: End Property
+Attribute Value.VB_MemberFlags = "200"
 Public Property Let Value(Value As CheckBoxConstants)
 tVal = Value
 If tVal = vbChecked Then Call UnCheckOther
@@ -543,6 +545,7 @@ Public Property Get Alignment() As AlignmentConstants: Alignment = tAlig: End Pr
 Public Property Let Alignment(Alignment As AlignmentConstants): tAlig = Alignment: bNotOk = False: UserControl_Paint: End Property
 Public Property Get ContainerHwnd() As Long: ContainerHwnd = UserControl.ContainerHwnd: End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
@@ -578,7 +581,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -626,7 +629,7 @@ Dim st As Long
     Else
         st = DT_RIGHT
     End If
-    Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, st)
+    Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, st)
 
     '//style
     If lBackStyle = [Transparent] Then
@@ -704,11 +707,11 @@ Dim lIMG As Long
     
     'on découpe l'image correspondant à lIMG depuis Image1 et on blit
     'sur l'usercontrol
-    SrcDC = CreateCompatibleDC(UserControl.hdc)
+    SrcDC = CreateCompatibleDC(UserControl.hDc)
     SrcObj = SelectObject(SrcDC, Image1.Picture)
     
     y = (ScaleHeight / 15 - 13) / 2
-    Call BitBlt(UserControl.hdc, 0, y, 13, 13, SrcDC, lIMG * 13, 0, SRCCOPY)
+    Call BitBlt(UserControl.hDc, 0, y, 13, 13, SrcDC, lIMG * 13, 0, SRCCOPY)
 
     Call DeleteDC(SrcDC)
     Call DeleteObject(SrcObj)

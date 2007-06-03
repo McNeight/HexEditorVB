@@ -138,6 +138,8 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_Description = "Internal proc for subclassing"
+Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -470,7 +472,7 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get TextPosition() As AlignmentConstants: TextPosition = lTextPos: End Property
 Public Property Let TextPosition(TextPosition As AlignmentConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
@@ -527,8 +529,10 @@ Public Property Let DrawMouseInRect(DrawMouseInRect As Boolean): bDrawMouseInRec
 Public Property Get DisabledBackColor() As OLE_COLOR: DisabledBackColor = lNotEnabledColor: End Property
 Public Property Let DisabledBackColor(DisabledBackColor As OLE_COLOR): lNotEnabledColor = DisabledBackColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Value() As Boolean: Value = bPushed: End Property
+Attribute Value.VB_MemberFlags = "200"
 Public Property Let Value(Value As Boolean): bPushed = Value: bNotOk = False: UserControl_Paint: End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
@@ -582,7 +586,7 @@ Dim lSigne As Long
         End If
         
         'se positionne tout à gauche de l'objet ==> balayera vers la droite
-        Call MoveToEx(.hdc, 0, Dep, 0&)
+        Call MoveToEx(.hDc, 0, Dep, 0&)
         
         'pour chaque 'colonne' constituée par une ligne verticale, on trace une
         'ligne en récupérant la couleur correspondante
@@ -594,10 +598,10 @@ Dim lSigne As Long
                 gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
                
             'trace une ligne
-            Call LineTo(.hdc, x, lHeight)
+            Call LineTo(.hDc, x, lHeight)
             
             'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hdc, x, Dep, 0&)
+            Call MoveToEx(.hDc, x, Dep, 0&)
         
         Next x
         
@@ -642,7 +646,7 @@ Dim lSigne As Long
         End If
         
         'se positionne tout à gauche de l'objet ==> balayera vers le bas
-        Call MoveToEx(.hdc, 0, Dep, 0&)
+        Call MoveToEx(.hDc, 0, Dep, 0&)
         
         'pour chaque 'colonne' constituée par une ligne verticale, on trace une
         'ligne en récupérant la couleur correspondante
@@ -654,10 +658,10 @@ Dim lSigne As Long
                 gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
                
             'trace une ligne
-            Call LineTo(.hdc, Width, x)
+            Call LineTo(.hDc, Width, x)
             
             'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hdc, 0, x, 0&)
+            Call MoveToEx(.hDc, 0, x, 0&)
         
         Next x
         
@@ -697,7 +701,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -814,13 +818,13 @@ Dim H As Long
     End If
     If lTextPos = vbCenter Then
         'au centre
-        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_CENTER)
+        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_CENTER)
     ElseIf lTextPos = vbRightJustify Then
         'à droite
-        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_RIGHT)
+        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_RIGHT)
     Else
         'à gauche
-        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_LEFT)
+        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_LEFT)
     End If
     
     
@@ -913,7 +917,7 @@ Dim H As Long
             ScaleHeight / 15)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -930,7 +934,7 @@ Dim H As Long
             ScaleHeight / 15, 7, 7)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
         
         'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
         Call SetWindowRgn(UserControl.hWnd, hRgn, True)

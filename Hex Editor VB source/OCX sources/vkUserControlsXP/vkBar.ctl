@@ -158,21 +158,37 @@ Private bUnRefreshControl As Boolean
 'EVENTS publics
 '=======================================================
 Public Event Change(NewValue As Double, OldValue As Double)
+Attribute Change.VB_Description = "Happens when Value is changed"
 Public Event KeyPress(KeyAscii As Integer)
+Attribute KeyPress.VB_Description = "Happens when a key is pressed"
 Public Event KeyDown(KeyCode As Integer, Shift As Integer)
+Attribute KeyDown.VB_Description = "Happens when a key is down"
 Public Event KeyUp(KeyCode As Integer, Shift As Integer)
+Attribute KeyUp.VB_Description = "Happens when a key is up"
 Public Event Click()
+Attribute Click.VB_Description = "Happens when control gets a click (left button)"
 Public Event DblClick()
+Attribute DblClick.VB_Description = "Happens when control gets a dblclick (left button)"
 Public Event InteractionComplete(NewValue As Double, OldValue As Double)
+Attribute InteractionComplete.VB_Description = "Happens when interaction is completed."
 Public Event ValueIsMax(Value As Double)
+Attribute ValueIsMax.VB_Description = "Happens when Value=Max"
 Public Event ValueIsMin(Value As Double)
+Attribute ValueIsMin.VB_Description = "Happens when Value=Min"
 Public Event MouseWheel(WheelSens As Wheel_Sens)
+Attribute MouseWheel.VB_Description = "Happens when control gets a wheel"
 Public Event MouseHover()
+Attribute MouseHover.VB_Description = "Happens when mouse enters control"
 Public Event MouseLeave()
+Attribute MouseLeave.VB_Description = "Happens when mouse leaves control"
 Public Event MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseDown.VB_Description = "Happens when control getsa click"
 Public Event MouseUp(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseUp.VB_Description = "Happens when control gets a mouseup"
 Public Event MouseDblClick(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseDblClick.VB_Description = "Happens when control gets a dblclick"
 Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
 
 
 
@@ -187,6 +203,8 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_Description = "Internal proc for subclassing"
+Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -399,10 +417,14 @@ End Sub
 'PROPERTIES
 '=======================================================
 Public Property Get Alignment() As Text_Alignment: Alignment = taAlign: End Property
+Attribute Alignment.VB_Description = "Text alignment"
 Public Property Let Alignment(Alignment As Text_Alignment): taAlign = Alignment: bNotOk = False: Refresh: End Property
 Public Property Get ForeColor() As OLE_COLOR: ForeColor = lLabelColor: End Property
+Attribute ForeColor.VB_Description = "Text color"
 Public Property Let ForeColor(ForeColor As OLE_COLOR): lLabelColor = ForeColor: Refresh: End Property
 Public Property Get Value() As Double: Value = dValue: End Property
+Attribute Value.VB_Description = "Current value"
+Attribute Value.VB_MemberFlags = "200"
 Public Property Let Value(Value As Double): Dim lOld As Double
     lOld = dValue
     If Value < Min Then
@@ -418,16 +440,22 @@ Public Property Let Value(Value As Double): Dim lOld As Double
     bNotOk = False: Refresh
 End Property
 Public Property Get InteractiveButton() As Button_Type: InteractiveButton = btButton: End Property
+Attribute InteractiveButton.VB_Description = "Define wich button is used to Interactive option"
 Public Property Let InteractiveButton(InteractiveButton As Button_Type): btButton = InteractiveButton: End Property
 Public Property Get InteractiveControl() As Boolean: InteractiveControl = bIsInteractive: End Property
+Attribute InteractiveControl.VB_Description = "Active or not the Interactive option (allows to change value by using mouse)"
 Public Property Let InteractiveControl(InteractiveControl As Boolean): bIsInteractive = InteractiveControl: End Property
 Public Property Get DisplayLabel() As Label_Mode: DisplayLabel = bShowLabel: End Property
+Attribute DisplayLabel.VB_Description = "Define how to display label"
 Public Property Let DisplayLabel(DisplayLabel As Label_Mode): bShowLabel = DisplayLabel: bNotOk = False: Refresh:: End Property
 Public Property Get Font() As StdFont: Set Font = UserControl.Font: End Property
+Attribute Font.VB_Description = "Text font"
 Public Property Set Font(Font As StdFont): Set UserControl.Font = Font: bNotOk = False: Refresh: End Property
 Public Property Get DisplayBorder() As Boolean: DisplayBorder = brndColor: UserControl_Resize: End Property
+Attribute DisplayBorder.VB_Description = "Display or not the border"
 Public Property Let DisplayBorder(DisplayBorder As Boolean): brndColor = DisplayBorder: bNotOk = False: Refresh: End Property
 Public Property Get BackPicture() As StdPicture
+Attribute BackPicture.VB_Description = "Define the picture wich is displayed on the back of the control"
 'BackPicture = lLeftColor
     Set BackPicture = tpn.Picture
     Set BackPicture = backImg.Picture
@@ -437,14 +465,18 @@ Public Property Set BackPicture(ByVal BackPicture As StdPicture)
     Set backImg.Picture = BackPicture
 End Property
 Public Property Get FrontPicture() As StdPicture
+Attribute FrontPicture.VB_Description = "Define the picture wich is displayed on the top of the control"
     Set FrontPicture = frontImg.Picture
 End Property
 Public Property Set FrontPicture(ByVal FrontPicture As StdPicture): Set frontImg.Picture = FrontPicture: End Property
 Public Property Get LeftColor() As OLE_COLOR: LeftColor = lLeftColor: End Property
+Attribute LeftColor.VB_Description = "Left color of the gradient"
 Public Property Let LeftColor(LeftColor As OLE_COLOR): lLeftColor = LeftColor: bNotOk = False: Refresh: End Property
 Public Property Get BorderStyle() As Border: BorderStyle = b3D: End Property
+Attribute BorderStyle.VB_Description = "3D effect or not"
 Public Property Let BorderStyle(BorderStyle As Border): b3D = BorderStyle: pct.BorderStyle = b3D: End Property
 Public Property Get Decimals() As Long: Decimals = lPercentDecimal: End Property
+Attribute Decimals.VB_Description = "Number of decimal to use to display percentage"
 Public Property Let Decimals(Decimals As Long)
     If Decimals >= 23 Then
         lPercentDecimal = 22
@@ -454,27 +486,38 @@ Public Property Let Decimals(Decimals As Long)
     bNotOk = False: Refresh
 End Property
 Public Property Get RightColor() As OLE_COLOR: RightColor = lRightColor: End Property
+Attribute RightColor.VB_Description = "Right color of the gradient"
 Public Property Let RightColor(RightColor As OLE_COLOR): lRightColor = RightColor: bNotOk = False: Refresh: End Property
 Public Property Get BackColorTop() As OLE_COLOR: BackColorTop = lBackColorTop: End Property
+Attribute BackColorTop.VB_Description = "Top backcolor"
 Public Property Let BackColorTop(BackColorTop As OLE_COLOR): lBackColorTop = BackColorTop: bNotOk = False: Refresh: End Property
 Public Property Get BackColorBottom() As OLE_COLOR: BackColorBottom = lBackColorBottom: End Property
+Attribute BackColorBottom.VB_Description = "Bottom backcolor"
 Public Property Let BackColorBottom(BackColorBottom As OLE_COLOR): lBackColorBottom = BackColorBottom: bNotOk = False: Refresh: End Property
 Public Property Get OffSetX() As Long: OffSetX = lOSx: End Property
+Attribute OffSetX.VB_Description = "Offset (pixels) of text"
 Public Property Let OffSetX(OffSetX As Long): lOSx = OffSetX: bNotOk = False: Refresh: End Property
 Public Property Get OffSetY() As Long: OffSetY = lOSy: End Property
+Attribute OffSetY.VB_Description = "Offset (pixels) of text"
 Public Property Let OffSetY(OffSetY As Long): lOSy = OffSetY: bNotOk = False: Refresh: End Property
 Public Property Get Min() As Double: Min = dMin: End Property
+Attribute Min.VB_Description = "Min of the range"
 Public Property Let Min(Min As Double): dMin = Min: End Property
 Public Property Get Max() As Double: Max = dMax: End Property
+Attribute Max.VB_Description = "Max of the range"
 Public Property Let Max(Max As Double)
 If Max > dMin Then dMax = Max
 End Property
 Public Property Get BorderColor() As OLE_COLOR: BorderColor = UserControl.BackColor: End Property
+Attribute BorderColor.VB_Description = "Color of the border"
 Public Property Let BorderColor(BorderColor As OLE_COLOR): UserControl.BackColor = BorderColor: bNotOk = False: Refresh: End Property
 Public Property Get GradientMode() As Mode_Degrade: GradientMode = mdDeg: End Property
+Attribute GradientMode.VB_Description = "Define how to display gradient"
 Public Property Let GradientMode(GradientMode As Mode_Degrade): mdDeg = GradientMode: bNotOk = False: Refresh: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
+Attribute hWnd.VB_Description = "Handle of the control"
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
@@ -689,7 +732,7 @@ Dim lRet As Long    'retour de l'API
         pct.Picture = tpn.Image
         
         'plaque la picturebox de devant sur la picturebox contenant la barre
-        Call StretchBlt(pct.hdc, 0, 0, Int(15 * lValueWidth), pct.Height, frontImg.hdc, 0, _
+        Call StretchBlt(pct.hDc, 0, 0, Int(15 * lValueWidth), pct.Height, frontImg.hDc, 0, _
         0, frontImg.Width, frontImg.Height, &HCC0020)
         
         'pct.Picture = frontImg.Picture

@@ -85,17 +85,29 @@ Private bHasLeftOneTime As Boolean
 'EVENTS
 '=======================================================
 Public Event Click()
+Attribute Click.VB_Description = "Happens when control gets a click (left button)"
 Public Event Change(Value As CheckBoxConstants)
+Attribute Change.VB_Description = "Happens when value changes"
 Public Event KeyDown(KeyCode As Integer, Shift As Integer)
+Attribute KeyDown.VB_Description = "Happens when a key is down"
 Public Event KeyPress(KeyAscii As Integer)
+Attribute KeyPress.VB_Description = "Happens when a key is pressed"
 Public Event KeyUp(KeyCode As Integer, Shift As Integer)
+Attribute KeyUp.VB_Description = "Happens when a key is up"
 Public Event MouseHover()
+Attribute MouseHover.VB_Description = "Happens when mouse enters control"
 Public Event MouseLeave()
+Attribute MouseLeave.VB_Description = "Happens when mouse leaves control"
 Public Event MouseWheel(Sens As Wheel_Sens)
+Attribute MouseWheel.VB_Description = "Happens when control gets a wheel"
 Public Event MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseDown.VB_Description = "Happens when control gets a click"
 Public Event MouseUp(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseUp.VB_Description = "Happens when control gets a mouseup"
 Public Event MouseDblClick(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseDblClick.VB_Description = "Happens when control gets a dblclick"
 Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
 
 
 
@@ -110,6 +122,7 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -265,7 +278,7 @@ Dim x As Long
     Call SetRect(R, 17, y - 1, TextWidth(sCaption) / 15 + 23, y + _
         GetCharHeight + 2)
     'dessine
-    Call DrawFocusRect(UserControl.hdc, R)
+    Call DrawFocusRect(UserControl.hDc, R)
     
     If lBackStyle = [Transparent] Then
         'transparent
@@ -430,30 +443,43 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
+Attribute hDc.VB_Description = "Get the control hDc"
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
+Attribute hWnd.VB_Description = "Handle of the control"
 Public Property Get BackStyle() As BackStyleConstants: BackStyle = lBackStyle: End Property
+Attribute BackStyle.VB_Description = "Use a transparent control or not"
 Public Property Let BackStyle(BackStyle As BackStyleConstants): lBackStyle = BackStyle: UserControl.BackStyle = BackStyle: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Caption() As String: Caption = sCaption: End Property
+Attribute Caption.VB_Description = "Caption to display"
 Public Property Let Caption(Caption As String): sCaption = Caption: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 Public Property Get ForeColor() As OLE_COLOR: ForeColor = lForeColor: End Property
+Attribute ForeColor.VB_Description = "Color of text"
 Public Property Let ForeColor(ForeColor As OLE_COLOR): lForeColor = ForeColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColor() As OLE_COLOR: BackColor = bCol: End Property
+Attribute BackColor.VB_Description = "Backcolor"
 Public Property Let BackColor(BackColor As OLE_COLOR)
 UserControl.BackColor = BackColor
 bCol = BackColor: bNotOk = False: UserControl_Paint:
 End Property
 Public Property Get Font() As StdFont: Set Font = UserControl.Font: End Property
+Attribute Font.VB_Description = "Text font"
 Public Property Set Font(Font As StdFont): Set UserControl.Font = Font: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Enabled() As Boolean: Enabled = bEnable: End Property
+Attribute Enabled.VB_Description = "Enable or not the control"
 Public Property Let Enabled(Enabled As Boolean)
 bEnable = Enabled: bNotOk = False: UserControl_Paint
 End Property
 Public Property Get Value() As CheckBoxConstants: Value = tVal: End Property
+Attribute Value.VB_Description = "Value"
+Attribute Value.VB_MemberFlags = "200"
 Public Property Let Value(Value As CheckBoxConstants): tVal = Value: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Alignment() As AlignmentConstants: Alignment = tAlig: End Property
+Attribute Alignment.VB_Description = "Text alignment"
+Attribute Alignment.VB_MemberFlags = "40"
 Public Property Let Alignment(Alignment As AlignmentConstants): tAlig = Alignment: bNotOk = False: UserControl_Paint: End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 
@@ -489,7 +515,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -498,6 +524,7 @@ End Function
 'MAJ du controle
 '=======================================================
 Public Sub Refresh()
+Attribute Refresh.VB_Description = "Refresh control"
 Dim R As RECT
 Dim yVal As Long
 Dim st As Long
@@ -538,7 +565,7 @@ Dim st As Long
     Else
         st = DT_RIGHT
     End If
-    Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, st)
+    Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, st)
     
     '//style
     If lBackStyle = [Transparent] Then
@@ -614,11 +641,11 @@ Dim lIMG As Long
     
     'on découpe l'image correspondant à lIMG depuis Image1 et on blit
     'sur l'usercontrol
-    SrcDC = CreateCompatibleDC(hdc)
+    SrcDC = CreateCompatibleDC(hDc)
     SrcObj = SelectObject(SrcDC, Image1.Picture)
     
     y = (ScaleHeight / 15 - 13) / 2
-    Call BitBlt(UserControl.hdc, 0, y, 13, 13, SrcDC, lIMG * 13, 0, SRCCOPY)
+    Call BitBlt(UserControl.hDc, 0, y, 13, 13, SrcDC, lIMG * 13, 0, SRCCOPY)
 
     Call DeleteDC(SrcDC)
     Call DeleteObject(SrcObj)

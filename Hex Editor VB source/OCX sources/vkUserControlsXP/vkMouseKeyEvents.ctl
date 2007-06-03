@@ -1,15 +1,18 @@
 VERSION 5.00
 Begin VB.UserControl vkMouseKeyEvents 
+   BackStyle       =   0  'Transparent
    CanGetFocus     =   0   'False
    ClientHeight    =   3600
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
    InvisibleAtRuntime=   -1  'True
-   Picture         =   "vkMouseKeyEvents.ctx":0000
+   MaskColor       =   &H00FFFFFF&
+   MaskPicture     =   "vkMouseKeyEvents.ctx":0000
+   Picture         =   "vkMouseKeyEvents.ctx":145E
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkMouseKeyEvents.ctx":145E
+   ToolboxBitmap   =   "vkMouseKeyEvents.ctx":28BC
 End
 Attribute VB_Name = "vkMouseKeyEvents"
 Attribute VB_GlobalNameSpace = False
@@ -67,15 +70,25 @@ Private IsMouseIn As Boolean    'si la souris est dans le controle
 'EVENTS
 '=======================================================
 Public Event KeyDown(KeyCode As Integer, Shift As Integer)
+Attribute KeyDown.VB_Description = "Happens when subclassed control gets a keydown"
 Public Event KeyPress(KeyAscii As Integer)
+Attribute KeyPress.VB_Description = "Happens when subclassed control gets a keypress"
 Public Event KeyUp(KeyCode As Integer, Shift As Integer)
+Attribute KeyUp.VB_Description = "Happens when subclassed control gets a keyup"
 Public Event MouseHover()
+Attribute MouseHover.VB_Description = "Happens when mouse enters subclassed control"
 Public Event MouseLeave()
+Attribute MouseLeave.VB_Description = "Happens when mouse leaves subclassed control"
 Public Event MouseWheel(Sens As Wheel_Sens)
+Attribute MouseWheel.VB_Description = "Happens when subclassed control gets a wheel"
 Public Event MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseDown.VB_Description = "Happens when subclassed control gets a click"
 Public Event MouseUp(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseUp.VB_Description = "Happens when subclassed control gets a mouseup"
 Public Event MouseDblClick(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseDblClick.VB_Description = "Happens when subclassed control gets a dblclick"
 Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Attribute MouseMove.VB_Description = "Happens when mouse moves on subclassed control"
 
 
 
@@ -90,6 +103,7 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -241,6 +255,7 @@ End Sub
 'lance le subclassing
 '=======================================================
 Public Sub LaunchKeyMouseEvents()
+Attribute LaunchKeyMouseEvents.VB_Description = "Start subclassing of control"
     If Ambient.UserMode Then
         If objHwnd <> 0 Then
         
@@ -280,6 +295,7 @@ End Sub
 'PROPERTIES
 '=======================================================
 Public Property Get ControlHwnd() As Long: ControlHwnd = objHwnd: End Property
+Attribute ControlHwnd.VB_Description = "hWnd of the control you want to subclass"
 Public Property Let ControlHwnd(ControlHwnd As Long)
     If OldProc <> 0 Then
         'alors déjà subclassing ==> on le termine
