@@ -9,7 +9,7 @@ Begin VB.UserControl vkListBox
    PropertyPages   =   "vkListBox.ctx":0000
    ScaleHeight     =   3210
    ScaleWidth      =   3780
-   ToolboxBitmap   =   "vkListBox.ctx":002D
+   ToolboxBitmap   =   "vkListBox.ctx":0042
    Begin vkUserContolsXP.vkVScrollPrivate VS 
       Height          =   2295
       Left            =   2400
@@ -18,6 +18,7 @@ Begin VB.UserControl vkListBox
       Width           =   255
       _ExtentX        =   450
       _ExtentY        =   4048
+      MouseInterval   =   50
    End
    Begin VB.PictureBox pic 
       AutoRedraw      =   -1  'True
@@ -26,7 +27,7 @@ Begin VB.UserControl vkListBox
       Height          =   195
       Index           =   5
       Left            =   600
-      Picture         =   "vkListBox.ctx":033F
+      Picture         =   "vkListBox.ctx":0354
       ScaleHeight     =   195
       ScaleWidth      =   195
       TabIndex        =   5
@@ -41,7 +42,7 @@ Begin VB.UserControl vkListBox
       Height          =   195
       Index           =   4
       Left            =   240
-      Picture         =   "vkListBox.ctx":0589
+      Picture         =   "vkListBox.ctx":059E
       ScaleHeight     =   195
       ScaleWidth      =   195
       TabIndex        =   4
@@ -56,7 +57,7 @@ Begin VB.UserControl vkListBox
       Height          =   195
       Index           =   3
       Left            =   1320
-      Picture         =   "vkListBox.ctx":07D3
+      Picture         =   "vkListBox.ctx":07E8
       ScaleHeight     =   195
       ScaleWidth      =   195
       TabIndex        =   3
@@ -71,7 +72,7 @@ Begin VB.UserControl vkListBox
       Height          =   195
       Index           =   2
       Left            =   960
-      Picture         =   "vkListBox.ctx":0A1D
+      Picture         =   "vkListBox.ctx":0A32
       ScaleHeight     =   195
       ScaleWidth      =   195
       TabIndex        =   2
@@ -86,7 +87,7 @@ Begin VB.UserControl vkListBox
       Height          =   195
       Index           =   1
       Left            =   600
-      Picture         =   "vkListBox.ctx":0C67
+      Picture         =   "vkListBox.ctx":0C7C
       ScaleHeight     =   195
       ScaleWidth      =   195
       TabIndex        =   1
@@ -101,7 +102,7 @@ Begin VB.UserControl vkListBox
       Height          =   195
       Index           =   0
       Left            =   240
-      Picture         =   "vkListBox.ctx":0EB1
+      Picture         =   "vkListBox.ctx":0EC6
       ScaleHeight     =   195
       ScaleWidth      =   195
       TabIndex        =   0
@@ -149,7 +150,6 @@ Attribute VB_Exposed = True
 Option Explicit
 
 
-
 '=======================================================
 'VARIABLES PRIVEES
 '=======================================================
@@ -164,9 +164,11 @@ Private lBackColor As OLE_COLOR
 Private bEnable As Boolean
 Private lListCount As Long
 Private lListIndex As Long
-Private lHeight() As Long
+'Private lHeight() As Long
 Private bSelected() As Boolean
 Private bChecked() As Boolean
+Private picCol As Collection
+Private cFile As clsFile
 Private bMultiSelect As Boolean
 Private lNewIndex As Long
 Private lSelCount As Long
@@ -175,9 +177,10 @@ Private lTopIndex As Long
 Private bNotOk As Boolean
 Private bNotOk2 As Boolean
 Private bUnRefreshControl As Boolean
+Private FilePics As clsFastCollection
 Private lForeColor As OLE_COLOR
 Private lBorderColor As OLE_COLOR
-Private bSorted As Boolean
+Private bSorted As SortOrder
 Private lCheckCount As Long
 Private tAlig As AlignmentConstants
 Private lSelColor As Long
@@ -190,12 +193,26 @@ Private tmpMouseItemIndex As Long
 Private Col As clsFastCollection
 Private zNumber As Long
 Private bVSvisible As Boolean
+Private tScroll As New vkListBoxVScroll
+Private bAcceptAutoSort As Boolean
+Private tListType As ListBoxType
+Private sPath As String
+Private bOkToAddFile As Boolean
+Private bDisplayFileIcons As Boolean
+Private bDisplayEntirePath As Boolean
+Private bUseDefautItemSettings As Boolean
+Private lIconSize As IconSize
+Private bShowHiddenFiles As Boolean
+Private bShowSystemFiles As Boolean
+Private bShowReadOnlyFiles As Boolean
 
 
 '=======================================================
 'EVENTS
 '=======================================================
 Public Event ItemClick(Item As vkListItem)
+Public Event ItemDblClick(Item As vkListItem)
+Public Event ItemUnCheck(Item As vkListItem)
 Public Event ItemChek(Item As vkListItem)
 Public Event Scroll()
 Public Event KeyDown(KeyCode As Integer, Shift As Integer)
@@ -222,11 +239,16 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
 Dim x As Long
 Dim y As Long
+Dim s As Long
+Dim e As Long
+Dim f As Long, z3 As Long
+
 
     Select Case uMsg
         
@@ -236,7 +258,16 @@ Dim y As Long
                 x = LoWord(lParam) * 15
                 y = HiWord(lParam) * 15
                 
-            RaiseEvent MouseDblClick(vbLeftButton, iShift, iControl, x, y)
+                'détermine quel Item est sélectionné
+                s = 0   'hauteur temporaire
+                On Error Resume Next
+                For z = lTopIndex To lListCount
+                    s = s + Col.Item(z).Height
+                    If s > y Then e = z: Exit For
+                Next z
+                    
+                RaiseEvent ItemDblClick(Col.Item(e))
+                RaiseEvent MouseDblClick(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
@@ -276,8 +307,38 @@ Dim y As Long
             If IsMouseIn = False Then
                 RaiseEvent MouseHover
                 IsMouseIn = True
+
+                If bStyleCheckBox Then
+                    On Error Resume Next
+                    For f = lTopIndex To lListCount
+                        e = e + Col.Item(f).Height
+                        If e >= Height - 50 Then
+                            z3 = z
+                            Exit For
+                        End If
+                        z = z + 1
+                    Next f
+            
+                    Call SplitIMGandShow(z)
+                End If
+            
             End If
         Case WM_MOUSELEAVE
+        
+            If bStyleCheckBox Then
+                On Error Resume Next
+                For f = lTopIndex To lListCount
+                    e = e + Col.Item(f).Height
+                    If e >= Height - 50 Then
+                        z3 = z
+                        Exit For
+                    End If
+                    z = z + 1
+                Next f
+        
+                MouseItemIndex = -1: Call SplitIMGandShow(z)
+            End If
+            
             RaiseEvent MouseLeave
             IsMouseIn = False
         Case WM_MOUSEMOVE
@@ -293,7 +354,7 @@ Dim y As Long
                 If (wParam And MK_MBUTTON) = MK_MBUTTON Then z = vbMiddleButton
                 RaiseEvent MouseMove(z, iShift, iControl, x, y)
         Case WM_RBUTTONDBLCLK
-                        iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
+                iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
                 x = LoWord(lParam) * 15
                 y = HiWord(lParam) * 15
@@ -314,7 +375,11 @@ Dim y As Long
                 
                 RaiseEvent MouseUp(vbRightButton, iShift, iControl, x, y)
         Case WM_MOUSEWHEEL
-
+            If wParam < 0 Then
+                RaiseEvent MouseWheel(WHEEL_DOWN)
+            Else
+                RaiseEvent MouseWheel(WHEEL_UP)
+            End If
         Case WM_PAINT
             bNotOk = True  'évite le clignotement lors du survol de la souris
     End Select
@@ -328,13 +393,20 @@ Private Sub UserControl_Initialize()
 Dim Ofs As Long
 Dim Ptr As Long
     
+    bNotOk = True
+    bNotOk2 = True
     ReDim bSelected(1)
     ReDim bChecked(1)
-    ReDim lHeight(1)
+    ReDim tPic(1)
     lListCount = 1
     
     'instancie la collection
     Set Col = New clsFastCollection
+    Set picCol = New Collection
+    
+    'instancie la classe File et la collection d'images
+    Set cFile = New clsFile
+    Set FilePics = New clsFastCollection
     
     'créé un controle dynamique
     'Set VS = Controls.Add("vkUserContolsXP.vkVScroll", "VS")
@@ -365,12 +437,17 @@ Dim Ptr As Long
     MovL Ofs, &H10C2               'C2 10 00             ret         10h
     
     'initialise le VS
+    bUnRefreshControl = True
     With VS
-        .Max = 2
+        .UnRefreshControl = True
+        .Max = 1
         .Min = 1
         .Value = 1
         .Visible = True
+        .UnRefreshControl = False
+        'Call .Refresh
     End With
+    bUnRefreshControl = False
 End Sub
 
 Private Sub UserControl_InitProperties()
@@ -394,9 +471,19 @@ Private Sub UserControl_InitProperties()
         .FullRowSelect = True
         .BorderSelColor = 16419097
         .TopIndex = 1
+        .AcceptAutoSort = False
+        .ListType = SimpleList
+        .Path = App.Path
+        .DisplayFileIcons = True
+        .UseDefautItemSettings = False
+        .DisplayEntirePath = False
+        .IconSize = Size16
+        .ShowHiddenFiles = True
+        .ShowReadOnlyFiles = True
+        .ShowSystemFiles = True
     End With
     bNotOk2 = False
-    Call UserControl_Paint  'refresh
+    bNotOk = True: Call UserControl_Paint 'refresh
 End Sub
 
 Private Sub UserControl_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -424,16 +511,23 @@ Dim e As Long
     If bStyleCheckBox Then
         If x < 255 Then
             bChecked(MouseItemIndex) = Not (bChecked(MouseItemIndex))
+            If bChecked(MouseItemIndex) Then
+                RaiseEvent ItemChek(Col.Item(MouseItemIndex))
+            Else
+                RaiseEvent ItemUnCheck(Col.Item(MouseItemIndex))
+            End If
         End If
     End If
 
     'détermine quel Item est sélectionné
     s = 0   'hauteur temporaire
     For z = lTopIndex To lListCount
-        s = s + lHeight(z)
+        s = s + Col.Item(z).Height
         If s > y Then e = z: Exit For
     Next z
-        
+    
+    RaiseEvent ItemClick(Col.Item(e))
+    
     If bMultiSelect = False Then
         'déselectionne tout
         Call UnSelectAll(False)
@@ -494,9 +588,9 @@ Dim f As Long
     'on détermine quel Item est survolé
     z2 = -1
     For f = lTopIndex To lListCount
-        e = e + lHeight(f)
+        e = e + Col.Item(f).Height
         If e > y Then
-            If z2 = -1 Then z2 = z: m = e - lHeight(f)
+            If z2 = -1 Then z2 = z: m = e - Col.Item(f).Height
         End If
         If e >= Height - 50 Then
             z3 = z
@@ -505,7 +599,8 @@ Dim f As Long
         z = z + 1
     Next f
     
-    'si pas suffisemment d'items pour remplir la vue, alors le nombre d'affichés = listcount
+    'si pas suffisemment d'items pour remplir la vue
+    'alors le nombre d'affichés = listcount
     If z3 = 0 Then z3 = ListCount
     
     'récupère l'Item survolé
@@ -525,9 +620,17 @@ Private Sub UserControl_Terminate()
     'on clear la collection
     Call Col.Clear
     Set Col = Nothing
+    Set tScroll = Nothing
+    Set cFile = Nothing
+    Set FilePics = Nothing
+    Set picCol = Nothing
+    'on efface les tableaux
+    Erase bSelected
+    Erase bChecked
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
+    bNotOk2 = True
     With PropBag
         Call .WriteProperty("Font", Me.Font, Ambient.Font)
         Call .WriteProperty("BackColor", Me.BackColor, &HFFFFFF)
@@ -546,7 +649,19 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("FullRowSelect", Me.FullRowSelect, True)
         Call .WriteProperty("BorderSelColor", Me.BorderSelColor, 16419097)
         Call .WriteProperty("TopIndex", Me.TopIndex, 1)
+        'Call .WriteProperty("VScroll", Me.VScroll, tScroll)
+        Call .WriteProperty("UseDefautItemSettings", Me.UseDefautItemSettings, False)
+        Call .WriteProperty("AcceptAutoSort", Me.AcceptAutoSort, False)
+        Call .WriteProperty("ListType", Me.ListType, SimpleList)
+        Call .WriteProperty("Path", Me.Path, App.Path)
+        Call .WriteProperty("DisplayFileIcons", Me.DisplayFileIcons, True)
+        Call .WriteProperty("DisplayEntirePath", Me.DisplayEntirePath, False)
+        Call .WriteProperty("IconSize", Me.IconSize, Size16)
+        Call .WriteProperty("ShowHiddenFiles", Me.ShowHiddenFiles, True)
+        Call .WriteProperty("ShowReadOnlyFiles", Me.ShowReadOnlyFiles, True)
+        Call .WriteProperty("ShowSystemFiles", Me.ShowSystemFiles, True)
     End With
+    bNotOk2 = False
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
 
@@ -569,9 +684,25 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.FullRowSelect = .ReadProperty("FullRowSelect", True)
         Me.BorderSelColor = .ReadProperty("BorderSelColor", 16419097)
         Me.TopIndex = .ReadProperty("TopIndex", 1)
+        'Me.VScroll.UnRefreshControl = True
+        Me.VScroll = .ReadProperty("VScroll", tScroll)
+        Me.AcceptAutoSort = .ReadProperty("AcceptAutoSort", False)
+        Me.ListType = .ReadProperty("ListType", SimpleList)
+        Me.Path = .ReadProperty("Path", App.Path)
+        Me.DisplayFileIcons = .ReadProperty("DisplayFileIcons", True)
+        Me.DisplayEntirePath = .ReadProperty("DisplayEntirePath", False)
+        Me.IconSize = .ReadProperty("IconSize", Size16)
+        Me.UseDefautItemSettings = .ReadProperty("UseDefautItemSettings", False)
+        Me.ShowHiddenFiles = .ReadProperty("ShowHiddenFiles", True)
+        Me.ShowReadOnlyFiles = .ReadProperty("ShowReadOnlyFiles", True)
+        Me.ShowSystemFiles = .ReadProperty("ShowSystemFiles", True)
     End With
     bNotOk2 = False
-    'Call UserControl_Paint  'refresh
+    If tListType = SimpleList Then
+        Call Refresh  'refresh
+    Else
+        Call AddFileToList
+    End If
     
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents
@@ -582,12 +713,22 @@ End Sub
 Private Sub UserControl_Resize()
     If Height < 800 Then Height = 800
     With VS
+        .UnRefreshControl = True
         .Width = 255
         .Top = 0
         .Left = Width - 255
         .Height = Height
+        .UnRefreshControl = False
+        'Call .Refresh
     End With
-    Call Refresh  'refresh
+    bNotOk = False: Call UserControl_Paint 'refresh
+    
+    'bon ben lors du premier resize, on considère que le controle est près
+    'pour pouvoir être remplit par les items File/Folder
+    If bOkToAddFile = False Then
+        bOkToAddFile = True
+        Call AddFileToList
+    End If
 End Sub
 
 '=======================================================
@@ -623,7 +764,64 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+
+'//Propriétés sur le Scroll
+Public Property Get VScroll() As vkListBoxVScroll
+    Set VScroll = New vkListBoxVScroll
+    With VScroll
+        .ArrowColor = VS.ArrowColor
+        .BackColor = VS.BackColor
+        .BorderColor = VS.BorderColor
+        .DownColor = VS.DownColor
+        .Enabled = VS.Enabled
+        .EnableWheel = VS.EnableWheel
+        .FrontColor = VS.FrontColor
+        .hDc = VS.hDc
+        .hWnd = VS.hWnd
+        .LargeChange = VS.LargeChange
+        .LargeChangeColor = VS.LargeChangeColor
+        .Max = VS.Max
+        .Min = VS.Min
+        .MouseHoverColor = VS.MouseHoverColor
+        .MouseInterval = VS.MouseInterval
+        .ScrollHeight = VS.ScrollHeight
+        .SmallChange = VS.SmallChange
+        .UnRefreshControl = VS.UnRefreshControl
+        .Value = VS.Value
+        .WheelChange = VS.WheelChange
+        .Width = VS.Width
+        .Height = VS.Height
+    End With
+End Property
+Public Property Let VScroll(VScroll As vkListBoxVScroll)
+    With VS
+        .UnRefreshControl = True
+        .ArrowColor = VScroll.ArrowColor
+        .BackColor = VScroll.BackColor
+        .BorderColor = VScroll.BorderColor
+        .DownColor = VScroll.DownColor
+        .Enabled = VScroll.Enabled
+        .EnableWheel = VScroll.EnableWheel
+        .FrontColor = VScroll.FrontColor
+        .LargeChange = VScroll.LargeChange
+        .LargeChangeColor = VScroll.LargeChangeColor
+        .MouseHoverColor = VScroll.MouseHoverColor
+        .MouseInterval = VScroll.MouseInterval
+        .ScrollHeight = VScroll.ScrollHeight
+        .SmallChange = VScroll.SmallChange
+        .UnRefreshControl = VScroll.UnRefreshControl
+        .Value = VScroll.Value
+        .WheelChange = VScroll.WheelChange
+        .Width = VScroll.Width
+        .Left = Width - .Width
+        .UnRefreshControl = False
+    End With
+    Call VS.Refresh
+    bNotOk = False: Call UserControl_Paint
+End Property
+
+'//Proptiétés normales
+Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get SelColor() As OLE_COLOR: SelColor = lSelColor: End Property
 Public Property Let SelColor(SelColor As OLE_COLOR): lSelColor = SelColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
@@ -652,8 +850,10 @@ Public Property Get Selected(Index As Long) As Boolean: On Error Resume Next: Se
 Public Property Get Checked(Index As Long) As Boolean: On Error Resume Next: Checked = bChecked(Index): End Property
 Public Property Let Selected(Index As Long, Selected As Boolean): On Error Resume Next: bSelected(Index) = Selected: End Property
 Public Property Let Checked(Index As Long, Checked As Boolean): On Error Resume Next: bChecked(Index) = Checked: End Property
-Public Property Get Sorted() As Boolean: Sorted = bSorted: End Property
-Public Property Let Sorted(Sorted As Boolean): bSorted = Sorted: bNotOk = False: UserControl_Paint: End Property
+Public Property Get Sorted() As SortOrder: Sorted = bSorted: End Property
+Public Property Let Sorted(Sorted As SortOrder)
+bSorted = Sorted: bNotOk = False: Call Sort(bSorted): UserControl_Paint
+End Property
 Public Property Get TopIndex() As Long: TopIndex = lTopIndex: End Property
 Public Property Let TopIndex(TopIndex As Long): lTopIndex = TopIndex: bNotOk = False: UserControl_Paint: End Property
 Public Property Get StyleCheckBox() As Boolean: StyleCheckBox = bStyleCheckBox: End Property
@@ -668,13 +868,12 @@ On Error Resume Next
 Set Col.Item(Index) = Item
 bSelected(Index) = Item.Selected
 bChecked(Index) = Item.Checked
-lHeight(Index) = Item.Height
+'lHeight(Index) = Item.Height
 bNotOk = False: UserControl_Paint
 End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
-Public Property Get VScroll() As vkVScroll: On Error Resume Next: Set VScroll = VS: End Property
-Public Property Let VScroll(VScroll As vkVScroll): On Error Resume Next: Set VS = VScroll: Call UserControl_Resize: End Property
 Public Property Get DisplayVScroll() As Boolean: DisplayVScroll = bVSvisible: End Property
 Public Property Let DisplayVScroll(DisplayVScroll As Boolean)
 bVSvisible = DisplayVScroll
@@ -684,19 +883,54 @@ End Property
 Public Property Get CheckCount() As Long: CheckCount = lCheckCount: End Property
 Public Property Get Alignment() As AlignmentConstants: Alignment = tAlig: End Property
 Public Property Let Alignment(Alignment As AlignmentConstants): tAlig = Alignment: bNotOk = False: UserControl_Paint: End Property
-Public Property Get ListItems() As vkListItems: On Error Resume Next: Set ListItems = Col: End Property
-'Public Property Let ListItems(ListItems As vkListItems): On Error Resume Next: Set Col = ListItems: bNotOk = False: UserControl_Paint: End Property
+Public Property Get ListItems() As clsFastCollection: On Error Resume Next: Set ListItems = Col: End Property
+Public Property Let ListItems(ListItems As clsFastCollection): On Error Resume Next: Set Col = ListItems: bNotOk = False: UserControl_Paint: End Property
 Public Property Get FullRowSelect() As Boolean: FullRowSelect = lFullRowSelect: End Property
 Public Property Let FullRowSelect(FullRowSelect As Boolean): lFullRowSelect = FullRowSelect: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BorderSelColor() As OLE_COLOR: BorderSelColor = lBorderSelColor: End Property
 Public Property Let BorderSelColor(BorderSelColor As OLE_COLOR): lBorderSelColor = BorderSelColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
+Public Property Get AcceptAutoSort() As Boolean: AcceptAutoSort = bAcceptAutoSort: End Property
+Attribute AcceptAutoSort.VB_MemberFlags = "40"
+Public Property Let AcceptAutoSort(AcceptAutoSort As Boolean): bAcceptAutoSort = AcceptAutoSort
+If bAcceptAutoSort Then Call Sort(bSorted)
+End Property
+Public Property Get ListType() As ListBoxType: ListType = tListType: End Property
+Public Property Let ListType(ListType As ListBoxType): tListType = ListType
+bNotOk = False: Call AddFileToList
+End Property
+Public Property Get Path() As String: Path = sPath: End Property
+Public Property Let Path(Path As String): sPath = Path
+bNotOk = False: Call AddFileToList
+End Property
+Public Property Get DisplayFileIcons() As Boolean: DisplayFileIcons = bDisplayFileIcons: End Property
+Public Property Let DisplayFileIcons(DisplayFileIcons As Boolean): bDisplayFileIcons = DisplayFileIcons
+bNotOk = False: Call AddFileToList
+End Property
+Public Property Get DisplayEntirePath() As Boolean: DisplayEntirePath = bDisplayEntirePath: End Property
+Public Property Let DisplayEntirePath(DisplayEntirePath As Boolean): bDisplayEntirePath = DisplayEntirePath
+bNotOk = False: Call AddFileToList
+End Property
+Public Property Get UseDefautItemSettings() As Boolean: UseDefautItemSettings = bUseDefautItemSettings: End Property
+Public Property Let UseDefautItemSettings(UseDefautItemSettings As Boolean): bUseDefautItemSettings = UseDefautItemSettings: bNotOk = False: UserControl_Paint: End Property
+Public Property Get IconSize() As IconSize: IconSize = lIconSize: End Property
+Public Property Let IconSize(IconSize As IconSize): lIconSize = IconSize: Call AddFileToList: End Property
+Public Property Get ShowHiddenFiles() As Boolean: ShowHiddenFiles = bShowHiddenFiles: End Property
+Public Property Let ShowHiddenFiles(ShowHiddenFiles As Boolean): bShowHiddenFiles = ShowHiddenFiles: bNotOk = False: AddFileToList: End Property
+Public Property Get ShowSystemFiles() As Boolean: ShowSystemFiles = bShowSystemFiles: End Property
+Public Property Let ShowSystemFiles(ShowSystemFiles As Boolean): bShowSystemFiles = ShowSystemFiles: bNotOk = False: AddFileToList: End Property
+Public Property Get ShowReadOnlyFiles() As Boolean: ShowReadOnlyFiles = bShowReadOnlyFiles: End Property
+Public Property Let ShowReadOnlyFiles(ShowReadOnlyFiles As Boolean): bShowReadOnlyFiles = ShowReadOnlyFiles: bNotOk = False: AddFileToList: End Property
 
 
 Private Sub UserControl_Paint()
 
     If bNotOk Or bNotOk2 Or bUnRefreshControl Then Exit Sub     'pas prêt à peindre
     
-    Call Refresh    'on refresh
+    If tListType = SimpleList Then
+        Call Refresh
+    Else
+        Call AddFileToList
+    End If
 End Sub
 
 
@@ -716,13 +950,14 @@ Public Sub AddItem(Optional ByVal Caption As String, Optional ByVal Item As _
     vkListItem, Optional ByVal Key As String, Optional ByVal Index As Long = -1)
     
 Dim tIt As vkListItem
+Dim bOk As Boolean
     
     lListCount = lListCount + 1
         
     'redimensionne les tableaux avec le nombre d'items de la liste
     ReDim Preserve bChecked(lListCount - 1)
     ReDim Preserve bSelected(lListCount - 1)
-    ReDim Preserve lHeight(lListCount - 1)
+    'ReDim Preserve lHeight(lListCount - 1)
     
     If Item Is Nothing Then
         'alors on créé un nouvel Item dont on définit les prop par défaut
@@ -743,13 +978,15 @@ Dim tIt As vkListItem
         
         If Index = -1 Then
             tIt.Index = Col.Count + 1
-            lHeight(lListCount - 1) = tIt.Height
+            'lHeight(lListCount - 1) = tIt.Height
             Call Col.Add(tIt)
         Else
             tIt.Index = Index
-            lHeight(Index) = tIt.Height
+            'lHeight(Index) = tIt.Height
             Call Col.Add(tIt, Index)
         End If
+        
+        lNewIndex = tIt.Index
         
     Else
         'on ajoute l'item passé en paramètre
@@ -757,22 +994,28 @@ Dim tIt As vkListItem
             Item.Index = lListCount - 1
             bSelected(Item.Index) = Item.Selected
             bChecked(Item.Index) = Item.Checked
-            lHeight(lListCount - 1) = Item.Height
+            'lHeight(lListCount - 1) = Item.Height
             Call Col.Add(Item)
         Else
             bSelected(Index) = Item.Selected
             bChecked(Index) = Item.Checked
-            lHeight(Index) = Item.Height
+            'lHeight(Index) = Item.Height
             Call Col.Add(Item, Index)
         End If
-   
+        
+        lNewIndex = Item.Index
+        
     End If
+    
     
     With VS
         .UnRefreshControl = True
         .Max = lListCount
         .UnRefreshControl = False
     End With
+    
+    'on trie à nouveau
+    If bAcceptAutoSort Then bNotOk = False: Call Sort(bSorted)
     
     'on refresh
     Call Refresh
@@ -787,7 +1030,7 @@ Dim x As Long
     'efface les tableau
     ReDim bSelected(1)
     ReDim bChecked(1)
-    ReDim lHeight(1)
+    'ReDim lHeight(1)
     
     'on vide la collection...
     Call Col.Clear
@@ -795,6 +1038,7 @@ Dim x As Long
     lListCount = 1
     lSelCount = 0
     lCheckCount = 0
+
     VS.Max = 1
     
     'refresh
@@ -861,7 +1105,7 @@ Public Sub RemoveItem(ByVal Index As Long)
     If lListCount < 1 Then lListCount = 1
     ReDim Preserve bChecked(lListCount)
     ReDim Preserve bSelected(lListCount)
-    ReDim Preserve lHeight(lListCount)
+    'ReDim Preserve lHeight(lListCount)
     
     VS.Max = lListCount - 1
     
@@ -923,6 +1167,14 @@ Dim x As Long
 End Sub
 
 '=======================================================
+'trie la collection
+'=======================================================
+Public Sub SortItems(ByVal SortType As SortOrder)
+    bNotOk = False: Call Sort(SortType)
+    Call Refresh
+End Sub
+
+'=======================================================
 'ne check rien
 '=======================================================
 Public Sub UnCheckAll()
@@ -962,7 +1214,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -979,20 +1231,12 @@ Dim hRgn As Long
 Dim x As Long
 Dim hBrush As Long
 Dim e As Long
-
-
-
-Static ni As Long
-Dim op As Long
-    ni = ni + 1
-    
-    
-    
+Dim vsEn As Boolean
     
     If bUnRefreshControl Then Exit Sub
     
     On Error Resume Next
-
+    
     '//on efface
     Call UserControl.Cls
 
@@ -1015,7 +1259,7 @@ Dim op As Long
     x = 0 'contient la hauteur des composants affichés
     z = 0 'contient le nombre d'items à afficher
     For y = lTopIndex To lListCount - 1
-        x = x + lHeight(y)
+        x = x + Col.Item(y).Height
         If x >= Height - 30 Then Exit For
         z = z + 1
     Next y
@@ -1041,7 +1285,7 @@ Dim op As Long
         End If
 
         'update la hauteur temporaire
-        y = y + lHeight(x)
+        y = y + Col.Item(x).Height
     Next x
 
 
@@ -1055,7 +1299,7 @@ Dim op As Long
             ScaleHeight / 15)
 
         'on dessine le contour
-        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -1128,7 +1372,7 @@ Dim H As Long
     Set UserControl.Font = Item.Font
     
     'récupère la hauteur du texte à afficher
-    H = (lHeight(Index) - TextHeight(Item.Text)) / 30
+    H = (Item.Height - TextHeight(Item.Text)) / 30
     
     'définit une zone pour le texte
     Call SetRect(R, 7 + e, 1 + lTop / 15 + H, ScaleWidth / 15 - 1 - o, _
@@ -1138,21 +1382,21 @@ Dim H As Long
     'dessine un rectangle (backcolor ou selection) dans cette zone
     If bSelected(Index) = False Then
         'backcolor
-        Line (15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + lHeight(Index) + 15), Item.BackColor, BF
+        Line (15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + Item.Height + 15), Item.BackColor, BF
     Else
         'sélection
         If f Then
             'alors on décale ==> on doit quand même faire le backColor
-            Line (15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + lHeight(Index) + 15), Item.BackColor, BF
+            Line (15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + Item.Height + 15), Item.BackColor, BF
         End If
         
         'fond de la sélection
-        Line (15 + f, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + lHeight(Index) + 15), Item.SelColor, BF
+        Line (15 + f, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + Item.Height + 15), Item.SelColor, BF
         'bordure de la sélection
         Line (15 + f, lTop + 15)-(Width - 255 - 30 + o2 * 15, lTop + 15), Item.BorderSelColor
-        Line (Width - 255 - 30 + o2 * 15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + lHeight(Index) + 15), Item.BorderSelColor
-        Line (Width - 255 - 30 + o2 * 15, lTop + lHeight(Index) + 15)-(15 + f, lTop + lHeight(Index) + 15), Item.BorderSelColor
-        Line (15 + f, lTop + lHeight(Index) + 15)-(15 + f, lTop + 15), Item.BorderSelColor
+        Line (Width - 255 - 30 + o2 * 15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + Item.Height + 15), Item.BorderSelColor
+        Line (Width - 255 - 30 + o2 * 15, lTop + Item.Height + 15)-(15 + f, lTop + Item.Height + 15), Item.BorderSelColor
+        Line (15 + f, lTop + Item.Height + 15)-(15 + f, lTop + 15), Item.BorderSelColor
     End If
         
     
@@ -1167,7 +1411,7 @@ Dim H As Long
     
     'définit la ForeColor et trace le texte
     UserControl.ForeColor = Item.ForeColor
-    Call DrawText(UserControl.hdc, Item.Text, Len(Item.Text), R, st)
+    Call DrawText(UserControl.hDc, Item.Text, Len(Item.Text), R, st)
     Set UserControl.Font = tF 'restaure la fonte d'origine
 End Sub
 
@@ -1179,24 +1423,45 @@ Dim y As Long
 Dim SrcDC As Long
 Dim SrcObj As Long
 Dim e As Long
+Dim pic As StdPicture
     
     'calcule le décalage en haut
-    y = 1 + lTop / 15 + lHeight(Index) / 30 - Item.pxlIconHeight / 2
-
-    SrcDC = CreateCompatibleDC(UserControl.hdc)
-    SrcObj = SelectObject(SrcDC, Item.Icon)
+    y = 1 + lTop / 15 + Item.Height / 30 - Item.pxlIconHeight / 2
     
     'décalage vers la droite si picture de checkboxes
     If bStyleCheckBox Then
         e = 15
     End If
-
-    Call BitBlt(UserControl.hdc, 4 + e, y, Item.pxlIconWidth, _
-        Item.pxlIconHeight, SrcDC, 0, 0, SRCCOPY)
-
-    Call DeleteDC(SrcDC)
-    Call DeleteObject(SrcObj)
-
+    
+    '//si le type est nul, c'est que la picture n'est pas issue d'une
+    'icone de fichier par ListType<>NormalList
+    If Item.pctType = 0 Then
+    
+        SrcDC = CreateCompatibleDC(UserControl.hDc)
+        SrcObj = SelectObject(SrcDC, Item.Icon)
+    
+        Call BitBlt(UserControl.hDc, 4 + e, y, Item.pxlIconWidth, _
+            Item.pxlIconHeight, SrcDC, 0, 0, SRCCOPY)
+    
+        Call DeleteDC(SrcDC)
+        Call DeleteObject(SrcObj)
+    Else
+        'alors Icon=1, et la picture est dans tPic()
+        
+        'si icone ==> DrawIcon, sinon PaintPicture
+        'If tPic(Item.Index).Type = vbPicTypeIcon Then
+            
+        Set pic = GetMyIcon(Item.tagString1)
+        
+        Call DrawIconEx(hDc, 4 + e, y, pic, Item.pxlIconWidth, _
+            Item.pxlIconHeight, 0, 0, DI_NORMAL)
+        'Else
+            'Call PaintPicture(tPic(Item.Index), 4 + e, y, _
+                Item.pxlIconWidth, Item.pxlIconHeight)
+        'End If
+       
+    End If
+    
 End Sub
 
 Private Sub VS_Change(Value As Currency)
@@ -1206,7 +1471,7 @@ Static lngOldValue
     If lListCount <= zNumber + TopIndex + 1 Then VS.Max = lListCount - zNumber
     
     lTopIndex = CLng(Value)
-    
+
     'on en refresh QUE si on a changé de value entre temps
     If lngOldValue <> CLng(Value) Then Call Refresh
     lngOldValue = Value
@@ -1224,7 +1489,7 @@ Public Sub FillByFile(ByVal File As String)
 Dim lFile As Long
 Dim x As Long
 Dim s As String
-Dim t() As String
+Dim T() As String
     
     On Error Resume Next
     
@@ -1236,13 +1501,13 @@ Dim t() As String
     Close lFile
     
     'sépare chaque ligne
-    ReDim t(0)
-    t() = Split(s, vbNewLine, , vbBinaryCompare)
+    ReDim T(0)
+    T() = Split(s, vbNewLine, , vbBinaryCompare)
     
     'ajoute tous les items
     bUnRefreshControl = True
-    For x = 0 To UBound(t())
-        Call Me.AddItem(t(x))
+    For x = 0 To UBound(T())
+        Call Me.AddItem(T(x))
     Next x
     bUnRefreshControl = False
     Call Refresh
@@ -1285,7 +1550,7 @@ Dim lIMG As Long
 Dim tVal As Boolean
 Dim e As Long
     
-    Debug.Print "SplitIMGandShow"
+    'Debug.Print "SplitIMGandShow"
     '0 rien
     '1 survol
     '2 enabled=false
@@ -1308,7 +1573,7 @@ Dim e As Long
     For x = lTopIndex To lTopIndex + z
     
         'Top de l'image
-        e = y + lHeight(x) / 2 - 100
+        e = y + Col.Item(x).Height / 2 - 100
         
         If bChecked(x) Then
             If MouseItemIndex = x Then
@@ -1330,11 +1595,11 @@ Dim e As Long
         
 
         'trace l'image
-        Call BitBlt(UserControl.hdc, 2, e / 15, 13, 13, pic(lIMG).hdc, _
+        Call BitBlt(UserControl.hDc, 2, e / 15, 13, 13, pic(lIMG).hDc, _
               0, 0, SRCCOPY)
         
         'update la hauteur temporaire
-        y = y + lHeight(x)
+        y = y + Col.Item(x).Height
     Next x
 
     '//on trace le contour
@@ -1347,7 +1612,7 @@ Dim e As Long
             ScaleHeight / 15)
 
         'on dessine le contour
-        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -1355,9 +1620,233 @@ Dim e As Long
     End If
     
     Call UserControl.Refresh
-    Debug.Print Rnd
+    'Debug.Print Rnd
     'libère
 '    Call DeleteDC(SrcDC)
 '    Call DeleteObject(SrcObj)
 
 End Sub
+
+'=======================================================
+'trie la collection
+'=======================================================
+Private Sub Sort(ByVal SortType As SortOrder)
+Dim cSort As clsSort
+Dim Col2 As clsFastCollection
+    
+    If SortType = DoNotSort Then Exit Sub
+    If bNotOk Or bNotOk2 Or lListCount <= 1 Then Exit Sub
+    
+    'instancie la classe
+    Set cSort = New clsSort
+    
+    If SortType = Alphabetical Then
+        Call cSort.SortList(Col, True)
+    Else
+        Call cSort.SortList(Col, False)
+    End If
+    
+    'libère
+    Set cSort = Nothing
+    
+    bNotOk = True
+    
+    'on refresh le controle
+    'Call Refresh
+End Sub
+
+'=======================================================
+'ajoute les fichiers du Path dans la liste
+'=======================================================
+Private Sub AddFileToList()
+Dim s() As String
+Dim x As Long
+Dim bOk As Boolean
+Dim tIt As vkListItem
+    
+    If bOkToAddFile = False Or bUnRefreshControl Or bNotOk2 Then Exit Sub
+    
+    On Error GoTo RedimArray
+    
+    bOk = bUnRefreshControl
+    bUnRefreshControl = True
+    
+    'on clear la sélection
+    Call Me.Clear
+    
+    bUnRefreshControl = bOk
+    
+    If tListType = SimpleList Then Exit Sub
+    
+    bUnRefreshControl = True
+    
+    If tListType = FileListBox Then
+        'alors c'est une liste de fichiers
+        'récupère tous les fichiers du Path
+        Call cFile.EnumFiles(sPath, s(), False, bShowSystemFiles, _
+            bShowHiddenFiles, bShowReadOnlyFiles)
+    ElseIf tListType = FolderListBox Then
+        'liste de dossiers
+        'énumère tous les dossiers du path
+        Call cFile.EnumFolders(sPath, s(), False, bShowSystemFiles, _
+            bShowHiddenFiles, bShowReadOnlyFiles)
+    Else
+        'liste des drives
+        'énumères tous les drives
+        Call cFile.EnumDrives(s())
+    End If
+    
+    'on vide la collection d'images
+    If bDisplayFileIcons Then Call FilePics.Clear
+    
+    'ajoute tous les items de s()
+    For x = 1 To UBound(s())
+    
+        If bDisplayFileIcons Then
+            'on récupère alors l'icone du fichier et on ajoute à la collection
+            Set tIt = New vkListItem
+            With tIt
+                If bDisplayEntirePath Then
+                    .Text = s(x)
+                Else
+                    .Text = GetFileName(s(x))
+                End If
+                .Icon = 1
+                .Font = Ambient.Font
+                .Index = x
+                .tagString1 = s(x)  'sauve aussi le path entier
+                .pctType = 1
+                If lIconSize = Size16 Then
+                    .pxlIconHeight = 16
+                    .pxlIconWidth = 16
+                Else
+                    .pxlIconHeight = 32
+                    .pxlIconWidth = 32
+                    .Height = 500
+                End If
+                .tagString2 = GetFileKey(s(x))
+            End With
+        
+            Call Me.AddItem(, tIt)
+        Else
+            
+            'sans icone
+            If bDisplayEntirePath Then
+                Call Me.AddItem(s(x))
+            Else
+                Call Me.AddItem(GetFileName(s(x)))
+            End If
+            
+        End If
+        
+    Next x
+    
+    bUnRefreshControl = bOk
+    Set tIt = Nothing
+    
+    'on refresh le controle
+    Call Refresh
+
+    Exit Sub
+    
+RedimArray:
+    ReDim tPic(0)
+    Resume
+End Sub
+
+'=======================================================
+'Récupère le nom du fichier depuis le path
+'=======================================================
+Private Function GetFileName(ByVal Path As String) As String
+
+    Call PathStripPath(Path)
+    
+    GetFileName = StringWithoutNullChar(Path)
+    
+End Function
+
+'=======================================================
+'Enlève le NullChar
+'=======================================================
+Private Function StringWithoutNullChar(ByVal strString As String) As String
+Dim lIn As Long
+    
+    lIn = InStr(strString, vbNullChar)
+    
+    If lIn Then StringWithoutNullChar = Left$(strString, lIn - 1) Else _
+        StringWithoutNullChar = strString
+
+End Function
+
+'=======================================================
+'Récupère la terminaison d'un fichier
+'=======================================================
+Private Function GetExt(ByVal File As String) As String
+Dim l As Long
+
+    l = InStrRev(File, ".", , vbBinaryCompare)
+    If l Then
+        GetExt = LCase$(Right$(File, Len(File) - l))
+    End If
+End Function
+
+'=======================================================
+'récupère une Key depuis un fichier
+'=======================================================
+Private Function GetFileKey(ByVal File As String) As String
+Dim s As String
+
+    If tListType = DriveListBox Then
+        'on ajoute les drives
+        GetFileKey = File
+    ElseIf tListType = DriveListBox Then
+        'on ajoute des fichiers
+        GetFileKey = ":folder"
+    Else
+        'des fichiers
+        s = GetExt(File)
+        Select Case s
+            Case "exe", "ico", "cur", "ani", "lnk"
+                'alors on ajoute comme key le Path
+                GetFileKey = File
+            Case vbNullString
+                'alors on ajoute comme key :no ext
+                GetFileKey = ":no ext"
+            Case Else
+                'alors l'extension
+                GetFileKey = s
+        End Select
+    End If
+    
+    If lIconSize = Size16 Then
+        GetFileKey = GetFileKey & ":1"
+    Else
+        GetFileKey = GetFileKey & ":3"
+    End If
+    
+End Function
+
+'=======================================================
+'Récupère l'icone d'un fichier/dossier/disque
+'=======================================================
+Private Function GetMyIcon(ByVal s As String) As StdPicture
+Dim Key As String
+
+    On Error GoTo NeedToAdd
+
+    'récupère la clé
+    Key = GetFileKey(s)
+    
+    'maintenant qu'on a la key, on essaie d'acceder à l'icone de cette key
+    'si erreur ==> on ajoutera
+    'si pas d'erreur ==> on ajoute pas
+    Set GetMyIcon = picCol.Item(Key)
+    
+    Exit Function
+    
+NeedToAdd:
+
+    'on a besoin d'ajouter l'icone
+    Call picCol.Add(cFile.GetIcon(s, lIconSize), Key)
+    Set GetMyIcon = picCol.Item(Key)
+End Function

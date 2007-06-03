@@ -7,10 +7,10 @@ BEGIN
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
 Attribute VB_Name = "clsFastCollection"
-Attribute VB_GlobalNameSpace = False
+Attribute VB_GlobalNameSpace = True
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = False
+Attribute VB_Exposed = True
 ' =======================================================
 '
 ' Hex Editor VB
@@ -54,10 +54,14 @@ Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (pDst As Any
 '=======================================================
 'variables privées
 '=======================================================
-Private lCount As Long
-Private lPtr() As Long
+Private lCount As Long  'nombre d'Items
+Private lUbound As Long 'taille du tableau
+Private lPtr() As Long  'contient la liste des pointeurs vers les objets
 
-Private Const USTEP As Long = 1000
+Private Const USTEP As Long = 1000  'variable arbitraire pour le redimensionnement
+'du tableau. Plus c'est grand, plus çà gaspille en mémoire (potentiellement)
+'mais plus c'est rapide.
+
 
 
 '=======================================================
@@ -68,37 +72,50 @@ Private Const USTEP As Long = 1000
 'ajoute un item
 '=======================================================
 Public Sub Add(Obj As Object, Optional ByVal Index As Long = -1)
-Dim n As Long
-Dim tmp As Object
+Attribute Add.VB_Description = "Add an item to collection"
+Dim Tmp As Object
     
-    Set tmp = Obj
+    'récupère l'objet passé en paramètre
+    Set Tmp = Obj
     
-    If Index = -1 Then
-        'alors on ajoute simplement à la suite
+    'on teste si c'est nécessaire de redimensionner le tableau ou pas
+    If lCount = lUbound Then
+    
+        'alors la taille du tableau est trop petite avec le nouvel Item
+        'donc on redimensionne ==> change le lUbound
+        lUbound = lUbound + USTEP
         
-        lCount = lCount + 1
+        'on redimensionne avec Preserve avec la nouvelle taille
+        ReDim Preserve lPtr(lUbound)
         
-        'redimensionne le tableau, pas à chaque fois, mais quand
-        'c'est nécessaire (tous les 1000)
-        If UBound(lPtr()) < lCount Then
-            ReDim Preserve lPtr(UBound(lPtr()) + USTEP)
-        End If
+    End If
         
-        'recupère le pointeur sur l'objet
-        lPtr(lCount) = ObjPtr(Obj)
-        
-        Call CopyMemory(ByVal VarPtr(Obj), 0, 4)
-        Set Obj = tmp
+    'incrémente le nombre d'objets
+    lCount = lCount + 1
+    
+    'si l'index est incorrect ==> alors c'est à la suite
+    If Index <= 0 Or Index > lCount Then
 
-    ElseIf Index > 0 And Index <= lCount Then
+        'recupère le pointeur sur l'objet et le stocke dans le tableau
+        lPtr(lCount) = ObjPtr(Obj)
+
+    Else
     
-        'alors on insère dans la liste
-        Call AddItemPr(ObjPtr(Obj), Index)
-        
-        Call CopyMemory(ByVal VarPtr(Obj), 0, 4)
-        Set Obj = tmp
+        'alors on insère dans la liste à l'Index voulu
+
+        'on copie la partie du tableau APRES index en décalant d'une case
+        'le tableau, grâce à Copymemory
+        Call CopyMemory(lPtr(Index + 1), lPtr(Index), (lCount - Index) * 4)
+    
+        'on insère le nouvel item au milieu du tableau
+        lPtr(Index) = ObjPtr(Obj)
                 
     End If
+    
+    '# On supprime le lien qui existe (ObjPtr) entre Tmp et notre objet.
+    '# Ainsi, la référence que nous venons de placer dans le tableau lPtr restera valide une fois la procédure
+    '# terminée (une fois Tmp en dehors de la portée) : nous avons subtilisée une référence vers notre objet.
+    Call CopyMemory(Tmp, 0&, 4&)
     
 End Sub
 
@@ -106,26 +123,74 @@ End Sub
 'enlève un item
 '=======================================================
 Public Sub Remove(Index As Long)
-    If Index > 0 And Index < lCount Then
-        Call RemoveItemPr(Index)
+Attribute Remove.VB_Description = "Remove an item"
+Dim Obj As Object
+    
+    'si l'index est correct, on supprime
+    If Index > 0 And Index <= lCount Then
+
+        '//libère l'objet correspondant à l'index à virer
+        'copie l'Item dans la variable temporaire grâce à son adresse mémoire
+        Call CopyMemory(Obj, lPtr(Index), 4)
+        'destroy l'Item par Set=Nothing
+        Set Obj = Nothing
+    
+        'on décale de 1 vers la gauche le tableau
+        Call CopyMemory(lPtr(Index), lPtr(Index + 1), (lCount - Index) * 4)
+    
+        'change le nombre d'Items
         lCount = lCount - 1
+        
+        'redimensionne le tableau SI NECESSAIRE
+        If lUbound - USTEP > lCount Then
+            
+            'on enlève USTEP items car les USTEP derniers ne servent plus
+            lUbound = lUbound - USTEP
+            
+            'alors on redimensionne le tableau en virant USTEP éléments
+            ReDim Preserve lPtr(lUbound)
+        
+        End If
+        
     End If
+    
 End Sub
 
 '=======================================================
 'clear la collection
 '=======================================================
 Public Sub Clear()
+Attribute Clear.VB_Description = "Clear the collection"
+Dim ptrFirst As Long
 Dim x As Long
-
-    'supprime tous les objets
-    For x = 1 To lCount
-        Call DestroyObj(lPtr(x))
-    Next x
+Dim Obj As Object
     
-    'supprime le tableau
-    ReDim lPtr(0)
-    lCount = 0
+    'que si des Items présents
+    If lCount Then
+        
+        'supprime tous les objets de la liste.
+        'ne parcours pas toute la liste : ne récupère que le pointeur du
+        'premier item de la liste et destroy les items situés à chaque pointeur
+        'Chaque élément du tableau est décalé de 4 bytes (Long) en mémoire
+        
+        'récupère le pointeur du premier objet
+        ptrFirst = VarPtr(lPtr(1))
+        
+        For x = ptrFirst To ptrFirst + (lCount - 1) * 4 Step 4
+            
+            'on récupère l'objet dans la variable temp Obj
+            Call CopyMemory(Obj, ByVal x, 4&) '4 <==> long
+            
+            'destroy l'item par Set=Nothing
+            Set Obj = Nothing
+            
+        Next x
+        
+        'supprime le tableau et initialise les valeurs
+        ReDim lPtr(0)
+        lCount = 0: lUbound = 0
+    
+    End If
  
 End Sub
 
@@ -133,89 +198,32 @@ End Sub
 'récupère l'item pointé par l'index
 '=======================================================
 Public Function Item(Index As Long) As Object
+Attribute Item.VB_Description = "Get an item"
 Attribute Item.VB_UserMemId = 0
+Dim Obj As Object
     
-    If Index > 0 And Index <= lCount Then _
-        Set Item = ObjFromPtr(lPtr(Index))
+    'si l'index est valide
+    If Index > 0 And Index <= lCount Then
         
+        'on a besoin de récupérer notre objet dans une variable temporaire
+        Call CopyMemory(Obj, lPtr(Index), 4)      '4 octets
+        
+        'récupère l'objet en résultat de la function
+        Set Item = Obj
+        
+        'détruit l'objet temporaire maintenant inutile
+        Call CopyMemory(Obj, 0&, 4)
+        
+    End If
+
 End Function
 
 '=======================================================
 'récupère le Count de la collection
 '=======================================================
 Public Property Get Count() As Long: Count = lCount: End Property
+Attribute Count.VB_Description = "Get the number of items in collection"
 
-
-
-
-
-'=======================================================
-'PRIVATE SUBS
-'=======================================================
-
-'=======================================================
-'récupère un objet depuis un pointeur
-'=======================================================
-Private Function ObjFromPtr(ByVal lngPtr As Long) As Object
-Dim Obj As Object
-
-   Call CopyMemory(Obj, lngPtr, 4)      '4 octets
-   Set ObjFromPtr = Obj     'récupère l'objet en résultat
-   Call CopyMemory(Obj, 0&, 4)      'détruit l'objet temporaire
-
-End Function
-
-'=======================================================
-'libère un objet depuis un pointeur
-'=======================================================
-Private Sub DestroyObj(ByVal lngPtr As Long)
-Dim Obj As Object
-    Call CopyMemory(Obj, lngPtr, 4)
-    Set Obj = Nothing
-End Sub
-
-'=======================================================
-'ajoute un item dans la liste
-'=======================================================
-Private Sub AddItemPr(ByVal Ptr As Long, ByVal Index As Long)
-Dim tmp As Long
-
-    'récupère le dernier item
-    tmp = lPtr(lCount)
-    
-    lCount = lCount + 1
-    
-    'redimensionne le tableau, pas à chaque fois, mais quand
-    'c'est nécessaire (tous les 1000)
-    If UBound(lPtr()) < lCount Then
-        ReDim Preserve lPtr(UBound(lPtr()) + USTEP)
-    End If
-
-    'on copie la partie APRES index en décalant d'une case
-    Call CopyMemory(lPtr(Index + 1), lPtr(Index), (lCount - Index) * 4)
-
-    'on insère le nouvel item
-    lPtr(Index) = Ptr
-    
-    lPtr(lCount) = tmp
-
- End Sub
- 
-'=======================================================
-'supprime un item de la liste
-'=======================================================
-Private Sub RemoveItemPr(ByVal Index As Long)
-
-    'libère l'objet correspondant à l'index à virer
-    Call DestroyObj(lPtr(Index))
-
-    'on décale de 1 vers la gauche le tableau
-    Call CopyMemory(lPtr(Index), lPtr(Index + 1), (lCount - Index) * 4)
-
-    'redimensionne de 1 en moins le tableau
-    ReDim Preserve lPtr(UBound(lPtr()) - 1)
-    
-End Sub
 
 
 
@@ -228,9 +236,9 @@ End Sub
 'initialisation et destruction
 '=======================================================
 Private Sub Class_Initialize()
-    lCount = 0
-    ReDim lPtr(0)
+    lCount = 0: lUbound = 0: ReDim lPtr(0)
 End Sub
 Private Sub Class_Terminate()
     Call Clear
+    Erase lPtr  'supprime complètement le tableau
 End Sub

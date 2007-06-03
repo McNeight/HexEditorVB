@@ -39,17 +39,17 @@ Public Timers As New Collection 'collection de tous les timers
 '=======================================================
 'function de callback pour le timer
 '=======================================================
-Public Sub TimerCallBackFunction(ByVal uID As Long, ByVal uMsg As Long, _
-    ByVal dwUser As Long, ByVal dw1 As Long, ByVal dw2 As Long)
-
+Public Sub TimerCallBackFunction(ByVal hWnd As Long, ByVal uMsg As Long, _
+    ByVal IdEvent As Long, ByVal SysTime As Long)
+    
 Dim Tim As vkTimer  'contiendra LE timer qui appelle cette fonction de callback
 Dim hTim As Long
 
     On Error Resume Next
-        
+
     'récupère le pointeur sur l'objet ayant créé le timer
-    hTim = CLng(Timers.Item("_" & CStr(uID)))
-    
+    hTim = CLng(Timers.Item("_" & CStr(IdEvent)))
+
     'on copie le Timer appelant (l'unique) dans la variable locale...
     Call CopyMemory(Tim, hTim, 4)  '4 octets
 
@@ -58,8 +58,30 @@ Dim hTim As Long
 
     'on delete l'objet temporaire
     Call CopyMemory(Tim, 0, 4)
-    
 End Sub
+
+
+'Public Sub TimerCallBackFunction(ByVal uID As Long, ByVal uMsg As Long, _
+'    ByVal dwUser As Long, ByVal dw1 As Long, ByVal dw2 As Long)
+'
+'Dim Tim As vkTimer  'contiendra LE timer qui appelle cette fonction de callback
+'Dim hTim As Long
+'
+'    On Error Resume Next
+'
+'    'récupère le pointeur sur l'objet ayant créé le timer
+'    hTim = CLng(Timers.Item("_" & CStr(uID)))
+'
+'    'on copie le Timer appelant (l'unique) dans la variable locale...
+'    Call CopyMemory(Tim, hTim, 4)  '4 octets
+'
+'    'on appelle une sub du controle ayant créé le timer
+'    Call Tim.Raiser
+'
+'    'on delete l'objet temporaire
+'    Call CopyMemory(Tim, 0, 4)
+'
+'End Sub
 
 '=======================================================
 'ajoute un timer à la liste

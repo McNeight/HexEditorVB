@@ -434,7 +434,7 @@ Private Sub UserControl_InitProperties()
         .MouseHoverColor = vbWhite
         .MouseInterval = 100
         .LargeChangeColor = 12492429
-        .UnRefreshControl = False
+        .UnRefreshControl = True
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -495,7 +495,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("DownColor", Me.DownColor, 12492429)
         Call .WriteProperty("MouseInterval", Me.MouseInterval, 100)
         Call .WriteProperty("LargeChangeColor", Me.LargeChangeColor, 12492429)
-        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
+        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, True)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -519,7 +519,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.DownColor = .ReadProperty("DownColor", 12492429)
         Me.MouseInterval = .ReadProperty("MouseInterval", 100)
         Me.LargeChangeColor = .ReadProperty("LargeChangeColor", 12492429)
-        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
+        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", True)
     End With
     bNotOk2 = False
     'Call UserControl_Paint  'refresh
@@ -572,7 +572,7 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get BackColor() As OLE_COLOR: BackColor = bCol: End Property
 Public Property Let BackColor(BackColor As OLE_COLOR): bCol = BackColor: bNotOk = False: UserControl_Paint: End Property
@@ -583,7 +583,11 @@ Public Property Let ArrowColor(ArrowColor As OLE_COLOR): lArrowColor = ArrowColo
 Public Property Get FrontColor() As OLE_COLOR: FrontColor = lFrontColor: End Property
 Public Property Let FrontColor(FrontColor As OLE_COLOR): lFrontColor = FrontColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Enabled() As Boolean: Enabled = bEnable: End Property
-Public Property Let Enabled(Enabled As Boolean): bEnable = Enabled: bNotOk = False: UserControl_Paint: End Property
+Public Property Let Enabled(Enabled As Boolean)
+If bEnable <> Enabled Then
+    bEnable = Enabled: bNotOk = False: UserControl_Paint
+End If
+End Property
 Public Property Get EnableWheel() As Boolean: EnableWheel = bEnableWheel: End Property
 Public Property Let EnableWheel(EnableWheel As Boolean): bEnableWheel = EnableWheel: bNotOk = False: UserControl_Paint: End Property
 Public Property Get ScrollHeight() As Byte: ScrollHeight = lScrollHeight: End Property
@@ -597,21 +601,27 @@ End Property
 Public Property Get Min() As Currency: Min = lMin: End Property
 Public Property Let Min(Min As Currency)
 If lMin > lValue Then Exit Property
-lMin = Min
-ChangeValues
-bNotOk = False: UserControl_Paint
+If lMin <> Min Then
+    lMin = Min
+    ChangeValues
+    bNotOk = False: UserControl_Paint
+End If
 End Property
 Public Property Get Max() As Currency: Max = lMax: End Property
 Public Property Let Max(Max As Currency)
 If lMax < lValue Then Exit Property
-lMax = Max
-ChangeValues
-bNotOk = False: UserControl_Paint
+If Max <> lMax Then
+    lMax = Max
+    ChangeValues
+    bNotOk = False: UserControl_Paint
+End If
 End Property
 Public Property Get Value() As Currency: Value = lValue: End Property
 Public Property Let Value(Value As Currency)
-If Value <> lValue Then RaiseEvent Change(lValue)
-lValue = Value: Call ChangeValues
+If Value <> lValue Then
+    RaiseEvent Change(lValue)
+    lValue = Value: Call ChangeValues
+End If
 End Property
 Public Property Get SmallChange() As Currency: SmallChange = lSmallChange: End Property
 Public Property Let SmallChange(SmallChange As Currency): lSmallChange = SmallChange: bNotOk = False: UserControl_Paint: End Property
@@ -664,7 +674,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 

@@ -100,3 +100,26 @@ Public Enum Direction
     [Left_Right]
     [Up_Down]
 End Enum
+Public Enum SortOrder
+    [Alphabetical]
+    [InverseAlphabetical]
+    [DoNotSort]
+End Enum
+Public Enum ListBoxType
+    [SimpleList]
+    [FileListBox]
+    [FolderListBox]
+    [DriveListBox]
+End Enum
+Public Enum FileAttributes
+    Alias = 1024
+    Archive = 32
+    Compressed = 2048
+    Directory = 16
+    Hidden = 2
+    Normal = 0
+    ReadOnly = 1
+    System = 4
+    Volume = 8
+    All = Alias Or Archive Or Compressed Or Hidden Or ReadOnly Or System
+End Enum
