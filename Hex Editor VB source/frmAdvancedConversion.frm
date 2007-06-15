@@ -1,6 +1,5 @@
 VERSION 5.00
 Begin VB.Form frmAdvancedConversion 
-   BackColor       =   &H00F9E5D9&
    Caption         =   "Conversion avancée"
    ClientHeight    =   7170
    ClientLeft      =   60

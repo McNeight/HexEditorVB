@@ -1,7 +1,6 @@
 VERSION 5.00
 Object = "{2245E336-2835-4C1E-B373-2395637023C8}#1.0#0"; "ProcessView_OCX.ocx"
 Begin VB.Form frmProcesses 
-   BackColor       =   &H00F9E5D9&
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Sélection du processus à ouvrir"
    ClientHeight    =   4020
