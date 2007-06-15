@@ -19,15 +19,6 @@ Begin VB.PropertyPage propToggleButton
    ScaleWidth      =   4800
    Begin VB.CheckBox chkValue 
       Caption         =   "Value"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   18
@@ -35,15 +26,6 @@ Begin VB.PropertyPage propToggleButton
       Width           =   3135
    End
    Begin VB.ComboBox cbAlignment 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   315
       ItemData        =   "propToggleButton.pgx":0000
       Left            =   1560
@@ -54,15 +36,6 @@ Begin VB.PropertyPage propToggleButton
       Width           =   1695
    End
    Begin VB.ComboBox cbBackGradient 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   315
       ItemData        =   "propToggleButton.pgx":0033
       Left            =   1320
@@ -73,15 +46,6 @@ Begin VB.PropertyPage propToggleButton
       Width           =   1935
    End
    Begin VB.TextBox txtCaption 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   285
       Left            =   1200
       TabIndex        =   9
@@ -90,15 +54,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.CheckBox chkEnabled 
       Caption         =   "Enabled"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   8
@@ -107,15 +62,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.CheckBox chkBreakCorner 
       Caption         =   "BreakCorner"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   7
@@ -124,15 +70,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.CheckBox chkDisplayPicture 
       Caption         =   "DisplayPicture"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   6
@@ -141,15 +78,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.CheckBox chkDrawFocus 
       Caption         =   "DrawFocus"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   5
@@ -158,15 +86,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.CheckBox chkDrawMouseInRect 
       Caption         =   "DrawMouseInRect"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   4
@@ -175,15 +94,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.CheckBox chkGrayPictureWhenDisabled 
       Caption         =   "GrayPictureWhenDisabled"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   3
@@ -191,15 +101,6 @@ Begin VB.PropertyPage propToggleButton
       Width           =   3015
    End
    Begin VB.TextBox txtPictureOffsetX 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   285
       Left            =   1440
       TabIndex        =   2
@@ -207,15 +108,6 @@ Begin VB.PropertyPage propToggleButton
       Width           =   1815
    End
    Begin VB.TextBox txtPictureOffsetY 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   285
       Left            =   1440
       TabIndex        =   1
@@ -223,15 +115,6 @@ Begin VB.PropertyPage propToggleButton
       Width           =   1815
    End
    Begin VB.ComboBox cbTextPosition 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   315
       ItemData        =   "propToggleButton.pgx":006C
       Left            =   1440
@@ -243,15 +126,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.Label Label1 
       Caption         =   "Picture alignment"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   0
       Left            =   120
@@ -261,15 +135,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.Label Label1 
       Caption         =   "BackGradient"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   1
       Left            =   120
@@ -279,15 +144,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.Label Label1 
       Caption         =   "Caption"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   3
       Left            =   120
@@ -297,15 +153,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.Label Label2 
       Caption         =   "PictureOffsetX"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   14
@@ -314,15 +161,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.Label Label3 
       Caption         =   "PictureOffsetY"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   13
@@ -331,15 +169,6 @@ Begin VB.PropertyPage propToggleButton
    End
    Begin VB.Label Label1 
       Caption         =   "TextPosition"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   2
       Left            =   120
@@ -355,31 +184,28 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 ' =======================================================
 '
-' Hex Editor VB
+' vkUserControlsXP
 ' Coded by violent_ken (Alain Descotes)
 '
 ' =======================================================
 '
-' A complete hexadecimal editor for Windows ©
-' (Editeur hexadécimal complet pour Windows ©)
+' Some graphical UserControls for your VB application.
 '
 ' Copyright © 2006-2007 by Alain Descotes.
 '
-' This file is part of Hex Editor VB.
+' vkUserControlsXP is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
 '
-' Hex Editor VB is free software; you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation; either version 2 of the License, or
-' (at your option) any later version.
-'
-' Hex Editor VB is distributed in the hope that it will be useful,
+' vkUserControlsXP is distributed in the hope that it will be useful,
 ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-' GNU General Public License for more details.
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License
-' along with Hex Editor VB; if not, write to the Free Software
-' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 '
 ' =======================================================
 

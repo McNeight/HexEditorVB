@@ -1,31 +1,28 @@
 Attribute VB_Name = "mdlTimerCallBack"
 ' =======================================================
 '
-' Hex Editor VB
+' vkUserControlsXP
 ' Coded by violent_ken (Alain Descotes)
 '
 ' =======================================================
 '
-' A complete hexadecimal editor for Windows ©
-' (Editeur hexadécimal complet pour Windows ©)
+' Some graphical UserControls for your VB application.
 '
 ' Copyright © 2006-2007 by Alain Descotes.
 '
-' This file is part of Hex Editor VB.
+' vkUserControlsXP is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
 '
-' Hex Editor VB is free software; you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation; either version 2 of the License, or
-' (at your option) any later version.
-'
-' Hex Editor VB is distributed in the hope that it will be useful,
+' vkUserControlsXP is distributed in the hope that it will be useful,
 ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-' GNU General Public License for more details.
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License
-' along with Hex Editor VB; if not, write to the Free Software
-' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 '
 ' =======================================================
 
@@ -39,9 +36,9 @@ Public Timers As New Collection 'collection de tous les timers
 '=======================================================
 'function de callback pour le timer
 '=======================================================
-Public Sub TimerCallBackFunction(ByVal hWnd As Long, ByVal uMsg As Long, _
+Public Sub TimerCallBackFunction(ByVal HWnd As Long, ByVal uMsg As Long, _
     ByVal IdEvent As Long, ByVal SysTime As Long)
-    
+
 Dim Tim As vkTimer  'contiendra LE timer qui appelle cette fonction de callback
 Dim hTim As Long
 
@@ -57,7 +54,7 @@ Dim hTim As Long
     Call Tim.Raiser
 
     'on delete l'objet temporaire
-    Call CopyMemory(Tim, 0, 4)
+    Call CopyMemory(Tim, CLng(0), 4)
 End Sub
 
 
@@ -79,7 +76,7 @@ End Sub
 '    Call Tim.Raiser
 '
 '    'on delete l'objet temporaire
-'    Call CopyMemory(Tim, 0, 4)
+'    Call CopyMemory(Tim, CLng(0), 4)
 '
 'End Sub
 
@@ -87,7 +84,7 @@ End Sub
 'ajoute un timer à la liste
 '=======================================================
 Public Sub AddTimer(Obj As Long, ID As String)
-    Call Timers.Add(Obj, ID)    'obj ==> pointeur sur vbTimer
+    Call Timers.Add(Obj, ID)    'obj ==> pointeur sur vkTimer
 End Sub
 
 '=======================================================

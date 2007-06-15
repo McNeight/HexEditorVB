@@ -25,31 +25,28 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' =======================================================
 '
-' Hex Editor VB
+' vkUserControlsXP
 ' Coded by violent_ken (Alain Descotes)
 '
 ' =======================================================
 '
-' A complete hexadecimal editor for Windows ©
-' (Editeur hexadécimal complet pour Windows ©)
+' Some graphical UserControls for your VB application.
 '
 ' Copyright © 2006-2007 by Alain Descotes.
 '
-' This file is part of Hex Editor VB.
+' vkUserControlsXP is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
 '
-' Hex Editor VB is free software; you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation; either version 2 of the License, or
-' (at your option) any later version.
-'
-' Hex Editor VB is distributed in the hope that it will be useful,
+' vkUserControlsXP is distributed in the hope that it will be useful,
 ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-' GNU General Public License for more details.
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License
-' along with Hex Editor VB; if not, write to the Free Software
-' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 '
 ' =======================================================
 
@@ -97,6 +94,8 @@ Private nY As Long
 Private n1 As Long
 Private bUnRefreshControl As Boolean
 Private bHasLeftOneTime As Boolean
+Private bBlockVS As Boolean
+Private bBlockValue As Boolean
 
 '=======================================================
 'EVENTS
@@ -108,10 +107,10 @@ Public Event KeyUp(KeyCode As Integer, Shift As Integer)
 Public Event MouseHover()
 Public Event MouseLeave()
 Public Event MouseWheel(Sens As Wheel_Sens)
-Public Event MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Public Event MouseUp(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Public Event MouseDblClick(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Public Event MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, X As Long, Y As Long)
+Public Event MouseUp(Button As MouseButtonConstants, Shift As Integer, Control As Integer, X As Long, Y As Long)
+Public Event MouseDblClick(Button As MouseButtonConstants, Shift As Integer, Control As Integer, X As Long, Y As Long)
+Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control As Integer, X As Long, Y As Long)
 Public Event Scroll()
 
 
@@ -129,16 +128,16 @@ Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam 
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 
     Select Case uMsg
         
         Case WM_LBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                X = LoWord(lParam) * Screen.TwipsPerPixelX
+                Y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 If lUpMoused = 1 Then
                     lUpMoused = 2: lValue = lValue - lSmallChange
@@ -148,11 +147,11 @@ Dim y As Long
                 End If
                 
                 If bEnable Then
-                    If y > 255 And y < lT Then
+                    If Y > 255 And Y < lT Then
                         n1 = -1
                         lValue = lValue - lLargeChange
                     End If
-                    If y > lT + lH And y < Height - 270 Then
+                    If Y > lT + lH And Y < Height - 270 Then
                         n1 = 1
                         lValue = lValue + lLargeChange
                     End If
@@ -161,12 +160,12 @@ Dim y As Long
                 Call ChangeValues
                 RaiseEvent Change(lValue)
                 
-            RaiseEvent MouseDblClick(vbLeftButton, iShift, iControl, x, y)
+            RaiseEvent MouseDblClick(vbLeftButton, iShift, iControl, X, Y)
         Case WM_LBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                X = LoWord(lParam) * Screen.TwipsPerPixelX
+                Y = HiWord(lParam) * Screen.TwipsPerPixelY
                                
                 If lUpMoused Then
                     lValue = lValue - lSmallChange
@@ -178,34 +177,34 @@ Dim y As Long
                 End If
                 
                 If bEnable Then
-                    If y > 255 And y < lT Then
+                    If Y > 255 And Y < lT Then
                         lValue = lValue - lLargeChange
                         n1 = -1: ChangeValues: RaiseEvent Change(lValue)
                     End If
-                    If y > lT + lH And y < Height - 270 Then
+                    If Y > lT + lH And Y < Height - 270 Then
                         lValue = lValue + lLargeChange
                         n1 = 1: ChangeValues: RaiseEvent Change(lValue)
                     End If
-                    If y > 255 And y < lT Then
+                    If Y > 255 And Y < lT Then
                         Timer2.Enabled = True
                     End If
-                    If y > lT + lH And y < Height - 270 Then
+                    If Y > lT + lH And Y < Height - 270 Then
                         Timer2.Enabled = True
                     End If
                 End If
                                 
-                RaiseEvent MouseDown(vbLeftButton, iShift, iControl, x, y)
+                RaiseEvent MouseDown(vbLeftButton, iShift, iControl, X, Y)
         Case WM_LBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                X = LoWord(lParam) * Screen.TwipsPerPixelX
+                Y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 n1 = 0
-                If y > 255 And y < lT Then
+                If Y > 255 And Y < lT Then
                     Timer2.Enabled = False
                 End If
-                If y > lT + lH And y < Height - 270 Then
+                If Y > lT + lH And Y < Height - 270 Then
                     Timer2.Enabled = False
                 End If
                 
@@ -217,28 +216,28 @@ Dim y As Long
                     lDownMoused = 1: Refresh: Timer1.Enabled = False
                 End If
                 
-                RaiseEvent MouseUp(vbLeftButton, iShift, iControl, x, y)
+                RaiseEvent MouseUp(vbLeftButton, iShift, iControl, X, Y)
         Case WM_MBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                X = LoWord(lParam) * Screen.TwipsPerPixelX
+                Y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
-                RaiseEvent MouseDblClick(vbMiddleButton, iShift, iControl, x, y)
+                RaiseEvent MouseDblClick(vbMiddleButton, iShift, iControl, X, Y)
         Case WM_MBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                X = LoWord(lParam) * Screen.TwipsPerPixelX
+                Y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
-                RaiseEvent MouseDown(vbMiddleButton, iShift, iControl, x, y)
+                RaiseEvent MouseDown(vbMiddleButton, iShift, iControl, X, Y)
         Case WM_MBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                X = LoWord(lParam) * Screen.TwipsPerPixelX
+                Y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
-                RaiseEvent MouseUp(vbMiddleButton, iShift, iControl, x, y)
+                RaiseEvent MouseUp(vbMiddleButton, iShift, iControl, X, Y)
         Case WM_MOUSEHOVER
             If IsMouseIn = False Then
                 RaiseEvent MouseHover
@@ -259,24 +258,24 @@ Dim y As Long
             
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                X = LoWord(lParam) * Screen.TwipsPerPixelX
+                Y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 If lUpMoused Then
-                    If y > 255 Then
+                    If Y > 255 Then
                         'on vire le cadre de sélection
                         lUpMoused = 0: Refresh
                     End If
                 End If
                 If lDownMoused Then
-                    If y < Height - 270 Then
+                    If Y < Height - 270 Then
                         'on vire le cadre de sélection
                         lDownMoused = 0: Refresh
                     End If
                 End If
                 
-                If lUpMoused = 0 And y <= 255 Then lUpMoused = 1: Refresh
-                If lDownMoused = 0 And y >= Height - 270 Then lDownMoused = 1: Refresh
+                If lUpMoused = 0 And Y <= 255 Then lUpMoused = 1: Refresh
+                If lDownMoused = 0 And Y >= Height - 270 Then lDownMoused = 1: Refresh
                 
                 If (wParam And MK_LBUTTON) = MK_LBUTTON Then z = vbLeftButton
                 If (wParam And MK_RBUTTON) = MK_RBUTTON Then z = vbRightButton
@@ -289,7 +288,7 @@ Dim y As Long
                         
                         RaiseEvent Scroll
                         
-                        lT = lT + y - nY
+                        lT = lT + Y - nY
                         
                         If lT <= 270 Then lT = 270
                         If lT >= Height - 285 - lH Then lT = Height - 285 - lH
@@ -301,34 +300,34 @@ Dim y As Long
                         
                         Call Refresh
                     End If
-                    RaiseEvent Change(lValue)
+                   ' RaiseEvent Change(lValue)
                 End If
                 
                 'sauvegarde la position
-                nY = y
-                RaiseEvent MouseMove(z, iShift, iControl, x, y)
+                nY = Y
+                RaiseEvent MouseMove(z, iShift, iControl, X, Y)
                 
         Case WM_RBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                X = LoWord(lParam) * Screen.TwipsPerPixelX
+                Y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
-                RaiseEvent MouseDblClick(vbRightButton, iShift, iControl, x, y)
+                RaiseEvent MouseDblClick(vbRightButton, iShift, iControl, X, Y)
         Case WM_RBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                X = LoWord(lParam) * Screen.TwipsPerPixelX
+                Y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
-                RaiseEvent MouseDown(vbRightButton, iShift, iControl, x, y)
+                RaiseEvent MouseDown(vbRightButton, iShift, iControl, X, Y)
         Case WM_RBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                X = LoWord(lParam) * Screen.TwipsPerPixelX
+                Y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
-                RaiseEvent MouseUp(vbRightButton, iShift, iControl, x, y)
+                RaiseEvent MouseUp(vbRightButton, iShift, iControl, X, Y)
         Case WM_MOUSEWHEEL
             If wParam < 0 Then
                 RaiseEvent MouseWheel(WHEEL_DOWN)
@@ -523,13 +522,14 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     End With
     bNotOk2 = False
     'Call UserControl_Paint  'refresh
+    Call Refresh
     
     'le bon endroit pour lancer le subclassing
     'Call LaunchKeyMouseEvents
 End Sub
 Private Sub UserControl_Resize()
-    If Height < 800 Then Height = 800
-    If Width < 255 Then Width = 255
+'    If Height < 800 Then Height = 800
+  '  If Width < 255 Then Width = 255
 
     'lScrollHeight représente le pourcentage de la hauteur
     'calcule la hauteur du curseur
@@ -609,7 +609,7 @@ End If
 End Property
 Public Property Get Max() As Currency: Max = lMax: End Property
 Public Property Let Max(Max As Currency)
-If lMax < lValue Then Exit Property
+'If lMax < lValue Then Exit Property
 If Max <> lMax Then
     lMax = Max
     ChangeValues
@@ -618,10 +618,12 @@ End If
 End Property
 Public Property Get Value() As Currency: Value = lValue: End Property
 Public Property Let Value(Value As Currency)
+If bBlockValue Then Exit Property
 If Value <> lValue Then
-    RaiseEvent Change(lValue)
+    If bBlockVS = False Then RaiseEvent Change(lValue)
     lValue = Value: Call ChangeValues
 End If
+bBlockVS = False
 End Property
 Public Property Get SmallChange() As Currency: SmallChange = lSmallChange: End Property
 Public Property Let SmallChange(SmallChange As Currency): lSmallChange = SmallChange: bNotOk = False: UserControl_Paint: End Property
@@ -639,7 +641,8 @@ Public Property Get LargeChangeColor() As OLE_COLOR: LargeChangeColor = lLargeCh
 Public Property Let LargeChangeColor(LargeChangeColor As OLE_COLOR): lLargeChangeColor = LargeChangeColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
-
+Public Property Let BlockVS(BlockVS As Boolean): bBlockVS = BlockVS: End Property
+Public Property Let BlockValue(BlockValue As Boolean): bBlockValue = BlockValue: End Property
 
 
 Private Sub UserControl_Paint()
@@ -701,8 +704,8 @@ End Sub
 'MAJ du controle
 '=======================================================
 Public Sub Refresh()
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 
     If bUnRefreshControl Then Exit Sub
     
@@ -743,17 +746,17 @@ Dim y As Long
     Else
         UserControl.ForeColor = 10070188
     End If
-    x = (Width - 255) / 2 + 15
+    X = (Width - 255) / 2 + 15
     'flèche du haut
-    Line (105 + x, 90)-(120 + x, 90)
-    Line (90 + x, 105)-(135 + x, 105)
-    Line (75 + x, 120)-(150 + x, 120)
-    Line (60 + x, 135)-(165 + x, 135)
+    Line (105 + X, 90)-(120 + X, 90)
+    Line (90 + X, 105)-(135 + X, 105)
+    Line (75 + X, 120)-(150 + X, 120)
+    Line (60 + X, 135)-(165 + X, 135)
     'en bas maintenant
-    Line (105 + x, Height - 105)-(120 + x, Height - 105)
-    Line (90 + x, Height - 120)-(135 + x, Height - 120)
-    Line (75 + x, Height - 135)-(150 + x, Height - 135)
-    Line (60 + x, Height - 150)-(165 + x, Height - 150)
+    Line (105 + X, Height - 105)-(120 + X, Height - 105)
+    Line (90 + X, Height - 120)-(135 + X, Height - 120)
+    Line (75 + X, Height - 135)-(150 + X, Height - 135)
+    Line (60 + X, Height - 150)-(165 + X, Height - 150)
     
     
     

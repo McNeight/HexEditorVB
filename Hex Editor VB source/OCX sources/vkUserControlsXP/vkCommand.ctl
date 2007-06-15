@@ -42,31 +42,28 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 ' =======================================================
 '
-' Hex Editor VB
+' vkUserControlsXP
 ' Coded by violent_ken (Alain Descotes)
 '
 ' =======================================================
 '
-' A complete hexadecimal editor for Windows ©
-' (Editeur hexadécimal complet pour Windows ©)
+' Some graphical UserControls for your VB application.
 '
 ' Copyright © 2006-2007 by Alain Descotes.
 '
-' This file is part of Hex Editor VB.
+' vkUserControlsXP is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
 '
-' Hex Editor VB is free software; you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation; either version 2 of the License, or
-' (at your option) any later version.
-'
-' Hex Editor VB is distributed in the hope that it will be useful,
+' vkUserControlsXP is distributed in the hope that it will be useful,
 ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-' GNU General Public License for more details.
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License
-' along with Hex Editor VB; if not, write to the Free Software
-' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 '
 ' =======================================================
 
@@ -108,6 +105,7 @@ Private bHasFocus As Boolean
 Private lNotEnabledColor As OLE_COLOR
 Private bUnRefreshControl As Boolean
 Private bHasLeftOneTime As Boolean
+Private tCustomStyle As vkCommandStyle
 
 
 '=======================================================
@@ -148,7 +146,7 @@ Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
@@ -162,24 +160,26 @@ Dim y As Long
         Case WM_LBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
+                If bEnable Then _
                 bPushed = True: Refresh: RaiseEvent Click
                 RaiseEvent MouseDblClick(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
+                If bEnable Then _
                 bPushed = True: Refresh: RaiseEvent Click
                 RaiseEvent MouseDown(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 bPushed = False: Refresh
                 If bPushed And bEnable Then RaiseEvent Click
@@ -188,22 +188,22 @@ Dim y As Long
         Case WM_MBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseDblClick(vbMiddleButton, iShift, iControl, x, y)
         Case WM_MBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseDown(vbMiddleButton, iShift, iControl, x, y)
         Case WM_MBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseUp(vbMiddleButton, iShift, iControl, x, y)
         Case WM_MOUSEHOVER
@@ -218,6 +218,7 @@ Dim y As Long
             IsMouseIn = False
             bNotOk = False
             If bHasLeftOneTime Then
+                If bDrawMouseInRect And bDrawFocus Then _
                 Call Refresh(False): Call DrawFocusRects
             Else
                 bHasLeftOneTime = True
@@ -227,32 +228,32 @@ Dim y As Long
             
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
     
                 If (wParam And MK_LBUTTON) = MK_LBUTTON Then z = vbLeftButton
                 If (wParam And MK_RBUTTON) = MK_RBUTTON Then z = vbRightButton
                 If (wParam And MK_MBUTTON) = MK_MBUTTON Then z = vbMiddleButton
                 RaiseEvent MouseMove(z, iShift, iControl, x, y)
         Case WM_RBUTTONDBLCLK
-                        iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
+                iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseDblClick(vbRightButton, iShift, iControl, x, y)
         Case WM_RBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseDown(vbRightButton, iShift, iControl, x, y)
         Case WM_RBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseUp(vbRightButton, iShift, iControl, x, y)
         Case WM_MOUSEWHEEL
@@ -266,7 +267,7 @@ Dim y As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hwnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -325,9 +326,10 @@ Private Sub UserControl_InitProperties()
         .DrawMouseInRect = True
         .DisabledBackColor = 15198183
         .UnRefreshControl = False
+        .CustomStyle = [Defaut Style - vkCommand]
     End With
     bNotOk2 = False
-    Call UserControl_Paint  'refresh
+    'Call UserControl_Paint  'refresh
 End Sub
 
 Private Sub UserControl_GotFocus()
@@ -346,6 +348,9 @@ Private Sub UserControl_GotFocus()
 End Sub
 
 Private Sub UserControl_KeyDown(KeyCode As Integer, Shift As Integer)
+
+    If bEnable = False Then Exit Sub
+    
     Select Case KeyCode
         Case vbKeyUp, vbKeyLeft:
             Call SendKeys("+{Tab}")
@@ -379,7 +384,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
@@ -387,8 +392,8 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
         Call .WriteProperty("BackColor1", Me.BackColor1, &HFBFBFB)
         Call .WriteProperty("BackColor2", Me.BackColor2, &HDCDCDC)
-        Call .WriteProperty("BackColorPushed1", Me.BackColor1, &HC8C8C8)
-        Call .WriteProperty("BackColorPushed2", Me.BackColor2, &HEBEBEB)
+        Call .WriteProperty("BackColorPushed1", Me.BackColorPushed1, &HC8C8C8)
+        Call .WriteProperty("BackColorPushed2", Me.BackColorPushed2, &HEBEBEB)
         Call .WriteProperty("BackGradient", Me.BackGradient, Horizontal)
         Call .WriteProperty("Caption", Me.Caption, "Caption")
         Call .WriteProperty("Font", Me.Font, Ambient.Font)
@@ -406,6 +411,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("DrawFocus", Me.DrawFocus, True)
         Call .WriteProperty("DrawMouseInRect", Me.DrawMouseInRect, True)
         Call .WriteProperty("DisabledBackColor", Me.DisabledBackColor, 15198183)
+        Call .WriteProperty("CustomStyle", Me.CustomStyle, [Defaut Style - vkCommand])
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -414,8 +420,8 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     With PropBag
         Me.BackColor1 = .ReadProperty("BackColor1", &HFBFBFB)
         Me.BackColor2 = .ReadProperty("BackColor2", &HDCDCDC)
-        Me.BackColorPushed1 = .ReadProperty("BackColor1", &HC8C8C8)
-        Me.BackColorPushed2 = .ReadProperty("BackColor2", &HEBEBEB)
+        Me.BackColorPushed1 = .ReadProperty("BackColorPushed1", &HC8C8C8)
+        Me.BackColorPushed2 = .ReadProperty("BackColorPushed2", &HEBEBEB)
         Me.BackGradient = .ReadProperty("BackGradient", Horizontal)
         Me.Caption = .ReadProperty("Caption", "Caption")
         Set Me.Font = .ReadProperty("Font", Ambient.Font)
@@ -434,9 +440,11 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.DrawMouseInRect = .ReadProperty("DrawMouseInRect", True)
         Me.DisabledBackColor = .ReadProperty("DisabledBackColor", 15198183)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
+        Me.CustomStyle = .ReadProperty("CustomStyle", [Defaut Style - vkCommand])
     End With
     bNotOk2 = False
     'Call UserControl_Paint  'refresh
+    Call Refresh
     
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents
@@ -453,13 +461,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hwnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.hWnd
+            .hwndTrack = UserControl.hwnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With
@@ -481,8 +489,8 @@ End Sub
 '=======================================================
 Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
 Attribute hDc.VB_Description = "Get the control hDc"
-Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
-Attribute hWnd.VB_Description = "Handle of the control"
+Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
+Attribute hwnd.VB_Description = "Handle of the control"
 Public Property Get TextPosition() As AlignmentConstants: TextPosition = lTextPos: End Property
 Attribute TextPosition.VB_Description = "Text position"
 Public Property Let TextPosition(TextPosition As AlignmentConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
@@ -491,25 +499,25 @@ Attribute Caption.VB_Description = "Text to display"
 Public Property Let Caption(Caption As String): sCaption = Caption: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 Public Property Get ForeColor() As OLE_COLOR: ForeColor = lForeColor: End Property
 Attribute ForeColor.VB_Description = "Text color"
-Public Property Let ForeColor(ForeColor As OLE_COLOR): lForeColor = ForeColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
+Public Property Let ForeColor(ForeColor As OLE_COLOR): lForeColor = ForeColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: tCustomStyle = [No Style - vkCommand]: End Property
 Public Property Get BackColor1() As OLE_COLOR: BackColor1 = bCol1: End Property
 Attribute BackColor1.VB_Description = "Color1 of the back gradient"
-Public Property Let BackColor1(BackColor1 As OLE_COLOR): bCol1 = BackColor1: bNotOk = False: UserControl_Paint: End Property
+Public Property Let BackColor1(BackColor1 As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: bCol1 = BackColor1: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColor2() As OLE_COLOR: BackColor2 = bCol2: End Property
 Attribute BackColor2.VB_Description = "Color2 of the back gradient"
-Public Property Let BackColor2(BackColor2 As OLE_COLOR): bCol2 = BackColor2: bNotOk = False: UserControl_Paint: End Property
+Public Property Let BackColor2(BackColor2 As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: bCol2 = BackColor2: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColorPushed1() As OLE_COLOR: BackColorPushed1 = tCol1: End Property
 Attribute BackColorPushed1.VB_Description = "Color1 of the back gradient when command is pushed"
-Public Property Let BackColorPushed1(BackColorPushed1 As OLE_COLOR): tCol1 = BackColorPushed1: bNotOk = False: UserControl_Paint: End Property
+Public Property Let BackColorPushed1(BackColorPushed1 As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: tCol1 = BackColorPushed1: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColorPushed2() As OLE_COLOR: BackColorPushed2 = tCol2: End Property
 Attribute BackColorPushed2.VB_Description = "Color2 of the back gradient when command is pushed"
-Public Property Let BackColorPushed2(BackColorPushed2 As OLE_COLOR): tCol2 = BackColorPushed2: bNotOk = False: UserControl_Paint: End Property
+Public Property Let BackColorPushed2(BackColorPushed2 As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: tCol2 = BackColorPushed2: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Font() As StdFont: Set Font = UserControl.Font: End Property
 Attribute Font.VB_Description = "Text font"
 Public Property Set Font(Font As StdFont): Set UserControl.Font = Font: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackGradient() As GradientConstants: BackGradient = lGradient: End Property
 Attribute BackGradient.VB_Description = "Type of back gradient"
-Public Property Let BackGradient(BackGradient As GradientConstants): lGradient = BackGradient: bNotOk = False: UserControl_Paint: End Property
+Public Property Let BackGradient(BackGradient As GradientConstants): tCustomStyle = [No Style - vkCommand]: lGradient = BackGradient: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Enabled() As Boolean: Enabled = bEnable: End Property
 Attribute Enabled.VB_Description = "Enable or not control"
 Public Property Let Enabled(Enabled As Boolean)
@@ -517,10 +525,10 @@ bEnable = Enabled: bNotOk = False: UserControl_Paint
 End Property
 Public Property Get BorderColor() As OLE_COLOR: BorderColor = lBorderColor: End Property
 Attribute BorderColor.VB_Description = "Color of the border"
-Public Property Let BorderColor(BorderColor As OLE_COLOR): lBorderColor = BorderColor: bNotOk = False: UserControl_Paint: End Property
+Public Property Let BorderColor(BorderColor As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: lBorderColor = BorderColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BreakCorner() As Boolean: BreakCorner = bBreakCorner: End Property
 Attribute BreakCorner.VB_Description = "Use round corner or not"
-Public Property Let BreakCorner(BreakCorner As Boolean): bBreakCorner = BreakCorner: bNotOk = False: UserControl_Paint: End Property
+Public Property Let BreakCorner(BreakCorner As Boolean): tCustomStyle = [No Style - vkCommand]: bBreakCorner = BreakCorner: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Picture() As Picture: Set Picture = PCTcolor.Picture: End Property
 Attribute Picture.VB_Description = "Picture to display"
 Public Property Set Picture(NewPic As Picture)
@@ -551,17 +559,94 @@ Attribute GrayPictureWhenDisabled.VB_Description = "Use a gray picture (or color
 Public Property Let GrayPictureWhenDisabled(GrayPictureWhenDisabled As Boolean): bGray = GrayPictureWhenDisabled: bNotOk = False: UserControl_Paint: End Property
 Public Property Get DrawFocus() As Boolean: DrawFocus = bDrawFocus: End Property
 Attribute DrawFocus.VB_Description = "Draw focus when control has focus"
-Public Property Let DrawFocus(DrawFocus As Boolean): bDrawFocus = DrawFocus: bNotOk = False: UserControl_Paint: End Property
+Public Property Let DrawFocus(DrawFocus As Boolean): tCustomStyle = [No Style - vkCommand]: bDrawFocus = DrawFocus: bNotOk = False: UserControl_Paint: End Property
 Public Property Get DrawMouseInRect() As Boolean: DrawMouseInRect = bDrawMouseInRect: End Property
 Attribute DrawMouseInRect.VB_Description = "Draw focus when mouse is hover control"
-Public Property Let DrawMouseInRect(DrawMouseInRect As Boolean): bDrawMouseInRect = DrawMouseInRect: bNotOk = False: UserControl_Paint: End Property
+Public Property Let DrawMouseInRect(DrawMouseInRect As Boolean): tCustomStyle = [No Style - vkCommand]: bDrawMouseInRect = DrawMouseInRect: bNotOk = False: UserControl_Paint: End Property
 Public Property Get DisabledBackColor() As OLE_COLOR: DisabledBackColor = lNotEnabledColor: End Property
 Attribute DisabledBackColor.VB_Description = "Color of then back color when control is not enabled"
-Public Property Let DisabledBackColor(DisabledBackColor As OLE_COLOR): lNotEnabledColor = DisabledBackColor: bNotOk = False: UserControl_Paint: End Property
+Public Property Let DisabledBackColor(DisabledBackColor As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: lNotEnabledColor = DisabledBackColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
 Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
-
+Public Property Get CustomStyle() As vkCommandStyle: CustomStyle = tCustomStyle: End Property
+Public Property Let CustomStyle(CustomStyle As vkCommandStyle)
+    tCustomStyle = CustomStyle
+    
+    Select Case CustomStyle
+        Case [Defaut Style - vkCommand]
+            bCol1 = &HFBFBFB
+            bCol2 = &HDCDCDC
+            tCol1 = &HC8C8C8
+            tCol2 = &HEBEBEB
+            lGradient = Horizontal
+            lBorderColor = &H733C00
+            bBreakCorner = True
+            lNotEnabledColor = &HE7E7E7
+            bDrawFocus = True
+            bDrawMouseInRect = True
+            lForeColor = &H733C00
+        Case [Office Style - vkCommand]
+            bCol1 = &HFFC0C0
+            tCol1 = &HFFC0C0
+            lGradient = None
+            lBorderColor = &H808080
+            bBreakCorner = True
+            lNotEnabledColor = &HE7E7E7
+            bDrawFocus = False
+            bDrawMouseInRect = False
+            lForeColor = &H404040
+        Case [XP Style - vkCommand]
+            bCol1 = &HFFFFFF
+            bCol2 = &HDAE3E6
+            tCol1 = &HDDE4E5
+            tCol2 = &HDAE4E2
+            lGradient = Horizontal
+            lBorderColor = &H743C00
+            bBreakCorner = True
+            lNotEnabledColor = 15398133
+            bDrawFocus = True
+            bDrawMouseInRect = True
+            lForeColor = &H404040
+        Case [Plastik Style - vkCommand]
+            bCol1 = &HEDFEFF
+            bCol2 = &HD2E3E6
+            tCol1 = &HC0D1D4
+            tCol2 = &HCEDFE2
+            lGradient = Horizontal
+            lBorderColor = &H809494
+            bBreakCorner = True
+            lNotEnabledColor = &HE9F5F6
+            bDrawFocus = False
+            bDrawMouseInRect = False
+            lForeColor = &H404040
+        Case [Galaxy Style - vkCommand]
+            bCol1 = &HFFFFFF
+            bCol2 = &HC9DADD
+            tCol1 = &HD8E9EC
+            tCol2 = &HFFFFFF
+            lGradient = Horizontal
+            lBorderColor = &HA8B9BC
+            bBreakCorner = True
+            lNotEnabledColor = &HE5F3F4
+            bDrawFocus = False
+            bDrawMouseInRect = False
+            lForeColor = &H404040
+        Case [JAVA Style - vkCommand]
+            bCol1 = &HD8E9EC
+            tCol1 = &HC9DADD
+            lGradient = None
+            lBorderColor = &H99A8AC
+            bBreakCorner = False
+            lNotEnabledColor = &HD8E9EC
+            bDrawFocus = False
+            bDrawMouseInRect = False
+            lForeColor = &H404040
+    End Select
+    
+    bNotOk = False: Call UserControl_Paint
+    
+End Property
 
 Private Sub UserControl_Paint()
 
@@ -595,8 +680,8 @@ Dim lSigne As Long
     With UserControl
         
         'récupère la largeur de l'objet
-        lWidth = Width / 15
-        lHeight = Height / 15
+        lWidth = Width / Screen.TwipsPerPixelX
+        lHeight = Height / Screen.TwipsPerPixelY
         
         'récupère la moyenne de couleur par unité de longueur
         rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lWidth)
@@ -656,7 +741,7 @@ Dim lSigne As Long
     With UserControl
         
         'récupère la hateur de l'objet
-        lHeight = Height / 15
+        lHeight = Height / Screen.TwipsPerPixelY
         
         'récupère la moyenne de couleur par unité de longueur
         rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lHeight)
@@ -830,13 +915,13 @@ Dim H As Long
     If bPic And PCTcolor.Picture Then
         'alors on affiche la picture ==> décale le texte
         If pctAlign = [Left Justify] Then
-            Call SetRect(R, 8 + PCTcolor.Width / 30, (Height / 15 - GetCharHeight) / 2, Width / 15 - 4, Height / 15)
+            Call SetRect(R, 8 + PCTcolor.Width / Screen.TwipsPerPixelX / 2, (Height / Screen.TwipsPerPixelY - GetCharHeight) / 2, Width / Screen.TwipsPerPixelX - 4, Height / Screen.TwipsPerPixelY)
         Else
-            Call SetRect(R, 4, (Height / 15 - GetCharHeight) / 2, Width / 15 - 8 - PCTcolor.Width / 30, Height / 15)
+            Call SetRect(R, 4, (Height / Screen.TwipsPerPixelY - GetCharHeight) / 2, Width / Screen.TwipsPerPixelX - 8 - PCTcolor.Width / Screen.TwipsPerPixelX / 2, Height / Screen.TwipsPerPixelY)
         End If
     Else
         'pas de picture ==> pas de décalage
-        Call SetRect(R, 4, (Height / 15 - GetCharHeight) / 2, Width / 15 - 4, Height / 15)
+        Call SetRect(R, 4, (Height / Screen.TwipsPerPixelY - GetCharHeight) / 2, Width / Screen.TwipsPerPixelX - 4, Height / Screen.TwipsPerPixelY)
     End If
     
     'on affiche le caption
@@ -942,8 +1027,8 @@ Dim H As Long
         hBrush = CreateSolidBrush(lBorderColor)
         
         'on définit une zone rectangulaire à bords arrondi
-        hRgn = CreateRectRgn(0, 0, ScaleWidth / 15, _
-            ScaleHeight / 15)
+        hRgn = CreateRectRgn(0, 0, ScaleWidth / Screen.TwipsPerPixelX, _
+            ScaleHeight / Screen.TwipsPerPixelY)
         
         'on dessine le contour
         Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
@@ -959,14 +1044,14 @@ Dim H As Long
         hBrush = CreateSolidBrush(lBorderColor)
         
         'on définit une zone rectangulaire à bords arrondi
-        hRgn = CreateRoundRectRgn(0, 0, ScaleWidth / 15, _
-            ScaleHeight / 15, 7, 7)
+        hRgn = CreateRoundRectRgn(0, 0, ScaleWidth / Screen.TwipsPerPixelX, _
+            ScaleHeight / Screen.TwipsPerPixelY, 7, 7)
         
         'on dessine le contour
         Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
         
         'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
-        Call SetWindowRgn(UserControl.hWnd, hRgn, True)
+        Call SetWindowRgn(UserControl.hwnd, hRgn, True)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -1039,7 +1124,6 @@ Dim H As Long
     'couleur bleu très clair : 16242621,16771022
     
     If bDrawFocus = False Or IsMouseIn Or bHasFocus = False Or bEnable = False Then Exit Sub
-    
     
     With UserControl
         H = .Height

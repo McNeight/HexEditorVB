@@ -1,31 +1,28 @@
 Attribute VB_Name = "mdlGray"
 ' =======================================================
 '
-' Hex Editor VB
+' vkUserControlsXP
 ' Coded by violent_ken (Alain Descotes)
 '
 ' =======================================================
 '
-' A complete hexadecimal editor for Windows ©
-' (Editeur hexadécimal complet pour Windows ©)
+' Some graphical UserControls for your VB application.
 '
 ' Copyright © 2006-2007 by Alain Descotes.
 '
-' This file is part of Hex Editor VB.
+' vkUserControlsXP is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
 '
-' Hex Editor VB is free software; you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation; either version 2 of the License, or
-' (at your option) any later version.
-'
-' Hex Editor VB is distributed in the hope that it will be useful,
+' vkUserControlsXP is distributed in the hope that it will be useful,
 ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-' GNU General Public License for more details.
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License
-' along with Hex Editor VB; if not, write to the Free Software
-' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 '
 ' =======================================================
 
@@ -72,9 +69,9 @@ End Type
 'APIS
 '=======================================================
 Private Declare Function GetTickCount Lib "kernel32" () As Long
-Private Declare Function GetDIBColorTable Lib "gdi32" (ByVal hdc As Long, ByVal un1 As Long, ByVal un2 As Long, pRGBQuad As RGBQUAD) As Long
+Private Declare Function GetDIBColorTable Lib "gdi32" (ByVal hDc As Long, ByVal un1 As Long, ByVal un2 As Long, pRGBQuad As RGBQUAD) As Long
 Private Declare Function GetDIBits Lib "gdi32" (ByVal aHDC As Long, ByVal hBitmap As Long, ByVal nStartScan As Long, ByVal nNumScans As Long, lpBits As Any, lpBI As BITMAPINFO, ByVal wUsage As Long) As Long
-Private Declare Function SetDIBits Lib "gdi32" (ByVal hdc As Long, ByVal hBitmap As Long, ByVal nStartScan As Long, ByVal nNumScans As Long, lpBits As Any, lpBI As BITMAPINFO, ByVal wUsage As Long) As Long
+Private Declare Function SetDIBits Lib "gdi32" (ByVal hDc As Long, ByVal hBitmap As Long, ByVal nStartScan As Long, ByVal nNumScans As Long, lpBits As Any, lpBI As BITMAPINFO, ByVal wUsage As Long) As Long
 
 
 '=======================================================
@@ -90,7 +87,7 @@ Dim bitmap_info As BITMAPINFO
 Dim pixels() As Byte
 Dim bytes_per_scanLine As Integer
 Dim x As Integer
-Dim Y As Integer
+Dim y As Integer
 Dim ave_color As Byte
 Dim bw As Long
 Dim bh As Long
@@ -112,22 +109,22 @@ Dim bh As Long
          End With
   ' Transforme en bitmap's data.
     ReDim pixels(1 To 4, 1 To bw, 1 To bh)
-    Call GetDIBits(PicSRC.hdc, PicSRC.Image, 0, bh, pixels(1, 1, 1), _
+    Call GetDIBits(PicSRC.hDc, PicSRC.Image, 0, bh, pixels(1, 1, 1), _
         bitmap_info, DIB_RGB_COLORS)
   ' Modifie les pixels.
-    For Y = 1 To bh
+    For y = 1 To bh
         For x = 1 To bw
-            ave_color = CByte((CInt(pixels(pixR, x, Y)) + pixels(pixG, x, Y) + _
-                pixels(pixB, x, Y)) \ 3)
+            ave_color = CByte((CInt(pixels(pixR, x, y)) + pixels(pixG, x, y) + _
+                pixels(pixB, x, y)) \ 3)
          '  une autre possibilité:
          '  ave_color = CByte((CInt(pixels(pixR, x, y)) * 0.299 + pixels(pixG, x, y) * 0.587 + pixels(pixB, x, y) * 0.114))
-            pixels(pixR, x, Y) = ave_color
-            pixels(pixG, x, Y) = ave_color
-            pixels(pixB, x, Y) = ave_color
+            pixels(pixR, x, y) = ave_color
+            pixels(pixG, x, y) = ave_color
+            pixels(pixB, x, y) = ave_color
             Next x
-        Next Y
+        Next y
   ' Affiche le resultat.
-    Call SetDIBits(PicSRC.hdc, PicSRC.Image, 0, bh, pixels(1, 1, 1), _
+    Call SetDIBits(PicSRC.hDc, PicSRC.Image, 0, bh, pixels(1, 1, 1), _
         bitmap_info, DIB_RGB_COLORS)
         
     PicSRC.Picture = PicSRC.Image

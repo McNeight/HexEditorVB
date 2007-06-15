@@ -1,46 +1,39 @@
 VERSION 5.00
-Begin VB.UserControl vkFrame 
+Begin VB.UserControl vkScrollContainer 
    AutoRedraw      =   -1  'True
    ClientHeight    =   3600
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
    ControlContainer=   -1  'True
-   PropertyPages   =   "vkFrame.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkFrame.ctx":004B
-   Begin VB.PictureBox pctG 
-      BorderStyle     =   0  'None
-      Height          =   240
-      Left            =   2160
-      ScaleHeight     =   240
-      ScaleWidth      =   240
+   ToolboxBitmap   =   "vkScrollContainer.ctx":0000
+   Begin vkUserContolsXP.vkHScrollPrivate HS 
+      Height          =   255
+      Left            =   600
+      TabIndex        =   1
+      Top             =   2880
+      Width           =   2895
+      _ExtentX        =   5106
+      _ExtentY        =   450
+   End
+   Begin vkUserContolsXP.vkVScrollPrivate VS 
+      Height          =   2655
+      Left            =   3960
       TabIndex        =   0
-      Top             =   1080
-      Visible         =   0   'False
-      Width           =   240
-   End
-   Begin VB.Image PCTcolor 
-      Height          =   240
-      Left            =   720
-      Top             =   0
-      Visible         =   0   'False
-      Width           =   240
-   End
-   Begin VB.Image PCTgray 
-      Height          =   240
-      Left            =   360
-      Top             =   0
-      Visible         =   0   'False
-      Width           =   240
+      Top             =   480
+      Width           =   255
+      _ExtentX        =   450
+      _ExtentY        =   4683
    End
 End
-Attribute VB_Name = "vkFrame"
+Attribute VB_Name = "vkScrollContainer"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
+
 ' =======================================================
 '
 ' vkUserControlsXP
@@ -82,57 +75,44 @@ Private ET As TRACKMOUSEEVENTTYPE   'type pour le mouse_hover et le mouse_leave
 Private IsMouseIn As Boolean    'si la souris est dans le controle
 
 Private lBackStyle As BackStyleConstants
-Private lTextPos As AlignmentConstants
-Private lTitleHeight As Long
-Private lForeColor As OLE_COLOR
-Private tCol1 As OLE_COLOR
-Private tCol2 As OLE_COLOR
 Private bCol1 As OLE_COLOR
 Private bCol2 As OLE_COLOR
-Private bShowTitle As Boolean
-Private sCaption As String
 Private bShowBackGround As Boolean
-Private lTitleGradient As GradientConstants
 Private lBackGradient As GradientConstants
 Private bNotOk As Boolean
 Private bNotOk2 As Boolean
 Private bEnable As Boolean
 Private lBorderColor As OLE_COLOR
 Private bDisplayBorder As Boolean
-Private bBreakCorner As Boolean
-Private lCornerSize As Long
 Private lBWidth As Long
-Private pctAlign As PictureAlignment
-Private bPic As Boolean
-Private lOffsetX As Long
-Private lOffsetY As Long
-Private bGray As Boolean
 Private bUnRefreshControl As Boolean
+Private lX As Long
+Private lY As Long
+Private lAreaHeight As Long
+Private lAreaWidth As Long
+Private OldValueH As Long
+Private OldValueV As Long
+Private tScroll As New vkPrivateScroll
+Private bNotResize As Boolean
+
 
 '=======================================================
 'EVENTS
 '=======================================================
 Public Event KeyDown(KeyCode As Integer, Shift As Integer)
-Attribute KeyDown.VB_Description = "Happens when a key is down"
 Public Event KeyPress(KeyAscii As Integer)
-Attribute KeyPress.VB_Description = "Happens when a key is pressed"
 Public Event KeyUp(KeyCode As Integer, Shift As Integer)
-Attribute KeyUp.VB_Description = "Happens when a key is up"
 Public Event MouseHover()
-Attribute MouseHover.VB_Description = "Happens when mouse enters control"
 Public Event MouseLeave()
-Attribute MouseLeave.VB_Description = "Happens when mouse leaves control"
 Public Event MouseWheel(Sens As Wheel_Sens)
-Attribute MouseWheel.VB_Description = "Happens when control gets a wheel"
 Public Event MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseDown.VB_Description = "Happens when control gets a click"
 Public Event MouseUp(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseUp.VB_Description = "Happens when control gets a mouseup"
 Public Event MouseDblClick(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseDblClick.VB_Description = "Happens when control gets a dblclick"
 Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
-
+Public Event HScrollChange(Value As Currency)
+Public Event HScrollScroll()
+Public Event VScrollChange(Value As Currency)
+Public Event VScrollScroll()
 
 
 
@@ -146,14 +126,12 @@ Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Attribute WindowProc.VB_Description = "Internal proc for subclassing"
-Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
 Dim x As Long
 Dim y As Long
-
+   
     Select Case uMsg
         
         Case WM_LBUTTONDBLCLK
@@ -257,7 +235,16 @@ End Function
 Private Sub UserControl_Initialize()
 Dim Ofs As Long
 Dim Ptr As Long
-        
+    
+    'on initialise le tScroll
+    With tScroll
+        .SmallChange = 100
+        .LargeChange = 600
+        .WheelChange = 300
+        .Enabled = True
+        .Value = 0
+    End With
+    
     'Recupere l'adresse de "Me.WindowProc"
     Call CopyMemory(Ptr, ByVal (ObjPtr(Me)), 4)
     Call CopyMemory(Ptr, ByVal (Ptr + 489 * 4), 4)
@@ -281,6 +268,36 @@ Dim Ptr As Long
     MovB Ofs, &HA1                 'A1 20 20 40 00       mov         eax,RetVal
     MovL Ofs, VarPtr(mAsm(59))
     MovL Ofs, &H10C2               'C2 10 00             ret         10h
+    
+    'initialise leS VS
+    bUnRefreshControl = True
+    With VS
+        .UnRefreshControl = True
+        .Max = 2
+        .Min = 1
+        .Value = 1
+        .Visible = True
+        .Enabled = True
+        .SmallChange = 100
+        .LargeChange = 600
+        .WheelChange = 300
+        .UnRefreshControl = False
+        'Call .Refresh
+    End With
+    With HS
+        .UnRefreshControl = True
+        .Max = 2
+        .Min = 0
+        .Value = 1
+        .SmallChange = 100
+        .LargeChange = 600
+        .WheelChange = 300
+        .Visible = True
+        .Enabled = True
+        .UnRefreshControl = False
+        'Call .Refresh
+    End With
+    bUnRefreshControl = False
 End Sub
 
 Private Sub UserControl_InitProperties()
@@ -291,29 +308,16 @@ Private Sub UserControl_InitProperties()
         .BackColor2 = &HDCDCDC    '
         .BackGradient = Horizontal '
         .BackStyle = Opaque
-        .Caption = "Caption" '
-        .Font = Ambient.Font '
-        .ForeColor = vbWhite '
         .ShowBackGround = True '
-        .ShowTitle = True '
-        .TextPosition = vbCenter '
-        .TitleColor1 = &HC85A21
-        .TitleColor2 = &HE4C6B5    '
-        .TitleGradient = Vertical '
-        .TitleHeight = 250 '
         .Enabled = True '
         .BorderColor = &HFF8080    '
         .DisplayBorder = True '
-        .BreakCorner = True '
         .BorderWidth = 1 '
-        .RoundAngle = 7 '
-        Set .Picture = Nothing
-        .PictureAlignment = [Left Justify]
-        .DisplayPicture = True
-        .PictureOffsetX = 0
-        .PictureOffsetY = 0
-        .GrayPictureWhenDisabled = True
         .UnRefreshControl = False
+        .x = 0
+        .y = 0
+        .AreaHeight = 0
+        .AreaWidth = 0
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -331,6 +335,20 @@ Private Sub UserControl_KeyUp(KeyCode As Integer, Shift As Integer)
     RaiseEvent KeyUp(KeyCode, Shift)
 End Sub
 
+Private Sub UserControl_Show()
+Dim ctr As Control
+    
+    On Error Resume Next
+    
+    'on passe chaque controle en arrière plan
+    For Each ctr In UserControl.ContainedControls
+        Call ctr.ZOrder(vbSendToBack)
+    Next ctr
+    
+    Call UserControl_Resize
+    
+End Sub
+
 Private Sub UserControl_Terminate()
     'vire le subclassing
     If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
@@ -343,28 +361,15 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("BackColor2", Me.BackColor2, &HDCDCDC)
         Call .WriteProperty("BackGradient", Me.BackGradient, Horizontal)
         Call .WriteProperty("BackStyle", Me.BackStyle, Opaque)
-        Call .WriteProperty("Caption", Me.Caption, "Caption")
-        Call .WriteProperty("Font", Me.Font, Ambient.Font)
-        Call .WriteProperty("ForeColor", Me.ForeColor, vbWhite)
         Call .WriteProperty("ShowBackGround", Me.ShowBackGround, True)
-        Call .WriteProperty("ShowTitle", Me.ShowTitle, True)
-        Call .WriteProperty("TextPosition", Me.TextPosition, vbCenter)
-        Call .WriteProperty("TitleColor1", Me.TitleColor1, &HC85A21)
-        Call .WriteProperty("TitleColor2", Me.TitleColor2, &HE4C6B5)
-        Call .WriteProperty("TitleGradient", Me.TitleGradient, Vertical)
-        Call .WriteProperty("TitleHeight", Me.TitleHeight, 250)
         Call .WriteProperty("Enabled", Me.Enabled, True)
         Call .WriteProperty("BorderColor", Me.BorderColor, &HFF8080)
         Call .WriteProperty("DisplayBorder", Me.DisplayBorder, True)
-        Call .WriteProperty("BreakCorner", Me.BreakCorner, True)
-        Call .WriteProperty("Picture", Me.Picture, Nothing)
-        Call .WriteProperty("RoundAngle", Me.RoundAngle, 7)
         Call .WriteProperty("BorderWidth", Me.BorderWidth, 1)
-        Call .WriteProperty("PictureAlignment", Me.PictureAlignment, [Left Justify])
-        Call .WriteProperty("DisplayPicture", Me.DisplayPicture, True)
-        Call .WriteProperty("PictureOffsetX", Me.PictureOffsetX, 0)
-        Call .WriteProperty("PictureOffsetY", Me.PictureOffsetY, 0)
-        Call .WriteProperty("GrayPictureWhenDisabled", Me.GrayPictureWhenDisabled, True)
+        Call .WriteProperty("X", Me.x, 0)
+        Call .WriteProperty("Y", Me.y, 0)
+        Call .WriteProperty("AreaHeight", Me.AreaHeight, 0)
+        Call .WriteProperty("AreaWidth", Me.AreaWidth, 0)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -375,29 +380,18 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.BackColor2 = .ReadProperty("BackColor2", &HDCDCDC)
         Me.BackGradient = .ReadProperty("BackGradient", Horizontal)
         Me.BackStyle = .ReadProperty("BackStyle", Opaque)
-        Me.Caption = .ReadProperty("Caption", "Caption")
-        Set Me.Font = .ReadProperty("Font", Ambient.Font)
-        Me.ForeColor = .ReadProperty("ForeColor", vbWhite)
         Me.ShowBackGround = .ReadProperty("ShowBackGround", True)
-        Me.ShowTitle = .ReadProperty("ShowTitle", True)
-        Me.TextPosition = .ReadProperty("TextPosition", vbCenter)
-        Me.TitleColor1 = .ReadProperty("TitleColor1", &HC85A21)
-        Me.TitleColor2 = .ReadProperty("TitleColor2", &HE4C6B5)
-        Me.TitleGradient = .ReadProperty("TitleGradient", Vertical)
-        Me.TitleHeight = .ReadProperty("TitleHeight", 250)
         Me.Enabled = .ReadProperty("Enabled", True)
         Me.BorderColor = .ReadProperty("BorderColor", &HFF8080)
         Me.DisplayBorder = .ReadProperty("DisplayBorder", True)
-        Me.BreakCorner = .ReadProperty("BreakCorner", True)
-        Set Me.Picture = .ReadProperty("Picture", Nothing)
         Me.BorderWidth = .ReadProperty("BorderWidth", 1)
-        Me.RoundAngle = .ReadProperty("RoundAngle", 7)
-        Me.PictureAlignment = .ReadProperty("PictureAlignment", [Left Justify])
-        Me.DisplayPicture = .ReadProperty("DisplayPicture", True)
-        Me.PictureOffsetX = .ReadProperty("PictureOffsetX", 0)
-        Me.PictureOffsetY = .ReadProperty("PictureOffsetY", 0)
-        Me.GrayPictureWhenDisabled = .ReadProperty("GrayPictureWhenDisabled", True)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
+        Me.x = .ReadProperty("X", 0)
+        Me.y = .ReadProperty("Y", 0)
+        Me.AreaHeight = .ReadProperty("AreaHeight", 0)
+        Me.AreaWidth = .ReadProperty("AreaWidth", 0)
+        Me.VScroll = .ReadProperty("VScroll", tScroll)
+        Me.HScroll = .ReadProperty("HScroll", tScroll)
     End With
     bNotOk2 = False
     'Call UserControl_Paint  'refresh
@@ -405,8 +399,30 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents
+    
+    If Ambient.UserMode Then
+        Call VS.LaunchKeyMouseEvents    'subclasse également le VS
+        Call HS.LaunchKeyMouseEvents    'et le HS
+    End If
+    
+    UserControl_Show
 End Sub
 Private Sub UserControl_Resize()
+
+    '//on change de place les VS et HS
+    With VS
+        .Top = 0 ' 15 * lBWidth + 15
+        .Left = Width - .Width '- 15 * lBWidth - 15
+        .Height = Height - IIf(Width < lAreaWidth, HS.Height, 0)
+    End With
+    With HS
+        .Top = Height - .Height '- 15 * lBWidth - 15
+        .Left = 0 ' 15 * lBWidth + 15
+        .Width = Width - IIf(Height < lAreaHeight, VS.Width - 15, 0) '- 30 * lBWidth - 30
+    End With
+    
+    If bNotResize = False Then Call ReorganizeView
+    
     bNotOk = False
     Call UserControl_Paint  'refresh
 End Sub
@@ -445,102 +461,152 @@ End Sub
 'PROPERTIES
 '=======================================================
 Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Attribute hDc.VB_Description = "Get the control hDc"
 Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
-Attribute hwnd.VB_Description = "Handle of the control"
 Public Property Get BackStyle() As BackStyleConstants: BackStyle = lBackStyle: End Property
-Attribute BackStyle.VB_Description = "Use a transparent control or not"
 Public Property Let BackStyle(BackStyle As BackStyleConstants): lBackStyle = BackStyle: UserControl.BackStyle = BackStyle: bNotOk = False: UserControl_Paint: End Property
-Public Property Get TextPosition() As AlignmentConstants: TextPosition = lTextPos: End Property
-Attribute TextPosition.VB_Description = "Text position"
-Public Property Let TextPosition(TextPosition As AlignmentConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
-Public Property Get Caption() As String: Caption = sCaption: End Property
-Attribute Caption.VB_Description = "Text to display"
-Public Property Let Caption(Caption As String): sCaption = Caption: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
-Public Property Get ShowTitle() As Boolean: ShowTitle = bShowTitle: End Property
-Attribute ShowTitle.VB_Description = "Display title zone or not"
-Public Property Let ShowTitle(ShowTitle As Boolean): bShowTitle = ShowTitle: bNotOk = False: UserControl_Paint: End Property
-Public Property Get TitleHeight() As Long: TitleHeight = lTitleHeight: End Property
-Attribute TitleHeight.VB_Description = "Height of the title zone"
-Public Property Let TitleHeight(TitleHeight As Long): lTitleHeight = TitleHeight: bNotOk = False: UserControl_Paint: End Property
-Public Property Get ForeColor() As OLE_COLOR: ForeColor = lForeColor: End Property
-Attribute ForeColor.VB_Description = "Text color"
-Public Property Let ForeColor(ForeColor As OLE_COLOR): lForeColor = ForeColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
-Public Property Get TitleColor1() As OLE_COLOR: TitleColor1 = tCol1: End Property
-Attribute TitleColor1.VB_Description = "Color1 of the title gradient"
-Public Property Let TitleColor1(TitleColor1 As OLE_COLOR): tCol1 = TitleColor1: bNotOk = False: UserControl_Paint: End Property
-Public Property Get TitleColor2() As OLE_COLOR: TitleColor2 = tCol2: End Property
-Attribute TitleColor2.VB_Description = "Color2 of the title gradient"
-Public Property Let TitleColor2(TitleColor2 As OLE_COLOR): tCol2 = TitleColor2: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColor1() As OLE_COLOR: BackColor1 = bCol1: End Property
-Attribute BackColor1.VB_Description = "Color1 of the back gradient"
 Public Property Let BackColor1(BackColor1 As OLE_COLOR): bCol1 = BackColor1: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColor2() As OLE_COLOR: BackColor2 = bCol2: End Property
-Attribute BackColor2.VB_Description = "Color2 of the back gradient"
 Public Property Let BackColor2(BackColor2 As OLE_COLOR): bCol2 = BackColor2: bNotOk = False: UserControl_Paint: End Property
-Public Property Get Font() As StdFont: Set Font = UserControl.Font: End Property
-Attribute Font.VB_Description = "Text font"
-Public Property Set Font(Font As StdFont): Set UserControl.Font = Font: bNotOk = False: UserControl_Paint: End Property
 Public Property Get ShowBackGround() As Boolean: ShowBackGround = bShowBackGround: End Property
-Attribute ShowBackGround.VB_Description = "Display background or not"
 Public Property Let ShowBackGround(ShowBackGround As Boolean): bShowBackGround = ShowBackGround: bNotOk = False: UserControl_Paint: End Property
-Public Property Get TitleGradient() As GradientConstants: TitleGradient = lTitleGradient: End Property
-Attribute TitleGradient.VB_Description = "Title gradient type"
-Public Property Let TitleGradient(TitleGradient As GradientConstants): lTitleGradient = TitleGradient: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackGradient() As GradientConstants: BackGradient = lBackGradient: End Property
-Attribute BackGradient.VB_Description = "Type of back gradient"
 Public Property Let BackGradient(BackGradient As GradientConstants): lBackGradient = BackGradient: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Enabled() As Boolean: Enabled = bEnable: End Property
-Attribute Enabled.VB_Description = "Enable control or not"
 Public Property Let Enabled(Enabled As Boolean)
 bEnable = Enabled: bNotOk = False: UserControl_Paint: EnableControls
 End Property
 Public Property Get BorderColor() As OLE_COLOR: BorderColor = lBorderColor: End Property
-Attribute BorderColor.VB_Description = "Color of the border"
 Public Property Let BorderColor(BorderColor As OLE_COLOR): lBorderColor = BorderColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get DisplayBorder() As Boolean: DisplayBorder = bDisplayBorder: End Property
-Attribute DisplayBorder.VB_Description = "Display border or not"
 Public Property Let DisplayBorder(DisplayBorder As Boolean): bDisplayBorder = DisplayBorder: bNotOk = False: UserControl_Paint: End Property
-Public Property Get BreakCorner() As Boolean: BreakCorner = bBreakCorner: End Property
-Attribute BreakCorner.VB_Description = "Use rounded corner or not"
-Public Property Let BreakCorner(BreakCorner As Boolean): bBreakCorner = BreakCorner: bNotOk = False: UserControl_Paint: End Property
-Public Property Get Picture() As Picture: Set Picture = PCTcolor.Picture: End Property
-Attribute Picture.VB_Description = "Picture to display on the title zone"
-Public Property Set Picture(NewPic As Picture)
-Set PCTcolor.Picture = NewPic
-Set pctG.Picture = NewPic
-If Not (NewPic Is Nothing) Then
-    pctG.Width = PCTcolor.Width
-    pctG.Height = PCTcolor.Height
-    Call GrayScale(pctG)
-End If
-PCTgray.Picture = pctG.Image
-bNotOk = False: UserControl_Paint
-End Property
-Public Property Get RoundAngle() As Long: RoundAngle = lCornerSize: End Property
-Attribute RoundAngle.VB_Description = "Use rounded corners or not"
-Public Property Let RoundAngle(RoundAngle As Long): lCornerSize = RoundAngle: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BorderWidth() As Long: BorderWidth = lBWidth: End Property
-Attribute BorderWidth.VB_Description = "Width of the border"
 Public Property Let BorderWidth(BorderWidth As Long): lBWidth = BorderWidth: bNotOk = False: UserControl_Paint: End Property
-Public Property Get PictureAlignment() As PictureAlignment: PictureAlignment = pctAlign: End Property
-Attribute PictureAlignment.VB_Description = "Picture alignment"
-Public Property Let PictureAlignment(PictureAlignment As PictureAlignment): pctAlign = PictureAlignment: bNotOk = False: UserControl_Paint: End Property
-Public Property Get DisplayPicture() As Boolean: DisplayPicture = bPic: End Property
-Attribute DisplayPicture.VB_Description = "Display picture or not"
-Public Property Let DisplayPicture(DisplayPicture As Boolean): bPic = DisplayPicture: bNotOk = False: UserControl_Paint: End Property
-Public Property Get PictureOffsetX() As Long: PictureOffsetX = lOffsetX: End Property
-Attribute PictureOffsetX.VB_Description = "Offset (twips) of the picture"
-Public Property Let PictureOffsetX(PictureOffsetX As Long): lOffsetX = PictureOffsetX: bNotOk = False: UserControl_Paint: End Property
-Public Property Get PictureOffsetY() As Long: PictureOffsetY = lOffsetY: End Property
-Attribute PictureOffsetY.VB_Description = "Offset (twips) of the picture"
-Public Property Let PictureOffsetY(PictureOffsetY As Long): lOffsetY = PictureOffsetY: bNotOk = False: UserControl_Paint: End Property
-Public Property Get GrayPictureWhenDisabled() As Boolean: GrayPictureWhenDisabled = bGray: End Property
-Attribute GrayPictureWhenDisabled.VB_Description = "Use a gray (or color) picture when control is not enabled"
-Public Property Let GrayPictureWhenDisabled(GrayPictureWhenDisabled As Boolean): bGray = GrayPictureWhenDisabled: bNotOk = False: UserControl_Paint: End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
-Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
+Public Property Get AreaHeight() As Long: AreaHeight = lAreaHeight: End Property
+Public Property Get AreaWidth() As Long: AreaWidth = lAreaWidth: End Property
+Public Property Get x() As Long: x = lX: End Property
+Public Property Get y() As Long: y = lY: End Property
+Public Property Let AreaHeight(AreaHeight As Long)
+VS.Max = AreaHeight
+lAreaHeight = AreaHeight: ReorganizeView
+End Property
+Public Property Let AreaWidth(AreaWidth As Long)
+HS.Max = AreaWidth
+lAreaWidth = AreaWidth: ReorganizeView
+End Property
+Public Property Let x(x As Long)
+HS.Value = x
+lX = x: ReorganizeView: Call MoveControls((OldValueH - x) / 2, 0): OldValueH = x
+End Property
+Public Property Let y(y As Long)
+VS.Value = y
+lY = y: ReorganizeView: Call MoveControls(0, (OldValueV - y) / 2): OldValueV = y
+End Property
+'//Propriétés sur les Scrolls
+Public Property Get VScroll() As vkPrivateScroll
+    Set VScroll = New vkPrivateScroll
+    With VScroll
+        .ArrowColor = VS.ArrowColor
+        .BackColor = VS.BackColor
+        .BorderColor = VS.BorderColor
+        .DownColor = VS.DownColor
+        .Enabled = VS.Enabled
+        .EnableWheel = VS.EnableWheel
+        .FrontColor = VS.FrontColor
+        .hDc = VS.hDc
+        .hwnd = VS.hwnd
+        .LargeChange = VS.LargeChange
+        .LargeChangeColor = VS.LargeChangeColor
+        .Max = VS.Max
+        .Min = VS.Min
+        .MouseHoverColor = VS.MouseHoverColor
+        .MouseInterval = VS.MouseInterval
+        .ScrollHeight = VS.ScrollHeight
+        .SmallChange = VS.SmallChange
+        .UnRefreshControl = VS.UnRefreshControl
+        .Value = VS.Value
+        .WheelChange = VS.WheelChange
+        .Width = VS.Width
+        .Height = VS.Height
+    End With
+End Property
+Public Property Let VScroll(VScroll As vkPrivateScroll)
+    With VS
+        .UnRefreshControl = True
+        .ArrowColor = VScroll.ArrowColor
+        .BackColor = VScroll.BackColor
+        .BorderColor = VScroll.BorderColor
+        .DownColor = VScroll.DownColor
+        .Enabled = VScroll.Enabled
+        .EnableWheel = VScroll.EnableWheel
+        .FrontColor = VScroll.FrontColor
+        .LargeChange = VScroll.LargeChange
+        .LargeChangeColor = VScroll.LargeChangeColor
+        .MouseHoverColor = VScroll.MouseHoverColor
+        .MouseInterval = VScroll.MouseInterval
+        .ScrollHeight = VScroll.ScrollHeight
+        .SmallChange = VScroll.SmallChange
+        .UnRefreshControl = VScroll.UnRefreshControl
+        .Value = VScroll.Value
+        .WheelChange = VScroll.WheelChange
+        .UnRefreshControl = False
+    End With
+    Call VS.Refresh
+    'bNotOk = False: Call UserControl_Paint
+End Property
+Public Property Get HScroll() As vkPrivateScroll
+    Set HScroll = New vkPrivateScroll
+    With HScroll
+        .ArrowColor = HS.ArrowColor
+        .BackColor = HS.BackColor
+        .BorderColor = HS.BorderColor
+        .DownColor = HS.DownColor
+        .Enabled = HS.Enabled
+        .EnableWheel = HS.EnableWheel
+        .FrontColor = HS.FrontColor
+        .hDc = HS.hDc
+        .hwnd = HS.hwnd
+        .LargeChange = HS.LargeChange
+        .LargeChangeColor = HS.LargeChangeColor
+        .Max = HS.Max
+        .Min = HS.Min
+        .MouseHoverColor = HS.MouseHoverColor
+        .MouseInterval = HS.MouseInterval
+        .ScrollHeight = HS.ScrollWidth
+        .SmallChange = HS.SmallChange
+        .UnRefreshControl = HS.UnRefreshControl
+        .Value = HS.Value
+        .WheelChange = HS.WheelChange
+        .Width = HS.Width
+        .Height = HS.Height
+    End With
+End Property
+Public Property Let HScroll(HScroll As vkPrivateScroll)
+    With HS
+        .UnRefreshControl = True
+        .ArrowColor = HScroll.ArrowColor
+        .BackColor = HScroll.BackColor
+        .BorderColor = HScroll.BorderColor
+        .DownColor = HScroll.DownColor
+        .Enabled = HScroll.Enabled
+        .EnableWheel = HScroll.EnableWheel
+        .FrontColor = HScroll.FrontColor
+        .LargeChange = HScroll.LargeChange
+        .LargeChangeColor = HScroll.LargeChangeColor
+        .MouseHoverColor = HScroll.MouseHoverColor
+        .MouseInterval = HScroll.MouseInterval
+        .ScrollWidth = HScroll.ScrollHeight
+        .SmallChange = HScroll.SmallChange
+        .UnRefreshControl = HScroll.UnRefreshControl
+        .Value = HScroll.Value
+        .WheelChange = HScroll.WheelChange
+        .UnRefreshControl = False
+    End With
+    Call HS.Refresh
+   ' bNotOk = False: Call UserControl_Paint
+End Property
 
 Private Sub UserControl_Paint()
 
@@ -703,13 +769,33 @@ Private Sub ToRGB(ByVal Color As Long, ByRef RGB As RGB_COLOR)
 End Sub
 
 '=======================================================
-'récupère la hauteur d'un caractère
+'déplace tous les controles de X, Y
 '=======================================================
-Private Function GetCharHeight() As Long
-Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
-    GetCharHeight = (Res And &HFFFF0000) \ &H10000
-End Function
+Public Sub MoveControls(ByVal x As Long, ByVal y As Long)
+Dim ctr As Control
+    
+    On Error Resume Next
+    
+    For Each ctr In UserControl.ContainedControls
+        'traitement spécial pour les Lines
+        If Not (TypeOf ctr Is VB.Line) Then
+            With ctr
+                .Left = .Left + x
+                .Top = .Top + y
+            End With
+        Else
+            'on change X1, Y1, X2 et Y2
+            With ctr
+                .x1 = .x1 + x
+                .x2 = .x2 + x
+                .y1 = .y1 + y
+                .Y2 = .Y2 + y
+            End With
+        End If
+    Next ctr
+    
+End Sub
+
 
 
 '=======================================================
@@ -734,11 +820,9 @@ End Sub
 'on dessine tout
 '=======================================================
 Public Sub Refresh()
-Attribute Refresh.VB_Description = "Refresh control"
 Dim x As Long
 Dim RGB1 As RGB_COLOR
 Dim RGB2 As RGB_COLOR
-Dim Dep As Long
 Dim R As RECT
 Dim hBrush As Long
 Dim Rec As Long
@@ -755,111 +839,29 @@ Dim H As Long
     
     '//on convertir les différentes couleurs si couleurs système
     Call OleTranslateColor(lBorderColor, 0, lBorderColor)
-    Call OleTranslateColor(lForeColor, 0, lForeColor)
-    Call OleTranslateColor(tCol1, 0, tCol1)
-    Call OleTranslateColor(tCol2, 0, tCol2)
     Call OleTranslateColor(bCol1, 0, bCol1)
     Call OleTranslateColor(bCol2, 0, bCol2)
     
-    
-    '//on commence par créer le Title
-    If bShowTitle Then
-        
-'        If lBackStyle = Transparent And bBreakCorner = True Then
-'            'alors c'est transparent et avec arrondi
-'            'alors on créé la zone perso dès maintenant
-'            'pour ne pas pouvoir tracer le titre dans les coins
-'            'haut-gauche et haut-droite
-'
-'            'on définit une zone rectangulaire à bords arrondi
-'            hRgn = CreateRoundRectRgn(0, 0, scalewidth / 15, _
-'                scaleheight / 15, lCornerSize, lCornerSize)
-'
-'            'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
-'            Call SetWindowRgn(UserControl.hWnd, hRgn, True)
-'
-'            'on détruit le brush et la zone
-'            Call DeleteObject(hRgn)
-'        End If
-            
-            
-        'récupère les 3 composantes des deux couleurs
-        Call ToRGB(tCol1, RGB1)
-        Call ToRGB(tCol2, RGB2)
-        
-        If lTitleGradient = None Then
-            'pas de gradient
-            'on dessine alors un rectangle
-            Line (0, 0)-(ScaleWidth, lTitleHeight), _
-                tCol1, BF
-        ElseIf lTitleGradient = Horizontal Then
-            'gradient horizontal
-            Call FillGradientH(RGB1, RGB2, ScaleWidth, lTitleHeight)
-        Else
-            'gradient vertical
-            Call FillGradientW(RGB1, RGB2, ScaleWidth, lTitleHeight)
-        End If
-    End If
-    
-    '//créé un rectangle
-    Call SetRect(R, 0, (lTitleHeight / Screen.TwipsPerPixelY - GetCharHeight) / 2, Width / Screen.TwipsPerPixelX, lTitleHeight / Screen.TwipsPerPixelY)
-    
-    'on affiche le caption
-    UserControl.ForeColor = lForeColor
-    If lTextPos = vbCenter Then
-        'au centre
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_CENTER)
-    ElseIf lTextPos = vbRightJustify Then
-        'à droite
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_RIGHT)
-    Else
-        'à gauche
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_LEFT)
-    End If
     
     If lBackStyle = Transparent Then
         'alors on créé une image dans le maskpicture
         
         'on dessine donc maintenant le bord
         If bDisplayBorder Then
-            If bBreakCorner = False Then
-                'alors c'est un rectangle
                 
-                'on défini un brush
-                hBrush = CreateSolidBrush(lBorderColor)
-                
-                'on définit une zone rectangulaire à bords arrondi
-                hRgn = CreateRectRgn(0, 0, ScaleWidth / Screen.TwipsPerPixelX, _
-                    ScaleHeight / Screen.TwipsPerPixelY)
-                
-                'on dessine le contour
-                Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
-    
-                'on détruit le brush et la zone
-                Call DeleteObject(hBrush)
-                Call DeleteObject(hRgn)
-                
-            Else
-                'alors c'est un arrondi
-                
-                'on défini un brush
-                hBrush = CreateSolidBrush(lBorderColor)
-                
-                'on définit une zone rectangulaire à bords arrondi
-                hRgn = CreateRoundRectRgn(0, 0, ScaleWidth / Screen.TwipsPerPixelX, _
-                    ScaleHeight / Screen.TwipsPerPixelY, lCornerSize, lCornerSize)
-                
-                'on dessine le contour
-                Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
-                
-                'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
-                Call SetWindowRgn(UserControl.hwnd, hRgn, True)
-    
-                'on détruit le brush et la zone
-                Call DeleteObject(hBrush)
-                Call DeleteObject(hRgn)
-    
-            End If
+            'on défini un brush
+            hBrush = CreateSolidBrush(lBorderColor)
+            
+            'on définit une zone rectangulaire à bords arrondi
+            hRgn = CreateRectRgn(0, 0, ScaleWidth / Screen.TwipsPerPixelX, _
+                ScaleHeight / Screen.TwipsPerPixelY)
+            
+            'on dessine le contour
+            Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
+
+            'on détruit le brush et la zone
+            Call DeleteObject(hBrush)
+            Call DeleteObject(hRgn)
         End If
         
         UserControl.MaskPicture = UserControl.Image
@@ -876,25 +878,19 @@ Dim H As Long
             Call ToRGB(bCol1, RGB1)
             Call ToRGB(bCol2, RGB2)
             
-            If bShowTitle Then
-                Dep = lTitleHeight / Screen.TwipsPerPixelY 'commence le gradient de pas tout en haut
-            Else
-                Dep = 0 'commence de tout en haut le gradient
-            End If
-            
             If lBackGradient = None Then
                 'pas de gradient
                 'on dessine alors un rectangle
-                Line (15, lTitleHeight + 1)-(ScaleWidth - 30, _
+                Line (15, 15)-(ScaleWidth - 30, _
                     ScaleHeight - 30), bCol1, BF
             ElseIf lBackGradient = Horizontal Then
                 'gradient horizontal
                 Call FillGradientH(RGB1, RGB2, ScaleWidth, _
-                    ScaleHeight, Dep)
+                    ScaleHeight, 0)
             Else
                 'gradient vertical
                 Call FillGradientW(RGB1, RGB2, ScaleWidth, _
-                    ScaleHeight, Dep)
+                    ScaleHeight, 0)
             End If
         End If
 '    Else
@@ -904,125 +900,24 @@ Dim H As Long
 '        UserControl.Picture = UserControl.MaskPicture
 '
     End If
-    
-    
-    
-    '//on va se tracer la bitmap maintenant ^^
-    If bPic Then
-        'on montre l'image présente
-        
-        'on choisit celle à afficher (Grise ou pas)
-        If bEnable Or Not (bGray) And bShowTitle And PCTcolor.Picture Then
-            With PCTcolor
-                'on move IMG en fonction du choix de Aligment
-                'on centre l'image dans la barre de titre
-                If pctAlign = [Left Justify] Then
-                    'à gauche
-                    
-                    W = (lTitleHeight - .Height) / 2 + lOffsetY
-                    H = 30 + lCornerSize * 2 + lOffsetX
-                    If W < 0 Then W = 0
-                    If H < 0 Then H = 0
-                    
-                    .Top = W
-                    .Left = H '2 pxls + arrondi
-                    
-                Else
-                    'à droite
-                    
-                    W = (lTitleHeight - .Height) / 2 + lOffsetY
-                    H = Width - 30 - .Width - lCornerSize * 2 - lOffsetX
-                    If H < 0 Then H = 0
-                    If W < 0 Then W = 0
-        
-                    .Top = W
-                    .Left = H '2 pxls + arrondi
-                    
-                End If
-                    
-                .Visible = True
-                PCTgray.Visible = False
-            End With
-        ElseIf bShowTitle And PCTcolor.Picture Then
-            With PCTgray
-                'on move IMG en fonction du choix de Aligment
-                'on centre l'image dans la barre de titre
-                If pctAlign = [Left Justify] Then
-                    'à gauche
-                    
-                    W = (lTitleHeight - .Height) / 2 + lOffsetY
-                    H = 30 + lCornerSize * 2 + lOffsetX
-                    If W < 0 Then W = 0
-                    If H < 0 Then H = 0
-                    
-                    .Top = W
-                    .Left = H '2 pxls + arrondi
-                    
-                Else
-                    'à droite
-                    
-                    W = (lTitleHeight - .Height) / 2 + lOffsetY
-                    H = Width - 30 - .Width - lCornerSize * 2 - lOffsetX
-                    If H < 0 Then H = 0
-                    If W < 0 Then W = 0
-        
-                    .Top = W
-                    .Left = H '2 pxls + arrondi
-                    
-                End If
-                    
-                .Visible = True
-                PCTcolor.Visible = False
-            End With
-        End If
-    Else
-        'on masque l'image
-        PCTgray.Visible = False
-        PCTcolor.Visible = False
-    End If
-    
+       
     
     '//on trace la bordure si opaque
     If lBackStyle = Opaque And bDisplayBorder Then
-    
-        If bBreakCorner = False Then
-            'alors c'est un rectangle
             
-            'on défini un brush
-            hBrush = CreateSolidBrush(lBorderColor)
-            
-            'on définit une zone rectangulaire à bords arrondi
-            hRgn = CreateRectRgn(0, 0, ScaleWidth / Screen.TwipsPerPixelX, _
-                ScaleHeight / Screen.TwipsPerPixelY)
-            
-            'on dessine le contour
-            Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
-
-            'on détruit le brush et la zone
-            Call DeleteObject(hBrush)
-            Call DeleteObject(hRgn)
+        'on défini un brush
+        hBrush = CreateSolidBrush(lBorderColor)
         
-        Else
-            'alors c'est un arrondi
-            
-            'on défini un brush
-            hBrush = CreateSolidBrush(lBorderColor)
-            
-            'on définit une zone rectangulaire à bords arrondi
-            hRgn = CreateRoundRectRgn(0, 0, ScaleWidth / Screen.TwipsPerPixelX, _
-                ScaleHeight / Screen.TwipsPerPixelY, lCornerSize, lCornerSize)
-            
-            'on dessine le contour
-            Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
-            
-            'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
-            Call SetWindowRgn(UserControl.hwnd, hRgn, True)
+        'on définit une zone rectangulaire à bords arrondi
+        hRgn = CreateRectRgn(0, 0, ScaleWidth / Screen.TwipsPerPixelX, _
+            ScaleHeight / Screen.TwipsPerPixelY)
+        
+        'on dessine le contour
+        Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
 
-            'on détruit le brush et la zone
-            Call DeleteObject(hBrush)
-            Call DeleteObject(hRgn)
-            
-        End If
+        'on détruit le brush et la zone
+        Call DeleteObject(hBrush)
+        Call DeleteObject(hRgn)
         
     End If
     
@@ -1044,3 +939,73 @@ End Property
 Friend Property Let MyExtender(MyExtender As Object)
     Set UserControl.Extender = MyExtender
 End Property
+
+Private Sub VS_Change(Value As Currency)
+    
+    RaiseEvent VScrollChange(Value)
+    
+    'on déplace tous les controles
+    Call MoveControls(0, CLng(OldValueV - Value) / 2)
+    
+    OldValueV = Value
+    
+End Sub
+Private Sub VS_Scroll()
+
+    RaiseEvent VScrollScroll
+    
+    'on déplace tous les controles
+    Call MoveControls(0, CLng(OldValueV - VS.Value) / 2)
+    
+    OldValueV = VS.Value
+    
+End Sub
+Private Sub HS_Change(Value As Currency)
+
+    RaiseEvent HScrollChange(Value)
+    
+    'on déplace tous les controles
+    Call MoveControls(CLng(OldValueH - Value) / 2, 0)
+    
+    OldValueH = Value
+    
+End Sub
+Private Sub HS_Scroll()
+
+    RaiseEvent HScrollScroll
+    
+    'on déplace tous les controles
+    Call MoveControls(CLng(OldValueH - HS.Value) / 2, 0)
+    
+    OldValueH = HS.Value
+
+End Sub
+
+'=======================================================
+'on change la vue en fonction de X,Y et de la taille
+'=======================================================
+Public Sub ReorganizeView()
+
+    '//on détermine si les scrolls doivent être visibles ou pas
+    If Width > lAreaWidth Then
+        'alors pas besoin de HScroll
+        HS.Visible = False
+    Else
+        HS.Visible = True
+    End If
+    If Height > lAreaHeight Then
+        'alors pas besoin de HScroll
+        VS.Visible = False
+    Else
+        VS.Visible = True
+    End If
+    
+    '//on replace les barres
+    bNotResize = True
+    Call UserControl_Resize
+    bNotResize = False
+    
+    '//on place les barres au premier plan
+'    Call HS.ZOrder(vbBringToFront)
+'    Call VS.ZOrder(vbBringToFront)
+End Sub
