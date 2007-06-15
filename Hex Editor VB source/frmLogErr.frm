@@ -1,7 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Begin VB.Form frmLogErr 
-   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Rapport d'erreurs"
    ClientHeight    =   4170

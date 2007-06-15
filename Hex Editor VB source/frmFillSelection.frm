@@ -1,6 +1,5 @@
 VERSION 5.00
 Begin VB.Form frmFillSelection 
-   BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Insertion / remplissage de bytes"
    ClientHeight    =   3540

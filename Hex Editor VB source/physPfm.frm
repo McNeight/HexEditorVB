@@ -1,9 +1,8 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
-Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form physPfm 
-   BackColor       =   &H00F9E5D9&
    Caption         =   "Ouverture d'un disque physique ..."
    ClientHeight    =   8415
    ClientLeft      =   60
@@ -25,6 +24,17 @@ Begin VB.Form physPfm
    ScaleHeight     =   8415
    ScaleWidth      =   10155
    Visible         =   0   'False
+   Begin vkUserContolsXP.vkVScroll VS 
+      Height          =   2895
+      Left            =   3240
+      TabIndex        =   24
+      Top             =   720
+      Width           =   255
+      _ExtentX        =   450
+      _ExtentY        =   5106
+      Value           =   0
+      MouseInterval   =   1
+   End
    Begin ComctlLib.StatusBar Sb 
       Align           =   2  'Align Bottom
       Height          =   255
@@ -43,7 +53,6 @@ Begin VB.Form physPfm
             MinWidth        =   4410
             Text            =   "Fichier=[Modifié]"
             TextSave        =   "Fichier=[Modifié]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -51,7 +60,6 @@ Begin VB.Form physPfm
             MinWidth        =   4410
             Text            =   "Page=[0/0]"
             TextSave        =   "Page=[0/0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -59,7 +67,6 @@ Begin VB.Form physPfm
             MinWidth        =   3175
             Text            =   "Offset=[0]"
             TextSave        =   "Offset=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -67,7 +74,6 @@ Begin VB.Form physPfm
             MinWidth        =   5292
             Text            =   "Sélection=[0 Bytes]"
             TextSave        =   "Sélection=[0 Bytes]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -161,13 +167,11 @@ Begin VB.Form physPfm
             NumTabs         =   2
             BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Historique"
-               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
             BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Signets"
-               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
@@ -395,17 +399,6 @@ Begin VB.Form physPfm
          Top             =   840
          Width           =   855
       End
-   End
-   Begin vkUserContolsXP.vkVScroll VS 
-      Height          =   2895
-      Left            =   3240
-      TabIndex        =   24
-      Top             =   720
-      Width           =   255
-      _ExtentX        =   450
-      _ExtentY        =   5106
-      Value           =   0
-      MouseInterval   =   1
    End
 End
 Attribute VB_Name = "physPfm"

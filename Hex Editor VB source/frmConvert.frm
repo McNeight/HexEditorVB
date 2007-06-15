@@ -1,7 +1,6 @@
 VERSION 5.00
-Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmConvert 
-   BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Conversions"
    ClientHeight    =   2250
@@ -24,6 +23,25 @@ Begin VB.Form frmConvert
    ScaleHeight     =   2250
    ScaleWidth      =   5265
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkCommand cmdQuitter 
+      Height          =   375
+      Left            =   3120
+      TabIndex        =   0
+      Top             =   1800
+      Width           =   1815
+      _ExtentX        =   3201
+      _ExtentY        =   661
+      Caption         =   "Fermer"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin vkUserContolsXP.vkFrame vkFrame2 
       Height          =   735
       Left            =   120
@@ -155,15 +173,6 @@ Begin VB.Form frmConvert
          Top             =   360
          Width           =   975
       End
-   End
-   Begin VB.CommandButton cmdQuitter 
-      Caption         =   "Fermer"
-      Height          =   375
-      Left            =   3105
-      TabIndex        =   0
-      ToolTipText     =   "Fermer cette feuille"
-      Top             =   1800
-      Width           =   1575
    End
    Begin vkUserContolsXP.vkCheck chkPlan 
       Height          =   255

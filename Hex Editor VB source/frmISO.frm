@@ -1,8 +1,7 @@
 VERSION 5.00
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
-Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmISO 
-   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Création de fichier ISO"
    ClientHeight    =   3255
@@ -210,7 +209,7 @@ Dim hDisk As Long
     
     txtFile.Enabled = False
     cmdBrowse.Enabled = False
-    cmdGO.Enabled = False
+    cmdGo.Enabled = False
     cmdQuit.Enabled = False
     
     With PGB
@@ -252,7 +251,7 @@ Dim hDisk As Long
     
     txtFile.Enabled = True
     cmdBrowse.Enabled = True
-    cmdGO.Enabled = True
+    cmdGo.Enabled = True
     cmdQuit.Enabled = True
 
     'ajoute du texte à la console
@@ -279,12 +278,12 @@ Dim s As String
         If s = "UDF" Or s = "CDFS" Then
             'on a choisi le drive
             Set tDrive = DV.GetSelectedDrive
-            cmdGO.Enabled = True
+            cmdGo.Enabled = True
         Else
-            cmdGO.Enabled = False
+            cmdGo.Enabled = False
         End If
     Else
-        cmdGO.Enabled = False
+        cmdGo.Enabled = False
     End If
 End Sub
 

@@ -57,7 +57,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -84,7 +83,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -554,7 +552,6 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -562,23 +559,20 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "22:31"
-            Key             =   ""
+            TextSave        =   "20:59"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "17/05/2007"
-            Key             =   ""
+            TextSave        =   "15/06/2007"
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1575,9 +1569,10 @@ Dim x As Long
     Next x
     
     'colorise les menus
-    Call ColorFormMenu(Me, cPref.general_MenuBackColor)
+    'Call ColorFormMenu(Me, cPref.general_MenuBackColor)
+    
     'applique une image dans le Toolbar
-    If cPref.general_ToolbarPCT Then Call ColorToolbar(Me.Toolbar1, _
+    'If cPref.general_ToolbarPCT Then Call ColorToolbar(Me.Toolbar1, _
         Me.pctToolbar.Picture.Handle)
 
     'loading des preferences

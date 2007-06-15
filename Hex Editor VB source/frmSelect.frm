@@ -1,6 +1,5 @@
 VERSION 5.00
 Begin VB.Form frmSelect 
-   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sélectionner une zone"
    ClientHeight    =   1425

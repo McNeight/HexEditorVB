@@ -1,7 +1,6 @@
 VERSION 5.00
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
 Begin VB.Form frmDrive 
-   BackColor       =   &H00F9E5D9&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sélection d'un disque"
    ClientHeight    =   3705

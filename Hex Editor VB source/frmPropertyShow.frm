@@ -1,8 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{5B5F5394-748F-414C-9FDD-08F3427C6A09}#3.0#0"; "vkUserControlsXP.ocx"
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmPropertyShow 
-   BackColor       =   &H00F9E5D9&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Propriétés"
    ClientHeight    =   6780
@@ -159,19 +158,16 @@ Begin VB.Form frmPropertyShow
          NumTabs         =   3
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fichier"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Disque"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Processus"
-            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
