@@ -1,14 +1,12 @@
 VERSION 5.00
-Begin VB.UserControl vkHScroll 
+Begin VB.UserControl vkHScrollPrivate 
    AutoRedraw      =   -1  'True
    ClientHeight    =   3600
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
-   PropertyPages   =   "vkHScroll.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
-   ToolboxBitmap   =   "vkHScroll.ctx":002C
    Begin VB.Timer Timer1 
       Enabled         =   0   'False
       Left            =   1680
@@ -20,11 +18,11 @@ Begin VB.UserControl vkHScroll
       Top             =   1560
    End
 End
-Attribute VB_Name = "vkHScroll"
+Attribute VB_Name = "vkHScrollPrivate"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
-Attribute VB_Exposed = True
+Attribute VB_Exposed = False
 ' =======================================================
 '
 ' vkUserControlsXP
@@ -96,7 +94,8 @@ Private lH As Long
 Private nY As Long
 Private n1 As Long
 Private bHasLeftOneTime As Boolean
-
+Private bBlockVS As Boolean
+Private bBlockValue As Boolean
 
 '=======================================================
 'EVENTS
@@ -125,7 +124,7 @@ Public Event Scroll()
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal HWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
@@ -346,7 +345,7 @@ Dim y As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, HWnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hwnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -436,7 +435,7 @@ Private Sub UserControl_InitProperties()
         .MouseHoverColor = vbWhite
         .MouseInterval = 100
         .LargeChangeColor = 12492429
-        .UnRefreshControl = False
+        .UnRefreshControl = True
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -446,7 +445,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.HWnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
@@ -468,7 +467,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("DownColor", Me.DownColor, 12492429)
         Call .WriteProperty("MouseInterval", Me.MouseInterval, 100)
         Call .WriteProperty("LargeChangeColor", Me.LargeChangeColor, 12492429)
-        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
+        Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, True)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -492,18 +491,18 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.DownColor = .ReadProperty("DownColor", 12492429)
         Me.MouseInterval = .ReadProperty("MouseInterval", 100)
         Me.LargeChangeColor = .ReadProperty("LargeChangeColor", 12492429)
-        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
+        Me.UnRefreshControl = .ReadProperty("UnRefreshControl", True)
     End With
     bNotOk2 = False
     'Call UserControl_Paint  'refresh
     Call Refresh
     
     'le bon endroit pour lancer le subclassing
-    Call LaunchKeyMouseEvents
+    'Call LaunchKeyMouseEvents
 End Sub
 Private Sub UserControl_Resize()
-    If Height < 255 Then Height = 255
-    If Width < 800 Then Width = 800
+    'If Height < 255 Then Height = 255
+   ' If Width < 800 Then Width = 800
 
     'lScrollHeight représente le pourcentage de la hauteur
     'calcule la hauteur du curseur
@@ -546,17 +545,17 @@ End Sub
 '=======================================================
 'lance le subclassing
 '=======================================================
-Private Sub LaunchKeyMouseEvents()
+Public Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.HWnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hwnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.HWnd
+            .hwndTrack = UserControl.hwnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With
@@ -577,7 +576,7 @@ End Sub
 'PROPERTIES
 '=======================================================
 Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Public Property Get HWnd() As Long: HWnd = UserControl.HWnd: End Property
+Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
 Public Property Get BackColor() As OLE_COLOR: BackColor = bCol: End Property
 Public Property Let BackColor(BackColor As OLE_COLOR): bCol = BackColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BorderColor() As OLE_COLOR: BorderColor = lBorderColor: End Property
@@ -587,7 +586,11 @@ Public Property Let ArrowColor(ArrowColor As OLE_COLOR): lArrowColor = ArrowColo
 Public Property Get FrontColor() As OLE_COLOR: FrontColor = lFrontColor: End Property
 Public Property Let FrontColor(FrontColor As OLE_COLOR): lFrontColor = FrontColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Enabled() As Boolean: Enabled = bEnable: End Property
-Public Property Let Enabled(Enabled As Boolean): bEnable = Enabled: bNotOk = False: UserControl_Paint: End Property
+Public Property Let Enabled(Enabled As Boolean)
+If bEnable <> Enabled Then
+    bEnable = Enabled: bNotOk = False: UserControl_Paint
+End If
+End Property
 Public Property Get EnableWheel() As Boolean: EnableWheel = bEnableWheel: End Property
 Public Property Let EnableWheel(EnableWheel As Boolean): bEnableWheel = EnableWheel: bNotOk = False: UserControl_Paint: End Property
 Public Property Let ScrollWidth(ScrollWidth As Byte)
@@ -609,7 +612,7 @@ End If
 End Property
 Public Property Get Max() As Currency: Max = lMax: End Property
 Public Property Let Max(Max As Currency)
-If lMax < lValue Then Exit Property
+'If lMax < lValue Then Exit Property
 If Max <> lMax Then
     lMax = Max
     ChangeValues
@@ -619,7 +622,7 @@ End Property
 Public Property Get Value() As Currency: Value = lValue: End Property
 Public Property Let Value(Value As Currency)
 If Value <> lValue Then
-    RaiseEvent Change(lValue)
+    If bBlockVS = False Then RaiseEvent Change(lValue)
     lValue = Value: Call ChangeValues
 End If
 End Property
@@ -640,6 +643,8 @@ Public Property Let LargeChangeColor(LargeChangeColor As OLE_COLOR): lLargeChang
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
 Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
+Public Property Let BlockVS(BlockVS As Boolean): bBlockVS = BlockVS: End Property
+Public Property Let BlockValue(BlockValue As Boolean): bBlockValue = BlockValue: End Property
 
 
 

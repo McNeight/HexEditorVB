@@ -18,15 +18,6 @@ Begin VB.PropertyPage propBar
    ScaleHeight     =   4980
    ScaleWidth      =   4800
    Begin VB.TextBox txtValue 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   285
       Left            =   1200
       TabIndex        =   22
@@ -34,15 +25,6 @@ Begin VB.PropertyPage propBar
       Width           =   1935
    End
    Begin VB.TextBox txtOffsetY 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   285
       Left            =   1200
       TabIndex        =   20
@@ -50,15 +32,6 @@ Begin VB.PropertyPage propBar
       Width           =   1935
    End
    Begin VB.TextBox txtOffsetX 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   285
       Left            =   1200
       TabIndex        =   18
@@ -66,15 +39,6 @@ Begin VB.PropertyPage propBar
       Width           =   1935
    End
    Begin VB.TextBox txtMin 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   285
       Left            =   1200
       TabIndex        =   16
@@ -82,15 +46,6 @@ Begin VB.PropertyPage propBar
       Width           =   1935
    End
    Begin VB.TextBox txtMax 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   285
       Left            =   1200
       TabIndex        =   14
@@ -99,15 +54,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.CheckBox chkInteractiveControl 
       Caption         =   "InteractiveControl"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   13
@@ -115,15 +61,6 @@ Begin VB.PropertyPage propBar
       Width           =   3015
    End
    Begin VB.ComboBox cbInteractiveButton 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   315
       ItemData        =   "propBar.pgx":0000
       Left            =   1440
@@ -134,15 +71,6 @@ Begin VB.PropertyPage propBar
       Width           =   1575
    End
    Begin VB.ComboBox cbGradientMode 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   315
       ItemData        =   "propBar.pgx":0055
       Left            =   1320
@@ -154,15 +82,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.CheckBox chkDisplayBorder 
       Caption         =   "DisplayBorder"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Left            =   120
       TabIndex        =   4
@@ -170,15 +89,6 @@ Begin VB.PropertyPage propBar
       Width           =   3015
    End
    Begin VB.TextBox txtDecimals 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   285
       Left            =   1200
       TabIndex        =   3
@@ -186,15 +96,6 @@ Begin VB.PropertyPage propBar
       Width           =   1935
    End
    Begin VB.ComboBox cbBorderStyle 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   315
       ItemData        =   "propBar.pgx":0081
       Left            =   1200
@@ -205,15 +106,6 @@ Begin VB.PropertyPage propBar
       Width           =   1935
    End
    Begin VB.ComboBox cbAlignment 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   315
       ItemData        =   "propBar.pgx":00AE
       Left            =   1200
@@ -224,15 +116,6 @@ Begin VB.PropertyPage propBar
       Width           =   1935
    End
    Begin VB.ComboBox cbDisplayLabel 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   315
       ItemData        =   "propBar.pgx":0163
       Left            =   1200
@@ -244,15 +127,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.Label Label1 
       Caption         =   "Value"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   10
       Left            =   120
@@ -262,15 +136,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.Label Label1 
       Caption         =   "OffsetY"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   9
       Left            =   120
@@ -280,15 +145,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.Label Label1 
       Caption         =   "OffsetX"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   8
       Left            =   120
@@ -298,15 +154,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.Label Label1 
       Caption         =   "Min"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   7
       Left            =   120
@@ -316,15 +163,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.Label Label1 
       Caption         =   "Max"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   6
       Left            =   120
@@ -334,15 +172,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.Label Label1 
       Caption         =   "InteractiveButton"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   4
       Left            =   120
@@ -352,15 +181,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.Label Label1 
       Caption         =   "GradientMode"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   2
       Left            =   120
@@ -370,15 +190,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.Label Label1 
       Caption         =   "Decimals"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   3
       Left            =   120
@@ -388,15 +199,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.Label Label1 
       Caption         =   "BorderStyle"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   1
       Left            =   120
@@ -406,15 +208,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.Label Label1 
       Caption         =   "Alignment"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   0
       Left            =   120
@@ -424,15 +217,6 @@ Begin VB.PropertyPage propBar
    End
    Begin VB.Label Label1 
       Caption         =   "DisplayLabel"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   5
       Left            =   120
@@ -448,31 +232,28 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 ' =======================================================
 '
-' Hex Editor VB
+' vkUserControlsXP
 ' Coded by violent_ken (Alain Descotes)
 '
 ' =======================================================
 '
-' A complete hexadecimal editor for Windows ©
-' (Editeur hexadécimal complet pour Windows ©)
+' Some graphical UserControls for your VB application.
 '
 ' Copyright © 2006-2007 by Alain Descotes.
 '
-' This file is part of Hex Editor VB.
+' vkUserControlsXP is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
 '
-' Hex Editor VB is free software; you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation; either version 2 of the License, or
-' (at your option) any later version.
-'
-' Hex Editor VB is distributed in the hope that it will be useful,
+' vkUserControlsXP is distributed in the hope that it will be useful,
 ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-' GNU General Public License for more details.
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License
-' along with Hex Editor VB; if not, write to the Free Software
-' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 '
 ' =======================================================
 

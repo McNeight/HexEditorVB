@@ -91,31 +91,28 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 ' =======================================================
 '
-' Hex Editor VB
+' vkUserControlsXP
 ' Coded by violent_ken (Alain Descotes)
 '
 ' =======================================================
 '
-' A complete hexadecimal editor for Windows ©
-' (Editeur hexadécimal complet pour Windows ©)
+' Some graphical UserControls for your VB application.
 '
 ' Copyright © 2006-2007 by Alain Descotes.
 '
-' This file is part of Hex Editor VB.
+' vkUserControlsXP is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
 '
-' Hex Editor VB is free software; you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation; either version 2 of the License, or
-' (at your option) any later version.
-'
-' Hex Editor VB is distributed in the hope that it will be useful,
+' vkUserControlsXP is distributed in the hope that it will be useful,
 ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-' GNU General Public License for more details.
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License
-' along with Hex Editor VB; if not, write to the Free Software
-' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 '
 ' =======================================================
 
@@ -202,7 +199,7 @@ Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
@@ -216,43 +213,43 @@ Dim y As Long
         Case WM_LBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
             RaiseEvent MouseDblClick(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseDown(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseUp(vbLeftButton, iShift, iControl, x, y)
         Case WM_MBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseDblClick(vbMiddleButton, iShift, iControl, x, y)
         Case WM_MBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseDown(vbMiddleButton, iShift, iControl, x, y)
         Case WM_MBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseUp(vbMiddleButton, iShift, iControl, x, y)
         Case WM_MOUSEHOVER
@@ -268,8 +265,8 @@ Dim y As Long
             
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
     
                 If (wParam And MK_LBUTTON) = MK_LBUTTON Then z = vbLeftButton
                 If (wParam And MK_RBUTTON) = MK_RBUTTON Then z = vbRightButton
@@ -278,22 +275,22 @@ Dim y As Long
         Case WM_RBUTTONDBLCLK
                         iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseDblClick(vbRightButton, iShift, iControl, x, y)
         Case WM_RBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseDown(vbRightButton, iShift, iControl, x, y)
         Case WM_RBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseUp(vbRightButton, iShift, iControl, x, y)
         Case WM_MOUSEWHEEL
@@ -307,7 +304,7 @@ Dim y As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hwnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -372,9 +369,8 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
     End With
     If backImg.Picture <> 0 Then Set tpn.Picture = backImg.Picture
     bNotOk2 = False
-    
-    'refresh
-    'Call Refresh
+    'Call UserControl_Paint  'refresh
+    Call Refresh
         
     'le bon endroit pour lancer le subclassing
     Call LaunchKeyMouseEvents
@@ -382,7 +378,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
@@ -514,8 +510,8 @@ Public Property Let BorderColor(BorderColor As OLE_COLOR): UserControl.BackColor
 Public Property Get GradientMode() As Mode_Degrade: GradientMode = mdDeg: End Property
 Attribute GradientMode.VB_Description = "Define how to display gradient"
 Public Property Let GradientMode(GradientMode As Mode_Degrade): mdDeg = GradientMode: bNotOk = False: Refresh: End Property
-Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
-Attribute hWnd.VB_Description = "Handle of the control"
+Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
+Attribute hwnd.VB_Description = "Handle of the control"
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
 Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
@@ -546,12 +542,14 @@ Dim lOld As Double
     
     If bIsInteractive And btButton = Button Then
         'alors on change la valeur
+        
         lOld = dValue
         dValue = (dMax / pct.ScaleWidth) * x
         
         'met à 100% quand on sélectionne tout à droite
         If x = (pct.ScaleWidth - 1) Then dValue = dMax
         
+        bNotOk = False
         Call Refresh 'réaffiche la barre
 
         'évênements
@@ -732,7 +730,7 @@ Dim lRet As Long    'retour de l'API
         pct.Picture = tpn.Image
         
         'plaque la picturebox de devant sur la picturebox contenant la barre
-        Call StretchBlt(pct.hDc, 0, 0, Int(15 * lValueWidth), pct.Height, frontImg.hDc, 0, _
+        Call StretchBlt(pct.hDc, 0, 0, Int(Screen.TwipsPerPixelX * lValueWidth), pct.Height, frontImg.hDc, 0, _
         0, frontImg.Width, frontImg.Height, &HCC0020)
         
         'pct.Picture = frontImg.Picture
@@ -787,7 +785,9 @@ BarreDone:
     'If bShowLabel = No Then GoTo NoText
     If bShowLabel = PercentageMode Then
         'pourcentage
-        sText = CStr(Round(100 * (dValue - dMin) / lPlage, lPercentDecimal)) & " %"
+        lValueWidth = Round(100 * (dValue - dMin) / lPlage, lPercentDecimal)
+        If lValueWidth < 0 Then lValueWidth = 0
+        sText = CStr(lValueWidth) & " %"
     ElseIf bShowLabel = ValueMode Then
         'valeur
         sText = CStr(Round(dValue, lPercentDecimal))
@@ -798,10 +798,15 @@ BarreDone:
 
     
     'récupère la dimension (en pixels)
-    txtWidth = TextWidth(sText) / 15
-    txtHeight = TextHeight(sText) / 15
+    txtWidth = TextWidth(sText) / Screen.TwipsPerPixelX
+    txtHeight = TextHeight(sText) / Screen.TwipsPerPixelY
     
     'affiche le texte dans pct en le centrant
+    
+    'affichage du texte
+    pct.ForeColor = ForeColor
+    Set pct.Font = UserControl.Font
+    
     'positionnement
     With pct
         Select Case taAlign
@@ -834,9 +839,6 @@ BarreDone:
                 .CurrentY = pxlHeight - txtHeight + lOSy
         End Select
 
-        'affichage du texte
-        .ForeColor = ForeColor
-        .Font = UserControl.Font
 
         pct.Print sText
     End With
@@ -891,13 +893,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hwnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.hWnd
+            .hwndTrack = UserControl.hwnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With

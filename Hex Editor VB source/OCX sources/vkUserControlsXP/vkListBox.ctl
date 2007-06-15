@@ -118,31 +118,28 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 ' =======================================================
 '
-' Hex Editor VB
+' vkUserControlsXP
 ' Coded by violent_ken (Alain Descotes)
 '
 ' =======================================================
 '
-' A complete hexadecimal editor for Windows ©
-' (Editeur hexadécimal complet pour Windows ©)
+' Some graphical UserControls for your VB application.
 '
 ' Copyright © 2006-2007 by Alain Descotes.
 '
-' This file is part of Hex Editor VB.
+' vkUserControlsXP is free software; you can redistribute it and/or
+' modify it under the terms of the GNU Lesser General Public
+' License as published by the Free Software Foundation; either
+' version 2.1 of the License, or (at your option) any later version.
 '
-' Hex Editor VB is free software; you can redistribute it and/or modify
-' it under the terms of the GNU General Public License as published by
-' the Free Software Foundation; either version 2 of the License, or
-' (at your option) any later version.
-'
-' Hex Editor VB is distributed in the hope that it will be useful,
+' vkUserControlsXP is distributed in the hope that it will be useful,
 ' but WITHOUT ANY WARRANTY; without even the implied warranty of
-' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-' GNU General Public License for more details.
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+' Lesser General Public License for more details.
 '
-' You should have received a copy of the GNU General Public License
-' along with Hex Editor VB; if not, write to the Free Software
-' Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+' You should have received a copy of the GNU Lesser General Public
+' License along with this library; if not, write to the Free Software
+' Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 '
 ' =======================================================
 
@@ -163,7 +160,6 @@ Private bDisplayBorder As Boolean
 Private lBackColor As OLE_COLOR
 Private bEnable As Boolean
 Private lListCount As Long
-Private lListIndex As Long
 'Private lHeight() As Long
 Private bSelected() As Boolean
 Private bChecked() As Boolean
@@ -193,7 +189,7 @@ Private tmpMouseItemIndex As Long
 Private Col As clsFastCollection
 Private zNumber As Long
 Private bVSvisible As Boolean
-Private tScroll As New vkListBoxVScroll
+Private tScroll As New vkPrivateScroll
 Private bAcceptAutoSort As Boolean
 Private tListType As ListBoxType
 Private sPath As String
@@ -238,7 +234,7 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Dim iControl As Integer
 Dim iShift As Integer
@@ -247,7 +243,7 @@ Dim x As Long
 Dim y As Long
 Dim s As Long
 Dim e As Long
-Dim f As Long, z3 As Long
+Dim F As Long, z3 As Long
 
 
     Select Case uMsg
@@ -255,8 +251,8 @@ Dim f As Long, z3 As Long
         Case WM_LBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 'détermine quel Item est sélectionné
                 s = 0   'hauteur temporaire
@@ -265,42 +261,61 @@ Dim f As Long, z3 As Long
                     s = s + Col.Item(z).Height
                     If s > y Then e = z: Exit For
                 Next z
-                    
+                
+                MouseItemIndex = e
                 RaiseEvent ItemDblClick(Col.Item(e))
                 RaiseEvent MouseDblClick(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
+                'détermine quel Item est sélectionné
+                s = 0   'hauteur temporaire
+                On Error Resume Next
+                For z = lTopIndex To lListCount
+                    s = s + Col.Item(z).Height
+                    If s > y Then e = z: Exit For
+                Next z
+                
+                MouseItemIndex = e
                 RaiseEvent MouseDown(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseUp(vbLeftButton, iShift, iControl, x, y)
         Case WM_MBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseDblClick(vbMiddleButton, iShift, iControl, x, y)
         Case WM_MBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
+                'détermine quel Item est sélectionné
+                s = 0   'hauteur temporaire
+                On Error Resume Next
+                For z = lTopIndex To lListCount
+                    s = s + Col.Item(z).Height
+                    If s > y Then e = z: Exit For
+                Next z
+                
+                MouseItemIndex = e
                 RaiseEvent MouseDown(vbMiddleButton, iShift, iControl, x, y)
         Case WM_MBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseUp(vbMiddleButton, iShift, iControl, x, y)
         Case WM_MOUSEHOVER
@@ -310,14 +325,14 @@ Dim f As Long, z3 As Long
 
                 If bStyleCheckBox Then
                     On Error Resume Next
-                    For f = lTopIndex To lListCount
-                        e = e + Col.Item(f).Height
+                    For F = lTopIndex To lListCount
+                        e = e + Col.Item(F).Height
                         If e >= Height - 50 Then
                             z3 = z
                             Exit For
                         End If
                         z = z + 1
-                    Next f
+                    Next F
             
                     Call SplitIMGandShow(z)
                 End If
@@ -327,14 +342,14 @@ Dim f As Long, z3 As Long
         
             If bStyleCheckBox Then
                 On Error Resume Next
-                For f = lTopIndex To lListCount
-                    e = e + Col.Item(f).Height
+                For F = lTopIndex To lListCount
+                    e = e + Col.Item(F).Height
                     If e >= Height - 50 Then
                         z3 = z
                         Exit For
                     End If
                     z = z + 1
-                Next f
+                Next F
         
                 MouseItemIndex = -1: Call SplitIMGandShow(z)
             End If
@@ -346,8 +361,8 @@ Dim f As Long, z3 As Long
             
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
     
                 If (wParam And MK_LBUTTON) = MK_LBUTTON Then z = vbLeftButton
                 If (wParam And MK_RBUTTON) = MK_RBUTTON Then z = vbRightButton
@@ -356,22 +371,31 @@ Dim f As Long, z3 As Long
         Case WM_RBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseDblClick(vbRightButton, iShift, iControl, x, y)
         Case WM_RBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
+                'détermine quel Item est sélectionné
+                s = 0   'hauteur temporaire
+                On Error Resume Next
+                For z = lTopIndex To lListCount
+                    s = s + Col.Item(z).Height
+                    If s > y Then e = z: Exit For
+                Next z
+                
+                MouseItemIndex = e
                 RaiseEvent MouseDown(vbRightButton, iShift, iControl, x, y)
         Case WM_RBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
-                x = LoWord(lParam) * 15
-                y = HiWord(lParam) * 15
+                x = LoWord(lParam) * Screen.TwipsPerPixelX
+                y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 RaiseEvent MouseUp(vbRightButton, iShift, iControl, x, y)
         Case WM_MOUSEWHEEL
@@ -385,7 +409,7 @@ Dim f As Long, z3 As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hwnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -579,7 +603,7 @@ Dim z2 As Long
 Dim z3 As Long
 Dim e As Long
 Dim m As Long
-Dim f As Long
+Dim F As Long
     
     If bStyleCheckBox = False Then Exit Sub
     
@@ -587,17 +611,17 @@ Dim f As Long
 
     'on détermine quel Item est survolé
     z2 = -1
-    For f = lTopIndex To lListCount
-        e = e + Col.Item(f).Height
+    For F = lTopIndex To lListCount
+        e = e + Col.Item(F).Height
         If e > y Then
-            If z2 = -1 Then z2 = z: m = e - Col.Item(f).Height
+            If z2 = -1 Then z2 = z: m = e - Col.Item(F).Height
         End If
         If e >= Height - 50 Then
             z3 = z
             Exit For
         End If
         z = z + 1
-    Next f
+    Next F
     
     'si pas suffisemment d'items pour remplir la vue
     'alors le nombre d'affichés = listcount
@@ -616,7 +640,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
     'on clear la collection
     Call Col.Clear
     Set Col = Nothing
@@ -738,13 +762,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hwnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.hWnd
+            .hwndTrack = UserControl.hwnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With
@@ -766,8 +790,8 @@ End Sub
 '=======================================================
 
 '//Propriétés sur le Scroll
-Public Property Get VScroll() As vkListBoxVScroll
-    Set VScroll = New vkListBoxVScroll
+Public Property Get VScroll() As vkPrivateScroll
+    Set VScroll = New vkPrivateScroll
     With VScroll
         .ArrowColor = VS.ArrowColor
         .BackColor = VS.BackColor
@@ -777,7 +801,7 @@ Public Property Get VScroll() As vkListBoxVScroll
         .EnableWheel = VS.EnableWheel
         .FrontColor = VS.FrontColor
         .hDc = VS.hDc
-        .hWnd = VS.hWnd
+        .hwnd = VS.hwnd
         .LargeChange = VS.LargeChange
         .LargeChangeColor = VS.LargeChangeColor
         .Max = VS.Max
@@ -793,7 +817,7 @@ Public Property Get VScroll() As vkListBoxVScroll
         .Height = VS.Height
     End With
 End Property
-Public Property Let VScroll(VScroll As vkListBoxVScroll)
+Public Property Let VScroll(VScroll As vkPrivateScroll)
     With VS
         .UnRefreshControl = True
         .ArrowColor = VScroll.ArrowColor
@@ -812,8 +836,8 @@ Public Property Let VScroll(VScroll As vkListBoxVScroll)
         .UnRefreshControl = VScroll.UnRefreshControl
         .Value = VScroll.Value
         .WheelChange = VScroll.WheelChange
-        .Width = VScroll.Width
-        .Left = Width - .Width
+        '.Width = VScroll.Width
+        '.Left = Width - .Width
         .UnRefreshControl = False
     End With
     Call VS.Refresh
@@ -822,7 +846,7 @@ End Property
 
 '//Proptiétés normales
 Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
+Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
 Public Property Get SelColor() As OLE_COLOR: SelColor = lSelColor: End Property
 Public Property Let SelColor(SelColor As OLE_COLOR): lSelColor = SelColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get ForeColor() As OLE_COLOR: ForeColor = lForeColor: End Property
@@ -840,8 +864,8 @@ Public Property Let BorderColor(BorderColor As OLE_COLOR): lBorderColor = Border
 Public Property Get List(Index As Long) As String: On Error Resume Next: List = Col.Item(Index).Text: End Property
 Public Property Let List(Index As Long, List As String): On Error Resume Next: Col.Item(Index).Text = List: bNotOk = False: UserControl_Paint: End Property
 Public Property Get ListCount() As Long: ListCount = lListCount - 1: End Property
-Public Property Get ListIndex() As Long: ListIndex = lListIndex: End Property
-Public Property Let ListIndex(ListIndex As Long): lListIndex = ListIndex: bNotOk = False: UserControl_Paint: End Property
+Public Property Get ListIndex() As Long: ListIndex = MouseItemIndex: End Property
+Public Property Let ListIndex(ListIndex As Long): MouseItemIndex = ListIndex: bNotOk = False: UserControl_Paint: End Property
 Public Property Get MultiSelect() As Boolean: MultiSelect = bMultiSelect: End Property
 Public Property Let MultiSelect(MultiSelect As Boolean): bMultiSelect = MultiSelect: End Property
 Public Property Get NewIndex() As Long: NewIndex = lNewIndex: End Property
@@ -1295,8 +1319,8 @@ Dim vsEn As Boolean
         hBrush = CreateSolidBrush(lBorderColor)
 
         'on définit une zone rectangulaire à bords arrondi
-        hRgn = CreateRectRgn(0, 0, ScaleWidth / 15, _
-            ScaleHeight / 15)
+        hRgn = CreateRectRgn(0, 0, ScaleWidth / Screen.TwipsPerPixelX, _
+            ScaleHeight / Screen.TwipsPerPixelY)
 
         'on dessine le contour
         Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
@@ -1337,7 +1361,7 @@ Dim st As Long
 Dim tF As StdFont
 Dim o As Long
 Dim o2 As Long
-Dim f As Long
+Dim F As Long
 Dim e As Long
 Dim H As Long
 
@@ -1345,7 +1369,7 @@ Dim H As Long
         'alors on décale le rect pour l'alignement à droite
         o = 19
     Else
-        o2 = 17
+        o2 = 17 * Screen.TwipsPerPixelX
     End If
     
     'décalage vers la droite si picture de checkboxes
@@ -1359,10 +1383,10 @@ Dim H As Long
     If lFullRowSelect = False Then
         'alors on effectue un décalage si Check
         If bStyleCheckBox Then
-            f = 230
+            F = 230
         End If
         If Item.Icon Then
-            f = f + 15 * Item.pxlIconWidth + 80
+            F = F + Screen.TwipsPerPixelX * Item.pxlIconWidth + 80
         End If
     End If
     
@@ -1372,31 +1396,31 @@ Dim H As Long
     Set UserControl.Font = Item.Font
     
     'récupère la hauteur du texte à afficher
-    H = (Item.Height - TextHeight(Item.Text)) / 30
+    H = (Item.Height - TextHeight(Item.Text)) / Screen.TwipsPerPixelY / 2
     
     'définit une zone pour le texte
-    Call SetRect(R, 7 + e, 1 + lTop / 15 + H, ScaleWidth / 15 - 1 - o, _
-        1 + lTop / 15 + H + TextHeight(Item.Text) / 15) 'lTop + _
-        (ScaleHeight - lTop - H / 2) / 15 + 1)
+    Call SetRect(R, 7 + e, 1 + lTop / Screen.TwipsPerPixelY + H, ScaleWidth / Screen.TwipsPerPixelX - 1 - o, _
+        1 + lTop / Screen.TwipsPerPixelY + H + TextHeight(Item.Text) / Screen.TwipsPerPixelY)  'lTop + _
+        (ScaleHeight - lTop - H / 2) / Screen.TwipsPerPixelY + 1)
     
     'dessine un rectangle (backcolor ou selection) dans cette zone
     If bSelected(Index) = False Then
         'backcolor
-        Line (15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + Item.Height + 15), Item.BackColor, BF
+        Line (15, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BackColor, BF
     Else
         'sélection
-        If f Then
+        If F Then
             'alors on décale ==> on doit quand même faire le backColor
-            Line (15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + Item.Height + 15), Item.BackColor, BF
+            Line (15, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BackColor, BF
         End If
         
         'fond de la sélection
-        Line (15 + f, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + Item.Height + 15), Item.SelColor, BF
+        Line (15 + F, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.SelColor, BF
         'bordure de la sélection
-        Line (15 + f, lTop + 15)-(Width - 255 - 30 + o2 * 15, lTop + 15), Item.BorderSelColor
-        Line (Width - 255 - 30 + o2 * 15, lTop + 30)-(Width - 255 - 30 + o2 * 15, lTop + Item.Height + 15), Item.BorderSelColor
-        Line (Width - 255 - 30 + o2 * 15, lTop + Item.Height + 15)-(15 + f, lTop + Item.Height + 15), Item.BorderSelColor
-        Line (15 + f, lTop + Item.Height + 15)-(15 + f, lTop + 15), Item.BorderSelColor
+        Line (15 + F, lTop + 15)-(Width - 255 - 30 + o2, lTop + 15), Item.BorderSelColor
+        Line (Width - 255 - 30 + o2, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BorderSelColor
+        Line (Width - 255 - 30 + o2, lTop + Item.Height + 15)-(15 + F, lTop + Item.Height + 15), Item.BorderSelColor
+        Line (15 + F, lTop + Item.Height + 15)-(15 + F, lTop + 15), Item.BorderSelColor
     End If
         
     
@@ -1426,7 +1450,7 @@ Dim e As Long
 Dim pic As StdPicture
     
     'calcule le décalage en haut
-    y = 1 + lTop / 15 + Item.Height / 30 - Item.pxlIconHeight / 2
+    y = 1 + lTop / Screen.TwipsPerPixelY + Item.Height / Screen.TwipsPerPixelY / 2 - Item.pxlIconHeight / 2
     
     'décalage vers la droite si picture de checkboxes
     If bStyleCheckBox Then
@@ -1595,7 +1619,7 @@ Dim e As Long
         
 
         'trace l'image
-        Call BitBlt(UserControl.hDc, 2, e / 15, 13, 13, pic(lIMG).hDc, _
+        Call BitBlt(UserControl.hDc, 2, e / Screen.TwipsPerPixelY, 13, 13, pic(lIMG).hDc, _
               0, 0, SRCCOPY)
         
         'update la hauteur temporaire
@@ -1608,8 +1632,8 @@ Dim e As Long
         hBrush = CreateSolidBrush(lBorderColor)
 
         'on définit une zone rectangulaire à bords arrondi
-        hRgn = CreateRectRgn(0, 0, ScaleWidth / 15, _
-            ScaleHeight / 15)
+        hRgn = CreateRectRgn(0, 0, ScaleWidth / Screen.TwipsPerPixelX, _
+            ScaleHeight / Screen.TwipsPerPixelY)
 
         'on dessine le contour
         Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
