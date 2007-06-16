@@ -1,5 +1,4 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmSearch 
    BorderStyle     =   1  'Fixed Single
@@ -27,7 +26,7 @@ Begin VB.Form frmSearch
    Begin vkUserContolsXP.vkFrame vkFrame6 
       Height          =   1695
       Left            =   3240
-      TabIndex        =   22
+      TabIndex        =   21
       Top             =   120
       Width           =   5415
       _ExtentX        =   9551
@@ -67,7 +66,7 @@ Begin VB.Form frmSearch
          BorderStyle     =   0  'None
          Height          =   615
          Left            =   120
-         TabIndex        =   25
+         TabIndex        =   24
          ToolTipText     =   $"frmSearch.frx":05C2
          Top             =   600
          Width           =   3375
@@ -76,7 +75,7 @@ Begin VB.Form frmSearch
          Caption         =   "Rechercher"
          Height          =   375
          Left            =   3840
-         TabIndex        =   24
+         TabIndex        =   23
          ToolTipText     =   "lancer la recherche"
          Top             =   360
          Width           =   1335
@@ -85,7 +84,7 @@ Begin VB.Form frmSearch
          Caption         =   "Fermer"
          Height          =   375
          Left            =   3840
-         TabIndex        =   23
+         TabIndex        =   22
          ToolTipText     =   "Fermer cette fenêtre"
          Top             =   840
          Width           =   1335
@@ -95,7 +94,7 @@ Begin VB.Form frmSearch
          Caption         =   "Expression à rechercher :"
          Height          =   255
          Left            =   120
-         TabIndex        =   26
+         TabIndex        =   25
          Top             =   360
          Width           =   1935
       End
@@ -108,7 +107,7 @@ Begin VB.Form frmSearch
       Width           =   5415
       _ExtentX        =   9551
       _ExtentY        =   8916
-      Caption         =   "Résultats"
+      Caption         =   "Résultats - offsets"
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -118,30 +117,25 @@ Begin VB.Form frmSearch
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Begin ComctlLib.ListView LV 
+      Begin vkUserContolsXP.vkListBox Listbox 
          Height          =   4575
          Left            =   120
-         TabIndex        =   21
-         Tag             =   "lang_ok"
+         TabIndex        =   26
          Top             =   360
          Width           =   5175
          _ExtentX        =   9128
          _ExtentY        =   8070
-         View            =   3
-         LabelEdit       =   1
-         LabelWrap       =   -1  'True
-         HideSelection   =   -1  'True
-         _Version        =   327682
-         ForeColor       =   -2147483640
-         BackColor       =   -2147483643
-         Appearance      =   0
-         NumItems        =   1
-         BeginProperty ColumnHeader(1) {0713E8C7-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
-            Object.Tag             =   ""
-            Text            =   "Offset"
-            Object.Width           =   9128
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
          EndProperty
+         MultiSelect     =   0   'False
+         Sorted          =   0
       End
    End
    Begin vkUserContolsXP.vkFrame vkFrame4 
@@ -593,7 +587,7 @@ Dim s As String
 
     If txtSearch.Text = vbNullString Then Exit Sub
     
-    Call LV.ListItems.Clear
+    Call Listbox.Clear
     txtSearch.Enabled = False
 
     Select Case TypeOfForm(frmContent.ActiveForm)
@@ -707,8 +701,9 @@ Dim s As String
     Call AddTextToConsole(Lang.GetString("_DisplayRes"))
 
     '//affiche les résultats
+    Listbox.UnRefreshControl = True
     For x = 1 To UBound(tRes())
-        LV.ListItems.Add Text:=Lang.GetString("_FoundAt") & " " & CStr(By16D(tRes(x)))
+        Call Listbox.AddItem(Caption:=Lang.GetString("_FoundAt") & " " & CStr(By16D(tRes(x))))
         If Check2.Value Then
             With frmContent.ActiveForm
                 .HW.AddSignet By16D(tRes(x))
@@ -717,6 +712,8 @@ Dim s As String
             End With
         End If
     Next x
+    Listbox.UnRefreshControl = False
+    Call Listbox.Refresh
     
     grdFrame1.Caption = Lang.GetString("_ResAre") & " " & CStr(UBound(tRes()))
     
@@ -762,11 +759,12 @@ Private Sub Form_Unload(Cancel As Integer)
     Set clsPref = Nothing
 End Sub
 
-Private Sub LV_ItemClick(ByVal Item As ComctlLib.ListItem)
+Private Sub Listbox_ItemClick(Item As vkUserContolsXP.vkListItem)
 'va dans le HW correspondant
 
     On Error Resume Next    'si jamais plus de ActiveForm ou je ne sais quoi d'autre...
     
     frmContent.ActiveForm.VS.Value = Val(Right$(Item.Text, Len(Item.Text) - 18)) / 16
     Call frmContent.ActiveForm.VS_Change(frmContent.ActiveForm.VS.Value)
+
 End Sub

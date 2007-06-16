@@ -26,7 +26,7 @@ Begin VB.Form MemPfm
    Begin vkUserContolsXP.vkVScroll VS 
       Height          =   2895
       Left            =   3360
-      TabIndex        =   29
+      TabIndex        =   27
       Top             =   480
       Width           =   255
       _ExtentX        =   450
@@ -98,7 +98,7 @@ Begin VB.Form MemPfm
       Begin ComctlLib.ListView lstHisto 
          Height          =   1575
          Left            =   0
-         TabIndex        =   28
+         TabIndex        =   26
          TabStop         =   0   'False
          Tag             =   "lang_ok"
          Top             =   4920
@@ -128,23 +128,10 @@ Begin VB.Form MemPfm
             Object.Width           =   706
          EndProperty
       End
-      Begin VB.TextBox txtFile 
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   0  'None
-         Height          =   2115
-         Left            =   120
-         Locked          =   -1  'True
-         MultiLine       =   -1  'True
-         ScrollBars      =   2  'Vertical
-         TabIndex        =   27
-         Text            =   "MemPfm.frx":08CA
-         Top             =   840
-         Width           =   2895
-      End
       Begin ComctlLib.TabStrip TB2 
          Height          =   375
          Left            =   120
-         TabIndex        =   20
+         TabIndex        =   19
          TabStop         =   0   'False
          Tag             =   "lang_ok"
          Top             =   360
@@ -170,7 +157,7 @@ Begin VB.Form MemPfm
          Caption         =   "Mettre à jour"
          Height          =   255
          Left            =   720
-         TabIndex        =   19
+         TabIndex        =   18
          ToolTipText     =   "Mettre à jour les informations"
          Top             =   6600
          Width           =   1695
@@ -178,7 +165,7 @@ Begin VB.Form MemPfm
       Begin ComctlLib.TabStrip TB 
          Height          =   375
          Left            =   120
-         TabIndex        =   18
+         TabIndex        =   17
          TabStop         =   0   'False
          Tag             =   "lang_ok"
          Top             =   4515
@@ -203,7 +190,7 @@ Begin VB.Form MemPfm
       Begin ComctlLib.ListView lstSignets 
          Height          =   1575
          Left            =   120
-         TabIndex        =   17
+         TabIndex        =   16
          TabStop         =   0   'False
          Tag             =   "lang_ok"
          Top             =   4920
@@ -235,19 +222,70 @@ Begin VB.Form MemPfm
             Object.Width           =   4410
          EndProperty
       End
-      Begin VB.TextBox txtProc 
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   0  'None
-         Height          =   2115
+      Begin vkUserContolsXP.vkTextBox txtFile 
+         Height          =   2175
          Left            =   120
+         TabIndex        =   28
+         Top             =   840
+         Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   3836
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
          Locked          =   -1  'True
          MultiLine       =   -1  'True
-         ScrollBars      =   2  'Vertical
-         TabIndex        =   16
-         Text            =   "MemPfm.frx":08D9
+         ScrollBars      =   2
+         LegendText      =   "Informations sur le fichier"
+         LegendForeColor =   12937777
+         LegendType      =   1
+      End
+      Begin vkUserContolsXP.vkTextBox txtProc 
+         Height          =   2175
+         Left            =   120
+         TabIndex        =   29
          Top             =   840
-         Visible         =   0   'False
          Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   3836
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         LegendText      =   "Infos sur le processus"
+         LegendForeColor =   12937777
+         LegendType      =   1
       End
       Begin VB.Label Label1 
          Alignment       =   1  'Right Justify
@@ -257,8 +295,8 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   0
          Left            =   120
-         TabIndex        =   26
-         Top             =   3000
+         TabIndex        =   25
+         Top             =   3040
          Width           =   2895
       End
       Begin VB.Label Label2 
@@ -267,7 +305,7 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   8
          Left            =   120
-         TabIndex        =   25
+         TabIndex        =   24
          Top             =   3240
          Width           =   2895
       End
@@ -277,7 +315,7 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   9
          Left            =   120
-         TabIndex        =   24
+         TabIndex        =   23
          Top             =   3480
          Width           =   2895
       End
@@ -287,7 +325,7 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   10
          Left            =   120
-         TabIndex        =   23
+         TabIndex        =   22
          Top             =   3720
          Width           =   2895
       End
@@ -297,7 +335,7 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   11
          Left            =   120
-         TabIndex        =   22
+         TabIndex        =   21
          Top             =   3960
          Width           =   2895
       End
@@ -307,7 +345,7 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   12
          Left            =   120
-         TabIndex        =   21
+         TabIndex        =   20
          Top             =   4200
          Width           =   2895
       End
@@ -337,6 +375,7 @@ Begin VB.Form MemPfm
       BeginProperty Tabs {0713E432-850A-101B-AFC0-4210102A8DA7} 
          NumTabs         =   1
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
+            Caption         =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
