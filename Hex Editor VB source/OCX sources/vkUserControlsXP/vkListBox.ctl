@@ -199,6 +199,7 @@ Private bDisplayEntirePath As Boolean
 Private bUseDefautItemSettings As Boolean
 Private lIconSize As IconSize
 Private bShowHiddenFiles As Boolean
+Private sPattern As String
 Private bShowSystemFiles As Boolean
 Private bShowReadOnlyFiles As Boolean
 
@@ -415,7 +416,7 @@ End Function
 
 Private Sub UserControl_Initialize()
 Dim Ofs As Long
-Dim Ptr As Long
+Dim ptr As Long
     
     bNotOk = True
     bNotOk2 = True
@@ -437,8 +438,8 @@ Dim Ptr As Long
     'VS.MyExtender.Visible = True
     
     'Recupere l'adresse de "Me.WindowProc"
-    Call CopyMemory(Ptr, ByVal (ObjPtr(Me)), 4)
-    Call CopyMemory(Ptr, ByVal (Ptr + 489 * 4), 4)
+    Call CopyMemory(ptr, ByVal (ObjPtr(Me)), 4)
+    Call CopyMemory(ptr, ByVal (ptr + 489 * 4), 4)
     
     'Crée la veritable fonction WindowProc (à optimiser)
     Ofs = VarPtr(mAsm(0))
@@ -455,7 +456,7 @@ Dim Ptr As Long
     MovB Ofs, &H68                 '68 44 33 22 11       push        ObjPtr(Me)
     MovL Ofs, ObjPtr(Me)
     MovB Ofs, &HE8                 'E8 1E 04 00 00       call        Me.WindowProc
-    MovL Ofs, Ptr - Ofs - 4
+    MovL Ofs, ptr - Ofs - 4
     MovB Ofs, &HA1                 'A1 20 20 40 00       mov         eax,RetVal
     MovL Ofs, VarPtr(mAsm(59))
     MovL Ofs, &H10C2               'C2 10 00             ret         10h
@@ -481,6 +482,7 @@ Private Sub UserControl_InitProperties()
         .BackColor = &HFFFFFF
         .BorderColor = 12937777
         .DisplayBorder = True
+        .Pattern = "*.*"
         .Enabled = True
         .ForeColor = vbBlack
         .MultiSelect = True
@@ -684,6 +686,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("ShowHiddenFiles", Me.ShowHiddenFiles, True)
         Call .WriteProperty("ShowReadOnlyFiles", Me.ShowReadOnlyFiles, True)
         Call .WriteProperty("ShowSystemFiles", Me.ShowSystemFiles, True)
+        Call .WriteProperty("Pattern", Me.Pattern, "*.*")
     End With
     bNotOk2 = False
 End Sub
@@ -720,6 +723,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.ShowHiddenFiles = .ReadProperty("ShowHiddenFiles", True)
         Me.ShowReadOnlyFiles = .ReadProperty("ShowReadOnlyFiles", True)
         Me.ShowSystemFiles = .ReadProperty("ShowSystemFiles", True)
+        Me.Pattern = .ReadProperty("Pattern", "*.*")
     End With
     bNotOk2 = False
     If tListType = SimpleList Then
@@ -944,7 +948,11 @@ Public Property Get ShowSystemFiles() As Boolean: ShowSystemFiles = bShowSystemF
 Public Property Let ShowSystemFiles(ShowSystemFiles As Boolean): bShowSystemFiles = ShowSystemFiles: bNotOk = False: AddFileToList: End Property
 Public Property Get ShowReadOnlyFiles() As Boolean: ShowReadOnlyFiles = bShowReadOnlyFiles: End Property
 Public Property Let ShowReadOnlyFiles(ShowReadOnlyFiles As Boolean): bShowReadOnlyFiles = ShowReadOnlyFiles: bNotOk = False: AddFileToList: End Property
-
+Public Property Get Pattern() As String: Pattern = sPattern: End Property
+Public Property Let Pattern(Pattern As String)
+sPattern = Pattern
+bNotOk = False: Call AddFileToList
+End Property
 
 Private Sub UserControl_Paint()
 
@@ -1708,7 +1716,7 @@ Dim tIt As vkListItem
         'alors c'est une liste de fichiers
         'récupère tous les fichiers du Path
         Call cFile.EnumFiles(sPath, s(), False, bShowSystemFiles, _
-            bShowHiddenFiles, bShowReadOnlyFiles)
+            bShowHiddenFiles, bShowReadOnlyFiles, sPattern)
     ElseIf tListType = FolderListBox Then
         'liste de dossiers
         'énumère tous les dossiers du path

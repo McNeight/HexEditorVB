@@ -97,7 +97,9 @@ Private Declare Function ExtractAssociatedIcon Lib "Shell32.dll" Alias "ExtractA
 Private Declare Function DestroyIcon Lib "user32.dll" (ByVal hIcon As Long) As Boolean
 Private Declare Function OleCreatePictureIndirect Lib "oleaut32.dll" (pDicDesc As TypeIcon, riid As CLSID, ByVal fown As Long, lpUnk As Object) As Long
 Private Declare Function GetLogicalDriveStrings Lib "kernel32.dll" Alias "GetLogicalDriveStringsA" (ByVal nBufferLength As Long, ByVal lpBuffer As String) As Long
-
+Private Declare Function PathFindExtension Lib "shlwapi" Alias "PathFindExtensionA" (ByVal pPath As String) As Long
+Private Declare Function lstrcpyA Lib "kernel32" (ByVal RetVal As String, ByVal ptr As Long) As Long
+Private Declare Function lstrlenA Lib "kernel32" (ByVal ptr As Any) As Long
 
 
 '=======================================================
@@ -110,17 +112,19 @@ Private Declare Function GetLogicalDriveStrings Lib "kernel32.dll" Alias "GetLog
 Public Sub EnumFiles(ByVal Folder As String, ByRef Result() As String, _
     Optional ByVal SubFolder As Boolean = False, Optional ByVal bSystem As _
     Boolean = True, Optional ByVal bHidden As Boolean = True, Optional _
-    ByVal bReadOnly As Boolean = True)
+    ByVal bReadOnly As Boolean = True, Optional ByVal Pattern As String _
+    = vbNullString)
     
 Dim x As Long
 'Dim s() As String
 
     'ajoute un slash si nécessaire
     If Right$(Folder, 1) <> "\" Then Folder = Folder & "\"
-    
+
     'lance l'énumération
     ReDim Result(0)
-    Call EnumFilesFromFolder(Folder, Result(), True, SubFolder, bSystem, bReadOnly, bHidden)
+    Call EnumFilesFromFolder(Folder, Result(), True, SubFolder, bSystem, _
+        bReadOnly, bHidden, Pattern)
     
     'donne le résultat
    ' Result = s
@@ -182,8 +186,9 @@ End Sub
 '=======================================================
 'Récpère une icone depuis un fichier/dossier/drive
 '=======================================================
-Public Function GetIcon(ByVal Source As String, ByVal Size As IconSize) As StdPicture
-Attribute GetIcon.VB_Description = "Get a handle to an icon"
+Public Function GetIcon(ByVal Source As String, ByVal Size As IconSize) _
+    As StdPicture
+    
 Dim SHFinfo As SHFILEINFO
 Dim lFlag As Long
 Dim tCLSID As CLSID
@@ -228,7 +233,8 @@ End Function
 Private Sub EnumFilesFromFolder(ByVal Directory As String, Files() As String, _
     Optional Begin As Boolean = False, Optional SubFolder As Boolean _
     = True, Optional ByVal bSystem As Boolean = True, Optional ByVal _
-    bReadOnly As Boolean = True, Optional ByVal bHidden As Boolean = True)
+    bReadOnly As Boolean = True, Optional ByVal bHidden As Boolean = True, _
+    Optional ByVal Pattern As String = vbNullString)
     
 'infos d'un fichier et handle d'énumération
 Dim FileInfo As WIN32_FIND_DATA, hFind As Long
@@ -253,7 +259,7 @@ Static ub As Long
             'vérifie l'attribut
             If Not (bHidden) And (FileInfo.dwFileAttributes And Hidden) = Hidden Or _
                 Not (bSystem) And (FileInfo.dwFileAttributes And System) = System Or _
-                Not (bReadOnly) And (FileInfo.dwFileAttributes And ReadOnly) = ReadOnly Then
+                Not (bReadOnly) And (FileInfo.dwFileAttributes And ReadOnly) = ReadOnly Or CheckPattern(Mid$(FileInfo.cFileName, 1, InStr(FileInfo.cFileName, vbNullChar) - 1), Pattern) = False Then
                 
             Else
                 ub = ub + 1
@@ -279,7 +285,7 @@ Static ub As Long
                 'vérifie l'attribut
                 If Not (bHidden) And (FileInfo.dwFileAttributes And Hidden) = Hidden Or _
                     Not (bSystem) And (FileInfo.dwFileAttributes And System) = System Or _
-                    Not (bReadOnly) And (FileInfo.dwFileAttributes And ReadOnly) = ReadOnly Then
+                    Not (bReadOnly) And (FileInfo.dwFileAttributes And ReadOnly) = ReadOnly Or CheckPattern(Mid$(FileInfo.cFileName, 1, InStr(FileInfo.cFileName, vbNullChar) - 1), Pattern) = False Then
                     
                 Else
                     ub = ub + 1
@@ -375,3 +381,38 @@ Static ub As Long
     'ferme l'énumèration
     FindClose hFind
 End Sub
+
+'=======================================================
+'vérifie le pattern d'un fichier
+'=======================================================
+Private Function CheckPattern(ByVal File As String, ByVal Pattern As _
+    String) As Boolean
+    
+Dim s As String
+Dim x As Long
+    
+    On Error Resume Next
+    
+    CheckPattern = False
+
+    'si pattern '*.*', alors tous les fichiers sont acceptés
+    If Pattern = "*.*" Then
+        CheckPattern = True
+        Exit Function
+    End If
+    
+    CheckPattern = CBool(InStr(1, LCase$(Pattern), _
+        LCase$(GetFileExtension(File)), vbBinaryCompare))
+
+End Function
+
+'=======================================================
+'Récupère l'extension du fichier depuis un path
+'=======================================================
+Public Function GetFileExtension(ByVal Path As String) As String
+
+    GetFileExtension = String$(lstrlenA(ByVal PathFindExtension(Path)), 0)
+    
+    Call lstrcpyA(ByVal GetFileExtension, ByVal PathFindExtension(Path))
+    
+End Function

@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmAbout 
    BackColor       =   &H00760401&
    BorderStyle     =   0  'None
@@ -18,29 +19,29 @@ Begin VB.Form frmAbout
    EndProperty
    Icon            =   "frmAbout.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    Picture         =   "frmAbout.frx":000C
    ScaleHeight     =   6390
    ScaleWidth      =   7065
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdUnload 
-      Caption         =   "Fermer"
+   Begin vkUserContolsXP.vkCommand cmdUnload 
       Height          =   375
       Left            =   5640
-      TabIndex        =   0
-      ToolTipText     =   "Fermer cette feuille"
+      TabIndex        =   9
       Top             =   5880
       Width           =   1335
-   End
-   Begin VB.CommandButton cmdLicense 
-      Caption         =   "Informations de licence"
-      Height          =   375
-      Left            =   3360
-      TabIndex        =   1
-      ToolTipText     =   "Afficher les informations sur la licence GNU GPL"
-      Top             =   5880
-      Width           =   2055
+      _ExtentX        =   2355
+      _ExtentY        =   661
+      Caption         =   "Fermer"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
    End
    Begin VB.TextBox txt 
       BorderStyle     =   0  'None
@@ -58,9 +59,28 @@ Begin VB.Form frmAbout
       Locked          =   -1  'True
       MultiLine       =   -1  'True
       ScrollBars      =   2  'Vertical
-      TabIndex        =   2
+      TabIndex        =   0
       Top             =   4040
       Width           =   6705
+   End
+   Begin vkUserContolsXP.vkCommand cmdLicense 
+      Height          =   375
+      Left            =   3360
+      TabIndex        =   10
+      Top             =   5880
+      Width           =   2055
+      _ExtentX        =   3625
+      _ExtentY        =   661
+      Caption         =   "Informations de licence"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
    End
    Begin VB.Label lblVersionWarning 
       BackStyle       =   0  'Transparent
@@ -77,7 +97,7 @@ Begin VB.Form frmAbout
       ForeColor       =   &H000000FF&
       Height          =   375
       Left            =   120
-      TabIndex        =   10
+      TabIndex        =   8
       Top             =   120
       Width           =   2535
    End
@@ -85,7 +105,7 @@ Begin VB.Form frmAbout
       BackColor       =   &H00FFFFFF&
       Height          =   1815
       Left            =   105
-      TabIndex        =   9
+      TabIndex        =   7
       Top             =   3960
       Width           =   6855
    End
@@ -104,7 +124,7 @@ Begin VB.Form frmAbout
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   3937
-      TabIndex        =   8
+      TabIndex        =   6
       Top             =   2872
       Width           =   3015
    End
@@ -123,7 +143,7 @@ Begin VB.Form frmAbout
       ForeColor       =   &H00FFFFFF&
       Height          =   195
       Left            =   120
-      TabIndex        =   7
+      TabIndex        =   5
       Top             =   3585
       Width           =   6855
    End
@@ -144,7 +164,7 @@ Begin VB.Form frmAbout
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       Left            =   5977
-      TabIndex        =   6
+      TabIndex        =   4
       Top             =   2512
       Width           =   795
    End
@@ -165,7 +185,7 @@ Begin VB.Form frmAbout
       ForeColor       =   &H00FFFFFF&
       Height          =   375
       Left            =   3307
-      TabIndex        =   5
+      TabIndex        =   3
       Top             =   2152
       Width           =   3525
    End
@@ -185,7 +205,7 @@ Begin VB.Form frmAbout
       ForeColor       =   &H00FFFFFF&
       Height          =   780
       Left            =   2257
-      TabIndex        =   4
+      TabIndex        =   2
       Top             =   1072
       Width           =   4500
    End
@@ -205,7 +225,7 @@ Begin VB.Form frmAbout
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Left            =   90
-      TabIndex        =   3
+      TabIndex        =   1
       Top             =   165
       Width           =   6855
    End

@@ -28,7 +28,7 @@ Begin VB.Form Pfm
    Begin vkUserContolsXP.vkVScroll VS 
       Height          =   2895
       Left            =   2880
-      TabIndex        =   27
+      TabIndex        =   26
       Top             =   0
       Width           =   255
       _ExtentX        =   450
@@ -100,7 +100,7 @@ Begin VB.Form Pfm
       Begin ComctlLib.ListView lstSignets 
          Height          =   1575
          Left            =   120
-         TabIndex        =   26
+         TabIndex        =   25
          TabStop         =   0   'False
          Tag             =   "lang_ok"
          Top             =   4920
@@ -131,20 +131,6 @@ Begin VB.Form Pfm
             Text            =   "Commentaire"
             Object.Width           =   4410
          EndProperty
-      End
-      Begin VB.TextBox txtFile 
-         BackColor       =   &H00FFFFFF&
-         BorderStyle     =   0  'None
-         Height          =   2115
-         Left            =   120
-         Locked          =   -1  'True
-         MultiLine       =   -1  'True
-         ScrollBars      =   2  'Vertical
-         TabIndex        =   18
-         TabStop         =   0   'False
-         Text            =   "Pfm.frx":08CA
-         Top             =   600
-         Width           =   2895
       End
       Begin ComctlLib.TabStrip TB 
          Height          =   375
@@ -213,13 +199,46 @@ Begin VB.Form Pfm
          Top             =   6600
          Width           =   1695
       End
+      Begin vkUserContolsXP.vkTextBox txtFile 
+         Height          =   2175
+         Left            =   120
+         TabIndex        =   27
+         Top             =   600
+         Width           =   2895
+         _ExtentX        =   5106
+         _ExtentY        =   3836
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2
+         LegendText      =   "Informations sur le fichier"
+         LegendForeColor =   12937777
+         LegendType      =   1
+      End
       Begin VB.Label Label2 
          BackStyle       =   0  'Transparent
          Caption         =   "Historique=[nombre]"
          Height          =   195
          Index           =   12
          Left            =   120
-         TabIndex        =   25
+         TabIndex        =   24
          Top             =   4200
          Width           =   2895
       End
@@ -229,7 +248,7 @@ Begin VB.Form Pfm
          Height          =   195
          Index           =   11
          Left            =   120
-         TabIndex        =   24
+         TabIndex        =   23
          Top             =   3960
          Width           =   2895
       End
@@ -239,7 +258,7 @@ Begin VB.Form Pfm
          Height          =   195
          Index           =   10
          Left            =   120
-         TabIndex        =   23
+         TabIndex        =   22
          Top             =   3720
          Width           =   2895
       End
@@ -249,7 +268,7 @@ Begin VB.Form Pfm
          Height          =   195
          Index           =   9
          Left            =   120
-         TabIndex        =   22
+         TabIndex        =   21
          Top             =   3480
          Width           =   2895
       End
@@ -259,7 +278,7 @@ Begin VB.Form Pfm
          Height          =   195
          Index           =   8
          Left            =   120
-         TabIndex        =   21
+         TabIndex        =   20
          Top             =   3240
          Width           =   2895
       End
@@ -271,7 +290,7 @@ Begin VB.Form Pfm
          Height          =   255
          Index           =   0
          Left            =   120
-         TabIndex        =   20
+         TabIndex        =   19
          Top             =   2880
          Width           =   2895
       End
@@ -283,7 +302,7 @@ Begin VB.Form Pfm
          Height          =   255
          Index           =   1
          Left            =   120
-         TabIndex        =   19
+         TabIndex        =   18
          Top             =   360
          Width           =   2895
       End
