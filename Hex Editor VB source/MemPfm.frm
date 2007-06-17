@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form MemPfm 
    Caption         =   "Ouverture d'un processus..."
    ClientHeight    =   8295
@@ -26,7 +26,7 @@ Begin VB.Form MemPfm
    Begin vkUserContolsXP.vkVScroll VS 
       Height          =   2895
       Left            =   3360
-      TabIndex        =   27
+      TabIndex        =   26
       Top             =   480
       Width           =   255
       _ExtentX        =   450
@@ -52,6 +52,7 @@ Begin VB.Form MemPfm
             MinWidth        =   4410
             Text            =   "Fichier=[Modifié]"
             TextSave        =   "Fichier=[Modifié]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -59,6 +60,7 @@ Begin VB.Form MemPfm
             MinWidth        =   4410
             Text            =   "Page=[0/0]"
             TextSave        =   "Page=[0/0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -66,6 +68,7 @@ Begin VB.Form MemPfm
             MinWidth        =   3175
             Text            =   "Offset=[0]"
             TextSave        =   "Offset=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -73,6 +76,7 @@ Begin VB.Form MemPfm
             MinWidth        =   5292
             Text            =   "Sélection=[0 Bytes]"
             TextSave        =   "Sélection=[0 Bytes]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -95,10 +99,30 @@ Begin VB.Form MemPfm
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+      Begin vkUserContolsXP.vkCommand cmdMAJ 
+         Height          =   255
+         Left            =   720
+         TabIndex        =   29
+         ToolTipText     =   "Mettre à jour les informations"
+         Top             =   6600
+         Width           =   1695
+         _ExtentX        =   2990
+         _ExtentY        =   450
+         Caption         =   "Mettre à jour"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
       Begin ComctlLib.ListView lstHisto 
          Height          =   1575
-         Left            =   0
-         TabIndex        =   26
+         Left            =   120
+         TabIndex        =   25
          TabStop         =   0   'False
          Tag             =   "lang_ok"
          Top             =   4920
@@ -131,7 +155,7 @@ Begin VB.Form MemPfm
       Begin ComctlLib.TabStrip TB2 
          Height          =   375
          Left            =   120
-         TabIndex        =   19
+         TabIndex        =   18
          TabStop         =   0   'False
          Tag             =   "lang_ok"
          Top             =   360
@@ -143,24 +167,17 @@ Begin VB.Form MemPfm
             NumTabs         =   2
             BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Fichier cible"
+               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
             BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Processus"
+               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
          EndProperty
-      End
-      Begin VB.CommandButton cmdMAJ 
-         Caption         =   "Mettre à jour"
-         Height          =   255
-         Left            =   720
-         TabIndex        =   18
-         ToolTipText     =   "Mettre à jour les informations"
-         Top             =   6600
-         Width           =   1695
       End
       Begin ComctlLib.TabStrip TB 
          Height          =   375
@@ -177,11 +194,13 @@ Begin VB.Form MemPfm
             NumTabs         =   2
             BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Historique"
+               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
             BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Signets"
+               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
@@ -225,7 +244,7 @@ Begin VB.Form MemPfm
       Begin vkUserContolsXP.vkTextBox txtFile 
          Height          =   2175
          Left            =   120
-         TabIndex        =   28
+         TabIndex        =   27
          Top             =   840
          Width           =   2895
          _ExtentX        =   5106
@@ -258,7 +277,7 @@ Begin VB.Form MemPfm
       Begin vkUserContolsXP.vkTextBox txtProc 
          Height          =   2175
          Left            =   120
-         TabIndex        =   29
+         TabIndex        =   28
          Top             =   840
          Width           =   2895
          _ExtentX        =   5106
@@ -295,7 +314,7 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   0
          Left            =   120
-         TabIndex        =   25
+         TabIndex        =   24
          Top             =   3040
          Width           =   2895
       End
@@ -305,7 +324,7 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   8
          Left            =   120
-         TabIndex        =   24
+         TabIndex        =   23
          Top             =   3240
          Width           =   2895
       End
@@ -315,7 +334,7 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   9
          Left            =   120
-         TabIndex        =   23
+         TabIndex        =   22
          Top             =   3480
          Width           =   2895
       End
@@ -325,7 +344,7 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   10
          Left            =   120
-         TabIndex        =   22
+         TabIndex        =   21
          Top             =   3720
          Width           =   2895
       End
@@ -335,7 +354,7 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   11
          Left            =   120
-         TabIndex        =   21
+         TabIndex        =   20
          Top             =   3960
          Width           =   2895
       End
@@ -345,7 +364,7 @@ Begin VB.Form MemPfm
          Height          =   255
          Index           =   12
          Left            =   120
-         TabIndex        =   20
+         TabIndex        =   19
          Top             =   4200
          Width           =   2895
       End
@@ -376,6 +395,7 @@ Begin VB.Form MemPfm
          NumTabs         =   1
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   ""
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -1451,15 +1471,15 @@ Dim l As Long
     With VS
         If l = 1 Then
             'affiche tout
-            .Min = lMinAdrr / 16
             .Max = lMaxAdrr / 16
+            .Min = lMinAdrr / 16
             .Value = .Min
             Call VS_Change(.Value)
         Else
             'affiche qu'une partie
             'change les valeurs du VS
-            .Min = By16(lBA(l - 1) / 16)
             .Max = By16((lBA(l - 1) + lRS(l - 1)) / 16)
+            .Min = By16(lBA(l - 1) / 16)
             .Value = .Min
             Call VS_Change(.Value)
         End If

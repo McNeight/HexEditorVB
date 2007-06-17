@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmStringSearch 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Recherche de chaînes de caractères"
@@ -27,7 +27,7 @@ Begin VB.Form frmStringSearch
    Begin vkUserContolsXP.vkBar PGB 
       Height          =   255
       Left            =   120
-      TabIndex        =   14
+      TabIndex        =   13
       Top             =   2520
       Width           =   4335
       _ExtentX        =   7646
@@ -48,7 +48,7 @@ Begin VB.Form frmStringSearch
    Begin vkUserContolsXP.vkFrame vkFrame1 
       Height          =   2295
       Left            =   120
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   120
       Width           =   4455
       _ExtentX        =   7858
@@ -66,7 +66,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkAddSignet 
          Height          =   255
          Left            =   120
-         TabIndex        =   13
+         TabIndex        =   12
          Top             =   1560
          Width           =   3735
          _ExtentX        =   6588
@@ -87,7 +87,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkAccent 
          Height          =   255
          Left            =   120
-         TabIndex        =   12
+         TabIndex        =   11
          Top             =   1320
          Width           =   3135
          _ExtentX        =   5530
@@ -108,7 +108,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkSigns 
          Height          =   255
          Left            =   120
-         TabIndex        =   11
+         TabIndex        =   10
          Top             =   1080
          Width           =   3135
          _ExtentX        =   5530
@@ -129,7 +129,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkMaj 
          Height          =   255
          Left            =   120
-         TabIndex        =   10
+         TabIndex        =   9
          Top             =   840
          Width           =   3135
          _ExtentX        =   5530
@@ -150,7 +150,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkMin 
          Height          =   255
          Left            =   120
-         TabIndex        =   9
+         TabIndex        =   8
          Top             =   600
          Width           =   3135
          _ExtentX        =   5530
@@ -171,7 +171,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkNumb3r 
          Height          =   255
          Left            =   120
-         TabIndex        =   8
+         TabIndex        =   7
          Top             =   360
          Width           =   3135
          _ExtentX        =   5530
@@ -194,7 +194,7 @@ Begin VB.Form frmStringSearch
          BorderStyle     =   0  'None
          Height          =   285
          Left            =   3360
-         TabIndex        =   6
+         TabIndex        =   5
          Tag             =   "pref"
          Text            =   "5"
          ToolTipText     =   "Taille minimale (au dessous de cette taille, les suites de caractères ne sont pas considérées comme des strings)"
@@ -206,28 +206,10 @@ Begin VB.Form frmStringSearch
          Caption         =   "Taille minimale de la chaîne de caractères :"
          Height          =   255
          Left            =   120
-         TabIndex        =   7
+         TabIndex        =   6
          Top             =   1920
          Width           =   3135
       End
-   End
-   Begin VB.CommandButton cmdGo 
-      Caption         =   "Lancer la recherche"
-      Height          =   375
-      Left            =   4785
-      TabIndex        =   3
-      ToolTipText     =   "Lancer la recherche"
-      Top             =   218
-      Width           =   1575
-   End
-   Begin VB.CommandButton cmdSave 
-      Caption         =   "Sauvegarder les résultats"
-      Height          =   495
-      Left            =   4785
-      TabIndex        =   2
-      ToolTipText     =   "Sauvegarder les résultats (format texte)"
-      Top             =   938
-      Width           =   1575
    End
    Begin VB.CommandButton cmdQuit 
       Caption         =   "Fermer"
@@ -271,13 +253,31 @@ Begin VB.Form frmStringSearch
          Object.Width           =   7673
       EndProperty
    End
+   Begin VB.CommandButton cmdSave 
+      Caption         =   "Sauvegarder les résultats"
+      Height          =   495
+      Left            =   4785
+      TabIndex        =   2
+      ToolTipText     =   "Sauvegarder les résultats (format texte)"
+      Top             =   938
+      Width           =   1575
+   End
+   Begin VB.CommandButton cmdGo 
+      Caption         =   "Lancer la recherche"
+      Height          =   375
+      Left            =   4800
+      TabIndex        =   14
+      ToolTipText     =   "Lancer la recherche"
+      Top             =   240
+      Width           =   1575
+   End
    Begin VB.Label Label2 
       Alignment       =   2  'Center
       BackColor       =   &H8000000A&
       Caption         =   "Résultats de la recherche"
       Height          =   255
       Left            =   105
-      TabIndex        =   4
+      TabIndex        =   3
       Top             =   2865
       Width           =   6375
    End

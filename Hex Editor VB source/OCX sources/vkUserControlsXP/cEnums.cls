@@ -127,7 +127,7 @@ Public Enum LegendTypeConstants
 End Enum
 Public Enum OrientationsConstants
     [HorizontalLegend] = 0
-    [VerticalLegend] = 0
+    [VerticalLegend] = 1
 End Enum
 Public Enum vkCommandStyle
     [No Style - vkCommand] = 0

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#2.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmSaveProcess 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sauvegarder le contenu mémoire du processus"
@@ -28,7 +28,7 @@ Begin VB.Form frmSaveProcess
    Begin vkUserContolsXP.vkCheck chkAll 
       Height          =   375
       Left            =   240
-      TabIndex        =   12
+      TabIndex        =   11
       ToolTipText     =   "Enregistre toute la mémoire (/!\ 2Go sont requis)"
       Top             =   3600
       Width           =   3735
@@ -50,7 +50,7 @@ Begin VB.Form frmSaveProcess
    Begin vkUserContolsXP.vkFrame vkFrame1 
       Height          =   1695
       Left            =   4200
-      TabIndex        =   8
+      TabIndex        =   7
       Top             =   120
       Width           =   3255
       _ExtentX        =   5741
@@ -68,7 +68,7 @@ Begin VB.Form frmSaveProcess
       Begin vkUserContolsXP.vkCheck chkOffset 
          Height          =   255
          Left            =   240
-         TabIndex        =   11
+         TabIndex        =   10
          ToolTipText     =   "La sauvegarde des offsets nécessite la sauvegarde de strings formatées"
          Top             =   1200
          Width           =   2775
@@ -90,7 +90,7 @@ Begin VB.Form frmSaveProcess
       Begin vkUserContolsXP.vkCheck chkASCII 
          Height          =   255
          Left            =   240
-         TabIndex        =   10
+         TabIndex        =   9
          ToolTipText     =   "Sauvegarder les valeurs ASCII réelles uniquement si coché seul"
          Top             =   840
          Width           =   2775
@@ -112,7 +112,7 @@ Begin VB.Form frmSaveProcess
       Begin vkUserContolsXP.vkCheck chkHexa 
          Height          =   255
          Left            =   240
-         TabIndex        =   9
+         TabIndex        =   8
          ToolTipText     =   "Sauvegarder les valeurs hexa"
          Top             =   480
          Width           =   2775
@@ -131,14 +131,6 @@ Begin VB.Form frmSaveProcess
             Strikethrough   =   0   'False
          EndProperty
       End
-   End
-   Begin VB.ListBox lstList 
-      Height          =   2985
-      Left            =   120
-      Style           =   1  'Checkbox
-      TabIndex        =   4
-      Top             =   480
-      Width           =   3855
    End
    Begin VB.TextBox txtPath 
       BorderStyle     =   0  'None
@@ -176,12 +168,33 @@ Begin VB.Form frmSaveProcess
       Top             =   3608
       Width           =   1575
    End
+   Begin vkUserContolsXP.vkListBox lstList 
+      Height          =   3015
+      Left            =   120
+      TabIndex        =   12
+      Top             =   480
+      Width           =   3855
+      _ExtentX        =   6800
+      _ExtentY        =   5318
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      MultiSelect     =   0   'False
+      Sorted          =   0
+      StyleCheckBox   =   -1  'True
+   End
    Begin VB.Label Label1 
       BackStyle       =   0  'Transparent
       Caption         =   "Zones mémoire à enregistrer"
       Height          =   255
       Left            =   128
-      TabIndex        =   7
+      TabIndex        =   6
       Top             =   128
       Width           =   2175
    End
@@ -190,7 +203,7 @@ Begin VB.Form frmSaveProcess
       Caption         =   "Chemin du fichier"
       Height          =   255
       Left            =   4208
-      TabIndex        =   6
+      TabIndex        =   5
       Top             =   2648
       Width           =   3255
    End
@@ -199,7 +212,7 @@ Begin VB.Form frmSaveProcess
       Caption         =   "Taille du fichier résultant=[0]"
       Height          =   615
       Left            =   4215
-      TabIndex        =   5
+      TabIndex        =   4
       ToolTipText     =   "Taille estimée du fichier qui sera créé"
       Top             =   1920
       Width           =   3255
@@ -354,7 +367,7 @@ Dim y As Long
 Dim s As String
     
     lSize = 0
-    For x = 0 To lstList.ListCount - 1
+    For x = 1 To lstList.ListCount
         s = Left$(lstList.List(x), Len(lstList.List(x)) - 1)  'garde l'item sans le ']' final
         y = InStrRev(s, "[", , vbBinaryCompare)
         s = Mid$(s, y + 1, Len(s) - y) 'contient la taille
@@ -369,7 +382,7 @@ Dim s As String
         vbNewLine & FormatedSize(lSize)
 End Sub
 
-Private Sub lstList_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstList_MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
 'affiche le popup menu sur le listbox
     If Button = 2 Then Me.PopupMenu Me.mnuPopUp
     
@@ -380,28 +393,16 @@ Private Sub mnuDeselectAll_Click()
 'décoche toutes les cases
 Dim x As Long
     
-    lstList.Visible = False
-    
-    For x = lstList.ListCount - 1 To 0 Step -1
-        lstList.Selected(x) = False
-    Next x
+    Call lstList.UnCheckAll
     
     lblSize.Caption = Lang.GetString("_SizeRes") & "0]"
-    lstList.Visible = True
 End Sub
 
 Private Sub mnuSelectAll_Click()
 'coche toutes les cases
 Dim x As Long
     
-    lstList.Visible = False
-    
-    For x = lstList.ListCount - 1 To 0 Step -1
-        ValidateRect lstList.hWnd, 0&
-        lstList.Selected(x) = True
-    Next x
-    
-    lstList.Visible = True
+    Call lstList.CheckAll
     
     Call RecalcSize  'recalcule la taille
 End Sub
@@ -422,13 +423,15 @@ Dim x As Long
     Call clsProc.RetrieveMemRegions(lPID, LB(), LS())
     
     Call lstList.Clear
-    lstList.Visible = False
     
     'les ajoute
-    For x = 1 To UBound(LS())
-        lstList.AddItem "Offset=[" & CStr(LB(x)) & "], " & Lang.GetString("_Size") & "=[" & CStr(LS(x)) & "]"
-    Next x
-    
-    lstList.Visible = True
-        
+    With lstList
+        .UnRefreshControl = True
+        For x = 1 To UBound(LS())
+            Call .AddItem("Offset=[" & CStr(LB(x)) & "], " & Lang.GetString("_Size") & "=[" & CStr(LS(x)) & "]")
+        Next x
+        .UnRefreshControl = False
+        Call .Refresh
+    End With
+            
 End Sub
