@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form diskPfm 
    Caption         =   "Ouverture d'un disque..."
    ClientHeight    =   8415
@@ -28,7 +28,7 @@ Begin VB.Form diskPfm
    Begin vkUserContolsXP.vkVScroll VS 
       Height          =   2895
       Left            =   3120
-      TabIndex        =   62
+      TabIndex        =   61
       Top             =   600
       Width           =   255
       _ExtentX        =   450
@@ -82,7 +82,7 @@ Begin VB.Form diskPfm
    Begin vkUserContolsXP.vkFrame FrameData 
       Height          =   1455
       Left            =   7320
-      TabIndex        =   53
+      TabIndex        =   52
       Top             =   360
       Width           =   1695
       _ExtentX        =   2990
@@ -103,7 +103,7 @@ Begin VB.Form diskPfm
          Height          =   195
          Index           =   3
          Left            =   1080
-         TabIndex        =   57
+         TabIndex        =   56
          Top             =   1080
          Width           =   495
       End
@@ -114,7 +114,7 @@ Begin VB.Form diskPfm
          Index           =   0
          Left            =   1080
          MaxLength       =   2
-         TabIndex        =   56
+         TabIndex        =   55
          Top             =   360
          Width           =   495
       End
@@ -125,7 +125,7 @@ Begin VB.Form diskPfm
          Index           =   1
          Left            =   1080
          MaxLength       =   3
-         TabIndex        =   55
+         TabIndex        =   54
          Top             =   600
          Width           =   495
       End
@@ -136,7 +136,7 @@ Begin VB.Form diskPfm
          Index           =   2
          Left            =   1080
          MaxLength       =   1
-         TabIndex        =   54
+         TabIndex        =   53
          Top             =   840
          Width           =   495
       End
@@ -146,7 +146,7 @@ Begin VB.Form diskPfm
          Height          =   255
          Index           =   3
          Left            =   120
-         TabIndex        =   61
+         TabIndex        =   60
          Top             =   1080
          Width           =   855
       End
@@ -156,7 +156,7 @@ Begin VB.Form diskPfm
          Height          =   255
          Index           =   0
          Left            =   120
-         TabIndex        =   60
+         TabIndex        =   59
          Top             =   360
          Width           =   855
       End
@@ -166,7 +166,7 @@ Begin VB.Form diskPfm
          Height          =   255
          Index           =   1
          Left            =   120
-         TabIndex        =   59
+         TabIndex        =   58
          Top             =   600
          Width           =   855
       End
@@ -176,7 +176,7 @@ Begin VB.Form diskPfm
          Height          =   255
          Index           =   2
          Left            =   120
-         TabIndex        =   58
+         TabIndex        =   57
          Top             =   840
          Width           =   855
       End
@@ -232,15 +232,6 @@ Begin VB.Form diskPfm
          TabStop         =   0   'False
          Top             =   240
          Width           =   2950
-         Begin VB.CommandButton cmdMAJ 
-            Caption         =   "Mettre à jour"
-            Height          =   255
-            Left            =   600
-            TabIndex        =   41
-            ToolTipText     =   "Mettre à jour les informations"
-            Top             =   6240
-            Width           =   1695
-         End
          Begin VB.TextBox TextBox 
             BackColor       =   &H8000000F&
             BorderStyle     =   0  'None
@@ -374,7 +365,7 @@ Begin VB.Form diskPfm
          Begin ComctlLib.ListView lstSignets 
             Height          =   1575
             Left            =   0
-            TabIndex        =   42
+            TabIndex        =   41
             TabStop         =   0   'False
             Tag             =   "lang_ok"
             Top             =   4560
@@ -409,7 +400,7 @@ Begin VB.Form diskPfm
          Begin ComctlLib.TabStrip TB 
             Height          =   375
             Left            =   0
-            TabIndex        =   43
+            TabIndex        =   42
             TabStop         =   0   'False
             Tag             =   "lang_ok"
             Top             =   4160
@@ -431,12 +422,32 @@ Begin VB.Form diskPfm
                EndProperty
             EndProperty
          End
+         Begin vkUserContolsXP.vkCommand cmdMAJ 
+            Height          =   255
+            Left            =   600
+            TabIndex        =   62
+            ToolTipText     =   "Mettre à jour les informations"
+            Top             =   6240
+            Width           =   1695
+            _ExtentX        =   2990
+            _ExtentY        =   450
+            Caption         =   "Mettre à jour"
+            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+         End
          Begin VB.Label Label2 
             Caption         =   "Historique=[nombre]"
             Height          =   200
             Index           =   12
             Left            =   0
-            TabIndex        =   50
+            TabIndex        =   49
             Top             =   3840
             Width           =   2895
          End
@@ -445,7 +456,7 @@ Begin VB.Form diskPfm
             Height          =   200
             Index           =   11
             Left            =   0
-            TabIndex        =   49
+            TabIndex        =   48
             Top             =   3600
             Width           =   2895
          End
@@ -454,7 +465,7 @@ Begin VB.Form diskPfm
             Height          =   200
             Index           =   10
             Left            =   0
-            TabIndex        =   48
+            TabIndex        =   47
             Top             =   3360
             Width           =   2895
          End
@@ -463,7 +474,7 @@ Begin VB.Form diskPfm
             Height          =   200
             Index           =   9
             Left            =   0
-            TabIndex        =   47
+            TabIndex        =   46
             Top             =   3120
             Width           =   2895
          End
@@ -472,7 +483,7 @@ Begin VB.Form diskPfm
             Height          =   200
             Index           =   8
             Left            =   0
-            TabIndex        =   46
+            TabIndex        =   45
             Top             =   2880
             Width           =   2895
          End
@@ -483,7 +494,7 @@ Begin VB.Form diskPfm
             Height          =   255
             Index           =   0
             Left            =   0
-            TabIndex        =   45
+            TabIndex        =   44
             Top             =   2640
             Width           =   2895
          End
@@ -494,7 +505,7 @@ Begin VB.Form diskPfm
             Height          =   255
             Index           =   1
             Left            =   0
-            TabIndex        =   44
+            TabIndex        =   43
             Top             =   0
             Width           =   2895
          End
@@ -813,7 +824,7 @@ Begin VB.Form diskPfm
    Begin FileView_OCX.FileView FV2 
       Height          =   1575
       Left            =   480
-      TabIndex        =   51
+      TabIndex        =   50
       Top             =   3000
       Width           =   2415
       _ExtentX        =   4260
@@ -838,7 +849,7 @@ Begin VB.Form diskPfm
       Caption         =   "Aller à ..."
       Height          =   255
       Left            =   240
-      TabIndex        =   52
+      TabIndex        =   51
       Top             =   7080
       Width           =   855
    End

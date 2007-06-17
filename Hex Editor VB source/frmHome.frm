@@ -2,6 +2,7 @@ VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
 Object = "{2245E336-2835-4C1E-B373-2395637023C8}#1.0#0"; "ProcessView_OCX.ocx"
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmHome 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Menu principal"
@@ -27,6 +28,44 @@ Begin VB.Form frmHome
    ScaleWidth      =   6855
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkCommand cmdQuit 
+      Height          =   375
+      Left            =   4260
+      TabIndex        =   4
+      Top             =   5160
+      Width           =   1455
+      _ExtentX        =   2566
+      _ExtentY        =   661
+      Caption         =   "Quitter"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin vkUserContolsXP.vkCommand cmdOk 
+      Height          =   375
+      Left            =   1140
+      TabIndex        =   3
+      Top             =   5160
+      Width           =   1455
+      _ExtentX        =   2566
+      _ExtentY        =   661
+      Caption         =   "OK"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin ComctlLib.TabStrip TB 
       Height          =   375
       Left            =   120
@@ -41,453 +80,590 @@ Begin VB.Form frmHome
          NumTabs         =   5
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Ouvrir fichier"
+            Key             =   ""
             Object.Tag             =   ""
             Object.ToolTipText     =   "Ouvrir un fichier"
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Ouvrir dossier"
+            Key             =   ""
             Object.Tag             =   ""
             Object.ToolTipText     =   "Ouvrir un dossier de fichiers"
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Ouvrir disque"
+            Key             =   ""
             Object.Tag             =   ""
             Object.ToolTipText     =   "Ouvrir un disque"
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab4 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Ouvrir processus"
+            Key             =   ""
             Object.Tag             =   ""
             Object.ToolTipText     =   "Ouvrir un processus"
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab5 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Nouveau fichier"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
       EndProperty
    End
-   Begin VB.Frame Frame1 
-      Height          =   4455
-      Index           =   4
-      Left            =   120
-      TabIndex        =   35
-      Top             =   473
-      Width           =   6615
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   4095
-         Index           =   4
-         Left            =   50
-         ScaleHeight     =   4095
-         ScaleWidth      =   6495
-         TabIndex        =   36
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   6495
-         Begin VB.CommandButton cmdBrowseNew 
-            Caption         =   "..."
-            Height          =   255
-            Left            =   5640
-            TabIndex        =   40
-            ToolTipText     =   "Choix du fichier à créer"
-            Top             =   480
-            Width           =   615
-         End
-         Begin VB.TextBox txtNewFile 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   120
-            TabIndex        =   39
-            ToolTipText     =   "Nouveau fichier à créer"
-            Top             =   480
-            Width           =   5415
-         End
-         Begin VB.ComboBox cdUnit 
-            Height          =   315
-            ItemData        =   "frmHome.frx":058A
-            Left            =   3360
-            List            =   "frmHome.frx":059A
-            Style           =   2  'Dropdown List
-            TabIndex        =   38
-            Tag             =   "pref lang_ok"
-            ToolTipText     =   "Unité"
-            Top             =   1080
-            Width           =   1335
-         End
-         Begin VB.TextBox txtSize 
-            Alignment       =   2  'Center
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   2160
-            TabIndex        =   37
-            Tag             =   "pref"
-            Text            =   "100"
-            ToolTipText     =   "Taille"
-            Top             =   1080
-            Width           =   975
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Création d'un nouveau fichier"
-            Height          =   255
-            Index           =   4
-            Left            =   120
-            TabIndex        =   42
-            Top             =   120
-            Width           =   3255
-         End
-         Begin VB.Label Label1 
-            Alignment       =   2  'Center
-            Caption         =   "Taille du fichier"
-            Height          =   255
-            Index           =   5
-            Left            =   120
-            TabIndex        =   41
-            Top             =   1080
-            Width           =   1935
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   4455
+   Begin vkUserContolsXP.vkFrame Frame1 
+      Height          =   4335
       Index           =   0
       Left            =   120
-      TabIndex        =   27
-      Top             =   473
+      TabIndex        =   0
+      Top             =   600
       Width           =   6615
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   4095
+      _ExtentX        =   11668
+      _ExtentY        =   7646
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkTextBox txtFileInfos 
+         Height          =   3135
+         Left            =   120
+         TabIndex        =   26
+         Top             =   1080
+         Width           =   6375
+         _ExtentX        =   11245
+         _ExtentY        =   5530
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2
+         LegendText      =   "Informations sur le fichier"
+         LegendForeColor =   12937777
+         LegendType      =   1
+      End
+      Begin vkUserContolsXP.vkCommand cmdBrowseFile 
+         Height          =   255
+         Left            =   5640
+         TabIndex        =   13
+         ToolTipText     =   "Choix du fichier à ouvrir"
+         Top             =   600
+         Width           =   615
+         _ExtentX        =   1085
+         _ExtentY        =   450
+         Caption         =   "..."
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkTextBox txtFile 
+         Height          =   255
+         Left            =   120
+         TabIndex        =   12
+         ToolTipText     =   "Fichier choisi pour l'ouverture"
+         Top             =   600
+         Width           =   5415
+         _ExtentX        =   9551
+         _ExtentY        =   450
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         LegendForeColor =   12937777
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Choix du fichier à ouvrir :"
+         Height          =   255
          Index           =   0
-         Left            =   50
-         ScaleHeight     =   4095
-         ScaleWidth      =   6495
-         TabIndex        =   28
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   6495
-         Begin VB.TextBox txtFile 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   120
-            TabIndex        =   33
-            ToolTipText     =   "Fichier choisi pour l'ouverture"
-            Top             =   360
-            Width           =   5415
-         End
-         Begin VB.CommandButton cmdBrowseFile 
-            Caption         =   "..."
-            Height          =   255
-            Left            =   5640
-            TabIndex        =   32
-            ToolTipText     =   "Choix du fichier à ouvrir"
-            Top             =   360
-            Width           =   615
-         End
-         Begin VB.Frame Frame2 
-            Caption         =   "Informations"
-            Height          =   3135
-            Index           =   2
-            Left            =   120
-            TabIndex        =   29
-            Top             =   840
-            Width           =   6255
-            Begin VB.PictureBox Picture2 
-               BorderStyle     =   0  'None
-               Height          =   2775
-               Index           =   2
-               Left            =   120
-               ScaleHeight     =   2775
-               ScaleWidth      =   6015
-               TabIndex        =   30
-               TabStop         =   0   'False
-               Top             =   240
-               Width           =   6015
-               Begin VB.TextBox txtFileInfos 
-                  BorderStyle     =   0  'None
-                  Height          =   2775
-                  Left            =   0
-                  Locked          =   -1  'True
-                  MultiLine       =   -1  'True
-                  ScrollBars      =   2  'Vertical
-                  TabIndex        =   31
-                  Top             =   0
-                  Width           =   6015
-               End
-            End
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Choix du fichier à ouvrir :"
-            Height          =   255
-            Index           =   0
-            Left            =   120
-            TabIndex        =   34
-            Top             =   120
-            Width           =   4095
-         End
+         Left            =   120
+         TabIndex        =   10
+         Top             =   360
+         Width           =   4095
       End
    End
-   Begin VB.Frame Frame1 
-      Height          =   4455
+   Begin vkUserContolsXP.vkFrame Frame1 
+      Height          =   4335
       Index           =   2
       Left            =   120
-      TabIndex        =   20
-      Top             =   473
+      TabIndex        =   15
+      Top             =   600
       Width           =   6615
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
+      _ExtentX        =   11668
+      _ExtentY        =   7646
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkTextBox txtDiskInfos 
          Height          =   4095
+         Left            =   2760
+         TabIndex        =   27
+         Top             =   120
+         Width           =   3735
+         _ExtentX        =   6588
+         _ExtentY        =   7223
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2
+         LegendText      =   "Informations sur le disque"
+         LegendForeColor =   12937777
+         LegendType      =   1
+      End
+      Begin DriveView_OCX.DriveView DV 
+         Height          =   3615
+         Left            =   120
+         TabIndex        =   16
+         Top             =   600
+         Width           =   2415
+         _ExtentX        =   4260
+         _ExtentY        =   6376
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Choix du disque à ouvrir :"
+         Height          =   255
          Index           =   2
-         Left            =   50
-         ScaleHeight     =   4095
-         ScaleWidth      =   6495
-         TabIndex        =   21
-         TabStop         =   0   'False
+         Left            =   120
+         TabIndex        =   17
          Top             =   240
-         Width           =   6495
-         Begin VB.Frame Frame2 
-            Caption         =   "Informations"
-            Height          =   3735
-            Index           =   0
-            Left            =   2640
-            TabIndex        =   23
-            Top             =   360
-            Width           =   3735
-            Begin VB.PictureBox Picture2 
-               BorderStyle     =   0  'None
-               Height          =   3375
-               Index           =   0
-               Left            =   120
-               ScaleHeight     =   3375
-               ScaleWidth      =   3495
-               TabIndex        =   24
-               TabStop         =   0   'False
-               Top             =   240
-               Width           =   3495
-               Begin VB.TextBox txtDiskInfos 
-                  BorderStyle     =   0  'None
-                  Height          =   3375
-                  Left            =   0
-                  Locked          =   -1  'True
-                  MultiLine       =   -1  'True
-                  ScrollBars      =   2  'Vertical
-                  TabIndex        =   25
-                  Top             =   0
-                  Width           =   3495
-               End
-            End
-         End
-         Begin DriveView_OCX.DriveView DV 
-            Height          =   3615
-            Left            =   120
-            TabIndex        =   22
-            Top             =   480
-            Width           =   2415
-            _ExtentX        =   4260
-            _ExtentY        =   6376
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Choix du disque à ouvrir :"
-            Height          =   255
-            Index           =   2
-            Left            =   120
-            TabIndex        =   26
-            Top             =   120
-            Width           =   2775
-         End
+         Width           =   2775
       End
    End
-   Begin VB.Frame Frame1 
-      Height          =   4455
-      Index           =   1
-      Left            =   120
-      TabIndex        =   10
-      Top             =   473
-      Width           =   6615
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   4095
-         Index           =   1
-         Left            =   50
-         ScaleHeight     =   4095
-         ScaleWidth      =   6495
-         TabIndex        =   11
-         TabStop         =   0   'False
-         Top             =   240
-         Width           =   6495
-         Begin VB.TextBox txtFolder 
-            BorderStyle     =   0  'None
-            Height          =   285
-            Left            =   120
-            TabIndex        =   18
-            ToolTipText     =   "Dossier choisi pour l'ouverture"
-            Top             =   360
-            Width           =   5415
-         End
-         Begin VB.CommandButton cmdBrowseFolder 
-            Caption         =   "..."
-            Height          =   255
-            Left            =   5640
-            TabIndex        =   17
-            ToolTipText     =   "Choix du dossier à ouvrir"
-            Top             =   360
-            Width           =   615
-         End
-         Begin VB.OptionButton optFolderSub 
-            Caption         =   "Ouvrir également les fichiers des sous-dossiers"
-            Height          =   255
-            Index           =   0
-            Left            =   240
-            TabIndex        =   16
-            Tag             =   "pref"
-            ToolTipText     =   "Ouvre également tous les fichiers des sous dossiers (lent)"
-            Top             =   960
-            Width           =   5775
-         End
-         Begin VB.OptionButton optFolderSub 
-            Caption         =   "N'ouvrir que les fichiers contenus directement dans le dossier"
-            Height          =   255
-            Index           =   1
-            Left            =   240
-            TabIndex        =   15
-            Tag             =   "pref"
-            ToolTipText     =   "Ne sélectionne que les fichiers qui sont dans la racine du dossier"
-            Top             =   1320
-            Value           =   -1  'True
-            Width           =   5775
-         End
-         Begin VB.Frame Frame2 
-            Caption         =   "Informations"
-            Height          =   2295
-            Index           =   3
-            Left            =   120
-            TabIndex        =   12
-            Top             =   1800
-            Width           =   6255
-            Begin VB.PictureBox Picture2 
-               BorderStyle     =   0  'None
-               Height          =   1935
-               Index           =   3
-               Left            =   120
-               ScaleHeight     =   1935
-               ScaleWidth      =   6015
-               TabIndex        =   13
-               TabStop         =   0   'False
-               Top             =   240
-               Width           =   6015
-               Begin VB.TextBox txtFolderInfos 
-                  BorderStyle     =   0  'None
-                  Height          =   1815
-                  Left            =   0
-                  Locked          =   -1  'True
-                  MultiLine       =   -1  'True
-                  ScrollBars      =   2  'Vertical
-                  TabIndex        =   14
-                  Top             =   120
-                  Width           =   6015
-               End
-            End
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Choix du dossier à ouvrir :"
-            Height          =   255
-            Index           =   1
-            Left            =   120
-            TabIndex        =   19
-            Top             =   120
-            Width           =   3015
-         End
-      End
-   End
-   Begin VB.Frame Frame1 
-      Height          =   4455
+   Begin vkUserContolsXP.vkFrame Frame1 
+      Height          =   4335
       Index           =   3
       Left            =   120
-      TabIndex        =   3
-      Top             =   473
+      TabIndex        =   18
+      Top             =   600
       Width           =   6615
-      Begin VB.PictureBox Picture1 
-         BorderStyle     =   0  'None
-         Height          =   4095
+      _ExtentX        =   11668
+      _ExtentY        =   7646
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkTextBox txtProcessInfos 
+         Height          =   3975
+         Left            =   3000
+         TabIndex        =   28
+         Top             =   120
+         Width           =   3495
+         _ExtentX        =   6165
+         _ExtentY        =   7011
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2
+         LegendText      =   "Informations sur le processus"
+         LegendForeColor =   12937777
+         LegendType      =   1
+      End
+      Begin ProcessView_OCX.ProcessView PV 
+         Height          =   3495
+         Left            =   120
+         TabIndex        =   24
+         Top             =   600
+         Width           =   2655
+         _ExtentX        =   4683
+         _ExtentY        =   6165
+         Sorted          =   0   'False
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Choix du processus à ouvrir :"
+         Height          =   255
          Index           =   3
-         Left            =   50
-         ScaleHeight     =   4095
-         ScaleWidth      =   6495
-         TabIndex        =   4
-         TabStop         =   0   'False
+         Left            =   120
+         TabIndex        =   25
          Top             =   240
-         Width           =   6495
-         Begin VB.Frame Frame2 
-            Caption         =   "Informations"
-            Height          =   3615
-            Index           =   1
-            Left            =   2880
-            TabIndex        =   6
-            Top             =   360
-            Width           =   3495
-            Begin VB.PictureBox Picture2 
-               BorderStyle     =   0  'None
-               Height          =   3255
-               Index           =   1
-               Left            =   120
-               ScaleHeight     =   3255
-               ScaleWidth      =   3255
-               TabIndex        =   7
-               TabStop         =   0   'False
-               Top             =   240
-               Width           =   3255
-               Begin VB.TextBox txtProcessInfos 
-                  BorderStyle     =   0  'None
-                  Height          =   3135
-                  Left            =   0
-                  Locked          =   -1  'True
-                  MultiLine       =   -1  'True
-                  ScrollBars      =   2  'Vertical
-                  TabIndex        =   8
-                  Top             =   0
-                  Width           =   3255
-               End
-            End
-         End
-         Begin ProcessView_OCX.ProcessView PV 
-            Height          =   3495
-            Left            =   120
-            TabIndex        =   5
-            Top             =   480
-            Width           =   2655
-            _ExtentX        =   4683
-            _ExtentY        =   6165
-            Sorted          =   0   'False
-         End
-         Begin VB.Label Label1 
-            Caption         =   "Choix du processus à ouvrir :"
-            Height          =   255
-            Index           =   3
-            Left            =   120
-            TabIndex        =   9
-            Top             =   120
-            Width           =   3255
-         End
+         Width           =   3255
       End
    End
-   Begin VB.CommandButton cmdOk 
-      Caption         =   "Ouvrir"
-      Height          =   435
-      Left            =   1125
-      TabIndex        =   1
-      Top             =   5153
-      Width           =   1815
+   Begin vkUserContolsXP.vkFrame Frame1 
+      Height          =   4335
+      Index           =   1
+      Left            =   120
+      TabIndex        =   14
+      Top             =   600
+      Width           =   6615
+      _ExtentX        =   11668
+      _ExtentY        =   7646
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkTextBox txtFolderInfos 
+         Height          =   2415
+         Left            =   120
+         TabIndex        =   29
+         Top             =   1800
+         Width           =   6375
+         _ExtentX        =   11245
+         _ExtentY        =   4260
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2
+         LegendText      =   "Informations sur le dossier"
+         LegendForeColor =   12937777
+         LegendType      =   1
+      End
+      Begin vkUserContolsXP.vkOptionButton optFolderSub 
+         Height          =   255
+         Index           =   0
+         Left            =   240
+         TabIndex        =   23
+         ToolTipText     =   "Ouvre également tous les fichiers des sous dossiers (lent)"
+         Top             =   1080
+         Width           =   5775
+         _ExtentX        =   10186
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Ouvrir également les fichiers des sous-dossiers"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Group           =   1
+      End
+      Begin vkUserContolsXP.vkOptionButton optFolderSub 
+         Height          =   255
+         Index           =   1
+         Left            =   240
+         TabIndex        =   22
+         ToolTipText     =   "Ne sélectionne que les fichiers qui sont dans la racine du dossier"
+         Top             =   1440
+         Width           =   5775
+         _ExtentX        =   10186
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "N'ouvrir que les fichiers contenus directement dans le dossier"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Value           =   1
+         Group           =   1
+      End
+      Begin vkUserContolsXP.vkCommand cmdBrowseFolder 
+         Height          =   255
+         Left            =   5640
+         TabIndex        =   21
+         ToolTipText     =   "Choix du dossier à ouvrir"
+         Top             =   480
+         Width           =   615
+         _ExtentX        =   1085
+         _ExtentY        =   450
+         Caption         =   "..."
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkTextBox txtFolder 
+         Height          =   255
+         Left            =   120
+         TabIndex        =   20
+         ToolTipText     =   "Dossier choisi pour l'ouverture"
+         Top             =   480
+         Width           =   5415
+         _ExtentX        =   9551
+         _ExtentY        =   450
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         LegendForeColor =   12937777
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Choix du dossier à ouvrir :"
+         Height          =   255
+         Index           =   1
+         Left            =   120
+         TabIndex        =   19
+         Top             =   240
+         Width           =   3015
+      End
    End
-   Begin VB.CommandButton cmdQuit 
-      Caption         =   "Annuler"
-      Height          =   435
-      Left            =   4125
-      TabIndex        =   0
-      Top             =   5153
-      Width           =   1575
+   Begin vkUserContolsXP.vkFrame Frame1 
+      Height          =   4335
+      Index           =   4
+      Left            =   120
+      TabIndex        =   1
+      Top             =   600
+      Width           =   6615
+      _ExtentX        =   11668
+      _ExtentY        =   7646
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkCommand cmdBrowseNew 
+         Height          =   255
+         Left            =   5640
+         TabIndex        =   11
+         ToolTipText     =   "Choix du fichier à créer"
+         Top             =   840
+         Width           =   615
+         _ExtentX        =   1085
+         _ExtentY        =   450
+         Caption         =   "..."
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkTextBox txtSize 
+         Height          =   255
+         Left            =   2160
+         TabIndex        =   9
+         ToolTipText     =   "Taille"
+         Top             =   1440
+         Width           =   975
+         _ExtentX        =   1720
+         _ExtentY        =   450
+         Text            =   "100"
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Alignment       =   2
+         LegendForeColor =   12937777
+      End
+      Begin vkUserContolsXP.vkTextBox txtNewFile 
+         Height          =   255
+         Left            =   240
+         TabIndex        =   8
+         ToolTipText     =   "Nouveau fichier à créer"
+         Top             =   840
+         Width           =   5295
+         _ExtentX        =   9340
+         _ExtentY        =   450
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         LegendForeColor =   12937777
+      End
+      Begin VB.ComboBox cdUnit 
+         Height          =   315
+         ItemData        =   "frmHome.frx":058A
+         Left            =   3360
+         List            =   "frmHome.frx":059A
+         Style           =   2  'Dropdown List
+         TabIndex        =   5
+         Tag             =   "pref lang_ok"
+         ToolTipText     =   "Unité"
+         Top             =   1440
+         Width           =   1335
+      End
+      Begin VB.Label Label1 
+         Alignment       =   2  'Center
+         BackStyle       =   0  'Transparent
+         Caption         =   "Taille du fichier"
+         Height          =   255
+         Index           =   5
+         Left            =   120
+         TabIndex        =   7
+         Top             =   1440
+         Width           =   1935
+      End
+      Begin VB.Label Label1 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Création d'un nouveau fichier"
+         Height          =   255
+         Index           =   4
+         Left            =   120
+         TabIndex        =   6
+         Top             =   480
+         Width           =   3255
+      End
    End
 End
 Attribute VB_Name = "frmHome"
@@ -886,9 +1062,9 @@ Dim x As Long
     For x = 0 To Frame1.Count - 1
         With Frame1(x)
             .Left = 120
-            .Top = 480
-            .Width = 6600
-            .Height = 4500
+            .Top = 600
+            .Width = 6615
+            .Height = 4335
         End With
     Next x
     
@@ -909,9 +1085,9 @@ Dim x As Long
     
     If lFrame = 4 Then
         'création de fichier
-        cmdOK.Caption = Lang.GetString("_CreateAndOpen!")
+        cmdOk.Caption = Lang.GetString("_CreateAndOpen!")
     Else
-        cmdOK.Caption = Lang.GetString("_Open!")
+        cmdOk.Caption = Lang.GetString("_Open!")
     End If
 
 End Sub

@@ -236,7 +236,6 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -416,7 +415,7 @@ End Function
 
 Private Sub UserControl_Initialize()
 Dim Ofs As Long
-Dim ptr As Long
+Dim Ptr As Long
     
     bNotOk = True
     bNotOk2 = True
@@ -438,8 +437,8 @@ Dim ptr As Long
     'VS.MyExtender.Visible = True
     
     'Recupere l'adresse de "Me.WindowProc"
-    Call CopyMemory(ptr, ByVal (ObjPtr(Me)), 4)
-    Call CopyMemory(ptr, ByVal (ptr + 489 * 4), 4)
+    Call CopyMemory(Ptr, ByVal (ObjPtr(Me)), 4)
+    Call CopyMemory(Ptr, ByVal (Ptr + 489 * 4), 4)
     
     'Crée la veritable fonction WindowProc (à optimiser)
     Ofs = VarPtr(mAsm(0))
@@ -456,7 +455,7 @@ Dim ptr As Long
     MovB Ofs, &H68                 '68 44 33 22 11       push        ObjPtr(Me)
     MovL Ofs, ObjPtr(Me)
     MovB Ofs, &HE8                 'E8 1E 04 00 00       call        Me.WindowProc
-    MovL Ofs, ptr - Ofs - 4
+    MovL Ofs, Ptr - Ofs - 4
     MovB Ofs, &HA1                 'A1 20 20 40 00       mov         eax,RetVal
     MovL Ofs, VarPtr(mAsm(59))
     MovL Ofs, &H10C2               'C2 10 00             ret         10h
@@ -532,6 +531,8 @@ Dim s As Long
 Dim e As Long
 
     On Error Resume Next
+    
+    If bEnable = False Then Exit Sub
     
     'si dans la zone gauche et que style=checkboxes ==> on checke
     If bStyleCheckBox Then
@@ -860,7 +861,7 @@ Public Property Let BackColor(BackColor As OLE_COLOR): UserControl.BackColor = B
 Public Property Get Font() As StdFont: Set Font = UserControl.Font: End Property
 Public Property Set Font(Font As StdFont): Set UserControl.Font = Font: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Enabled() As Boolean: Enabled = bEnable: End Property
-Public Property Let Enabled(Enabled As Boolean): bEnable = Enabled: bNotOk = False: UserControl_Paint: End Property
+Public Property Let Enabled(Enabled As Boolean): VS.Enabled = Enabled: bEnable = Enabled: bNotOk = False: UserControl_Paint: End Property
 Public Property Get DisplayBorder() As Boolean: DisplayBorder = bDisplayBorder: End Property
 Public Property Let DisplayBorder(DisplayBorder As Boolean): bDisplayBorder = DisplayBorder: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BorderColor() As OLE_COLOR: BorderColor = lBorderColor: End Property
@@ -900,7 +901,6 @@ bChecked(Index) = Item.Checked
 bNotOk = False: UserControl_Paint
 End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
-Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 Public Property Get DisplayVScroll() As Boolean: DisplayVScroll = bVSvisible: End Property
 Public Property Let DisplayVScroll(DisplayVScroll As Boolean)
@@ -918,7 +918,6 @@ Public Property Let FullRowSelect(FullRowSelect As Boolean): lFullRowSelect = Fu
 Public Property Get BorderSelColor() As OLE_COLOR: BorderSelColor = lBorderSelColor: End Property
 Public Property Let BorderSelColor(BorderSelColor As OLE_COLOR): lBorderSelColor = BorderSelColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get AcceptAutoSort() As Boolean: AcceptAutoSort = bAcceptAutoSort: End Property
-Attribute AcceptAutoSort.VB_MemberFlags = "40"
 Public Property Let AcceptAutoSort(AcceptAutoSort As Boolean): bAcceptAutoSort = AcceptAutoSort
 If bAcceptAutoSort Then Call Sort(bSorted)
 End Property
@@ -1272,16 +1271,8 @@ Dim vsEn As Boolean
     '//on efface
     Call UserControl.Cls
 
-    If bEnable Then
-        UserControl.ForeColor = lForeColor
-    Else
-        'couleur de enabled=false
-        UserControl.ForeColor = 10070188
-    End If
-
     '//convertit les couleurs
     Call OleTranslateColor(lBackColor, 0, lBackColor)
-    Call OleTranslateColor(lForeColor, 0, lForeColor)
     Call OleTranslateColor(lBorderColor, 0, lBorderColor)
     
     
@@ -1299,8 +1290,9 @@ Dim vsEn As Boolean
     'limite le Max
     If lListCount <= z + TopIndex Then VS.Max = lListCount - z
     zNumber = z 'sauvegarde le nombre d'Items affichés
-        
-    If z < lListCount - 1 Then VS.Enabled = True Else VS.Enabled = False
+
+    If z < (lListCount - 1) And bEnable Then VS.Enabled = True _
+        Else VS.Enabled = False
 
     'on affiche maintenant chaque controle
     y = 1 'contient la hauteur temporaire
@@ -1412,23 +1404,25 @@ Dim H As Long
         (ScaleHeight - lTop - H / 2) / Screen.TwipsPerPixelY + 1)
     
     'dessine un rectangle (backcolor ou selection) dans cette zone
-    If bSelected(Index) = False Then
-        'backcolor
-        Line (15, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BackColor, BF
-    Else
-        'sélection
-        If F Then
-            'alors on décale ==> on doit quand même faire le backColor
+    If bEnable Then
+        If bSelected(Index) = False Then
+            'backcolor
             Line (15, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BackColor, BF
+        Else
+            'sélection
+            If F Then
+                'alors on décale ==> on doit quand même faire le backColor
+                Line (15, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BackColor, BF
+            End If
+            
+            'fond de la sélection
+            Line (15 + F, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.SelColor, BF
+            'bordure de la sélection
+            Line (15 + F, lTop + 15)-(Width - 255 - 30 + o2, lTop + 15), Item.BorderSelColor
+            Line (Width - 255 - 30 + o2, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BorderSelColor
+            Line (Width - 255 - 30 + o2, lTop + Item.Height + 15)-(15 + F, lTop + Item.Height + 15), Item.BorderSelColor
+            Line (15 + F, lTop + Item.Height + 15)-(15 + F, lTop + 15), Item.BorderSelColor
         End If
-        
-        'fond de la sélection
-        Line (15 + F, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.SelColor, BF
-        'bordure de la sélection
-        Line (15 + F, lTop + 15)-(Width - 255 - 30 + o2, lTop + 15), Item.BorderSelColor
-        Line (Width - 255 - 30 + o2, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BorderSelColor
-        Line (Width - 255 - 30 + o2, lTop + Item.Height + 15)-(15 + F, lTop + Item.Height + 15), Item.BorderSelColor
-        Line (15 + F, lTop + Item.Height + 15)-(15 + F, lTop + 15), Item.BorderSelColor
     End If
         
     
@@ -1442,7 +1436,14 @@ Dim H As Long
     End If
     
     'définit la ForeColor et trace le texte
-    UserControl.ForeColor = Item.ForeColor
+    Call OleTranslateColor(lForeColor, 0, lForeColor)
+    If bEnable Then
+        UserControl.ForeColor = Item.ForeColor
+    Else
+        'couleur de enabled=false
+        UserControl.ForeColor = 10070188
+    End If
+    
     Call DrawText(UserControl.hDc, Item.Text, Len(Item.Text), R, st)
     Set UserControl.Font = tF 'restaure la fonte d'origine
 End Sub
@@ -1622,6 +1623,15 @@ Dim e As Long
             Else
                 'pas checké, pas survol
                 lIMG = 0
+            End If
+        End If
+        
+        'si Enable=false, on change les icones
+        If bEnable = False Then
+            If bChecked(x) Then
+                lIMG = 5
+            Else
+                lIMG = 2
             End If
         End If
         
@@ -1882,3 +1892,5 @@ NeedToAdd:
     Call picCol.Add(cFile.GetIcon(s, lIconSize), Key)
     Set GetMyIcon = picCol.Item(Key)
 End Function
+
+

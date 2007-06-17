@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmAbout 
    BackColor       =   &H00760401&
    BorderStyle     =   0  'None
@@ -28,6 +28,7 @@ Begin VB.Form frmAbout
       Height          =   375
       Left            =   5640
       TabIndex        =   9
+      ToolTipText     =   "Fermer cette fenêtre"
       Top             =   5880
       Width           =   1335
       _ExtentX        =   2355
@@ -67,6 +68,7 @@ Begin VB.Form frmAbout
       Height          =   375
       Left            =   3360
       TabIndex        =   10
+      Tag             =   "Afficher les informations de licence"
       Top             =   5880
       Width           =   2055
       _ExtentX        =   3625

@@ -615,7 +615,8 @@ Dim mdTemp() As MODULEENTRY32
         ReDim mdTemp(1)
     End If
     
-    ReDim Preserve mdTemp(UBound(mdTemp()) - 1)
+    If UBound(mdTemp()) Then _
+        ReDim Preserve mdTemp(UBound(mdTemp()) - 1)
     'stockage de la liste des modules
     mdList = mdTemp 'on aurait directement pu travailler sur mdList sans passer par mdTemp, mais il est plus propre de ne changer mdList (d'ailleurs toute autre valeur renvoyée par une sub/fonction) uniquement A LA FIN de cette sub/fonction
     

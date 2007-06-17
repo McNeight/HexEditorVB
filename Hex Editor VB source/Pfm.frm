@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form Pfm 
    AutoRedraw      =   -1  'True
    Caption         =   "Ouverture d'un fichier..."
@@ -28,7 +28,7 @@ Begin VB.Form Pfm
    Begin vkUserContolsXP.vkVScroll VS 
       Height          =   2895
       Left            =   2880
-      TabIndex        =   26
+      TabIndex        =   25
       Top             =   0
       Width           =   255
       _ExtentX        =   450
@@ -54,6 +54,7 @@ Begin VB.Form Pfm
             MinWidth        =   4410
             Text            =   "Fichier=[Modifié]"
             TextSave        =   "Fichier=[Modifié]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -61,6 +62,7 @@ Begin VB.Form Pfm
             MinWidth        =   4410
             Text            =   "Page=[0/0]"
             TextSave        =   "Page=[0/0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -68,6 +70,7 @@ Begin VB.Form Pfm
             MinWidth        =   3175
             Text            =   "Offset=[0]"
             TextSave        =   "Offset=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -75,6 +78,7 @@ Begin VB.Form Pfm
             MinWidth        =   5292
             Text            =   "Sélection=[0 Bytes]"
             TextSave        =   "Sélection=[0 Bytes]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -97,10 +101,30 @@ Begin VB.Form Pfm
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+      Begin vkUserContolsXP.vkCommand cmdMAJ 
+         Height          =   255
+         Left            =   720
+         TabIndex        =   27
+         ToolTipText     =   "Mettre à jour les informations"
+         Top             =   6600
+         Width           =   1695
+         _ExtentX        =   2990
+         _ExtentY        =   450
+         Caption         =   "Mettre à jour"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
       Begin ComctlLib.ListView lstSignets 
          Height          =   1575
          Left            =   120
-         TabIndex        =   25
+         TabIndex        =   24
          TabStop         =   0   'False
          Tag             =   "lang_ok"
          Top             =   4920
@@ -135,7 +159,7 @@ Begin VB.Form Pfm
       Begin ComctlLib.TabStrip TB 
          Height          =   375
          Left            =   120
-         TabIndex        =   17
+         TabIndex        =   16
          TabStop         =   0   'False
          Tag             =   "lang_ok"
          Top             =   4515
@@ -147,11 +171,13 @@ Begin VB.Form Pfm
             NumTabs         =   2
             BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Historique"
+               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
             BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
                Caption         =   "Signets"
+               Key             =   ""
                Object.Tag             =   ""
                ImageVarType    =   2
             EndProperty
@@ -160,7 +186,7 @@ Begin VB.Form Pfm
       Begin ComctlLib.ListView lstHisto 
          Height          =   1575
          Left            =   120
-         TabIndex        =   16
+         TabIndex        =   15
          TabStop         =   0   'False
          Tag             =   "lang_ok"
          Top             =   4920
@@ -190,19 +216,10 @@ Begin VB.Form Pfm
             Object.Width           =   706
          EndProperty
       End
-      Begin VB.CommandButton cmdMAJ 
-         Caption         =   "Mettre à jour"
-         Height          =   255
-         Left            =   720
-         TabIndex        =   15
-         ToolTipText     =   "Mettre à jour les informations"
-         Top             =   6600
-         Width           =   1695
-      End
       Begin vkUserContolsXP.vkTextBox txtFile 
          Height          =   2175
          Left            =   120
-         TabIndex        =   27
+         TabIndex        =   26
          Top             =   600
          Width           =   2895
          _ExtentX        =   5106
@@ -238,7 +255,7 @@ Begin VB.Form Pfm
          Height          =   195
          Index           =   12
          Left            =   120
-         TabIndex        =   24
+         TabIndex        =   23
          Top             =   4200
          Width           =   2895
       End
@@ -248,7 +265,7 @@ Begin VB.Form Pfm
          Height          =   195
          Index           =   11
          Left            =   120
-         TabIndex        =   23
+         TabIndex        =   22
          Top             =   3960
          Width           =   2895
       End
@@ -258,7 +275,7 @@ Begin VB.Form Pfm
          Height          =   195
          Index           =   10
          Left            =   120
-         TabIndex        =   22
+         TabIndex        =   21
          Top             =   3720
          Width           =   2895
       End
@@ -268,7 +285,7 @@ Begin VB.Form Pfm
          Height          =   195
          Index           =   9
          Left            =   120
-         TabIndex        =   21
+         TabIndex        =   20
          Top             =   3480
          Width           =   2895
       End
@@ -278,7 +295,7 @@ Begin VB.Form Pfm
          Height          =   195
          Index           =   8
          Left            =   120
-         TabIndex        =   20
+         TabIndex        =   19
          Top             =   3240
          Width           =   2895
       End
@@ -290,7 +307,7 @@ Begin VB.Form Pfm
          Height          =   255
          Index           =   0
          Left            =   120
-         TabIndex        =   19
+         TabIndex        =   18
          Top             =   2880
          Width           =   2895
       End
@@ -302,7 +319,7 @@ Begin VB.Form Pfm
          Height          =   255
          Index           =   1
          Left            =   120
-         TabIndex        =   18
+         TabIndex        =   17
          Top             =   360
          Width           =   2895
       End
