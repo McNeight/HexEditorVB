@@ -206,7 +206,7 @@ Dim s As String
             Obj.Caption = Me.GetString(s & "|Caption")
         ElseIf TypeOf Obj Is Frame Then
             Obj.Caption = Me.GetString(s & "|Caption")
-        ElseIf TypeOf Obj Is ListBox Then
+        ElseIf TypeOf Obj Is Listbox Then
             'alors là faut aussi sauvegarder les Items qu'il y a dedans si tag OK
             
             'vérifie que le Tag est OK
@@ -263,6 +263,20 @@ Dim s As String
                 Next x
                 
             End If
+        ElseIf TypeOf Obj Is vkFrame Then
+            Obj.Caption = Me.GetString(s & "|Caption")
+        ElseIf TypeOf Obj Is vkOptionButton Then
+            Obj.Caption = Me.GetString(s & "|Caption")
+        ElseIf TypeOf Obj Is vkCheck Then
+            Obj.Caption = Me.GetString(s & "|Caption")
+        ElseIf TypeOf Obj Is vkLabel Then
+            Obj.Caption = Me.GetString(s & "|Caption")
+        ElseIf TypeOf Obj Is vkCommand Then
+            Obj.Caption = Me.GetString(s & "|Caption")
+        ElseIf TypeOf Obj Is vkToggleButton Then
+            Obj.Caption = Me.GetString(s & "|Caption")
+        ElseIf TypeOf Obj Is vkTextBox Then
+            Obj.LegendText = Me.GetString(s & "|LegendText")
         End If
 
     Next Obj
@@ -327,7 +341,7 @@ Dim s As String
             Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
         ElseIf TypeOf Obj Is Menu Then
             Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
-        ElseIf TypeOf Obj Is ListBox Then
+        ElseIf TypeOf Obj Is Listbox Then
                     
             'vérifie que le Tag est OK
             If InStr(1, Obj.Tag, "lang_ok", vbBinaryCompare) Then
@@ -374,6 +388,20 @@ Dim s As String
                     Call LetPref(mParent.Name, s & "|Item" & Trim$(Str$(x)), Obj.Tabs.Item(x).Caption, sFile)
                 Next x
             End If
+        ElseIf TypeOf Obj Is vkFrame Then
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
+        ElseIf TypeOf Obj Is vkOptionButton Then
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
+        ElseIf TypeOf Obj Is vkCheck Then
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
+        ElseIf TypeOf Obj Is vkLabel Then
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
+        ElseIf TypeOf Obj Is vkCommand Then
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
+        ElseIf TypeOf Obj Is vkToggleButton Then
+            Call LetPref(mParent.Name, s & "|Caption", Obj.Caption, sFile)
+        ElseIf TypeOf Obj Is vkTextBox Then
+            Call LetPref(mParent.Name, s & "|LegendText", Obj.LegendText, sFile)
         End If
     Next Obj
 

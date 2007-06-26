@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmAbout 
    BackColor       =   &H00760401&
    BorderStyle     =   0  'None

@@ -136,6 +136,12 @@ Dim Obj As Control
                     LetPref .Name & .Tag, "SelectedItemIndex", .SelectedItem.Index, strIniFile
                 ElseIf TypeOf Obj Is ComboBox Then
                     LetPref .Name & .Tag, "text", .Text, strIniFile
+                ElseIf TypeOf Obj Is vkOptionButton Then
+                    LetPref .Name & .Tag, "value", .Value, strIniFile
+                ElseIf TypeOf Obj Is vkCheck Then
+                    LetPref .Name & .Tag, "value", .Value, strIniFile
+                ElseIf TypeOf Obj Is vkToggleButton Then
+                    LetPref .Name & .Tag, "value", .Value, strIniFile
                 End If
             End If
                         
@@ -212,6 +218,12 @@ Dim Obj As Control
                     .Tabs.Item(CLng(GetPref(.Name & .Tag, "SelectedItemIndex", strIniFile))).Selected = True
                 ElseIf TypeOf Obj Is ComboBox Then
                     .Text = GetPref(.Name & .Tag, "text", strIniFile)
+                ElseIf TypeOf Obj Is vkOptionButton Then
+                    .Value = CLng(GetPref(.Name & .Tag, "value", strIniFile))
+                ElseIf TypeOf Obj Is vkCheck Then
+                    .Value = CLng(GetPref(.Name & .Tag, "value", strIniFile))
+                ElseIf TypeOf Obj Is vkToggleButton Then
+                    .Value = CBool(GetPref(.Name & .Tag, "value", strIniFile))
                 End If
             End If
                         
