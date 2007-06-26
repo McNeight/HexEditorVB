@@ -5,6 +5,7 @@ Begin VB.UserControl vkCommand
    ClientLeft      =   0
    ClientTop       =   0
    ClientWidth     =   4800
+   DefaultCancel   =   -1  'True
    PropertyPages   =   "vkCommand.ctx":0000
    ScaleHeight     =   3600
    ScaleWidth      =   4800
@@ -106,33 +107,23 @@ Private lNotEnabledColor As OLE_COLOR
 Private bUnRefreshControl As Boolean
 Private bHasLeftOneTime As Boolean
 Private tCustomStyle As vkCommandStyle
+Private bJustPushedTab As Boolean
 
 
 '=======================================================
 'EVENTS
 '=======================================================
 Public Event Click()
-Attribute Click.VB_Description = "Happens when control gets a click (leftbutton)"
 Public Event KeyDown(KeyCode As Integer, Shift As Integer)
-Attribute KeyDown.VB_Description = "Happens when a key is down"
 Public Event KeyPress(KeyAscii As Integer)
-Attribute KeyPress.VB_Description = "Happens when a key is pressed"
 Public Event KeyUp(KeyCode As Integer, Shift As Integer)
-Attribute KeyUp.VB_Description = "Happens when a key is up"
 Public Event MouseHover()
-Attribute MouseHover.VB_Description = "Happens when mouse enters control"
 Public Event MouseLeave()
-Attribute MouseLeave.VB_Description = "Happens when mouse leaves control"
 Public Event MouseWheel(Sens As Wheel_Sens)
-Attribute MouseWheel.VB_Description = "Happens when control gets a wheel"
 Public Event MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseDown.VB_Description = "Happens when control gets a click"
 Public Event MouseUp(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseUp.VB_Description = "Happens when control gets a mouseup"
 Public Event MouseDblClick(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseDblClick.VB_Description = "Happens when control gets a dblclick"
 Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
 
 
 
@@ -146,13 +137,12 @@ Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Attribute WindowProc.VB_Description = "Internal proc for subclassing"
-Attribute WindowProc.VB_MemberFlags = "40"
+Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
 Dim x As Long
+Dim e As Boolean
 Dim y As Long
 
     Select Case uMsg
@@ -164,7 +154,7 @@ Dim y As Long
                 y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 If bEnable Then _
-                bPushed = True: Refresh: RaiseEvent Click
+                bPushed = True: Refresh
                 RaiseEvent MouseDblClick(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONDOWN
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
@@ -173,7 +163,7 @@ Dim y As Long
                 y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
                 If bEnable Then _
-                bPushed = True: Refresh: RaiseEvent Click
+                bPushed = True: Refresh
                 RaiseEvent MouseDown(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONUP
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
@@ -181,9 +171,11 @@ Dim y As Long
                 x = LoWord(lParam) * Screen.TwipsPerPixelX
                 y = HiWord(lParam) * Screen.TwipsPerPixelY
                 
+                e = bPushed
                 bPushed = False: Refresh
-                If bPushed And bEnable Then RaiseEvent Click
                 Call DrawMouseEnterRect
+                If e And bEnable Then RaiseEvent Click
+                bPushed = False
                 RaiseEvent MouseUp(vbLeftButton, iShift, iControl, x, y)
         Case WM_MBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
@@ -235,6 +227,21 @@ Dim y As Long
                 If (wParam And MK_RBUTTON) = MK_RBUTTON Then z = vbRightButton
                 If (wParam And MK_MBUTTON) = MK_MBUTTON Then z = vbMiddleButton
                 RaiseEvent MouseMove(z, iShift, iControl, x, y)
+                
+                If z = vbLeftButton Then
+                    If Not IsMouseInCtrl Then
+                        If bPushed Then
+                            bPushed = False
+                            Call Refresh
+                        End If
+                    Else
+                        If Not bPushed Then
+                            bPushed = True
+                            Call Refresh
+                        End If
+                    End If
+                End If
+        
         Case WM_RBUTTONDBLCLK
                 iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
@@ -267,9 +274,15 @@ Dim y As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, hwnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
     
 End Function
+
+Private Sub UserControl_ExitFocus()
+'/!\ WARNING, DO NOT REMOVE
+'IT PREVENT A BUG WHEN YOU ADD "FORM.SHOW VBMODAL" IN CLICK() EVENT
+    Call SendMessage(UserControl.hWnd, WM_LBUTTONUP, 0, 0)
+End Sub
 
 Private Sub UserControl_Initialize()
 Dim Ofs As Long
@@ -334,7 +347,7 @@ End Sub
 
 Private Sub UserControl_GotFocus()
 
-    If bEnable = False Then
+     If bEnable = False Then
         'on ne garde pas le focus
         Call SendKeys("{Tab}")
         Exit Sub
@@ -345,6 +358,13 @@ Private Sub UserControl_GotFocus()
     
     'trace le rectangle de focus
     Call DrawFocusRects
+    
+    'trace aussi le rectangle de survol si nécessaire
+    If IsMouseInCtrl Then Call DrawMouseEnterRect
+End Sub
+
+Private Sub UserControl_AccessKeyPress(KeyAscii As Integer)
+    If bEnable Then RaiseEvent Click
 End Sub
 
 Private Sub UserControl_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -354,18 +374,32 @@ Private Sub UserControl_KeyDown(KeyCode As Integer, Shift As Integer)
     Select Case KeyCode
         Case vbKeyUp, vbKeyLeft:
             Call SendKeys("+{Tab}")
+            GoTo 12
         Case vbKeyDown, vbKeyRight:
             Call SendKeys("{Tab}")
+            GoTo 12
         Case vbKeySpace
             If bPushed = False Then
                 bPushed = True: Refresh: RaiseEvent Click
             End If
         Case vbKeyReturn
             RaiseEvent Click
+        Case vbKeyTab
+            GoTo 12
     End Select
     
     'Call Refresh
     RaiseEvent KeyDown(KeyCode, Shift)
+    
+    Exit Sub
+12:
+'bJustPushedTab = True
+'    bHasFocus = False
+'    IsMouseIn = False
+'    Refresh
+'    Call SendMessage(UserControl.hWnd, WM_MOUSELEAVE, 0&, 0&)
+'UserControl_LostFocus
+'Refresh
 End Sub
 
 Private Sub UserControl_KeyPress(KeyAscii As Integer)
@@ -374,17 +408,23 @@ End Sub
 
 Private Sub UserControl_KeyUp(KeyCode As Integer, Shift As Integer)
     RaiseEvent KeyUp(KeyCode, Shift)
-    If KeyCode = vbKeySpace Then bPushed = False: Refresh: DrawMouseEnterRect
+    If KeyCode = vbKeySpace Then
+        bPushed = False
+        Call Refresh
+        Call DrawMouseEnterRect
+    End If
 End Sub
 
 Private Sub UserControl_LostFocus()
-bHasFocus = False: bNotOk = False
-Call UserControl_Paint
+    bHasFocus = False
+    bNotOk = False
+    Call UserControl_Paint
+    bJustPushedTab = True
 End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
@@ -461,13 +501,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.hwnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.hwnd
+            .hwndTrack = UserControl.hWnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With
@@ -487,50 +527,35 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Attribute hDc.VB_Description = "Get the control hDc"
-Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
-Attribute hwnd.VB_Description = "Handle of the control"
+Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get TextPosition() As AlignmentConstants: TextPosition = lTextPos: End Property
-Attribute TextPosition.VB_Description = "Text position"
 Public Property Let TextPosition(TextPosition As AlignmentConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Caption() As String: Caption = sCaption: End Property
-Attribute Caption.VB_Description = "Text to display"
 Public Property Let Caption(Caption As String): sCaption = Caption: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 Public Property Get ForeColor() As OLE_COLOR: ForeColor = lForeColor: End Property
-Attribute ForeColor.VB_Description = "Text color"
 Public Property Let ForeColor(ForeColor As OLE_COLOR): lForeColor = ForeColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: tCustomStyle = [No Style - vkCommand]: End Property
 Public Property Get BackColor1() As OLE_COLOR: BackColor1 = bCol1: End Property
-Attribute BackColor1.VB_Description = "Color1 of the back gradient"
 Public Property Let BackColor1(BackColor1 As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: bCol1 = BackColor1: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColor2() As OLE_COLOR: BackColor2 = bCol2: End Property
-Attribute BackColor2.VB_Description = "Color2 of the back gradient"
 Public Property Let BackColor2(BackColor2 As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: bCol2 = BackColor2: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColorPushed1() As OLE_COLOR: BackColorPushed1 = tCol1: End Property
-Attribute BackColorPushed1.VB_Description = "Color1 of the back gradient when command is pushed"
 Public Property Let BackColorPushed1(BackColorPushed1 As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: tCol1 = BackColorPushed1: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColorPushed2() As OLE_COLOR: BackColorPushed2 = tCol2: End Property
-Attribute BackColorPushed2.VB_Description = "Color2 of the back gradient when command is pushed"
 Public Property Let BackColorPushed2(BackColorPushed2 As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: tCol2 = BackColorPushed2: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Font() As StdFont: Set Font = UserControl.Font: End Property
-Attribute Font.VB_Description = "Text font"
 Public Property Set Font(Font As StdFont): Set UserControl.Font = Font: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackGradient() As GradientConstants: BackGradient = lGradient: End Property
-Attribute BackGradient.VB_Description = "Type of back gradient"
 Public Property Let BackGradient(BackGradient As GradientConstants): tCustomStyle = [No Style - vkCommand]: lGradient = BackGradient: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Enabled() As Boolean: Enabled = bEnable: End Property
-Attribute Enabled.VB_Description = "Enable or not control"
 Public Property Let Enabled(Enabled As Boolean)
 bEnable = Enabled: bNotOk = False: UserControl_Paint
 End Property
 Public Property Get BorderColor() As OLE_COLOR: BorderColor = lBorderColor: End Property
-Attribute BorderColor.VB_Description = "Color of the border"
 Public Property Let BorderColor(BorderColor As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: lBorderColor = BorderColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BreakCorner() As Boolean: BreakCorner = bBreakCorner: End Property
-Attribute BreakCorner.VB_Description = "Use round corner or not"
 Public Property Let BreakCorner(BreakCorner As Boolean): tCustomStyle = [No Style - vkCommand]: bBreakCorner = BreakCorner: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Picture() As Picture: Set Picture = PCTcolor.Picture: End Property
-Attribute Picture.VB_Description = "Picture to display"
 Public Property Set Picture(NewPic As Picture)
 Set PCTcolor.Picture = NewPic
 Set pctG.Picture = NewPic
@@ -543,31 +568,22 @@ PCTgray.Picture = pctG.Image
 bNotOk = False: UserControl_Paint
 End Property
 Public Property Get PictureAlignment() As PictureAlignment: PictureAlignment = pctAlign: End Property
-Attribute PictureAlignment.VB_Description = "Alignment of the picture"
 Public Property Let PictureAlignment(PictureAlignment As PictureAlignment): pctAlign = PictureAlignment: bNotOk = False: UserControl_Paint: End Property
 Public Property Get DisplayPicture() As Boolean: DisplayPicture = bPic: End Property
-Attribute DisplayPicture.VB_Description = "Display a picture or not"
 Public Property Let DisplayPicture(DisplayPicture As Boolean): bPic = DisplayPicture: bNotOk = False: UserControl_Paint: End Property
 Public Property Get PictureOffsetX() As Long: PictureOffsetX = lOffsetX: End Property
-Attribute PictureOffsetX.VB_Description = "Offset (twips) of picture"
 Public Property Let PictureOffsetX(PictureOffsetX As Long): lOffsetX = PictureOffsetX: bNotOk = False: UserControl_Paint: End Property
 Public Property Get PictureOffsetY() As Long: PictureOffsetY = lOffsetY: End Property
-Attribute PictureOffsetY.VB_Description = "Offset (twips) of picture"
 Public Property Let PictureOffsetY(PictureOffsetY As Long): lOffsetY = PictureOffsetY: bNotOk = False: UserControl_Paint: End Property
 Public Property Get GrayPictureWhenDisabled() As Boolean: GrayPictureWhenDisabled = bGray: End Property
-Attribute GrayPictureWhenDisabled.VB_Description = "Use a gray picture (or color picture) when control is not enabled"
 Public Property Let GrayPictureWhenDisabled(GrayPictureWhenDisabled As Boolean): bGray = GrayPictureWhenDisabled: bNotOk = False: UserControl_Paint: End Property
 Public Property Get DrawFocus() As Boolean: DrawFocus = bDrawFocus: End Property
-Attribute DrawFocus.VB_Description = "Draw focus when control has focus"
 Public Property Let DrawFocus(DrawFocus As Boolean): tCustomStyle = [No Style - vkCommand]: bDrawFocus = DrawFocus: bNotOk = False: UserControl_Paint: End Property
 Public Property Get DrawMouseInRect() As Boolean: DrawMouseInRect = bDrawMouseInRect: End Property
-Attribute DrawMouseInRect.VB_Description = "Draw focus when mouse is hover control"
 Public Property Let DrawMouseInRect(DrawMouseInRect As Boolean): tCustomStyle = [No Style - vkCommand]: bDrawMouseInRect = DrawMouseInRect: bNotOk = False: UserControl_Paint: End Property
 Public Property Get DisabledBackColor() As OLE_COLOR: DisabledBackColor = lNotEnabledColor: End Property
-Attribute DisabledBackColor.VB_Description = "Color of then back color when control is not enabled"
 Public Property Let DisabledBackColor(DisabledBackColor As OLE_COLOR): tCustomStyle = [No Style - vkCommand]: lNotEnabledColor = DisabledBackColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
-Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 Public Property Get CustomStyle() As vkCommandStyle: CustomStyle = tCustomStyle: End Property
 Public Property Let CustomStyle(CustomStyle As vkCommandStyle)
@@ -662,128 +678,6 @@ End Sub
 'PRIVATE SUBS
 '=======================================================
 '=======================================================
-'applique un gradient de couleur sur un objet de gauche à droite
-'il doit être "en autoredraw=true" (si c'est une form, picturebox...)
-'=======================================================
-Private Sub FillGradientW(LeftColor As RGB_COLOR, _
-    RightColor As RGB_COLOR, ByVal Width As Long, ByVal Height As Long, _
-    Optional ByVal Dep As Long)
-    
-Dim rAverageColorPerSizeUnit As Double
-Dim gAverageColorPerSizeUnit As Double
-Dim bAverageColorPerSizeUnit As Double
-Dim lWidth As Long
-Dim x As Long
-Dim lHeight As Long
-Dim lSigne As Long
-
-    With UserControl
-        
-        'récupère la largeur de l'objet
-        lWidth = Width / Screen.TwipsPerPixelX
-        lHeight = Height / Screen.TwipsPerPixelY
-        
-        'récupère la moyenne de couleur par unité de longueur
-        rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lWidth)
-        gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lWidth)
-        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lWidth)
-        
-        'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
-            
-            lSigne = 1
-        Else
-            lSigne = -1
-        End If
-        
-        'se positionne tout à gauche de l'objet ==> balayera vers la droite
-        Call MoveToEx(.hDc, 0, Dep, 0&)
-        
-        'pour chaque 'colonne' constituée par une ligne verticale, on trace une
-        'ligne en récupérant la couleur correspondante
-        For x = 0 To lWidth
-            
-            'change le ForeColor qui détermine la couleur de la Line
-            'multiplie la largeur actuelle par la couleur par unité de longueur
-            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
-               
-            'trace une ligne
-            Call LineTo(.hDc, x, lHeight)
-            
-            'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hDc, x, Dep, 0&)
-        
-        Next x
-        
-        'on refresh l'objet
-        Call .Refresh
-    End With
-
-End Sub
-
-'=======================================================
-'applique un gradient de couleur sur un objet de gauche à droite
-'il doit être "en autoredraw=true" (si c'est une form, picturebox...)
-'=======================================================
-Private Sub FillGradientH(LeftColor As RGB_COLOR, _
-    RightColor As RGB_COLOR, ByVal Width As Long, ByVal Height As Long, _
-    Optional ByVal Dep As Long)
-    
-Dim rAverageColorPerSizeUnit As Double
-Dim gAverageColorPerSizeUnit As Double
-Dim bAverageColorPerSizeUnit As Double
-Dim lHeight As Long
-Dim x As Long
-Dim lSigne As Long
-
-    With UserControl
-        
-        'récupère la hateur de l'objet
-        lHeight = Height / Screen.TwipsPerPixelY
-        
-        'récupère la moyenne de couleur par unité de longueur
-        rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lHeight)
-        gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lHeight)
-        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lHeight)
-
-        'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
-            
-            lSigne = 1
-        Else
-            lSigne = -1
-        End If
-        
-        'se positionne tout à gauche de l'objet ==> balayera vers le bas
-        Call MoveToEx(.hDc, 0, Dep, 0&)
-        
-        'pour chaque 'colonne' constituée par une ligne verticale, on trace une
-        'ligne en récupérant la couleur correspondante
-        For x = Dep To lHeight
-            
-            'change le ForeColor qui détermine la couleur de la Line
-            'multiplie la largeur actuelle par la couleur par unité de longueur
-            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
-               
-            'trace une ligne
-            Call LineTo(.hDc, Width, x)
-            
-            'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hDc, 0, x, 0&)
-        
-        Next x
-        
-        'on refresh l'objet
-        Call .Refresh
-    End With
-
-End Sub
-
-'=======================================================
 'copie un "byte"
 '=======================================================
 Private Sub MovB(Ofs As Long, ByVal Value As Long)
@@ -813,7 +707,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -825,10 +719,7 @@ End Function
 'on dessine tout
 '=======================================================
 Public Sub Refresh(Optional ByVal ShowFocusRects As Boolean = True)
-Attribute Refresh.VB_Description = "Refresh the control"
 Dim x As Long
-Dim RGB1 As RGB_COLOR
-Dim RGB2 As RGB_COLOR
 Dim R As RECT
 Dim hBrush As Long
 Dim Rec As Long
@@ -864,8 +755,6 @@ Dim H As Long
             'récupère les 3 composantes des deux couleurs
             Call OleTranslateColor(bCol1, 0, bCol1)
             Call OleTranslateColor(bCol2, 0, bCol2)
-            Call ToRGB(bCol1, RGB1)
-            Call ToRGB(bCol2, RGB2)
             
             If lGradient = None Then
                 'pas de gradient
@@ -874,12 +763,14 @@ Dim H As Long
                     ScaleHeight - 30), bCol1, BF
             ElseIf lGradient = Horizontal Then
                 'gradient horizontal
-                Call FillGradientH(RGB1, RGB2, ScaleWidth, _
-                    ScaleHeight, 0)
+                Call FillGradient(UserControl.hdc, bCol1, bCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Horizontal)
             Else
                 'gradient vertical
-                Call FillGradientW(RGB1, RGB2, ScaleWidth, _
-                    ScaleHeight, 0)
+                Call FillGradient(UserControl.hdc, bCol1, bCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Vertical)
             End If
         Else
             'appuyé sur le bouton
@@ -887,8 +778,6 @@ Dim H As Long
             'récupère les 3 composantes des deux couleurs
             Call OleTranslateColor(tCol1, 0, tCol1)
             Call OleTranslateColor(tCol2, 0, tCol2)
-            Call ToRGB(tCol2, RGB1)
-            Call ToRGB(tCol1, RGB2)
             
             If lGradient = None Then
                 'pas de gradient
@@ -897,12 +786,14 @@ Dim H As Long
                     ScaleHeight - 30), bCol2, BF
             ElseIf lGradient = Horizontal Then
                 'gradient horizontal
-                Call FillGradientH(RGB2, RGB1, ScaleWidth, _
-                    ScaleHeight, 0)
+                Call FillGradient(UserControl.hdc, tCol1, tCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Horizontal)
             Else
                 'gradient vertical
-                Call FillGradientW(RGB2, RGB1, ScaleWidth, _
-                    ScaleHeight, 0)
+                Call FillGradient(UserControl.hdc, tCol1, tCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Vertical)
             End If
         End If
     Else
@@ -932,13 +823,13 @@ Dim H As Long
     End If
     If lTextPos = vbCenter Then
         'au centre
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_CENTER)
+        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_CENTER)
     ElseIf lTextPos = vbRightJustify Then
         'à droite
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_RIGHT)
+        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_RIGHT)
     Else
         'à gauche
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_LEFT)
+        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_LEFT)
     End If
     
     
@@ -1031,7 +922,7 @@ Dim H As Long
             ScaleHeight / Screen.TwipsPerPixelY)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -1048,10 +939,10 @@ Dim H As Long
             ScaleHeight / Screen.TwipsPerPixelY, 7, 7)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
         
         'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
-        Call SetWindowRgn(UserControl.hwnd, hRgn, True)
+        Call SetWindowRgn(UserControl.hWnd, hRgn, True)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -1081,14 +972,20 @@ Dim H As Long
     'couleur orange clair : 7064575
     'couleur orange très clair : 9033981,9889535
     
+    'évite de dessiner le rectangle de focus si on a appuyé sur Tab pour
+    'enlever le focus
+    If bJustPushedTab Then
+        bJustPushedTab = False
+        Exit Sub
+    End If
+    
     If bDrawMouseInRect = False Or bEnable = False Then Exit Sub
     
     With UserControl
         H = .Height
         W = .Width
     End With
-    
-    
+        
     '//trace les lignes orange foncé
     UserControl.ForeColor = 3257087
     Line (15, 60)-(15, H - 60)
@@ -1129,8 +1026,7 @@ Dim H As Long
         H = .Height
         W = .Width
     End With
-    
-    
+        
     '//trace les lignes bleu foncé
     UserControl.ForeColor = 15183500
     Line (15, 60)-(15, H - 60)
@@ -1162,3 +1058,20 @@ End Property
 Friend Property Let MyExtender(MyExtender As Object)
     Set UserControl.Extender = MyExtender
 End Property
+
+'=======================================================
+'renvoie True si la souris est DANS le controle
+'=======================================================
+Private Function IsMouseInCtrl() As Boolean
+Dim tMouse As POINTAPI
+Dim R As RECT
+
+    'récupère la position de la souris
+    Call GetCursorPos(tMouse)
+    
+    'récupère un RECT de la position du controle
+    Call GetWindowRect(UserControl.hWnd, R)
+    
+    'renvoie le résultat
+    IsMouseInCtrl = (PtInRect(R, tMouse.x, tMouse.y) <> 0)
+End Function

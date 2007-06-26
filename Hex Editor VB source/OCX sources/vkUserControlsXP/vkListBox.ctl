@@ -235,7 +235,8 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -263,6 +264,18 @@ Dim F As Long, z3 As Long
                 Next z
                 
                 MouseItemIndex = e
+                
+                'permet de cocher les checks si jamais on double-click
+                If bStyleCheckBox Then
+                    bChecked(MouseItemIndex) = Not (bChecked(MouseItemIndex))
+                    Call Refresh    'change l'état des images
+                    If bChecked(MouseItemIndex) Then
+                        RaiseEvent ItemChek(Col.Item(MouseItemIndex))
+                    Else
+                        RaiseEvent ItemUnCheck(Col.Item(MouseItemIndex))
+                    End If
+                 End If
+    
                 RaiseEvent ItemDblClick(Col.Item(e))
                 RaiseEvent MouseDblClick(vbLeftButton, iShift, iControl, x, y)
         Case WM_LBUTTONDOWN
@@ -409,7 +422,7 @@ Dim F As Long, z3 As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, hwnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -643,7 +656,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
     'on clear la collection
     Call Col.Clear
     Set Col = Nothing
@@ -767,13 +780,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.hwnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.hwnd
+            .hwndTrack = UserControl.hWnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With
@@ -805,8 +818,8 @@ Public Property Get VScroll() As vkPrivateScroll
         .Enabled = VS.Enabled
         .EnableWheel = VS.EnableWheel
         .FrontColor = VS.FrontColor
-        .hDc = VS.hDc
-        .hwnd = VS.hwnd
+        .hdc = VS.hdc
+        .hWnd = VS.hWnd
         .LargeChange = VS.LargeChange
         .LargeChangeColor = VS.LargeChangeColor
         .Max = VS.Max
@@ -850,8 +863,8 @@ Public Property Let VScroll(VScroll As vkPrivateScroll)
 End Property
 
 '//Proptiétés normales
-Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
+Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get SelColor() As OLE_COLOR: SelColor = lSelColor: End Property
 Public Property Let SelColor(SelColor As OLE_COLOR): lSelColor = SelColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get ForeColor() As OLE_COLOR: ForeColor = lForeColor: End Property
@@ -901,6 +914,7 @@ bChecked(Index) = Item.Checked
 bNotOk = False: UserControl_Paint
 End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
+Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 Public Property Get DisplayVScroll() As Boolean: DisplayVScroll = bVSvisible: End Property
 Public Property Let DisplayVScroll(DisplayVScroll As Boolean)
@@ -918,6 +932,7 @@ Public Property Let FullRowSelect(FullRowSelect As Boolean): lFullRowSelect = Fu
 Public Property Get BorderSelColor() As OLE_COLOR: BorderSelColor = lBorderSelColor: End Property
 Public Property Let BorderSelColor(BorderSelColor As OLE_COLOR): lBorderSelColor = BorderSelColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get AcceptAutoSort() As Boolean: AcceptAutoSort = bAcceptAutoSort: End Property
+Attribute AcceptAutoSort.VB_MemberFlags = "40"
 Public Property Let AcceptAutoSort(AcceptAutoSort As Boolean): bAcceptAutoSort = AcceptAutoSort
 If bAcceptAutoSort Then Call Sort(bSorted)
 End Property
@@ -1245,7 +1260,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -1263,6 +1278,8 @@ Dim x As Long
 Dim hBrush As Long
 Dim e As Long
 Dim vsEn As Boolean
+Static vsMax As Long
+
     
     If bUnRefreshControl Then Exit Sub
     
@@ -1290,9 +1307,9 @@ Dim vsEn As Boolean
     'limite le Max
     If lListCount <= z + TopIndex Then VS.Max = lListCount - z
     zNumber = z 'sauvegarde le nombre d'Items affichés
-
-    If z < (lListCount - 1) And bEnable Then VS.Enabled = True _
-        Else VS.Enabled = False
+    
+    If bEnable Then _
+        If z < lListCount - 1 Then VS.Enabled = True Else VS.Enabled = False
 
     'on affiche maintenant chaque controle
     y = 1 'contient la hauteur temporaire
@@ -1323,7 +1340,7 @@ Dim vsEn As Boolean
             ScaleHeight / Screen.TwipsPerPixelY)
 
         'on dessine le contour
-        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -1334,6 +1351,12 @@ Dim vsEn As Boolean
     '//affiche les checkboxes
     If bStyleCheckBox Then Call SplitIMGandShow(z)
     
+    'rafraichit le VS si on a changé le Max d'items (permet de changer la
+    'hauteur du thumb quand on ajoute des items)
+    If vsMax <> VS.Max Then
+        vsMax = VS.Max
+        Call VS.Refresh
+    End If
     
     '//on refresh le control
     Call UserControl.Refresh
@@ -1404,25 +1427,23 @@ Dim H As Long
         (ScaleHeight - lTop - H / 2) / Screen.TwipsPerPixelY + 1)
     
     'dessine un rectangle (backcolor ou selection) dans cette zone
-    If bEnable Then
-        If bSelected(Index) = False Then
-            'backcolor
+    If bSelected(Index) = False Then
+        'backcolor
+        Line (15, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BackColor, BF
+    Else
+        'sélection
+        If F Then
+            'alors on décale ==> on doit quand même faire le backColor
             Line (15, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BackColor, BF
-        Else
-            'sélection
-            If F Then
-                'alors on décale ==> on doit quand même faire le backColor
-                Line (15, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BackColor, BF
-            End If
-            
-            'fond de la sélection
-            Line (15 + F, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.SelColor, BF
-            'bordure de la sélection
-            Line (15 + F, lTop + 15)-(Width - 255 - 30 + o2, lTop + 15), Item.BorderSelColor
-            Line (Width - 255 - 30 + o2, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BorderSelColor
-            Line (Width - 255 - 30 + o2, lTop + Item.Height + 15)-(15 + F, lTop + Item.Height + 15), Item.BorderSelColor
-            Line (15 + F, lTop + Item.Height + 15)-(15 + F, lTop + 15), Item.BorderSelColor
         End If
+        
+        'fond de la sélection
+        Line (15 + F, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.SelColor, BF
+        'bordure de la sélection
+        Line (15 + F, lTop + 15)-(Width - 255 - 30 + o2, lTop + 15), Item.BorderSelColor
+        Line (Width - 255 - 30 + o2, lTop + 30)-(Width - 255 - 30 + o2, lTop + Item.Height + 15), Item.BorderSelColor
+        Line (Width - 255 - 30 + o2, lTop + Item.Height + 15)-(15 + F, lTop + Item.Height + 15), Item.BorderSelColor
+        Line (15 + F, lTop + Item.Height + 15)-(15 + F, lTop + 15), Item.BorderSelColor
     End If
         
     
@@ -1444,7 +1465,7 @@ Dim H As Long
         UserControl.ForeColor = 10070188
     End If
     
-    Call DrawText(UserControl.hDc, Item.Text, Len(Item.Text), R, st)
+    Call DrawText(UserControl.hdc, Item.Text, Len(Item.Text), R, st)
     Set UserControl.Font = tF 'restaure la fonte d'origine
 End Sub
 
@@ -1470,10 +1491,10 @@ Dim pic As StdPicture
     'icone de fichier par ListType<>NormalList
     If Item.pctType = 0 Then
     
-        SrcDC = CreateCompatibleDC(UserControl.hDc)
+        SrcDC = CreateCompatibleDC(UserControl.hdc)
         SrcObj = SelectObject(SrcDC, Item.Icon)
     
-        Call BitBlt(UserControl.hDc, 4 + e, y, Item.pxlIconWidth, _
+        Call BitBlt(UserControl.hdc, 4 + e, y, Item.pxlIconWidth, _
             Item.pxlIconHeight, SrcDC, 0, 0, SRCCOPY)
     
         Call DeleteDC(SrcDC)
@@ -1486,7 +1507,7 @@ Dim pic As StdPicture
             
         Set pic = GetMyIcon(Item.tagString1)
         
-        Call DrawIconEx(hDc, 4 + e, y, pic, Item.pxlIconWidth, _
+        Call DrawIconEx(hdc, 4 + e, y, pic, Item.pxlIconWidth, _
             Item.pxlIconHeight, 0, 0, DI_NORMAL)
         'Else
             'Call PaintPicture(tPic(Item.Index), 4 + e, y, _
@@ -1637,7 +1658,7 @@ Dim e As Long
         
 
         'trace l'image
-        Call BitBlt(UserControl.hDc, 2, e / Screen.TwipsPerPixelY, 13, 13, pic(lIMG).hDc, _
+        Call BitBlt(UserControl.hdc, 2, e / Screen.TwipsPerPixelY, 13, 13, pic(lIMG).hdc, _
               0, 0, SRCCOPY)
         
         'update la hauteur temporaire
@@ -1654,7 +1675,7 @@ Dim e As Long
             ScaleHeight / Screen.TwipsPerPixelY)
 
         'on dessine le contour
-        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -1892,5 +1913,3 @@ NeedToAdd:
     Call picCol.Add(cFile.GetIcon(s, lIconSize), Key)
     Set GetMyIcon = picCol.Item(Key)
 End Function
-
-

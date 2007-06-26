@@ -135,7 +135,7 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -252,7 +252,7 @@ Dim y As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, hwnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -320,7 +320,7 @@ End Sub
 
 Private Sub UserControl_GotFocus()
 
-    If bEnable = False Then
+     If bEnable = False Then
         'on ne garde pas le focus
         Call SendKeys("{Tab}")
         Exit Sub
@@ -372,7 +372,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
@@ -451,13 +451,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.hwnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.hwnd
+            .hwndTrack = UserControl.hWnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With
@@ -477,8 +477,8 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
+Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get TextPosition() As AlignmentConstants: TextPosition = lTextPos: End Property
 Public Property Let TextPosition(TextPosition As AlignmentConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Caption() As String: Caption = sCaption: End Property
@@ -657,11 +657,11 @@ Dim lSigne As Long
         'récupère la moyenne de couleur par unité de longueur
         rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lWidth)
         gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lWidth)
-        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lWidth)
+        bAverageColorPerSizeUnit = Abs((RightColor.b - LeftColor.b) / lWidth)
         
         'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
+        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.b)) <= _
+            CLng(RGB(RightColor.R, RightColor.G, RightColor.b)) Then
             
             lSigne = 1
         Else
@@ -669,7 +669,7 @@ Dim lSigne As Long
         End If
         
         'se positionne tout à gauche de l'objet ==> balayera vers la droite
-        Call MoveToEx(.hDc, 0, Dep, 0&)
+        Call MoveToEx(.hdc, 0, Dep, 0&)
         
         'pour chaque 'colonne' constituée par une ligne verticale, on trace une
         'ligne en récupérant la couleur correspondante
@@ -678,13 +678,13 @@ Dim lSigne As Long
             'change le ForeColor qui détermine la couleur de la Line
             'multiplie la largeur actuelle par la couleur par unité de longueur
             .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
+                gAverageColorPerSizeUnit * lSigne, LeftColor.b + x * bAverageColorPerSizeUnit * lSigne)
                
             'trace une ligne
-            Call LineTo(.hDc, x, lHeight)
+            Call LineTo(.hdc, x, lHeight)
             
             'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hDc, x, Dep, 0&)
+            Call MoveToEx(.hdc, x, Dep, 0&)
         
         Next x
         
@@ -717,11 +717,11 @@ Dim lSigne As Long
         'récupère la moyenne de couleur par unité de longueur
         rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lHeight)
         gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lHeight)
-        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lHeight)
+        bAverageColorPerSizeUnit = Abs((RightColor.b - LeftColor.b) / lHeight)
 
         'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
+        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.b)) <= _
+            CLng(RGB(RightColor.R, RightColor.G, RightColor.b)) Then
             
             lSigne = 1
         Else
@@ -729,7 +729,7 @@ Dim lSigne As Long
         End If
         
         'se positionne tout à gauche de l'objet ==> balayera vers le bas
-        Call MoveToEx(.hDc, 0, Dep, 0&)
+        Call MoveToEx(.hdc, 0, Dep, 0&)
         
         'pour chaque 'colonne' constituée par une ligne verticale, on trace une
         'ligne en récupérant la couleur correspondante
@@ -738,13 +738,13 @@ Dim lSigne As Long
             'change le ForeColor qui détermine la couleur de la Line
             'multiplie la largeur actuelle par la couleur par unité de longueur
             .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
+                gAverageColorPerSizeUnit * lSigne, LeftColor.b + x * bAverageColorPerSizeUnit * lSigne)
                
             'trace une ligne
-            Call LineTo(.hDc, Width, x)
+            Call LineTo(.hdc, Width, x)
             
             'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hDc, 0, x, 0&)
+            Call MoveToEx(.hdc, 0, x, 0&)
         
         Next x
         
@@ -775,7 +775,7 @@ Private Sub ToRGB(ByVal Color As Long, ByRef RGB As RGB_COLOR)
     With RGB
         .R = Color And &HFF&
         .G = (Color And &HFF00&) \ &H100&
-        .B = Color \ &H10000
+        .b = Color \ &H10000
     End With
 End Sub
 
@@ -784,7 +784,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -797,8 +797,6 @@ End Function
 '=======================================================
 Public Sub Refresh(Optional ByVal ShowFocusRects As Boolean = True)
 Dim x As Long
-Dim RGB1 As RGB_COLOR
-Dim RGB2 As RGB_COLOR
 Dim R As RECT
 Dim hBrush As Long
 Dim Rec As Long
@@ -833,8 +831,6 @@ Dim H As Long
             'récupère les 3 composantes des deux couleurs
             Call OleTranslateColor(bCol1, 0, bCol1)
             Call OleTranslateColor(bCol2, 0, bCol2)
-            Call ToRGB(bCol1, RGB1)
-            Call ToRGB(bCol2, RGB2)
             
             If lGradient = None Then
                 'pas de gradient
@@ -843,12 +839,14 @@ Dim H As Long
                     ScaleHeight - 30), bCol1, BF
             ElseIf lGradient = Horizontal Then
                 'gradient horizontal
-                Call FillGradientH(RGB1, RGB2, ScaleWidth, _
-                    ScaleHeight, 0)
+                Call FillGradient(UserControl.hdc, bCol1, bCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Horizontal)
             Else
                 'gradient vertical
-                Call FillGradientW(RGB1, RGB2, ScaleWidth, _
-                    ScaleHeight, 0)
+                Call FillGradient(UserControl.hdc, bCol1, bCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Vertical)
             End If
         Else
             'appuyé sur le bouton
@@ -856,8 +854,6 @@ Dim H As Long
             'récupère les 3 composantes des deux couleurs
             Call OleTranslateColor(tCol1, 0, tCol1)
             Call OleTranslateColor(tCol2, 0, tCol2)
-            Call ToRGB(tCol2, RGB1)
-            Call ToRGB(tCol1, RGB2)
             
             If lGradient = None Then
                 'pas de gradient
@@ -866,12 +862,14 @@ Dim H As Long
                     ScaleHeight - 30), bCol2, BF
             ElseIf lGradient = Horizontal Then
                 'gradient horizontal
-                Call FillGradientH(RGB2, RGB1, ScaleWidth, _
-                    ScaleHeight, 0)
+                Call FillGradient(UserControl.hdc, tCol1, tCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Horizontal)
             Else
                 'gradient vertical
-                Call FillGradientW(RGB2, RGB1, ScaleWidth, _
-                    ScaleHeight, 0)
+                Call FillGradient(UserControl.hdc, tCol1, tCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Vertical)
             End If
         End If
     Else
@@ -901,13 +899,13 @@ Dim H As Long
     End If
     If lTextPos = vbCenter Then
         'au centre
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_CENTER)
+        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_CENTER)
     ElseIf lTextPos = vbRightJustify Then
         'à droite
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_RIGHT)
+        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_RIGHT)
     Else
         'à gauche
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_LEFT)
+        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_LEFT)
     End If
     
     
@@ -1000,7 +998,7 @@ Dim H As Long
             ScaleHeight / Screen.TwipsPerPixelY)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -1017,10 +1015,10 @@ Dim H As Long
             ScaleHeight / Screen.TwipsPerPixelY, 7, 7)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
         
         'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
-        Call SetWindowRgn(UserControl.hwnd, hRgn, True)
+        Call SetWindowRgn(UserControl.hWnd, hRgn, True)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
