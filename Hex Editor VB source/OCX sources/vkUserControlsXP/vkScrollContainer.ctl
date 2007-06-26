@@ -33,7 +33,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-
 ' =======================================================
 '
 ' vkUserControlsXP
@@ -125,7 +124,7 @@ Public Event VScrollScroll()
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -228,7 +227,7 @@ Dim y As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, hwnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -351,7 +350,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
@@ -434,13 +433,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.hwnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.hwnd
+            .hwndTrack = UserControl.hWnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With
@@ -460,8 +459,8 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
+Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get BackStyle() As BackStyleConstants: BackStyle = lBackStyle: End Property
 Public Property Let BackStyle(BackStyle As BackStyleConstants): lBackStyle = BackStyle: UserControl.BackStyle = BackStyle: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColor1() As OLE_COLOR: BackColor1 = bCol1: End Property
@@ -515,8 +514,8 @@ Public Property Get VScroll() As vkPrivateScroll
         .Enabled = VS.Enabled
         .EnableWheel = VS.EnableWheel
         .FrontColor = VS.FrontColor
-        .hDc = VS.hDc
-        .hwnd = VS.hwnd
+        .hdc = VS.hdc
+        .hWnd = VS.hWnd
         .LargeChange = VS.LargeChange
         .LargeChangeColor = VS.LargeChangeColor
         .Max = VS.Max
@@ -566,8 +565,8 @@ Public Property Get HScroll() As vkPrivateScroll
         .Enabled = HS.Enabled
         .EnableWheel = HS.EnableWheel
         .FrontColor = HS.FrontColor
-        .hDc = HS.hDc
-        .hwnd = HS.hwnd
+        .hdc = HS.hdc
+        .hWnd = HS.hWnd
         .LargeChange = HS.LargeChange
         .LargeChangeColor = HS.LargeChangeColor
         .Max = HS.Max
@@ -622,128 +621,6 @@ End Sub
 'PRIVATE SUBS
 '=======================================================
 '=======================================================
-'applique un gradient de couleur sur un objet de gauche à droite
-'il doit être "en autoredraw=true" (si c'est une form, picturebox...)
-'=======================================================
-Private Sub FillGradientW(LeftColor As RGB_COLOR, _
-    RightColor As RGB_COLOR, ByVal Width As Long, ByVal Height As Long, _
-    Optional ByVal Dep As Long)
-    
-Dim rAverageColorPerSizeUnit As Double
-Dim gAverageColorPerSizeUnit As Double
-Dim bAverageColorPerSizeUnit As Double
-Dim lWidth As Long
-Dim x As Long
-Dim lHeight As Long
-Dim lSigne As Long
-
-    With UserControl
-        
-        'récupère la largeur de l'objet
-        lWidth = Width / Screen.TwipsPerPixelX
-        lHeight = Height / Screen.TwipsPerPixelY
-        
-        'récupère la moyenne de couleur par unité de longueur
-        rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lWidth)
-        gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lWidth)
-        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lWidth)
-        
-        'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
-            
-            lSigne = 1
-        Else
-            lSigne = -1
-        End If
-        
-        'se positionne tout à gauche de l'objet ==> balayera vers la droite
-        Call MoveToEx(.hDc, 0, Dep, 0&)
-        
-        'pour chaque 'colonne' constituée par une ligne verticale, on trace une
-        'ligne en récupérant la couleur correspondante
-        For x = 0 To lWidth
-            
-            'change le ForeColor qui détermine la couleur de la Line
-            'multiplie la largeur actuelle par la couleur par unité de longueur
-            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
-               
-            'trace une ligne
-            Call LineTo(.hDc, x, lHeight)
-            
-            'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hDc, x, Dep, 0&)
-        
-        Next x
-        
-        'on refresh l'objet
-        Call .Refresh
-    End With
-
-End Sub
-
-'=======================================================
-'applique un gradient de couleur sur un objet de gauche à droite
-'il doit être "en autoredraw=true" (si c'est une form, picturebox...)
-'=======================================================
-Private Sub FillGradientH(LeftColor As RGB_COLOR, _
-    RightColor As RGB_COLOR, ByVal Width As Long, ByVal Height As Long, _
-    Optional ByVal Dep As Long)
-    
-Dim rAverageColorPerSizeUnit As Double
-Dim gAverageColorPerSizeUnit As Double
-Dim bAverageColorPerSizeUnit As Double
-Dim lHeight As Long
-Dim x As Long
-Dim lSigne As Long
-
-    With UserControl
-        
-        'récupère la hateur de l'objet
-        lHeight = Height / Screen.TwipsPerPixelY
-        
-        'récupère la moyenne de couleur par unité de longueur
-        rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lHeight)
-        gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lHeight)
-        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lHeight)
-
-        'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
-            
-            lSigne = 1
-        Else
-            lSigne = -1
-        End If
-        
-        'se positionne tout à gauche de l'objet ==> balayera vers le bas
-        Call MoveToEx(.hDc, 0, Dep, 0&)
-        
-        'pour chaque 'colonne' constituée par une ligne verticale, on trace une
-        'ligne en récupérant la couleur correspondante
-        For x = Dep To lHeight
-            
-            'change le ForeColor qui détermine la couleur de la Line
-            'multiplie la largeur actuelle par la couleur par unité de longueur
-            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
-               
-            'trace une ligne
-            Call LineTo(.hDc, Width, x)
-            
-            'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hDc, 0, x, 0&)
-        
-        Next x
-        
-        'on refresh l'objet
-        Call .Refresh
-    End With
-
-End Sub
-
-'=======================================================
 'copie un "byte"
 '=======================================================
 Private Sub MovB(Ofs As Long, ByVal Value As Long)
@@ -764,7 +641,7 @@ Private Sub ToRGB(ByVal Color As Long, ByRef RGB As RGB_COLOR)
     With RGB
         .R = Color And &HFF&
         .G = (Color And &HFF00&) \ &H100&
-        .B = Color \ &H10000
+        .b = Color \ &H10000
     End With
 End Sub
 
@@ -786,9 +663,9 @@ Dim ctr As Control
         Else
             'on change X1, Y1, X2 et Y2
             With ctr
-                .x1 = .x1 + x
-                .x2 = .x2 + x
-                .y1 = .y1 + y
+                .X1 = .X1 + x
+                .X2 = .X2 + x
+                .Y1 = .Y1 + y
                 .Y2 = .Y2 + y
             End With
         End If
@@ -821,8 +698,6 @@ End Sub
 '=======================================================
 Public Sub Refresh()
 Dim x As Long
-Dim RGB1 As RGB_COLOR
-Dim RGB2 As RGB_COLOR
 Dim R As RECT
 Dim hBrush As Long
 Dim Rec As Long
@@ -843,7 +718,7 @@ Dim H As Long
     Call OleTranslateColor(bCol2, 0, bCol2)
     
     
-    If lBackStyle = Transparent Then
+    If lBackStyle = TRANSPARENT Then
         'alors on créé une image dans le maskpicture
         
         'on dessine donc maintenant le bord
@@ -857,7 +732,7 @@ Dim H As Long
                 ScaleHeight / Screen.TwipsPerPixelY)
             
             'on dessine le contour
-            Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
+            Call FrameRgn(UserControl.hdc, hRgn, hBrush, lBWidth, lBWidth)
 
             'on détruit le brush et la zone
             Call DeleteObject(hBrush)
@@ -875,8 +750,6 @@ Dim H As Long
         If bShowBackGround Then
     
             'récupère les 3 composantes des deux couleurs
-            Call ToRGB(bCol1, RGB1)
-            Call ToRGB(bCol2, RGB2)
             
             If lBackGradient = None Then
                 'pas de gradient
@@ -885,12 +758,14 @@ Dim H As Long
                     ScaleHeight - 30), bCol1, BF
             ElseIf lBackGradient = Horizontal Then
                 'gradient horizontal
-                Call FillGradientH(RGB1, RGB2, ScaleWidth, _
-                    ScaleHeight, 0)
+                Call FillGradient(UserControl.hdc, bCol1, bCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Horizontal)
             Else
                 'gradient vertical
-                Call FillGradientW(RGB1, RGB2, ScaleWidth, _
-                    ScaleHeight, 0)
+                Call FillGradient(UserControl.hdc, bCol1, bCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Vertical)
             End If
         End If
 '    Else
@@ -913,7 +788,7 @@ Dim H As Long
             ScaleHeight / Screen.TwipsPerPixelY)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
+        Call FrameRgn(UserControl.hdc, hRgn, hBrush, lBWidth, lBWidth)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)

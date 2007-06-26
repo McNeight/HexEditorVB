@@ -82,6 +82,8 @@ Public Const NIF_TIP                        As Long = &H4
 Public Const NIM_ADD                        As Long = &H0
 Public Const NIM_MODIFY                     As Long = &H1
 Public Const NIF_INFO                       As Long = &H10
+Private Const GRADIENT_FILL_RECT_H          As Long = &H0
+Private Const GRADIENT_FILL_RECT_V          As Long = &H1
 
 
 
@@ -89,34 +91,32 @@ Public Const NIF_INFO                       As Long = &H10
 'APIs
 '=======================================================
 Public Declare Sub PathStripPath Lib "shlwapi.dll" Alias "PathStripPathA" (ByVal pszPath As String)
-Public Declare Function StretchBlt Lib "gdi32" (ByVal hDc As Long, ByVal X As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal xSrc As Long, ByVal ySrc As Long, ByVal nSrcWidth As Long, ByVal nSrcHeight As Long, ByVal dwRop As Long) As Long
+Public Declare Function StretchBlt Lib "gdi32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal xSrc As Long, ByVal ySrc As Long, ByVal nSrcWidth As Long, ByVal nSrcHeight As Long, ByVal dwRop As Long) As Long
 Public Declare Function GetWindowLong Lib "user32" Alias "GetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long) As Long
 Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hwnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
 Public Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hwnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Public Declare Function TrackMouseEvent Lib "user32" (lpEventTrack As TRACKMOUSEEVENTTYPE) As Long
-Attribute TrackMouseEvent.VB_MemberFlags = "40"
 Public Declare Function GetProp Lib "user32.dll" Alias "GetPropA" (ByVal hwnd As Long, ByVal lpString As String) As Long
 Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (pDst As Any, pSrc As Any, ByVal ByteLen As Long)
-Public Declare Function DrawText Lib "user32" Alias "DrawTextA" (ByVal hDc As Long, ByVal lpStr As String, ByVal nCount As Long, lpRect As RECT, ByVal wFormat As Long) As Long
-Public Declare Function SetRect Lib "user32" (lpRect As RECT, ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As Long, ByVal Y2 As Long) As Long
-Public Declare Function GetTabbedTextExtent Lib "user32" Alias "GetTabbedTextExtentA" (ByVal hDc As Long, ByVal lpString As String, ByVal nCount As Long, ByVal nTabPositions As Long, lpnTabStopPositions As Long) As Long
-Public Declare Function OleTranslateColor Lib "olepro32.dll" (ByVal OLE_COLOR As Long, ByVal HPALETTE As Long, pccolorref As Long) As Long
+Public Declare Function DrawText Lib "user32" Alias "DrawTextA" (ByVal hdc As Long, ByVal lpStr As String, ByVal nCount As Long, lpRect As RECT, ByVal wFormat As Long) As Long
+Public Declare Function SetRect Lib "user32" (lpRect As RECT, ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long) As Long
+Public Declare Function GetTabbedTextExtent Lib "user32" Alias "GetTabbedTextExtentA" (ByVal hdc As Long, ByVal lpString As String, ByVal nCount As Long, ByVal nTabPositions As Long, lpnTabStopPositions As Long) As Long
+Public Declare Function OleTranslateColor Lib "olepro32.dll" (ByVal OLE_COLOR As Long, ByVal hPalette As Long, pccolorref As Long) As Long
 Public Declare Function DeleteObject Lib "gdi32" (ByVal hObject As Long) As Long
 Public Declare Function CreateSolidBrush Lib "gdi32" (ByVal crColor As Long) As Long
 Public Declare Function LockWindowUpdate Lib "user32" (ByVal hwndLock As Long) As Long
-Public Declare Function CreateCompatibleDC Lib "gdi32" (ByVal hDc As Long) As Long
-Public Declare Function SelectObject Lib "gdi32" (ByVal hDc As Long, ByVal hObject As Long) As Long
-Public Declare Function BitBlt Lib "gdi32" (ByVal hDestDC As Long, ByVal X As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal xSrc As Long, ByVal ySrc As Long, ByVal dwRop As Long) As Long
-Attribute BitBlt.VB_MemberFlags = "40"
-Public Declare Function DeleteDC Lib "gdi32" (ByVal hDc As Long) As Long
-Public Declare Function DrawFocusRect Lib "user32" (ByVal hDc As Long, lpRect As RECT) As Long
-Public Declare Function MoveToEx Lib "gdi32" (ByVal hDc As Long, ByVal X As Long, ByVal Y As Long, Lppoint As Long) As Long
-Public Declare Function LineTo Lib "gdi32" (ByVal hDc As Long, ByVal X As Long, ByVal Y As Long) As Long
-Public Declare Function CreateRoundRectRgn Lib "gdi32" (ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As Long, ByVal Y2 As Long, ByVal X3 As Long, ByVal Y3 As Long) As Long
-Public Declare Function FrameRgn Lib "gdi32" (ByVal hDc As Long, ByVal hRgn As Long, ByVal hBrush As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
+Public Declare Function CreateCompatibleDC Lib "gdi32" (ByVal hdc As Long) As Long
+Public Declare Function SelectObject Lib "gdi32" (ByVal hdc As Long, ByVal hObject As Long) As Long
+Public Declare Function BitBlt Lib "gdi32" (ByVal hDestDC As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal xSrc As Long, ByVal ySrc As Long, ByVal dwRop As Long) As Long
+Public Declare Function DeleteDC Lib "gdi32" (ByVal hdc As Long) As Long
+Public Declare Function DrawFocusRect Lib "user32" (ByVal hdc As Long, lpRect As RECT) As Long
+Public Declare Function MoveToEx Lib "gdi32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, lpPoint As Long) As Long
+Public Declare Function LineTo Lib "gdi32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long) As Long
+Public Declare Function CreateRoundRectRgn Lib "gdi32" (ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long, ByVal X3 As Long, ByVal Y3 As Long) As Long
+Public Declare Function FrameRgn Lib "gdi32" (ByVal hdc As Long, ByVal hRgn As Long, ByVal hBrush As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
 Public Declare Function SetWindowRgn Lib "user32" (ByVal hwnd As Long, ByVal hRgn As Long, ByVal bRedraw As Boolean) As Long
-Public Declare Function CreateRectRgn Lib "gdi32" (ByVal x1 As Long, ByVal y1 As Long, ByVal x2 As Long, ByVal Y2 As Long) As Long
-Public Declare Function DrawIconEx Lib "user32" (ByVal hDc As Long, ByVal xLeft As Long, ByVal yTop As Long, ByVal hIcon As Long, ByVal cxWidth As Long, ByVal cyWidth As Long, ByVal istepIfAniCur As Long, ByVal hbrFlickerFreeDraw As Long, ByVal diFlags As Long) As Long
+Public Declare Function CreateRectRgn Lib "gdi32" (ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long) As Long
+Public Declare Function DrawIconEx Lib "user32" (ByVal hdc As Long, ByVal xLeft As Long, ByVal yTop As Long, ByVal hIcon As Long, ByVal cxWidth As Long, ByVal cyWidth As Long, ByVal istepIfAniCur As Long, ByVal hbrFlickerFreeDraw As Long, ByVal diFlags As Long) As Long
 Public Declare Function timeKillEvent Lib "winmm.dll" (ByVal uID As Long) As Long
 Public Declare Function timeSetEvent Lib "winmm.dll" (ByVal uDelay As Long, ByVal uResolution As Long, ByVal lpFunction As Long, ByVal dwUser As Long, ByVal uFlags As Long) As Long
 Public Declare Function GetTickCount Lib "kernel32.dll" () As Long
@@ -127,6 +127,24 @@ Public Declare Function Shell_NotifyIcon Lib "Shell32.dll" Alias "Shell_NotifyIc
 Public Declare Function GetActiveWindow Lib "user32.dll" () As Long
 Public Declare Function CreateFontIndirect Lib "gdi32" Alias "CreateFontIndirectA" (ByRef lpLogFont As LOGFONT) As Long
 Public Declare Function GetObjectA Lib "gdi32" (ByVal hObject As Long, ByVal nCount As Long, lpObject As Any) As Long
+Public Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal nIndex As Long) As Long
+Public Declare Function CreateCompatibleBitmap Lib "gdi32" (ByVal hdc As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
+Public Declare Function GetDC Lib "user32" (ByVal hwnd As Long) As Long
+Public Declare Function CreateEllipticRgn Lib "gdi32" (ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long) As Long
+Public Declare Function CreateFont Lib "gdi32" Alias "CreateFontA" (ByVal nHeight As Long, ByVal nWidth As Long, ByVal nEscapement As Long, ByVal nOrientation As Long, ByVal fnWeight As Long, ByVal fdwItalic As Boolean, ByVal fdwUnderline As Boolean, ByVal fdwStrikeOut As Boolean, ByVal fdwCharSet As Long, ByVal fdwOutputPrecision As Long, ByVal fdwClipPrecision As Long, ByVal fdwQuality As Long, ByVal fdwPitchAndFamily As Long, ByVal lpszFace As String) As Long
+Public Declare Function TextOut Lib "gdi32" Alias "TextOutA" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, ByVal lpString As String, ByVal nCount As Long) As Long
+Public Declare Function MulDiv Lib "kernel32" (ByVal nNumber As Long, ByVal nNumerator As Long, ByVal nDenominator As Long) As Long
+Public Declare Function SetBkMode Lib "gdi32" (ByVal hdc As Long, ByVal nBkMode As Long) As Long
+Public Declare Function GetSysColorBrush Lib "user32" (ByVal nIndex As Long) As Long
+Public Declare Function FillRect Lib "user32" (ByVal hdc As Long, lpRect As RECT, ByVal hBrush As Long) As Long
+Public Declare Function GetWindowRect Lib "user32" (ByVal hwnd As Long, lpRect As RECT) As Long
+Public Declare Function PtInRect Lib "user32" (lpRect As RECT, ByVal x As Long, ByVal y As Long) As Long
+Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
+Public Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+
+
+Private Declare Function GradientFillRect Lib "msimg32" Alias "GradientFill" (ByVal hdc As Long, pVertex As TRIVERTEX, ByVal dwNumVertex As Long, pMesh As GRADIENT_RECT, ByVal dwNumMesh As Long, ByVal dwMode As Long) As Long
+
 
 
 '=======================================================
@@ -138,6 +156,10 @@ Public Type TRACKMOUSEEVENTTYPE
     hwndTrack As Long
     dwHoverTime As Long
 End Type
+Public Type POINTAPI
+    x As Long
+    y As Long
+End Type
 Public Type RECT
     Left As Long
     Top As Long
@@ -147,7 +169,12 @@ End Type
 Public Type RGB_COLOR
     R As Long
     G As Long
-    B As Long
+    b As Long
+End Type
+Public Type RGB_COLOR_INT
+    R As Integer
+    G As Integer
+    b As Integer
 End Type
 Public Type SHFILEINFO
     hIcon As Long
@@ -187,6 +214,18 @@ Public Type LOGFONT
     lfPitchAndFamily As Byte
     lfFaceName(1 To 32) As Byte
 End Type
+Private Type TRIVERTEX
+    x As Long
+    y As Long
+    Red As Integer
+    Green As Integer
+    Blue As Integer
+    Alpha As Integer
+End Type
+Private Type GRADIENT_RECT
+    UpperLeft As Long
+    LowerRight As Long
+End Type
 
 
 '=======================================================
@@ -208,8 +247,80 @@ End Function
 '=======================================================
 'convertit une couleur en long vers RGB
 '=======================================================
-Public Sub LongToRGB(ByVal Color As Long, ByRef R As Long, ByRef G As Long, ByRef B As Long)
+Public Sub LongToRGB(ByVal Color As Long, ByRef R As Long, ByRef G As Long, ByRef b As Long)
     R = Color And &HFF&
     G = (Color And &HFF00&) \ &H100&
-    B = Color \ &H10000
+    b = Color \ &H10000
+End Sub
+'=======================================================
+'convertit une couleur en long vers RGB (Integer)
+'=======================================================
+Public Function LongToRGBint(ByVal Color As Long) As RGB_COLOR_INT
+    LongToRGBint.R = GetCompatibleColor(Color And &HFF&)
+    LongToRGBint.G = GetCompatibleColor((Color And &HFF00&) \ &H100&)
+    LongToRGBint.b = GetCompatibleColor(Color \ &H10000)
+End Function
+'=======================================================
+'convertit une couleur 0-255 vers un format compatible pour l'API GradientFillRect
+'=======================================================
+Private Function GetCompatibleColor(Color As Long) As Integer
+    If Color > 127 Then
+        GetCompatibleColor = 256 * (Color - 256)
+    Else
+        GetCompatibleColor = 256 * Color
+    End If
+End Function
+
+'=======================================================
+'création de gradients de couleur
+'=======================================================
+Public Sub FillGradient(DC As Long, LeftColor As Long, RightColor As _
+    Long, ByVal Width As Long, ByVal Height As Long, ByVal _
+    tType As GradientConstants, Optional ByVal Dep As Long = 0)
+    
+Dim VERT(1) As TRIVERTEX
+Dim gRect As GRADIENT_RECT
+Dim LC As RGB_COLOR_INT
+Dim RC As RGB_COLOR_INT
+Dim Hconst As Long
+    
+    'on convertit les Long en RGBint
+    LC = LongToRGBint(LeftColor)
+    RC = LongToRGBint(RightColor)
+    
+    'couleur de gauche que l'on définit
+    With VERT(0)
+        .x = 0
+        .y = Dep
+        .Red = LC.R
+        .Green = LC.G
+        .Blue = LC.b
+        .Alpha = 0&
+    End With
+
+    'to blue
+    With VERT(1)
+        .x = Width
+        .y = Height
+        .Red = RC.R
+        .Green = RC.G
+        .Blue = RC.b
+        .Alpha = 0&
+    End With
+    
+    'on définit le type de gradient à appliquer
+    If tType = Vertical Then
+        Hconst = GRADIENT_FILL_RECT_H
+    Else
+        Hconst = GRADIENT_FILL_RECT_V
+    End If
+    
+    With gRect
+        .LowerRight = 0
+        .UpperLeft = 1
+    End With
+    
+    'maintenant on trace le gradient !
+    Call GradientFillRect(DC, VERT(0), 2, gRect, 1, Hconst)
+
 End Sub

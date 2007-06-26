@@ -199,7 +199,7 @@ Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
@@ -304,7 +304,7 @@ Dim y As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, hwnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -378,7 +378,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
@@ -510,8 +510,8 @@ Public Property Let BorderColor(BorderColor As OLE_COLOR): UserControl.BackColor
 Public Property Get GradientMode() As Mode_Degrade: GradientMode = mdDeg: End Property
 Attribute GradientMode.VB_Description = "Define how to display gradient"
 Public Property Let GradientMode(GradientMode As Mode_Degrade): mdDeg = GradientMode: bNotOk = False: Refresh: End Property
-Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
-Attribute hwnd.VB_Description = "Handle of the control"
+Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
+Attribute hWnd.VB_Description = "Handle of the control"
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
 Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
@@ -730,7 +730,7 @@ Dim lRet As Long    'retour de l'API
         pct.Picture = tpn.Image
         
         'plaque la picturebox de devant sur la picturebox contenant la barre
-        Call StretchBlt(pct.hDc, 0, 0, Int(Screen.TwipsPerPixelX * lValueWidth), pct.Height, frontImg.hDc, 0, _
+        Call StretchBlt(pct.hdc, 0, 0, Int(Screen.TwipsPerPixelX * lValueWidth), pct.Height, frontImg.hdc, 0, _
         0, frontImg.Width, frontImg.Height, &HCC0020)
         
         'pct.Picture = frontImg.Picture
@@ -893,13 +893,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.hwnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.hwnd
+            .hwndTrack = UserControl.hWnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With

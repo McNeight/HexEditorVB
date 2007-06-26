@@ -118,7 +118,7 @@ Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal HWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Dim iControl As Integer
 Dim iShift As Integer
@@ -230,7 +230,7 @@ Dim y As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, HWnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -260,7 +260,7 @@ Dim R As RECT
 Dim y As Long
 Dim x As Long
     
-    If bEnable = False Then
+     If bEnable = False Then
         'on ne garde pas le focus
         Call SendKeys("{Tab}")
         Exit Sub
@@ -275,9 +275,9 @@ Dim x As Long
     Call SetRect(R, 17, y - 1, TextWidth(sCaption) / Screen.TwipsPerPixelX + 23, y + _
         GetCharHeight + 2)
     'dessine
-    Call DrawFocusRect(UserControl.hDc, R)
+    Call DrawFocusRect(UserControl.hdc, R)
     
-    If lBackStyle = [Transparent] Then
+    If lBackStyle = [TRANSPARENT] Then
         'transparent
         With UserControl
             .BackStyle = 0
@@ -366,7 +366,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.HWnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
@@ -415,13 +415,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.HWnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.HWnd
+            .hwndTrack = UserControl.hWnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With
@@ -441,10 +441,10 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Attribute hDc.VB_Description = "Get the control hDc"
-Public Property Get HWnd() As Long: HWnd = UserControl.HWnd: End Property
-Attribute HWnd.VB_Description = "Handle of the control"
+Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Attribute hdc.VB_Description = "Get the control hDc"
+Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
+Attribute hWnd.VB_Description = "Handle of the control"
 Public Property Get BackStyle() As BackStyleConstants: BackStyle = lBackStyle: End Property
 Attribute BackStyle.VB_Description = "Use a transparent control or not"
 Public Property Let BackStyle(BackStyle As BackStyleConstants): lBackStyle = BackStyle: UserControl.BackStyle = BackStyle: bNotOk = False: UserControl_Paint: End Property
@@ -513,7 +513,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -563,10 +563,10 @@ Dim st As Long
     Else
         st = DT_RIGHT
     End If
-    Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, st)
+    Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, st)
     
     '//style
-    If lBackStyle = [Transparent] Then
+    If lBackStyle = [TRANSPARENT] Then
         'transparent
         With UserControl
             .BackStyle = 0
@@ -639,11 +639,11 @@ Dim lIMG As Long
     
     'on découpe l'image correspondant à lIMG depuis Image1 et on blit
     'sur l'usercontrol
-    SrcDC = CreateCompatibleDC(hDc)
+    SrcDC = CreateCompatibleDC(hdc)
     SrcObj = SelectObject(SrcDC, Image1.Picture)
     
     y = (ScaleHeight / Screen.TwipsPerPixelY - 13) / 2
-    Call BitBlt(UserControl.hDc, 0, y, 13, 13, SrcDC, lIMG * 13, 0, SRCCOPY)
+    Call BitBlt(UserControl.hdc, 0, y, 13, 13, SrcDC, lIMG * 13, 0, SRCCOPY)
 
     Call DeleteDC(SrcDC)
     Call DeleteObject(SrcObj)

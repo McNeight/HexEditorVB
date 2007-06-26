@@ -1051,128 +1051,6 @@ Dim s() As String
 End Sub
 
 '=======================================================
-'applique un gradient de couleur sur un objet de gauche à droite
-'il doit être "en autoredraw=true" (si c'est une form, picturebox...)
-'=======================================================
-Private Sub FillGradientW(LeftColor As RGB_COLOR, _
-    RightColor As RGB_COLOR, ByVal Width As Long, ByVal Height As Long, _
-    Optional ByVal Dep As Long)
-    
-Dim rAverageColorPerSizeUnit As Double
-Dim gAverageColorPerSizeUnit As Double
-Dim bAverageColorPerSizeUnit As Double
-Dim lWidth As Long
-Dim x As Long
-Dim lHeight As Long
-Dim lSigne As Long
-
-    With UserControl
-        
-        'récupère la largeur de l'objet
-        lWidth = Width / Screen.TwipsPerPixelX
-        lHeight = Height / Screen.TwipsPerPixelY
-        
-        'récupère la moyenne de couleur par unité de longueur
-        rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lWidth)
-        gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lWidth)
-        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lWidth)
-        
-        'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
-            
-            lSigne = 1
-        Else
-            lSigne = -1
-        End If
-        
-        'se positionne tout à gauche de l'objet ==> balayera vers la droite
-        Call MoveToEx(.hDc, 0, Dep, 0&)
-        
-        'pour chaque 'colonne' constituée par une ligne verticale, on trace une
-        'ligne en récupérant la couleur correspondante
-        For x = 0 To lWidth
-            
-            'change le ForeColor qui détermine la couleur de la Line
-            'multiplie la largeur actuelle par la couleur par unité de longueur
-            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
-               
-            'trace une ligne
-            Call LineTo(.hDc, x, lHeight)
-            
-            'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hDc, x, Dep, 0&)
-        
-        Next x
-        
-        'on refresh l'objet
-        Call .Refresh
-    End With
-
-End Sub
-
-'=======================================================
-'applique un gradient de couleur sur un objet de gauche à droite
-'il doit être "en autoredraw=true" (si c'est une form, picturebox...)
-'=======================================================
-Private Sub FillGradientH(LeftColor As RGB_COLOR, _
-    RightColor As RGB_COLOR, ByVal lWidth As Long, ByVal Height As Long, _
-    Optional ByVal Dep As Long)
-    
-Dim rAverageColorPerSizeUnit As Double
-Dim gAverageColorPerSizeUnit As Double
-Dim bAverageColorPerSizeUnit As Double
-Dim lHeight As Long
-Dim x As Long
-Dim lSigne As Long
-
-    With UserControl
-        
-        'récupère la hateur de l'objet
-        lHeight = Height / Screen.TwipsPerPixelY
-        
-        'récupère la moyenne de couleur par unité de longueur
-        rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lHeight)
-        gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lHeight)
-        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lHeight)
-
-        'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
-            
-            lSigne = 1
-        Else
-            lSigne = -1
-        End If
-        
-        'se positionne tout à gauche de l'objet ==> balayera vers le bas
-        Call MoveToEx(.hDc, 0, Dep, 0&)
-        
-        'pour chaque 'colonne' constituée par une ligne verticale, on trace une
-        'ligne en récupérant la couleur correspondante
-        For x = Dep To lHeight
-            
-            'change le ForeColor qui détermine la couleur de la Line
-            'multiplie la largeur actuelle par la couleur par unité de longueur
-            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
-               
-            'trace une ligne
-            Call LineTo(.hDc, lWidth, x)
-            
-            'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hDc, 0, x, 0&)
-        
-        Next x
-        
-        'on refresh l'objet
-        Call .Refresh
-    End With
-
-End Sub
-
-'=======================================================
 'copie un "byte"
 '=======================================================
 Private Sub MovB(Ofs As Long, ByVal Value As Long)
@@ -1347,8 +1225,6 @@ Dim R As RECT
 Dim st As Long
 Dim hRgn As Long
 Dim hBrush As Long
-Dim RGB1 As RGB_COLOR
-Dim RGB2 As RGB_COLOR
 Dim hFont As Long
 Dim ttFont As LOGFONT
 Dim hObj As Long
@@ -1377,16 +1253,16 @@ Dim x As Long
             Line (15, 15)-(lLegendWidth, ScaleHeight - 30), lLegendBackColor1, BF
         ElseIf tLegendGradient = Horizontal Then
             'gradient horizontal
-            Call ToRGB(lLegendBackColor1, RGB1)
-            Call ToRGB(lLegendBackColor2, RGB2)
-            Call FillGradientH(RGB1, RGB2, lLegendWidth / Screen.TwipsPerPixelX, ScaleHeight, 0)
+            Call FillGradient(UserControl.hDc, lLegendBackColor1, lLegendBackColor2, _
+                lLegendWidth / Screen.TwipsPerPixelX, Height / _
+                Screen.TwipsPerPixelY, Horizontal)
         Else
             'gradient vertical
-            Call ToRGB(lLegendBackColor1, RGB1)
-            Call ToRGB(lLegendBackColor2, RGB2)
-            Call FillGradientW(RGB1, RGB2, lLegendWidth, ScaleHeight, 0)
+            Call FillGradient(UserControl.hDc, lLegendBackColor1, lLegendBackColor2, _
+                lLegendWidth / Screen.TwipsPerPixelX, Height / _
+                Screen.TwipsPerPixelY, Vertical)
         End If
-        Line (lLegendWidth, 15)-(lLegendWidth, ScaleHeight - 30), lBorderColor
+        Line (lLegendWidth, 15)-(lLegendWidth, ScaleHeight - 15), lBorderColor
     End If
 
 

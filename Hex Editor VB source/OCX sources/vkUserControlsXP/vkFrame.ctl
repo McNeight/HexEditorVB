@@ -113,25 +113,15 @@ Private bUnRefreshControl As Boolean
 'EVENTS
 '=======================================================
 Public Event KeyDown(KeyCode As Integer, Shift As Integer)
-Attribute KeyDown.VB_Description = "Happens when a key is down"
 Public Event KeyPress(KeyAscii As Integer)
-Attribute KeyPress.VB_Description = "Happens when a key is pressed"
 Public Event KeyUp(KeyCode As Integer, Shift As Integer)
-Attribute KeyUp.VB_Description = "Happens when a key is up"
 Public Event MouseHover()
-Attribute MouseHover.VB_Description = "Happens when mouse enters control"
 Public Event MouseLeave()
-Attribute MouseLeave.VB_Description = "Happens when mouse leaves control"
 Public Event MouseWheel(Sens As Wheel_Sens)
-Attribute MouseWheel.VB_Description = "Happens when control gets a wheel"
 Public Event MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseDown.VB_Description = "Happens when control gets a click"
 Public Event MouseUp(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseUp.VB_Description = "Happens when control gets a mouseup"
 Public Event MouseDblClick(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseDblClick.VB_Description = "Happens when control gets a dblclick"
 Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
-Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
 
 
 
@@ -146,8 +136,6 @@ Attribute MouseMove.VB_Description = "Happens when mouse moves on control"
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Attribute WindowProc.VB_Description = "Internal proc for subclassing"
-Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -445,67 +433,46 @@ End Sub
 'PROPERTIES
 '=======================================================
 Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Attribute hDc.VB_Description = "Get the control hDc"
 Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
-Attribute hwnd.VB_Description = "Handle of the control"
 Public Property Get BackStyle() As BackStyleConstants: BackStyle = lBackStyle: End Property
-Attribute BackStyle.VB_Description = "Use a transparent control or not"
 Public Property Let BackStyle(BackStyle As BackStyleConstants): lBackStyle = BackStyle: UserControl.BackStyle = BackStyle: bNotOk = False: UserControl_Paint: End Property
 Public Property Get TextPosition() As AlignmentConstants: TextPosition = lTextPos: End Property
-Attribute TextPosition.VB_Description = "Text position"
 Public Property Let TextPosition(TextPosition As AlignmentConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Caption() As String: Caption = sCaption: End Property
-Attribute Caption.VB_Description = "Text to display"
 Public Property Let Caption(Caption As String): sCaption = Caption: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 Public Property Get ShowTitle() As Boolean: ShowTitle = bShowTitle: End Property
-Attribute ShowTitle.VB_Description = "Display title zone or not"
 Public Property Let ShowTitle(ShowTitle As Boolean): bShowTitle = ShowTitle: bNotOk = False: UserControl_Paint: End Property
 Public Property Get TitleHeight() As Long: TitleHeight = lTitleHeight: End Property
-Attribute TitleHeight.VB_Description = "Height of the title zone"
 Public Property Let TitleHeight(TitleHeight As Long): lTitleHeight = TitleHeight: bNotOk = False: UserControl_Paint: End Property
 Public Property Get ForeColor() As OLE_COLOR: ForeColor = lForeColor: End Property
-Attribute ForeColor.VB_Description = "Text color"
 Public Property Let ForeColor(ForeColor As OLE_COLOR): lForeColor = ForeColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get TitleColor1() As OLE_COLOR: TitleColor1 = tCol1: End Property
-Attribute TitleColor1.VB_Description = "Color1 of the title gradient"
 Public Property Let TitleColor1(TitleColor1 As OLE_COLOR): tCol1 = TitleColor1: bNotOk = False: UserControl_Paint: End Property
 Public Property Get TitleColor2() As OLE_COLOR: TitleColor2 = tCol2: End Property
-Attribute TitleColor2.VB_Description = "Color2 of the title gradient"
 Public Property Let TitleColor2(TitleColor2 As OLE_COLOR): tCol2 = TitleColor2: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColor1() As OLE_COLOR: BackColor1 = bCol1: End Property
-Attribute BackColor1.VB_Description = "Color1 of the back gradient"
 Public Property Let BackColor1(BackColor1 As OLE_COLOR): bCol1 = BackColor1: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColor2() As OLE_COLOR: BackColor2 = bCol2: End Property
-Attribute BackColor2.VB_Description = "Color2 of the back gradient"
 Public Property Let BackColor2(BackColor2 As OLE_COLOR): bCol2 = BackColor2: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Font() As StdFont: Set Font = UserControl.Font: End Property
-Attribute Font.VB_Description = "Text font"
 Public Property Set Font(Font As StdFont): Set UserControl.Font = Font: bNotOk = False: UserControl_Paint: End Property
 Public Property Get ShowBackGround() As Boolean: ShowBackGround = bShowBackGround: End Property
-Attribute ShowBackGround.VB_Description = "Display background or not"
 Public Property Let ShowBackGround(ShowBackGround As Boolean): bShowBackGround = ShowBackGround: bNotOk = False: UserControl_Paint: End Property
 Public Property Get TitleGradient() As GradientConstants: TitleGradient = lTitleGradient: End Property
-Attribute TitleGradient.VB_Description = "Title gradient type"
 Public Property Let TitleGradient(TitleGradient As GradientConstants): lTitleGradient = TitleGradient: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackGradient() As GradientConstants: BackGradient = lBackGradient: End Property
-Attribute BackGradient.VB_Description = "Type of back gradient"
 Public Property Let BackGradient(BackGradient As GradientConstants): lBackGradient = BackGradient: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Enabled() As Boolean: Enabled = bEnable: End Property
-Attribute Enabled.VB_Description = "Enable control or not"
 Public Property Let Enabled(Enabled As Boolean)
 bEnable = Enabled: bNotOk = False: UserControl_Paint: EnableControls
 End Property
 Public Property Get BorderColor() As OLE_COLOR: BorderColor = lBorderColor: End Property
-Attribute BorderColor.VB_Description = "Color of the border"
 Public Property Let BorderColor(BorderColor As OLE_COLOR): lBorderColor = BorderColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get DisplayBorder() As Boolean: DisplayBorder = bDisplayBorder: End Property
-Attribute DisplayBorder.VB_Description = "Display border or not"
 Public Property Let DisplayBorder(DisplayBorder As Boolean): bDisplayBorder = DisplayBorder: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BreakCorner() As Boolean: BreakCorner = bBreakCorner: End Property
-Attribute BreakCorner.VB_Description = "Use rounded corner or not"
 Public Property Let BreakCorner(BreakCorner As Boolean): bBreakCorner = BreakCorner: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Picture() As Picture: Set Picture = PCTcolor.Picture: End Property
-Attribute Picture.VB_Description = "Picture to display on the title zone"
 Public Property Set Picture(NewPic As Picture)
 Set PCTcolor.Picture = NewPic
 Set pctG.Picture = NewPic
@@ -518,28 +485,20 @@ PCTgray.Picture = pctG.Image
 bNotOk = False: UserControl_Paint
 End Property
 Public Property Get RoundAngle() As Long: RoundAngle = lCornerSize: End Property
-Attribute RoundAngle.VB_Description = "Use rounded corners or not"
 Public Property Let RoundAngle(RoundAngle As Long): lCornerSize = RoundAngle: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BorderWidth() As Long: BorderWidth = lBWidth: End Property
-Attribute BorderWidth.VB_Description = "Width of the border"
 Public Property Let BorderWidth(BorderWidth As Long): lBWidth = BorderWidth: bNotOk = False: UserControl_Paint: End Property
 Public Property Get PictureAlignment() As PictureAlignment: PictureAlignment = pctAlign: End Property
-Attribute PictureAlignment.VB_Description = "Picture alignment"
 Public Property Let PictureAlignment(PictureAlignment As PictureAlignment): pctAlign = PictureAlignment: bNotOk = False: UserControl_Paint: End Property
 Public Property Get DisplayPicture() As Boolean: DisplayPicture = bPic: End Property
-Attribute DisplayPicture.VB_Description = "Display picture or not"
 Public Property Let DisplayPicture(DisplayPicture As Boolean): bPic = DisplayPicture: bNotOk = False: UserControl_Paint: End Property
 Public Property Get PictureOffsetX() As Long: PictureOffsetX = lOffsetX: End Property
-Attribute PictureOffsetX.VB_Description = "Offset (twips) of the picture"
 Public Property Let PictureOffsetX(PictureOffsetX As Long): lOffsetX = PictureOffsetX: bNotOk = False: UserControl_Paint: End Property
 Public Property Get PictureOffsetY() As Long: PictureOffsetY = lOffsetY: End Property
-Attribute PictureOffsetY.VB_Description = "Offset (twips) of the picture"
 Public Property Let PictureOffsetY(PictureOffsetY As Long): lOffsetY = PictureOffsetY: bNotOk = False: UserControl_Paint: End Property
 Public Property Get GrayPictureWhenDisabled() As Boolean: GrayPictureWhenDisabled = bGray: End Property
-Attribute GrayPictureWhenDisabled.VB_Description = "Use a gray (or color) picture when control is not enabled"
 Public Property Let GrayPictureWhenDisabled(GrayPictureWhenDisabled As Boolean): bGray = GrayPictureWhenDisabled: bNotOk = False: UserControl_Paint: End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
-Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 
 Private Sub UserControl_Paint()
@@ -555,128 +514,6 @@ End Sub
 '=======================================================
 'PRIVATE SUBS
 '=======================================================
-'=======================================================
-'applique un gradient de couleur sur un objet de gauche à droite
-'il doit être "en autoredraw=true" (si c'est une form, picturebox...)
-'=======================================================
-Private Sub FillGradientW(LeftColor As RGB_COLOR, _
-    RightColor As RGB_COLOR, ByVal Width As Long, ByVal Height As Long, _
-    Optional ByVal Dep As Long)
-    
-Dim rAverageColorPerSizeUnit As Double
-Dim gAverageColorPerSizeUnit As Double
-Dim bAverageColorPerSizeUnit As Double
-Dim lWidth As Long
-Dim x As Long
-Dim lHeight As Long
-Dim lSigne As Long
-
-    With UserControl
-        
-        'récupère la largeur de l'objet
-        lWidth = Width / Screen.TwipsPerPixelX
-        lHeight = Height / Screen.TwipsPerPixelY
-        
-        'récupère la moyenne de couleur par unité de longueur
-        rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lWidth)
-        gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lWidth)
-        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lWidth)
-        
-        'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
-            
-            lSigne = 1
-        Else
-            lSigne = -1
-        End If
-        
-        'se positionne tout à gauche de l'objet ==> balayera vers la droite
-        Call MoveToEx(.hDc, 0, Dep, 0&)
-        
-        'pour chaque 'colonne' constituée par une ligne verticale, on trace une
-        'ligne en récupérant la couleur correspondante
-        For x = 0 To lWidth
-            
-            'change le ForeColor qui détermine la couleur de la Line
-            'multiplie la largeur actuelle par la couleur par unité de longueur
-            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
-               
-            'trace une ligne
-            Call LineTo(.hDc, x, lHeight)
-            
-            'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hDc, x, Dep, 0&)
-        
-        Next x
-        
-        'on refresh l'objet
-        Call .Refresh
-    End With
-
-End Sub
-
-'=======================================================
-'applique un gradient de couleur sur un objet de gauche à droite
-'il doit être "en autoredraw=true" (si c'est une form, picturebox...)
-'=======================================================
-Private Sub FillGradientH(LeftColor As RGB_COLOR, _
-    RightColor As RGB_COLOR, ByVal Width As Long, ByVal Height As Long, _
-    Optional ByVal Dep As Long)
-    
-Dim rAverageColorPerSizeUnit As Double
-Dim gAverageColorPerSizeUnit As Double
-Dim bAverageColorPerSizeUnit As Double
-Dim lHeight As Long
-Dim x As Long
-Dim lSigne As Long
-
-    With UserControl
-        
-        'récupère la hateur de l'objet
-        lHeight = Height / Screen.TwipsPerPixelY
-        
-        'récupère la moyenne de couleur par unité de longueur
-        rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lHeight)
-        gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lHeight)
-        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lHeight)
-
-        'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
-            
-            lSigne = 1
-        Else
-            lSigne = -1
-        End If
-        
-        'se positionne tout à gauche de l'objet ==> balayera vers le bas
-        Call MoveToEx(.hDc, 0, Dep, 0&)
-        
-        'pour chaque 'colonne' constituée par une ligne verticale, on trace une
-        'ligne en récupérant la couleur correspondante
-        For x = Dep To lHeight
-            
-            'change le ForeColor qui détermine la couleur de la Line
-            'multiplie la largeur actuelle par la couleur par unité de longueur
-            .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
-               
-            'trace une ligne
-            Call LineTo(.hDc, Width, x)
-            
-            'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hDc, 0, x, 0&)
-        
-        Next x
-        
-        'on refresh l'objet
-        Call .Refresh
-    End With
-
-End Sub
-
 '=======================================================
 'copie un "byte"
 '=======================================================
@@ -698,7 +535,7 @@ Private Sub ToRGB(ByVal Color As Long, ByRef RGB As RGB_COLOR)
     With RGB
         .R = Color And &HFF&
         .G = (Color And &HFF00&) \ &H100&
-        .B = Color \ &H10000
+        .b = Color \ &H10000
     End With
 End Sub
 
@@ -734,10 +571,7 @@ End Sub
 'on dessine tout
 '=======================================================
 Public Sub Refresh()
-Attribute Refresh.VB_Description = "Refresh control"
 Dim x As Long
-Dim RGB1 As RGB_COLOR
-Dim RGB2 As RGB_COLOR
 Dim Dep As Long
 Dim R As RECT
 Dim hBrush As Long
@@ -783,9 +617,6 @@ Dim H As Long
 '        End If
             
             
-        'récupère les 3 composantes des deux couleurs
-        Call ToRGB(tCol1, RGB1)
-        Call ToRGB(tCol2, RGB2)
         
         If lTitleGradient = None Then
             'pas de gradient
@@ -794,10 +625,14 @@ Dim H As Long
                 tCol1, BF
         ElseIf lTitleGradient = Horizontal Then
             'gradient horizontal
-            Call FillGradientH(RGB1, RGB2, ScaleWidth, lTitleHeight)
+            Call FillGradient(UserControl.hDc, tCol1, tCol2, _
+                Width / Screen.TwipsPerPixelX, lTitleHeight / _
+                Screen.TwipsPerPixelY, Horizontal)
         Else
             'gradient vertical
-            Call FillGradientW(RGB1, RGB2, ScaleWidth, lTitleHeight)
+            Call FillGradient(UserControl.hDc, tCol1, tCol2, _
+                Width / Screen.TwipsPerPixelX, lTitleHeight / _
+                Screen.TwipsPerPixelY, Vertical)
         End If
     End If
     
@@ -871,10 +706,6 @@ Dim H As Long
         UserControl.BackStyle = 1
         
         If bShowBackGround Then
-    
-            'récupère les 3 composantes des deux couleurs
-            Call ToRGB(bCol1, RGB1)
-            Call ToRGB(bCol2, RGB2)
             
             If bShowTitle Then
                 Dep = lTitleHeight / Screen.TwipsPerPixelY 'commence le gradient de pas tout en haut
@@ -889,12 +720,14 @@ Dim H As Long
                     ScaleHeight - 30), bCol1, BF
             ElseIf lBackGradient = Horizontal Then
                 'gradient horizontal
-                Call FillGradientH(RGB1, RGB2, ScaleWidth, _
-                    ScaleHeight, Dep)
+                Call FillGradient(UserControl.hDc, bCol1, bCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Horizontal, Dep)
             Else
                 'gradient vertical
-                Call FillGradientW(RGB1, RGB2, ScaleWidth, _
-                    ScaleHeight, Dep)
+                Call FillGradient(UserControl.hDc, bCol1, bCol2, _
+                    Width / Screen.TwipsPerPixelX, Height / _
+                    Screen.TwipsPerPixelY, Vertical, Dep)
             End If
         End If
 '    Else
@@ -1044,3 +877,5 @@ End Property
 Friend Property Let MyExtender(MyExtender As Object)
     Set UserControl.Extender = MyExtender
 End Property
+
+
