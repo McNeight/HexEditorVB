@@ -4,7 +4,7 @@ Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.0#0"; "vkUserControlsXP.ocx"
 Begin VB.MDIForm frmContent 
    BackColor       =   &H8000000C&
    Caption         =   "Hex Editor VB  --- PRE ALPHA v1.6"
@@ -65,7 +65,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -92,7 +91,6 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
-         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -562,7 +560,6 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -570,23 +567,20 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "23:40"
-            Key             =   ""
+            TextSave        =   "15:22"
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "16/06/2007"
-            Key             =   ""
+            TextSave        =   "26/06/2007"
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1337,6 +1331,15 @@ Begin VB.MDIForm frmContent
       Begin VB.Menu mnuVersions 
          Caption         =   "&Versions..."
       End
+      Begin VB.Menu mnuInternetTiret10101 
+         Caption         =   "-"
+      End
+      Begin VB.Menu mnuUpdate 
+         Caption         =   "&Rechercher une mise à jour..."
+      End
+      Begin VB.Menu mnuInternetTiret17 
+         Caption         =   "-"
+      End
       Begin VB.Menu mnuAbout 
          Caption         =   "&A propos"
       End
@@ -1490,21 +1493,21 @@ End Sub
 'affiche le path du fichier sélectionné dans la picturbox
 '=======================================================
 Private Sub DisplayPath()
-Dim s As String
+Dim S As String
 Dim l As Long
 
     'récupère le texte à afficher
-    s = LV.Path & "\"
-    s = Replace$(s, "\\", "\")  'vire le double slash
+    S = LV.Path & "\"
+    S = Replace$(S, "\\", "\")  'vire le double slash
     
     'enlève la partie après le vbNullChar de la string
-    l = InStr(1, s, vbNullChar)
+    l = InStr(1, S, vbNullChar)
     If l > 0 Then
-        s = Left$(s, l)
+        S = Left$(S, l)
     End If
     
     'affiche la string dans la picturebox
-    pctPath.Text = cFile.GetFolderName(s)
+    pctPath.Text = cFile.GetFolderName(S)
 End Sub
 
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -1757,7 +1760,7 @@ End Sub
 
 Private Sub mnuCopyBitmapToClipBoard_Click()
 'enregistre l'icone de l'active form en bitmap
-Dim s As String
+Dim S As String
 
     If Me.ActiveForm Is Nothing Then Exit Sub
     If TypeOfForm(Me.ActiveForm) <> "Fichier" And TypeOfForm(Me.ActiveForm) <> _
@@ -1848,22 +1851,22 @@ End Sub
 
 Private Sub mnuLang_Click(Index As Integer)
 'on change de langue
-Dim s As String
+Dim S As String
 Dim x As Long
 Dim cPRE As clsIniFile
 
     'détermine le path du dossier
     If App.LogMode = 0 Then
-        s = LANG_PATH
+        S = LANG_PATH
     Else
-        s = App.Path & "\Lang"
+        S = App.Path & "\Lang"
     End If
     
-    s = s & "\" & mnuLang(Index).Caption & ".ini"
-    s = Replace$(s, "&", vbNullString)
+    S = S & "\" & mnuLang(Index).Caption & ".ini"
+    S = Replace$(S, "&", vbNullString)
     
     'vérifie la présence du fichier
-    If cFile.FileExists(s) = False Then MsgBox Lang.GetString("_LangFileNot"), _
+    If cFile.FileExists(S) = False Then MsgBox Lang.GetString("_LangFileNot"), _
         vbCritical, Lang.GetString("_Error"): Exit Sub
     
     'on décoche tout les menus
@@ -1930,6 +1933,10 @@ Private Sub mnuShowConsole_Click()
     Me.mnuShowConsole.Checked = pctConsole.Visible
 End Sub
 
+Private Sub mnuUpdate_Click()
+    frmUpdate.Show vbModal
+End Sub
+
 Private Sub mnuVersions_Click()
     frmComponents.Show vbModal
 End Sub
@@ -1969,11 +1976,11 @@ End Sub
 
 Private Sub pctPath_KeyDown(KeyCode As Integer, Shift As Integer)
 'valide si entrée
-Dim s As String
+Dim S As String
     If KeyCode = vbKeyReturn Then
-        s = pctPath.Text
+        S = pctPath.Text
         If cFile.FolderExists(pctPath.Text) Then LV.Path = pctPath.Text
-        pctPath.Text = s
+        pctPath.Text = S
     End If
 End Sub
 
@@ -2173,7 +2180,7 @@ Private Sub mnuCopyASCII_Click()
 'copier la sélection (strings) formatée
 Dim x As Long
 Dim y As Long
-Dim s As String
+Dim S As String
 Dim curPos2 As Currency
 Dim curSize2 As Currency
 Dim curSize As Currency
@@ -2181,7 +2188,7 @@ Dim curPos As Currency
 
     If Me.ActiveForm Is Nothing Then Exit Sub
     
-    s = vbNullString    'contiendra la string à copier
+    S = vbNullString    'contiendra la string à copier
     
     Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
         
@@ -2202,12 +2209,12 @@ Dim curPos As Currency
                 'édition d'un fichier ==> va piocher avec ReadFile
     
                 'récupère la string
-                s = GetBytesFromFile(.Caption, curSize, curPos)
+                S = GetBytesFromFile(.Caption, curSize, curPos)
                 
             Case "Processus"
             
                 'récupère la string
-                s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), _
+                S = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), _
                     CLng(curPos), CLng(curSize))
     
             Case "Disque"
@@ -2222,10 +2229,10 @@ Dim curPos As Currency
                 'récupère la string
                 Call DirectReadS(.GetDriveInfos.VolumeLetter & ":\", _
                     curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                    .GetDriveInfos.BytesPerSector, s)
+                    .GetDriveInfos.BytesPerSector, S)
                     
                 'recoupe la string pour récupérer ce qui intéresse vraiment
-                s = Mid$(s, curPos - curPos2 + 1, curSize)
+                S = Mid$(S, curPos - curPos2 + 1, curSize)
             
             Case "Disque physique"
             
@@ -2239,26 +2246,26 @@ Dim curPos As Currency
                 'récupère la string
                 Call DirectReadSPhys(Val(.Tag), _
                     curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                    .GetDriveInfos.BytesPerSector, s)
+                    .GetDriveInfos.BytesPerSector, S)
                     
                 'recoupe la string pour récupérer ce qui intéresse vraiment
-                s = Mid$(s, curPos - curPos2 + 1, curSize)
+                S = Mid$(S, curPos - curPos2 + 1, curSize)
                 
         End Select
     
     End With
 
     'formate la string
-    s = FormatednString(s)
+    S = FormatednString(S)
             
-    Clipboard.SetText s
+    Clipboard.SetText S
     Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 Private Sub mnuCopyASCII2_Click()
 'copier la sélection (strings) formatée en bas niveau
 Dim x As Long
 Dim y As Long
-Dim s As String
+Dim S As String
 Dim curSize As Currency
 Dim curPos2 As Currency
 Dim curSize2 As Currency
@@ -2266,7 +2273,7 @@ Dim curPos As Currency
 
     If Me.ActiveForm Is Nothing Then Exit Sub
     
-    s = vbNullString    'contiendra la string à copier
+    S = vbNullString    'contiendra la string à copier
     
     Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
         
@@ -2287,12 +2294,12 @@ Dim curPos As Currency
                 'édition d'un fichier ==> va piocher avec ReadFile
                             
                 'récupère la string
-                s = GetBytesFromFile(.Caption, curSize, curPos)
+                S = GetBytesFromFile(.Caption, curSize, curPos)
                 
             Case "Processus"
             
                 'récupère la string
-                s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+                S = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
               
             Case "Disque"
             
@@ -2306,10 +2313,10 @@ Dim curPos As Currency
                 'récupère la string
                 Call DirectReadS(.GetDriveInfos.VolumeLetter & ":\", _
                     curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                    .GetDriveInfos.BytesPerSector, s)
+                    .GetDriveInfos.BytesPerSector, S)
                     
                 'recoupe la string pour récupérer ce qui intéresse vraiment
-                s = Mid$(s, curPos - curPos2 + 1, curSize)
+                S = Mid$(S, curPos - curPos2 + 1, curSize)
     
             Case "Disque physique"
             
@@ -2323,18 +2330,18 @@ Dim curPos As Currency
                 'récupère la string
                 Call DirectReadSPhys(Val(.Tag), _
                     curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                    .GetDriveInfos.BytesPerSector, s)
+                    .GetDriveInfos.BytesPerSector, S)
                     
                 'recoupe la string pour récupérer ce qui intéresse vraiment
-                s = Mid$(s, curPos - curPos2 + 1, curSize)
+                S = Mid$(S, curPos - curPos2 + 1, curSize)
                 
         End Select
     End With
 
     'formate la string
-    s = Replace$(s, vbNullChar, Chr_(32), , , vbBinaryCompare)
+    S = Replace$(S, vbNullChar, Chr_(32), , , vbBinaryCompare)
     
-    Clipboard.SetText s
+    Clipboard.SetText S
     Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 Private Sub mnuCopyASCIIReal_Click()
@@ -2342,7 +2349,7 @@ Private Sub mnuCopyASCIIReal_Click()
 '/!\ NULL TERMINATED STRING
 Dim x As Long
 Dim y As Long
-Dim s As String
+Dim S As String
 Dim curPos2 As Currency
 Dim curSize2 As Currency
 Dim curSize As Currency
@@ -2350,7 +2357,7 @@ Dim curPos As Currency
 
     If Me.ActiveForm Is Nothing Then Exit Sub
     
-    s = vbNullString    'contiendra la string à copier
+    S = vbNullString    'contiendra la string à copier
 
     Me.Sb.Panels(1).Text = "Status=[Copying to ClipBoard]"
     
@@ -2371,12 +2378,12 @@ Dim curPos As Currency
                 'édition d'un fichier ==> va piocher avec ReadFile
                 
                 'récupère la string
-                s = GetBytesFromFile(.Caption, curSize, curPos)
+                S = GetBytesFromFile(.Caption, curSize, curPos)
             
             Case "Processus"
                 
                 'récupère la string
-                s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+                S = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
             
             Case "Disque"
             
@@ -2390,10 +2397,10 @@ Dim curPos As Currency
                 'récupère la string
                 Call DirectReadS(.GetDriveInfos.VolumeLetter & ":\", _
                     curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                    .GetDriveInfos.BytesPerSector, s)
+                    .GetDriveInfos.BytesPerSector, S)
                     
                 'recoupe la string pour récupérer ce qui intéresse vraiment
-                s = Mid$(s, curPos - curPos2 + 1, curSize)
+                S = Mid$(S, curPos - curPos2 + 1, curSize)
     
             Case "Disque physique"
             
@@ -2407,22 +2414,22 @@ Dim curPos As Currency
                 'récupère la string
                 Call DirectReadSPhys(Val(.Tag), _
                     curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                    .GetDriveInfos.BytesPerSector, s)
+                    .GetDriveInfos.BytesPerSector, S)
                     
                 'recoupe la string pour récupérer ce qui intéresse vraiment
-                s = Mid$(s, curPos - curPos2 + 1, curSize)
+                S = Mid$(S, curPos - curPos2 + 1, curSize)
                 
         End Select
     End With
 
-    Clipboard.SetText s, vbCFText   'format fichier texte
+    Clipboard.SetText S, vbCFText   'format fichier texte
     Me.Sb.Panels(1).Text = "Status=[Ready]"
 End Sub
 Private Sub mnuCopyhexa_Click()
 'copier la sélection (hexa)
 Dim x As Long
 Dim y As Long
-Dim s As String
+Dim S As String
 Dim s2 As String
 Dim curSize As Currency
 Dim curPos2 As Currency
@@ -2431,7 +2438,7 @@ Dim curPos As Currency
 
     If Me.ActiveForm Is Nothing Then Exit Sub
     
-    s = vbNullString    'contiendra la string à copier
+    S = vbNullString    'contiendra la string à copier
     
     'vide le clipboard
     Call Clipboard.Clear
@@ -2452,12 +2459,12 @@ Dim curPos As Currency
                 'édition d'un fichier ==> va piocher avec ReadFile
                             
                 'récupère la string
-                s = GetBytesFromFile(.Caption, curSize, curPos)
+                S = GetBytesFromFile(.Caption, curSize, curPos)
                 
             Case "Processus"
             
                 'récupère la string
-                s = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
+                S = cMem.ReadBytes(Val(frmContent.ActiveForm.Tag), CLng(curPos), CLng(curSize))
     
             Case "Disque"
             
@@ -2471,10 +2478,10 @@ Dim curPos As Currency
                 'récupère la string
                 Call DirectReadS(.GetDriveInfos.VolumeLetter & ":\", _
                     curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                    .GetDriveInfos.BytesPerSector, s)
+                    .GetDriveInfos.BytesPerSector, S)
                     
                 'recoupe la string pour récupérer ce qui intéresse vraiment
-                s = Mid$(s, curPos - curPos2 + 1, curSize)
+                S = Mid$(S, curPos - curPos2 + 1, curSize)
                 
             Case "Disque physique"
             
@@ -2488,19 +2495,19 @@ Dim curPos As Currency
                 'récupère la string
                 Call DirectReadSPhys(Val(.Tag), _
                     curPos2 / .GetDriveInfos.BytesPerSector, CLng(curSize2), _
-                    .GetDriveInfos.BytesPerSector, s)
+                    .GetDriveInfos.BytesPerSector, S)
                     
                 'recoupe la string pour récupérer ce qui intéresse vraiment
-                s = Mid$(s, curPos - curPos2 + 1, curSize)
+                S = Mid$(S, curPos - curPos2 + 1, curSize)
                 
         End Select
     End With
 
     'formate la string
     s2 = vbNullString
-    For x = 1 To Len(s)
+    For x = 1 To Len(S)
         If (x Mod 1000) = 0 Then DoEvents 'rend la main
-        s2 = s2 & Str2Hex_(Mid$(s, x, 1))
+        s2 = s2 & Str2Hex_(Mid$(S, x, 1))
     Next x
             
     Clipboard.SetText s2
@@ -2531,15 +2538,15 @@ Dim bOver As Boolean
         .CancelError = True
         .DialogTitle = Lang.GetString("_SavingSel")
         .Filter = Lang.GetString("_All") & " |*.*|" & Lang.GetString("_DatFile") & "|*.dat"
-        .Filename = vbNullString
+        .FileName = vbNullString
         .ShowSave
-        If cFile.FileExists(.Filename) Then
+        If cFile.FileExists(.FileName) Then
             'le fichier existe déjà
             If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
                 vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
         End If
         'créé un fichier vide
-        Call cFile.CreateEmptyFile(.Filename, True)
+        Call cFile.CreateEmptyFile(.FileName, True)
     End With
     
 
@@ -2703,18 +2710,18 @@ End Sub
 
 Private Sub mnuMoveOffset_Click()
 'va à une valeur particulière de l'offset (déplacement relatif)
-Dim s As String
+Dim S As String
 Dim l As Currency
 
     On Error Resume Next
     
     If Me.ActiveForm Is Nothing Then Exit Sub
-    s = InputBox(Lang.GetString("_HowMove"), Lang.GetString("_OffChange"))
-    If StrPtr(s) = 0 Then Exit Sub  'cancel
+    S = InputBox(Lang.GetString("_HowMove"), Lang.GetString("_OffChange"))
+    If StrPtr(S) = 0 Then Exit Sub  'cancel
     
     'alors on va à l'offset
     l = By16(Me.ActiveForm.HW.Item.Offset + Me.ActiveForm.HW.Item.Col + _
-        Int(Val(s)))
+        Int(Val(S)))
     
     If l <= By16(Me.ActiveForm.HW.MaxOffset) And l >= 0 Then
         'alors c'est ok
@@ -2917,17 +2924,17 @@ End Sub
 
 Private Sub mnuGoToOffset_Click()
 'va à une valeur particulière de l'offset
-Dim s As String
+Dim S As String
 Dim l As Currency
 
     On Error Resume Next
     
     If Me.ActiveForm Is Nothing Then Exit Sub
-    s = InputBox(Lang.GetString("_MoveToWich"), Lang.GetString("_OffChange"))
-    If StrPtr(s) = 0 Then Exit Sub  'cancel
+    S = InputBox(Lang.GetString("_MoveToWich"), Lang.GetString("_OffChange"))
+    If StrPtr(S) = 0 Then Exit Sub  'cancel
     
     'alors on va à l'offset (si possible)
-    l = By16(Int(Abs(Val(s))) - 15)  'formatage de l'offset
+    l = By16(Int(Abs(Val(S))) - 15)  'formatage de l'offset
     
     If l <= By16(Me.ActiveForm.HW.MaxOffset) Then
         'alors c'est ok
@@ -2985,21 +2992,21 @@ End Sub
 
 Private Sub mnuOpen_Click()
 'ajoute un fichier à la liste à supprimer
-Dim s() As String
+Dim S() As String
 Dim s2 As String
 Dim x As Long
 Dim Frm As Form
     
-    ReDim s(0)
+    ReDim S(0)
     
     s2 = cFile.ShowOpen(Lang.GetString("_SelFileToOpen"), Me.hWnd, _
         Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
-        OFN_ALLOWMULTISELECT, s())
+        OFN_ALLOWMULTISELECT, S())
     
-    For x = 1 To UBound(s())
-        If cFile.FileExists(s(x)) Then
+    For x = 1 To UBound(S())
+        If cFile.FileExists(S(x)) Then
             Set Frm = New Pfm
-            Call Frm.GetFile(s(x))
+            Call Frm.GetFile(S(x))
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
         End If
@@ -3198,7 +3205,7 @@ End Sub
 
 Private Sub mnuSaveIconAsBitmap_Click()
 'enregistre l'icone de l'active form en bitmap
-Dim s As String
+Dim S As String
 
     If Me.ActiveForm Is Nothing Then Exit Sub
     If TypeOfForm(Me.ActiveForm) <> "Fichier" And TypeOfForm(Me.ActiveForm) <> "Processus" Then Exit Sub
@@ -3222,16 +3229,16 @@ Dim s As String
         .CancelError = True
         .DialogTitle = Lang.GetString("_SaveBMP")
         .Filter = "Bitmap Image|*.bmp|"
-        .Filename = vbNullString
+        .FileName = vbNullString
         .ShowSave
-        s = .Filename
+        S = .FileName
     End With
     
     'rajoute l'extension si nécessaire
-    If LCase$(Right$(s, 4)) <> ".bmp" Then s = s & ".bmp"
+    If LCase$(Right$(S, 4)) <> ".bmp" Then S = S & ".bmp"
     
     'lance la sauvegarde
-    Call SavePicture(Me.ActiveForm.pct.Image, s)
+    Call SavePicture(Me.ActiveForm.pct.Image, S)
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_IconSaved"))
@@ -3242,7 +3249,7 @@ End Sub
 
 Private Sub mnuSaveSignets_Click()
 'enregistre la liste des signets de la form active
-Dim s As String
+Dim S As String
 Dim lFile As Long
 Dim x As Long
 
@@ -3254,16 +3261,16 @@ Dim x As Long
     'enregistrement ==> choix du fichier
     With CMD
         .CancelError = True
-        .Filename = Me.ActiveForm.Caption & ".sig"
+        .FileName = Me.ActiveForm.Caption & ".sig"
         .DialogTitle = Lang.GetString("_SaveSigList")
         .Filter = Lang.GetString("_SigList") & " |*.sig|"
         .InitDir = App.Path
-        .Filename = vbNullString
+        .FileName = vbNullString
         .ShowSave
-        s = .Filename
+        S = .FileName
     End With
 
-    If cFile.FileExists(s) Then
+    If cFile.FileExists(S) Then
         'message de confirmation
         x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
         If Not (x = vbYes) Then Exit Sub
@@ -3271,7 +3278,7 @@ Dim x As Long
     
     'ouvre le fchier
     lFile = FreeFile
-    Open s For Output As lFile
+    Open S For Output As lFile
     
     'enregistre les entrées
     For x = 1 To Me.ActiveForm.lstSignets.ListItems.Count
@@ -3468,9 +3475,9 @@ Dim x As Long
         .CancelError = True
         .DialogTitle = Lang.GetString("_SaveAs")
         .Filter = Lang.GetString("_All") & "|*.*"
-        .Filename = vbNullString
+        .FileName = vbNullString
         .ShowSave
-        sPath = .Filename
+        sPath = .FileName
     End With
     
     If cFile.FileExists(sPath) Then
@@ -3610,7 +3617,7 @@ End Sub
 'ajoute (ou ouvre si overwrite) une liste de signets
 '=======================================================
 Private Sub AddSignetIn(ByVal bOverWrite As Boolean)
-Dim s As String
+Dim S As String
 Dim lFile As Long
 Dim x As Long
 Dim sTemp As String
@@ -3627,7 +3634,7 @@ Dim l As Long
         .Filter = Lang.GetString("_SigList") & " |*.sig|"
         .InitDir = App.Path
         .ShowOpen
-        s = .Filename
+        S = .FileName
     End With
     
     If bOverWrite Then
@@ -3637,7 +3644,7 @@ Dim l As Long
     
     'ouvre le fchier
     lFile = FreeFile
-    Open s For Input As lFile
+    Open S For Input As lFile
     While Not EOF(lFile)
         Input #lFile, sTemp
         l = InStr(1, sTemp, "|", vbBinaryCompare)

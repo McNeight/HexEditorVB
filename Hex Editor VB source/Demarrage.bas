@@ -43,6 +43,7 @@ Option Explicit
 Public Const DEFAULT_INI As String = "[Appearance]" & vbNewLine & "BackGroundColor=16777215" & vbNewLine & "OffsetForeColor=16737380" & vbNewLine & "HexaForeColor=7303023" & vbNewLine & "StringsForeColor=7303023" & vbNewLine & "BaseForeColor=16737380" & vbNewLine & "TitleBackGroundColor=16777215" & vbNewLine & "LinesColor=-2147483636" & vbNewLine & "SelectionColor=14737632" & vbNewLine & "ModifiedItems=255" & vbNewLine & "SelectedItems=0" & vbNewLine & "BookMarkColor=8421631" & vbNewLine & "ModifiedSelectedItems=255" & vbNewLine & "Grid=0" & vbNewLine & "OffsetTitleForeColor=16737380" & vbNewLine & "OffsetsHex=1" & vbNewLine & "[Integration]" & vbNewLine & "FileContextual=1" & vbNewLine & "FolderContextual=1" & vbNewLine & "SendTo=1" & vbNewLine & "[General]" & vbNewLine & "DisplayExplore=1" & vbNewLine & "ShowAvert=1" & vbNewLine & "MaximizeWhenOpen=1" & vbNewLine & "DisplayIcon=1" & vbNewLine & "DisplayInfos=1" & vbNewLine & "DisplayData=1" & vbNewLine & "QuickBackup=1" & vbNewLine & "ResoX=640" & _
     vbNewLine & "ResoY=480" & vbNewLine & "AllowMultipleInstances=0" & vbNewLine & "DoNotChangeDates=1" & vbNewLine & "OpenSubFiles=0" & vbNewLine & "CloseHomeWhenChosen=0" & vbNewLine & "Splash=1" & vbNewLine & "FormBackColor=16377305" & vbNewLine & "MenuBackColor=16117739" & vbNewLine & "ToolbarPCT=1" & vbNewLine & "[Environnement]" & vbNewLine & "OS=1" & vbNewLine & "Lang=" & vbNewLine & "[Historique]" & vbNewLine & "NumberOfSave=0" & vbNewLine & "[FileExplorer]" & vbNewLine & "ShowPath=0" & vbNewLine & "ShowHiddenFiles=1" & vbNewLine & "ShowHiddenFolders=1" & vbNewLine & "ShowSystemFiles=1" & vbNewLine & "ShowSystemFodlers=1" & vbNewLine & "ShowROFiles=1" & vbNewLine & "ShowROFolders=1" & vbNewLine & "AllowMultipleSelection=1" & vbNewLine & "AllowFileSuppression=1" & vbNewLine & "AllowFolderSuppression=0" & vbNewLine & "IconType=1" & vbNewLine & _
     "DefaultPath=Dossier du programme" & vbNewLine & "Pattern=*.*" & vbNewLine & "Height=2200" & vbNewLine & "HideColumnTitle=0" & vbNewLine & "[Executable]" & vbNewLine & "HasCrashed=0" & vbNewLine & "[Console]" & vbNewLine & "BackColor=0" & vbNewLine & "ForeColor=12632256" & vbNewLine & "Heigth=1250" & vbNewLine & "Load=1"
+Public Const HEX_EDITOR_VB_VERSION As String = "Hex Editor VB v1.6 pre-Alpha 1"
 
 Public AfManifest As AfClsManifest   'classe appliquant le style XP
 Public TempFiles() As String    'contient tout les fichiers temporaires
@@ -77,7 +78,7 @@ Dim sFile() As String
 Dim m() As String
 Dim x As Long
 Dim y As Long
-Dim s As String
+Dim S As String
 
     'change le path actuel pour permettre la reconnaissance de bnAlloc.dll
     #If FINAL_VERSION Then
@@ -98,10 +99,10 @@ Dim s As String
     
     
     '//vérifie la version de Windows
-        x = GetWindowsVersion(s, y)
+        x = GetWindowsVersion(S, y)
         If x <> [Windows Vista] And x <> [Windows XP] And x <> [Windows 2000] Then
             'OS non compatible
-            MsgBox "Votre système d'exploitation est [" & s & "] build [" & Trim$(Str$(y)) & "]" & vbNewLine & "Ce logiciel n'est compatible qu'avec Windows XP et Windows Vista." & vbNewLine & "Hex Editor VB va donc se fermer", vbCritical, "Système d'exploitation non compatible"
+            MsgBox "Votre système d'exploitation est [" & S & "] build [" & Trim$(Str$(y)) & "]" & vbNewLine & "Ce logiciel n'est compatible qu'avec Windows XP et Windows Vista." & vbNewLine & "Hex Editor VB va donc se fermer", vbCritical, "Système d'exploitation non compatible"
             End
         End If
         
@@ -152,11 +153,11 @@ Dim s As String
         
         If App.LogMode = 0 Then
             'IDE
-            s = LANG_PATH
+            S = LANG_PATH
         Else
-            s = App.Path & "\Lang"
+            S = App.Path & "\Lang"
         End If
-        sFile() = cFile.EnumFilesStr(s, False)
+        sFile() = cFile.EnumFilesStr(S, False)
         
         'vire les fichiers qui ne sont pas *.ini et French.ini
         For x = 1 To UBound(sFile())
@@ -427,7 +428,7 @@ Private Sub LoadQuickBackupINIFile()
 Dim x As Long
 Dim s2() As String
 Dim s3 As String
-Dim s As String
+Dim S As String
 Dim s4() As String
 Dim bIsOk As Long
 Dim Frm As Form
@@ -438,13 +439,13 @@ Dim lTo As Currency
     
     'extrait la première ligne qui détermine le type de form à ouvrir
     Dim s8 As String
-    s = cFile.LoadFileInString(App.Path & "\Preferences\QuickBackup.ini", bIsOk)
+    S = cFile.LoadFileInString(App.Path & "\Preferences\QuickBackup.ini", bIsOk)
     
     If bIsOk = False Then Exit Sub  'fichier inacessible en lecture (ou inexistant)
     
     'extrait la première ligne
-    s2() = Split(s, vbNewLine, , vbBinaryCompare) ' Left$(s, InStr(1, s, vbNewLine) - 1)
-    s3 = Right$(s2(0), Len(s2(0)) - InStr(1, s, "|"))   'contient le PID, le disque ou le fichier
+    s2() = Split(S, vbNewLine, , vbBinaryCompare) ' Left$(s, InStr(1, s, vbNewLine) - 1)
+    s3 = Right$(s2(0), Len(s2(0)) - InStr(1, S, "|"))   'contient le PID, le disque ou le fichier
     
     With frmContent.Lang
         Select Case Left$(s2(0), 2)
@@ -542,7 +543,7 @@ End Sub
 'sauve les données qui permettent de rendre le logiciel dans l'état dans lequel on a quitté
 '=======================================================
 Public Sub SaveQuickBackupINIFile()
-Dim s As String
+Dim S As String
 Dim x As Long
 
     If cPref.general_QuickBackup Then
@@ -556,17 +557,17 @@ Dim x As Long
                 'sauvegarde le type de form et le path (ou PID) correspondant
                 Select Case TypeOfForm(frmContent.ActiveForm)
                     Case "Processus"
-                        s = "Process|" & Trim$(Str$(.Tag))
+                        S = "Process|" & Trim$(Str$(.Tag))
                     Case "Disque"
-                        s = "Disk|" & Right$(.Caption, 3)
+                        S = "Disk|" & Right$(.Caption, 3)
                     Case "Fichier"
-                        s = "File|" & .Caption
+                        S = "File|" & .Caption
                     Case "Disque physique"
-                        s = "Phys|" & Trim$(Str$(.Tag))
+                        S = "Phys|" & Trim$(Str$(.Tag))
                 End Select
             
                 'maintenant on sauve la zone sélectionnée et la valeur du VS
-                s = s & vbNewLine & Trim$(Str$(.HW.FirstSelectionItem.Offset)) & "|" & _
+                S = S & vbNewLine & Trim$(Str$(.HW.FirstSelectionItem.Offset)) & "|" & _
                     Trim$(Str$(.HW.FirstSelectionItem.Col)) & "|" & _
                     Trim$(Str$(.HW.SecondSelectionItem.Offset)) & "|" & _
                     Trim$(Str$(.HW.SecondSelectionItem.Col)) & "|" & Trim$(Str$(.VS.Value)) & "|" & _
@@ -576,12 +577,12 @@ Dim x As Long
                 
                 'maintenant on sauvegarde tous les signets
                 For x = 1 To .lstSignets.ListItems.Count
-                    s = s & vbNewLine & .lstSignets.ListItems.Item(x) & "|" & .lstSignets.ListItems.Item(x).SubItems(1)
+                    S = S & vbNewLine & .lstSignets.ListItems.Item(x) & "|" & .lstSignets.ListItems.Item(x).SubItems(1)
                 Next x
             End With
             
             'lance la sauvegarde
-            Call cFile.SaveDataInFile(App.Path & "\Preferences\QuickBackup.ini", s, True)
+            Call cFile.SaveDataInFile(App.Path & "\Preferences\QuickBackup.ini", S, True)
         Else
             'on delete le fichier
             Call cFile.DeleteFile(App.Path & "\Preferences\QuickBackup.ini")
