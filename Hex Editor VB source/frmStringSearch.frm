@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmStringSearch 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Recherche de chaînes de caractères"
@@ -457,7 +457,7 @@ Private Sub cmdSave_Click()
 'sauvegarde les résultats
 Dim lFile As Long
 Dim sFile As String
-Dim x As Long
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -466,9 +466,9 @@ Dim x As Long
         .CancelError = True
         .DialogTitle = Lang.GetString("_SaveRes")
         .Filter = Lang.GetString("_All") & "|*.*"
-        .Filename = vbNullString
+        .FileName = vbNullString
         .ShowSave
-        sFile = .Filename
+        sFile = .FileName
     End With
     
     If cFile.FileExists(sFile) Then
@@ -487,11 +487,11 @@ Dim x As Long
         sFile & vbNewLine & Lang.GetString("_DateIs") & Date$ & "  " & Time$ & _
         vbNewLine & "[match]=" & LV.ListItems.Count
     
-    For x = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
-        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(x)) & "  [string]=" & _
-        LV.ListItems.Item(x).SubItems(1)
+    For X = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
+        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(X)) & "  [string]=" & _
+        LV.ListItems.Item(X).SubItems(1)
         DoEvents
-    Next x
+    Next X
     
     Close lFile
     
@@ -533,6 +533,7 @@ Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
     Call clsPref.SaveFormSettings(App.Path & "\Preferences\StringSearch.ini", Me)
     Set clsPref = Nothing
+    Set Lang = Nothing
 End Sub
 
 Private Sub LV_ItemClick(ByVal Item As ComctlLib.ListItem)

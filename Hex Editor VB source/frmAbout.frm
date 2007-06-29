@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmAbout 
    BackColor       =   &H00760401&
    BorderStyle     =   0  'None
@@ -292,7 +292,7 @@ Private Sub cmdUnload_Click()
 End Sub
 
 Private Sub Form_Load()
-Dim s As String
+Dim S As String
 
     With Lang
         #If MODE_DEBUG Then
@@ -323,10 +323,14 @@ Dim s As String
     End With
     
     'écriture du texte
-    s = "Hex Editor VB" & vbNewLine & _
+    S = "Hex Editor VB" & vbNewLine & _
         "Copyright (c) 2006-2007 Alain Descotes (violent_ken)"
-    s = s & vbNewLine & vbNewLine & _
+    S = S & vbNewLine & vbNewLine & _
         cFile.LoadFileInString(App.Path & "\License.txt")
-    txt.Text = s
+    txt.Text = S
     
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub

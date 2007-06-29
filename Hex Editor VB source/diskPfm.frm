@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form diskPfm 
    Caption         =   "Ouverture d'un disque..."
    ClientHeight    =   8415
@@ -984,6 +984,8 @@ End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     Set cUndo = Nothing
+    Set Lang = Nothing
+
     #If USE_FORM_SUBCLASSING Then
         'alors enlève le subclassing
         Call RestoreResizing(Me.hWnd)
@@ -1018,7 +1020,7 @@ Dim curOffset As Currency
     Call VS_Change(VS.Value)
 End Sub
 
-Private Sub lblGOTO_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lblGOTO_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche un popup pour sauter à un autre emplacement du disque
     lblGOTO.BorderStyle = 1
     If Button = 1 Then Me.PopupMenu frmContent.mnuPopupDisk, , _
@@ -1068,7 +1070,7 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub
@@ -1278,22 +1280,22 @@ End Sub
 'affiche le path du fichier sélectionné dans la textbox
 '=======================================================
 Private Sub DisplayPath()
-Dim s As String
+Dim S As String
 Dim l As Long
 
     'récupère le texte à afficher
-    s = FV.Path & "\"
-    s = Replace$(s, "\\", "\")  'vire le double slash
-    If FV2.ListIndex <> -1 Then s = s & FV2.ListItems.Item(FV2.ListIndex)
+    S = FV.Path & "\"
+    S = Replace$(S, "\\", "\")  'vire le double slash
+    If FV2.ListIndex <> -1 Then S = S & FV2.ListItems.Item(FV2.ListIndex)
     
     'enlève la partie après le vbNullChar de la string
-    l = InStr(1, s, vbNullChar)
+    l = InStr(1, S, vbNullChar)
     If l > 0 Then
-        s = Left$(s, l)
+        S = Left$(S, l)
     End If
     
     'affiche la string dans la picturebox
-    pctPath.Text = cFile.GetFolderName(s)
+    pctPath.Text = cFile.GetFolderName(S)
 End Sub
 
 '=======================================================
@@ -1308,9 +1310,9 @@ Dim RD() As Byte
 Dim RT() As Byte
 Dim Offset As Currency
 Dim Sector As Currency
-Dim x As Long
-Dim s As String
-Dim y As Long
+Dim X As Long
+Dim S As String
+Dim Y As Long
 Dim h As Long
 Dim lDisplayableBytes As Long
 Dim Sb As Currency
@@ -1359,53 +1361,53 @@ Dim lDecal As Long
         'le "+2" n'est pas logique pour moi, mais bon, sans çà çà plante (+1 pour moi)
 
     '//remplit le tableau temporaire contenant la réunion des secteurs lus
-        For x = 0 To lBytesPerSector - 1
+        For X = 0 To lBytesPerSector - 1
             If UBound(RB) > 0 Then
                 'alors on pioche dans le secteur 1
-                RT(x) = RB(x)
+                RT(X) = RB(X)
             Else
                 'alors on pioche dans le secteur 2 (toujours lu)
-                RT(x) = r(x)
+                RT(X) = r(X)
             End If
-        Next x
+        Next X
         If UBound(RT) > lBytesPerSector Then
-            For x = lBytesPerSector To 2 * lBytesPerSector - 1
+            For X = lBytesPerSector To 2 * lBytesPerSector - 1
                 If UBound(RB) > 0 Then
                     'alors on pioche dans le secteur 2
-                    RT(x) = r(x - lBytesPerSector)
+                    RT(X) = r(X - lBytesPerSector)
                 Else
                     'alors on pioche dans le secteur 3
-                    RT(x) = RA(x - lBytesPerSector)
+                    RT(X) = RA(X - lBytesPerSector)
                 End If
-            Next x
+            Next X
         End If
         If UBound(RT) > 2 * lBytesPerSector Then
-            For x = 2 * lBytesPerSector To 3 * lBytesPerSector - 1
+            For X = 2 * lBytesPerSector To 3 * lBytesPerSector - 1
                 'on pioche forcément dans le 3eme secteur
-                RT(x) = RA(x - 2 * lBytesPerSector)
-            Next x
+                RT(X) = RA(X - 2 * lBytesPerSector)
+            Next X
         End If
         
         
         'affecte au tableau affiché les bytes qui proviennent de la réunion des 3 secteurs
         lDecal = Offset - offsetFinSectorBef + lBytesPerSector
         
-        For x = 0 To lDisplayableBytes
+        For X = 0 To lDisplayableBytes
             'calcule le décalage
-            RD(x) = RT(x + lDecal) 'affecte la valeur qui sera affichée
-        Next x
+            RD(X) = RT(X + lDecal) 'affecte la valeur qui sera affichée
+        Next X
     
     'ajoute les valeurs string/hexa obtenues au HW
-    For x = 0 To ByN(UBound(RD()), 16) - 1 Step 16
-        s = vbNullString
-        For y = 0 To 15
-            h = x + y
-            s = s & Byte2FormatedString(RD(h))
-            HW.AddHexValue 1 + x / 16, y + 1, IIf(Len(Hex$(RD(h))) = 1, "0" & _
+    For X = 0 To ByN(UBound(RD()), 16) - 1 Step 16
+        S = vbNullString
+        For Y = 0 To 15
+            h = X + Y
+            S = S & Byte2FormatedString(RD(h))
+            HW.AddHexValue 1 + X / 16, Y + 1, IIf(Len(Hex$(RD(h))) = 1, "0" & _
                 Hex$(RD(h)), Hex$(RD(h)))
-        Next y
-        HW.AddStringValue 1 + x / 16, s
-    Next x
+        Next Y
+        HW.AddStringValue 1 + X / 16, S
+    Next X
     
     'HW.Refresh  'refresh HW
     
@@ -1420,19 +1422,19 @@ End Sub
 Private Function IsOffsetModified(ByVal lOffset As Long, ByRef lPlace As Long) _
     As Boolean
     
-Dim x As Long
+Dim X As Long
     
     IsOffsetModified = False
     
-    For x = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
+    For X = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
     'dans le cas où il y a eu plusieurs modifs dans le même offset
-        If ChangeListO(x) = lOffset + 1 Then
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            lPlace = x
+            lPlace = X
             IsOffsetModified = True
             Exit Function
         End If
-    Next x
+    Next X
     
 End Function
 
@@ -1440,19 +1442,19 @@ End Function
 'renvoie si la case a été modifiée ou non
 '=======================================================
 Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Long) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsModified = False
     
-    For x = 2 To ChangeListDim
-        If ChangeListO(x) = lOffset + 1 Then
+    For X = 2 To ChangeListDim
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            If ChangeListC(x) = lCol Then
+            If ChangeListC(X) = lCol Then
                 IsModified = True
                 Exit Function
             End If
         End If
-    Next x
+    Next X
 End Function
 
 '=======================================================
@@ -1692,11 +1694,11 @@ End Sub
 
 Private Sub HW_KeyPress(KeyAscii As Integer)
 'change les valeurs dans le tableau
-Dim s As String
+Dim S As String
 Dim sKey As Long
 Dim bytHex As Byte
 Dim Valu As Byte
-Dim x As Byte
+Dim X As Byte
 
     On Error GoTo ErrGestion
 
@@ -1750,8 +1752,8 @@ ErrGestion:
     clsERREUR.AddError "Pfm.KeyPress", True
 End Sub
 
-Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As ItemElement)
-Dim s As String
+Private Sub HW_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single, Item As ItemElement)
+Dim S As String
 Dim r As Long
 Dim l As Currency
 
@@ -1768,11 +1770,11 @@ Dim l As Currency
     l = Item.Line * 16 + HW.FirstOffset - 16 + Item.Col - 1
     If cPref.app_OffsetsHex Then
         clsConv.CurrentString = Trim$(Str$(l))
-        s = clsConv.Convert(16, 10)
+        S = clsConv.Convert(16, 10)
     Else
-        s = CStr(l)
+        S = CStr(l)
     End If
-    Me.Sb.Panels(3).Text = "Offset=[" & s & "]"
+    Me.Sb.Panels(3).Text = "Offset=[" & S & "]"
     
     
     Label2(10).Caption = Me.Sb.Panels(3).Text
@@ -1804,12 +1806,12 @@ Dim l As Currency
             End If
             If .tType = tString Then
                 'valeur strind sélectionnée
-                s = HW.Value(.Line, .Col)
-                txtValue(0).Text = s
-                txtValue(1).Text = Hex2Dec(s)
-                txtValue(2).Text = Hex2Str(s)
-                txtValue(3).Text = Hex2Oct(s)
-                FrameData.Caption = "Data=[" & s & "]"
+                S = HW.Value(.Line, .Col)
+                txtValue(0).Text = S
+                txtValue(1).Text = Hex2Dec(S)
+                txtValue(2).Text = Hex2Str(S)
+                txtValue(3).Text = Hex2Oct(S)
+                FrameData.Caption = "Data=[" & S & "]"
             End If
         End With
         
@@ -1852,7 +1854,7 @@ Dim l As Currency
     
 End Sub
 
-Private Sub HW_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub HW_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Me.Sb.Panels(4).Text = Lang.GetString("_Selec") & _
         CStr(HW.NumberOfSelectedItems) & " " & Lang.GetString("_Bytes")
     Label2(9) = Me.Sb.Panels(4).Text
@@ -1893,26 +1895,26 @@ Private Sub lstSignets_ItemClick(ByVal Item As ComctlLib.ListItem)
     End If
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 Dim tLst As ListItem
-Dim s As String
+Dim S As String
 Dim r As Long
 
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
-        s = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, Lang.GetString("_AddCom"))
-        If StrPtr(s) <> 0 Then
+        S = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, Lang.GetString("_AddCom"))
+        If StrPtr(S) <> 0 Then
             'ajoute le commentaire
-            tLst.SubItems(1) = s
+            tLst.SubItems(1) = S
         End If
     End If
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
         
         r = MsgBox(Lang.GetString("_DelSig") & " " & tLst.Text & " ?", vbInformation + vbYesNo, Lang.GetString("_War"))
@@ -1939,12 +1941,12 @@ End Sub
 
 Private Sub pctPath_KeyDown(KeyCode As Integer, Shift As Integer)
 'valide si entrée
-Dim s As String
+Dim S As String
     If KeyCode = vbKeyReturn Then
         With pctPath
-            s = .Text
+            S = .Text
             If cFile.FolderExists(.Text) Then FV.Path = .Text
-            .Text = s
+            .Text = S
         End With
     End If
 End Sub
@@ -2304,7 +2306,7 @@ Public Sub RefreshHW()
     Call VS_Change(VS.Value)
 End Sub
 
-Private Sub VS_MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Private Sub VS_MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, X As Long, Y As Long)
 'alors une action a été effectuée (lance le popup menu)
     If Button = vbRightButton Then Me.PopupMenu frmContent.rmnuPos
 End Sub

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmSearch 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Recherche d'expressions"
@@ -582,7 +582,7 @@ End Sub
 Private Sub cmdSearch_Click()
 'lance la recherche
 Dim tRes() As Currency
-Dim x As Long
+Dim X As Long
 Dim S As String
 
     If txtSearch.Text = vbNullString Then Exit Sub
@@ -702,16 +702,16 @@ Dim S As String
 
     '//affiche les résultats
     Listbox.UnRefreshControl = True
-    For x = 1 To UBound(tRes())
-        Call Listbox.AddItem(Caption:=Lang.GetString("_FoundAt") & " " & CStr(By16D(tRes(x))))
+    For X = 1 To UBound(tRes())
+        Call Listbox.AddItem(Caption:=Lang.GetString("_FoundAt") & " " & CStr(By16D(tRes(X))))
         If Check2.Value Then
             With frmContent.ActiveForm
-                .HW.AddSignet By16D(tRes(x))
-                .lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(x))))
+                .HW.AddSignet By16D(tRes(X))
+                .lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(X))))
                 .lstSignets.ListItems.Item(.lstSignets.ListItems.Count).SubItems(1) = "Found [" & Trim$(txtSearch.Text) & "]"
             End With
         End If
-    Next x
+    Next X
     Listbox.UnRefreshControl = False
     Call Listbox.Refresh
     
@@ -757,6 +757,7 @@ Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
     Call clsPref.SaveFormSettings(App.Path & "\Preferences\Search.ini", Me)
     Set clsPref = Nothing
+    Set Lang = Nothing
 End Sub
 
 Private Sub Listbox_ItemClick(Item As vkUserContolsXP.vkListItem)

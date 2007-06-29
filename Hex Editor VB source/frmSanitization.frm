@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmSanitization 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sanitization"
@@ -40,16 +40,19 @@ Begin VB.Form frmSanitization
          NumTabs         =   3
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Disque logique"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fichiers"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Disque physique"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -334,12 +337,12 @@ End Sub
 
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
 'supprime si touche Delete
-Dim x As Long
+Dim X As Long
 
     If KeyCode = vbKeyDelete Then
-        For x = LV.ListItems.Count To 1 Step -1
-            If LV.ListItems.Item(x).Selected Then LV.ListItems.Remove x
-        Next x
+        For X = LV.ListItems.Count To 1 Step -1
+            If LV.ListItems.Item(X).Selected Then LV.ListItems.Remove X
+        Next X
     End If
     
     cmdGo2.Enabled = CBool(LV.ListItems.Count)
@@ -369,7 +372,7 @@ Private Sub cmdGo_Click()
         MsgBox .GetString("_SanitWarLau"), vbInformation, .GetString("_War")
     End With
     
-    cmdGo.Enabled = False
+    cmdGO.Enabled = False
     
     'on lance le processus de sanitization
     Call SanitDiskNow(tDrive.VolumeLetter & ":\", Me.PGB)
@@ -400,22 +403,22 @@ End Sub
 
 Private Sub cmdSelFile_Click()
 Dim cFile As FileSystemLibrary.FileSystem
-Dim s() As String
+Dim S() As String
 Dim s2 As String
-Dim x As Long
+Dim X As Long
 
     'sélection d'un ou plusieurs fichiers
  
     Set cFile = New FileSystemLibrary.FileSystem
     
-    ReDim s(0)
+    ReDim S(0)
     s2 = cFile.ShowOpen(Lang.GetString("_SelFile"), Me.hWnd, _
         Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
-        OFN_ALLOWMULTISELECT, s())
+        OFN_ALLOWMULTISELECT, S())
         
-    For x = 1 To UBound(s())
-        If cFile.FileExists(s(x)) Then LV.ListItems.Add Text:=s(x)
-    Next x
+    For X = 1 To UBound(S())
+        If cFile.FileExists(S(X)) Then LV.ListItems.Add Text:=S(X)
+    Next X
     
     'dans le cas d'un fichier simple
     If cFile.FileExists(s2) Then LV.ListItems.Add Text:=s2
@@ -425,22 +428,22 @@ Dim x As Long
 End Sub
 
 Private Sub DV_NodeClick(ByVal Node As ComctlLib.INode)
-Dim s As String
+Dim S As String
 
     If DV.IsSelectedDriveAccessible Then
     
         'récupère le type de fichier du drive
-        s = DV.GetSelectedDrive.FileSystemName
+        S = DV.GetSelectedDrive.FileSystemName
         
-        If InStr(1, LCase$(s), "fat") Or InStr(1, LCase$(s), "ntfs") Then
+        If InStr(1, LCase$(S), "fat") Or InStr(1, LCase$(S), "ntfs") Then
             'on a choisi le drive
             Set tDrive = DV.GetSelectedDrive
-            cmdGo.Enabled = True
+            cmdGO.Enabled = True
         Else
-            cmdGo.Enabled = False
+            cmdGO.Enabled = False
         End If
     Else
-        cmdGo.Enabled = False
+        cmdGO.Enabled = False
     End If
 End Sub
 
@@ -475,7 +478,7 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-Dim x As Long
+Dim X As Long
     
     Set tDrive = New DriveView_OCX.clsDrive
     
@@ -484,10 +487,10 @@ Dim x As Long
     ReDim sH55(2097151)
     ReDim sHAA(2097151)
     'remplit
-    For x = 0 To 2097151
-        sH55(x) = 85
-        sHAA(x) = 170
-    Next x
+    For X = 0 To 2097151
+        sH55(X) = 85
+        sHAA(X) = 170
+    Next X
     
     'récupère les pointeurs
     pAA = VarPtr(sHAA(0))
@@ -496,6 +499,7 @@ End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     Set tDrive = Nothing
+    Set Lang = Nothing
     
     'vide les tableaux
     ReDim sH55(0)

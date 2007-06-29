@@ -133,7 +133,7 @@ Dim Frm As Form
 Dim sFile As String
 Dim lFile As Long
 Dim lLen As Double
-Dim s As String
+Dim S As String
     
     On Error GoTo ErrGestion
     
@@ -218,6 +218,7 @@ Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
     Call clsPref.SaveFormSettings(App.Path & "\Preferences\NewFile.ini", Me)
     Set clsPref = Nothing
+    Set Lang = Nothing
 End Sub
 
 Private Sub txtSize_KeyDown(KeyCode As Integer, Shift As Integer)

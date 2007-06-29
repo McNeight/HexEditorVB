@@ -4,7 +4,7 @@ Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Object = "{C9771C4C-85A3-44E9-A790-1B18202DA173}#1.0#0"; "FileView_OCX.ocx"
-Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.MDIForm frmContent 
    BackColor       =   &H8000000C&
    Caption         =   "Hex Editor VB  --- PRE ALPHA v1.6"
@@ -65,6 +65,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          MultiLine       =   0   'False
          Appearance      =   0
          OLEDragMode     =   0
@@ -91,6 +92,7 @@ Begin VB.MDIForm frmContent
          _Version        =   393217
          BackColor       =   0
          BorderStyle     =   0
+         Enabled         =   -1  'True
          ReadOnly        =   -1  'True
          ScrollBars      =   2
          Appearance      =   0
@@ -560,6 +562,7 @@ Begin VB.MDIForm frmContent
             MinWidth        =   14993
             Text            =   "Status=[Ready]"
             TextSave        =   "Status=[Ready]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel2 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
@@ -567,20 +570,23 @@ Begin VB.MDIForm frmContent
             MinWidth        =   3528
             Text            =   "Ouvertures=[0]"
             TextSave        =   "Ouvertures=[0]"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel3 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   5
             Object.Width           =   1411
             MinWidth        =   1411
-            TextSave        =   "15:22"
+            TextSave        =   "23:35"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
          BeginProperty Panel4 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
             Style           =   6
             Object.Width           =   2117
             MinWidth        =   2117
-            TextSave        =   "26/06/2007"
+            TextSave        =   "29/06/2007"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1517,10 +1523,10 @@ Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
     End If
 End Sub
 
-Private Sub LV_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub LV_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = 2 Then
         'popup menu
-        Me.PopupMenu Me.mnuPopupExplore, , x + LV.Left, y + LV.Top + 300
+        Me.PopupMenu Me.mnuPopupExplore, , X + LV.Left, Y + LV.Top + 300
     End If
 End Sub
 
@@ -1544,7 +1550,7 @@ Private Sub MDIForm_DblClick()
 End Sub
 
 Private Sub MDIForm_Load()
-Dim x As Long
+Dim X As Long
 
     On Error Resume Next
     
@@ -1575,18 +1581,18 @@ Dim x As Long
     End With
     
     'chargement des menus de langue (sLang())
-    For x = 1 To UBound(sLang())
+    For X = 1 To UBound(sLang())
         'ajoute une entrée au menu
-        Load Me.mnuLang(x)
-        Me.mnuLang(x).Caption = Left$(cFile.GetFileName(sLang(x)), _
-            Len(cFile.GetFileName(sLang(x))) - 4)
-    Next x
+        Load Me.mnuLang(X)
+        Me.mnuLang(X).Caption = Left$(cFile.GetFileName(sLang(X)), _
+            Len(cFile.GetFileName(sLang(X))) - 4)
+    Next X
     
     'coche le bon menu
-    For x = 1 To mnuLang.Count
-        If Replace$(Me.mnuLang(x).Caption, "&", vbNullString) = cPref.env_Lang _
-            Then Me.mnuLang(x).Checked = True
-    Next x
+    For X = 1 To mnuLang.Count
+        If Replace$(Me.mnuLang(X).Caption, "&", vbNullString) = cPref.env_Lang _
+            Then Me.mnuLang(X).Checked = True
+    Next X
     
     'colorise les menus
     'Call ColorFormMenu(Me, cPref.general_MenuBackColor)
@@ -1852,7 +1858,7 @@ End Sub
 Private Sub mnuLang_Click(Index As Integer)
 'on change de langue
 Dim S As String
-Dim x As Long
+Dim X As Long
 Dim cPRE As clsIniFile
 
     'détermine le path du dossier
@@ -1870,9 +1876,9 @@ Dim cPRE As clsIniFile
         vbCritical, Lang.GetString("_Error"): Exit Sub
     
     'on décoche tout les menus
-    For x = 1 To UBound(sLang())
-        mnuLang(x).Checked = False
-    Next x
+    For X = 1 To UBound(sLang())
+        mnuLang(X).Checked = False
+    Next X
     
     'on coche celui sélectionné
     mnuLang(Index).Checked = True
@@ -1984,14 +1990,14 @@ Dim S As String
     End If
 End Sub
 
-Private Sub MDIForm_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub MDIForm_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = 2 Then
         'affiche un popup
         Me.PopupMenu Me.rmnuTools
     End If
 End Sub
 
-Private Sub MDIForm_OLEDragDrop(Data As DataObject, Effect As Long, Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub MDIForm_OLEDragDrop(Data As DataObject, Effect As Long, Button As Integer, Shift As Integer, X As Single, Y As Single)
 'alors on récupère un drag&drop de fichiers
 Dim i As Long
 Dim i2 As Long
@@ -2061,6 +2067,7 @@ End Sub
 Private Sub MDIForm_Unload(Cancel As Integer)
     
     Set clsPref = Nothing
+    Set Lang = Nothing
     
     Call UnHookPictureResizement(Me.pctConsole.hWnd, 1)
     Call UnHookPictureResizement(Me.pctExplorer.hWnd)
@@ -2155,7 +2162,7 @@ End Sub
 Private Sub mnuCloseAll_Click()
 'ferme toutes les fenêtres
 Dim lRep As Long
-Dim x As Long
+Dim X As Long
     
     If Me.ActiveForm Is Nothing Then Exit Sub
         
@@ -2178,8 +2185,8 @@ End Sub
 
 Private Sub mnuCopyASCII_Click()
 'copier la sélection (strings) formatée
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 Dim S As String
 Dim curPos2 As Currency
 Dim curSize2 As Currency
@@ -2263,8 +2270,8 @@ Dim curPos As Currency
 End Sub
 Private Sub mnuCopyASCII2_Click()
 'copier la sélection (strings) formatée en bas niveau
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 Dim S As String
 Dim curSize As Currency
 Dim curPos2 As Currency
@@ -2347,8 +2354,8 @@ End Sub
 Private Sub mnuCopyASCIIReal_Click()
 'copie les valeurs ASCII réelles vers le clipboard
 '/!\ NULL TERMINATED STRING
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 Dim S As String
 Dim curPos2 As Currency
 Dim curSize2 As Currency
@@ -2427,8 +2434,8 @@ Dim curPos As Currency
 End Sub
 Private Sub mnuCopyhexa_Click()
 'copier la sélection (hexa)
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 Dim S As String
 Dim s2 As String
 Dim curSize As Currency
@@ -2505,10 +2512,10 @@ Dim curPos As Currency
 
     'formate la string
     s2 = vbNullString
-    For x = 1 To Len(S)
-        If (x Mod 1000) = 0 Then DoEvents 'rend la main
-        s2 = s2 & Str2Hex_(Mid$(S, x, 1))
-    Next x
+    For X = 1 To Len(S)
+        If (X Mod 1000) = 0 Then DoEvents 'rend la main
+        s2 = s2 & Str2Hex_(Mid$(S, X, 1))
+    Next X
             
     Clipboard.SetText s2
     Me.Sb.Panels(1).Text = "Status=[Ready]"
@@ -2571,13 +2578,13 @@ CancelPushed:
 End Sub
 
 Private Sub mnuCreateFileFromSelelection_Click()
-Dim x As Long
+Dim X As Long
 
     'créé un fichier depuis la sélection
-    x = MsgBox(Lang.GetString("_WannaNewFile"), vbQuestion + vbYesNo, _
+    X = MsgBox(Lang.GetString("_WannaNewFile"), vbQuestion + vbYesNo, _
         Lang.GetString("_SaveType"))
     
-    Call CreateFileFromCurrentSelection(x)
+    Call CreateFileFromCurrentSelection(X)
 End Sub
 
 Private Sub mnuCutCopyFiles_Click()
@@ -2612,22 +2619,22 @@ Private Sub mnuEditSelection_Click()
 'édite les fichiers sélectionnés dans le LV
 Dim Frm As Form
 Dim sFile() As ComctlLib.ListItem
-Dim x As Long
+Dim X As Long
 
     'On Error GoTo ErrGestion
     Call LV.GetSelectedItems(sFile)
     
-    For x = 1 To UBound(sFile)
-        If cFile.FileExists(sFile(x).Tag) Then
+    For X = 1 To UBound(sFile)
+        If cFile.FileExists(sFile(X).Tag) Then
             'affiche une nouvelle fenêtre
             Set Frm = New Pfm
-            Call Frm.GetFile(sFile(x).Tag)
+            Call Frm.GetFile(sFile(X).Tag)
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
             Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
         End If
         DoEvents
-    Next x
+    Next X
     
     Exit Sub
     
@@ -2994,7 +3001,7 @@ Private Sub mnuOpen_Click()
 'ajoute un fichier à la liste à supprimer
 Dim S() As String
 Dim s2 As String
-Dim x As Long
+Dim X As Long
 Dim Frm As Form
     
     ReDim S(0)
@@ -3003,15 +3010,15 @@ Dim Frm As Form
         Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
         OFN_ALLOWMULTISELECT, S())
     
-    For x = 1 To UBound(S())
-        If cFile.FileExists(S(x)) Then
+    For X = 1 To UBound(S())
+        If cFile.FileExists(S(X)) Then
             Set Frm = New Pfm
-            Call Frm.GetFile(S(x))
+            Call Frm.GetFile(S(X))
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
         End If
         DoEvents    '/!\ IMPORTANT DO NOT REMOVE
-    Next x
+    Next X
     
     'dans le cas d'un fichier simple
     If cFile.FileExists(s2) Then
@@ -3041,7 +3048,7 @@ Private Sub mnuOpenFolder_Click()
 Dim m() As String
 Dim sDir As String
 Dim Frm As Form
-Dim x As Long
+Dim X As Long
 
     'sélectionne un répertoire
     sDir = cFile.BrowseForFolder(Lang.GetString("_SelADir"), Me.hWnd)
@@ -3054,16 +3061,16 @@ Dim x As Long
     If UBound(m()) < 1 Then Exit Sub
 
     'les ouvre un par un
-    For x = 1 To UBound(m)
-        If cFile.FileExists(m(x)) Then
+    For X = 1 To UBound(m)
+        If cFile.FileExists(m(X)) Then
             Set Frm = New Pfm
-            Call Frm.GetFile(m(x))
+            Call Frm.GetFile(m(X))
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
             Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
             DoEvents
         End If
-    Next x
+    Next X
   
     'Call frmContent.ChangeEnabledMenus  'active ou pas certaines entrées dans les menus
 
@@ -3071,7 +3078,7 @@ End Sub
 
 Private Sub mnuOpenInBN_Click()
 'ouvre le fichier dans le bloc notes
-Dim x As Long
+Dim X As Long
 
     If ActiveForm Is Nothing Then Exit Sub
     
@@ -3082,8 +3089,8 @@ Dim x As Long
     
     If cFile.GetFileSize(Me.ActiveForm.Caption) > 1000000 Then
         'fichier de plus de 700Ko
-        x = MsgBox(Lang.GetString("_FileMakeMoreThan") & vbNewLine & Lang.GetString("_ShoudNotBN"), vbInformation + vbYesNo, Lang.GetString("_War"))
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox(Lang.GetString("_FileMakeMoreThan") & vbNewLine & Lang.GetString("_ShoudNotBN"), vbInformation + vbYesNo, Lang.GetString("_War"))
+        If Not (X = vbYes) Then Exit Sub
     End If
 
     'ajoute du texte à la console
@@ -3106,14 +3113,14 @@ End Sub
 Private Sub mnuOpenSelectedFiles_Click()
 'ouvre les fichiers sélectionnés dans le LV
 Dim sFile() As ListItem
-Dim x As Long
+Dim X As Long
 
     'obtient la liste des sélections
     Call LV.GetSelectedItems(sFile)
     
-    For x = 1 To UBound(sFile)
-        Call cFile.ShellOpenFile(sFile(x).Tag, Me.hWnd)
-    Next x
+    For X = 1 To UBound(sFile)
+        Call cFile.ShellOpenFile(sFile(X).Tag, Me.hWnd)
+    Next X
     
 End Sub
 
@@ -3175,7 +3182,7 @@ End Sub
 
 Private Sub mnuRemoveSignet_Click()
 'supprime un signet, si existant
-Dim x As Long
+Dim X As Long
 
     
     If Me.ActiveForm Is Nothing Then Exit Sub
@@ -3189,11 +3196,11 @@ Dim x As Long
             Wend
             
             'enlève du listview
-            For x = .lstSignets.ListItems.Count To 1 Step -1
-                If .lstSignets.ListItems.Item(x).Text = CStr(.HW.Item.Offset) Then
-                    .lstSignets.ListItems.Remove x
+            For X = .lstSignets.ListItems.Count To 1 Step -1
+                If .lstSignets.ListItems.Item(X).Text = CStr(.HW.Item.Offset) Then
+                    .lstSignets.ListItems.Remove X
                 End If
-            Next x
+            Next X
         End If
     End With
     
@@ -3251,7 +3258,7 @@ Private Sub mnuSaveSignets_Click()
 'enregistre la liste des signets de la form active
 Dim S As String
 Dim lFile As Long
-Dim x As Long
+Dim X As Long
 
     On Error GoTo ErrGestion
     
@@ -3272,8 +3279,8 @@ Dim x As Long
 
     If cFile.FileExists(S) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'ouvre le fchier
@@ -3281,9 +3288,9 @@ Dim x As Long
     Open S For Output As lFile
     
     'enregistre les entrées
-    For x = 1 To Me.ActiveForm.lstSignets.ListItems.Count
-        Write #lFile, Me.ActiveForm.lstSignets.ListItems.Item(x) & "|" & Me.ActiveForm.lstSignets.ListItems.Item(x).SubItems(1)
-    Next x
+    For X = 1 To Me.ActiveForm.lstSignets.ListItems.Count
+        Write #lFile, Me.ActiveForm.lstSignets.ListItems.Item(X) & "|" & Me.ActiveForm.lstSignets.ListItems.Item(X).SubItems(1)
+    Next X
     
     Close lFile
 
@@ -3407,24 +3414,24 @@ Private Sub mnuStatsPopup_Click()
 'affiche les stats des fichiers sélectionnés dans LV
 Dim Frm As Form
 Dim sFile() As ListItem
-Dim x As Long
+Dim X As Long
 
     'On Error GoTo ErrGestion
 
     LV.GetSelectedItems sFile
     
-    For x = 1 To UBound(sFile)
-        If cFile.FileExists(sFile(x).Tag) Then
+    For X = 1 To UBound(sFile)
+        If cFile.FileExists(sFile(X).Tag) Then
             'affiche une nouvelle fenêtre
             Set Frm = New frmAnalys
-            Call Frm.GetFile(sFile(x).Tag)
+            Call Frm.GetFile(sFile(X).Tag)
             Call Frm.cmdAnalyse_Click   'lance l'analyse
             Frm.Show
             lNbChildFrm = lNbChildFrm + 1
             Me.Sb.Panels(2).Text = Lang.GetString("_Openings") & CStr(lNbChildFrm) & "]"
         End If
         DoEvents
-    Next x
+    Next X
     
     Exit Sub
     
@@ -3463,7 +3470,7 @@ Private Sub mnuSaveAs_Click()
 Dim sFile As String
 Dim sPath As String
 Dim lFile As Long
-Dim x As Long
+Dim X As Long
 
     On Error GoTo GestionErr
 
@@ -3482,8 +3489,8 @@ Dim x As Long
     
     If cFile.FileExists(sPath) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'efface le précédent fichier
@@ -3619,7 +3626,7 @@ End Sub
 Private Sub AddSignetIn(ByVal bOverWrite As Boolean)
 Dim S As String
 Dim lFile As Long
-Dim x As Long
+Dim X As Long
 Dim sTemp As String
 Dim l As Long
 

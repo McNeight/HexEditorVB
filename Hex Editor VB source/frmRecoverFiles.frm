@@ -134,16 +134,19 @@ Begin VB.Form frmRecoverFiles
          NumTabs         =   3
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fichiers effacés"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fichiers existants"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Extraire des données"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -234,13 +237,17 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Resize()
-Dim x As Long
+Dim X As Long
 
     'positionnement des frames
-    For x = 0 To Frame1.Count - 1
-        Frame1(x).Top = 480
-        Frame1(x).Left = 120
-    Next x
+    For X = 0 To Frame1.Count - 1
+        Frame1(X).Top = 480
+        Frame1(X).Left = 120
+    Next X
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub
 
 Private Sub LV_PathChange(sOldPath As String, sNewPath As String)
@@ -259,11 +266,11 @@ End Sub
 
 Private Sub pctPath_KeyDown(KeyCode As Integer, Shift As Integer)
 'valide si entrée
-Dim s As String
+Dim S As String
     If KeyCode = vbKeyReturn Then
-        s = pctPath.Text
+        S = pctPath.Text
         If cFile.FolderExists(pctPath.Text) Then LV.Path = pctPath.Text
-        pctPath.Text = s
+        pctPath.Text = S
     End If
 End Sub
 

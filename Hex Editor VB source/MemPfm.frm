@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form MemPfm 
    Caption         =   "Ouverture d'un processus..."
    ClientHeight    =   8295
@@ -659,9 +659,9 @@ Dim sCopyright As String
 Dim sVersion As String
 Dim lPages As Long
 Dim cF As FileSystemLibrary.File
-Dim s As String
+Dim S As String
     
-    s = pProcess.szImagePath
+    S = pProcess.szImagePath
     
     'récupère les infos sur le fichier
     Set cF = cFile.GetFile(pProcess.szImagePath)
@@ -677,15 +677,15 @@ Dim s As String
         sDescription = IIf(sDescription = vbNullString, "--", sDescription)
         
         'affiche tout çà
-        s = s & vbNewLine & Lang.GetString("_SizeIs") & CStr(.FileSize) & _
+        S = S & vbNewLine & Lang.GetString("_SizeIs") & CStr(.FileSize) & _
             " Octets  -  " & CStr(Round(.FileSize / 1024, 3)) & " Ko" & "]"
-        s = s & vbNewLine & Lang.GetString("_AttrIs") & CStr(.Attributes) & "]"
-        s = s & vbNewLine & Lang.GetString("_CreaIs") & .DateCreated & "]"
-        s = s & vbNewLine & Lang.GetString("_AccessIs") & .DateLastAccessed & "]"
-        s = s & vbNewLine & Lang.GetString("_ModifIs") & .DateLastModified & "]"
-        s = s & vbNewLine & Lang.GetString("_Version") & sVersion & "]"
-        s = s & vbNewLine & Lang.GetString("_DescrIs") & sDescription & "]"
-        s = s & vbNewLine & "Copyright=[" & sCopyright & "]"
+        S = S & vbNewLine & Lang.GetString("_AttrIs") & CStr(.Attributes) & "]"
+        S = S & vbNewLine & Lang.GetString("_CreaIs") & .DateCreated & "]"
+        S = S & vbNewLine & Lang.GetString("_AccessIs") & .DateLastAccessed & "]"
+        S = S & vbNewLine & Lang.GetString("_ModifIs") & .DateLastModified & "]"
+        S = S & vbNewLine & Lang.GetString("_Version") & sVersion & "]"
+        S = S & vbNewLine & Lang.GetString("_DescrIs") & sDescription & "]"
+        S = S & vbNewLine & "Copyright=[" & sCopyright & "]"
        
         Label2(8).Caption = Me.Sb.Panels(2).Text
         Label2(9).Caption = Lang.GetString("_SelIs") & CStr(HW.NumberOfSelectedItems) & " bytes]"
@@ -694,7 +694,7 @@ Dim s As String
         'Label2(12).Caption = "[" & sDescription & "]"
     End With
     
-    txtFile.Text = s
+    txtFile.Text = S
     
     'affiche les informations concernant le processus
     Call cmdRefreshMemInfo_Click
@@ -704,20 +704,20 @@ End Sub
 Private Sub cmdRefreshMemInfo_Click()
 'refresh process info
 Dim p As ProcessItem
-Dim s As String
+Dim S As String
     
     Set p = clsProc.GetProcess(pProcess.th32ProcessID, True, False, True)   'réobtient les infos
     
     With p
-        s = "PID=[" & .th32ProcessID & "]"
-        s = s & vbNewLine & Lang.GetString("_ParentProc") & .procParentProcess.szExeFile & " - " & pProcess.procParentProcess.th32ProcessID & "]"
-        s = s & vbNewLine & Lang.GetString("_UsedMem") & .procMemory.WorkingSetSize & "]"
-        s = s & vbNewLine & Lang.GetString("_SWAP") & .procMemory.PagefileUsage & "]"
-        s = s & vbNewLine & Lang.GetString("_Prior") & PriorityFromLong(.pcPriClassBase) & "-" & .pcPriClassBase & "]"
-        s = s & vbNewLine & "Threads=[" & .cntThreads & "]"
+        S = "PID=[" & .th32ProcessID & "]"
+        S = S & vbNewLine & Lang.GetString("_ParentProc") & .procParentProcess.szExeFile & " - " & pProcess.procParentProcess.th32ProcessID & "]"
+        S = S & vbNewLine & Lang.GetString("_UsedMem") & .procMemory.WorkingSetSize & "]"
+        S = S & vbNewLine & Lang.GetString("_SWAP") & .procMemory.PagefileUsage & "]"
+        S = S & vbNewLine & Lang.GetString("_Prior") & PriorityFromLong(.pcPriClassBase) & "-" & .pcPriClassBase & "]"
+        S = S & vbNewLine & "Threads=[" & .cntThreads & "]"
     End With
     
-    txtProc.Text = s
+    txtProc.Text = S
 End Sub
 
 '=======================================================
@@ -893,7 +893,7 @@ End Sub
 Private Sub OpenFile(ByVal lBg As Long, ByVal lEd As Long)
 Dim tmpText As String
 Dim a As Long
-Dim s As String
+Dim S As String
 Dim b As Long
 Dim c As Long
 Dim lLength As Long
@@ -948,19 +948,19 @@ End Sub
 'renvoie si l'offset contient une modification
 '=======================================================
 Private Function IsOffsetModified(ByVal lOffset As Long, ByRef lPlace As Long) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsOffsetModified = False
     
-    For x = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
+    For X = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
     'dans le cas où il y a eu plusieurs modifs dans le même offset
-        If ChangeListO(x) = lOffset + 1 Then
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            lPlace = x
+            lPlace = X
             IsOffsetModified = True
             Exit Function
         End If
-    Next x
+    Next X
     
 End Function
 
@@ -968,19 +968,19 @@ End Function
 'renvoie si la case a été modifiée ou non (permet l'affichage en couleur dans HW)
 '=======================================================
 Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Long) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsModified = False
     
-    For x = 2 To ChangeListDim
-        If ChangeListO(x) = lOffset + 1 Then
+    For X = 2 To ChangeListDim
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            If ChangeListC(x) = lCol Then
+            If ChangeListC(X) = lCol Then
                 IsModified = True
                 Exit Function
             End If
         End If
-    Next x
+    Next X
 End Function
 
 '=======================================================
@@ -1071,6 +1071,7 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
 
     Set cUndo = Nothing
+    Set Lang = Nothing
     
     #If USE_FORM_SUBCLASSING Then
         'alors enlève le subclassing
@@ -1211,7 +1212,7 @@ ErrGestion:
     clsERREUR.AddError "MemPfm.KeyDown", True
 End Sub
 
-Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = 2 Then
         Me.PopupMenu frmContent.mnuPopupIcon
     End If
@@ -1219,11 +1220,11 @@ End Sub
 
 Private Sub HW_KeyPress(KeyAscii As Integer)
 'change les valeurs dans le tableau
-Dim s As String
+Dim S As String
 Dim sKey As Long
 Dim bytHex As Byte
 Dim Valu As Byte
-Dim x As Byte
+Dim X As Byte
 
     On Error GoTo ErrGestion
 
@@ -1256,13 +1257,13 @@ Dim x As Byte
             
             'le nouveau byte est donc désormais bytHex
             'l'ancien byte est s
-            s = cMem.ReadBytes(pProcess.th32ProcessID, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, 1)
+            S = cMem.ReadBytes(pProcess.th32ProcessID, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, 1)
             
             'applique le changement
             Call AddAChange(bytHex)
             
             'ajoute l'historique
-            Me.AddHistoFrm actByteWritten, Chr_(bytHex), s, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, , HW.Item.Col, , pProcess.th32ProcessID
+            Me.AddHistoFrm actByteWritten, Chr_(bytHex), S, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, , HW.Item.Col, , pProcess.th32ProcessID
             
            'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
@@ -1273,13 +1274,13 @@ Dim x As Byte
         
             'le nouveau byte est donc désormais bytHex
             'l'ancien byte est s
-            s = cMem.ReadBytes(pProcess.th32ProcessID, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, 1)
+            S = cMem.ReadBytes(pProcess.th32ProcessID, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, 1)
 
             'applique le changement
             Call AddAChange(KeyAscii)
 
             'ajoute l'historique
-            Me.AddHistoFrm actByteWritten, Chr_(KeyAscii), s, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, , HW.Item.Col, , pProcess.th32ProcessID
+            Me.AddHistoFrm actByteWritten, Chr_(KeyAscii), S, HW.FirstOffset + 16 * (HW.Item.Line - 1) + HW.Item.Col - 1, , HW.Item.Col, , pProcess.th32ProcessID
             
            'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
@@ -1290,8 +1291,8 @@ ErrGestion:
     clsERREUR.AddError "Pfm.KeyPress", True
 End Sub
 
-Private Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As ItemElement)
-Dim s As String
+Private Sub HW_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single, Item As ItemElement)
+Dim S As String
 Dim r As Long
 Dim l As Currency
 
@@ -1306,11 +1307,11 @@ Dim l As Currency
     l = Item.Line * 16 + HW.FirstOffset - 16 + Item.Col - 1
     If cPref.app_OffsetsHex Then
         clsConv.CurrentString = Trim$(Str$(l))
-        s = clsConv.Convert(16, 10)
+        S = clsConv.Convert(16, 10)
     Else
-        s = CStr(l)
+        S = CStr(l)
     End If
-    Me.Sb.Panels(3).Text = "Offset=[" & s & "]"
+    Me.Sb.Panels(3).Text = "Offset=[" & S & "]"
     
     Label2(10).Caption = Me.Sb.Panels(3).Text
     
@@ -1342,12 +1343,12 @@ Dim l As Currency
         End If
         If Item.tType = tString Then
             'valeur strind sélectionnée
-            s = HW.Value(Item.Line, Item.Col)
-            txtValue(0).Text = s
-            txtValue(1).Text = Hex2Dec(s)
-            txtValue(2).Text = Hex2Str(s)
-            txtValue(3).Text = Hex2Oct(s)
-            FrameData.Caption = "Data=[" & s & "]"
+            S = HW.Value(Item.Line, Item.Col)
+            txtValue(0).Text = S
+            txtValue(1).Text = Hex2Dec(S)
+            txtValue(2).Text = Hex2Str(S)
+            txtValue(3).Text = Hex2Oct(S)
+            FrameData.Caption = "Data=[" & S & "]"
         End If
         
     ElseIf Button = 4 And Shift = 0 Then
@@ -1385,7 +1386,7 @@ Dim l As Currency
     
 End Sub
 
-Private Sub HW_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub HW_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Me.Sb.Panels(4).Text = Lang.GetString("_SelIs") & _
         CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(9) = Me.Sb.Panels(4).Text
@@ -1426,27 +1427,27 @@ Private Sub lstSignets_ItemClick(ByVal Item As ComctlLib.ListItem)
     End If
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 Dim tLst As ListItem
-Dim s As String
+Dim S As String
 Dim r As Long
 
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
-        s = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, _
+        S = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, _
             Lang.GetString("_AddCom"))
-        If StrPtr(s) <> 0 Then
+        If StrPtr(S) <> 0 Then
             'ajoute le commentaire
-            tLst.SubItems(1) = s
+            tLst.SubItems(1) = S
         End If
     End If
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
         
         r = MsgBox(Lang.GetString("_DelSig") & " " & tLst.Text & " ?", _
@@ -1491,7 +1492,7 @@ Dim l As Long
 
 End Sub
 
-Private Sub MemTB_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub MemTB_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'affiche un popupmenu créé dynamiquement
 Dim l As Long
 
@@ -1530,7 +1531,7 @@ Private Sub TB2_Click()
     End If
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub
@@ -1617,7 +1618,7 @@ Dim pMenuInfo As MENUITEMINFO 'définit les info de l'item de menu ajouté
 Dim pPositionCurseur As POINTAPI 'stocke la position actuelle du curseur
 Dim lHandleMenu As Long 'stocke le handle du menu
 Dim lHandleSousMenu() As Long 'stocke les handles des sous-menus
-Dim x As Long
+Dim X As Long
 
     On Error GoTo erreur0
 
@@ -1627,31 +1628,31 @@ Dim x As Long
     Let lHandleMenu = CreatePopupMenu
     
     'insère MemTB.Tabs.Count sous-menus
-    For x = MemTB.Tabs.Count To 1 Step -1
+    For X = MemTB.Tabs.Count To 1 Step -1
         With pMenuInfo
             .cbSize = Len(pMenuInfo)
             .fType = MFT_STRING
             .fState = MFS_ENABLED
-            .dwTypeData = MemTB.Tabs.Item(x).Caption
+            .dwTypeData = MemTB.Tabs.Item(X).Caption
             .cch = Len(pMenuInfo.dwTypeData)
-            .wID = x
+            .wID = X
             .fMask = MIIM_ID Or MIIM_TYPE Or MIIM_STATE
             .hSubMenu = lHandleMenu
         End With
         Call InsertMenuItem(lHandleMenu, 0, True, pMenuInfo)
-        lHandleSousMenu(x) = CreatePopupMenu
-    Next x
+        lHandleSousMenu(X) = CreatePopupMenu
+    Next X
     
     'on affiche le menu crée
     Call GetCursorPos(pPositionCurseur)
     AfficherMenu = TrackPopupMenuEx(lHandleMenu, TPM_LEFTALIGN Or _
-        TPM_RIGHTBUTTON Or TPM_RETURNCMD, pPositionCurseur.x, _
-        pPositionCurseur.y, Me.hWnd, ByVal 0&)
+        TPM_RIGHTBUTTON Or TPM_RETURNCMD, pPositionCurseur.X, _
+        pPositionCurseur.Y, Me.hWnd, ByVal 0&)
     
     Call DestroyMenu(lHandleMenu)
-    For x = 1 To MemTB.Tabs.Count
+    For X = 1 To MemTB.Tabs.Count
         Call DestroyMenu(lHandleSousMenu(0))
-    Next x
+    Next X
 
 Exit Function
 
@@ -1672,8 +1673,8 @@ End Function
 'effectue un changement dans la mémoire du processus
 '=======================================================
 Public Sub AddAChange(ByVal sNewByte As Long)
-Dim s As String
-Dim x As Long
+Dim S As String
+Dim X As Long
 
     'écrit le nouveau byte dans la mémoire
     Call cMem.WriteBytesH(lHandle, HW.FirstOffset + 16 * (HW.Item.Line - 1) + _
@@ -1795,7 +1796,7 @@ Public Sub RefreshHW()
     Call VS_Change(VS.Value)
 End Sub
 
-Private Sub VS_MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Private Sub VS_MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, X As Long, Y As Long)
 'alors une action a été effectuée (lance le popup menu)
     If Button = vbRightButton Then Me.PopupMenu frmContent.rmnuPos
 End Sub

@@ -94,7 +94,7 @@ Begin VB.Form frmDates
          _ExtentY        =   529
          _Version        =   393216
          CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-         Format          =   16515075
+         Format          =   62259203
          CurrentDate     =   39133.9583333333
       End
       Begin VB.PictureBox Picture1 
@@ -160,7 +160,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   16515075
+            Format          =   62259203
             CurrentDate     =   39133
          End
       End
@@ -205,7 +205,7 @@ Begin VB.Form frmDates
             _ExtentY        =   529
             _Version        =   393216
             CustomFormat    =   "dd/MM/yyyy hh:mm:ss"
-            Format          =   16515075
+            Format          =   62259203
             CurrentDate     =   39133
          End
       End
@@ -458,4 +458,8 @@ Private Sub Form_Load()
         .LoadControlsCaption
     End With
     
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub

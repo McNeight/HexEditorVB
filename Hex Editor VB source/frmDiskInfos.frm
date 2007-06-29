@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmDiskInfos 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Infos sur les disques"
@@ -411,6 +411,10 @@ Private Sub Form_Load()
     
 End Sub
 
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
+End Sub
+
 Private Sub mnuQuit_Click()
     Unload Me
 End Sub
@@ -418,70 +422,70 @@ End Sub
 Private Sub mnuRefresh_Click()
 'refresh infos
 Dim strDisk As String
-Dim s As String
+Dim S As String
 Dim cDrive As FileSystemLibrary.Drive
 Dim cDisk As FileSystemLibrary.PhysicalDisk
-Dim x As Byte
-Dim y As Byte
+Dim X As Byte
+Dim Y As Byte
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_RetDisk"))
     
-    LV1.ListItems.Clear: x = 0: y = 0
+    LV1.ListItems.Clear: X = 0: Y = 0
 
     'obtient les infos sur les drives physiques
     For Each cDisk In cFile.PhysicalDisks
         
-        y = y + 1
+        Y = Y + 1
         
         'obtient les infos sur le drive
         If cDisk.IsDiskAvailable Then
-            x = x + 1
+            X = X + 1
             With LV1.ListItems
-                .Add Text:=CStr(y)
-                .Item(x).SubItems(1) = cDisk.DiskName
-                .Item(x).SubItems(2) = cDisk.TotalSpace
-                .Item(x).SubItems(3) = cDisk.Cylinders
-                .Item(x).SubItems(4) = cDisk.TracksPerCylinder
-                .Item(x).SubItems(5) = cDisk.SectorsPerTrack
-                .Item(x).SubItems(6) = cDisk.BytesPerSector
-                .Item(x).SubItems(7) = cDisk.strMediaType
-                .Item(x).SubItems(8) = cDisk.TotalPhysicalSectors
+                .Add Text:=CStr(Y)
+                .Item(X).SubItems(1) = cDisk.DiskName
+                .Item(X).SubItems(2) = cDisk.TotalSpace
+                .Item(X).SubItems(3) = cDisk.Cylinders
+                .Item(X).SubItems(4) = cDisk.TracksPerCylinder
+                .Item(X).SubItems(5) = cDisk.SectorsPerTrack
+                .Item(X).SubItems(6) = cDisk.BytesPerSector
+                .Item(X).SubItems(7) = cDisk.strMediaType
+                .Item(X).SubItems(8) = cDisk.TotalPhysicalSectors
             End With
         End If
     Next cDisk
         
-    LV2.ListItems.Clear: x = 0
+    LV2.ListItems.Clear: X = 0
     
     For Each cDrive In cFile.Drives
         
         If cDrive.IsDriveAvailable Then
             'le drive est accessible
-            x = x + 1
+            X = X + 1
             With LV2.ListItems
                 .Add Text:=cDrive.VolumeName
-                .Item(x).SubItems(1) = cDrive.TotalSpace
-                .Item(x).SubItems(2) = cDrive.PartitionLength
-                .Item(x).SubItems(3) = cDrive.UsedSpace
-                .Item(x).SubItems(4) = cDrive.FreeSpace
-                .Item(x).SubItems(5) = cDrive.PercentageFree
-                .Item(x).SubItems(6) = cDrive.BytesPerCluster
-                .Item(x).SubItems(7) = cDrive.UsedClusters
-                .Item(x).SubItems(8) = cDrive.FreeClusters
-                .Item(x).SubItems(9) = cDrive.TotalClusters
-                .Item(x).SubItems(10) = cDrive.HiddenSectors
-                .Item(x).SubItems(11) = cDrive.TotalLogicalSectors
-                .Item(x).SubItems(12) = cDrive.TotalPhysicalSectors
-                .Item(x).SubItems(13) = cDrive.strMediaType
-                .Item(x).SubItems(14) = Hex$(cDrive.VolumeSerialNumber)
-                .Item(x).SubItems(15) = cDrive.BytesPerSector
-                .Item(x).SubItems(16) = cDrive.SectorPerCluster
-                .Item(x).SubItems(17) = cDrive.Cylinders
-                .Item(x).SubItems(18) = cDrive.TracksPerCylinder
-                .Item(x).SubItems(19) = cDrive.SectorsPerTrack
-                .Item(x).SubItems(20) = cDrive.StartingOffset
-                .Item(x).SubItems(21) = cDrive.FileSystemName
-                .Item(x).SubItems(22) = cDrive.strDriveType
+                .Item(X).SubItems(1) = cDrive.TotalSpace
+                .Item(X).SubItems(2) = cDrive.PartitionLength
+                .Item(X).SubItems(3) = cDrive.UsedSpace
+                .Item(X).SubItems(4) = cDrive.FreeSpace
+                .Item(X).SubItems(5) = cDrive.PercentageFree
+                .Item(X).SubItems(6) = cDrive.BytesPerCluster
+                .Item(X).SubItems(7) = cDrive.UsedClusters
+                .Item(X).SubItems(8) = cDrive.FreeClusters
+                .Item(X).SubItems(9) = cDrive.TotalClusters
+                .Item(X).SubItems(10) = cDrive.HiddenSectors
+                .Item(X).SubItems(11) = cDrive.TotalLogicalSectors
+                .Item(X).SubItems(12) = cDrive.TotalPhysicalSectors
+                .Item(X).SubItems(13) = cDrive.strMediaType
+                .Item(X).SubItems(14) = Hex$(cDrive.VolumeSerialNumber)
+                .Item(X).SubItems(15) = cDrive.BytesPerSector
+                .Item(X).SubItems(16) = cDrive.SectorPerCluster
+                .Item(X).SubItems(17) = cDrive.Cylinders
+                .Item(X).SubItems(18) = cDrive.TracksPerCylinder
+                .Item(X).SubItems(19) = cDrive.SectorsPerTrack
+                .Item(X).SubItems(20) = cDrive.StartingOffset
+                .Item(X).SubItems(21) = cDrive.FileSystemName
+                .Item(X).SubItems(22) = cDrive.strDriveType
             End With
         End If
    
@@ -494,7 +498,7 @@ End Sub
 
 Private Sub mnuSaveInfos_Click()
 'enregistre les infos dans un fichier texte
-Dim s As String
+Dim S As String
 
     On Error GoTo CancelPushed
     
@@ -503,24 +507,24 @@ Dim s As String
         .DialogTitle = Lang.GetString("_SaveInfos")
         .Filter = Lang.GetString("_HTMLfile") & "|*.html"
         .InitDir = cFile.GetSpecialFolder(CSIDL_PERSONAL)
-        .Filename = vbNullString
+        .FileName = vbNullString
         .ShowSave
         
         'fichier déjà existant ==> prévient
-        If cFile.FileExists(.Filename) Then
+        If cFile.FileExists(.FileName) Then
             If MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
                 vbYesNo, Lang.GetString("_War")) <> vbYes Then Exit Sub
         End If
         
         'le recréé
-        Call cFile.CreateEmptyFile(.Filename, True)
+        Call cFile.CreateEmptyFile(.FileName, True)
         
         'créé une string à enregistrer
         'format HTML
-        s = CreateMeHtmlString(Me.LV1, Me.LV2)
+        S = CreateMeHtmlString(Me.LV1, Me.LV2)
         
         'colle la string dedans
-        Call cFile.SaveDataInFile(.Filename, s, True)
+        Call cFile.SaveDataInFile(.FileName, S, True)
         
     End With
     

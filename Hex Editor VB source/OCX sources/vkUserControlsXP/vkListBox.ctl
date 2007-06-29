@@ -203,6 +203,7 @@ Private sPattern As String
 Private bShowSystemFiles As Boolean
 Private bShowReadOnlyFiles As Boolean
 Private bUnicode As Boolean
+Private lNumberOfVisibleItemsAtEnd As Long
 
 
 '=======================================================
@@ -1064,7 +1065,7 @@ Dim bOk As Boolean
     
     With VS
         .UnRefreshControl = True
-        .Max = lListCount
+        .Max = lListCount ' - CalclNumberOfVisibleItemsAtEnd
         .UnRefreshControl = False
     End With
     
@@ -1091,9 +1092,10 @@ Dim x As Long
     
     lListCount = 1
     lSelCount = 0
+    lTopIndex = 1
     lCheckCount = 0
 
-    VS.Max = 1
+    'VS.Max = 1
     
     'refresh
     Call Refresh
@@ -1161,7 +1163,8 @@ Public Sub RemoveItem(ByVal Index As Long)
     ReDim Preserve bSelected(lListCount)
     'ReDim Preserve lHeight(lListCount)
     
-    VS.Max = lListCount - 1
+    'Le max sera recalculé DANS LE REFRESH
+    'VS.Max = lListCount - 1
     
     'refresh
     Call Refresh
@@ -1287,7 +1290,7 @@ Dim hBrush As Long
 Dim e As Long
 Dim vsEn As Boolean
 Static vsMax As Long
-
+Static lCnt As Long
     
     If bUnRefreshControl Then Exit Sub
     
@@ -1300,7 +1303,6 @@ Static vsMax As Long
     Call OleTranslateColor(lBackColor, 0, lBackColor)
     Call OleTranslateColor(lBorderColor, 0, lBorderColor)
     
-    
     '//on trace chaque élément de la liste
     
     'calcule le nombre d'items qui seront affichés
@@ -1308,16 +1310,21 @@ Static vsMax As Long
     z = 0 'contient le nombre d'items à afficher
     For y = lTopIndex To lListCount - 1
         x = x + Col.Item(y).Height
-        If x >= Height - 30 Then Exit For
+        If x > Height - 30 Then Exit For
         z = z + 1
     Next y
-    
     'limite le Max
-    If lListCount <= z + TopIndex Then VS.Max = lListCount - z
+    'If lListCount <= z + TopIndex Then VS.Max = lListCount - z
     zNumber = z 'sauvegarde le nombre d'Items affichés
     
-    If bEnable Then _
-        If z < lListCount - 1 Then VS.Enabled = True Else VS.Enabled = False
+    If bEnable Then
+        VS.Enabled = (z < lListCount - 1)
+    End If
+    
+    '//on redéfinit correctement le Max de la VS
+    VS.UnRefreshControl = True  'permet de Refresh QUE si le Max est
+    'différent depuis le dernier Refresh
+    VS.Max = lListCount - CalclNumberOfVisibleItemsAtEnd
 
     'on affiche maintenant chaque controle
     y = 1 'contient la hauteur temporaire
@@ -1359,12 +1366,16 @@ Static vsMax As Long
     '//affiche les checkboxes
     If bStyleCheckBox Then Call SplitIMGandShow(z)
     
-    'rafraichit le VS si on a changé le Max d'items (permet de changer la
-    'hauteur du thumb quand on ajoute des items)
-    If vsMax <> VS.Max Then
+    'rafraichit le VS si on a changé le Max
+    'Ou bien si on a changé le nombre d'Items
+    '(permet la MAJ du thumb)
+    VS.UnRefreshControl = False
+    If vsMax <> VS.Max Or lCnt <> lListCount Then
         vsMax = VS.Max
+        lCnt = lListCount
         Call VS.Refresh
     End If
+    
     
     '//on refresh le control
     Call UserControl.Refresh
@@ -1535,7 +1546,7 @@ Private Sub VS_Change(Value As Currency)
 Static lngOldValue
     
     'limite le Max
-    If lListCount <= zNumber + TopIndex + 1 Then VS.Max = lListCount - zNumber
+    'If lListCount <= zNumber + TopIndex + 1 Then VS.Max = lListCount - zNumber
     
     lTopIndex = CLng(Value)
 
@@ -1616,6 +1627,7 @@ Dim y As Single
 Dim lIMG As Long
 Dim tVal As Boolean
 Dim e As Long
+'Dim bErrorOccured As Boolean
     
     'Debug.Print "SplitIMGandShow"
     '0 rien
@@ -1625,23 +1637,14 @@ Dim e As Long
     '4 value survol enable
     '5 enable=false OR gray
 
-'    SrcDC = CreateCompatibleDC(UserControl.hdc)
-'    SrcObj = SelectObject(SrcDC, CreateCompatibleBitmap(UserControl.hdc, _
-'        78, 13))
-
-    'là, on va tracer un rectangle de la couleur BackColor pour effacer les pictures
-    'Line (15, 15)-(230, Height - 30), lBackColor, BF
-        
-    'on découpe l'image correspondant à lIMG depuis Image1 et on blit
-    'sur l'usercontrol
-    
     If Col.Item(1) Is Nothing Then Exit Sub
     
-    For x = lTopIndex To lTopIndex + z
+    'On Error GoTo DAMN
+    
+    For x = lTopIndex To lTopIndex + z ' + 1
     
         'Top de l'image
         e = y + Col.Item(x).Height / 2 - 100
-        
         If bChecked(x) Then
             If MouseItemIndex = x Then
                 'checké et survolé
@@ -1669,7 +1672,6 @@ Dim e As Long
             End If
         End If
         
-
         'trace l'image
         Call BitBlt(UserControl.hDC, 2, e / Screen.TwipsPerPixelY, 13, 13, pic(lIMG).hDC, _
               0, 0, SRCCOPY)
@@ -1677,7 +1679,47 @@ Dim e As Long
         'update la hauteur temporaire
         y = y + Col.Item(x).Height
     Next x
-
+    
+    'si une erreur a survenu, alors on doit tracer le dernier Item tout seul
+'    If bErrorOccured Then
+'
+'        x = lTopIndex + z '- 1
+'        Beep
+'        'Top de l'image
+'        'e = y + Col.Item(x).Height / 2 - 100
+'        If bChecked(x) Then
+'            If MouseItemIndex = x Then
+'                'checké et survolé
+'                lIMG = 4
+'            Else
+'                'checké sans survol
+'                lIMG = 3
+'            End If
+'        Else
+'            If MouseItemIndex = x Then
+'                'pas checké mais survol
+'                lIMG = 1
+'            Else
+'                'pas checké, pas survol
+'                lIMG = 0
+'            End If
+'        End If
+'
+'        'si Enable=false, on change les icones
+'        If bEnable = False Then
+'            If bChecked(x) Then
+'                lIMG = 5
+'            Else
+'                lIMG = 2
+'            End If
+'        End If
+'
+'        'trace l'image
+'        Call BitBlt(UserControl.hDC, 2, e / Screen.TwipsPerPixelY, 13, 13, pic(lIMG).hDC, _
+'              0, 0, SRCCOPY)
+'    End If
+    
+    
     '//on trace le contour
     If bDisplayBorder Then
         'on défini un brush
@@ -1696,11 +1738,13 @@ Dim e As Long
     End If
     
     Call UserControl.Refresh
-    'Debug.Print Rnd
-    'libère
-'    Call DeleteDC(SrcDC)
-'    Call DeleteObject(SrcObj)
-
+    
+'    Exit Sub
+'
+'DAMN:
+'    bErrorOccured = True 'on signale qu'une erreur a apparu ==> donc on va
+'    'avoir besoin de tracer le dernier Item à part
+'    Resume Next
 End Sub
 
 '=======================================================
@@ -1925,4 +1969,19 @@ NeedToAdd:
     'on a besoin d'ajouter l'icone
     Call picCol.Add(cFile.GetIcon(s, lIconSize), Key)
     Set GetMyIcon = picCol.Item(Key)
+End Function
+
+'=======================================================
+'calcule le nombre d'Items visibles en fin de liste
+'=======================================================
+Private Function CalclNumberOfVisibleItemsAtEnd() As Long
+Dim x As Long
+Dim T As Long
+    
+    For x = Col.Count To 1 Step -1
+        T = T + Col.Item(x).Height
+        If T >= Height Then Exit For
+    Next x
+    
+    CalclNumberOfVisibleItemsAtEnd = Col.Count - x
 End Function

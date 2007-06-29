@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmCut 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Découpeur/fusionneur de fichiers"
@@ -581,6 +581,10 @@ Private Sub Form_Load()
         .Height = 3615
     End With
     
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub
 
 Private Sub Option1_Click(Index As Integer)

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#2.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmSaveProcess 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sauvegarder le contenu mémoire du processus"
@@ -284,7 +284,7 @@ End Sub
 
 Private Sub cmdBrowse_Click()
 'browse
-Dim x As Long
+Dim X As Long
     
     On Error GoTo CancelPushed
     
@@ -292,16 +292,16 @@ Dim x As Long
         .CancelError = True
         .DialogTitle = Lang.GetString("_SelFileToSave")
         .Filter = Lang.GetString("_ExeFile") & " |*.exe|" & Lang.GetString("_TxtFile") & "|*.txt|Tous|*.*"
-        .Filename = vbNullString
+        .FileName = vbNullString
         .ShowSave
-        txtPath.Text = .Filename
+        txtPath.Text = .FileName
     End With
     
     If cFile.FileExists(txtPath.Text) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
+        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
             vbYesNo, Lang.GetString("_War"))
-        If Not (x = vbYes) Then Exit Sub
+        If Not (X = vbYes) Then Exit Sub
     End If
     
 CancelPushed:
@@ -354,6 +354,7 @@ Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
     Call clsPref.SaveFormSettings(App.Path & "\Preferences\SaveProcess.ini", Me)
     Set clsPref = Nothing
+    Set Lang = Nothing
 End Sub
 
 '=======================================================
@@ -362,36 +363,36 @@ End Sub
 Private Sub RecalcSize()
 'alors on recalcule la taille du fichier résultat
 Dim lSize As Long
-Dim x As Long
-Dim y As Long
-Dim s As String
+Dim X As Long
+Dim Y As Long
+Dim S As String
     
     lSize = 0
-    For x = 1 To lstList.ListCount
-        s = Left$(lstList.List(x), Len(lstList.List(x)) - 1)  'garde l'item sans le ']' final
-        y = InStrRev(s, "[", , vbBinaryCompare)
-        s = Mid$(s, y + 1, Len(s) - y) 'contient la taille
+    For X = 1 To lstList.ListCount
+        S = Left$(lstList.List(X), Len(lstList.List(X)) - 1)  'garde l'item sans le ']' final
+        Y = InStrRev(S, "[", , vbBinaryCompare)
+        S = Mid$(S, Y + 1, Len(S) - Y) 'contient la taille
         
-        If lstList.Selected(x) Then
+        If lstList.Selected(X) Then
             'ajoute la taille
-            lSize = lSize + Val(s)
+            lSize = lSize + Val(S)
         End If
-    Next x
+    Next X
     
     lblSize.Caption = Lang.GetString("_SizeRes") & Trim$(Str$(lSize)) & "]" & _
         vbNewLine & FormatedSize(lSize)
 End Sub
 
-Private Sub lstList_MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Private Sub lstList_MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, X As Long, Y As Long)
 'affiche le popup menu sur le listbox
-    If Button = 2 Then Me.PopupMenu Me.mnuPopUp
+    If Button = 2 Then Me.PopupMenu Me.mnuPopup
     
     Call RecalcSize  'recalcule la taille
 End Sub
 
 Private Sub mnuDeselectAll_Click()
 'décoche toutes les cases
-Dim x As Long
+Dim X As Long
     
     Call lstList.UnCheckAll
     
@@ -400,7 +401,7 @@ End Sub
 
 Private Sub mnuSelectAll_Click()
 'coche toutes les cases
-Dim x As Long
+Dim X As Long
     
     Call lstList.CheckAll
     
@@ -413,7 +414,7 @@ End Sub
 Public Sub GetProcess(ByVal lPID As Long, sFile As String)
 Dim clsProc As clsMemoryRW
 Dim LB() As Long
-Dim x As Long
+Dim X As Long
 
     txtPath.Text = sFile
     
@@ -427,9 +428,9 @@ Dim x As Long
     'les ajoute
     With lstList
         .UnRefreshControl = True
-        For x = 1 To UBound(LS())
-            Call .AddItem("Offset=[" & CStr(LB(x)) & "], " & Lang.GetString("_Size") & "=[" & CStr(LS(x)) & "]")
-        Next x
+        For X = 1 To UBound(LS())
+            Call .AddItem("Offset=[" & CStr(LB(X)) & "], " & Lang.GetString("_Size") & "=[" & CStr(LS(X)) & "]")
+        Next X
         .UnRefreshControl = False
         Call .Refresh
     End With

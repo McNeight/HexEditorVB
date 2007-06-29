@@ -270,6 +270,10 @@ Private Sub Form_Load()
     lblVersion.Caption = Lang.GetString("_Version") & " " & Trim$(Str$(App.Major)) & "." & Trim$(Str$(App.Minor)) & "." & Trim$(Str$(App.Revision))
 End Sub
 
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
+End Sub
+
 Private Sub Timer1_Timer()
     If bEndSplash Then
         'alors on ferme cette fenêtre

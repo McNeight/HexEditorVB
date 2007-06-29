@@ -173,7 +173,7 @@ End Sub
 
 Private Sub Form_Load()
 Dim var As Variant
-Dim x As Long
+Dim X As Long
 
     With Lang
         #If MODE_DEBUG Then
@@ -204,14 +204,14 @@ Dim x As Long
     LV.ListItems.Clear
     
     With LV.ListItems
-        For x = 1 To clsERREUR.NumberOfErrorInLogFile
-            .Add Text:=var(x).ErrDate
-            .Item(x).SubItems(1) = var(x).ErrTime
-            .Item(x).SubItems(2) = var(x).ErrZone
-            .Item(x).SubItems(3) = var(x).ErrSource
-            .Item(x).SubItems(4) = var(x).ErrNumber
-            .Item(x).SubItems(5) = var(x).ErrDescription
-        Next x
+        For X = 1 To clsERREUR.NumberOfErrorInLogFile
+            .Add Text:=var(X).ErrDate
+            .Item(X).SubItems(1) = var(X).ErrTime
+            .Item(X).SubItems(2) = var(X).ErrZone
+            .Item(X).SubItems(3) = var(X).ErrSource
+            .Item(X).SubItems(4) = var(X).ErrNumber
+            .Item(X).SubItems(5) = var(X).ErrDescription
+        Next X
     End With
     
     With Text1
@@ -228,4 +228,8 @@ Dim x As Long
             .Text = Lang.GetString("_NoError")
         End If
     End With
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub
