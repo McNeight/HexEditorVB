@@ -125,6 +125,7 @@ Public Event VScrollScroll()
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -459,7 +460,7 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hDC() As Long: hDC = UserControl.hDC: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get BackStyle() As BackStyleConstants: BackStyle = lBackStyle: End Property
 Public Property Let BackStyle(BackStyle As BackStyleConstants): lBackStyle = BackStyle: UserControl.BackStyle = BackStyle: bNotOk = False: UserControl_Paint: End Property
@@ -514,7 +515,7 @@ Public Property Get VScroll() As vkPrivateScroll
         .Enabled = VS.Enabled
         .EnableWheel = VS.EnableWheel
         .FrontColor = VS.FrontColor
-        .hdc = VS.hdc
+        .hDC = VS.hDC
         .hWnd = VS.hWnd
         .LargeChange = VS.LargeChange
         .LargeChangeColor = VS.LargeChangeColor
@@ -565,7 +566,7 @@ Public Property Get HScroll() As vkPrivateScroll
         .Enabled = HS.Enabled
         .EnableWheel = HS.EnableWheel
         .FrontColor = HS.FrontColor
-        .hdc = HS.hdc
+        .hDC = HS.hDC
         .hWnd = HS.hWnd
         .LargeChange = HS.LargeChange
         .LargeChangeColor = HS.LargeChangeColor
@@ -641,7 +642,7 @@ Private Sub ToRGB(ByVal Color As Long, ByRef RGB As RGB_COLOR)
     With RGB
         .R = Color And &HFF&
         .G = (Color And &HFF00&) \ &H100&
-        .b = Color \ &H10000
+        .B = Color \ &H10000
     End With
 End Sub
 
@@ -732,7 +733,7 @@ Dim H As Long
                 ScaleHeight / Screen.TwipsPerPixelY)
             
             'on dessine le contour
-            Call FrameRgn(UserControl.hdc, hRgn, hBrush, lBWidth, lBWidth)
+            Call FrameRgn(UserControl.hDC, hRgn, hBrush, lBWidth, lBWidth)
 
             'on détruit le brush et la zone
             Call DeleteObject(hBrush)
@@ -758,12 +759,12 @@ Dim H As Long
                     ScaleHeight - 30), bCol1, BF
             ElseIf lBackGradient = Horizontal Then
                 'gradient horizontal
-                Call FillGradient(UserControl.hdc, bCol1, bCol2, _
+                Call FillGradient(UserControl.hDC, bCol1, bCol2, _
                     Width / Screen.TwipsPerPixelX, Height / _
                     Screen.TwipsPerPixelY, Horizontal)
             Else
                 'gradient vertical
-                Call FillGradient(UserControl.hdc, bCol1, bCol2, _
+                Call FillGradient(UserControl.hDC, bCol1, bCol2, _
                     Width / Screen.TwipsPerPixelX, Height / _
                     Screen.TwipsPerPixelY, Vertical)
             End If
@@ -788,7 +789,7 @@ Dim H As Long
             ScaleHeight / Screen.TwipsPerPixelY)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hdc, hRgn, hBrush, lBWidth, lBWidth)
+        Call FrameRgn(UserControl.hDC, hRgn, hBrush, lBWidth, lBWidth)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)

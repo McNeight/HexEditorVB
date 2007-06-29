@@ -108,6 +108,8 @@ Private lOffsetX As Long
 Private lOffsetY As Long
 Private bGray As Boolean
 Private bUnRefreshControl As Boolean
+Private bUnicode As Boolean
+
 
 '=======================================================
 'EVENTS
@@ -135,7 +137,8 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -238,7 +241,7 @@ Dim y As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, hwnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -302,6 +305,7 @@ Private Sub UserControl_InitProperties()
         .PictureOffsetY = 0
         .GrayPictureWhenDisabled = True
         .UnRefreshControl = False
+        .UseUnicode = False
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -321,7 +325,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
@@ -353,6 +357,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("PictureOffsetX", Me.PictureOffsetX, 0)
         Call .WriteProperty("PictureOffsetY", Me.PictureOffsetY, 0)
         Call .WriteProperty("GrayPictureWhenDisabled", Me.GrayPictureWhenDisabled, True)
+        Call .WriteProperty("UseUnicode", Me.UseUnicode, False)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -386,6 +391,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.PictureOffsetY = .ReadProperty("PictureOffsetY", 0)
         Me.GrayPictureWhenDisabled = .ReadProperty("GrayPictureWhenDisabled", True)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
+        Me.UseUnicode = .ReadProperty("UseUnicode", False)
     End With
     bNotOk2 = False
     'Call UserControl_Paint  'refresh
@@ -406,13 +412,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.hwnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.hwnd
+            .hwndTrack = UserControl.hWnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With
@@ -432,14 +438,14 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
+Public Property Get hDC() As Long: hDC = UserControl.hDC: End Property
+Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get BackStyle() As BackStyleConstants: BackStyle = lBackStyle: End Property
 Public Property Let BackStyle(BackStyle As BackStyleConstants): lBackStyle = BackStyle: UserControl.BackStyle = BackStyle: bNotOk = False: UserControl_Paint: End Property
 Public Property Get TextPosition() As AlignmentConstants: TextPosition = lTextPos: End Property
 Public Property Let TextPosition(TextPosition As AlignmentConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Caption() As String: Caption = sCaption: End Property
-Public Property Let Caption(Caption As String): sCaption = Caption: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
+Public Property Let Caption(Caption As String): sCaption = Caption: Call SetAccessKeys: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 Public Property Get ShowTitle() As Boolean: ShowTitle = bShowTitle: End Property
 Public Property Let ShowTitle(ShowTitle As Boolean): bShowTitle = ShowTitle: bNotOk = False: UserControl_Paint: End Property
 Public Property Get TitleHeight() As Long: TitleHeight = lTitleHeight: End Property
@@ -500,6 +506,8 @@ Public Property Get GrayPictureWhenDisabled() As Boolean: GrayPictureWhenDisable
 Public Property Let GrayPictureWhenDisabled(GrayPictureWhenDisabled As Boolean): bGray = GrayPictureWhenDisabled: bNotOk = False: UserControl_Paint: End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
+Public Property Get UseUnicode() As Boolean: UseUnicode = bUnicode: End Property
+Public Property Let UseUnicode(UseUnicode As Boolean): bUnicode = UseUnicode: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 
 Private Sub UserControl_Paint()
 
@@ -535,7 +543,7 @@ Private Sub ToRGB(ByVal Color As Long, ByRef RGB As RGB_COLOR)
     With RGB
         .R = Color And &HFF&
         .G = (Color And &HFF00&) \ &H100&
-        .b = Color \ &H10000
+        .B = Color \ &H10000
     End With
 End Sub
 
@@ -544,7 +552,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDC, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -625,12 +633,12 @@ Dim H As Long
                 tCol1, BF
         ElseIf lTitleGradient = Horizontal Then
             'gradient horizontal
-            Call FillGradient(UserControl.hDc, tCol1, tCol2, _
+            Call FillGradient(UserControl.hDC, tCol1, tCol2, _
                 Width / Screen.TwipsPerPixelX, lTitleHeight / _
                 Screen.TwipsPerPixelY, Horizontal)
         Else
             'gradient vertical
-            Call FillGradient(UserControl.hDc, tCol1, tCol2, _
+            Call FillGradient(UserControl.hDC, tCol1, tCol2, _
                 Width / Screen.TwipsPerPixelX, lTitleHeight / _
                 Screen.TwipsPerPixelY, Vertical)
         End If
@@ -641,18 +649,33 @@ Dim H As Long
     
     'on affiche le caption
     UserControl.ForeColor = lForeColor
-    If lTextPos = vbCenter Then
-        'au centre
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_CENTER)
-    ElseIf lTextPos = vbRightJustify Then
-        'à droite
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_RIGHT)
+    
+    If bUnicode = False Then
+        If lTextPos = vbCenter Then
+            'au centre
+            Call DrawText(UserControl.hDC, sCaption, Len(sCaption), R, DT_CENTER)
+        ElseIf lTextPos = vbRightJustify Then
+            'à droite
+            Call DrawText(UserControl.hDC, sCaption, Len(sCaption), R, DT_RIGHT)
+        Else
+            'à gauche
+            Call DrawText(UserControl.hDC, sCaption, Len(sCaption), R, DT_LEFT)
+        End If
     Else
-        'à gauche
-        Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, DT_LEFT)
+        If lTextPos = vbCenter Then
+            'au centre
+            Call DrawTextW(UserControl.hDC, StrPtr(sCaption), Len(sCaption), R, DT_CENTER)
+        ElseIf lTextPos = vbRightJustify Then
+            'à droite
+            Call DrawTextW(UserControl.hDC, StrPtr(sCaption), Len(sCaption), R, DT_RIGHT)
+        Else
+            'à gauche
+            Call DrawTextW(UserControl.hDC, StrPtr(sCaption), Len(sCaption), R, DT_LEFT)
+        End If
     End If
     
-    If lBackStyle = Transparent Then
+    
+    If lBackStyle = TRANSPARENT Then
         'alors on créé une image dans le maskpicture
         
         'on dessine donc maintenant le bord
@@ -668,7 +691,7 @@ Dim H As Long
                     ScaleHeight / Screen.TwipsPerPixelY)
                 
                 'on dessine le contour
-                Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
+                Call FrameRgn(UserControl.hDC, hRgn, hBrush, lBWidth, lBWidth)
     
                 'on détruit le brush et la zone
                 Call DeleteObject(hBrush)
@@ -685,10 +708,10 @@ Dim H As Long
                     ScaleHeight / Screen.TwipsPerPixelY, lCornerSize, lCornerSize)
                 
                 'on dessine le contour
-                Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
+                Call FrameRgn(UserControl.hDC, hRgn, hBrush, lBWidth, lBWidth)
                 
                 'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
-                Call SetWindowRgn(UserControl.hwnd, hRgn, True)
+                Call SetWindowRgn(UserControl.hWnd, hRgn, True)
     
                 'on détruit le brush et la zone
                 Call DeleteObject(hBrush)
@@ -720,12 +743,12 @@ Dim H As Long
                     ScaleHeight - 30), bCol1, BF
             ElseIf lBackGradient = Horizontal Then
                 'gradient horizontal
-                Call FillGradient(UserControl.hDc, bCol1, bCol2, _
+                Call FillGradient(UserControl.hDC, bCol1, bCol2, _
                     Width / Screen.TwipsPerPixelX, Height / _
                     Screen.TwipsPerPixelY, Horizontal, Dep)
             Else
                 'gradient vertical
-                Call FillGradient(UserControl.hDc, bCol1, bCol2, _
+                Call FillGradient(UserControl.hDC, bCol1, bCol2, _
                     Width / Screen.TwipsPerPixelX, Height / _
                     Screen.TwipsPerPixelY, Vertical, Dep)
             End If
@@ -829,7 +852,7 @@ Dim H As Long
                 ScaleHeight / Screen.TwipsPerPixelY)
             
             'on dessine le contour
-            Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
+            Call FrameRgn(UserControl.hDC, hRgn, hBrush, lBWidth, lBWidth)
 
             'on détruit le brush et la zone
             Call DeleteObject(hBrush)
@@ -846,10 +869,10 @@ Dim H As Long
                 ScaleHeight / Screen.TwipsPerPixelY, lCornerSize, lCornerSize)
             
             'on dessine le contour
-            Call FrameRgn(UserControl.hDc, hRgn, hBrush, lBWidth, lBWidth)
+            Call FrameRgn(UserControl.hDC, hRgn, hBrush, lBWidth, lBWidth)
             
             'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
-            Call SetWindowRgn(UserControl.hwnd, hRgn, True)
+            Call SetWindowRgn(UserControl.hWnd, hRgn, True)
 
             'on détruit le brush et la zone
             Call DeleteObject(hBrush)
@@ -878,4 +901,18 @@ Friend Property Let MyExtender(MyExtender As Object)
     Set UserControl.Extender = MyExtender
 End Property
 
+'=======================================================
+'défini les touches de raccourci (avec '&')
+'=======================================================
+Private Sub SetAccessKeys()
+Dim a As Long
 
+    'récupère la position du '&' en partant de la fin
+    a = InStrRev(sCaption, "&")
+    
+    'si le '&' existe et n'est pas tout à la fin
+    If a <> Len(sCaption) And a <> 0 Then
+        'on récupère le caractère qui est juste après
+        AccessKeys = Mid$(sCaption, a + 1, 1)
+    End If
+End Sub

@@ -69,6 +69,7 @@ Private bNotOk2 As Boolean
 Private tAlig As AlignmentConstants
 Private bSize As Boolean
 Private bUnRefreshControl As Boolean
+Private bUnicode As Boolean
 
 
 '=======================================================
@@ -97,7 +98,7 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal HWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Attribute WindowProc.VB_Description = "Internal proc for subclassing"
 Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
@@ -202,7 +203,7 @@ Dim y As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, HWnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -250,6 +251,7 @@ Private Sub UserControl_InitProperties()
         .BorderStyle = NoBorder
         .Alignment = vbLeftJustify
         .UnRefreshControl = False
+        .UseUnicode = False
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -269,7 +271,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.HWnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
@@ -285,6 +287,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("Enabled", Me.Enabled, True)
         Call .WriteProperty("Alignment", Me.Alignment, vbLeftJustify)
         Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
+        Call .WriteProperty("UseUnicode", Me.UseUnicode, False)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -302,6 +305,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.AutoSize = .ReadProperty("AutoSize", False)
         Me.BorderStyle = .ReadProperty("BorderStyle", NoBorder)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
+        Me.UseUnicode = .ReadProperty("UseUnicode", False)
     End With
     bNotOk2 = False
     'Call UserControl_Paint  'refresh
@@ -323,13 +327,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.HWnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.HWnd
+            .hwndTrack = UserControl.hWnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With
@@ -349,8 +353,8 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Public Property Get HWnd() As Long: HWnd = UserControl.HWnd: End Property
+Public Property Get hDC() As Long: hDC = UserControl.hDC: End Property
+Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get BackStyle() As BackStyleConstants: BackStyle = lBackStyle: End Property
 Public Property Let BackStyle(BackStyle As BackStyleConstants): lBackStyle = BackStyle: UserControl.BackStyle = BackStyle: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Caption() As String: Caption = sCaption: End Property
@@ -389,6 +393,9 @@ End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
 Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
+Public Property Get UseUnicode() As Boolean: UseUnicode = bUnicode: End Property
+Public Property Let UseUnicode(UseUnicode As Boolean): bUnicode = UseUnicode: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
+
 
 
 Private Sub UserControl_Paint()
@@ -423,7 +430,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDC, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -466,7 +473,13 @@ Dim hBrush As Long
     Else
         st = DT_RIGHT
     End If
-    Call DrawText(UserControl.hDc, sCaption, Len(sCaption), R, st)
+    
+    'on trace le texte
+    If bUnicode = False Then
+        Call DrawText(UserControl.hDC, sCaption, Len(sCaption), R, st)
+    Else
+        Call DrawTextW(UserControl.hDC, StrPtr(sCaption), Len(sCaption), R, st)
+    End If
     
     '//on trace le contour
     If tBorder = FixedSingle Then
@@ -478,7 +491,7 @@ Dim hBrush As Long
             ScaleHeight / Screen.TwipsPerPixelY)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hDC, hRgn, hBrush, 1, 1)
     
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -486,7 +499,7 @@ Dim hBrush As Long
     End If
 
     '//style
-    If lBackStyle = [Transparent] Then
+    If lBackStyle = [TRANSPARENT] Then
         'transparent
         With UserControl
             .BackStyle = 0

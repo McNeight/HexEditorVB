@@ -20,6 +20,13 @@ Begin VB.UserControl vkToggleButton
       Visible         =   0   'False
       Width           =   240
    End
+   Begin VB.Image PCTmouse 
+      Height          =   240
+      Left            =   3600
+      Top             =   2160
+      Visible         =   0   'False
+      Width           =   240
+   End
    Begin VB.Image PCTcolor 
       Height          =   240
       Left            =   3240
@@ -106,6 +113,10 @@ Private lNotEnabledColor As OLE_COLOR
 Private bUnRefreshControl As Boolean
 Private bHasLeftOneTime As Boolean
 Private tCustomStyle As vkCommandStyle
+Private bUnicode As Boolean
+Private bRefOneTime As Boolean
+Private bDisplayMouseHoverIcon As Boolean
+
 
 
 '=======================================================
@@ -136,6 +147,7 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -195,13 +207,18 @@ Dim y As Long
                 RaiseEvent MouseUp(vbMiddleButton, iShift, iControl, x, y)
         Case WM_MOUSEHOVER
             If IsMouseIn = False Then
+                IsMouseIn = True
+                If bRefOneTime = False And bDisplayMouseHoverIcon Then
+                    bRefOneTime = True
+                    Call Refresh(False)
+                End If
                 Call DrawMouseEnterRect
                 RaiseEvent MouseHover
-                IsMouseIn = True
             End If
         Case WM_MOUSELEAVE
             RaiseEvent MouseLeave
             IsMouseIn = False
+            bRefOneTime = False
             bNotOk = False
             If bHasLeftOneTime Then
                 Call Refresh(False): Call DrawFocusRects
@@ -221,7 +238,7 @@ Dim y As Long
                 If (wParam And MK_MBUTTON) = MK_MBUTTON Then z = vbMiddleButton
                 RaiseEvent MouseMove(z, iShift, iControl, x, y)
         Case WM_RBUTTONDBLCLK
-                        iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
+                iShift = Abs((wParam And MK_SHIFT) = MK_SHIFT)
                 iControl = Abs((wParam And MK_CONTROL) = MK_CONTROL)
                 x = LoWord(lParam) * Screen.TwipsPerPixelX
                 y = HiWord(lParam) * Screen.TwipsPerPixelY
@@ -313,6 +330,9 @@ Private Sub UserControl_InitProperties()
         .Value = False
         .UnRefreshControl = False
         .CustomStyle = [Defaut Style - vkCommand]
+        .UseUnicode = False
+        .DisplayMouseHoverIcon = False
+        Set .MouseHoverPicture = Nothing
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -401,7 +421,10 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("DisabledBackColor", Me.DisabledBackColor, 15198183)
         Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
         Call .WriteProperty("CustomStyle", Me.CustomStyle, [Defaut Style - vkCommand])
-    End With
+        Call .WriteProperty("UseUnicode", Me.UseUnicode, False)
+        Call .WriteProperty("DisplayMouseHoverIcon", Me.DisplayMouseHoverIcon, False)
+        Call .WriteProperty("MouseHoverPicture", Me.MouseHoverPicture, Nothing)
+End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
 
@@ -431,6 +454,9 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.Value = .ReadProperty("Value", False)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
         Me.CustomStyle = .ReadProperty("CustomStyle", [Defaut Style - vkCommand])
+        Me.UseUnicode = .ReadProperty("UseUnicode", False)
+        Set Me.MouseHoverPicture = .ReadProperty("MouseHoverPicture", Nothing)
+        Me.DisplayMouseHoverIcon = .ReadProperty("DisplayMouseHoverIcon", False)
     End With
     bNotOk2 = False
     'Call UserControl_Paint  'refresh
@@ -477,12 +503,12 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hDC() As Long: hDC = UserControl.hDC: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get TextPosition() As AlignmentConstants: TextPosition = lTextPos: End Property
 Public Property Let TextPosition(TextPosition As AlignmentConstants): lTextPos = TextPosition: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Caption() As String: Caption = sCaption: End Property
-Public Property Let Caption(Caption As String): sCaption = Caption: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
+Public Property Let Caption(Caption As String): sCaption = Caption: Call SetAccessKeys: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 Public Property Get ForeColor() As OLE_COLOR: ForeColor = lForeColor: End Property
 Public Property Let ForeColor(ForeColor As OLE_COLOR): lForeColor = ForeColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: tCustomStyle = [No Style - vkCommand]: End Property
 Public Property Get BackColor1() As OLE_COLOR: BackColor1 = bCol1: End Property
@@ -617,6 +643,15 @@ End Property
 Public Property Get Value() As Boolean: Value = bPushed: End Property
 Attribute Value.VB_MemberFlags = "200"
 Public Property Let Value(Value As Boolean): bPushed = Value: bNotOk = False: UserControl_Paint: End Property
+Public Property Get UseUnicode() As Boolean: UseUnicode = bUnicode: End Property
+Public Property Let UseUnicode(UseUnicode As Boolean): bUnicode = UseUnicode: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
+Public Property Get MouseHoverPicture() As Picture: Set MouseHoverPicture = PCTmouse.Picture: End Property
+Public Property Set MouseHoverPicture(NewPic As Picture)
+Set PCTmouse.Picture = NewPic
+bNotOk = False: UserControl_Paint
+End Property
+Public Property Get DisplayMouseHoverIcon() As Boolean: DisplayMouseHoverIcon = bDisplayMouseHoverIcon: End Property
+Public Property Let DisplayMouseHoverIcon(DisplayMouseHoverIcon As Boolean): bDisplayMouseHoverIcon = DisplayMouseHoverIcon: bNotOk = False: End Property
 
 
 Private Sub UserControl_Paint()
@@ -657,11 +692,11 @@ Dim lSigne As Long
         'récupère la moyenne de couleur par unité de longueur
         rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lWidth)
         gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lWidth)
-        bAverageColorPerSizeUnit = Abs((RightColor.b - LeftColor.b) / lWidth)
+        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lWidth)
         
         'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.b)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.b)) Then
+        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
+            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
             
             lSigne = 1
         Else
@@ -669,7 +704,7 @@ Dim lSigne As Long
         End If
         
         'se positionne tout à gauche de l'objet ==> balayera vers la droite
-        Call MoveToEx(.hdc, 0, Dep, 0&)
+        Call MoveToEx(.hDC, 0, Dep, 0&)
         
         'pour chaque 'colonne' constituée par une ligne verticale, on trace une
         'ligne en récupérant la couleur correspondante
@@ -678,13 +713,13 @@ Dim lSigne As Long
             'change le ForeColor qui détermine la couleur de la Line
             'multiplie la largeur actuelle par la couleur par unité de longueur
             .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.b + x * bAverageColorPerSizeUnit * lSigne)
+                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
                
             'trace une ligne
-            Call LineTo(.hdc, x, lHeight)
+            Call LineTo(.hDC, x, lHeight)
             
             'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hdc, x, Dep, 0&)
+            Call MoveToEx(.hDC, x, Dep, 0&)
         
         Next x
         
@@ -717,11 +752,11 @@ Dim lSigne As Long
         'récupère la moyenne de couleur par unité de longueur
         rAverageColorPerSizeUnit = Abs((RightColor.R - LeftColor.R) / lHeight)
         gAverageColorPerSizeUnit = Abs((RightColor.G - LeftColor.G) / lHeight)
-        bAverageColorPerSizeUnit = Abs((RightColor.b - LeftColor.b) / lHeight)
+        bAverageColorPerSizeUnit = Abs((RightColor.B - LeftColor.B) / lHeight)
 
         'on change le signe (sens) au cas où
-        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.b)) <= _
-            CLng(RGB(RightColor.R, RightColor.G, RightColor.b)) Then
+        If CLng(RGB(LeftColor.R, LeftColor.G, LeftColor.B)) <= _
+            CLng(RGB(RightColor.R, RightColor.G, RightColor.B)) Then
             
             lSigne = 1
         Else
@@ -729,7 +764,7 @@ Dim lSigne As Long
         End If
         
         'se positionne tout à gauche de l'objet ==> balayera vers le bas
-        Call MoveToEx(.hdc, 0, Dep, 0&)
+        Call MoveToEx(.hDC, 0, Dep, 0&)
         
         'pour chaque 'colonne' constituée par une ligne verticale, on trace une
         'ligne en récupérant la couleur correspondante
@@ -738,13 +773,13 @@ Dim lSigne As Long
             'change le ForeColor qui détermine la couleur de la Line
             'multiplie la largeur actuelle par la couleur par unité de longueur
             .ForeColor = RGB(LeftColor.R + x * rAverageColorPerSizeUnit * lSigne, LeftColor.G + x * _
-                gAverageColorPerSizeUnit * lSigne, LeftColor.b + x * bAverageColorPerSizeUnit * lSigne)
+                gAverageColorPerSizeUnit * lSigne, LeftColor.B + x * bAverageColorPerSizeUnit * lSigne)
                
             'trace une ligne
-            Call LineTo(.hdc, Width, x)
+            Call LineTo(.hDC, Width, x)
             
             'bouge 'd'une colonne' vers la droite
-            Call MoveToEx(.hdc, 0, x, 0&)
+            Call MoveToEx(.hDC, 0, x, 0&)
         
         Next x
         
@@ -775,7 +810,7 @@ Private Sub ToRGB(ByVal Color As Long, ByRef RGB As RGB_COLOR)
     With RGB
         .R = Color And &HFF&
         .G = (Color And &HFF00&) \ &H100&
-        .b = Color \ &H10000
+        .B = Color \ &H10000
     End With
 End Sub
 
@@ -784,7 +819,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDC, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -839,12 +874,12 @@ Dim H As Long
                     ScaleHeight - 30), bCol1, BF
             ElseIf lGradient = Horizontal Then
                 'gradient horizontal
-                Call FillGradient(UserControl.hdc, bCol1, bCol2, _
+                Call FillGradient(UserControl.hDC, bCol1, bCol2, _
                     Width / Screen.TwipsPerPixelX, Height / _
                     Screen.TwipsPerPixelY, Horizontal)
             Else
                 'gradient vertical
-                Call FillGradient(UserControl.hdc, bCol1, bCol2, _
+                Call FillGradient(UserControl.hDC, bCol1, bCol2, _
                     Width / Screen.TwipsPerPixelX, Height / _
                     Screen.TwipsPerPixelY, Vertical)
             End If
@@ -862,12 +897,12 @@ Dim H As Long
                     ScaleHeight - 30), bCol2, BF
             ElseIf lGradient = Horizontal Then
                 'gradient horizontal
-                Call FillGradient(UserControl.hdc, tCol1, tCol2, _
+                Call FillGradient(UserControl.hDC, tCol1, tCol2, _
                     Width / Screen.TwipsPerPixelX, Height / _
                     Screen.TwipsPerPixelY, Horizontal)
             Else
                 'gradient vertical
-                Call FillGradient(UserControl.hdc, tCol1, tCol2, _
+                Call FillGradient(UserControl.hDC, tCol1, tCol2, _
                     Width / Screen.TwipsPerPixelX, Height / _
                     Screen.TwipsPerPixelY, Vertical)
             End If
@@ -879,16 +914,20 @@ Dim H As Long
     
 
     '//créé un rectangle
+    'calcule le nombre de lignes à afficher
+    x = Int((TextWidth(sCaption) + 120) / Width) + 1
+    
     If bPic And PCTcolor.Picture Then
         'alors on affiche la picture ==> décale le texte
+        
         If pctAlign = [Left Justify] Then
-            Call SetRect(R, 8 + PCTcolor.Width / Screen.TwipsPerPixelX / 2, (Height / Screen.TwipsPerPixelY - GetCharHeight) / 2, Width / Screen.TwipsPerPixelX - 4, Height / Screen.TwipsPerPixelY)
+            Call SetRect(R, 8 + PCTcolor.Width / Screen.TwipsPerPixelX / 2, (Height / Screen.TwipsPerPixelY - GetCharHeight * x) / 2, Width / Screen.TwipsPerPixelX - 4, Height / Screen.TwipsPerPixelY)
         Else
-            Call SetRect(R, 4, (Height / Screen.TwipsPerPixelY - GetCharHeight) / 2, Width / Screen.TwipsPerPixelX - 8 - PCTcolor.Width / Screen.TwipsPerPixelX / 2, Height / Screen.TwipsPerPixelY)
+            Call SetRect(R, 4, (Height / Screen.TwipsPerPixelY - GetCharHeight * x) / 2, Width / Screen.TwipsPerPixelX - 8 - PCTcolor.Width / Screen.TwipsPerPixelX / 2, Height / Screen.TwipsPerPixelY)
         End If
     Else
         'pas de picture ==> pas de décalage
-        Call SetRect(R, 4, (Height / Screen.TwipsPerPixelY - GetCharHeight) / 2, Width / Screen.TwipsPerPixelX - 4, Height / Screen.TwipsPerPixelY)
+        Call SetRect(R, 4, (Height / Screen.TwipsPerPixelY - GetCharHeight * x) / 2, Width / Screen.TwipsPerPixelX - 4, Height / Screen.TwipsPerPixelY)
     End If
     
     'on affiche le caption
@@ -897,17 +936,30 @@ Dim H As Long
     Else
         UserControl.ForeColor = 9934743
     End If
-    If lTextPos = vbCenter Then
-        'au centre
-        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_CENTER)
-    ElseIf lTextPos = vbRightJustify Then
-        'à droite
-        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_RIGHT)
-    Else
-        'à gauche
-        Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, DT_LEFT)
-    End If
     
+    If bUnicode = False Then
+        If lTextPos = vbCenter Then
+            'au centre
+            Call DrawText(UserControl.hDC, sCaption, Len(sCaption), R, DT_CENTER)
+        ElseIf lTextPos = vbRightJustify Then
+            'à droite
+            Call DrawText(UserControl.hDC, sCaption, Len(sCaption), R, DT_RIGHT)
+        Else
+            'à gauche
+            Call DrawText(UserControl.hDC, sCaption, Len(sCaption), R, DT_LEFT)
+        End If
+    Else
+        If lTextPos = vbCenter Then
+            'au centre
+            Call DrawTextW(UserControl.hDC, StrPtr(sCaption), Len(sCaption), R, DT_CENTER)
+        ElseIf lTextPos = vbRightJustify Then
+            'à droite
+            Call DrawTextW(UserControl.hDC, StrPtr(sCaption), Len(sCaption), R, DT_RIGHT)
+        Else
+            'à gauche
+            Call DrawTextW(UserControl.hDC, StrPtr(sCaption), Len(sCaption), R, DT_LEFT)
+        End If
+    End If
     
     
     '//on va se tracer la bitmap maintenant ^^
@@ -916,36 +968,71 @@ Dim H As Long
         
         'on choisit celle à afficher (Grise ou pas)
         If bEnable Or Not (bGray) Then
-            With PCTcolor
-                'on move IMG en fonction du choix de Aligment
-                'on centre l'image dans la barre de titre
-                If pctAlign = [Left Justify] Then
-                    'à gauche
-                    
-                    W = (Height - .Height) / 2 + lOffsetY
-                    H = (Width - TextWidth(sCaption)) / 2 - .Width + lOffsetX - 4
-                    If W < 0 Then W = 0
-                    If H < 0 Then H = 0
-                    
-                    .Top = W
-                    .Left = H '2 pxls + arrondi
-                    
-                Else
-                    'à droite
-                    
-                    W = (Height - .Height) / 2 + lOffsetY
-                    H = (Width - TextWidth(sCaption)) / 2 + TextWidth(sCaption) / 2 + .Width + lOffsetX + 4
-                    If H < 0 Then H = 0
-                    If W < 0 Then W = 0
-        
-                    .Top = W
-                    .Left = H '2 pxls + arrondi
-                    
-                End If
-                    
-                .Visible = True
-                PCTgray.Visible = False
-            End With
+            If IsMouseIn Then
+                With PCTmouse
+                    'on move IMG en fonction du choix de Aligment
+                    'on centre l'image dans la barre de titre
+                    If pctAlign = [Left Justify] Then
+                        'à gauche
+                        
+                        W = (Height - .Height) / 2 + lOffsetY
+                        H = (Width - TextWidth(sCaption)) / 2 - .Width + lOffsetX - 4
+                        If W < 0 Then W = 0
+                        If H < 0 Then H = 0
+                        
+                        .Top = W
+                        .Left = H '2 pxls + arrondi
+                        
+                    Else
+                        'à droite
+                        
+                        W = (Height - .Height) / 2 + lOffsetY
+                        H = (Width - TextWidth(sCaption)) / 2 + TextWidth(sCaption) / 2 + .Width + lOffsetX + 4
+                        If H < 0 Then H = 0
+                        If W < 0 Then W = 0
+            
+                        .Top = W
+                        .Left = H '2 pxls + arrondi
+                        
+                    End If
+                        
+                    .Visible = True
+                    PCTgray.Visible = False
+                    PCTcolor.Visible = False
+                End With
+            Else
+                With PCTcolor
+                    'on move IMG en fonction du choix de Aligment
+                    'on centre l'image dans la barre de titre
+                    If pctAlign = [Left Justify] Then
+                        'à gauche
+                        
+                        W = (Height - .Height) / 2 + lOffsetY
+                        H = (Width - TextWidth(sCaption)) / 2 - .Width + lOffsetX - 4
+                        If W < 0 Then W = 0
+                        If H < 0 Then H = 0
+                        
+                        .Top = W
+                        .Left = H '2 pxls + arrondi
+                        
+                    Else
+                        'à droite
+                        
+                        W = (Height - .Height) / 2 + lOffsetY
+                        H = (Width - TextWidth(sCaption)) / 2 + TextWidth(sCaption) / 2 + .Width + lOffsetX + 4
+                        If H < 0 Then H = 0
+                        If W < 0 Then W = 0
+            
+                        .Top = W
+                        .Left = H '2 pxls + arrondi
+                        
+                    End If
+                        
+                    .Visible = True
+                    PCTgray.Visible = False
+                    PCTmouse.Visible = False
+                End With
+            End If
         Else
             With PCTgray
                 'on move IMG en fonction du choix de Aligment
@@ -998,7 +1085,7 @@ Dim H As Long
             ScaleHeight / Screen.TwipsPerPixelY)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hDC, hRgn, hBrush, 1, 1)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -1015,7 +1102,7 @@ Dim H As Long
             ScaleHeight / Screen.TwipsPerPixelY, 7, 7)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hDC, hRgn, hBrush, 1, 1)
         
         'on défini la zone rectangulaire arrondi comme nouvelle fenêtre
         Call SetWindowRgn(UserControl.hWnd, hRgn, True)
@@ -1130,3 +1217,19 @@ End Property
 Friend Property Let MyExtender(MyExtender As Object)
     Set UserControl.Extender = MyExtender
 End Property
+
+'=======================================================
+'défini les touches de raccourci (avec '&')
+'=======================================================
+Private Sub SetAccessKeys()
+Dim A As Long
+
+    'récupère la position du '&' en partant de la fin
+    A = InStrRev(sCaption, "&")
+    
+    'si le '&' existe et n'est pas tout à la fin
+    If A <> Len(sCaption) And A <> 0 Then
+        'on récupère le caractère qui est juste après
+        AccessKeys = Mid$(sCaption, A + 1, 1)
+    End If
+End Sub

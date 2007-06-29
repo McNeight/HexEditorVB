@@ -46,7 +46,7 @@ Option Explicit
 'ENUMS
 '=======================================================
 Public Enum BackStyleConstants
-    Transparent = 0
+    TRANSPARENT = 0
     Opaque = 1
 End Enum
 Public Enum Label_Mode

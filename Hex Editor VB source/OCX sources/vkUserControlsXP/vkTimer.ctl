@@ -66,14 +66,20 @@ Private bNotOk As Boolean
 '=======================================================
 Public Property Get Enabled() As Boolean: Enabled = bEnable: End Property
 Attribute Enabled.VB_Description = "Enable or not the control"
-Public Property Let Enabled(Enabled As Boolean): bEnable = Enabled: Refresh: End Property
+Public Property Let Enabled(Enabled As Boolean)
+If bEnable <> Enabled Then
+    bEnable = Enabled: Refresh
+End If
+End Property
 Public Property Get Interval() As Long: Interval = lInterval: End Property
 Attribute Interval.VB_Description = "Interval of timer"
 Public Property Let Interval(Interval As Long)
-If Interval < 0 Then Interval = 0
-lInterval = Interval
-Call UserControl_Terminate
-Refresh
+If Interval <> lInterval Then
+    If Interval < 0 Then Interval = 0
+    lInterval = Interval
+    Call UserControl_Terminate
+    Refresh
+End If
 End Property
 
 
@@ -145,7 +151,6 @@ Private Sub Refresh()
             
         'on ajoute un timer à la collection
         Call AddTimer(ObjPtr(Me), "_" & hTimer) 'pointeur sur CE vkTimer
-
     End If
 End Sub
 

@@ -574,7 +574,7 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hDC() As Long: hDC = UserControl.hDC: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get BackColor() As OLE_COLOR: BackColor = bCol: End Property
 Public Property Let BackColor(BackColor As OLE_COLOR): bCol = BackColor: bNotOk = False: UserControl_Paint: End Property
@@ -679,7 +679,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDC, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 

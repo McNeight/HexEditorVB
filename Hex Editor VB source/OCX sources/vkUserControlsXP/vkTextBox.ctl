@@ -111,14 +111,14 @@ Private Type SCROLLINFO
     nPos As Long
     nTrackPos As Long
 End Type
-Private Declare Function PostMessage Lib "user32" Alias "PostMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Private Declare Function ShowScrollBar Lib "user32" (ByVal hwnd As Long, ByVal wBar As Long, ByVal bShow As Long) As Long
-Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Private Declare Function SendMessageStr Lib "user32" Alias "SendMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Any) As Long
+Private Declare Function PostMessage Lib "user32" Alias "PostMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Private Declare Function ShowScrollBar Lib "user32" (ByVal hWnd As Long, ByVal wBar As Long, ByVal bShow As Long) As Long
+Private Declare Function SendMessage Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Private Declare Function SendMessageStr Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Any) As Long
 Private Declare Function GetSystemMetrics Lib "user32" (ByVal nIndex As Long) As Long
-Private Declare Function GetScrollRange Lib "user32" (ByVal hwnd As Long, ByVal nBar As Long, lpMinPos As Long, lpMaxPos As Long) As Long
-Private Declare Function GetScrollPos Lib "user32" (ByVal hwnd As Long, ByVal nBar As Long) As Long
-Private Declare Function GetScrollInfo Lib "user32" (ByVal hwnd As Long, ByVal fnBar As Integer, lPsi As SCROLLINFO) As Boolean
+Private Declare Function GetScrollRange Lib "user32" (ByVal hWnd As Long, ByVal nBar As Long, lpMinPos As Long, lpMaxPos As Long) As Long
+Private Declare Function GetScrollPos Lib "user32" (ByVal hWnd As Long, ByVal nBar As Long) As Long
+Private Declare Function GetScrollInfo Lib "user32" (ByVal hWnd As Long, ByVal fnBar As Integer, lPsi As SCROLLINFO) As Boolean
 
 'Private Declare Function SetScrollPos Lib "user32" (ByVal hwnd As Long, ByVal code As Long, ByVal nPos As Long, ByVal fRedraw As Boolean) As Long
 'Const WS_EX_STATICEDGE = &H20000
@@ -231,6 +231,7 @@ Private bNot3 As Long
 Private bDamn As Boolean
 Private bDoNotSync As Boolean
 Private bOk4 As Boolean
+Private bUnicode As Boolean
 'Private tScroll As New vkListBoxVScroll
 
 
@@ -270,7 +271,8 @@ Public Event HScrolled(Value As Currency)
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal hwnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -405,7 +407,7 @@ Dim F As Long
     End Select
     
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, hwnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -434,7 +436,7 @@ Dim lPsi As SCROLLINFO
     '//on enable ou pas le HS
     lPsi.cbSize = Len(lPsi)
     lPsi.fMask = SIF_PAGE
-    Call GetScrollInfo(Text1(2).hwnd, SB_HORZ, lPsi)
+    Call GetScrollInfo(Text1(2).hWnd, SB_HORZ, lPsi)
     o = HS.Enabled
     HS.Enabled = (lPsi.nPage <> 1)
     
@@ -540,6 +542,7 @@ Private Sub UserControl_InitProperties()
         .LegendWidth = 250
         .LegendOrientation = VerticalLegend
         .AuthorizedChars = vbNullString
+        .UseUnicode = False
     End With
     bNotOk2 = False
     Call UserControl_Paint  'refresh
@@ -559,7 +562,7 @@ End Sub
 
 Private Sub UserControl_Terminate()
     'vire le subclassing
-    If OldProc Then Call SetWindowLong(UserControl.hwnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
 End Sub
 
 Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
@@ -591,6 +594,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("LegendWidth", Me.LegendWidth, 250)
         Call .WriteProperty("LegendOrientation", Me.LegendOrientation, VerticalLegend)
         Call .WriteProperty("AuthorizedChars", Me.AuthorizedChars, vbNullString)
+        Call .WriteProperty("UseUnicode", Me.UseUnicode, False)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -624,6 +628,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.LegendWidth = .ReadProperty("LegendWidth", 250)
         Me.LegendOrientation = .ReadProperty("LegendOrientation", VerticalLegend)
         Me.AuthorizedChars = .ReadProperty("AuthorizedChars", vbNullString)
+        Me.UseUnicode = .ReadProperty("UseUnicode", False)
        ' Me.VScroll = .ReadProperty("VScroll", tScroll)
     End With
     bNotOk2 = False
@@ -725,7 +730,7 @@ Dim hRgn As Long
     'tout en la masquant !
     hRgn = CreateRectRgn(0, 0, Text1(2).Width / Screen.TwipsPerPixelX, _
             Text1(2).Height / Screen.TwipsPerPixelY - GetSystemMetrics(SM_CYHSCROLL))
-    Call SetWindowRgn(Text1(2).hwnd, hRgn, True)
+    Call SetWindowRgn(Text1(2).hWnd, hRgn, True)
     Call DeleteObject(hRgn)
     
     bNotOk = False
@@ -739,13 +744,13 @@ Private Sub LaunchKeyMouseEvents()
                 
     If Ambient.UserMode Then
 
-        OldProc = SetWindowLong(UserControl.hwnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'prépare le terrain pour le mouse_over et mouse_leave
         With ET
             .cbSize = Len(ET)
-            .hwndTrack = UserControl.hwnd
+            .hwndTrack = UserControl.hWnd
             .dwFlags = TME_LEAVE Or TME_HOVER
             .dwHoverTime = 1
         End With
@@ -765,8 +770,8 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hDc() As Long: hDc = UserControl.hDc: End Property
-Public Property Get hwnd() As Long: hwnd = UserControl.hwnd: End Property
+Public Property Get hDC() As Long: hDC = UserControl.hDC: End Property
+Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get Text() As String: Text = sText: End Property
 Public Property Let Text(Text As String): sText = Text: bNotOk = False: UserControl_Paint: bNotOk = True: Text1(1).Text = sText: Text1(0).Text = sText: Text1(2).Text = sText: End Property
 Public Property Get ForeColor() As OLE_COLOR: ForeColor = lForeColor: End Property
@@ -909,36 +914,36 @@ If LegendAutosize And tLegendOrientation = HorizontalLegend And tLegendType = Si
 UserControl_Resize
 End Property
 Public Property Get LeftMargin() As Long: LeftMargin = lLeftMargin: End Property
-Public Property Let LeftMargin(LeftMargin As Long): lLeftMargin = LeftMargin: Call PostMessage(Text1(0).hwnd, EM_SETMARGINS, EC_LEFTMARGIN, LeftMargin): Call PostMessage(Text1(1).hwnd, EM_SETMARGINS, EC_LEFTMARGIN, LeftMargin): Call PostMessage(Text1(2).hwnd, EM_SETMARGINS, EC_LEFTMARGIN, LeftMargin): End Property
+Public Property Let LeftMargin(LeftMargin As Long): lLeftMargin = LeftMargin: Call PostMessage(Text1(0).hWnd, EM_SETMARGINS, EC_LEFTMARGIN, LeftMargin): Call PostMessage(Text1(1).hWnd, EM_SETMARGINS, EC_LEFTMARGIN, LeftMargin): Call PostMessage(Text1(2).hWnd, EM_SETMARGINS, EC_LEFTMARGIN, LeftMargin): End Property
 Public Property Get RightMargin() As Long: RightMargin = lRightMargin: End Property
-Public Property Let RightMargin(RightMargin As Long): lRightMargin = RightMargin: Call PostMessage(Text1(0).hwnd, EM_SETMARGINS, EC_RIGHTMARGIN, RightMargin): Call PostMessage(Text1(1).hwnd, EM_SETMARGINS, EC_RIGHTMARGIN, RightMargin): Call PostMessage(Text1(2).hwnd, EM_SETMARGINS, EC_RIGHTMARGIN, RightMargin): End Property
-Public Property Get FirstVisibleLine() As Long: FirstVisibleLine = SendMessage(Text1(lCurrentTextBox).hwnd, EM_GETFIRSTVISIBLELINE, 0, 0): End Property
+Public Property Let RightMargin(RightMargin As Long): lRightMargin = RightMargin: Call PostMessage(Text1(0).hWnd, EM_SETMARGINS, EC_RIGHTMARGIN, RightMargin): Call PostMessage(Text1(1).hWnd, EM_SETMARGINS, EC_RIGHTMARGIN, RightMargin): Call PostMessage(Text1(2).hWnd, EM_SETMARGINS, EC_RIGHTMARGIN, RightMargin): End Property
+Public Property Get FirstVisibleLine() As Long: FirstVisibleLine = SendMessage(Text1(lCurrentTextBox).hWnd, EM_GETFIRSTVISIBLELINE, 0, 0): End Property
 Public Property Get LineCount() As Long
-LineCount = SendMessage(Text1(lCurrentTextBox).hwnd, EM_GETLINECOUNT, 0, 0)
+LineCount = SendMessage(Text1(lCurrentTextBox).hWnd, EM_GETLINECOUNT, 0, 0)
 End Property
 Public Property Get FirstChar(Optional ByVal LineIndex As Long = -1)
 If LineIndex = -1 Then LineIndex = Me.LineIndex(Text1(lCurrentTextBox).SelStart)
-FirstChar = SendMessage(Text1(lCurrentTextBox).hwnd, EM_LINEINDEX, LineIndex, 0)
+FirstChar = SendMessage(Text1(lCurrentTextBox).hWnd, EM_LINEINDEX, LineIndex, 0)
 End Property
 Public Property Get LineLength(Optional ByVal LineIndex As Long = -1, Optional ByVal CharPos = -1)
 If LineIndex <> -1 Then CharPos = FirstChar(LineIndex)
 If CharPos = -1 Then CharPos = Text1(lCurrentTextBox).SelStart
-LineLength = SendMessage(Text1(lCurrentTextBox).hwnd, EM_LINELENGTH, CharPos, 0)
+LineLength = SendMessage(Text1(lCurrentTextBox).hWnd, EM_LINELENGTH, CharPos, 0)
 End Property
 Public Property Get LineIndex(Optional ByVal CharPos = -1) As Long
 If CharPos = -1 Then CharPos = Text1(lCurrentTextBox).SelStart
-LineIndex = 1 + SendMessage(Text1(lCurrentTextBox).hwnd, EM_LINEFROMCHAR, CharPos, 0)
+LineIndex = 1 + SendMessage(Text1(lCurrentTextBox).hWnd, EM_LINEFROMCHAR, CharPos, 0)
 End Property
 Public Property Get AuthorizedChars() As String: AuthorizedChars = sAuthorizedChars: End Property
 Public Property Let AuthorizedChars(AuthorizedChars As String): sAuthorizedChars = AuthorizedChars: Call CheckChars: End Property
 Public Property Let LineNumber(LineIndex As Long)
     LineIndex = LineIndex - 1
     If LineIndex > LineCount Or LineIndex < 0 Then Exit Property
-    Text1(lCurrentTextBox).SelStart = SendMessage(Text1(lCurrentTextBox).hwnd, EM_LINEINDEX, LineIndex, 0)
+    Text1(lCurrentTextBox).SelStart = SendMessage(Text1(lCurrentTextBox).hWnd, EM_LINEINDEX, LineIndex, 0)
     Call Me.EnsureCaretVisibility
 End Property
 Public Property Let FirstVisibleLine(NewLine As Long)
-Call SendMessage(Text1(lCurrentTextBox).hwnd, EM_LINESCROLL, 0, _
+Call SendMessage(Text1(lCurrentTextBox).hWnd, EM_LINESCROLL, 0, _
         CLng(NewLine - 1 - FirstVisibleLine))
 End Property
 'Public Property Get VSValue() As Long: VSValue = VS.Value: End Property
@@ -954,8 +959,8 @@ Public Property Get VScroll() As vkPrivateScroll
         .Enabled = VS.Enabled
         .EnableWheel = VS.EnableWheel
         .FrontColor = VS.FrontColor
-        .hDc = VS.hDc
-        .hwnd = VS.hwnd
+        .hDC = VS.hDC
+        .hWnd = VS.hWnd
         .LargeChange = VS.LargeChange
         .LargeChangeColor = VS.LargeChangeColor
         .Max = VS.Max
@@ -997,6 +1002,8 @@ Public Property Let VScroll(VScroll As vkPrivateScroll)
     Call VS.Refresh
     bNotOk = False: Call UserControl_Paint
 End Property
+Public Property Get UseUnicode() As Boolean: UseUnicode = bUnicode: End Property
+Public Property Let UseUnicode(UseUnicode As Boolean): bUnicode = UseUnicode: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 
 
 Private Sub UserControl_Paint()
@@ -1080,7 +1087,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hDc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDC, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -1091,54 +1098,54 @@ End Function
 'effectue un Undo
 '=======================================================
 Public Sub Undo()
-    Call PostMessage(Text1(0).hwnd, EM_UNDO, 0, 0)
-    Call PostMessage(Text1(1).hwnd, EM_UNDO, 0, 0)
-    Call PostMessage(Text1(2).hwnd, EM_UNDO, 0, 0)
+    Call PostMessage(Text1(0).hWnd, EM_UNDO, 0, 0)
+    Call PostMessage(Text1(1).hWnd, EM_UNDO, 0, 0)
+    Call PostMessage(Text1(2).hWnd, EM_UNDO, 0, 0)
 End Sub
 
 '=======================================================
 'clear le buffer des Undo
 '=======================================================
 Public Sub ClearUndoBuffer()
-    Call SendMessage(Text1(0).hwnd, EM_EMPTYUNDOBUFFER, 0, 0)
-    Call SendMessage(Text1(1).hwnd, EM_EMPTYUNDOBUFFER, 0, 0)
-    Call SendMessage(Text1(2).hwnd, EM_EMPTYUNDOBUFFER, 0, 0)
+    Call SendMessage(Text1(0).hWnd, EM_EMPTYUNDOBUFFER, 0, 0)
+    Call SendMessage(Text1(1).hWnd, EM_EMPTYUNDOBUFFER, 0, 0)
+    Call SendMessage(Text1(2).hWnd, EM_EMPTYUNDOBUFFER, 0, 0)
 End Sub
 
 '=======================================================
 'effectue un Copier de la sélection
 '=======================================================
 Public Sub Copy()
-    Call PostMessage(Text1(0).hwnd, WM_COPY, 0, 0)
-    Call PostMessage(Text1(1).hwnd, WM_COPY, 0, 0)
-    Call PostMessage(Text1(2).hwnd, WM_COPY, 0, 0)
+    Call PostMessage(Text1(0).hWnd, WM_COPY, 0, 0)
+    Call PostMessage(Text1(1).hWnd, WM_COPY, 0, 0)
+    Call PostMessage(Text1(2).hWnd, WM_COPY, 0, 0)
 End Sub
 
 '=======================================================
 'effectue un Couper de la sélection
 '=======================================================
 Public Sub Cut()
-    Call PostMessage(Text1(0).hwnd, WM_CUT, 0, 0)
-    Call PostMessage(Text1(1).hwnd, WM_CUT, 0, 0)
-    Call PostMessage(Text1(2).hwnd, WM_CUT, 0, 0)
+    Call PostMessage(Text1(0).hWnd, WM_CUT, 0, 0)
+    Call PostMessage(Text1(1).hWnd, WM_CUT, 0, 0)
+    Call PostMessage(Text1(2).hWnd, WM_CUT, 0, 0)
 End Sub
 
 '=======================================================
 'effectue un Coller de la sélection
 '=======================================================
 Public Sub Paste()
-    Call PostMessage(Text1(0).hwnd, WM_PASTE, 0, 0)
-    Call PostMessage(Text1(1).hwnd, WM_PASTE, 0, 0)
-    Call PostMessage(Text1(2).hwnd, WM_PASTE, 0, 0)
+    Call PostMessage(Text1(0).hWnd, WM_PASTE, 0, 0)
+    Call PostMessage(Text1(1).hWnd, WM_PASTE, 0, 0)
+    Call PostMessage(Text1(2).hWnd, WM_PASTE, 0, 0)
 End Sub
 
 '=======================================================
 'Scrolls the caret into view.
 '=======================================================
 Public Sub EnsureCaretVisibility()
-    Call SendMessage(Text1(0).hwnd, EM_SCROLLCARET, 0&, 0&)
-    Call SendMessage(Text1(1).hwnd, EM_SCROLLCARET, 0&, 0&)
-    Call SendMessage(Text1(2).hwnd, EM_SCROLLCARET, 0&, 0&)
+    Call SendMessage(Text1(0).hWnd, EM_SCROLLCARET, 0&, 0&)
+    Call SendMessage(Text1(1).hWnd, EM_SCROLLCARET, 0&, 0&)
+    Call SendMessage(Text1(2).hWnd, EM_SCROLLCARET, 0&, 0&)
 End Sub
 
 '=======================================================
@@ -1147,7 +1154,7 @@ End Sub
 Public Function GetLineByCoords(ByVal x, ByVal y) As Long
 Dim LineIndex  As Long
     x = Int(x / 15): y = Int(y / 15)
-    LineIndex = SendMessage(Text1(lCurrentTextBox).hwnd, EM_CHARFROMPOS, 0, CLng(y * 2 ^ 16 + x))
+    LineIndex = SendMessage(Text1(lCurrentTextBox).hWnd, EM_CHARFROMPOS, 0, CLng(y * 2 ^ 16 + x))
     GetLineByCoords = LineIndex \ 2 ^ 16
 End Function
 
@@ -1157,7 +1164,7 @@ End Function
 Public Function GetCharByCoords(ByVal x, ByVal y) As Long
 Dim CharIndex  As Long
     x = Int(x / 15): y = Int(y / 15)
-    CharIndex = SendMessage(Text1(lCurrentTextBox).hwnd, EM_CHARFROMPOS, 0, CLng(y * &H10000 + x))
+    CharIndex = SendMessage(Text1(lCurrentTextBox).hWnd, EM_CHARFROMPOS, 0, CLng(y * &H10000 + x))
     GetCharByCoords = Int(CharIndex And &HFFFF&)
 End Function
 
@@ -1191,13 +1198,13 @@ Dim lLen As Long
     lPos = Me.FirstChar(n)
     
     'récupère la taille de la ligne en donnant son premier char
-    lLen = SendMessage(Text1(lCurrentTextBox).hwnd, EM_LINELENGTH, lPos, 0&)
+    lLen = SendMessage(Text1(lCurrentTextBox).hWnd, EM_LINELENGTH, lPos, 0&)
     
     'dimensionne le buffer
     Buf = Space$(lLen)
     
     'récupère le texte
-    Call SendMessageStr(Text1(lCurrentTextBox).hwnd, EM_GETLINE, n, Buf)
+    Call SendMessageStr(Text1(lCurrentTextBox).hWnd, EM_GETLINE, n, Buf)
     
     GetLine = Buf
 
@@ -1253,12 +1260,12 @@ Dim x As Long
             Line (15, 15)-(lLegendWidth, ScaleHeight - 30), lLegendBackColor1, BF
         ElseIf tLegendGradient = Horizontal Then
             'gradient horizontal
-            Call FillGradient(UserControl.hDc, lLegendBackColor1, lLegendBackColor2, _
+            Call FillGradient(UserControl.hDC, lLegendBackColor1, lLegendBackColor2, _
                 lLegendWidth / Screen.TwipsPerPixelX, Height / _
                 Screen.TwipsPerPixelY, Horizontal)
         Else
             'gradient vertical
-            Call FillGradient(UserControl.hDc, lLegendBackColor1, lLegendBackColor2, _
+            Call FillGradient(UserControl.hDC, lLegendBackColor1, lLegendBackColor2, _
                 lLegendWidth / Screen.TwipsPerPixelX, Height / _
                 Screen.TwipsPerPixelY, Vertical)
         End If
@@ -1278,7 +1285,7 @@ Dim x As Long
             ScaleHeight / Screen.TwipsPerPixelY)
         
         'on dessine le contour
-        Call FrameRgn(UserControl.hDc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hDC, hRgn, hBrush, 1, 1)
     
         '//on sauve la picture dans le MaskPicture
         'sera utilisée lors du réaffichage des lignes pour éviter
@@ -1299,7 +1306,7 @@ Dim x As Long
             'alors vertical
             
             'récupère la police utilisée (celle du Usercontrol)
-            hFont = SelectObject(hDc, CreateFontIndirect(ttFont))
+            hFont = SelectObject(hDC, CreateFontIndirect(ttFont))
             
             'récupère un LOGFONT
             Call GetObjectA(hFont, Len(ttFont), ttFont)
@@ -1309,7 +1316,7 @@ Dim x As Long
             
             'on associe la font au DC du UserControl
             hObj = CreateFontIndirect(ttFont)
-            Call SelectObject(hDc, hObj)
+            Call SelectObject(hDC, hObj)
     
             UserControl.ForeColor = lLegendForeColor
             
@@ -1324,15 +1331,23 @@ Dim x As Long
             
             'on définit la hauteur en fonction de l'alignement
             If tLegendAlignmentY = vbCenter Then
-                CurrentY = (Height - TextWidth(sLegendText)) / 2 + TextWidth(sLegendText)
+                CurrentY = (Height - TextWidth(sLegendText)) / 2 '+ TextWidth(sLegendText)
             ElseIf tLegendAlignmentY = vbLeftJustify Then
-                CurrentY = ScaleHeight - 60
+                CurrentY = 0
             Else
-                CurrentY = TextWidth(sLegendText) + 45
+                CurrentY = Height - TextWidth(sLegendText) - 45
             End If
             
             'on affiche le texte
-            Print sLegendText
+            Call SetRect(R, CurrentX / Screen.TwipsPerPixelX, _
+                ScaleHeight / 15 - 2 - CurrentY / Screen.TwipsPerPixelY, _
+                lLegendWidth / Screen.TwipsPerPixelX, -ScaleHeight / 15)
+            
+            If bUnicode Then
+                Call DrawTextW(UserControl.hDC, StrPtr(sLegendText), Len(sLegendText), R, DT_LEFT)
+            Else
+                Call DrawText(UserControl.hDC, sLegendText, Len(sLegendText), R, DT_LEFT)
+            End If
             
             'on vire les objets créés
             Call DeleteObject(hObj)
@@ -1340,7 +1355,7 @@ Dim x As Long
             'alors horizontal
             
             'récupère la police utilisée (celle du Usercontrol)
-            hFont = SelectObject(hDc, CreateFontIndirect(ttFont))
+            hFont = SelectObject(hDC, CreateFontIndirect(ttFont))
             
             'récupère un LOGFONT
             Call GetObjectA(hFont, Len(ttFont), ttFont)
@@ -1350,7 +1365,7 @@ Dim x As Long
             
             'on associe la font au DC du UserControl
             hObj = CreateFontIndirect(ttFont)
-            Call SelectObject(hDc, hObj)
+            Call SelectObject(hDC, hObj)
     
             UserControl.ForeColor = lLegendForeColor
             
@@ -1373,7 +1388,13 @@ Dim x As Long
             End If
             
             'on affiche le texte
-            Print sLegendText
+            Call SetRect(R, CurrentX / Screen.TwipsPerPixelX, CurrentY / Screen.TwipsPerPixelY, lLegendWidth / Screen.TwipsPerPixelX, Height / Screen.TwipsPerPixelY)
+            
+            If bUnicode Then
+                Call DrawTextW(UserControl.hDC, StrPtr(sLegendText), Len(sLegendText), R, DT_LEFT)
+            Else
+                Call DrawText(UserControl.hDC, sLegendText, Len(sLegendText), R, DT_LEFT)
+            End If
             
             'on vire les objets créés
             Call DeleteObject(hObj)
@@ -1415,7 +1436,7 @@ Dim zNumber As Long
     zNumber = FirstVisibleLine
     
     'on change maintenant la FirstVisibleLine
-    Call SendMessage(Text1(lCurrentTextBox).hwnd, EM_LINESCROLL, 0, _
+    Call SendMessage(Text1(lCurrentTextBox).hWnd, EM_LINESCROLL, 0, _
         CLng(Value - zNumber - 1))
         
     'on en refresh QUE si on a changé de value entre temps
@@ -1522,18 +1543,18 @@ Static lngOldValue As Currency
    ' bDoNotSync = True
     
     'on change maintenant la FirstVisibleLine
-    vale = GetScrollPos(Text1(2).hwnd, SB_HORZ) 'value de la HScroll classique
+    vale = GetScrollPos(Text1(2).hWnd, SB_HORZ) 'value de la HScroll classique
     
     If Abs(Value - lngOldValue) < 1 Then Exit Sub
     
     'scroll horizontalement
-    Call SendMessage(Text1(2).hwnd, EM_LINESCROLL, Value - lngOldValue, 0)
+    Call SendMessage(Text1(2).hWnd, EM_LINESCROLL, Value - lngOldValue, 0)
     If Value = 0 Then
         'alors tout à gauche
-        Call SendMessage(Text1(2).hwnd, EM_LINESCROLL, -1, 0)
+        Call SendMessage(Text1(2).hWnd, EM_LINESCROLL, -1, 0)
     ElseIf Round(Value) = HS.Max Then
         'alors tout à droite
-        Call SendMessage(Text1(2).hwnd, EM_LINESCROLL, 1, 0)
+        Call SendMessage(Text1(2).hWnd, EM_LINESCROLL, 1, 0)
     End If
     
     lngOldValue = Value
@@ -1560,7 +1581,7 @@ Private Function GetHMax()
 Dim lPsi As SCROLLINFO
     lPsi.cbSize = Len(lPsi)
     lPsi.fMask = SIF_RANGE
-    Call GetScrollInfo(Text1(2).hwnd, SB_HORZ, lPsi)
+    Call GetScrollInfo(Text1(2).hWnd, SB_HORZ, lPsi)
     GetHMax = lPsi.nMax
 End Function
 
@@ -1571,7 +1592,7 @@ Private Function GetHValue()
 Dim lPsi As SCROLLINFO
     lPsi.cbSize = Len(lPsi)
     lPsi.fMask = SIF_ALL
-    Call GetScrollInfo(Text1(2).hwnd, SB_HORZ, lPsi)
+    Call GetScrollInfo(Text1(2).hWnd, SB_HORZ, lPsi)
     GetHValue = lPsi.nTrackPos
 End Function
 
@@ -1585,7 +1606,7 @@ Dim lPsi As SCROLLINFO
     
     lPsi.cbSize = Len(lPsi)
     lPsi.fMask = SIF_ALL
-    Call GetScrollInfo(Text1(2).hwnd, SB_HORZ, lPsi)
+    Call GetScrollInfo(Text1(2).hWnd, SB_HORZ, lPsi)
     
     With HS
         .Max = Int((lPsi.nMax - lPsi.nPage) / 7)

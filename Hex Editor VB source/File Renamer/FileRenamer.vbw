@@ -1,9 +1,9 @@
-frmMain = 0, 0, 0, 0, C, 0, 0, 0, 0, C
+frmMain = 66, 87, 569, 517, , 0, 0, 0, 0, C
 AfClsManifest = 0, 0, 0, 0, C
-frmResult = 0, 0, 0, 0, C, 0, 0, 0, 0, C
-frmAbout = 0, 0, 0, 0, C, 0, 0, 0, 0, C
-frmSimul = 0, 0, 0, 0, C, 0, 0, 0, 0, C
-Demarrage = 88, 116, 639, 406, Z
+frmResult = 88, 116, 591, 546, , 0, 0, 0, 0, C
+frmAbout = 44, 58, 547, 488, , 0, 0, 0, 0, C
+frmSimul = 110, 145, 613, 575, Z, 0, 0, 0, 0, C
+Demarrage = 88, 116, 639, 406, 
 Declarations = 0, 0, 0, 0, C
 clsTagInfo = 0, 0, 0, 0, C
 clsTag = 0, 0, 0, 0, C

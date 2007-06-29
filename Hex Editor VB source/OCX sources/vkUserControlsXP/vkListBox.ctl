@@ -202,6 +202,7 @@ Private bShowHiddenFiles As Boolean
 Private sPattern As String
 Private bShowSystemFiles As Boolean
 Private bShowReadOnlyFiles As Boolean
+Private bUnicode As Boolean
 
 
 '=======================================================
@@ -237,6 +238,7 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Attribute WindowProc.VB_Description = "Internal proc for subclassing"
+Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -519,6 +521,7 @@ Private Sub UserControl_InitProperties()
         .ShowHiddenFiles = True
         .ShowReadOnlyFiles = True
         .ShowSystemFiles = True
+        .UseUnicode = False
     End With
     bNotOk2 = False
     bNotOk = True: Call UserControl_Paint 'refresh
@@ -701,6 +704,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("ShowReadOnlyFiles", Me.ShowReadOnlyFiles, True)
         Call .WriteProperty("ShowSystemFiles", Me.ShowSystemFiles, True)
         Call .WriteProperty("Pattern", Me.Pattern, "*.*")
+        Call .WriteProperty("UseUnicode", Me.UseUnicode, False)
     End With
     bNotOk2 = False
 End Sub
@@ -738,6 +742,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.ShowReadOnlyFiles = .ReadProperty("ShowReadOnlyFiles", True)
         Me.ShowSystemFiles = .ReadProperty("ShowSystemFiles", True)
         Me.Pattern = .ReadProperty("Pattern", "*.*")
+        Me.UseUnicode = .ReadProperty("UseUnicode", False)
     End With
     bNotOk2 = False
     If tListType = SimpleList Then
@@ -818,7 +823,7 @@ Public Property Get VScroll() As vkPrivateScroll
         .Enabled = VS.Enabled
         .EnableWheel = VS.EnableWheel
         .FrontColor = VS.FrontColor
-        .hdc = VS.hdc
+        .hDC = VS.hDC
         .hWnd = VS.hWnd
         .LargeChange = VS.LargeChange
         .LargeChangeColor = VS.LargeChangeColor
@@ -863,7 +868,7 @@ Public Property Let VScroll(VScroll As vkPrivateScroll)
 End Property
 
 '//Proptiétés normales
-Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hDC() As Long: hDC = UserControl.hDC: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get SelColor() As OLE_COLOR: SelColor = lSelColor: End Property
 Public Property Let SelColor(SelColor As OLE_COLOR): lSelColor = SelColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
@@ -967,6 +972,9 @@ Public Property Let Pattern(Pattern As String)
 sPattern = Pattern
 bNotOk = False: Call AddFileToList
 End Property
+Public Property Get UseUnicode() As Boolean: UseUnicode = bUnicode: End Property
+Public Property Let UseUnicode(UseUnicode As Boolean): bUnicode = UseUnicode: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
+
 
 Private Sub UserControl_Paint()
 
@@ -1260,7 +1268,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDC, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -1340,7 +1348,7 @@ Static vsMax As Long
             ScaleHeight / Screen.TwipsPerPixelY)
 
         'on dessine le contour
-        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hDC, hRgn, hBrush, 1, 1)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)
@@ -1465,7 +1473,12 @@ Dim H As Long
         UserControl.ForeColor = 10070188
     End If
     
-    Call DrawText(UserControl.hdc, Item.Text, Len(Item.Text), R, st)
+    If bUnicode = False Then
+        Call DrawText(UserControl.hDC, Item.Text, Len(Item.Text), R, st)
+    Else
+        Call DrawTextW(UserControl.hDC, StrPtr(Item.Text), Len(Item.Text), R, st)
+    End If
+    
     Set UserControl.Font = tF 'restaure la fonte d'origine
 End Sub
 
@@ -1491,10 +1504,10 @@ Dim pic As StdPicture
     'icone de fichier par ListType<>NormalList
     If Item.pctType = 0 Then
     
-        SrcDC = CreateCompatibleDC(UserControl.hdc)
+        SrcDC = CreateCompatibleDC(UserControl.hDC)
         SrcObj = SelectObject(SrcDC, Item.Icon)
     
-        Call BitBlt(UserControl.hdc, 4 + e, y, Item.pxlIconWidth, _
+        Call BitBlt(UserControl.hDC, 4 + e, y, Item.pxlIconWidth, _
             Item.pxlIconHeight, SrcDC, 0, 0, SRCCOPY)
     
         Call DeleteDC(SrcDC)
@@ -1507,7 +1520,7 @@ Dim pic As StdPicture
             
         Set pic = GetMyIcon(Item.tagString1)
         
-        Call DrawIconEx(hdc, 4 + e, y, pic, Item.pxlIconWidth, _
+        Call DrawIconEx(hDC, 4 + e, y, pic, Item.pxlIconWidth, _
             Item.pxlIconHeight, 0, 0, DI_NORMAL)
         'Else
             'Call PaintPicture(tPic(Item.Index), 4 + e, y, _
@@ -1658,7 +1671,7 @@ Dim e As Long
         
 
         'trace l'image
-        Call BitBlt(UserControl.hdc, 2, e / Screen.TwipsPerPixelY, 13, 13, pic(lIMG).hdc, _
+        Call BitBlt(UserControl.hDC, 2, e / Screen.TwipsPerPixelY, 13, 13, pic(lIMG).hDC, _
               0, 0, SRCCOPY)
         
         'update la hauteur temporaire
@@ -1675,7 +1688,7 @@ Dim e As Long
             ScaleHeight / Screen.TwipsPerPixelY)
 
         'on dessine le contour
-        Call FrameRgn(UserControl.hdc, hRgn, hBrush, 1, 1)
+        Call FrameRgn(UserControl.hDC, hRgn, hBrush, 1, 1)
 
         'on détruit le brush et la zone
         Call DeleteObject(hBrush)

@@ -48,11 +48,11 @@ Attribute VB_Exposed = True
 Option Explicit
 
 
-Private Declare Function SetForegroundWindow Lib "user32" (ByVal HWnd As Long) As Long
-Private Declare Function GetParent Lib "user32" (ByVal HWnd As Long) As Long
-Private Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal HWnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
+Private Declare Function SetForegroundWindow Lib "user32" (ByVal hWnd As Long) As Long
+Private Declare Function GetParent Lib "user32" (ByVal hWnd As Long) As Long
+Private Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" (ByVal hWnd As Long, ByVal nIndex As Long, ByVal dwNewLong As Long) As Long
 Private Declare Function RegisterWindowMessage Lib "user32" Alias "RegisterWindowMessageA" (ByVal lpString As String) As Long
-Private Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal HWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Private Declare Function CallWindowProc Lib "user32" Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 
 '=======================================================
 'VARIABLES PRIVEES
@@ -89,13 +89,14 @@ Public Event MouseMove(Button As MouseButtonConstants, ID As Long)
 ' Cette fonction doit rester la premiere '
 ' fonction "public" du module de classe  '
 '=======================================================
-Public Function WindowProc(ByVal HWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Attribute WindowProc.VB_MemberFlags = "40"
     
     'appelle la gestion des events
     Call Raiser(uMsg, lParam, wParam, wParam)
         
     'appel de la routine standard pour les autres messages
-    WindowProc = CallWindowProc(OldProc, HWnd, uMsg, wParam, lParam)
+    WindowProc = CallWindowProc(OldProc, hWnd, uMsg, wParam, lParam)
     
 End Function
 
@@ -158,7 +159,7 @@ Private Sub Raiser(lParam As Long, uMsg As Long, wParam As Long, ID As Long)
         
         'ceci permet de pouvoir cliquer à côté du menu en le faisant disparaitre
         'si l'user a prévu un popup menu
-        Call SetForegroundWindow(GetParent(UserControl.HWnd))
+        Call SetForegroundWindow(GetParent(UserControl.hWnd))
     End If
     
     
@@ -221,7 +222,7 @@ Private Sub LaunchKeyMouseEvents()
     If Ambient.UserMode Then
 
         'change la WindowProc
-        OldProc = SetWindowLong(UserControl.HWnd, GWL_WNDPROC, _
+        OldProc = SetWindowLong(UserControl.hWnd, GWL_WNDPROC, _
             VarPtr(mAsm(0)))    'pas de AddressOf aujourd'hui ;)
             
         'lance un hook sur le message TaskBarCreated (permet de récupérer le moment
@@ -244,14 +245,14 @@ Private Sub UserControl_Terminate()
 Dim x As Long
 
     'vire les subclassing
-    If OldProc Then Call SetWindowLong(UserControl.HWnd, GWL_WNDPROC, OldProc)
+    If OldProc Then Call SetWindowLong(UserControl.hWnd, GWL_WNDPROC, OldProc)
     'If OldOne Then Call SetWindowLong(UserControl.ContainerHwnd, GWL_WNDPROC, OldOne)
 
     'on vire toutes les icones
     For x = 0 To UBound(tIcon())
 
         'enlève tous les Tray de la collection
-        Call RemoveVkTray("_" & CStr(HWnd) & CStr(x))
+        Call RemoveVkTray("_" & CStr(hWnd) & CStr(x))
 
         'enlève l'image
         Call Shell_NotifyIcon(NIM_DELETE, tIcon(x))
@@ -300,7 +301,7 @@ Public Sub AddToTray(Optional ByVal ID As Long = 0)
     'on définit notre type perso pour le passer après en paramètre de l'API
     With tIcon(ID)
         .cbSize = Len(tIcon(ID))
-        .HWnd = UserControl.HWnd
+        .hWnd = UserControl.hWnd
         .uID = ID
         .uFlags = NIF_ICON Or NIF_MESSAGE Or NIF_TIP
         .uCallbackMessage = WM_MOUSEMOVE
@@ -314,7 +315,7 @@ Public Sub AddToTray(Optional ByVal ID As Long = 0)
     Call Shell_NotifyIcon(NIM_ADD, tIcon(ID))
 
     'on ajoute ce Tray à la collection
-    Call AddVkTray(ObjPtr(Me), "_" & CStr(HWnd) & CStr(ID))   'pointeur sur CE vkSysTray
+    Call AddVkTray(ObjPtr(Me), "_" & CStr(hWnd) & CStr(ID))   'pointeur sur CE vkSysTray
 End Sub
 
 '=======================================================
@@ -329,7 +330,7 @@ Public Sub RemoveFromTray(Optional ByVal ID As Long = 0)
     Call Shell_NotifyIcon(NIM_DELETE, tIcon(ID))
     
     'on vire de la collection
-    Call RemoveVkTray("_" & CStr(HWnd) & CStr(ID))
+    Call RemoveVkTray("_" & CStr(hWnd) & CStr(ID))
     
     'on ne redimensionne QUE si on vient de virer le dernier Item<>0
     If UBound(tIcon()) = ID And ID > 0 Then
