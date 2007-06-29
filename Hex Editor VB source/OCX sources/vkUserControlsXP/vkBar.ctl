@@ -730,7 +730,7 @@ Dim lRet As Long    'retour de l'API
         pct.Picture = tpn.Image
         
         'plaque la picturebox de devant sur la picturebox contenant la barre
-        Call StretchBlt(pct.hdc, 0, 0, Int(Screen.TwipsPerPixelX * lValueWidth), pct.Height, frontImg.hdc, 0, _
+        Call StretchBlt(pct.hDC, 0, 0, Int(Screen.TwipsPerPixelX * lValueWidth), pct.Height, frontImg.hDC, 0, _
         0, frontImg.Width, frontImg.Height, &HCC0020)
         
         'pct.Picture = frontImg.Picture

@@ -72,41 +72,41 @@ Private lBrushColor As Long
 '=======================================================
 Private Declare Function BitBlt Lib "gdi32" (ByVal hDestDC As Long, ByVal x As Long, ByVal y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal xSrc As Long, ByVal ySrc As Long, ByVal dwRop As Long) As Long
 Private Declare Function CopyImage Lib "user32" (ByVal hImage As Long, ByVal uType As Long, ByVal OutputWidth As Long, ByVal OutputHeight As Long, ByVal fuFlags As Long) As Long
-Private Declare Function CreateCompatibleBitmap Lib "gdi32" (ByVal hdc As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
-Private Declare Function CreateCompatibleDC Lib "gdi32" (ByVal hdc As Long) As Long
+Private Declare Function CreateCompatibleBitmap Lib "gdi32" (ByVal hDC As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
+Private Declare Function CreateCompatibleDC Lib "gdi32" (ByVal hDC As Long) As Long
 Private Declare Function CreatePalette Lib "gdi32" (lpLogPalette As LOGPALETTE) As Long
-Private Declare Function DeleteDC Lib "gdi32" (ByVal hdc As Long) As Long
+Private Declare Function DeleteDC Lib "gdi32" (ByVal hDC As Long) As Long
 Private Declare Function DeleteObject Lib "gdi32" (ByVal hObject As Long) As Long
 Private Declare Function GetDC Lib "user32" (ByVal hWnd As Long) As Long
-Private Declare Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, ByVal iCapabilitiy As Long) As Long
-Private Declare Function GetSystemPaletteEntries Lib "gdi32" (ByVal hdc As Long, ByVal wStartIndex As Long, ByVal wNumEntries As Long, lpPaletteEntries As PALETTEENTRY) As Long
+Private Declare Function GetDeviceCaps Lib "gdi32" (ByVal hDC As Long, ByVal iCapabilitiy As Long) As Long
+Private Declare Function GetSystemPaletteEntries Lib "gdi32" (ByVal hDC As Long, ByVal wStartIndex As Long, ByVal wNumEntries As Long, lpPaletteEntries As PALETTEENTRY) As Long
 Private Declare Function OleCreatePictureIndirect Lib "olepro32.dll" (PicDesc As PicBmp, RefIID As GUID, ByVal fPictureOwnsHandle As Long, IPic As IPicture) As Long
-Private Declare Function RealizePalette Lib "gdi32" (ByVal hdc As Long) As Long
-Private Declare Function ReleaseDC Lib "user32" (ByVal hWnd As Long, ByVal hdc As Long) As Long
-Private Declare Function SelectObject Lib "gdi32" (ByVal hdc As Long, ByVal hObject As Long) As Long
-Private Declare Function SelectPalette Lib "gdi32" (ByVal hdc As Long, ByVal hPalette As Long, ByVal bForceBackground As Long) As Long
-Private Declare Function InvertRect Lib "user32" (ByVal hdc As Long, lpRect As RECT) As Long
+Private Declare Function RealizePalette Lib "gdi32" (ByVal hDC As Long) As Long
+Private Declare Function ReleaseDC Lib "user32" (ByVal hWnd As Long, ByVal hDC As Long) As Long
+Private Declare Function SelectObject Lib "gdi32" (ByVal hDC As Long, ByVal hObject As Long) As Long
+Private Declare Function SelectPalette Lib "gdi32" (ByVal hDC As Long, ByVal hPalette As Long, ByVal bForceBackground As Long) As Long
+Private Declare Function InvertRect Lib "user32" (ByVal hDC As Long, lpRect As RECT) As Long
 Private Declare Function CreateSolidBrush Lib "gdi32" (ByVal crColor As Long) As Long
-Private Declare Function FillRect Lib "user32" (ByVal hdc As Long, lpRect As RECT, ByVal hBrush As Long) As Long
+Private Declare Function FillRect Lib "user32" (ByVal hDC As Long, lpRect As RECT, ByVal hBrush As Long) As Long
 Private Declare Function GetSysColor Lib "user32" (ByVal nIndex As Long) As Long
-Private Declare Function DrawTextAPI Lib "user32" Alias "DrawTextA" (ByVal hdc As Long, ByVal lpStr As String, ByVal nCount As Long, lpRect As RECT, ByVal wFormat As Long) As Long
+Private Declare Function DrawTextAPI Lib "user32" Alias "DrawTextA" (ByVal hDC As Long, ByVal lpStr As String, ByVal nCount As Long, lpRect As RECT, ByVal wFormat As Long) As Long
 Private Declare Function MulDiv Lib "kernel32" (ByVal nNumber As Long, ByVal nNumerator As Long, ByVal nDenominator As Long) As Long
 Private Declare Function CreateFontIndirect Lib "gdi32" Alias "CreateFontIndirectA" (lpLogFont As LOGFONT) As Long
-Private Declare Function SetTextColor Lib "gdi32" (ByVal hdc As Long, ByVal crColor As Long) As Long
-Private Declare Function MoveToEx Lib "gdi32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, lpPoint As POINTAPI) As Long
-Private Declare Function LineTo Lib "gdi32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long) As Long
+Private Declare Function SetTextColor Lib "gdi32" (ByVal hDC As Long, ByVal crColor As Long) As Long
+Private Declare Function MoveToEx Lib "gdi32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, lpPoint As POINTAPI) As Long
+Private Declare Function LineTo Lib "gdi32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long) As Long
 Private Declare Function CreatePen Lib "gdi32" (ByVal nPenStyle As Long, ByVal nWidth As Long, ByVal crColor As Long) As Long
-Private Declare Function GradientFillRect Lib "msimg32" Alias "GradientFill" (ByVal hdc As Long, pVertex As TRIVERTEX, ByVal dwNumVertex As Long, pMesh As GRADIENT_RECT, ByVal dwNumMesh As Long, ByVal dwMode As Long) As Long
-Private Declare Function GetPixelAPI Lib "gdi32" Alias "GetPixel" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long) As Long
-Private Declare Function DrawFocusRectAPI Lib "user32" Alias "DrawFocusRect" (ByVal hdc As Long, lpRect As RECT) As Long
-Private Declare Function Ellipse Lib "gdi32" (ByVal hdc As Long, ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long) As Long
-Private Declare Function Rectangle Lib "gdi32" (ByVal hdc As Long, ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long) As Long
-Private Declare Function RoundRect Lib "gdi32" (ByVal hdc As Long, ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long, ByVal X3 As Long, ByVal Y3 As Long) As Long
-Private Declare Function SetBkMode Lib "gdi32.dll" (ByVal hdc As Long, ByVal nBkMode As Long) As Long
-Private Declare Function SetBkColor Lib "gdi32" (ByVal hdc As Long, ByVal crColor As Long) As Long
-Private Declare Function DrawEdgeAPI Lib "user32" Alias "DrawEdge" (ByVal hdc As Long, qrc As RECT, ByVal Edge As Long, ByVal grfFlags As Long) As Long
+Private Declare Function GradientFillRect Lib "msimg32" Alias "GradientFill" (ByVal hDC As Long, pVertex As TRIVERTEX, ByVal dwNumVertex As Long, pMesh As GRADIENT_RECT, ByVal dwNumMesh As Long, ByVal dwMode As Long) As Long
+Private Declare Function GetPixelAPI Lib "gdi32" Alias "GetPixel" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long) As Long
+Private Declare Function DrawFocusRectAPI Lib "user32" Alias "DrawFocusRect" (ByVal hDC As Long, lpRect As RECT) As Long
+Private Declare Function Ellipse Lib "gdi32" (ByVal hDC As Long, ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long) As Long
+Private Declare Function Rectangle Lib "gdi32" (ByVal hDC As Long, ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long) As Long
+Private Declare Function RoundRect Lib "gdi32" (ByVal hDC As Long, ByVal X1 As Long, ByVal Y1 As Long, ByVal X2 As Long, ByVal Y2 As Long, ByVal X3 As Long, ByVal Y3 As Long) As Long
+Private Declare Function SetBkMode Lib "gdi32.dll" (ByVal hDC As Long, ByVal nBkMode As Long) As Long
+Private Declare Function SetBkColor Lib "gdi32" (ByVal hDC As Long, ByVal crColor As Long) As Long
+Private Declare Function DrawEdgeAPI Lib "user32" Alias "DrawEdge" (ByVal hDC As Long, qrc As RECT, ByVal Edge As Long, ByVal grfFlags As Long) As Long
 Private Declare Function CreateBrushIndirect Lib "gdi32" (lpLogBrush As LOGBRUSH) As Long
-Private Declare Function SetPixelV Lib "gdi32" (ByVal hdc As Long, ByVal x As Long, ByVal y As Long, ByVal crColor As Long) As Long
+Private Declare Function SetPixelV Lib "gdi32" (ByVal hDC As Long, ByVal x As Long, ByVal y As Long, ByVal crColor As Long) As Long
 
 
 
@@ -335,11 +335,11 @@ End Property
 Public Property Get Font() As StdFont
     Set Font = tFont
 End Property
-Public Property Get hdc() As Long
-    hdc = lhDc
+Public Property Get hDC() As Long
+    hDC = lhDc
 End Property
 Public Property Get Picture() As StdPicture
-    Set Picture = hDCToPicture(Me.hdc, 0, 0, lWidth, lHeight)
+    Set Picture = hDCToPicture(Me.hDC, 0, 0, lWidth, lHeight)
 End Property
 
 Public Property Let Width(Width As Long)
@@ -355,14 +355,14 @@ Public Property Let BackColor(BackColor As Long)
 End Property
 Public Property Let ForeColor(ForeColor As Long)
     lForeColor = ForeColor
-    Call SetTextColor(Me.hdc, GetColor(ForeColor))
+    Call SetTextColor(Me.hDC, GetColor(ForeColor))
 End Property
 Public Property Let Font(Font As StdFont)
     Set tFont = Font
     Call AssociateFont(Font)
 End Property
-Public Property Let hdc(hdc As Long)
-    lhDc = hdc
+Public Property Let hDC(hDC As Long)
+    lhDc = hDC
 End Property
 Public Property Set Picture(Picture As StdPicture)
     Set tPicture = Picture
@@ -395,14 +395,14 @@ Public Property Get BackMode() As BackModeEnum
 End Property
 Public Property Let BackMode(BackMode As BackModeEnum)
     tBackMode = BackMode
-    If Me.hdc Then Call SetBkMode(Me.hdc, BackMode)
+    If Me.hDC Then Call SetBkMode(Me.hDC, BackMode)
 End Property
 Public Property Get BkColor() As Long
     BkColor = lBkColor
 End Property
 Public Property Let BkColor(BkColor As Long)
     lBkColor = BkColor
-    If Me.hdc Then Call SetBkColor(Me.hdc, BkColor)
+    If Me.hDC Then Call SetBkColor(Me.hDC, BkColor)
 End Property
 
 Public Property Get BrushStyle() As BrushStyleEnum
@@ -461,7 +461,7 @@ Private Sub Class_Terminate()
     Call DeleteObject(lImage)
     Call DeleteObject(hPen)
     Call DeleteObject(hBrush)
-    Call DeleteDC(Me.hdc)
+    Call DeleteDC(Me.hDC)
 
 End Sub
 
@@ -487,13 +487,13 @@ Dim hDesktop As Long
     hDesktop = GetDC(HWND_DESKTOP)
 
     'création DC compatible
-    Me.hdc = CreateCompatibleDC(hDesktop)
+    Me.hDC = CreateCompatibleDC(hDesktop)
 
     'création image
     lImage = CreateCompatibleBitmap(hDesktop, lWidth, lHeight)
     
     'on lie l'image
-    lRetDC = SelectObject(Me.hdc, lImage)
+    lRetDC = SelectObject(Me.hDC, lImage)
 
     'initialise la Picture
     Set Me.Picture = Nothing
@@ -502,15 +502,15 @@ Dim hDesktop As Long
     Call ReleaseDC(HWND_DESKTOP, hDesktop)
     
     'change le BackMode
-    Call SetBkMode(Me.hdc, tBackMode)
+    Call SetBkMode(Me.hDC, tBackMode)
     
 End Sub
 
 '=======================================================
 'copie le contenu de notre picture vers le HDC désiré
 '=======================================================
-Public Sub PaintToDC(hdc As Long, Left As Long, Top As Long)
-    Call BitBlt(hdc, Left, Top, lWidth, lHeight, Me.hdc, 0&, 0&, vbSrcCopy)
+Public Sub PaintToDC(hDC As Long, Left As Long, Top As Long)
+    Call BitBlt(hDC, Left, Top, lWidth, lHeight, Me.hDC, 0&, 0&, vbSrcCopy)
 End Sub
 
 '=======================================================
@@ -541,7 +541,7 @@ Dim hMem As Long
     Call ReleaseDC(HWND_DESKTOP, hDesktop)
 
     'applique le STD
-    Call BitBlt(Me.hdc, Left, Top, iWidth, iHeight, hTempDC, 0, 0, vbSrcCopy)
+    Call BitBlt(Me.hDC, Left, Top, iWidth, iHeight, hTempDC, 0, 0, vbSrcCopy)
 
     'libère.
     Call SelectObject(hTempDC, hMem)
@@ -575,7 +575,7 @@ Dim tRect As RECT
     End With
     
     'trace le texte
-    Call DrawTextAPI(Me.hdc, strString, Len(strString), tRect, Style)
+    Call DrawTextAPI(Me.hDC, strString, Len(strString), tRect, Style)
     
 End Sub
 
@@ -595,10 +595,10 @@ Dim hPen As Long
     End If
     
     'déplace vers le point actif
-    Call MoveToEx(Me.hdc, X1, Y1, T)
+    Call MoveToEx(Me.hDC, X1, Y1, T)
     
     'trace la ligne
-    Call LineTo(Me.hdc, X2, Y2)
+    Call LineTo(Me.hDC, X2, Y2)
     
 End Sub
 
@@ -651,7 +651,7 @@ Dim Hconst As Long
     End With
     
     'maintenant on trace le gradient !
-    Call GradientFillRect(Me.hdc, VERT(0), 2, gRect, 1, Hconst)
+    Call GradientFillRect(Me.hDC, VERT(0), 2, gRect, 1, Hconst)
 
 End Sub
 
@@ -675,11 +675,11 @@ Dim tRect As RECT
     End With
 
     'on remplit la zone et on libère le brush
-    Call FillRect(Me.hdc, tRect, hBrush2)
+    Call FillRect(Me.hDC, tRect, hBrush2)
     Call DeleteObject(hBrush2)
     
     'on remet l'ancien Brush si existant
-    If hBrush Then Call SelectObject(Me.hdc, hBrush)
+    If hBrush Then Call SelectObject(Me.hDC, hBrush)
 
 End Sub
 
@@ -745,7 +745,7 @@ Dim hMem As Long
     Call Me.CreateMyDC(lWidth, lHeight)
 
     'copie l'image du pct
-    Call BitBlt(Me.hdc, 0&, 0&, lWidth, lHeight, pct.hdc, 0&, 0&, vbSrcCopy)
+    Call BitBlt(Me.hDC, 0&, 0&, lWidth, lHeight, pct.hDC, 0&, 0&, vbSrcCopy)
 
     'libère
     Call SelectObject(hTempDC, hMem)
@@ -765,14 +765,14 @@ End Sub
 'ajoute un point de couleur
 '=======================================================
 Public Sub SetPixel(x As Long, y As Long, Color As Long)
-    Call SetPixelV(Me.hdc, x, y, Color)
+    Call SetPixelV(Me.hDC, x, y, Color)
 End Sub
 
 '=======================================================
 'récupère la couleur d'ub point
 '=======================================================
 Public Function GetPixel(x As Long, y As Long) As Long
-    GetPixel = GetPixelAPI(Me.hdc, x, y)
+    GetPixel = GetPixelAPI(Me.hDC, x, y)
 End Function
 
 '=======================================================
@@ -792,7 +792,7 @@ Dim R As RECT
     End With
     
     'dessine le rectangle
-    Call DrawFocusRectAPI(Me.hdc, R)
+    Call DrawFocusRectAPI(Me.hDC, R)
 End Sub
 
 '=======================================================
@@ -801,7 +801,7 @@ End Sub
 Public Sub DrawEllipse(X1 As Long, Y1 As Long, X2 As Long, Y2 As Long)
     
     'trace l'ellipse
-    Call Ellipse(Me.hdc, X1, Y1, X2, Y2)
+    Call Ellipse(Me.hDC, X1, Y1, X2, Y2)
 
 End Sub
 
@@ -811,7 +811,7 @@ End Sub
 Public Sub DrawRectangle(X1 As Long, Y1 As Long, X2 As Long, Y2 As Long)
     
     'trace le rectangle
-    Call Rectangle(Me.hdc, X1, Y1, X2, Y2)
+    Call Rectangle(Me.hDC, X1, Y1, X2, Y2)
     
 End Sub
 
@@ -822,7 +822,7 @@ Public Sub DrawRoundRectangle(X1 As Long, Y1 As Long, X2 As Long, _
     Y2 As Long, X3 As Long, Y3 As Long)
 
     'trace le rectangle
-    Call RoundRect(Me.hdc, X1, Y1, X2, Y2, X3, Y3)
+    Call RoundRect(Me.hDC, X1, Y1, X2, Y2, X3, Y3)
 
 End Sub
 
@@ -843,7 +843,7 @@ Dim R As RECT
     End With
     
     'trace
-    Call DrawEdgeAPI(Me.hdc, R, Edge, Flags)
+    Call DrawEdgeAPI(Me.hDC, R, Edge, Flags)
 End Sub
 
 '=======================================================
@@ -948,19 +948,19 @@ Dim nSize As Byte
         .lfStrikeOut = Abs(CLng(Font.Strikethrough))
         .lfUnderline = Abs(CLng(Font.Underline))
         .lfWeight = Font.Weight
-        .lfHeight = MulDiv(Font.Size, GetDeviceCaps(Me.hdc, _
+        .lfHeight = MulDiv(Font.Size, GetDeviceCaps(Me.hDC, _
             LOGPIXELSY), 72)
     End With
     
     'si déjà une fonte, alors on la supprime
     If hFont <> 0 Then
-        Call SelectObject(Me.hdc, hOldFont)
+        Call SelectObject(Me.hDC, hOldFont)
         Call DeleteObject(hFont)
     End If
     
     'on sélectionne la nouvelle fonte
     hFont = CreateFontIndirect(tFont)
-    hOldFont = SelectObject(Me.hdc, hFont)
+    hOldFont = SelectObject(Me.hDC, hFont)
 
 End Sub
 '=======================================================
@@ -993,7 +993,7 @@ Private Sub SelectNewPen()
     hPen = CreatePen(ttPenStyle, lPenWidth, lPenColor)
     
     'on l'associe
-    Call SelectObject(Me.hdc, hPen)
+    Call SelectObject(Me.hDC, hPen)
     
 End Sub
 '=======================================================
@@ -1016,6 +1016,6 @@ Dim LB As LOGBRUSH
     hBrush = CreateBrushIndirect(LB)
     
     'on l'associe
-    Call SelectObject(Me.hdc, hBrush)
+    Call SelectObject(Me.hDC, hBrush)
     
 End Sub

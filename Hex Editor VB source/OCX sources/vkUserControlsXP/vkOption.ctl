@@ -81,6 +81,7 @@ Private lGroup As Byte
 Private tAlig As AlignmentConstants
 Private bUnRefreshControl As Boolean
 Private bHasLeftOneTime As Boolean
+Private bUnicode As Boolean
             
 
 '=======================================================
@@ -112,6 +113,7 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
 Attribute WindowProc.VB_Description = "Internal proc for subclassing"
+Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -284,7 +286,7 @@ Dim x As Long
     Call SetRect(R, 17, y - 1, TextWidth(sCaption) / Screen.TwipsPerPixelX + 23, y + _
         GetCharHeight + 2)
     'dessine
-    Call DrawFocusRect(UserControl.hdc, R)
+    Call DrawFocusRect(UserControl.hDC, R)
     
     If lBackStyle = [TRANSPARENT] Then
         'transparent
@@ -352,6 +354,7 @@ Dim x As Long
         .Value = False
         .Alignment = vbLeftJustify
         .UnRefreshControl = False
+        .UseUnicode = False
     End With
     
     'maintenant on va tenter de déterminer le Group convenable : part à la recherche
@@ -449,6 +452,7 @@ Private Sub UserControl_WriteProperties(PropBag As PropertyBag)
         Call .WriteProperty("Group", Me.Group, 0)
         Call .WriteProperty("Alignment", Me.Alignment, vbLeftJustify)
         Call .WriteProperty("UnRefreshControl", Me.UnRefreshControl, False)
+        Call .WriteProperty("UseUnicode", Me.UseUnicode, False)
     End With
 End Sub
 Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
@@ -465,6 +469,7 @@ Private Sub UserControl_ReadProperties(PropBag As PropertyBag)
         Me.Value = .ReadProperty("Value", False)
         Me.Group = .ReadProperty("Group", 0)
         Me.UnRefreshControl = .ReadProperty("UnRefreshControl", False)
+        Me.UseUnicode = .ReadProperty("UseUnicode", False)
     End With
     bNotOk2 = False
     'Call UserControl_Paint  'refresh
@@ -511,12 +516,12 @@ End Sub
 '=======================================================
 'PROPERTIES
 '=======================================================
-Public Property Get hdc() As Long: hdc = UserControl.hdc: End Property
+Public Property Get hDC() As Long: hDC = UserControl.hDC: End Property
 Public Property Get hWnd() As Long: hWnd = UserControl.hWnd: End Property
 Public Property Get BackStyle() As BackStyleConstants: BackStyle = lBackStyle: End Property
 Public Property Let BackStyle(BackStyle As BackStyleConstants): lBackStyle = BackStyle: UserControl.BackStyle = BackStyle: bNotOk = False: UserControl_Paint: End Property
 Public Property Get Caption() As String: Caption = sCaption: End Property
-Public Property Let Caption(Caption As String): sCaption = Caption: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
+Public Property Let Caption(Caption As String): sCaption = Caption: Call SetAccessKeys: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 Public Property Get ForeColor() As OLE_COLOR: ForeColor = lForeColor: End Property
 Public Property Let ForeColor(ForeColor As OLE_COLOR): lForeColor = ForeColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get BackColor() As OLE_COLOR: BackColor = bCol: End Property
@@ -545,6 +550,8 @@ Public Property Get ContainerHwnd() As Long: ContainerHwnd = UserControl.Contain
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
 Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
+Public Property Get UseUnicode() As Boolean: UseUnicode = bUnicode: End Property
+Public Property Let UseUnicode(UseUnicode As Boolean): bUnicode = UseUnicode: bNotOk = False: UserControl_Paint: bNotOk = True: End Property
 
 
 Private Sub UserControl_Paint()
@@ -579,7 +586,7 @@ End Sub
 '=======================================================
 Private Function GetCharHeight() As Long
 Dim Res As Long
-    Res = GetTabbedTextExtent(UserControl.hdc, "A", 1, 0, 0)
+    Res = GetTabbedTextExtent(UserControl.hDC, "A", 1, 0, 0)
     GetCharHeight = (Res And &HFFFF0000) \ &H10000
 End Function
 
@@ -627,8 +634,13 @@ Dim st As Long
     Else
         st = DT_RIGHT
     End If
-    Call DrawText(UserControl.hdc, sCaption, Len(sCaption), R, st)
-
+    
+    If bUnicode = False Then
+        Call DrawText(UserControl.hDC, sCaption, Len(sCaption), R, st)
+    Else
+        Call DrawTextW(UserControl.hDC, StrPtr(sCaption), Len(sCaption), R, st)
+    End If
+    
     '//style
     If lBackStyle = [TRANSPARENT] Then
         'transparent
@@ -705,11 +717,11 @@ Dim lIMG As Long
     
     'on découpe l'image correspondant à lIMG depuis Image1 et on blit
     'sur l'usercontrol
-    SrcDC = CreateCompatibleDC(UserControl.hdc)
+    SrcDC = CreateCompatibleDC(UserControl.hDC)
     SrcObj = SelectObject(SrcDC, Image1.Picture)
     
     y = (ScaleHeight / Screen.TwipsPerPixelY - 13) / 2
-    Call BitBlt(UserControl.hdc, 0, y, 13, 13, SrcDC, lIMG * 13, 0, SRCCOPY)
+    Call BitBlt(UserControl.hDC, 0, y, 13, 13, SrcDC, lIMG * 13, 0, SRCCOPY)
 
     Call DeleteDC(SrcDC)
     Call DeleteObject(SrcObj)
@@ -724,3 +736,19 @@ End Property
 Friend Property Let MyExtender(MyExtender As Object)
     Set UserControl.Extender = MyExtender
 End Property
+
+'=======================================================
+'défini les touches de raccourci (avec '&')
+'=======================================================
+Private Sub SetAccessKeys()
+Dim a As Long
+
+    'récupère la position du '&' en partant de la fin
+    a = InStrRev(sCaption, "&")
+    
+    'si le '&' existe et n'est pas tout à la fin
+    If a <> Len(sCaption) And a <> 0 Then
+        'on récupère le caractère qui est juste après
+        AccessKeys = Mid$(sCaption, a + 1, 1)
+    End If
+End Sub

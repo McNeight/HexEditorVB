@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.0#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmSearch 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Recherche d'expressions"
@@ -417,8 +417,8 @@ Begin VB.Form frmSearch
          TabIndex        =   5
          ToolTipText     =   "Effectuer une recherche simple"
          Top             =   720
-         Width           =   1575
-         _ExtentX        =   2778
+         Width           =   2055
+         _ExtentX        =   3625
          _ExtentY        =   450
          BackColor       =   16777215
          BackStyle       =   0
@@ -486,8 +486,8 @@ Begin VB.Form frmSearch
          TabIndex        =   2
          ToolTipText     =   "Rechercher une valeur ASCII"
          Top             =   720
-         Width           =   1455
-         _ExtentX        =   2566
+         Width           =   1815
+         _ExtentX        =   3201
          _ExtentY        =   450
          BackColor       =   16777215
          BackStyle       =   0
@@ -583,7 +583,7 @@ Private Sub cmdSearch_Click()
 'lance la recherche
 Dim tRes() As Currency
 Dim x As Long
-Dim s As String
+Dim S As String
 
     If txtSearch.Text = vbNullString Then Exit Sub
     
@@ -604,13 +604,13 @@ Dim s As String
                     
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
-                s = HexValues2String(txtSearch.Text)
+                S = HexValues2String(txtSearch.Text)
                 
                 'ajoute du texte à la console
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
                     
                 'lance la recherche de la string
-                Call SearchForStringFile(frmContent.ActiveForm.Caption, s, Check1.Value, _
+                Call SearchForStringFile(frmContent.ActiveForm.Caption, S, Check1.Value, _
                     tRes(), Me.PGB)
             Else
                 Exit Sub
@@ -629,13 +629,13 @@ Dim s As String
                 
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
-                s = HexValues2String(txtSearch.Text)
+                S = HexValues2String(txtSearch.Text)
                 
                 'ajoute du texte à la console
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 'lance la recherche de la string
-                Call SearchForStringDisk(frmContent.ActiveForm.Caption, s, Check1.Value, _
+                Call SearchForStringDisk(frmContent.ActiveForm.Caption, S, Check1.Value, _
                     tRes(), Me.PGB)
             Else
                 Exit Sub
@@ -656,13 +656,13 @@ Dim s As String
                 
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
-                s = HexValues2String(txtSearch.Text)
+                S = HexValues2String(txtSearch.Text)
                 
                 'ajoute du texte à la console
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 'lance la recherche de la string
-                Call SearchForStringDisk(frmContent.ActiveForm.Caption, s, _
+                Call SearchForStringDisk(frmContent.ActiveForm.Caption, S, _
                     Check1.Value, tRes(), Me.PGB, True)
             Else
                 Exit Sub
@@ -683,14 +683,14 @@ Dim s As String
                     txtSearch.Text, Check1.Value, tRes(), Me.PGB)
             ElseIf Option1(2).Value Then
                 'alors c'est une valeur hexa en recherche simple ==> on convertit d'abord en string
-                s = HexValues2String(txtSearch.Text)
+                S = HexValues2String(txtSearch.Text)
 
                 'ajoute du texte à la console
                 Call AddTextToConsole(Lang.GetString("_SearchCour"))
                 
                 'lance la recherche de la string
                 Call cMem.SearchForStringMemory(CLng(frmContent.ActiveForm.Tag), _
-                    s, Check1.Value, tRes(), Me.PGB)
+                    S, Check1.Value, tRes(), Me.PGB)
             Else
                 Exit Sub
             End If

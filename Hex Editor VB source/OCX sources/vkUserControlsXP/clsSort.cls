@@ -52,7 +52,23 @@ Public Function SortList(ByRef Col As clsFastCollection, Optional _
 Attribute SortList.VB_Description = "Sort a list of vkListItem"
 
 Dim s() As vkListItem
+Dim s2 As String
 Dim x As Long
+Dim B As Boolean
+    
+    If Col.Count <= 1 Then Exit Function
+    
+    'on vérifie tout d'abord que les Items ne sont pas tous les mêmes
+    s2 = Col.Item(1).Text
+    For x = 2 To Col.Count
+        If Not (s2 = Col.Item(x).Text) Then
+            B = True
+            Exit For
+        End If
+    Next x
+    
+    If B = False Then Exit Function 'tous les Items identiques
+    
     
     'on prépare une liste de vkListItems
     ReDim s(Col.Count - 1)
@@ -184,7 +200,7 @@ Dim Low As Long
 Dim High As Long
 Dim MidValue As String
     
-    Low = First: High = Last: MidValue = c((First + Last) \ 2).Text
+    Low = First - 1: High = Last: MidValue = c((First + Last) \ 2).Text
     
     Do
         While c(Low).Text > MidValue
