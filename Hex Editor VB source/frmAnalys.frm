@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{EF4A8ABF-4214-4B3F-8F82-ACF6D11FA80D}#1.0#0"; "BGraphe_OCX.ocx"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmAnalys 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Statistiques"
@@ -345,7 +345,7 @@ Dim cF As FileSystemLibrary.File
 End Sub
 
 Private Sub BG_MouseMove(bByteX As Byte, lOccurence As Long, Button As Integer, _
-    Shift As Integer, x As Single, y As Single)
+    Shift As Integer, X As Single, Y As Single)
     
     Label1.Caption = "Byte=[" & CStr(bByteX) & "] = [" & _
         Byte2FormatedString(bByteX) & "]  :   " & CStr(lOccurence)
@@ -355,8 +355,8 @@ End Sub
 Public Sub cmdAnalyse_Click()
 'lance l'analyse du fichier sFile
 Dim lngLen As Long
-Dim x As Long
-Dim y As Long
+Dim X As Long
+Dim Y As Long
 Dim b As Byte
 Dim l As Long
 Dim F(255) As Long
@@ -392,7 +392,7 @@ Dim lngFile As Long
     curByte = 0
     Do Until curByte > lngLen  'tant que le fichier n'est pas fini
     
-        x = x + 1
+        X = X + 1
     
         'prépare le type OVERLAPPED - obtient 2 long à la place du Currency
         Call GetLargeInteger(curByte, tOver.Offset, tOver.OffsetHigh)
@@ -409,13 +409,13 @@ Dim lngFile As Long
             l = lngLen - curByte
         End If
         
-        For y = 1 To l
-            b = Asc(Mid$(strBuffer, y, 1))
+        For Y = 1 To l
+            b = Asc(Mid$(strBuffer, Y, 1))
             'ajoute une occurence
             F(b) = F(b) + 1
-        Next y
+        Next Y
         
-        If (x Mod 10) = 0 Then
+        If (X Mod 10) = 0 Then
             'rend la main
             DoEvents
             PGB.Value = curByte
@@ -428,9 +428,9 @@ Dim lngFile As Long
     Call CloseHandle(lngFile)
     
     'remplit le BG
-    For x = 0 To 255
-        Call BG.AddValue(x, F(x))
-    Next x
+    For X = 0 To 255
+        Call BG.AddValue(X, F(X))
+    Next X
         
     PGB.Value = PGB.Max
     Call BG.TraceGraph
@@ -449,8 +449,8 @@ End Sub
 
 Private Sub cmdSaveBMP_Click()
 'sauvegarder en bmp
-Dim s As String
-Dim x As Long
+Dim S As String
+Dim X As Long
 
     On Error GoTo Err
     
@@ -459,23 +459,23 @@ Dim x As Long
         .CancelError = True
         .DialogTitle = Lang.GetString("_BitmapImg")
         .Filter = "Bitmap Image|*.bmp|"
-        .Filename = vbNullString
+        .FileName = vbNullString
         .ShowSave
-        s = .Filename
+        S = .FileName
     End With
     
     'formate le nom (add terminaison)
-    If LCase(Right$(s, 4)) <> ".bmp" Then s = s & ".bmp"
+    If LCase(Right$(S, 4)) <> ".bmp" Then S = S & ".bmp"
     
-    If cFile.FileExists(s) Then
+    If cFile.FileExists(S) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, _
+        X = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, _
             Lang.GetString("_War"))
-        If Not (x = vbYes) Then Exit Sub
+        If Not (X = vbYes) Then Exit Sub
     End If
 
     'sauvegarde
-    Call BG.SaveBMP(s, cPref.general_ResoX, cPref.general_ResoY)
+    Call BG.SaveBMP(S, cPref.general_ResoX, cPref.general_ResoY)
 
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_ImgSaved"))
@@ -485,8 +485,8 @@ End Sub
 
 Private Sub cmdSaveStats_Click()
 'sauvegarde les stats dans un fichier *.log
-Dim s As String
-Dim x As Long
+Dim S As String
+Dim X As Long
 Dim s2 As String
 
     On Error GoTo Err
@@ -496,33 +496,33 @@ Dim s2 As String
         .CancelError = True
         .DialogTitle = Lang.GetString("_SaveStat")
         .Filter = Lang.GetString("_LogFile") & " |*.log|"
-        .Filename = vbNullString
+        .FileName = vbNullString
         .ShowSave
-        s = .Filename
+        S = .FileName
     End With
     
     'formate le nom (add terminaison)
-    If LCase(Right$(s, 4)) <> ".log" Then s = s & ".log"
+    If LCase(Right$(S, 4)) <> ".log" Then S = S & ".log"
     
-    If cFile.FileExists(s) Then
+    If cFile.FileExists(S) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, _
+        X = MsgBox(Lang.GetString("_FileAlreadyEx"), vbInformation + vbYesNo, _
             Lang.GetString("_War"))
-        If Not (x = vbYes) Then Exit Sub
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'créé le fichier
-    Call cFile.CreateEmptyFile(s)
+    Call cFile.CreateEmptyFile(S)
     
     s2 = vbNullString
     'créé la string
-    For x = 0 To 255
-        s2 = s2 & "Byte=[" & Trim$(Str$(x)) & "] --> " & Lang.GetString("_Occ") _
-            & Trim$(Str$(BG.GetValue(x))) & "]" & vbNewLine
-    Next x
+    For X = 0 To 255
+        s2 = s2 & "Byte=[" & Trim$(Str$(X)) & "] --> " & Lang.GetString("_Occ") _
+            & Trim$(Str$(BG.GetValue(X))) & "]" & vbNewLine
+    Next X
     
     'sauvegarde le fichier
-    Call cFile.SaveDataInFile(s, Left$(s2, Len(s2) - 2), True)
+    Call cFile.SaveDataInFile(S, Left$(s2, Len(s2) - 2), True)
     
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_StatSaved"))
@@ -553,4 +553,8 @@ Private Sub Form_Load()
         .LoadControlsCaption
     End With
     
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmUpdate 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Mise à jour de Hex Editor VB"

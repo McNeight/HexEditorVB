@@ -142,7 +142,7 @@ Private Lang As New clsLang
 Private Sub cmdCLoseIt_Click()
 'ferme les fenêtres sélectionnées
 Dim Frm As Form
-Dim x As Long
+Dim X As Long
 
     On Error GoTo ErrGestion
     
@@ -159,15 +159,15 @@ Dim x As Long
     'liste les form et ferme les sélectionnées
     For Each Frm In Forms
         If (TypeOf Frm Is Pfm) Or (TypeOf Frm Is diskPfm) Or (TypeOf Frm Is MemPfm) Or (TypeOf Frm Is physPfm) Then
-            For x = LV.ListItems.Count To 1 Step -1
-                If LV.ListItems.Item(x).Selected And LV.ListItems.Item(x).SubItems(1) = _
+            For X = LV.ListItems.Count To 1 Step -1
+                If LV.ListItems.Item(X).Selected And LV.ListItems.Item(X).SubItems(1) = _
                 Frm.Caption Then
                     Call SendMessage(Frm.hWnd, WM_CLOSE, 0, 0)
                     'Unload frm
                     'lNbChildFrm = lNbChildFrm - 1
-                    LV.ListItems.Remove x
+                    LV.ListItems.Remove X
                 End If
-            Next x
+            Next X
         End If
     Next Frm
     
@@ -246,6 +246,10 @@ Dim Frm As Form
         End If
     Next Frm
     
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub
 
 Private Sub LV_DblClick()

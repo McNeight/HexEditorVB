@@ -97,3 +97,7 @@ Private Sub Form_Load()
         .LoadControlsCaption
     End With
 End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
+End Sub

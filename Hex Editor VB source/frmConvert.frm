@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmConvert 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Conversions"
@@ -350,6 +350,7 @@ Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
     Call clsPref.SaveFormSettings(App.Path & "\Preferences\Conversion.ini", Me)
     Set clsPref = Nothing
+    Set Lang = Nothing
 End Sub
 
 Private Sub txtBase_Change(Index As Integer)

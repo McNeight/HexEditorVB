@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
 Object = "{C60799F1-7AA3-45BA-AFBF-5BEAB08BC66C}#1.0#0"; "HexViewer_OCX.ocx"
-Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form Pfm 
    AutoRedraw      =   -1  'True
    Caption         =   "Ouverture d'un fichier..."
@@ -574,29 +574,29 @@ Public Sub cmdMAJ_Click()
 'MAJ des infos
 Dim lPages As Long
 Dim cFic As FileSystemLibrary.File
-Dim s As String
+Dim S As String
 
     On Error Resume Next
     
     'nom du fichier
-    s = "[" & Me.Caption & "]"
+    S = "[" & Me.Caption & "]"
     
     'récupère les infos sur le fichier
     Set cFic = cFile.GetFile(Me.Caption)
     
     'affiche tout çà
     With cFic
-        s = s & vbNewLine & Lang.GetString("_SizeIs") & CStr(.FileSize) & " Octets  -  " & CStr(Round(.FileSize / 1024, 3)) & " Ko" & "]"
-        s = s & vbNewLine & Lang.GetString("_AttrIs") & CStr(.Attributes) & "]"
-        s = s & vbNewLine & Lang.GetString("_CreaIs") & .DateCreated & "]"
-        s = s & vbNewLine & Lang.GetString("_AccessIs") & .DateLastAccessed & "]"
-        s = s & vbNewLine & Lang.GetString("_ModifIs") & .DateLastModified & "]"
-        s = s & vbNewLine & Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
-        s = s & vbNewLine & Lang.GetString("_DescrIs") & .FileVersionInfos.FileDescription & "]"
-        s = s & vbNewLine & "Copyright=[" & .FileVersionInfos.Copyright & "]"
+        S = S & vbNewLine & Lang.GetString("_SizeIs") & CStr(.FileSize) & " Octets  -  " & CStr(Round(.FileSize / 1024, 3)) & " Ko" & "]"
+        S = S & vbNewLine & Lang.GetString("_AttrIs") & CStr(.Attributes) & "]"
+        S = S & vbNewLine & Lang.GetString("_CreaIs") & .DateCreated & "]"
+        S = S & vbNewLine & Lang.GetString("_AccessIs") & .DateLastAccessed & "]"
+        S = S & vbNewLine & Lang.GetString("_ModifIs") & .DateLastModified & "]"
+        S = S & vbNewLine & Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
+        S = S & vbNewLine & Lang.GetString("_DescrIs") & .FileVersionInfos.FileDescription & "]"
+        S = S & vbNewLine & "Copyright=[" & .FileVersionInfos.Copyright & "]"
     End With
     
-    txtFile.Text = s
+    txtFile.Text = S
     
     Label2(8).Caption = Me.Sb.Panels(2).Text
     Label2(9).Caption = Lang.GetString("_SelIs") & CStr(HW.NumberOfSelectedItems) & " bytes]"
@@ -836,7 +836,7 @@ End Sub
 Private Sub OpenFile(ByVal lBg As Currency, ByVal lEd As Currency)
 Dim tmpText As String
 Dim a As Long
-Dim s As String
+Dim S As String
 Dim b As Long
 Dim c As Long
 Dim s2 As String
@@ -873,7 +873,7 @@ Dim Ret As Long
         'stocke la VRAIE string de 16
         sTemp(e) = Mid$(tmpText, e * 16 - 15, 16)
         
-        s = vbNullString
+        S = vbNullString
         For a = 1 To 16
         
             'calcule l'offset équivalent
@@ -883,21 +883,21 @@ Dim Ret As Long
                 'l'offset est modifié
 
                 'la string existe dans la liste des string modifiées
-                s = ChangeListS(lPlace)   'ne formate PAS la string
+                S = ChangeListS(lPlace)   'ne formate PAS la string
                 
                 'ajoute les valeurs hexa à partir de la VRAIE NOUVELLE string
                 For c = 1 To 16
-                    s2 = Hex$(Asc(Mid$(s, c, 1)))
+                    s2 = Hex$(Asc(Mid$(S, c, 1)))
                     If Len(s2) = 1 Then s2 = "0" & s2
                     HW.AddHexValue e, c, s2, IsModified(c, lOff)
                 Next c
                 
-                s = Formated16String(s) 'formate la string POUR L'AFFICHAGE
+                S = Formated16String(S) 'formate la string POUR L'AFFICHAGE
                 Exit For
             Else
 
                 'formate une string de 16 pour l'affichage
-                s = s & Byte2FormatedString(Asc(Mid$(sTemp(e), a, 1)))
+                S = S & Byte2FormatedString(Asc(Mid$(sTemp(e), a, 1)))
                 
                 'ajoute les valeurs hexa à partir de la VRAIE string
                 s2 = Hex$(Asc(Mid$(sTemp(e), a, 1)))
@@ -908,7 +908,7 @@ Dim Ret As Long
         Next a
         
         'ajoute la string FORMATEE pour l'affichage
-        HW.AddStringValue e, s
+        HW.AddStringValue e, S
         
     Next e
 
@@ -922,19 +922,19 @@ End Sub
 'renvoie si l'offset contient une modification
 '=======================================================
 Public Function IsOffsetModified(ByVal lOffset As Currency, ByRef lPlace As Long) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsOffsetModified = False
     
-    For x = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
+    For X = ChangeListDim To 2 Step -1      'ordre décroissant pour pouvoir détecter la dernière modification
     'dans le cas où il y a eu plusieurs modifs dans le même offset
-        If ChangeListO(x) = lOffset + 1 Then
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            lPlace = x
+            lPlace = X
             IsOffsetModified = True
             Exit Function
         End If
-    Next x
+    Next X
     
 End Function
 
@@ -944,9 +944,9 @@ End Function
 '=======================================================
 Public Sub DeleteZone()
 Dim tempFile As String
-Dim x As Long, s As String
+Dim X As Long, S As String
 Dim tmpText As String
-Dim y As Long
+Dim Y As Long
 Dim a As Long
 Dim lNewPos As Long
 Dim e As Long
@@ -999,9 +999,9 @@ Dim OfL As Currency
                     
                     'vérifie que l'on est pas dans la dernière ligne, si oui, ne prend que la longueur nécessaire
                     If a + 16 > tempFileLen Then
-                        s = Mid$(ChangeListS(lPlace), 1, tempFileLen - a + 1)
+                        S = Mid$(ChangeListS(lPlace), 1, tempFileLen - a + 1)
                     Else
-                        s = ChangeListS(lPlace)
+                        S = ChangeListS(lPlace)
                     End If
                 Else
                     
@@ -1009,13 +1009,13 @@ Dim OfL As Currency
                     'vérfie que l'on est pas dans la dernière ligne
                     
                     If a + 16 > tempFileLen Then
-                        s = Mid$(tmpText, 1, lLength - a + 1)
+                        S = Mid$(tmpText, 1, lLength - a + 1)
                     Else
-                        s = tmpText
+                        S = tmpText
                     End If
                 End If
                 
-                Put lFile2, a + lNewPos, s  'ajoute au fichier résultant
+                Put lFile2, a + lNewPos, S  'ajoute au fichier résultant
                 
             Else
                 'ALORS appartient à la zone enlevée
@@ -1049,19 +1049,19 @@ End Sub
 'renvoie si la case a été modifiée ou non
 '=======================================================
 Private Function IsModified(ByVal lCol As Long, ByVal lOffset As Currency) As Boolean
-Dim x As Long
+Dim X As Long
     
     IsModified = False
     
-    For x = 2 To ChangeListDim
-        If ChangeListO(x) = lOffset + 1 Then
+    For X = 2 To ChangeListDim
+        If ChangeListO(X) = lOffset + 1 Then
             'quelque chose de modifié dans cet ligne
-            If ChangeListC(x) = lCol Then
+            If ChangeListC(X) = lCol Then
                 IsModified = True
                 Exit Function
             End If
         End If
-    Next x
+    Next X
 End Function
 
 '=======================================================
@@ -1133,6 +1133,7 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
 
     Set cUndo = Nothing
+    Set Lang = Nothing
     
     #If USE_FORM_SUBCLASSING Then
         'alors enlève le subclassing
@@ -1310,11 +1311,11 @@ End Sub
 
 Private Sub HW_KeyPress(KeyAscii As Integer)
 'change les valeurs dans le tableau
-Dim s As String
+Dim S As String
 Dim sKey As Long
 Dim bytHex As Byte
 Dim Valu As Byte
-Dim x As Byte
+Dim X As Byte
 Dim s2 As String
     
     If HW.Item.tType = tHex Then  'si l'on est dans la zone hexa
@@ -1347,19 +1348,19 @@ Dim s2 As String
             'le nouveau byte est donc désormais bytHex
 
             's est la nouvelle string
-            s = vbNullString
-            For x = 1 To 16
-                s = s & Hex2Str_(HW.Value(HW.Item.Line, CLng(x)))
-            Next x
-            s2 = s
+            S = vbNullString
+            For X = 1 To 16
+                S = S & Hex2Str_(HW.Value(HW.Item.Line, CLng(X)))
+            Next X
+            s2 = S
             
             'calcule la nouvelle string (partie de gauche ancienne + nouveau byte + partie de droite ancienne)
-            s = Mid$(s, 1, HW.Item.Col - 1) & Chr_(bytHex) & Mid$(s, HW.Item.Col + 1, 16 - HW.Item.Col)   'avant & nouvelle & après
+            S = Mid$(S, 1, HW.Item.Col - 1) & Chr_(bytHex) & Mid$(S, HW.Item.Col + 1, 16 - HW.Item.Col)   'avant & nouvelle & après
             
             'applique le changement
-            Call Me.AddChange((HW.Item.Line - 1) * 16 + HW.FirstOffset, HW.Item.Col, s)
+            Call Me.AddChange((HW.Item.Line - 1) * 16 + HW.FirstOffset, HW.Item.Col, S)
             'ajoute l'historique
-            Call Me.AddHistoFrm(actByteWritten, s2, s, (HW.Item.Line - 1) * _
+            Call Me.AddHistoFrm(actByteWritten, s2, S, (HW.Item.Line - 1) * _
                 16 + HW.FirstOffset, , HW.Item.Col)
            'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
@@ -1372,19 +1373,19 @@ Dim s2 As String
             'le nouveau byte est donc désormais KeyAscii
 
             's est la nouvelle string
-            s = vbNullString
-            For x = 1 To 16
-                s = s & Hex2Str_(HW.Value(HW.Item.Line, CLng(x)))
-            Next x
-            s2 = s
+            S = vbNullString
+            For X = 1 To 16
+                S = S & Hex2Str_(HW.Value(HW.Item.Line, CLng(X)))
+            Next X
+            s2 = S
             
             'calcule la nouvelle string (partie de gauche ancienne + nouveau byte + partie de droite ancienne)
-            s = Mid$(s, 1, HW.Item.Col - 1) & Chr_(KeyAscii) & Mid$(s, HW.Item.Col + 1, 16 - HW.Item.Col)   'avant & nouvelle & après
+            S = Mid$(S, 1, HW.Item.Col - 1) & Chr_(KeyAscii) & Mid$(S, HW.Item.Col + 1, 16 - HW.Item.Col)   'avant & nouvelle & après
             
             'applique le changement
-            Call Me.AddChange((HW.Item.Line - 1) * 16 + HW.FirstOffset, HW.Item.Col, s)
+            Call Me.AddChange((HW.Item.Line - 1) * 16 + HW.FirstOffset, HW.Item.Col, S)
             'ajoute l'historique
-            Call Me.AddHistoFrm(actByteWritten, s2, s, (HW.Item.Line - 1) * _
+            Call Me.AddHistoFrm(actByteWritten, s2, S, (HW.Item.Line - 1) * _
                 16 + HW.FirstOffset, , HW.Item.Col)
             'simule l'appui sur "droite"
             Call HW_KeyDown(vbKeyRight, 0)
@@ -1392,8 +1393,8 @@ Dim s2 As String
     End If
 End Sub
 
-Public Sub HW_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single, Item As HexViewer_OCX.ItemElement)
-Dim s As String
+Public Sub HW_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single, Item As HexViewer_OCX.ItemElement)
+Dim S As String
 Dim r As Long
 Dim l As Currency
 
@@ -1408,11 +1409,11 @@ Dim l As Currency
     l = Item.Line * 16 + HW.FirstOffset - 16 + Item.Col - 1
     If cPref.app_OffsetsHex Then
         clsConv.CurrentString = Trim$(Str$(l))
-        s = clsConv.Convert(16, 10)
+        S = clsConv.Convert(16, 10)
     Else
-        s = CStr(l)
+        S = CStr(l)
     End If
-    Me.Sb.Panels(3).Text = "Offset=[" & s & "]"
+    Me.Sb.Panels(3).Text = "Offset=[" & S & "]"
     
     Label2(10).Caption = Me.Sb.Panels(3).Text
     
@@ -1447,12 +1448,12 @@ Dim l As Currency
         End If
         If Item.tType = tString Then
             'valeur strind sélectionnée
-            s = HW.Value(Item.Line, Item.Col)
-            txtValue(0).Text = s
-            txtValue(1).Text = Hex2Dec(s)
-            txtValue(2).Text = Hex2Str(s)
-            txtValue(3).Text = Hex2Oct(s)
-            FrameData.Caption = "Data=[" & s & "]"
+            S = HW.Value(Item.Line, Item.Col)
+            txtValue(0).Text = S
+            txtValue(1).Text = Hex2Dec(S)
+            txtValue(2).Text = Hex2Str(S)
+            txtValue(3).Text = Hex2Oct(S)
+            FrameData.Caption = "Data=[" & S & "]"
         End If
         
     ElseIf Button = 4 And Shift = 0 Then
@@ -1490,7 +1491,7 @@ Dim l As Currency
     
 End Sub
 
-Private Sub HW_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub HW_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Me.Sb.Panels(4).Text = "Sélection=[" & CStr(HW.NumberOfSelectedItems) & " bytes]"
     Label2(9) = Me.Sb.Panels(4).Text
 End Sub
@@ -1520,21 +1521,21 @@ Private Sub HW_UserMakeFirstOffsetChangeByMovingMouse()
     VS.Value = HW.FirstOffset / 16
 End Sub
 
-Private Sub lstHisto_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstHisto_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'on supprime l'historique si button=2
 'on va à l'élément si button=4
 Dim Item As ListItem
         
     If Button = 2 Then
         'récupère l'item
-        Set Item = lstHisto.HitTest(x, y)
+        Set Item = lstHisto.HitTest(X, Y)
         If Item Is Nothing Then Exit Sub
         
         'supprime
         Call DelHisto(Val(Item.SubItems(1)), cHisto(), cUndo)
     ElseIf Button = 4 Then
         'récupère l'item
-        Set Item = lstHisto.HitTest(x, y)
+        Set Item = lstHisto.HitTest(X, Y)
         If Item Is Nothing Then Exit Sub
         
         'active l'élément
@@ -1579,26 +1580,26 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 Dim tLst As ListItem
-Dim s As String
+Dim S As String
 Dim r As Long
 
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
-        s = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, Lang.GetString("_AddCom"))
-        If StrPtr(s) <> 0 Then
+        S = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, Lang.GetString("_AddCom"))
+        If StrPtr(S) <> 0 Then
             'ajoute le commentaire
-            tLst.SubItems(1) = s
+            tLst.SubItems(1) = S
         End If
     End If
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(x, y)
+        Set tLst = lstSignets.HitTest(X, Y)
         If tLst Is Nothing Then Exit Sub
         
         r = MsgBox(Lang.GetString("_DelSig") & " " & tLst.Text & " ?", vbInformation + vbYesNo, Lang.GetString("_War"))
@@ -1613,12 +1614,12 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub
 
-Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvIcon_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = 2 Then
         Me.PopupMenu frmContent.mnuPopupIcon
     End If
@@ -1690,10 +1691,10 @@ End Sub
 'procède à la sauvegarde du fichier avec changements à l'emplacement sFile2
 '=======================================================
 Public Function GetNewFile(ByVal sFile2 As String) As String
-Dim x As Long, s As String
+Dim X As Long, S As String
 Dim tmpText As String
 Dim dblAdv As Double
-Dim y As Long
+Dim Y As Long
 Dim a As Long
 Dim e As Long
 Dim lLen As Long, lFile2 As Long
@@ -1738,9 +1739,9 @@ Dim Ret As Long
                 
                 'vérifie que l'on est pas dans la dernière ligne, si oui, ne prend que la longueur nécessaire
                 If a + 16 > lLength Then
-                    s = Mid$(ChangeListS(lPlace), 1, lLength - a + 1)
+                    S = Mid$(ChangeListS(lPlace), 1, lLength - a + 1)
                 Else
-                    s = ChangeListS(lPlace)
+                    S = ChangeListS(lPlace)
                 End If
             Else
                 
@@ -1748,9 +1749,9 @@ Dim Ret As Long
                 'vérfie que l'on est pas dans la dernière ligne
                 
                 If a + 16 > lLength Then
-                    s = Mid$(tmpText, 1, lLength - a + 1)
+                    S = Mid$(tmpText, 1, lLength - a + 1)
                 Else
-                    s = tmpText
+                    S = tmpText
                 End If
             End If
             
@@ -1758,7 +1759,7 @@ Dim Ret As Long
             'bouge le pointeur
             Ret = SetFilePointerEx(lFile2, 0&, 0&, FILE_END) 'FILE_END ==> écrit à la fin du fichier
             'écriture dans le fichier
-            Call WriteFile(lFile2, ByVal s, Len(s), Ret, ByVal 0&)
+            Call WriteFile(lFile2, ByVal S, Len(S), Ret, ByVal 0&)
             
             If (a Mod 160017) = 0 Then
                 'rend un peu la main
@@ -1848,8 +1849,8 @@ End Sub
 'des données ont étés modifiées ==> on sauvegarde ces changements
 '=======================================================
 Private Sub ModifyData()
-Dim s As String
-Dim x As Long
+Dim S As String
+Dim X As Long
 Dim I_tem As ItemElement
 
     Set I_tem = HW.Item
@@ -1857,12 +1858,12 @@ Dim I_tem As ItemElement
     If frmContent.ActiveForm Is Nothing Then Exit Sub
     
     'définit s (nouvelle string)
-    s = vbNullString
-    For x = 1 To 16
-        s = s & Hex2Str_(frmContent.ActiveForm.HW.Value(I_tem.Line, x))
-    Next x
+    S = vbNullString
+    For X = 1 To 16
+        S = S & Hex2Str_(frmContent.ActiveForm.HW.Value(I_tem.Line, X))
+    Next X
 
-    frmContent.ActiveForm.AddChange frmContent.ActiveForm.HW.FirstOffset + 16 * (I_tem.Line - 1), I_tem.Col, s
+    frmContent.ActiveForm.AddChange frmContent.ActiveForm.HW.FirstOffset + 16 * (I_tem.Line - 1), I_tem.Col, S
     
 End Sub
 
@@ -1931,7 +1932,7 @@ Public Sub RefreshHW()
     Call VS_Change(VS.Value)
 End Sub
 
-Private Sub VS_MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, x As Long, y As Long)
+Private Sub VS_MouseDown(Button As MouseButtonConstants, Shift As Integer, Control As Integer, X As Long, Y As Long)
 'alors une action a été effectuée (lance le popup menu)
     If Button = vbRightButton Then Me.PopupMenu frmContent.rmnuPos
 End Sub

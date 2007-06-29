@@ -197,3 +197,7 @@ Private Sub Form_Load()
     'affiche l'élément actuellement sélectionné dans l'activeform
     txtFrom.Text = CStr(frmContent.ActiveForm.HW.Item.Offset + frmContent.ActiveForm.HW.Item.Col)
 End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
+End Sub

@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.1#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmComponents 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Composants de Hex Editor VB"
@@ -44,6 +44,7 @@ Begin VB.Form frmComponents
       Height          =   375
       Left            =   3960
       TabIndex        =   2
+      ToolTipText     =   "Ferme cette fenêtre"
       Top             =   2520
       Width           =   2055
       _ExtentX        =   3625
@@ -166,12 +167,37 @@ Option Explicit
 'FORM DE GESTION DES VERSIONS DES COMPOSANTS
 '=======================================================
 
+Private Lang As New clsLang
+
+
 Private Sub cmdOk_Click()
     Unload Me
 End Sub
 
 Private Sub Form_Load()
 Dim sPath As String
+    
+    With Lang
+        #If MODE_DEBUG Then
+            If App.LogMode = 0 And CREATE_FRENCH_FILE Then
+                'on créé le fichier de langue français
+                .Language = "French"
+                .LangFolder = LANG_PATH
+                .WriteIniFileFormIDEform
+            End If
+        #End If
+        
+        If App.LogMode = 0 Then
+            'alors on est dans l'IDE
+            .LangFolder = LANG_PATH
+        Else
+            .LangFolder = App.Path & "\Lang"
+        End If
+        
+        'applique la langue désirée aux controles
+        Call .ActiveLang(Me): .Language = cPref.env_Lang
+        Call .LoadControlsCaption
+    End With
     
     'on ajoute à la liste tous les composants utilisés par Hex Editor VB
     
@@ -247,8 +273,12 @@ ErrGestion:
     clsERREUR.AddError "frmComponents.AddIconToImg", True
 End Function
 
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
+End Sub
+
 Private Sub List_ItemClick(Item As vkUserContolsXP.vkListItem)
-Dim s As String
+Dim S As String
 Dim cFic As FileSystemLibrary.File
 Dim sPath As String
 
@@ -265,17 +295,17 @@ Dim sPath As String
     Set cFic = cFile.GetFile(sPath & Item.Text) 'récupère les infos
     
     With cFic
-        s = frmContent.Lang.GetString("_SizeIs") & CStr(.FileSize) & " Octets  -  " & CStr(Round(.FileSize / 1024, 3)) & " Ko" & "]"
-        s = s & vbNewLine & frmContent.Lang.GetString("_AttrIs") & CStr(.Attributes) & "]"
-        s = s & vbNewLine & frmContent.Lang.GetString("_CreaIs") & .DateCreated & "]"
-        s = s & vbNewLine & frmContent.Lang.GetString("_AccessIs") & .DateLastAccessed & "]"
-        s = s & vbNewLine & frmContent.Lang.GetString("_ModifIs") & .DateLastModified & "]"
-        s = s & vbNewLine & frmContent.Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
-        s = s & vbNewLine & frmContent.Lang.GetString("_DescrIs") & .FileVersionInfos.FileDescription & "]"
-        s = s & vbNewLine & "Copyright=[" & .FileVersionInfos.Copyright & "]"
+        S = frmContent.Lang.GetString("_SizeIs") & CStr(.FileSize) & " Octets  -  " & CStr(Round(.FileSize / 1024, 3)) & " Ko" & "]"
+        S = S & vbNewLine & frmContent.Lang.GetString("_AttrIs") & CStr(.Attributes) & "]"
+        S = S & vbNewLine & frmContent.Lang.GetString("_CreaIs") & .DateCreated & "]"
+        S = S & vbNewLine & frmContent.Lang.GetString("_AccessIs") & .DateLastAccessed & "]"
+        S = S & vbNewLine & frmContent.Lang.GetString("_ModifIs") & .DateLastModified & "]"
+        S = S & vbNewLine & frmContent.Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
+        S = S & vbNewLine & frmContent.Lang.GetString("_DescrIs") & .FileVersionInfos.FileDescription & "]"
+        S = S & vbNewLine & "Copyright=[" & .FileVersionInfos.Copyright & "]"
     End With
     
-    txtVersion.Text = s
+    txtVersion.Text = S
     
     Set cFic = Nothing
     

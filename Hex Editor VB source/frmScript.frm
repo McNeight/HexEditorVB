@@ -95,6 +95,7 @@ Begin VB.Form frmScript
       _ExtentY        =   4895
       _Version        =   393217
       BorderStyle     =   0
+      Enabled         =   -1  'True
       ScrollBars      =   3
       Appearance      =   0
       TextRTF         =   $"frmScript.frx":2307
@@ -431,28 +432,32 @@ Private Sub Form_Resize()
     End With
 End Sub
 
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
+End Sub
+
 Private Sub lst_DblClick()
 'ajoute au richtextbox la commande double cliquée
-Dim s As String
+Dim S As String
 Dim lg As Long
 Dim ld As Long
 Dim len1 As Long
 
-    s = lst.List(lst.ListIndex)  'contient la commande à ajouter
+    S = lst.List(lst.ListIndex)  'contient la commande à ajouter
 
     len1 = Len(RTB.Text)
-    RTB.Text = RTB.Text & s
+    RTB.Text = RTB.Text & S
     
     'change la zone sélectionnée
     'détermine où se situe la première zone entre <> dans la string s
-    lg = InStr(1, s, "<", vbBinaryCompare)
-    ld = InStr(1, s, ">", vbBinaryCompare)
+    lg = InStr(1, S, "<", vbBinaryCompare)
+    ld = InStr(1, S, ">", vbBinaryCompare)
     
     RTB.SelStart = len1 + lg
     RTB.SelLength = IIf((ld - lg - 1) > 0, ld - lg - 1, 0)  'définit la taille de la sélection
     If (lg - ld) = 0 Then
         'alors pas de <>
-        RTB.SelStart = len1 + Len(s)
+        RTB.SelStart = len1 + Len(S)
         RTB.SelLength = 0
     End If
         
@@ -495,8 +500,8 @@ Private Sub mnuNew_Click()
 End Sub
 Private Sub mnuOpen_Click()
 'ouverture de fichier
-Dim s As String
-Dim x As Long
+Dim S As String
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -511,11 +516,11 @@ Dim x As Long
         .DialogTitle = Lang.GetString("_OpenFile")
         .Filter = "Hex Editor Script|*.hescr|Tous|*.*|"
         .ShowOpen
-        s = .Filename
+        S = .FileName
     End With
     
     'sauvegarde du fichier
-    Call RTB.LoadFile(s)
+    Call RTB.LoadFile(S)
     
     bIsModified = False 'le fichier a été sauvegardé
     
@@ -537,8 +542,8 @@ Private Sub mnuQuit_Click()
 End Sub
 Private Sub mnuSaveAs_Click()
 'sauvegarde
-Dim s As String
-Dim x As Long
+Dim S As String
+Dim X As Long
 
     On Error GoTo CancelPushed
     
@@ -546,20 +551,20 @@ Dim x As Long
         .CancelError = True
         .DialogTitle = Lang.GetString("_SaveAs")
         .Filter = "Hex Editor Script|*.hescr|Tous|*.*|"
-        .Filename = vbNullString
+        .FileName = vbNullString
         .ShowSave
-        s = .Filename
+        S = .FileName
     End With
     
-    If cFile.FileExists(s) Then
+    If cFile.FileExists(S) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
+        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + _
             vbYesNo, Lang.GetString("_War"))
-        If Not (x = vbYes) Then Exit Sub
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'sauvegarde du fichier
-    Call RTB.SaveFile(s)
+    Call RTB.SaveFile(S)
     
     bIsModified = False 'le fichier a été sauvegardé
     

@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{EF4A8ABF-4214-4B3F-8F82-ACF6D11FA80D}#1.0#0"; "BGraphe_OCX.ocx"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmCPF 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Comparaison de fichiers"
@@ -307,12 +307,12 @@ Private Sub cmdBrowse_Click(Index As Integer)
             'fichier 1
             .DialogTitle = Lang.GetString("_SelectFile1")
             .ShowOpen
-            txtFile1.Text = .Filename
+            txtFile1.Text = .FileName
         Else
             'fichier 2
             .DialogTitle = Lang.GetString("_SelectFile2")
             .ShowOpen
-            txtFile2.Text = .Filename
+            txtFile2.Text = .FileName
         End If
     End With
 
@@ -552,4 +552,8 @@ Private Sub Form_Load()
         Call .ActiveLang(Me): .Language = cPref.env_Lang
         Call .LoadControlsCaption
     End With
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub

@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{3AF19019-2368-4F9C-BBFC-FD02C59BD0EC}#1.0#0"; "DriveView_OCX.ocx"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmISO 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Création de fichier ISO"
@@ -172,9 +172,9 @@ Private Sub cmdBrowse_Click()
         .CancelError = True
         .DialogTitle = Lang.GetString("_BrowseForFile")
         .Filter = "Iso File |*.iso|"
-        .Filename = vbNullString
+        .FileName = vbNullString
         .ShowSave
-        txtFile.Text = .Filename
+        txtFile.Text = .FileName
     End With
     
 ErrGes:
@@ -183,8 +183,8 @@ End Sub
 Private Sub cmdGo_Click()
 'lance la création du fichier ISO
 Dim lngSec As Long
-Dim s As String
-Dim x As Long
+Dim S As String
+Dim X As Long
 Dim lFile As Long
 Dim lBPC As Long
 Dim lTLS As Long
@@ -196,8 +196,8 @@ Dim hDisk As Long
     'vérifie si le fichier existe pas déjà
     If cFile.FileExists(sFile) Then
         'message de confirmation
-        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
-        If Not (x = vbYes) Then Exit Sub
+        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_War"))
+        If Not (X = vbYes) Then Exit Sub
     End If
     
     'vérifie que le dossier existe bien
@@ -209,7 +209,7 @@ Dim hDisk As Long
     
     txtFile.Enabled = False
     cmdBrowse.Enabled = False
-    cmdGo.Enabled = False
+    cmdGO.Enabled = False
     cmdQuit.Enabled = False
     
     With PGB
@@ -235,10 +235,10 @@ Dim hDisk As Long
     For lngSec = 0 To lTLS
         
         'récupère le contenu du secteur
-        Call DirectReadSHandle(hDisk, lngSec, lBPC, lBPC, s)
+        Call DirectReadSHandle(hDisk, lngSec, lBPC, lBPC, S)
         
         'sauve dans le fichier
-        Call WriteBytesToFileEndHandle(lFile, s)
+        Call WriteBytesToFileEndHandle(lFile, S)
         
         If (lngSec Mod 500) = 0 Then
             DoEvents   'rend la main de tps en tps
@@ -251,7 +251,7 @@ Dim hDisk As Long
     
     txtFile.Enabled = True
     cmdBrowse.Enabled = True
-    cmdGo.Enabled = True
+    cmdGO.Enabled = True
     cmdQuit.Enabled = True
 
     'ajoute du texte à la console
@@ -268,22 +268,22 @@ Private Sub cmdQuit_Click()
 End Sub
 
 Private Sub DV_NodeClick(ByVal Node As ComctlLib.INode)
-Dim s As String
+Dim S As String
 
     If DV.IsSelectedDriveAccessible Then
     
         'récupère le type de fichier du drive
-        s = DV.GetSelectedDrive.FileSystemName
+        S = DV.GetSelectedDrive.FileSystemName
         
-        If s = "UDF" Or s = "CDFS" Then
+        If S = "UDF" Or S = "CDFS" Then
             'on a choisi le drive
             Set tDrive = DV.GetSelectedDrive
-            cmdGo.Enabled = True
+            cmdGO.Enabled = True
         Else
-            cmdGo.Enabled = False
+            cmdGO.Enabled = False
         End If
     Else
-        cmdGo.Enabled = False
+        cmdGO.Enabled = False
     End If
 End Sub
 
@@ -319,4 +319,8 @@ Private Sub Form_Load()
         DV.LogicalDrivesString = .GetString("_LogicalString")
     
     End With
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub

@@ -283,7 +283,7 @@ End Sub
 
 Private Sub cmdSave_Click()
 'lance la sauvegarde
-Dim x As Long
+Dim X As Long
 
     'ajoute du texte à la console
     Call AddTextToConsole(Lang.GetString("_Exporting"))
@@ -304,8 +304,8 @@ Dim x As Long
     Select Case cbFormat.Text
         Case Lang.GetString("_HTML!")
             
-            x = Int(Abs(Val(txtOpt.Text)))
-            If x < 1 Or x > 10 Then
+            X = Int(Abs(Val(txtOpt.Text)))
+            If X < 1 Or X > 10 Then
                 MsgBox Lang.GetString("_SizeNoOk"), vbCritical, _
                     Lang.GetString("_War")
                 GoTo ResumeMe
@@ -315,11 +315,11 @@ Dim x As Long
                 'sauvegarde d'un fichier entier
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), _
                     CBool(chkString.Value), frmContent.ActiveForm.Caption, _
-                    -1, , x, CBool(chkClip.Value))
+                    -1, , X, CBool(chkClip.Value))
             Else
                 'sauvegarde d'une plage d'offset
                 Call SaveAsHTML(txtFile.Text, CBool(chkOffset.Value), _
-                    CBool(chkString.Value), "az", 1, 1, x, CBool(chkClip.Value))
+                    CBool(chkString.Value), "az", 1, 1, X, CBool(chkClip.Value))
             End If
             
         Case Lang.GetString("_RTF!")
@@ -424,4 +424,8 @@ Private Sub Form_Load()
         Call .ActiveLang(Me): .Language = cPref.env_Lang
         Call .LoadControlsCaption
     End With
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub

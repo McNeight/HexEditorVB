@@ -351,4 +351,5 @@ Private Sub Form_Unload(Cancel As Integer)
     'sauvegarde des preferences
     Call clsPref.SaveFormSettings(App.Path & "\Preferences\PrintFile.ini", Me)
     Set clsPref = Nothing
+    Set Lang = Nothing
 End Sub

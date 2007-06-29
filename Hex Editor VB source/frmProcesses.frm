@@ -194,6 +194,10 @@ Private Sub Form_Load()
     bFirst = False
 End Sub
 
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
+End Sub
+
 Private Sub PV_DblClick()
     If PV.SelectedItem Is Nothing Then Exit Sub
     Call cmdOk_Click

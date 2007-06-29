@@ -130,7 +130,7 @@ Private Sub cmdOk_Click()
 'valide
 Dim lFrom As Currency
 Dim lTo As Currency
-Dim x As Currency
+Dim X As Currency
 
     'On Error GoTo ErrGestion
     
@@ -140,9 +140,9 @@ Dim x As Currency
     
     'fait en sorte que lFrom soit le plus petit
     If lFrom > lTo Then
-        x = lFrom
+        X = lFrom
         lFrom = lTo
-        lTo = x
+        lTo = X
     End If
         
     If byteFunc = 0 Then    'il s'agit d'une sélection paramétrée
@@ -257,4 +257,8 @@ Public Sub GetEditFunction(ByVal btFunction As Byte)
     Call Lang.ActiveLang(Me)
     
     byteFunc = btFunction
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub

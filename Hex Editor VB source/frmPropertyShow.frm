@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
-Object = "{BEF0F0EF-04C8-45BD-A6A9-68C01A66CB51}#1.0#0"; "vkUserControlsXP.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmPropertyShow 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Propriétés"
@@ -158,16 +158,19 @@ Begin VB.Form frmPropertyShow
          NumTabs         =   3
          BeginProperty Tab1 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Fichier"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Disque"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {0713F341-850A-101B-AFC0-4210102A8DA7} 
             Caption         =   "Processus"
+            Key             =   ""
             Object.Tag             =   ""
             ImageVarType    =   2
          EndProperty
@@ -287,7 +290,7 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-Dim x As Long
+Dim X As Long
 
     With Lang
         #If MODE_DEBUG Then
@@ -311,11 +314,11 @@ Dim x As Long
         .LoadControlsCaption
     End With
     
-    For x = 0 To 2
-        Frame1(x).Top = 600
-        Frame1(x).Left = 120
-        Frame1(x).Visible = False
-    Next x
+    For X = 0 To 2
+        Frame1(X).Top = 600
+        Frame1(X).Left = 120
+        Frame1(X).Visible = False
+    Next X
     
     If TypeOfForm(frmContent.ActiveForm) = "Disque physique" Then _
         Me.mnuDisplayWindowsProp.Enabled = False
@@ -354,7 +357,7 @@ End Sub
 '=======================================================
 Private Sub ShowDiskProp()
 Dim cDrive As FileSystemLibrary.Drive
-Dim s As String
+Dim S As String
 
     On Error Resume Next
     
@@ -369,33 +372,33 @@ Dim s As String
     
     'affiche tout çà
     With cDrive
-        s = Lang.GetString("_Drive") & .VolumeLetter & "]"
-        s = s & vbNewLine & Lang.GetString("_VolName") & CStr(.VolumeName) & "]"
-        s = s & vbNewLine & Lang.GetString("_Serial") & Hex$(.VolumeSerialNumber) & "]"
-        s = s & vbNewLine & Lang.GetString("_FileS") & CStr(.FileSystemName) & "]"
-        s = s & vbNewLine & Lang.GetString("_DriveT") & CStr(.strDriveType) & "]"
-        s = s & vbNewLine & Lang.GetString("_MedT") & CStr(.strMediaType) & "]"
-        s = s & vbNewLine & Lang.GetString("_PartSize") & CStr(.PartitionLength) & "]"
-        s = s & vbNewLine & Lang.GetString("_TotalSize") & CStr(.TotalSpace) & "  <--> " & FormatedSize(.TotalSpace, 10) & " ]"
-        s = s & vbNewLine & Lang.GetString("_FreeSize") & CStr(.FreeSpace) & "  <--> " & FormatedSize(.FreeSpace, 10) & " ]"
-        s = s & vbNewLine & Lang.GetString("_UsedSize") & CStr(.UsedSpace) & "  <--> " & FormatedSize(.UsedSpace, 10) & " ]"
-        s = s & vbNewLine & Lang.GetString("_Percent") & CStr(.PercentageFree) & " %]"
-        s = s & vbNewLine & Lang.GetString("_LogCount") & CStr(.TotalLogicalSectors) & "]"
-        s = s & vbNewLine & Lang.GetString("_PhysCount") & CStr(.TotalPhysicalSectors) & "]"
-        s = s & vbNewLine & Lang.GetString("_Hid") & CStr(.HiddenSectors) & "]"
-        s = s & vbNewLine & Lang.GetString("_BPerSec") & CStr(.BytesPerSector) & "]"
-        s = s & vbNewLine & Lang.GetString("_SPerClust") & CStr(.SectorPerCluster) & "]"
-        s = s & vbNewLine & Lang.GetString("_Clust") & CStr(.TotalClusters) & "]"
-        s = s & vbNewLine & Lang.GetString("_FreeClust") & CStr(.FreeClusters) & "]"
-        s = s & vbNewLine & Lang.GetString("_UsedClust") & CStr(.UsedClusters) & "]"
-        s = s & vbNewLine & Lang.GetString("_BPerClust") & CStr(.BytesPerCluster) & "]"
-        s = s & vbNewLine & Lang.GetString("_Cyl") & CStr(.Cylinders) & "]"
-        s = s & vbNewLine & Lang.GetString("_TPerCyl") & CStr(.TracksPerCylinder) & "]"
-        s = s & vbNewLine & Lang.GetString("_SPerT") & CStr(.SectorsPerTrack) & "]"
-        s = s & vbNewLine & Lang.GetString("_OffDep") & CStr(.StartingOffset) & "]"
+        S = Lang.GetString("_Drive") & .VolumeLetter & "]"
+        S = S & vbNewLine & Lang.GetString("_VolName") & CStr(.VolumeName) & "]"
+        S = S & vbNewLine & Lang.GetString("_Serial") & Hex$(.VolumeSerialNumber) & "]"
+        S = S & vbNewLine & Lang.GetString("_FileS") & CStr(.FileSystemName) & "]"
+        S = S & vbNewLine & Lang.GetString("_DriveT") & CStr(.strDriveType) & "]"
+        S = S & vbNewLine & Lang.GetString("_MedT") & CStr(.strMediaType) & "]"
+        S = S & vbNewLine & Lang.GetString("_PartSize") & CStr(.PartitionLength) & "]"
+        S = S & vbNewLine & Lang.GetString("_TotalSize") & CStr(.TotalSpace) & "  <--> " & FormatedSize(.TotalSpace, 10) & " ]"
+        S = S & vbNewLine & Lang.GetString("_FreeSize") & CStr(.FreeSpace) & "  <--> " & FormatedSize(.FreeSpace, 10) & " ]"
+        S = S & vbNewLine & Lang.GetString("_UsedSize") & CStr(.UsedSpace) & "  <--> " & FormatedSize(.UsedSpace, 10) & " ]"
+        S = S & vbNewLine & Lang.GetString("_Percent") & CStr(.PercentageFree) & " %]"
+        S = S & vbNewLine & Lang.GetString("_LogCount") & CStr(.TotalLogicalSectors) & "]"
+        S = S & vbNewLine & Lang.GetString("_PhysCount") & CStr(.TotalPhysicalSectors) & "]"
+        S = S & vbNewLine & Lang.GetString("_Hid") & CStr(.HiddenSectors) & "]"
+        S = S & vbNewLine & Lang.GetString("_BPerSec") & CStr(.BytesPerSector) & "]"
+        S = S & vbNewLine & Lang.GetString("_SPerClust") & CStr(.SectorPerCluster) & "]"
+        S = S & vbNewLine & Lang.GetString("_Clust") & CStr(.TotalClusters) & "]"
+        S = S & vbNewLine & Lang.GetString("_FreeClust") & CStr(.FreeClusters) & "]"
+        S = S & vbNewLine & Lang.GetString("_UsedClust") & CStr(.UsedClusters) & "]"
+        S = S & vbNewLine & Lang.GetString("_BPerClust") & CStr(.BytesPerCluster) & "]"
+        S = S & vbNewLine & Lang.GetString("_Cyl") & CStr(.Cylinders) & "]"
+        S = S & vbNewLine & Lang.GetString("_TPerCyl") & CStr(.TracksPerCylinder) & "]"
+        S = S & vbNewLine & Lang.GetString("_SPerT") & CStr(.SectorsPerTrack) & "]"
+        S = S & vbNewLine & Lang.GetString("_OffDep") & CStr(.StartingOffset) & "]"
     End With
     
-    txtDisk.Text = s
+    txtDisk.Text = S
     
     'libère la mémoire
     Set cDrive = Nothing
@@ -407,7 +410,7 @@ End Sub
 '=======================================================
 Private Sub ShowFileProp()
 Dim cFic As FileSystemLibrary.File
-Dim s As String
+Dim S As String
 
     On Error Resume Next
     
@@ -421,28 +424,28 @@ Dim s As String
     
     'affiche tout çà
     With cFic
-        s = Lang.GetString("_File") & .Path & "]"
-        s = s & vbNewLine & Lang.GetString("_Size") & CStr(.FileSize) & " " & Lang.GetString("_Bytes") & "  -  " & CStr(Round(.FileSize / 1024, 3)) & " " & Lang.GetString("_Ko") & "]"
-        s = s & vbNewLine & Lang.GetString("_Attr") & CStr(.Attributes) & "]"
-        s = s & vbNewLine & Lang.GetString("_Crea") & .DateCreated & "]"
-        s = s & vbNewLine & Lang.GetString("_Access") & .DateLastAccessed & "]"
-        s = s & vbNewLine & Lang.GetString("_Modif") & .DateLastModified & "]"
-        s = s & vbNewLine & Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
-        s = s & vbNewLine & Lang.GetString("_Descr") & .FileVersionInfos.FileDescription & "]"
-        s = s & vbNewLine & "Copyright=[" & .FileVersionInfos.Copyright & "]"
-        s = s & vbNewLine & "CompanyName=[" & .FileVersionInfos.CompanyName & "]"
-        s = s & vbNewLine & "InternalName=[" & .FileVersionInfos.InternalName & "]"
-        s = s & vbNewLine & "OriginalFileName=[" & .FileVersionInfos.OriginalFileName & "]"
-        s = s & vbNewLine & "ProductName=[" & .FileVersionInfos.ProductName & "]"
-        s = s & vbNewLine & "ProductVersion=[" & .FileVersionInfos.ProductVersion & "]"
-        s = s & vbNewLine & Lang.GetString("_CompS") & .FileCompressedSize & "]"
-        s = s & vbNewLine & Lang.GetString("_AssocP") & .AssociatedExecutableProgram & "]"
-        s = s & vbNewLine & Lang.GetString("_Fold") & .FolderName & "]"
-        s = s & vbNewLine & Lang.GetString("_DriveC") & .DriveName & "]"
-        s = s & vbNewLine & Lang.GetString("_FileType") & .FileType & "]"
-        s = s & vbNewLine & Lang.GetString("_FileExt") & .FileExtension & "]"
-        s = s & vbNewLine & Lang.GetString("_ShortN") & .ShortName & "]"
-        s = s & vbNewLine & Lang.GetString("_ShortP") & .ShortPath & "]"
+        S = Lang.GetString("_File") & .Path & "]"
+        S = S & vbNewLine & Lang.GetString("_Size") & CStr(.FileSize) & " " & Lang.GetString("_Bytes") & "  -  " & CStr(Round(.FileSize / 1024, 3)) & " " & Lang.GetString("_Ko") & "]"
+        S = S & vbNewLine & Lang.GetString("_Attr") & CStr(.Attributes) & "]"
+        S = S & vbNewLine & Lang.GetString("_Crea") & .DateCreated & "]"
+        S = S & vbNewLine & Lang.GetString("_Access") & .DateLastAccessed & "]"
+        S = S & vbNewLine & Lang.GetString("_Modif") & .DateLastModified & "]"
+        S = S & vbNewLine & Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
+        S = S & vbNewLine & Lang.GetString("_Descr") & .FileVersionInfos.FileDescription & "]"
+        S = S & vbNewLine & "Copyright=[" & .FileVersionInfos.Copyright & "]"
+        S = S & vbNewLine & "CompanyName=[" & .FileVersionInfos.CompanyName & "]"
+        S = S & vbNewLine & "InternalName=[" & .FileVersionInfos.InternalName & "]"
+        S = S & vbNewLine & "OriginalFileName=[" & .FileVersionInfos.OriginalFileName & "]"
+        S = S & vbNewLine & "ProductName=[" & .FileVersionInfos.ProductName & "]"
+        S = S & vbNewLine & "ProductVersion=[" & .FileVersionInfos.ProductVersion & "]"
+        S = S & vbNewLine & Lang.GetString("_CompS") & .FileCompressedSize & "]"
+        S = S & vbNewLine & Lang.GetString("_AssocP") & .AssociatedExecutableProgram & "]"
+        S = S & vbNewLine & Lang.GetString("_Fold") & .FolderName & "]"
+        S = S & vbNewLine & Lang.GetString("_DriveC") & .DriveName & "]"
+        S = S & vbNewLine & Lang.GetString("_FileType") & .FileType & "]"
+        S = S & vbNewLine & Lang.GetString("_FileExt") & .FileExtension & "]"
+        S = S & vbNewLine & Lang.GetString("_ShortN") & .ShortName & "]"
+        S = S & vbNewLine & Lang.GetString("_ShortP") & .ShortPath & "]"
     
         chkAt(0).Value = Abs(.IsNormal)
         chkAt(1).Value = Abs(.IsHidden)
@@ -450,7 +453,7 @@ Dim s As String
         chkAt(3).Value = Abs(.IsReadOnly)
     End With
     
-    txtFile.Text = s
+    txtFile.Text = S
 
     'libère mémoire
     Set cFic = Nothing
@@ -463,7 +466,7 @@ End Sub
 Private Sub ShowProcessProp()
 Dim pProcess As ProcessItem
 Dim cFic As FileSystemLibrary.File
-Dim s As String
+Dim S As String
 
     On Error Resume Next
     
@@ -481,59 +484,63 @@ Dim s As String
     
     'infos fichier cible
     With cFic
-        s = "-------------------------------------------"
-        s = s & vbNewLine & "-------------- " & Lang.GetString("_Cible") & "  -------------"
-        s = s & vbNewLine & "-------------------------------------------"
-        s = s & vbNewLine & Lang.GetString("_File") & .Path & "]"
-        s = s & vbNewLine & Lang.GetString("_Size") & CStr(.FileSize) & " " & Lang.GetString("_Bytes") & "  -  " & CStr(Round(.FileSize / 1024, 3)) & " " & Lang.GetString("_Ko") & "]"
-        s = s & vbNewLine & Lang.GetString("_Attr") & CStr(.Attributes) & "]"
-        s = s & vbNewLine & Lang.GetString("_Crea") & .DateCreated & "]"
-        s = s & vbNewLine & Lang.GetString("_Access") & .DateLastAccessed & "]"
-        s = s & vbNewLine & Lang.GetString("_Modif") & .DateLastModified & "]"
-        s = s & vbNewLine & Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
-        s = s & vbNewLine & Lang.GetString("_Descr") & .FileVersionInfos.FileDescription & "]"
-        s = s & vbNewLine & "Copyright=[" & .FileVersionInfos.Copyright & "]"
-        s = s & vbNewLine & "CompanyName=[" & .FileVersionInfos.CompanyName & "]"
-        s = s & vbNewLine & "InternalName=[" & .FileVersionInfos.InternalName & "]"
-        s = s & vbNewLine & "OriginalFileName=[" & .FileVersionInfos.OriginalFileName & "]"
-        s = s & vbNewLine & "ProductName=[" & .FileVersionInfos.ProductName & "]"
-        s = s & vbNewLine & "ProductVersion=[" & .FileVersionInfos.ProductVersion & "]"
-        s = s & vbNewLine & Lang.GetString("_CompS") & .FileCompressedSize & "]"
-        s = s & vbNewLine & Lang.GetString("_AssocP") & .AssociatedExecutableProgram & "]"
-        s = s & vbNewLine & Lang.GetString("_Fold") & .FolderName & "]"
-        s = s & vbNewLine & Lang.GetString("_DriveC") & .DriveName & "]"
-        s = s & vbNewLine & Lang.GetString("_FileType") & .FileType & "]"
-        s = s & vbNewLine & Lang.GetString("_FileExt") & .FileExtension & "]"
-        s = s & vbNewLine & Lang.GetString("_ShortN") & .ShortName & "]"
-        s = s & vbNewLine & Lang.GetString("_ShortP") & .ShortPath & "]"
+        S = "-------------------------------------------"
+        S = S & vbNewLine & "-------------- " & Lang.GetString("_Cible") & "  -------------"
+        S = S & vbNewLine & "-------------------------------------------"
+        S = S & vbNewLine & Lang.GetString("_File") & .Path & "]"
+        S = S & vbNewLine & Lang.GetString("_Size") & CStr(.FileSize) & " " & Lang.GetString("_Bytes") & "  -  " & CStr(Round(.FileSize / 1024, 3)) & " " & Lang.GetString("_Ko") & "]"
+        S = S & vbNewLine & Lang.GetString("_Attr") & CStr(.Attributes) & "]"
+        S = S & vbNewLine & Lang.GetString("_Crea") & .DateCreated & "]"
+        S = S & vbNewLine & Lang.GetString("_Access") & .DateLastAccessed & "]"
+        S = S & vbNewLine & Lang.GetString("_Modif") & .DateLastModified & "]"
+        S = S & vbNewLine & Lang.GetString("_Version") & .FileVersionInfos.FileVersion & "]"
+        S = S & vbNewLine & Lang.GetString("_Descr") & .FileVersionInfos.FileDescription & "]"
+        S = S & vbNewLine & "Copyright=[" & .FileVersionInfos.Copyright & "]"
+        S = S & vbNewLine & "CompanyName=[" & .FileVersionInfos.CompanyName & "]"
+        S = S & vbNewLine & "InternalName=[" & .FileVersionInfos.InternalName & "]"
+        S = S & vbNewLine & "OriginalFileName=[" & .FileVersionInfos.OriginalFileName & "]"
+        S = S & vbNewLine & "ProductName=[" & .FileVersionInfos.ProductName & "]"
+        S = S & vbNewLine & "ProductVersion=[" & .FileVersionInfos.ProductVersion & "]"
+        S = S & vbNewLine & Lang.GetString("_CompS") & .FileCompressedSize & "]"
+        S = S & vbNewLine & Lang.GetString("_AssocP") & .AssociatedExecutableProgram & "]"
+        S = S & vbNewLine & Lang.GetString("_Fold") & .FolderName & "]"
+        S = S & vbNewLine & Lang.GetString("_DriveC") & .DriveName & "]"
+        S = S & vbNewLine & Lang.GetString("_FileType") & .FileType & "]"
+        S = S & vbNewLine & Lang.GetString("_FileExt") & .FileExtension & "]"
+        S = S & vbNewLine & Lang.GetString("_ShortN") & .ShortName & "]"
+        S = S & vbNewLine & Lang.GetString("_ShortP") & .ShortPath & "]"
     End With
     
     'info process
     With pProcess
-        s = s & vbNewLine & vbNewLine & vbNewLine & "-------------------------------------------"
-        s = s & vbNewLine & "--------------- " & Lang.GetString("_Process") & " --------------"
-        s = s & vbNewLine & "-------------------------------------------"
-        s = s & vbNewLine & "PID=[" & .th32ProcessID & "]"
-        s = s & vbNewLine & Lang.GetString("_ParentP") & .th32ParentProcessID & "   " & .procParentProcess.szImagePath & "]"
-        s = s & vbNewLine & "Threads=[" & .cntThreads & "]"
-        s = s & vbNewLine & Lang.GetString("_Prior") & .pcPriClassBase & "]"
-        s = s & vbNewLine & Lang.GetString("_MemUsed") & .procMemory.WorkingSetSize & "]"
-        s = s & vbNewLine & Lang.GetString("_PicMemUsed") & .procMemory.PeakWorkingSetSize & "]"
-        s = s & vbNewLine & Lang.GetString("_SwapU") & .procMemory.PagefileUsage & "]"
-        s = s & vbNewLine & Lang.GetString("_PicSwapU") & .procMemory.PeakPagefileUsage & "]"
-        s = s & vbNewLine & "QuotaPagedPoolUsage=[" & .procMemory.QuotaPagedPoolUsage & "]"
-        s = s & vbNewLine & "QuotaNonPagedPoolUsage=[" & .procMemory.QuotaNonPagedPoolUsage & "]"
-        s = s & vbNewLine & "QuotaPeakPagedPoolUsage=[" & .procMemory.QuotaPeakPagedPoolUsage & "]"
-        s = s & vbNewLine & "QuotaPeakNonPagedPoolUsage=[" & .procMemory.QuotaPeakNonPagedPoolUsage & "]"
-        s = s & vbNewLine & Lang.GetString("_PageF") & .procMemory.PageFaultCount & "]"
+        S = S & vbNewLine & vbNewLine & vbNewLine & "-------------------------------------------"
+        S = S & vbNewLine & "--------------- " & Lang.GetString("_Process") & " --------------"
+        S = S & vbNewLine & "-------------------------------------------"
+        S = S & vbNewLine & "PID=[" & .th32ProcessID & "]"
+        S = S & vbNewLine & Lang.GetString("_ParentP") & .th32ParentProcessID & "   " & .procParentProcess.szImagePath & "]"
+        S = S & vbNewLine & "Threads=[" & .cntThreads & "]"
+        S = S & vbNewLine & Lang.GetString("_Prior") & .pcPriClassBase & "]"
+        S = S & vbNewLine & Lang.GetString("_MemUsed") & .procMemory.WorkingSetSize & "]"
+        S = S & vbNewLine & Lang.GetString("_PicMemUsed") & .procMemory.PeakWorkingSetSize & "]"
+        S = S & vbNewLine & Lang.GetString("_SwapU") & .procMemory.PagefileUsage & "]"
+        S = S & vbNewLine & Lang.GetString("_PicSwapU") & .procMemory.PeakPagefileUsage & "]"
+        S = S & vbNewLine & "QuotaPagedPoolUsage=[" & .procMemory.QuotaPagedPoolUsage & "]"
+        S = S & vbNewLine & "QuotaNonPagedPoolUsage=[" & .procMemory.QuotaNonPagedPoolUsage & "]"
+        S = S & vbNewLine & "QuotaPeakPagedPoolUsage=[" & .procMemory.QuotaPeakPagedPoolUsage & "]"
+        S = S & vbNewLine & "QuotaPeakNonPagedPoolUsage=[" & .procMemory.QuotaPeakNonPagedPoolUsage & "]"
+        S = S & vbNewLine & Lang.GetString("_PageF") & .procMemory.PageFaultCount & "]"
     End With
     
-    txtProcess.Text = s
+    txtProcess.Text = S
     
     'libère mémoire
     Set cFic = Nothing
     Set pProcess = Nothing
 
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Set Lang = Nothing
 End Sub
 
 Private Sub mnuDisplayWindowsProp_Click()
