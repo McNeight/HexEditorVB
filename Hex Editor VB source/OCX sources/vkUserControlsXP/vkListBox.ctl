@@ -238,8 +238,6 @@ Public Event MouseMove(Button As MouseButtonConstants, Shift As Integer, Control
 ' fonction "public" du module de classe  '
 '=======================================================
 Public Function WindowProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-Attribute WindowProc.VB_Description = "Internal proc for subclassing"
-Attribute WindowProc.VB_MemberFlags = "40"
 Dim iControl As Integer
 Dim iShift As Integer
 Dim z As Long
@@ -339,35 +337,13 @@ Dim F As Long, z3 As Long
                 RaiseEvent MouseHover
                 IsMouseIn = True
 
-                If bStyleCheckBox Then
-                    On Error Resume Next
-                    For F = lTopIndex To lListCount
-                        e = e + Col.Item(F).Height
-                        If e >= Height - 50 Then
-                            z3 = z
-                            Exit For
-                        End If
-                        z = z + 1
-                    Next F
-            
-                    Call SplitIMGandShow(z)
-                End If
+                If bStyleCheckBox Then Call SplitIMGandShow
             
             End If
         Case WM_MOUSELEAVE
         
             If bStyleCheckBox Then
-                On Error Resume Next
-                For F = lTopIndex To lListCount
-                    e = e + Col.Item(F).Height
-                    If e >= Height - 50 Then
-                        z3 = z
-                        Exit For
-                    End If
-                    z = z + 1
-                Next F
-        
-                MouseItemIndex = -1: Call SplitIMGandShow(z)
+                MouseItemIndex = -1: Call SplitIMGandShow
             End If
             
             RaiseEvent MouseLeave
@@ -620,38 +596,30 @@ End Sub
 Private Sub UserControl_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
 Dim z As Long
 Dim z2 As Long
-Dim z3 As Long
 Dim e As Long
 Dim m As Long
 Dim F As Long
     
     If bStyleCheckBox = False Then Exit Sub
     
-    On Error Resume Next
+    'On Error Resume Next
 
     'on détermine quel Item est survolé
     z2 = -1
-    For F = lTopIndex To lListCount
+    For F = lTopIndex To lListCount - 1
         e = e + Col.Item(F).Height
         If e > y Then
             If z2 = -1 Then z2 = z: m = e - Col.Item(F).Height
         End If
-        If e >= Height - 50 Then
-            z3 = z
-            Exit For
-        End If
+        If e >= Height - 50 Then Exit For
         z = z + 1
     Next F
-    
-    'si pas suffisemment d'items pour remplir la vue
-    'alors le nombre d'affichés = listcount
-    If z3 = 0 Then z3 = ListCount
     
     'récupère l'Item survolé
     MouseItemIndex = lTopIndex + z2
     
     'redessine les images si nécessaire (item survolé différent)
-    If MouseItemIndex <> tmpMouseItemIndex Then Call SplitIMGandShow(z3)
+    If MouseItemIndex <> tmpMouseItemIndex Then Call SplitIMGandShow
     
     'sauvegarde les bornes (en height) de l'item survolé
     tmpMouseItemIndex = MouseItemIndex
@@ -920,7 +888,6 @@ bChecked(Index) = Item.Checked
 bNotOk = False: UserControl_Paint
 End Property
 Public Property Get UnRefreshControl() As Boolean: UnRefreshControl = bUnRefreshControl: End Property
-Attribute UnRefreshControl.VB_Description = "Prevent to refresh control"
 Public Property Let UnRefreshControl(UnRefreshControl As Boolean): bUnRefreshControl = UnRefreshControl: End Property
 Public Property Get DisplayVScroll() As Boolean: DisplayVScroll = bVSvisible: End Property
 Public Property Let DisplayVScroll(DisplayVScroll As Boolean)
@@ -938,7 +905,6 @@ Public Property Let FullRowSelect(FullRowSelect As Boolean): lFullRowSelect = Fu
 Public Property Get BorderSelColor() As OLE_COLOR: BorderSelColor = lBorderSelColor: End Property
 Public Property Let BorderSelColor(BorderSelColor As OLE_COLOR): lBorderSelColor = BorderSelColor: UserControl.ForeColor = ForeColor: bNotOk = False: UserControl_Paint: End Property
 Public Property Get AcceptAutoSort() As Boolean: AcceptAutoSort = bAcceptAutoSort: End Property
-Attribute AcceptAutoSort.VB_MemberFlags = "40"
 Public Property Let AcceptAutoSort(AcceptAutoSort As Boolean): bAcceptAutoSort = AcceptAutoSort
 If bAcceptAutoSort Then Call Sort(bSorted)
 End Property
@@ -1364,7 +1330,7 @@ Static lCnt As Long
     
     
     '//affiche les checkboxes
-    If bStyleCheckBox Then Call SplitIMGandShow(z)
+    If bStyleCheckBox Then Call SplitIMGandShow
     
     'rafraichit le VS si on a changé le Max
     'Ou bien si on a changé le nombre d'Items
@@ -1619,7 +1585,7 @@ End Sub
 '=======================================================
 'affiche une des 6 images en la découpant depuis l'image complète
 '=======================================================
-Private Sub SplitIMGandShow(ByVal z As Long)
+Private Sub SplitIMGandShow()
 Dim hBrush As Long
 Dim hRgn As Long
 Dim x As Long
@@ -1627,7 +1593,8 @@ Dim y As Single
 Dim lIMG As Long
 Dim tVal As Boolean
 Dim e As Long
-'Dim bErrorOccured As Boolean
+Dim yH As Long
+Dim bOkToEnd As Boolean
     
     'Debug.Print "SplitIMGandShow"
     '0 rien
@@ -1638,10 +1605,15 @@ Dim e As Long
     '5 enable=false OR gray
 
     If Col.Item(1) Is Nothing Then Exit Sub
-    
-    'On Error GoTo DAMN
-    
-    For x = lTopIndex To lTopIndex + z ' + 1
+        
+    For x = lTopIndex To lListCount - 1
+        
+        'on additionne à chaque Item (à partir du premier visible)
+        'la hauteur pour déterminer jusqu'où les Items sont visibles
+        'ce qui permet de sortir de la boucle avant de lister tous les Items
+        yH = yH + Col.Item(x).Height            'ajoute la hauteur
+        If bOkToEnd Then Exit For               'si à la boucle précédent on dépassait ==> quitte
+        If yH >= Height Then bOkToEnd = True    'alors c'est la dernière boucle (dernier Item en bas)
     
         'Top de l'image
         e = y + Col.Item(x).Height / 2 - 100
@@ -1680,45 +1652,6 @@ Dim e As Long
         y = y + Col.Item(x).Height
     Next x
     
-    'si une erreur a survenu, alors on doit tracer le dernier Item tout seul
-'    If bErrorOccured Then
-'
-'        x = lTopIndex + z '- 1
-'        Beep
-'        'Top de l'image
-'        'e = y + Col.Item(x).Height / 2 - 100
-'        If bChecked(x) Then
-'            If MouseItemIndex = x Then
-'                'checké et survolé
-'                lIMG = 4
-'            Else
-'                'checké sans survol
-'                lIMG = 3
-'            End If
-'        Else
-'            If MouseItemIndex = x Then
-'                'pas checké mais survol
-'                lIMG = 1
-'            Else
-'                'pas checké, pas survol
-'                lIMG = 0
-'            End If
-'        End If
-'
-'        'si Enable=false, on change les icones
-'        If bEnable = False Then
-'            If bChecked(x) Then
-'                lIMG = 5
-'            Else
-'                lIMG = 2
-'            End If
-'        End If
-'
-'        'trace l'image
-'        Call BitBlt(UserControl.hDC, 2, e / Screen.TwipsPerPixelY, 13, 13, pic(lIMG).hDC, _
-'              0, 0, SRCCOPY)
-'    End If
-    
     
     '//on trace le contour
     If bDisplayBorder Then
@@ -1738,13 +1671,7 @@ Dim e As Long
     End If
     
     Call UserControl.Refresh
-    
-'    Exit Sub
-'
-'DAMN:
-'    bErrorOccured = True 'on signale qu'une erreur a apparu ==> donc on va
-'    'avoir besoin de tracer le dernier Item à part
-'    Resume Next
+
 End Sub
 
 '=======================================================

@@ -379,7 +379,7 @@ Private Sub UserControl_GotFocus()
     Call DrawFocusRects
     
     'trace aussi le rectangle de survol si nécessaire
-    If IsMouseInCtrl Then Call DrawMouseEnterRect
+    If IsMouseInCtrl And Not (bPushed) Then Call DrawMouseEnterRect
 End Sub
 
 Private Sub UserControl_AccessKeyPress(KeyAscii As Integer)
