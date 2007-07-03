@@ -1,9 +1,10 @@
 VERSION 5.00
 Object = "{2245E336-2835-4C1E-B373-2395637023C8}#1.0#0"; "ProcessView_OCX.ocx"
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmProcesses 
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Sélection du processus à ouvrir"
-   ClientHeight    =   4020
+   ClientHeight    =   4065
    ClientLeft      =   45
    ClientTop       =   315
    ClientWidth     =   3765
@@ -21,36 +22,69 @@ Begin VB.Form frmProcesses
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4020
+   ScaleHeight     =   4065
    ScaleWidth      =   3765
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
-   Begin VB.CommandButton cmdOK 
-      Caption         =   "OK"
+   Begin vkUserContolsXP.vkCommand cmdRefresh 
       Height          =   375
-      Left            =   135
+      Left            =   1080
       TabIndex        =   3
-      ToolTipText     =   "Ouvrir de processus"
-      Top             =   3623
-      Width           =   735
-   End
-   Begin VB.CommandButton cmdFermer 
-      Caption         =   "Fermer"
-      Height          =   375
-      Left            =   2535
-      TabIndex        =   2
-      ToolTipText     =   "Fermer cette fenêtre"
-      Top             =   3623
-      Width           =   1095
-   End
-   Begin VB.CommandButton cmdRefresh 
-      Caption         =   "Rafraichir"
-      Height          =   375
-      Left            =   1095
-      TabIndex        =   1
-      ToolTipText     =   "Ouvrir de processus"
-      Top             =   3623
+      ToolTipText     =   "Rafrichir la liste des processus"
+      Top             =   3600
       Width           =   1215
+      _ExtentX        =   2143
+      _ExtentY        =   661
+      Caption         =   "Rafrachir"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin vkUserContolsXP.vkCommand cmdOK 
+      Height          =   375
+      Left            =   120
+      TabIndex        =   2
+      ToolTipText     =   "Ouvrir de processus"
+      Top             =   3600
+      Width           =   735
+      _ExtentX        =   1296
+      _ExtentY        =   661
+      Caption         =   "OK"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin vkUserContolsXP.vkCommand cmdFermer 
+      Height          =   375
+      Left            =   2520
+      TabIndex        =   1
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   3600
+      Width           =   1095
+      _ExtentX        =   1931
+      _ExtentY        =   661
+      Caption         =   "Fermer"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
    End
    Begin ProcessView_OCX.ProcessView PV 
       Height          =   3495

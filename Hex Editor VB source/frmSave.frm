@@ -3,7 +3,7 @@ Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmSave 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sauvegarder le fichier"
-   ClientHeight    =   2115
+   ClientHeight    =   1785
    ClientLeft      =   45
    ClientTop       =   345
    ClientWidth     =   3510
@@ -21,16 +21,56 @@ Begin VB.Form frmSave
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   2115
+   ScaleHeight     =   1785
    ScaleWidth      =   3510
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkCommand cmdYES 
+      Height          =   375
+      Left            =   240
+      TabIndex        =   3
+      ToolTipText     =   "Procède à la sauvegarde et écrase le fichier"
+      Top             =   960
+      Width           =   1215
+      _ExtentX        =   2143
+      _ExtentY        =   661
+      Caption         =   "Oui"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin vkUserContolsXP.vkCommand cmdNO 
+      Height          =   375
+      Left            =   2040
+      TabIndex        =   2
+      ToolTipText     =   "Ne procède pas à la sauvegarde"
+      Top             =   960
+      Width           =   1215
+      _ExtentX        =   2143
+      _ExtentY        =   661
+      Caption         =   "Non"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin vkUserContolsXP.vkCheck chkDoNotShowAlert 
       Height          =   255
-      Left            =   608
-      TabIndex        =   3
+      Left            =   615
+      TabIndex        =   1
       ToolTipText     =   $"frmSave.frx":058A
-      Top             =   1680
+      Top             =   1440
       Width           =   2295
       _ExtentX        =   4048
       _ExtentY        =   450
@@ -47,24 +87,6 @@ Begin VB.Form frmSave
          Strikethrough   =   0   'False
       EndProperty
    End
-   Begin VB.CommandButton cmdYES 
-      Caption         =   "Oui"
-      Height          =   495
-      Left            =   248
-      TabIndex        =   1
-      ToolTipText     =   "Procède à la sauvegarde et écrase le fichier"
-      Top             =   1028
-      Width           =   1215
-   End
-   Begin VB.CommandButton cmdNO 
-      Caption         =   "Non"
-      Height          =   495
-      Left            =   2048
-      TabIndex        =   0
-      ToolTipText     =   "Ne procède pas à la sauvegarde"
-      Top             =   1028
-      Width           =   1215
-   End
    Begin VB.Label Label1 
       BackStyle       =   0  'Transparent
       Caption         =   "Voulez vous réellement sauvegarder ? (le fichier actuel sera écrasé)"
@@ -79,7 +101,7 @@ Begin VB.Form frmSave
       EndProperty
       Height          =   495
       Left            =   128
-      TabIndex        =   2
+      TabIndex        =   0
       Top             =   188
       Width           =   3255
    End

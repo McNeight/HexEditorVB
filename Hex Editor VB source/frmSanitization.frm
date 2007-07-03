@@ -71,7 +71,7 @@ Begin VB.Form frmSanitization
       Height          =   3135
       Index           =   0
       Left            =   120
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   480
       Width           =   3495
       _ExtentX        =   6165
@@ -86,10 +86,29 @@ Begin VB.Form frmSanitization
          Strikethrough   =   0   'False
       EndProperty
       ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkCommand cmdGo 
+         Height          =   375
+         Left            =   1080
+         TabIndex        =   10
+         Top             =   2640
+         Width           =   1215
+         _ExtentX        =   2143
+         _ExtentY        =   661
+         Caption         =   "GO"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
       Begin vkUserContolsXP.vkBar PGB 
          Height          =   255
          Left            =   120
-         TabIndex        =   8
+         TabIndex        =   6
          Top             =   2280
          Width           =   3255
          _ExtentX        =   5741
@@ -110,7 +129,7 @@ Begin VB.Form frmSanitization
       Begin DriveView_OCX.DriveView DV 
          Height          =   2055
          Left            =   120
-         TabIndex        =   7
+         TabIndex        =   5
          Top             =   120
          Width           =   3255
          _ExtentX        =   5741
@@ -118,20 +137,12 @@ Begin VB.Form frmSanitization
          DisplayPhysicalDrives=   0   'False
          PhysicalDrivesString=   ""
       End
-      Begin VB.CommandButton cmdGo 
-         Caption         =   "GO"
-         Height          =   375
-         Left            =   1080
-         TabIndex        =   6
-         Top             =   2640
-         Width           =   1215
-      End
    End
    Begin vkUserContolsXP.vkFrame Frame1 
       Height          =   3135
       Index           =   1
       Left            =   120
-      TabIndex        =   9
+      TabIndex        =   7
       Top             =   480
       Width           =   3495
       _ExtentX        =   6165
@@ -146,10 +157,48 @@ Begin VB.Form frmSanitization
          Strikethrough   =   0   'False
       EndProperty
       ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkCommand cmdSelFile 
+         Height          =   375
+         Left            =   120
+         TabIndex        =   12
+         Top             =   2640
+         Width           =   2055
+         _ExtentX        =   3625
+         _ExtentY        =   661
+         Caption         =   "Sélection de fichiers..."
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkCommand cmdGo2 
+         Height          =   375
+         Left            =   2520
+         TabIndex        =   11
+         Top             =   2640
+         Width           =   735
+         _ExtentX        =   1296
+         _ExtentY        =   661
+         Caption         =   "GO"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
       Begin vkUserContolsXP.vkBar PGB2 
          Height          =   255
          Left            =   120
-         TabIndex        =   13
+         TabIndex        =   9
          Top             =   2280
          Width           =   3255
          _ExtentX        =   5741
@@ -167,27 +216,10 @@ Begin VB.Form frmSanitization
             Strikethrough   =   0   'False
          EndProperty
       End
-      Begin VB.CommandButton cmdGo2 
-         Caption         =   "GO"
-         Enabled         =   0   'False
-         Height          =   375
-         Left            =   2520
-         TabIndex        =   12
-         Top             =   2640
-         Width           =   735
-      End
-      Begin VB.CommandButton cmdSelFile 
-         Caption         =   "Sélection de fichiers..."
-         Height          =   375
-         Left            =   120
-         TabIndex        =   11
-         Top             =   2640
-         Width           =   2055
-      End
       Begin ComctlLib.ListView LV 
          Height          =   2055
          Left            =   120
-         TabIndex        =   10
+         TabIndex        =   8
          Top             =   120
          Width           =   3255
          _ExtentX        =   5741
@@ -229,10 +261,29 @@ Begin VB.Form frmSanitization
          Strikethrough   =   0   'False
       EndProperty
       ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkCommand cmdGoPhys 
+         Height          =   375
+         Left            =   1080
+         TabIndex        =   13
+         Top             =   2640
+         Width           =   1215
+         _ExtentX        =   2143
+         _ExtentY        =   661
+         Caption         =   "GO"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
       Begin vkUserContolsXP.vkBar PGB3 
          Height          =   255
          Left            =   120
-         TabIndex        =   4
+         TabIndex        =   3
          Top             =   2280
          Width           =   3255
          _ExtentX        =   5741
@@ -249,14 +300,6 @@ Begin VB.Form frmSanitization
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-      End
-      Begin VB.CommandButton cmdGoPhys 
-         Caption         =   "GO"
-         Height          =   375
-         Left            =   1080
-         TabIndex        =   3
-         Top             =   2640
-         Width           =   1215
       End
       Begin DriveView_OCX.DriveView DV2 
          Height          =   2055
@@ -337,12 +380,12 @@ End Sub
 
 Private Sub LV_KeyDown(KeyCode As Integer, Shift As Integer)
 'supprime si touche Delete
-Dim X As Long
+Dim x As Long
 
     If KeyCode = vbKeyDelete Then
-        For X = LV.ListItems.Count To 1 Step -1
-            If LV.ListItems.Item(X).Selected Then LV.ListItems.Remove X
-        Next X
+        For x = LV.ListItems.Count To 1 Step -1
+            If LV.ListItems.Item(x).Selected Then LV.ListItems.Remove x
+        Next x
     End If
     
     cmdGo2.Enabled = CBool(LV.ListItems.Count)
@@ -405,7 +448,7 @@ Private Sub cmdSelFile_Click()
 Dim cFile As FileSystemLibrary.FileSystem
 Dim S() As String
 Dim s2 As String
-Dim X As Long
+Dim x As Long
 
     'sélection d'un ou plusieurs fichiers
  
@@ -416,9 +459,9 @@ Dim X As Long
         Lang.GetString("_All") & "|*.*", , , , , OFN_EXPLORER + _
         OFN_ALLOWMULTISELECT, S())
         
-    For X = 1 To UBound(S())
-        If cFile.FileExists(S(X)) Then LV.ListItems.Add Text:=S(X)
-    Next X
+    For x = 1 To UBound(S())
+        If cFile.FileExists(S(x)) Then LV.ListItems.Add Text:=S(x)
+    Next x
     
     'dans le cas d'un fichier simple
     If cFile.FileExists(s2) Then LV.ListItems.Add Text:=s2
@@ -478,7 +521,7 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-Dim X As Long
+Dim x As Long
     
     Set tDrive = New DriveView_OCX.clsDrive
     
@@ -487,10 +530,10 @@ Dim X As Long
     ReDim sH55(2097151)
     ReDim sHAA(2097151)
     'remplit
-    For X = 0 To 2097151
-        sH55(X) = 85
-        sHAA(X) = 170
-    Next X
+    For x = 0 To 2097151
+        sH55(x) = 85
+        sHAA(x) = 170
+    Next x
     
     'récupère les pointeurs
     pAA = VarPtr(sHAA(0))
