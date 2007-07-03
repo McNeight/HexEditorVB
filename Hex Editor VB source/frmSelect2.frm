@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{16DCE99A-3937-4772-A07F-3BA5B09FCE6E}#1.1#0"; "vkUserControlsXP.ocx"
 Begin VB.Form frmSelect2 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Sélectionner une zone"
@@ -24,11 +25,51 @@ Begin VB.Form frmSelect2
    ScaleWidth      =   2745
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkCommand cmdQuit 
+      Height          =   375
+      Left            =   1440
+      TabIndex        =   5
+      ToolTipText     =   "Fermer"
+      Top             =   960
+      Width           =   1095
+      _ExtentX        =   1931
+      _ExtentY        =   661
+      Caption         =   "Fermer"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin vkUserContolsXP.vkCommand cmdOK 
+      Height          =   375
+      Left            =   120
+      TabIndex        =   4
+      ToolTipText     =   "Procéder à la restriction"
+      Top             =   960
+      Width           =   1095
+      _ExtentX        =   1931
+      _ExtentY        =   661
+      Caption         =   "Sélectionner"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin VB.TextBox txtFrom 
       BorderStyle     =   0  'None
       Height          =   285
       Left            =   1545
-      TabIndex        =   3
+      TabIndex        =   1
       ToolTipText     =   "Offset de départ"
       Top             =   105
       Width           =   1095
@@ -37,28 +78,10 @@ Begin VB.Form frmSelect2
       BorderStyle     =   0  'None
       Height          =   285
       Left            =   1665
-      TabIndex        =   2
+      TabIndex        =   0
       ToolTipText     =   "Taille de la sélection"
       Top             =   465
       Width           =   975
-   End
-   Begin VB.CommandButton cmdOK 
-      Caption         =   "Sélectionner"
-      Height          =   375
-      Left            =   150
-      TabIndex        =   1
-      ToolTipText     =   "Procéder à la restriction"
-      Top             =   945
-      Width           =   1095
-   End
-   Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
-      Height          =   375
-      Left            =   1470
-      TabIndex        =   0
-      ToolTipText     =   "Fermer cette fenêtre"
-      Top             =   945
-      Width           =   1095
    End
    Begin VB.Label Label1 
       BackStyle       =   0  'Transparent
@@ -66,7 +89,7 @@ Begin VB.Form frmSelect2
       Height          =   255
       Index           =   0
       Left            =   105
-      TabIndex        =   5
+      TabIndex        =   3
       Top             =   105
       Width           =   1215
    End
@@ -76,7 +99,7 @@ Begin VB.Form frmSelect2
       Height          =   255
       Index           =   1
       Left            =   105
-      TabIndex        =   4
+      TabIndex        =   2
       Top             =   465
       Width           =   1455
    End

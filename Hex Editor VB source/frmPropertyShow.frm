@@ -24,125 +24,6 @@ Begin VB.Form frmPropertyShow
    ScaleHeight     =   6780
    ScaleWidth      =   7890
    StartUpPosition =   2  'CenterScreen
-   Begin vkUserContolsXP.vkFrame Frame1 
-      Height          =   6135
-      Index           =   0
-      Left            =   120
-      TabIndex        =   5
-      Top             =   600
-      Width           =   7695
-      _ExtentX        =   13573
-      _ExtentY        =   10821
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ShowTitle       =   0   'False
-      Begin vkUserContolsXP.vkCheck chkAt 
-         Height          =   255
-         Index           =   3
-         Left            =   4920
-         TabIndex        =   10
-         Top             =   5760
-         Width           =   1335
-         _ExtentX        =   2355
-         _ExtentY        =   450
-         BackColor       =   16777215
-         BackStyle       =   0
-         Caption         =   "Lecture seule"
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin vkUserContolsXP.vkCheck chkAt 
-         Height          =   255
-         Index           =   2
-         Left            =   3360
-         TabIndex        =   9
-         Top             =   5760
-         Width           =   1335
-         _ExtentX        =   2355
-         _ExtentY        =   450
-         BackColor       =   16777215
-         BackStyle       =   0
-         Caption         =   "Système"
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin vkUserContolsXP.vkCheck chkAt 
-         Height          =   255
-         Index           =   1
-         Left            =   1800
-         TabIndex        =   8
-         Top             =   5760
-         Width           =   1335
-         _ExtentX        =   2355
-         _ExtentY        =   450
-         BackColor       =   16777215
-         BackStyle       =   0
-         Caption         =   "Caché"
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin vkUserContolsXP.vkCheck chkAt 
-         Height          =   255
-         Index           =   0
-         Left            =   240
-         TabIndex        =   7
-         Top             =   5760
-         Width           =   1335
-         _ExtentX        =   2355
-         _ExtentY        =   450
-         BackColor       =   16777215
-         BackStyle       =   0
-         Caption         =   "Normal"
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin VB.TextBox txtFile 
-         BorderStyle     =   0  'None
-         Height          =   5415
-         Left            =   120
-         Locked          =   -1  'True
-         MultiLine       =   -1  'True
-         ScrollBars      =   2  'Vertical
-         TabIndex        =   6
-         Top             =   240
-         Width           =   7455
-      End
-   End
    Begin ComctlLib.TabStrip TabStrip1 
       Height          =   495
       Left            =   120
@@ -178,6 +59,147 @@ Begin VB.Form frmPropertyShow
    End
    Begin vkUserContolsXP.vkFrame Frame1 
       Height          =   6135
+      Index           =   0
+      Left            =   120
+      TabIndex        =   3
+      Top             =   600
+      Width           =   7695
+      _ExtentX        =   13573
+      _ExtentY        =   10821
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ShowTitle       =   0   'False
+      Begin vkUserContolsXP.vkTextBox txtFile 
+         Height          =   5535
+         Left            =   120
+         TabIndex        =   8
+         Top             =   120
+         Width           =   7455
+         _ExtentX        =   13150
+         _ExtentY        =   9763
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2
+         LegendText      =   "Informations sur le fichier"
+         LegendForeColor =   12937777
+         LegendType      =   1
+      End
+      Begin vkUserContolsXP.vkCheck chkAt 
+         Height          =   255
+         Index           =   3
+         Left            =   4920
+         TabIndex        =   7
+         Top             =   5760
+         Width           =   1335
+         _ExtentX        =   2355
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Lecture seule"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkCheck chkAt 
+         Height          =   255
+         Index           =   2
+         Left            =   3360
+         TabIndex        =   6
+         Top             =   5760
+         Width           =   1335
+         _ExtentX        =   2355
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Système"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkCheck chkAt 
+         Height          =   255
+         Index           =   1
+         Left            =   1800
+         TabIndex        =   5
+         Top             =   5760
+         Width           =   1335
+         _ExtentX        =   2355
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Caché"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkCheck chkAt 
+         Height          =   255
+         Index           =   0
+         Left            =   240
+         TabIndex        =   4
+         Top             =   5760
+         Width           =   1335
+         _ExtentX        =   2355
+         _ExtentY        =   450
+         BackColor       =   16777215
+         BackStyle       =   0
+         Caption         =   "Normal"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+   End
+   Begin vkUserContolsXP.vkFrame Frame1 
+      Height          =   6135
       Index           =   2
       Left            =   120
       TabIndex        =   1
@@ -195,23 +217,45 @@ Begin VB.Form frmPropertyShow
          Strikethrough   =   0   'False
       EndProperty
       ShowTitle       =   0   'False
-      Begin VB.TextBox txtProcess 
-         BorderStyle     =   0  'None
+      Begin vkUserContolsXP.vkTextBox txtProcess 
          Height          =   5895
          Left            =   120
-         Locked          =   -1  'True
-         MultiLine       =   -1  'True
-         ScrollBars      =   2  'Vertical
-         TabIndex        =   2
+         TabIndex        =   9
          Top             =   120
          Width           =   7455
+         _ExtentX        =   13150
+         _ExtentY        =   10398
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2
+         LegendText      =   "Informations sur le processus"
+         LegendForeColor =   12937777
+         LegendType      =   1
       End
    End
    Begin vkUserContolsXP.vkFrame Frame1 
       Height          =   6135
       Index           =   1
       Left            =   120
-      TabIndex        =   3
+      TabIndex        =   2
       Top             =   600
       Width           =   7695
       _ExtentX        =   13573
@@ -226,16 +270,38 @@ Begin VB.Form frmPropertyShow
          Strikethrough   =   0   'False
       EndProperty
       ShowTitle       =   0   'False
-      Begin VB.TextBox txtDisk 
-         BorderStyle     =   0  'None
+      Begin vkUserContolsXP.vkTextBox txtDisk 
          Height          =   5895
          Left            =   120
-         Locked          =   -1  'True
-         MultiLine       =   -1  'True
-         ScrollBars      =   2  'Vertical
-         TabIndex        =   4
+         TabIndex        =   10
          Top             =   120
          Width           =   7455
+         _ExtentX        =   13150
+         _ExtentY        =   10398
+         BeginProperty LegendFont {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   9.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2
+         LegendText      =   "Informations sur le disque"
+         LegendForeColor =   12937777
+         LegendType      =   1
       End
    End
    Begin VB.Menu mnuDisplayWindowsProp 
@@ -290,7 +356,7 @@ Private Sub Form_Activate()
 End Sub
 
 Private Sub Form_Load()
-Dim X As Long
+Dim x As Long
 
     With Lang
         #If MODE_DEBUG Then
@@ -314,11 +380,11 @@ Dim X As Long
         .LoadControlsCaption
     End With
     
-    For X = 0 To 2
-        Frame1(X).Top = 600
-        Frame1(X).Left = 120
-        Frame1(X).Visible = False
-    Next X
+    For x = 0 To 2
+        Frame1(x).Top = 600
+        Frame1(x).Left = 120
+        Frame1(x).Visible = False
+    Next x
     
     If TypeOfForm(frmContent.ActiveForm) = "Disque physique" Then _
         Me.mnuDisplayWindowsProp.Enabled = False

@@ -26,10 +26,30 @@ Begin VB.Form frmSignets
    ScaleWidth      =   5475
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkCommand cmdSaveChanges 
+      Height          =   375
+      Left            =   120
+      TabIndex        =   3
+      ToolTipText     =   "Applique les changements à la fenêtre active"
+      Top             =   5040
+      Width           =   2655
+      _ExtentX        =   4683
+      _ExtentY        =   661
+      Caption         =   "Appliquer les changements"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin vkUserContolsXP.vkFrame vkFrame2 
       Height          =   1335
       Left            =   120
-      TabIndex        =   7
+      TabIndex        =   2
       Top             =   3600
       Width           =   5295
       _ExtentX        =   9340
@@ -44,47 +64,91 @@ Begin VB.Form frmSignets
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Begin VB.CommandButton cmdDeleteAll 
-         Caption         =   "Supprimer tout"
+      Begin vkUserContolsXP.vkCommand cmdComment 
          Height          =   375
-         Left            =   3720
-         TabIndex        =   11
-         ToolTipText     =   "Supprime tous les signets"
+         Left            =   120
+         TabIndex        =   9
+         ToolTipText     =   "Ajouter un commentaite sur le signet sélectionné"
+         Top             =   840
+         Width           =   5055
+         _ExtentX        =   8916
+         _ExtentY        =   661
+         Caption         =   "Ajouter un commentaite sur le signet sélectionné"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkCommand cmdNew 
+         Height          =   375
+         Left            =   120
+         TabIndex        =   8
+         ToolTipText     =   "Créé un nouveau signet"
          Top             =   360
          Width           =   1455
+         _ExtentX        =   2566
+         _ExtentY        =   661
+         Caption         =   "Nouveau"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
       End
-      Begin VB.CommandButton cmdDeleteSel 
-         Caption         =   "Supprimer sélection"
+      Begin vkUserContolsXP.vkCommand cmdDeleteSel 
          Height          =   375
          Left            =   1680
          TabIndex        =   10
          ToolTipText     =   "Supprime les fichiers sélectionnés"
          Top             =   360
          Width           =   1815
+         _ExtentX        =   3201
+         _ExtentY        =   661
+         Caption         =   "Supprimer sélection"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
       End
-      Begin VB.CommandButton cmdNew 
-         Caption         =   "Nouveau"
+      Begin vkUserContolsXP.vkCommand cmdDeleteAll 
          Height          =   375
-         Left            =   120
-         TabIndex        =   9
-         ToolTipText     =   "Créé un nouveau signet"
+         Left            =   3720
+         TabIndex        =   11
+         ToolTipText     =   "Supprime tous les signets"
          Top             =   360
          Width           =   1455
-      End
-      Begin VB.CommandButton cmdComment 
-         Caption         =   "Ajouter un commentaite sur le signet sélectionné"
-         Height          =   375
-         Left            =   120
-         TabIndex        =   8
-         ToolTipText     =   "Ajoute un commentaire sur les signets sélectionnés"
-         Top             =   840
-         Width           =   5055
+         _ExtentX        =   2566
+         _ExtentY        =   661
+         Caption         =   "Supprimer tout"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
       End
    End
    Begin vkUserContolsXP.vkFrame vkFrame1 
       Height          =   855
       Left            =   120
-      TabIndex        =   3
+      TabIndex        =   1
       Top             =   2640
       Width           =   5295
       _ExtentX        =   9340
@@ -99,56 +163,71 @@ Begin VB.Form frmSignets
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Begin VB.CommandButton cmdOpen 
-         Caption         =   "Ouvrir..."
-         Height          =   375
-         Left            =   120
-         TabIndex        =   6
-         ToolTipText     =   "Ouvre une liste de signets"
-         Top             =   360
-         Width           =   1455
-      End
-      Begin VB.CommandButton cmdAdd 
-         Caption         =   "Ajouter..."
-         Height          =   375
-         Left            =   1920
-         TabIndex        =   5
-         ToolTipText     =   "Ajoute une liste de signets"
-         Top             =   360
-         Width           =   1455
-      End
-      Begin VB.CommandButton cmdSave 
-         Caption         =   "Sauvegarder..."
+      Begin vkUserContolsXP.vkCommand cmdSave 
          Height          =   375
          Left            =   3720
-         TabIndex        =   4
+         TabIndex        =   7
          ToolTipText     =   "Sauvegarde la liste de signets actuelle"
          Top             =   360
          Width           =   1455
+         _ExtentX        =   2566
+         _ExtentY        =   661
+         Caption         =   "Sauvegarder..."
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
       End
-   End
-   Begin VB.CommandButton dmQuit 
-      Caption         =   "Fermer"
-      Height          =   375
-      Left            =   3851
-      TabIndex        =   1
-      ToolTipText     =   "Ferme cette fenêtre"
-      Top             =   5040
-      Width           =   1455
-   End
-   Begin VB.CommandButton cmdSaveChanges 
-      Caption         =   "Appliquer les changements"
-      Height          =   375
-      Left            =   131
-      TabIndex        =   0
-      ToolTipText     =   "Applique les changements à la fenêtre active"
-      Top             =   5040
-      Width           =   2655
+      Begin vkUserContolsXP.vkCommand cmdAdd 
+         Height          =   375
+         Left            =   1920
+         TabIndex        =   6
+         ToolTipText     =   "Ajoute une liste de signets"
+         Top             =   360
+         Width           =   1455
+         _ExtentX        =   2566
+         _ExtentY        =   661
+         Caption         =   "Ajouter..."
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkCommand cmdOpen 
+         Height          =   375
+         Left            =   120
+         TabIndex        =   5
+         ToolTipText     =   "Ouvre une liste de signets"
+         Top             =   360
+         Width           =   1455
+         _ExtentX        =   2566
+         _ExtentY        =   661
+         Caption         =   "Ouvrir..."
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
    End
    Begin ComctlLib.ListView lstSignets 
       Height          =   2535
       Left            =   48
-      TabIndex        =   2
+      TabIndex        =   0
       TabStop         =   0   'False
       Tag             =   "lang_ok"
       Top             =   0
@@ -177,6 +256,26 @@ Begin VB.Form frmSignets
          Object.Tag             =   ""
          Text            =   "Commentaire"
          Object.Width           =   6703
+      EndProperty
+   End
+   Begin vkUserContolsXP.vkCommand dmQuit 
+      Height          =   375
+      Left            =   3840
+      TabIndex        =   4
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   5040
+      Width           =   1455
+      _ExtentX        =   2566
+      _ExtentY        =   661
+      Caption         =   "Fermer"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
       EndProperty
    End
 End
@@ -232,17 +331,17 @@ End Sub
 
 Private Sub cmdComment_Click()
 'ajoute un commentaire sur les signets sélectionnés
-Dim X As Long
+Dim x As Long
 Dim S As String
 
-    For X = Me.lstSignets.ListItems.Count To 1 Step -1
-        If Me.lstSignets.ListItems.Item(X).Selected Then
+    For x = Me.lstSignets.ListItems.Count To 1 Step -1
+        If Me.lstSignets.ListItems.Item(x).Selected Then
             S = InputBox(Lang.GetString("_NewComment") & " " & _
-                Me.lstSignets.ListItems.Item(X).Text, Lang.GetString("_AddComment"))
+                Me.lstSignets.ListItems.Item(x).Text, Lang.GetString("_AddComment"))
             If StrPtr(S) <> 0 Then _
-                Me.lstSignets.ListItems.Item(X).SubItems(1) = S
+                Me.lstSignets.ListItems.Item(x).SubItems(1) = S
         End If
-    Next X
+    Next x
 End Sub
 
 Private Sub cmdDeleteAll_Click()
@@ -252,12 +351,12 @@ End Sub
 
 Private Sub cmdDeleteSel_Click()
 'supprime la sélection
-Dim X As Long
+Dim x As Long
 
-    For X = Me.lstSignets.ListItems.Count To 1 Step -1
-        If Me.lstSignets.ListItems.Item(X).Selected Then _
-            Me.lstSignets.ListItems.Remove X
-    Next X
+    For x = Me.lstSignets.ListItems.Count To 1 Step -1
+        If Me.lstSignets.ListItems.Item(x).Selected Then _
+            Me.lstSignets.ListItems.Remove x
+    Next x
 End Sub
 
 Private Sub cmdNew_Click()
@@ -287,7 +386,7 @@ Private Sub cmdSave_Click()
 'enregistre la liste des signets de la form active
 Dim S As String
 Dim lFile As Long
-Dim X As Long
+Dim x As Long
 
     On Error GoTo ErrGestion
     
@@ -308,8 +407,8 @@ Dim X As Long
 
     If cFile.FileExists(S) Then
         'message de confirmation
-        X = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_Warning"))
-        If Not (X = vbYes) Then Exit Sub
+        x = MsgBox(Lang.GetString("_FileAlreadyExists"), vbInformation + vbYesNo, Lang.GetString("_Warning"))
+        If Not (x = vbYes) Then Exit Sub
     End If
     
     'ouvre le fchier
@@ -317,9 +416,9 @@ Dim X As Long
     Open S For Output As lFile
     
     'enregistre les entrées
-    For X = 1 To lstSignets.ListItems.Count
-        Write #lFile, lstSignets.ListItems.Item(X) & "|" & lstSignets.ListItems.Item(X).SubItems(1)
-    Next X
+    For x = 1 To lstSignets.ListItems.Count
+        Write #lFile, lstSignets.ListItems.Item(x) & "|" & lstSignets.ListItems.Item(x).SubItems(1)
+    Next x
     
     Close lFile
 
@@ -330,23 +429,23 @@ ErrGestion:
 End Sub
 
 Private Sub cmdSaveChanges_Click()
-Dim X As Long
+Dim x As Long
 
     'applique les changements à la forme active
  
     With frmContent.ActiveForm
         'on ajoute tous les signets qui sont affichés dans l'activeform
         .lstSignets.ListItems.Clear
-        For X = 1 To Me.lstSignets.ListItems.Count
-            .lstSignets.ListItems.Add Text:=Me.lstSignets.ListItems.Item(X).Text
-            .lstSignets.ListItems.Item(X).SubItems(1) = Me.lstSignets.ListItems.Item(X).SubItems(1)
-        Next X
+        For x = 1 To Me.lstSignets.ListItems.Count
+            .lstSignets.ListItems.Add Text:=Me.lstSignets.ListItems.Item(x).Text
+            .lstSignets.ListItems.Item(x).SubItems(1) = Me.lstSignets.ListItems.Item(x).SubItems(1)
+        Next x
         
         'on vire les anciens signets du HW actif et on rajoute les nouveau
         Call .HW.RemoveAllSignets
-        For X = 1 To Me.lstSignets.ListItems.Count
-            .HW.AddSignet CCur(Val(Me.lstSignets.ListItems.Item(X).Text))
-        Next X
+        For x = 1 To Me.lstSignets.ListItems.Count
+            .HW.AddSignet CCur(Val(Me.lstSignets.ListItems.Item(x).Text))
+        Next x
         
         Call .HW.Refresh
         
@@ -359,7 +458,7 @@ Private Sub dmQuit_Click()
 End Sub
 
 Private Sub Form_Load()
-Dim X As Long
+Dim x As Long
 
     With Lang
         #If MODE_DEBUG Then
@@ -387,10 +486,10 @@ Dim X As Long
     
     'on ajoute tous les signets qui sont affichés dans l'activeform
     With lstSignets.ListItems
-        For X = 1 To frmContent.ActiveForm.lstSignets.ListItems.Count
-            .Add Text:=frmContent.ActiveForm.lstSignets.ListItems.Item(X).Text
-            .Item(X).SubItems(1) = frmContent.ActiveForm.lstSignets.ListItems.Item(X).SubItems(1)
-        Next X
+        For x = 1 To frmContent.ActiveForm.lstSignets.ListItems.Count
+            .Add Text:=frmContent.ActiveForm.lstSignets.ListItems.Item(x).Text
+            .Item(x).SubItems(1) = frmContent.ActiveForm.lstSignets.ListItems.Item(x).SubItems(1)
+        Next x
     End With
     
 End Sub
@@ -401,7 +500,7 @@ End Sub
 Private Sub AddSignetIn(ByVal bOverWrite As Boolean)
 Dim S As String
 Dim lFile As Long
-Dim X As Long
+Dim x As Long
 Dim sTemp As String
 Dim l As Long
 
@@ -477,7 +576,7 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lstSignets_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
 Dim tLst As ListItem
 Dim S As String
 Dim r As Long
@@ -485,7 +584,7 @@ Dim r As Long
     If Button = 2 Then
         'alors clic droit ==> on affiche la boite de dialogue "commentaire" sur le comment
         'qui a été sélectionné
-        Set tLst = lstSignets.HitTest(X, Y)
+        Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         S = InputBox(Lang.GetString("_AddCommentFor") & " " & tLst.Text, _
             Lang.GetString("_AddComment"))
@@ -497,7 +596,7 @@ Dim r As Long
     
     If Button = 4 Then
         'mouse du milieu ==> on supprime le signet
-        Set tLst = lstSignets.HitTest(X, Y)
+        Set tLst = lstSignets.HitTest(x, y)
         If tLst Is Nothing Then Exit Sub
         
         'on enlève du listview
@@ -506,7 +605,7 @@ Dim r As Long
         
 End Sub
 
-Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lstSignets_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
 'permet de ne pas changer le HW dans le cas de multiples sélections
     mouseUped = True
 End Sub

@@ -24,10 +24,30 @@ Begin VB.Form frmStringSearch
    ScaleHeight     =   6960
    ScaleWidth      =   6585
    StartUpPosition =   2  'CenterScreen
+   Begin vkUserContolsXP.vkCommand cmdGo 
+      Height          =   375
+      Left            =   4800
+      TabIndex        =   12
+      ToolTipText     =   "Lancer la recherche"
+      Top             =   360
+      Width           =   1575
+      _ExtentX        =   2778
+      _ExtentY        =   661
+      Caption         =   "Lancer la recherche"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin vkUserContolsXP.vkBar PGB 
       Height          =   255
       Left            =   120
-      TabIndex        =   13
+      TabIndex        =   11
       Top             =   2520
       Width           =   4335
       _ExtentX        =   7646
@@ -48,7 +68,7 @@ Begin VB.Form frmStringSearch
    Begin vkUserContolsXP.vkFrame vkFrame1 
       Height          =   2295
       Left            =   120
-      TabIndex        =   4
+      TabIndex        =   2
       Top             =   120
       Width           =   4455
       _ExtentX        =   7858
@@ -66,7 +86,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkAddSignet 
          Height          =   255
          Left            =   120
-         TabIndex        =   12
+         TabIndex        =   10
          Top             =   1560
          Width           =   3735
          _ExtentX        =   6588
@@ -87,7 +107,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkAccent 
          Height          =   255
          Left            =   120
-         TabIndex        =   11
+         TabIndex        =   9
          Top             =   1320
          Width           =   3135
          _ExtentX        =   5530
@@ -108,7 +128,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkSigns 
          Height          =   255
          Left            =   120
-         TabIndex        =   10
+         TabIndex        =   8
          Top             =   1080
          Width           =   3135
          _ExtentX        =   5530
@@ -129,7 +149,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkMaj 
          Height          =   255
          Left            =   120
-         TabIndex        =   9
+         TabIndex        =   7
          Top             =   840
          Width           =   3135
          _ExtentX        =   5530
@@ -150,7 +170,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkMin 
          Height          =   255
          Left            =   120
-         TabIndex        =   8
+         TabIndex        =   6
          Top             =   600
          Width           =   3135
          _ExtentX        =   5530
@@ -171,7 +191,7 @@ Begin VB.Form frmStringSearch
       Begin vkUserContolsXP.vkCheck chkNumb3r 
          Height          =   255
          Left            =   120
-         TabIndex        =   7
+         TabIndex        =   5
          Top             =   360
          Width           =   3135
          _ExtentX        =   5530
@@ -194,7 +214,7 @@ Begin VB.Form frmStringSearch
          BorderStyle     =   0  'None
          Height          =   285
          Left            =   3360
-         TabIndex        =   5
+         TabIndex        =   3
          Tag             =   "pref"
          Text            =   "5"
          ToolTipText     =   "Taille minimale (au dessous de cette taille, les suites de caractères ne sont pas considérées comme des strings)"
@@ -206,19 +226,10 @@ Begin VB.Form frmStringSearch
          Caption         =   "Taille minimale de la chaîne de caractères :"
          Height          =   255
          Left            =   120
-         TabIndex        =   6
+         TabIndex        =   4
          Top             =   1920
          Width           =   3135
       End
-   End
-   Begin VB.CommandButton cmdQuit 
-      Caption         =   "Fermer"
-      Height          =   375
-      Left            =   4785
-      TabIndex        =   1
-      ToolTipText     =   "Fermer cette fenêtre"
-      Top             =   1778
-      Width           =   1575
    End
    Begin ComctlLib.ListView LV 
       Height          =   3735
@@ -253,23 +264,45 @@ Begin VB.Form frmStringSearch
          Object.Width           =   7673
       EndProperty
    End
-   Begin VB.CommandButton cmdSave 
-      Caption         =   "Sauvegarder les résultats"
+   Begin vkUserContolsXP.vkCommand cmdSave 
       Height          =   495
-      Left            =   4785
-      TabIndex        =   2
-      ToolTipText     =   "Sauvegarder les résultats (format texte)"
-      Top             =   938
+      Left            =   4800
+      TabIndex        =   13
+      ToolTipText     =   "Sauvegarder les résultats"
+      Top             =   960
       Width           =   1575
+      _ExtentX        =   2778
+      _ExtentY        =   873
+      Caption         =   "Sauvegarder les résultats"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
    End
-   Begin VB.CommandButton cmdGo 
-      Caption         =   "Lancer la recherche"
+   Begin vkUserContolsXP.vkCommand cmdQuit 
       Height          =   375
       Left            =   4800
       TabIndex        =   14
-      ToolTipText     =   "Lancer la recherche"
-      Top             =   240
+      ToolTipText     =   "Fermer cette fenêtre"
+      Top             =   1800
       Width           =   1575
+      _ExtentX        =   2778
+      _ExtentY        =   661
+      Caption         =   "Fermer"
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
    End
    Begin VB.Label Label2 
       Alignment       =   2  'Center
@@ -277,7 +310,7 @@ Begin VB.Form frmStringSearch
       Caption         =   "Résultats de la recherche"
       Height          =   255
       Left            =   105
-      TabIndex        =   3
+      TabIndex        =   1
       Top             =   2865
       Width           =   6375
    End
@@ -457,7 +490,7 @@ Private Sub cmdSave_Click()
 'sauvegarde les résultats
 Dim lFile As Long
 Dim sFile As String
-Dim X As Long
+Dim x As Long
 
     On Error GoTo CancelPushed
     
@@ -487,11 +520,11 @@ Dim X As Long
         sFile & vbNewLine & Lang.GetString("_DateIs") & Date$ & "  " & Time$ & _
         vbNewLine & "[match]=" & LV.ListItems.Count
     
-    For X = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
-        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(X)) & "  [string]=" & _
-        LV.ListItems.Item(X).SubItems(1)
+    For x = 1 To LV.ListItems.Count 'sauvegarde chaque élément du ListView
+        Print #lFile, "[offset]=" & CStr(LV.ListItems.Item(x)) & "  [string]=" & _
+        LV.ListItems.Item(x).SubItems(1)
         DoEvents
-    Next X
+    Next x
     
     Close lFile
     

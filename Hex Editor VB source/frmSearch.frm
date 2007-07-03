@@ -41,6 +41,46 @@ Begin VB.Form frmSearch
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+      Begin vkUserContolsXP.vkCommand cmdQuit 
+         Height          =   375
+         Left            =   3840
+         TabIndex        =   26
+         ToolTipText     =   "Fermer cette fenêtre"
+         Top             =   840
+         Width           =   1335
+         _ExtentX        =   2355
+         _ExtentY        =   661
+         Caption         =   "Fermer"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
+      Begin vkUserContolsXP.vkCommand cmdSearch 
+         Height          =   375
+         Left            =   3840
+         TabIndex        =   25
+         ToolTipText     =   "lancer la recherche"
+         Top             =   360
+         Width           =   1335
+         _ExtentX        =   2355
+         _ExtentY        =   661
+         Caption         =   "Rechercher"
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+      End
       Begin vkUserContolsXP.vkBar PGB 
          Height          =   255
          Left            =   120
@@ -66,35 +106,17 @@ Begin VB.Form frmSearch
          BorderStyle     =   0  'None
          Height          =   615
          Left            =   120
-         TabIndex        =   24
+         TabIndex        =   22
          ToolTipText     =   $"frmSearch.frx":05C2
          Top             =   600
          Width           =   3375
-      End
-      Begin VB.CommandButton cmdSearch 
-         Caption         =   "Rechercher"
-         Height          =   375
-         Left            =   3840
-         TabIndex        =   23
-         ToolTipText     =   "lancer la recherche"
-         Top             =   360
-         Width           =   1335
-      End
-      Begin VB.CommandButton cmdQuit 
-         Caption         =   "Fermer"
-         Height          =   375
-         Left            =   3840
-         TabIndex        =   22
-         ToolTipText     =   "Fermer cette fenêtre"
-         Top             =   840
-         Width           =   1335
       End
       Begin VB.Label Label2 
          BackStyle       =   0  'Transparent
          Caption         =   "Expression à rechercher :"
          Height          =   255
          Left            =   120
-         TabIndex        =   25
+         TabIndex        =   23
          Top             =   360
          Width           =   1935
       End
@@ -120,7 +142,7 @@ Begin VB.Form frmSearch
       Begin vkUserContolsXP.vkListBox Listbox 
          Height          =   4575
          Left            =   120
-         TabIndex        =   26
+         TabIndex        =   24
          Top             =   360
          Width           =   5175
          _ExtentX        =   9128
@@ -582,12 +604,12 @@ End Sub
 Private Sub cmdSearch_Click()
 'lance la recherche
 Dim tRes() As Currency
-Dim X As Long
+Dim x As Long
 Dim S As String
 
     If txtSearch.Text = vbNullString Then Exit Sub
     
-    Call Listbox.Clear
+    Call ListBox.Clear
     txtSearch.Enabled = False
 
     Select Case TypeOfForm(frmContent.ActiveForm)
@@ -701,19 +723,19 @@ Dim S As String
     Call AddTextToConsole(Lang.GetString("_DisplayRes"))
 
     '//affiche les résultats
-    Listbox.UnRefreshControl = True
-    For X = 1 To UBound(tRes())
-        Call Listbox.AddItem(Caption:=Lang.GetString("_FoundAt") & " " & CStr(By16D(tRes(X))))
+    ListBox.UnRefreshControl = True
+    For x = 1 To UBound(tRes())
+        Call ListBox.AddItem(Caption:=Lang.GetString("_FoundAt") & " " & CStr(By16D(tRes(x))))
         If Check2.Value Then
             With frmContent.ActiveForm
-                .HW.AddSignet By16D(tRes(X))
-                .lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(X))))
+                .HW.AddSignet By16D(tRes(x))
+                .lstSignets.ListItems.Add Text:=Trim$(Str$(By16D(tRes(x))))
                 .lstSignets.ListItems.Item(.lstSignets.ListItems.Count).SubItems(1) = "Found [" & Trim$(txtSearch.Text) & "]"
             End With
         End If
-    Next X
-    Listbox.UnRefreshControl = False
-    Call Listbox.Refresh
+    Next x
+    ListBox.UnRefreshControl = False
+    Call ListBox.Refresh
     
     grdFrame1.Caption = Lang.GetString("_ResAre") & " " & CStr(UBound(tRes()))
     
